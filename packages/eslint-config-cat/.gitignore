@@ -1,0 +1,9 @@
+*.swp
+*.log
+.DS_Store
+.eslintcache
+node_modules
+coverage
+lib
+
+flow-typed

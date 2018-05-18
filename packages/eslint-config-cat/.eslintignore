@@ -1,0 +1,8 @@
+node_modules
+coverage
+lib
+!.eslintrc.js
+!.babelrc.js
+
+flow-typed/npm
+**/__testsFiles__/**

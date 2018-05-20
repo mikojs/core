@@ -1,0 +1,23 @@
+{
+  "lerna": "2.11.0",
+  "version": "0.3.0",
+  "changelog": {
+    "repo": "cat-org/cat-core",
+    "cacheDir": ".changelog"
+  },
+  "commands": {
+    "publish": {
+      "ignore": [
+        "*.md",
+        "__tests__/**"
+      ]
+    }
+  },
+  "packages": [
+    "packages/*"
+  ],
+  "npmClient": "yarn",
+  "npmClientArgs": [
+    "--ignore-engines"
+  ]
+}

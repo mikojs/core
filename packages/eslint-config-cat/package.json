@@ -1,39 +1,19 @@
 {
-  "scripts": {
-    "flow": "flow",
-    "test": "jest --silent",
-    "test:watch": "yarn test --watchAll",
-    "babel:build": "babel src --out-dir lib",
-    "babel": "rm -rf ./lib && yarn babel:build",
-    "babel:watch": "rm -rf ./lib && yarn babel:build -w",
-    "lint": "yarn babel && esw ./ --cache --ext .js",
-    "lint:watch": "yarn lint -w",
-    "build": "yarn flow-typed install && yarn babel",
-    "prod": "cross-env NODE_ENV=production && yarn build",
-    "watch": "concurrently -c green \"yarn lint:watch\" \"yarn babel:watch\""
-  },
   "name": "eslint-config-cat",
   "version": "0.2.2",
   "description": "eslint config for cat",
-  "author": {
-    "name": "HsuTing",
-    "email": "hsuting0106@gmail.com",
-    "url": "http://hsuting.com"
-  },
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
   "main": "./lib/index.js",
   "keywords": [
     "eslint",
     "config",
     "cat"
   ],
-  "pre-commit": [
-    "flow",
-    "lint"
-  ],
-  "homepage": "https://github.com/HsuTing/eslint-config-cat/",
-  "repository": "https://github.com/HsuTing/eslint-config-cat.git",
-  "bugs": {
-    "url": "https://github.com/HsuTing/eslint-config-cat/issues/"
+  "homepage": "https://cat-org.github.io/cat-core/",
+  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/eslint-config-cat",
+  "scripts": {
+    "babel": "babel src --out-dir lib"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",
@@ -49,28 +29,8 @@
     "eslint-plugin-relay": "^0.0.21"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.44",
-    "@babel/core": "^7.0.0-beta.46",
-    "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.46",
-    "@babel/preset-env": "^7.0.0-beta.44",
-    "@babel/preset-flow": "^7.0.0-beta.44",
-    "babel-core": "^7.0.0-0",
-    "babel-jest": "^22.4.3",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-module-resolver": "^3.1.1",
-    "babel-plugin-transform-imports": "^1.5.0",
-    "concurrently": "^3.5.1",
-    "cross-env": "^5.1.4",
     "d3-hierarchy": "^1.1.6",
     "directory-tree": "^2.1.0",
-    "eslint": "^4.19.1",
-    "eslint-watch": "^3.1.4",
-    "fbjs": "^0.8.16",
-    "flow-bin": "^0.70.0",
-    "flow-typed": "^2.4.0",
-    "jest": "^22.4.3",
-    "pre-commit": "^1.2.2",
-    "regenerator-runtime": "^0.11.1"
-  },
-  "license": "MIT"
+    "fbjs": "^0.8.16"
+  }
 }

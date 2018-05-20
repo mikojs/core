@@ -1,0 +1,38 @@
+{
+  "name": "cat-core",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 9.11.1",
+    "npm": ">= 5.6.0",
+    "yarn": ">= 1.6.0"
+  },
+  "scripts": {
+    "flow": "flow",
+    "lint": "esw ./ --cache --ext .js",
+    "test": "jest --silent",
+    "babel:clean": "rm -rf ./packages/**/lib"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.47",
+    "@babel/core": "^7.0.0-beta.47",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.47",
+    "@babel/preset-env": "^7.0.0-beta.47",
+    "@babel/preset-flow": "^7.0.0-beta.47",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^22.4.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "babel-plugin-transform-imports": "^1.5.0",
+    "eslint": "^4.19.1",
+    "eslint-watch": "^3.1.4",
+    "flow-bin": "^0.72.0",
+    "flow-typed": "^2.4.0",
+    "jest": "^22.4.4",
+    "lerna": "^2.11.0",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "flow",
+    "lint"
+  ]
+}

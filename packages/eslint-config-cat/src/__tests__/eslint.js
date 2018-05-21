@@ -27,6 +27,7 @@ type testDataType = {
 
 type dirTreeType = {
   data: {
+    name: string,
     path: string,
     extension: string,
   },
@@ -59,7 +60,7 @@ const testData = files
 
     return /__testsFiles__/.test(filePath) && extension === '.js';
   })
-  .map(({ data }: dirTree): testDataType => {
+  .map(({ data }: dirTreeType): testDataType => {
     const { path: filePath, name } = data;
 
     const { messages = [] } = eslintResult

@@ -29,8 +29,7 @@
     "eslint-plugin-relay": "^0.0.21"
   },
   "devDependencies": {
-    "d3-hierarchy": "^1.1.6",
-    "directory-tree": "^2.1.0",
-    "fbjs": "^0.8.16"
+    "fbjs": "^0.8.16",
+    "flow-bin": "^0.72.0"
   }
 }

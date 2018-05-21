@@ -4,9 +4,9 @@ import fs from 'fs';
 import path from 'path';
 
 import { CLIEngine } from 'eslint';
-import dirTree from 'directory-tree';
-import * as d3 from 'd3-hierarchy';
 import { hyphenate } from 'fbjs';
+
+import { d3DirTree } from 'cat-utils';
 
 type eslintInfoType = {
   ruleId: string,
@@ -51,9 +51,7 @@ const eslintResult = results
     messages: $ReadOnlyArray<string>
   }): boolean => messages.length !== 0);
 
-const files = d3
-  .hierarchy(dirTree(root))
-  .leaves();
+const files = d3DirTree(root).leaves();
 
 const testData = files
   .filter(({ data }: dirTreeType): boolean => {

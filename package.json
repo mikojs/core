@@ -7,11 +7,12 @@
     "yarn": ">= 1.6.0"
   },
   "scripts": {
-    "flow": "flow",
+    "install:all": "make install",
+    "clean:all": "make clean",
+    "babel": "babel src --out-dir lib",
+    "flow": "yarn lerna run babel --scope cat-utils && flow && make babel-clean",
     "lint": "esw ./ --cache --ext .js",
-    "test": "jest --silent",
-    "babel:clean": "rm -rf ./lib ./packages/**/lib",
-    "babel": "babel src --out-dir lib"
+    "test": "jest --silent"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.47",

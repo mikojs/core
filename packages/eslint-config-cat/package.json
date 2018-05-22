@@ -13,8 +13,7 @@
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/eslint-config-cat",
   "scripts": {
-    "babel": "babel src --out-dir lib",
-    "build": "yarn flow-typed install && yarn babel"
+    "babel": "babel src --out-dir lib"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",
@@ -31,7 +30,6 @@
   },
   "devDependencies": {
     "fbjs": "^0.8.16",
-    "flow-bin": "^0.72.0",
-    "flow-typed": "^2.4.0"
+    "flow-bin": "^0.72.0"
   }
 }

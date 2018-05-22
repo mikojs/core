@@ -1,8 +1,15 @@
+# default
 node_modules
-coverage
+
+# babel
 lib
+
+# flow
+flow-typed/npm
+
+# jest
+coverage
+
+# add other check
 !.eslintrc.js
 !.babelrc.js
-
-flow-typed/npm
-**/__testsFiles__/**

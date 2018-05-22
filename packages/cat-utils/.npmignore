@@ -1,3 +1,6 @@
-.babelrc.js
+# default
 yarn.lock
+
+# babel
 src
+.babelrc.js

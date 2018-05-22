@@ -1,9 +1,19 @@
+# default
 *.swp
 *.log
 .DS_Store
-.eslintcache
+
+# node
 node_modules
-coverage
+
+# babel
 lib
 
+# eslint
+.eslintcache
+
+# flow
 flow-typed
+
+# jest
+coverage

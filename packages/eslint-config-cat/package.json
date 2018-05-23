@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-cat",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "eslint config for cat",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
@@ -13,7 +13,8 @@
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/eslint-config-cat",
   "scripts": {
-    "babel": "babel src --out-dir lib"
+    "babel": "babel src --out-dir lib",
+    "lint": "eslint --cache --ext .js -c ./../../.eslintrc.js --ignore-path ./../../.eslintignore ./../"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",
@@ -29,6 +30,9 @@
     "eslint-plugin-relay": "^0.0.21"
   },
   "devDependencies": {
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "cat-utils": "^1.0.0",
+    "eslint": "^4.19.1",
     "fbjs": "^0.8.16",
     "flow-bin": "^0.72.0"
   }

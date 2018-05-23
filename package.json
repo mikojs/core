@@ -10,8 +10,8 @@
     "install:all": "make install",
     "clean:all": "make clean",
     "babel": "babel src --out-dir lib",
-    "flow": "yarn lerna run babel --scope cat-utils && flow && make babel-clean",
-    "lint": "esw ./ --cache --ext .js",
+    "flow": "make flow",
+    "lint": "make lint",
     "test": "jest --silent"
   },
   "devDependencies": {
@@ -22,12 +22,9 @@
     "@babel/preset-flow": "^7.0.0-beta.47",
     "babel-core": "^6.26.3",
     "babel-jest": "^22.4.4",
-    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-transform-imports": "^1.5.0",
     "chalk": "^2.4.1",
-    "eslint": "^4.19.1",
-    "eslint-watch": "^3.1.4",
     "fbjs": "^0.8.16",
     "flow-bin": "^0.72.0",
     "flow-typed": "^2.4.0",

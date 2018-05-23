@@ -2,6 +2,6 @@
 
 module.exports = {
   extends: [
-    './lib/index.js',
+    './packages/eslint-config-cat/lib/index.js',
   ],
 };

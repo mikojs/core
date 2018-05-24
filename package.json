@@ -9,10 +9,10 @@
   "scripts": {
     "install:all": "make install",
     "clean:all": "make clean",
-    "babel": "babel src --out-dir lib",
+    "babel": "make babel",
     "flow": "make flow",
     "lint": "make lint",
-    "test": "jest --silent"
+    "test": "make test"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.47",

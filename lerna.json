@@ -18,6 +18,7 @@
   ],
   "npmClient": "yarn",
   "npmClientArgs": [
-    "--ignore-engines"
+    "--ignore-engines",
+    "--no-lockfile"
   ]
 }

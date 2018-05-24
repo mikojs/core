@@ -2,12 +2,13 @@
 
 module.exports = {
   testPathIgnorePatterns: [
-    '/lib/',
+    '<rootDir>/lib/',
+    '<rootDir>/packages/cat-utils/lib/',
   ],
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
-    '!**/__testsFiles__/**',
+    'packages/**/*.js',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: [

@@ -10,7 +10,7 @@ module.exports = babelConfig
     'cat-utils': {
       transform: 'cat-utils/lib/${member}',
     },
-    'fbjs': {
+    fbjs: {
       transform: 'fbjs/lib/${member}',
     },
   })

@@ -36,7 +36,7 @@ const defaultConfig = {
   },
 };
 
-export default [
+const configs = [
   defaultConfig,
   importResolver,
   flowtype,
@@ -74,3 +74,5 @@ export default [
       }
     }, {})
 ), {});
+
+export default configs;

@@ -2,7 +2,7 @@
 
 const babelConfig = require('./babel.config');
 
-const configs = babelConfig
+module.exports = babelConfig
   .addAliasToModuleResolver({
     'cat-utils/lib': './packages/cat-utils/lib',
   })
@@ -13,12 +13,5 @@ const configs = babelConfig
     fbjs: {
       transform: 'fbjs/lib/${member}',
     },
-  });
-
-module.exports = (
-  process.env.NODE_ENV !== 'test' ?
-    configs :
-    configs.addPreset('@babel/preset-stage-0', 1, {
-      decoratorsLegacy: true,
-    })
-).getConfigs;
+  })
+  .getConfigs;

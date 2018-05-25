@@ -55,29 +55,6 @@ class BabelConfig {
 
   /**
    * @example
-   * babelConfig.addPreset('@babel/preset-stage-0', 1, {
-   *   key: 'value',
-   * });
-   *
-   * @param {string} presetName - name of new preset
-   * @param {number} presetIndex - index of new preset
-   * @param {Object} setting - setting of new preset
-   * @return {BabelConfig} - new BabelConfig with new setting
-  */
-  addPreset(presetName, presetIndex, setting) {
-    const newPresets = [...this.presets];
-
-    newPresets.splice(
-      presetIndex,
-      0,
-      setting ? [presetName, setting] : presetName
-    );
-
-    return new BabelConfig(newPresets, this.plugins);
-  }
-
-  /**
-   * @example
    * babelConfig.addPlugin('add-module-exports', -1, {
    *   key: 'value',
    * });

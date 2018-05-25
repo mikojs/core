@@ -22,7 +22,6 @@ babel:
 	@yarn lerna run babel
 
 flow:
-	@make build-utils
 	@./node_modules/.bin/flow
 
 lint:

@@ -12,15 +12,16 @@
     "babel": "make babel",
     "flow": "make flow",
     "lint": "make lint",
-    "test": "make test"
+    "test": "NODE_ENV=test make test"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.47",
-    "@babel/core": "^7.0.0-beta.47",
-    "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.47",
-    "@babel/preset-env": "^7.0.0-beta.47",
-    "@babel/preset-flow": "^7.0.0-beta.47",
-    "babel-core": "^6.26.3",
+    "@babel/cli": "^7.0.0-beta.48",
+    "@babel/core": "^7.0.0-beta.48",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.48",
+    "@babel/preset-env": "^7.0.0-beta.48",
+    "@babel/preset-flow": "^7.0.0-beta.48",
+    "@babel/preset-stage-0": "^7.0.0-beta.48",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^22.4.4",
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-transform-imports": "^1.5.0",

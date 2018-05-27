@@ -11,6 +11,7 @@ const packages = d3DirTree(path.resolve(__dirname, './../packages'))
     data: { name: string },
   }): string => data.name);
 
+/* istanbul ignore if */
 if (process.env.NODE_ENV !== 'test') {
   console.log(packages.join(' ')); // eslint-disable-line no-console
 }

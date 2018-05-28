@@ -25,7 +25,7 @@ export default {
     'no-extra-parens': ['error', 'functions'],
     'no-shadow': 'error',
     'no-warning-comments': ['warn', {
-      terms: ['todo'],
+      terms: ['todo', 'fixme'],
       location: 'anywhere',
     }],
 

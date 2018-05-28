@@ -10,7 +10,7 @@ const defaultPresets = [
 const defaultPlugins = [
   ['module-resolver', {
     root: ['./src'],
-    cwd: __dirname,
+    cwd: __dirname, // FIXME wil change when .babelrc is differents
   }],
   '@babel/plugin-proposal-optional-chaining',
 ];

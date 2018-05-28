@@ -1,6 +1,6 @@
 // @flow
 
-const babelConfig = require('./babel.config');
+const babelConfig = require('./.build-babelrc');
 
 module.exports = babelConfig
   .addAliasToModuleResolver({

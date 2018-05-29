@@ -34,7 +34,7 @@ type dirTreeType = {
 };
 
 const root = path
-  .resolve(process.cwd(), './src');
+  .resolve(__dirname, './../');
 
 const cli = new CLIEngine({
   cwd: root,
@@ -58,7 +58,7 @@ const testData = files
   .filter(({ data }: dirTreeType): boolean => {
     const { path: filePath, extension } = data;
 
-    return /__testsFiles__/.test(filePath) && extension === '.js';
+    return /__tests__\/__ignore__/.test(filePath) && extension === '.js';
   })
   .map(({ data }: dirTreeType): testDataType => {
     const { path: filePath, name } = data;

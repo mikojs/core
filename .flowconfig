@@ -1,5 +1,4 @@
 [ignore]
-.*babel\.config\.js
 
 [include]
 
@@ -10,7 +9,5 @@
 
 [options]
 module.ignore_non_literal_requires=true
-
-module.name_mapper='^cat-utils$' -> '<PROJECT_ROOT>/packages/cat-utils'
 
 [strict]

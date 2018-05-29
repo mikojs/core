@@ -13,6 +13,3 @@ coverage
 # add other check
 !.eslintrc.js
 !.babelrc.js
-
-# for eslint-config-cat
-__testsFiles__

@@ -29,9 +29,8 @@ lint:
 	@yarn lerna run lint
 
 test:
-	@make build-core
-	@make build-utils
-	@yarn jest --silent
+	@make babel
+	@yarn jest --silent ./
 
 babel-clean:
 	@rm -rf ./lib ./packages/**/lib

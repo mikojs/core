@@ -2,8 +2,7 @@
 
 import path from 'path';
 
-/* eslint-disable-next-line import/no-unresolved */
-import { d3DirTree } from 'cat-utils';
+import d3DirTree from 'cat-utils/lib/d3DirTree';
 
 const packages = d3DirTree(path.resolve(__dirname, './../packages'))
   .children

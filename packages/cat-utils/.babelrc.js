@@ -1,5 +1,3 @@
-// @flow
-
-const babelConfig = require('./../../.build-babelrc');
-
-module.exports = babelConfig.getConfigs;
+module.exports = {
+  extends: './../../babel.config',
+};

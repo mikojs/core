@@ -1,14 +1,13 @@
 // @flow
 
 module.exports = {
+  /** TODO use findPackages */
   testPathIgnorePatterns: [
-    '<rootDir>/lib/',
-    '<rootDir>/packages/cat-utils/lib/',
+    '__tests__/__ignore__',
   ],
   collectCoverage: true,
   collectCoverageFrom: [
-    'src/**/*.js',
-    'packages/**/*.js',
+    '**/src/**/*.js',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: [

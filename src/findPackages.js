@@ -4,6 +4,7 @@ import path from 'path';
 
 import commandLineArgs from 'command-line-args';
 
+/* eslint-disable-next-line import/no-unresolved */
 import d3DirTree from 'cat-utils/lib/d3DirTree';
 
 type dataType = {
@@ -20,7 +21,7 @@ const { ignore } = commandLineArgs([{
 
 const packages = d3DirTree(path.resolve(__dirname, './../packages'))
   .children
-  .filter(({ data }: dataType) => !ignore.includes(data.name))
+  .filter(({ data }: dataType): boolean => !ignore.includes(data.name))
   .map(({ data }: dataType): string => data.name);
 
 /* istanbul ignore if */

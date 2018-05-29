@@ -1,3 +1,5 @@
+// @flow
+
 const rootOverrides = {
   test: './',
   plugins: [

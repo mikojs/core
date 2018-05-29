@@ -13,7 +13,6 @@
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/eslint-config-cat",
   "scripts": {
-    "babel": "babel src --out-dir lib",
     "lint": "eslint --cache --ext .js -c ./../../.eslintrc.js --ignore-path ./../../.eslintignore ./../../"
   },
   "dependencies": {

@@ -11,9 +11,6 @@
   ],
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/cat-utils",
-  "scripts": {
-    "babel": "babel src --out-dir lib"
-  },
   "dependencies": {
     "d3-hierarchy": "^1.1.6",
     "directory-tree": "^2.1.0"

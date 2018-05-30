@@ -11,13 +11,18 @@ type dataType = {
   data: { name: string },
 };
 
-const { ignore } = commandLineArgs([{
-  name: 'ignore',
-  alias: 'i',
-  type: String,
-  multiple: true,
-  defaultValue: [],
-}]);
+const ENV = process.env.NODE_ENV;
+const { ignore } = (
+  ENV === 'test' ?
+    { ignore: [] } :
+    commandLineArgs([{
+      name: 'ignore',
+      alias: 'i',
+      type: String,
+      multiple: true,
+      defaultValue: [],
+    }])
+);
 
 const packages = d3DirTree(path.resolve(__dirname, './../packages'))
   .children
@@ -25,7 +30,7 @@ const packages = d3DirTree(path.resolve(__dirname, './../packages'))
   .map(({ data }: dataType): string => data.name);
 
 /* istanbul ignore if */
-if (process.env.NODE_ENV !== 'test') {
+if (ENV !== 'test') {
   console.log(packages.join(' ')); // eslint-disable-line no-console
 }
 

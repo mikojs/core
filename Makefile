@@ -5,9 +5,11 @@ install-all:
 
 install-flow-typed:
 	@make babel-core
-	@for package in $$(node ./lib/findPackages); do \
-		yarn flow-typed install -p ./packages/$$package --verbose; \
-	done
+	rm -rf ./flow-typed
+	@yarn flow-typed install --verbose
+	@yarn lerna run flow-typed
+	# FIXME remove
+	@yarn flow-typed install jest@v22.0.0
 
 babel-core:
 	@$(call babel-build, ./packages/cat-utils)

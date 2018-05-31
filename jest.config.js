@@ -1,7 +1,6 @@
 // @flow
 
 module.exports = {
-  /** TODO use findPackages */
   testPathIgnorePatterns: [
     '__tests__/__ignore__',
   ],

@@ -11,6 +11,7 @@ export default {
   ],
   rules: {
     'flowtype/no-dupe-keys': 'error',
+    'flowtype/no-flow-fix-me-comments': 'warn',
     'flowtype/no-mutable-array': 'error',
     'flowtype/no-primitive-constructor-types': 'error',
     'flowtype/no-unused-expressions': 'error',

@@ -40,7 +40,8 @@ const cli = new CLIEngine({
   cwd: root,
   ignore: false,
   rules: {
-    'no-unused-vars': ['off'],
+    'no-unused-vars': 'off',
+    'no-warning-comments': 'off',
   },
 });
 

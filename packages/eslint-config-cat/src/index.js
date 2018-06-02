@@ -1,8 +1,8 @@
 // @flow
 
-import importResolver from './importResolver';
-import flowtype from './flowtype';
-import jsdoc from './jsdoc';
+import importConfig from './import';
+import flowtypeConfig from './flowtype';
+import jsdocConfig from './jsdoc';
 import extendsConfig from './extendsConfigs';
 
 type configType = {
@@ -38,9 +38,9 @@ const defaultConfig = {
 
 const configs = [
   defaultConfig,
-  importResolver,
-  flowtype,
-  jsdoc,
+  importConfig,
+  flowtypeConfig,
+  jsdocConfig,
   extendsConfig,
 ].reduce((newConfig: configType, otherConfig: configType): configType => (
   Object.keys({ ...newConfig, ...otherConfig })

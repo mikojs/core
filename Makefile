@@ -7,8 +7,9 @@ install-flow-typed:
 	@make babel-core
 	rm -rf ./flow-typed
 	@yarn flow-typed install --verbose
+	# TODO: write file to auto add scripts
 	@yarn lerna run flow-typed
-	# FIXME remove
+	# FIXME: https://github.com/flowtype/flow-typed/issues/2264
 	@yarn flow-typed install jest@v22.0.0
 
 babel-core:
@@ -28,7 +29,7 @@ lint:
 
 test:
 	@make babel-all
-	@yarn jest --silent ./
+	@NODE_ENV=test yarn jest --silent ./
 
 babel-clean:
 	rm -rf ./lib ./packages/**/lib
@@ -41,6 +42,7 @@ clean-all:
 	rm -rf ./*.log
 	rm -rf ./packages/eslint-config-cat/.eslintcache
 
+# TODO: write file to auto add scripts
 define babel-build
 	yarn babel $(1)/src --out-dir $(1)/lib
 endef

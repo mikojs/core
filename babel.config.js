@@ -1,14 +1,5 @@
 // @flow
 
-const rootOverrides = {
-  test: './',
-  plugins: [
-    ['module-resolver', {
-      root: ['./src', './packages'],
-    }],
-  ],
-};
-
 module.exports = {
   presets: [
     '@babel/preset-env',
@@ -31,8 +22,5 @@ module.exports = {
   ],
   ignore: process.env.NODE_ENV === 'test' ? [] : [
     '**/__tests__/**',
-  ],
-  overrides: [
-    rootOverrides,
   ],
 };

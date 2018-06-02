@@ -2,8 +2,8 @@
 
 import path from 'path';
 
-import findPackages from './../findPackages';
-import pkg from './../../package.json';
+import findPackages from '../findPackages';
+import pkg from '../../package.json';
 
 const flowVersion = pkg
   .devDependencies['flow-bin']

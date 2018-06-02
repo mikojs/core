@@ -4,7 +4,7 @@ import path from 'path';
 
 import commandLineArgs from 'command-line-args';
 
-import d3DirTree from './../packages/cat-utils/lib/d3DirTree';
+import d3DirTree from '../packages/cat-utils/lib/d3DirTree';
 
 type dataType = {
   data: { name: string },

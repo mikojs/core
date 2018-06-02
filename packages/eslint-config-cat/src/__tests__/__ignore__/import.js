@@ -1,9 +1,18 @@
 // @flow
 
 // $expectError import/order
-import test from './../../index';
+import order from './../../index';
 
 import eslint from 'eslint';
 
 // $expectError import/no-unresolved
-import test2 from './test2';
+import noUnresolver from './../index';
+
+// $expectError import/first
+eslint();
+
+// $expectError import/no-self-import
+// $expectError import/default
+import noSelfImport from './import';
+
+// TODO add test

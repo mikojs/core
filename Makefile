@@ -1,13 +1,13 @@
 install-all:
 	@yarn install
 	@yarn lerna bootstrap
+	@make babel-core
+	@node ./lib/addScriptsToPkg
 	@make install-flow-typed
 
 install-flow-typed:
-	@make babel-core
 	rm -rf ./flow-typed
 	@yarn flow-typed install --verbose
-	# TODO: write file to auto add scripts
 	@yarn lerna run flow-typed
 	# FIXME: https://github.com/flowtype/flow-typed/issues/2264
 	@yarn flow-typed install jest@v22.0.0
@@ -19,7 +19,7 @@ babel-core:
 babel-all:
 	@make babel-clean
 	@make babel-core
-	@for package in $$(node ./lib/findPackages -i cat-utils); do \
+	@for package in $$(node ./lib/findPackages -i cat-utils -s); do \
 	  $(call babel-build, ./packages/$$package); \
   done
 
@@ -42,7 +42,6 @@ clean-all:
 	rm -rf ./*.log
 	rm -rf ./packages/eslint-config-cat/.eslintcache
 
-# TODO: write file to auto add scripts
 define babel-build
 	yarn babel $(1)/src --out-dir $(1)/lib
 endef

@@ -13,8 +13,8 @@
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/eslint-config-cat",
   "scripts": {
-    "flow-typed": "flow-typed install -f 0.72.0 --verbose",
-    "lint": "eslint --cache --ext .js -c ./../../.eslintrc.js --ignore-path ./../../.eslintignore ./../../"
+    "lint": "eslint --cache --ext .js -c ./../../.eslintrc.js --ignore-path ./../../.eslintignore ./../../",
+    "flow-typed": "flow-typed install -f 0.72.0 --verbose"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",

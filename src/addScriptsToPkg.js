@@ -7,6 +7,8 @@ import editor from 'mem-fs-editor';
 import chalk from 'chalk';
 
 import findPackages from './findPackages';
+import showInfo from './showInfo';
+
 import pkg from '../package.json';
 
 const store = memFs.create();
@@ -31,8 +33,5 @@ findPackages
       },
     });
 
-    fs.commit((err) => {
-      if (err) console.log(chalk`{bgRed  ${packageName} } add scripts {cyan fail}`);
-      else console.log(chalk`{bgGreen  ${packageName} } add scripts {cyan done}`);
-    });
+    fs.commit(err => showInfo(!err, packageName, 'add scripts'));
   });

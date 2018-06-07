@@ -3,11 +3,7 @@
 import dirTree from 'directory-tree';
 import * as d3 from 'd3-hierarchy';
 
-type dirTreeType = {
-  name: string,
-  data: mixed,
-  children: $ReadOnlyArray<dirTreeType>,
-};
+import type dirTreeType from './definitions/d3DirTree.js.flow';
 
 export default (filePath: string): dirTreeType => d3
   .hierarchy(dirTree(filePath));

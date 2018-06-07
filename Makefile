@@ -3,6 +3,7 @@ install-all:
 	@yarn lerna bootstrap
 	@make babel-core
 	@node ./lib/addScriptsToPkg
+	@node ./lib/copyFlowFiles
 	@make install-flow-typed
 
 install-flow-typed:
@@ -22,6 +23,7 @@ babel-all:
 	@for package in $$(node ./lib/findPackages -i cat-utils -s); do \
 	  $(call babel-build, ./packages/$$package); \
   done
+	@node ./lib/copyFlowFiles
 
 lint:
 	@$(call babel-build, ./packages/eslint-config-cat)

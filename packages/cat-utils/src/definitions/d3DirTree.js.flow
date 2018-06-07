@@ -1,0 +1,7 @@
+// @flow
+
+export type dirTreeType = {
+  name: string,
+  data: mixed,
+  children: $ReadOnlyArray<dirTreeType>,
+};

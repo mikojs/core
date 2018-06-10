@@ -25,14 +25,6 @@ type testDataType = {
   checkErrorAmount: boolean,
 };
 
-type dirTreeType = {
-  data: {
-    name: string,
-    path: string,
-    extension: string,
-  },
-};
-
 const root = path
   .resolve(__dirname, './../');
 
@@ -56,12 +48,12 @@ const eslintResult = results
 const files = d3DirTree(root).leaves();
 
 const testData = files
-  .filter(({ data }: dirTreeType): boolean => {
+  .filter(({ data }: d3DirTree): boolean => {
     const { path: filePath, extension } = data;
 
     return /__tests__\/__ignore__/.test(filePath) && extension === '.js';
   })
-  .map(({ data }: dirTreeType): testDataType => {
+  .map(({ data }: d3DirTree): testDataType => {
     const { path: filePath, name } = data;
 
     const { messages = [] } = eslintResult

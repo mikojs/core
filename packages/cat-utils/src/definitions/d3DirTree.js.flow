@@ -1,7 +1,18 @@
 // @flow
 
-export type dirTreeType = {
-  name: string,
-  data: mixed,
-  children: $ReadOnlyArray<dirTreeType>,
+// FIXME: not work
+declare module "cat-utils/lib/d3DirTree" {
+  declare type d3DirTreeType = {|
+    name: string,
+    data: {|
+      path: string,
+      name: string,
+      size: number,
+      type: 'directory' | 'file',
+      extension: mixed,
+    |},
+    children: $ReadOnlyArray<d3DirTreeType>,
+  |};
+
+  declare module.exports: d3DirTreeType;
 };

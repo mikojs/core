@@ -10,7 +10,6 @@ type dataType = {
   data: { name: string },
 };
 
-const ENV = process.env.NODE_ENV;
 const { ignore, showInfo } = commandLineArgs([{
   name: 'ignore',
   alias: 'i',

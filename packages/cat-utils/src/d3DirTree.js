@@ -3,7 +3,7 @@
 import dirTree from 'directory-tree';
 import * as d3 from 'd3-hierarchy';
 
-import type dirTreeType from './definitions/d3DirTree.js.flow';
+import typeof d3DirTreeType from './definitions/d3DirTree.js.flow';
 
-export default (filePath: string): dirTreeType => d3
+export default (filePath: string): d3DirTreeType => d3
   .hierarchy(dirTree(filePath));

@@ -10,8 +10,6 @@ install-flow-typed:
 	rm -rf ./flow-typed
 	@yarn flow-typed install --verbose
 	@yarn lerna run flow-typed
-	# FIXME: https://github.com/flowtype/flow-typed/issues/2264
-	@yarn flow-typed install jest@v22.0.0
 
 babel-core:
 	@$(call babel-build, ./packages/cat-utils)

@@ -7,6 +7,7 @@ import { CLIEngine } from 'eslint';
 import { hyphenate } from 'fbjs';
 
 import { d3DirTree } from 'cat-utils';
+import type { d3DirTreeType } from 'cat-utils/src/definitions/d3DirTree.js.flow';
 
 type eslintInfoType = {
   ruleId: string,
@@ -48,12 +49,12 @@ const eslintResult = results
 const files = d3DirTree(root).leaves();
 
 const testData = files
-  .filter(({ data }: d3DirTree): boolean => {
+  .filter(({ data }: d3DirTreeType): boolean => {
     const { path: filePath, extension } = data;
 
     return /__tests__\/__ignore__/.test(filePath) && extension === '.js';
   })
-  .map(({ data }: d3DirTree): testDataType => {
+  .map(({ data }: d3DirTreeType): testDataType => {
     const { path: filePath, name } = data;
 
     const { messages = [] } = eslintResult

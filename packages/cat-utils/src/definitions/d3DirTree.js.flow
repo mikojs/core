@@ -1,18 +1,15 @@
 // @flow
 
-// FIXME: not work
-declare module "cat-utils/lib/d3DirTree" {
-  declare type d3DirTreeType = {|
+export type d3DirTreeType = {|
+  data: {|
+    path: string,
     name: string,
-    data: {|
-      path: string,
-      name: string,
-      size: number,
-      type: 'directory' | 'file',
-      extension: mixed,
-    |},
-    children: $ReadOnlyArray<d3DirTreeType>,
-  |};
-
-  declare module.exports: d3DirTreeType;
-};
+    size: number,
+    type: 'directory' | 'file',
+    extension: mixed,
+  |},
+  depth: number,
+  height: number,
+  parent: d3DirTreeType,
+  children: $ReadOnlyArray<d3DirTreeType>,
+|};

@@ -15,6 +15,8 @@ export default {
     'arrow-parens': ['error', 'as-needed'],
     'arrow-body-style': ['error', 'as-needed'],
 
+    'comma-dangle': ['error', 'always-multiline'],
+
     'default-case': 'error',
 
     indent: ['error', 2, {

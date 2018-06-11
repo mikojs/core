@@ -5,6 +5,7 @@ import path from 'path';
 import commandLineArgs from 'command-line-args';
 
 import d3DirTree from '../packages/cat-utils/lib/d3DirTree';
+// eslint-disable-next-line max-len
 import type { d3DirTreeType } from '../packages/cat-utils/lib/definitions/d3DirTree.js.flow';
 
 const { ignore, showInfo } = commandLineArgs([{

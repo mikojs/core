@@ -10,6 +10,7 @@ export default {
     'plugin:flowtype/recommended',
   ],
   rules: {
+    'flowtype/delimiter-dangle': ['error', 'always-multiline'],
     'flowtype/no-dupe-keys': 'error',
     'flowtype/no-flow-fix-me-comments': 'warn',
     'flowtype/no-mutable-array': 'error',

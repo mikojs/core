@@ -7,6 +7,7 @@ import { CLIEngine } from 'eslint';
 import { hyphenate } from 'fbjs';
 
 import { d3DirTree } from 'cat-utils';
+// eslint-disable-next-line max-len
 import type { d3DirTreeType } from 'cat-utils/src/definitions/d3DirTree.js.flow';
 
 type eslintInfoType = {
@@ -43,7 +44,7 @@ const { results } = cli
 
 const eslintResult = results
   .filter(({ messages }: {
-    messages: $ReadOnlyArray<string>
+    messages: $ReadOnlyArray<string>,
   }): boolean => messages.length !== 0);
 
 const files = d3DirTree(root).leaves();

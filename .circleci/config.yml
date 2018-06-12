@@ -1,0 +1,50 @@
+version: 2
+jobs:
+  test:
+    working_directory: ~/repo
+
+    docker:
+      - image: node:latest
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Install packages
+          command: yarn install:all
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Check code style
+          command: |
+            yarn lint
+            yarn flow
+
+      - run:
+          name: Test
+          command: yarn test
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+
+      - run:
+          name: Prod
+          command: yarn prod
+
+# TODO add deploy
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /.*/

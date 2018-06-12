@@ -13,7 +13,8 @@
     "babel:all": "make babel-all",
     "flow": "flow",
     "lint": "make lint",
-    "test": "make test"
+    "test": "make test",
+    "prod": "yarn babel:all"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.48",

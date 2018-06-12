@@ -73,6 +73,6 @@ const configs = [
           };
       }
     }, {})
-), {});
+), ({}: configType));
 
 export default configs;

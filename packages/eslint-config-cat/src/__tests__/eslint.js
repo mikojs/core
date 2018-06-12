@@ -10,6 +10,8 @@ import { d3DirTree } from 'cat-utils';
 // eslint-disable-next-line max-len
 import type { d3DirTreeType } from 'cat-utils/src/definitions/d3DirTree.js.flow';
 
+import configs from '..';
+
 type eslintInfoType = {
   ruleId: string,
   line: number,
@@ -48,6 +50,7 @@ const eslintResult = results
   }): boolean => messages.length !== 0);
 
 const files = d3DirTree(root).leaves();
+const ruleIds = [];
 
 const testData = files
   .filter(({ data }: d3DirTreeType): boolean => {
@@ -72,10 +75,18 @@ const testData = files
       ));
 
     const testTasks = messages
-      .map((message: eslintInfoType, index: number): testTaskType => ({
-        eslintInfo: message,
-        expectError: expectErrors[index] || null,
-      }));
+      .map((message: eslintInfoType, index: number): testTaskType => {
+        const { ruleId } = message;
+
+        if (!ruleIds.includes(ruleId)) {
+          ruleIds.push(ruleId);
+        }
+
+        return {
+          eslintInfo: message,
+          expectError: expectErrors[index] || null,
+        };
+      });
 
     return {
       testName: hyphenate(name.replace(/.js/, '')),
@@ -84,10 +95,17 @@ const testData = files
     };
   });
 
-
 describe('eslint', () => {
   it('check amount of test files', () => {
-    expect(eslintResult.length).toBe(testData.length);
+    expect(eslintResult.length)
+      .toBe(testData.length);
+  });
+
+  it('check amount of rules', () => {
+    expect(ruleIds.sort())
+      // FIXME: https://github.com/babel/babel-eslint/issues/595
+      // eslint-disable-next-line no-undef
+      .toBe(Object.keys(configs?.rules || {}).sort());
   });
 
   testData
@@ -101,12 +119,14 @@ describe('eslint', () => {
           const { ruleId, line, message } = eslintInfo;
 
           it(`[line: ${line}, rule: ${ruleId}] ${message}`, () => {
-            expect(ruleId).toBe(expectError);
+            expect(ruleId)
+              .toBe(expectError);
           });
         });
 
         it('check error amount', () => {
-          expect(checkErrorAmount).toBeTruthy();
+          expect(checkErrorAmount)
+            .toBeTruthy();
         });
       });
     });

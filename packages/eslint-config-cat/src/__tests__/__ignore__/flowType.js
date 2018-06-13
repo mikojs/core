@@ -37,6 +37,11 @@ type spaceAfterTypeColonType = {
   beforeType : string,
 };
 
+// $expectError flowtype/delimiter-dangle
+type delimiterDangleType = {
+  key: string
+};
+
 // $expectError flowtype/type-id-match
 type typeIdMatch = string;
 

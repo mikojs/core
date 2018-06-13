@@ -68,5 +68,7 @@ export default {
     }],
 
     strict: ['error', 'never'],
+
+    'valid-jsdoc': 'error',
   },
 };

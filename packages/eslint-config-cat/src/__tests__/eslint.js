@@ -102,10 +102,23 @@ describe('eslint', () => {
   });
 
   it('check amount of rules', () => {
+    // FIXME: https://github.com/babel/babel-eslint/issues/595
+    // eslint-disable-next-line no-undef
+    const testRules = Object.keys(configs?.rules || {})
+      .filter((ruleName: string): boolean => {
+        switch (ruleName) {
+          case 'arrow-parens':
+            return !ruleIds.includes('flowtype/require-parameter-type');
+          case 'flowtype/no-flow-fix-me-comments':
+          case 'no-warning-comments':
+            return false;
+          default: return true;
+        }
+      })
+      .sort();
+
     expect(ruleIds.sort())
-      // FIXME: https://github.com/babel/babel-eslint/issues/595
-      // eslint-disable-next-line no-undef
-      .toBe(Object.keys(configs?.rules || {}).sort());
+      .toBe(testRules);
   });
 
   testData

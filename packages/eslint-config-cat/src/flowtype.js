@@ -27,6 +27,8 @@ export default {
         const: true,
       },
     }],
+    'flowtype/space-after-type-colon': ['error', 'always'],
+    'flowtype/space-before-type-colon': ['error', 'never'],
     'flowtype/type-id-match': ['error', '^([a-z][A-Za-z0-9]*)+Type$'],
   },
 };

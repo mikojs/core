@@ -43,3 +43,8 @@ const {keyAAAA } = moduleA;
 
 // $expectError object-curly-spacing
 const { keyAAAAA} = moduleA;
+
+// $expectError comma-dangle
+const {
+  commaDangle
+} = testB;

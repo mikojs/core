@@ -6,17 +6,17 @@ import {
   moduleBB,
   moduleCC,
   moduleDD,
-} from '@babel/core';
+} from 'eslint-import-resolver-babel-module';
 
 // $expectError object-curly-newline
 // $expectError object-curly-newline
-import { moduleAAA, moduleBBB, moduleCCC, moduleDDD } from '@babel/cli';
+import { moduleAAA, moduleBBB, moduleCCC, moduleDDD } from 'babel-eslint';
 
 // $expectError object-curly-spacing
-import {moduleAAAA } from '@babel/preset-env';
+import {moduleAAAA } from 'eslint-config-fbjs';
 
 // $expectError object-curly-spacing
-import { moduleAAAAA} from '@babel/preset-flow';
+import { moduleAAAAA} from 'eslint-config-google';
 
 const testA = { keyA: 'a', keyB: 'b', keyC: 'c' };
 const testB = {

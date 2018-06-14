@@ -118,7 +118,7 @@ describe('eslint', () => {
       .sort();
 
     expect(ruleIds.sort())
-      .toBe(testRules);
+      .toEqual(testRules);
   });
 
   testData

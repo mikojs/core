@@ -42,3 +42,6 @@ const shouldDirectReturn = (argu: string): string => {
  * @return {'true' | 'false'} - value
 */
 const noConfusingArrow = (): string => true ? 'true' : 'false';
+
+// $expectError no-extra-parens
+((function foo() {}))();

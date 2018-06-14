@@ -6,7 +6,8 @@ import order from '../../index';
 import eslint from 'eslint';
 
 // $expectError import/no-extraneous-dependencies
-import babel from '@babel/core';
+// $expectError import/no-internal-modules
+import babel from '@babel/core/lib/index';
 
 // $expectError import/no-unresolved
 // $expectError import/no-useless-path-segments

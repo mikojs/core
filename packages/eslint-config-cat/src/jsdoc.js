@@ -21,7 +21,6 @@ export default {
     'jsdoc/check-tag-names': 'error',
     'jsdoc/check-types': 'error',
     'jsdoc/newline-after-description': 'error',
-    'jsdoc/require-description-complete-sentence': 'off',
     'jsdoc/require-example': 'error',
     'jsdoc/require-hyphen-before-param-description': 'error',
     'jsdoc/require-param': 'error',

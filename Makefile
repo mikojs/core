@@ -31,6 +31,13 @@ test:
 	@make babel-all
 	@NODE_ENV=test yarn jest --silent ./
 
+release:
+	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}
+	@yarn lerna-changelog && \
+		git add . && \
+		git commit -m "chore(release): publish v${VERSION}" && \
+		git tag -a v${VERSION} -m "v${VERSION}"
+
 babel-clean:
 	rm -rf ./lib ./packages/**/lib
 

@@ -10,11 +10,11 @@
   "scripts": {
     "install:all": "make install-all",
     "clean:all": "make clean-all",
-    "babel:all": "make babel-all",
     "flow": "flow",
     "lint": "make lint",
     "test": "make test",
-    "prod": "yarn babel:all"
+    "prod": "make babel-all",
+    "release": "make release"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.48",
@@ -34,6 +34,7 @@
     "flow-typed": "^2.4.0",
     "jest": "^23.0.0",
     "lerna": "^2.11.0",
+    "lerna-changelog": "^0.7.0",
     "mem-fs": "^1.1.3",
     "mem-fs-editor": "^4.0.2",
     "pre-commit": "^1.2.2"

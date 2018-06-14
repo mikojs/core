@@ -38,13 +38,46 @@ jobs:
           name: Test prod
           command: yarn prod
 
-# TODO add deploy
+  deploy-beta:
+    working_directory: ~/repo
+
+    docker:
+      - image: node:latest
+
+    steps:
+      - checkout
+
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Install packages
+          command: yarn install:all
+
+      - run:
+          name: publish
+          command: |
+            yarn prod
+            bash .circleci/npm-release.sh ${CIRCLE_TAG} --npm-tag=beta
 
 workflows:
   version: 2
-  test:
+  test-and-deploy:
     jobs:
       - test:
           filters:
             tags:
               only: /.*/
+
+      - deploy-beta:
+          context: global-env
+          requires:
+            - test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v\d+(\.\d+){2}(-beta\.\d+)?/

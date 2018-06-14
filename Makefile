@@ -12,20 +12,20 @@ install-flow-typed:
 	@yarn lerna run flow-typed
 
 babel-core:
-	@$(call babel-build, ./packages/cat-utils)
+	@$(call babel-build, ./packages/utils)
 	@$(call babel-build, .)
 
 babel-all:
 	@make babel-clean
 	@make babel-core
-	@for package in $$(node ./lib/findPackages -i cat-utils -s); do \
+	@for package in $$(node ./lib/findPackages -i utils -s); do \
 	  $(call babel-build, ./packages/$$package); \
   done
 	@node ./lib/copyFlowFiles
 
 lint:
 	@$(call babel-build, ./packages/eslint-config-cat)
-	@yarn lerna run lint --scope eslint-config-cat
+	@yarn lerna run lint --scope @cat-org/eslint-config-cat
 
 test:
 	@make babel-all

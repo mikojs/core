@@ -1,5 +1,5 @@
 {
-  "name": "cat-core",
+  "name": "@cat-org/cat-core",
   "license": "MIT",
   "private": true,
   "engines": {

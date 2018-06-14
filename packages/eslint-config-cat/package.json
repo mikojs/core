@@ -1,7 +1,7 @@
 {
-  "name": "eslint-config-cat",
+  "name": "@cat-org/eslint-config-cat",
   "version": "1.0.0",
-  "description": "eslint config for cat",
+  "description": "eslint config fo cat-org",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "main": "./lib/index.js",
@@ -30,7 +30,7 @@
     "eslint-plugin-relay": "^0.0.21"
   },
   "devDependencies": {
-    "cat-utils": "^1.0.0",
+    "@cat-org/utils": "^1.0.0",
     "eslint": "^4.19.1",
     "fbjs": "^0.8.16"
   }

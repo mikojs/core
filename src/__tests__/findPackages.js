@@ -4,10 +4,10 @@ import findPackages from '../findPackages';
 
 describe('find packages', () => {
   it('equal', () => {
-    expect(findPackages)
+    expect(findPackages.sort())
       .toEqual([
-        'cat-utils',
+        'utils',
         'eslint-config-cat',
-      ]);
+      ].sort());
   });
 });

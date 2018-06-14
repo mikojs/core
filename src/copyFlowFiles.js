@@ -7,7 +7,7 @@ import memFs from 'mem-fs';
 import editor from 'mem-fs-editor';
 import chalk from 'chalk';
 
-import d3DirTree from '../packages/cat-utils/lib/d3DirTree';
+import d3DirTree from '../packages/utils/lib/d3DirTree';
 
 import showInfo from './showInfo';
 

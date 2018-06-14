@@ -7,8 +7,8 @@ module.exports = {
   ],
   plugins: [
     ['transform-imports', {
-      'cat-utils': {
-        transform: 'cat-utils/lib/${member}',
+      '@cat-org/utils': {
+        transform: '@cat-org/utils/lib/${member}',
       },
       fbjs: {
         transform: 'fbjs/lib/${member}',

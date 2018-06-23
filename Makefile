@@ -23,8 +23,9 @@ babel-all:
   done
 	@node ./lib/copyFlowFiles
 
-babel-build:
-	@$(call babel-build, ./packages/${MODULE})
+bebal-lint-staged:
+	@$(call babel-build, ./packages/configs)
+	@$(call babel-build, ./packages/eslint-config-cat)
 
 release:
 	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}

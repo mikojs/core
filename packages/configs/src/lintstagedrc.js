@@ -3,7 +3,10 @@
 export default {
   '*.js': [
     'yarn prettier',
-    'yarn lint',
+    'git add',
+  ],
+  'package.json': [
+    'yarn prettier-package-json',
     'git add',
   ],
 };

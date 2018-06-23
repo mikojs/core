@@ -23,13 +23,8 @@ babel-all:
   done
 	@node ./lib/copyFlowFiles
 
-lint:
-	@$(call babel-build, ./packages/eslint-config-cat)
-	@yarn lerna run lint --scope @cat-org/eslint-config-cat
-
-test:
-	@make babel-all
-	@NODE_ENV=test yarn jest --silent ./
+babel-build:
+	@$(call babel-build, ./packages/${MODULE})
 
 release:
 	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}

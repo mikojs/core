@@ -11,8 +11,8 @@
     "install:all": "make install-all",
     "clean:all": "make clean-all",
     "flow": "flow",
-    "lint": "make lint",
-    "test": "make test",
+    "lint": "make babel-build MODULE=eslint-config-cat && lerna run lint --scope @cat-org/eslint-config-cat",
+    "test": "make babel-all && NODE_ENV=test yarn jest --silent ./",
     "prod": "make babel-all",
     "release": "make release"
   },

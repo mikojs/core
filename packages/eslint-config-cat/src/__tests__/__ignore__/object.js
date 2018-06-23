@@ -13,10 +13,10 @@ import {
 import { moduleAAA, moduleBBB, moduleCCC, moduleDDD } from 'babel-eslint';
 
 // $expectError object-curly-spacing
-import {moduleAAAA } from 'eslint-config-fbjs';
+import { moduleAAAA } from 'eslint-config-fbjs';
 
 // $expectError object-curly-spacing
-import { moduleAAAAA} from 'eslint-config-google';
+import { moduleAAAAA } from 'eslint-config-google';
 
 const testA = { keyA: 'a', keyB: 'b', keyC: 'c' };
 const testB = {
@@ -27,24 +27,17 @@ const testB = {
 };
 
 const { keyA, keyB, keyC } = testA;
-const {
-  keyAA,
-  keyBB,
-  keyCC,
-  keyDD,
-} = testB;
+const { keyAA, keyBB, keyCC, keyDD } = testB;
 
 // $expectError object-curly-newline
 // $expectError object-curly-newline
 const { keyAAA, keyBBB, keyCCC, keyDDD } = moduleA;
 
 // $expectError object-curly-spacing
-const {keyAAAA } = moduleA;
+const { keyAAAA } = moduleA;
 
 // $expectError object-curly-spacing
-const { keyAAAAA} = moduleA;
+const { keyAAAAA } = moduleA;
 
 // $expectError comma-dangle
-const {
-  commaDangle
-} = testB;
+const { commaDangle } = testB;

@@ -1,20 +1,20 @@
 {
   "name": "@cat-org/configs",
-  "version": "1.0.0-beta.0",
   "description": "Configs for cat-org",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/cat-core/",
+  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/configs",
+  "version": "1.0.0-beta.0",
   "main": "./lib/index.js",
-  "publishConfig": {
-    "access": "public"
+  "scripts": {
+    "flow-typed": "flow-typed install -f 0.72.0 --verbose"
   },
   "keywords": [
     "cat",
     "configs"
   ],
-  "homepage": "https://cat-org.github.io/cat-core/",
-  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/configs",
-  "scripts": {
-    "flow-typed": "flow-typed install -f 0.72.0 --verbose"
+  "publishConfig": {
+    "access": "public"
   }
 }

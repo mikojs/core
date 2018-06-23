@@ -13,24 +13,21 @@ import showInfo from './showInfo';
 const store = memFs.create();
 const fs = editor.create(store);
 
-const flowVersion = pkg
-  .devDependencies['flow-bin']
-  .replace(/\^/, '');
+const flowVersion = pkg.devDependencies['flow-bin'].replace(/\^/, '');
 
-findPackages
-  .forEach((packageName: string) => {
-    const packagePkgPath = path.resolve(
-      __dirname,
-      './../packages',
-      packageName,
-      'package.json'
-    );
+findPackages.forEach((packageName: string) => {
+  const packagePkgPath = path.resolve(
+    __dirname,
+    './../packages',
+    packageName,
+    'package.json',
+  );
 
-    fs.extendJSON(packagePkgPath, {
-      scripts: {
-        'flow-typed': `flow-typed install -f ${flowVersion} --verbose`,
-      },
-    });
-
-    fs.commit((err: mixed): void => showInfo(!err, packageName, 'add scripts'));
+  fs.extendJSON(packagePkgPath, {
+    scripts: {
+      'flow-typed': `flow-typed install -f ${flowVersion} --verbose`,
+    },
   });
+
+  fs.commit((err: mixed): void => showInfo(!err, packageName, 'add scripts'));
+});

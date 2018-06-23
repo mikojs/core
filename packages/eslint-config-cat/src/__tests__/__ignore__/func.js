@@ -6,7 +6,7 @@
  *
  * @param {string} argu - any
  * @return {'value'} - value
-*/
+ */
 const correct = (argu: string): string => 'value';
 
 /**
@@ -15,7 +15,7 @@ const correct = (argu: string): string => 'value';
  *
  * @param {string} argu - any
  * @return {'test'} - value
-*/
+ */
 const correctNotDirectReturn = (argu: string): string => {
   const a = 'test';
 
@@ -29,7 +29,7 @@ const correctNotDirectReturn = (argu: string): string => {
  *
  * @param {string} argu - any
  * @return {'value'} - value
-*/
+ */
 const shouldDirectReturn = (argu: string): string => {
   return 'value';
 };
@@ -40,8 +40,8 @@ const shouldDirectReturn = (argu: string): string => {
  * noConfusingArrow();
  *
  * @return {'true' | 'false'} - value
-*/
-const noConfusingArrow = (): string => true ? 'true' : 'false';
+ */
+const noConfusingArrow = (): string => (true ? 'true' : 'false');
 
 // $expectError no-extra-parens
-((function foo() {}))();
+(function foo() {})();

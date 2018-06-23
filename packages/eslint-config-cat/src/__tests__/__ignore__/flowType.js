@@ -32,14 +32,14 @@ type useFunctionType = Function;
 
 type spaceAfterTypeColonType = {
   // $expectError flowtype/space-after-type-colon
-  afterType:string,
+  afterType: string,
   // $expectError flowtype/space-before-type-colon
-  beforeType : string,
+  beforeType: string,
 };
 
 // $expectError flowtype/delimiter-dangle
 type delimiterDangleType = {
-  key: string
+  key: string,
 };
 
 // $expectError flowtype/type-id-match
@@ -55,7 +55,7 @@ let requireVariableType = 'test';
  *
  * @param {any} argu - any
  * @return {any} - any
-*/
+ */
 const requireReturnType = (argu: string) => argu;
 
 // $expectError flowtype/require-parameter-type
@@ -65,5 +65,5 @@ const requireReturnType = (argu: string) => argu;
  *
  * @param {any} argu - any
  * @return {any} - any
-*/
+ */
 const requireParameterType = (argu): string => argu;

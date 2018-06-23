@@ -1,20 +1,16 @@
 {
+  "private": true,
   "name": "@cat-org/cat-core",
   "license": "MIT",
-  "private": true,
-  "engines": {
-    "node": ">= 10.2.1",
-    "npm": ">= 6.1.0",
-    "yarn": ">= 1.7.0"
-  },
   "scripts": {
-    "install:all": "make install-all",
     "clean:all": "make clean-all",
+    "precommit":
+      "make bebal-lint-staged && lint-staged && yarn flow && yarn lint",
+    "install:all": "make install-all",
     "lint": "lerna run lint --scope @cat-org/eslint-config-cat",
-    "test": "make babel-all && NODE_ENV=test yarn jest --silent ./",
     "prod": "make babel-all",
     "release": "make release",
-    "precommit": "make bebal-lint-staged && lint-staged && yarn flow && yarn lint"
+    "test": "make babel-all && NODE_ENV=test yarn jest --silent ./"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.48",
@@ -41,5 +37,10 @@
     "mem-fs-editor": "^4.0.2",
     "prettier": "^1.13.5",
     "prettier-package-json": "^1.6.0"
+  },
+  "engines": {
+    "node": ">= 10.2.1",
+    "npm": ">= 6.1.0",
+    "yarn": ">= 1.7.0"
   }
 }

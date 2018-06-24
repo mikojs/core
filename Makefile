@@ -34,7 +34,7 @@ release:
 		vim CHANGELOG.md && \
 		git add . && \
 		git commit -m "chore(release): v${VERSION} [skip ci]" && \
-	  git tag -a v${VERSION} -e
+	  git tag -a v${VERSION} -m "v${VERSION}"
 
 babel-clean:
 	rm -rf ./lib ./packages/**/lib

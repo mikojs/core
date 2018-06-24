@@ -1,9 +1,28 @@
 // @flow
 
+import { invariant } from 'fbjs';
+
+import type { configType } from './definitions/configType.js.flow';
+
 /**
  * extends eslint-import-resolver, eslint-import-resolver-babel-module
  * repo: https://github.com/tleunen/eslint-import-resolver-babel-module
  */
+
+/**
+ * @example
+ * checImport({
+ *   rules: {},
+ * });
+ *
+ * @param {config} config - eslint config
+ */
+export const checkImport = (config: configType) => {
+  invariant(
+    Object.keys(config?.rules || {}).includes('import/no-restricted-paths'),
+    'You should include "import/no-restricted-paths"',
+  );
+};
 
 export default {
   extends: ['plugin:import/errors', 'plugin:import/warnings'],

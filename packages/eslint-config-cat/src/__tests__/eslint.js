@@ -117,6 +117,7 @@ describe('eslint', () => {
             case 'arrow-parens':
               return !ruleIds.includes('flowtype/require-parameter-type');
             case 'flowtype/no-flow-fix-me-comments':
+            case 'flowtype/generic-spacing':
             case 'no-warning-comments':
               return false;
             default:

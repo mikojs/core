@@ -15,15 +15,10 @@ describe('check files in packages', () => {
     it(name, () => {
       const files = children
         .map(({ data: childData }: d3DirTreeType): string => childData.name)
+        .filter((fileName: string): boolean => fileName !== 'node_modules')
         .sort();
 
-      expect(files).toEqual([
-        '.npmignore',
-        'lib',
-        'node_modules',
-        'package.json',
-        'src',
-      ]);
+      expect(files).toEqual(['.npmignore', 'lib', 'package.json', 'src']);
     });
   });
 });

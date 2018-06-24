@@ -32,14 +32,14 @@ type useFunctionType = Function;
 
 type spaceAfterTypeColonType = {
   // $expectError flowtype/space-after-type-colon
-  afterType: string,
+  afterType:string,
   // $expectError flowtype/space-before-type-colon
-  beforeType: string,
+  beforeType : string,
 };
 
 // $expectError flowtype/delimiter-dangle
 type delimiterDangleType = {
-  key: string,
+  key: string
 };
 
 // $expectError flowtype/type-id-match

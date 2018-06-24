@@ -37,6 +37,6 @@ export default {
     ],
     'flowtype/space-before-type-colon': ['error', 'never'],
     'flowtype/type-id-match': ['error', '^([a-z][A-Za-z0-9]*)+Type$'],
-    'flowtype/generic-spacing': ['never'],
+    'flowtype/generic-spacing': ['off'],
   },
 };

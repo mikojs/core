@@ -7,5 +7,5 @@ const correct = {
 
 const unnecessarilyQuotedKey = {
   // $expectError quote-props
-  key: 'value',
+  'key': 'value',
 };

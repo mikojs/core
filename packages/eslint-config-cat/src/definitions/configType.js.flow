@@ -1,0 +1,26 @@
+// @flow
+
+export type configType = {
+  extends?: $ReadOnlyArray<string>,
+  parser?: 'babel-eslint',
+  env?: {
+    jest: true,
+    node: true,
+    browser: true,
+  },
+  plugins?: $ReadOnlyArray<string>,
+  settings?: {
+    [string]: {},
+  },
+  rules?: {
+    [string]:
+      | string
+      | $ReadOnlyArray<
+          | string
+          | number
+          | {
+              [string]: mixed,
+            },
+        >,
+  },
+};

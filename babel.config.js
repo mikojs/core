@@ -1,26 +1,27 @@
 // @flow
 
 module.exports = {
-  presets: [
-    '@babel/preset-env',
-    '@babel/preset-flow',
-  ],
+  presets: ['@babel/preset-env', '@babel/preset-flow'],
   plugins: [
-    ['transform-imports', {
-      '@cat-org/utils': {
-        transform: '@cat-org/utils/lib/${member}',
+    [
+      'transform-imports',
+      {
+        '@cat-org/utils': {
+          transform: '@cat-org/utils/lib/${member}',
+        },
+        fbjs: {
+          transform: 'fbjs/lib/${member}',
+        },
       },
-      fbjs: {
-        transform: 'fbjs/lib/${member}',
+    ],
+    [
+      'module-resolver',
+      {
+        root: ['./src'],
       },
-    }],
-    ['module-resolver', {
-      root: ['./src'],
-    }],
+    ],
     '@babel/plugin-proposal-optional-chaining',
     'add-module-exports',
   ],
-  ignore: process.env.NODE_ENV === 'test' ? [] : [
-    '**/__tests__/**',
-  ],
+  ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],
 };

@@ -6,7 +6,7 @@
  *
  * @param {number} argu - example argu
  * @return {10} - example return
-*/
+ */
 const correctFunction = (argu: string): number => 10;
 
 // $expectError jsdoc/newline-after-description
@@ -15,7 +15,7 @@ const correctFunction = (argu: string): number => 10;
  * desc
  * @param {number} argu - example argu
  * @return {10} - example return
-*/
+ */
 const noExample = (argu: string): number => 10;
 
 // $expectError jsdoc/check-tag-names
@@ -26,7 +26,7 @@ const noExample = (argu: string): number => 10;
  *
  * @Param {string} argu - example argu
  * @return {10} - example return
-*/
+ */
 const noParams = (argu: string): number => 10;
 
 // $expectError jsdoc/require-hyphen-before-param-description
@@ -36,7 +36,7 @@ const noParams = (argu: string): number => 10;
  * correctFunction('test');
  *
  * @param {number} argu example argu
-*/
+ */
 const noReturns = (argu: string): number => 10;
 
 // $expectError jsdoc/check-param-names
@@ -46,7 +46,7 @@ const noReturns = (argu: string): number => 10;
  * checkParamNames();
  *
  * @param {string} Argu - example argu
-*/
+ */
 const checkParamNames = (argu: string) => {};
 
 // $expectError jsdoc/check-types
@@ -56,7 +56,7 @@ const checkParamNames = (argu: string) => {};
  *
  * @param {Number} argu - example argu
  * @return {10} - example return
-*/
+ */
 const checkTypes = (argu: string): number => 10;
 
 // $expectError jsdoc/check-param-names
@@ -71,7 +71,7 @@ const checkTypes = (argu: string): number => 10;
  *
  * @param
  * @return {10} - example return
-*/
+ */
 const requireParam = (argu: string): number => 10;
 
 // $expectError jsdoc/require-returns-description
@@ -83,7 +83,7 @@ const requireParam = (argu: string): number => 10;
  *
  * @param {number} argu - example argu
  * @return
-*/
+ */
 const requireReturn = (argu: string): number => 10;
 
 // $expectError require-jsdoc

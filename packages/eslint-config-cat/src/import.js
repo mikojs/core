@@ -3,14 +3,11 @@
 /**
  * extends eslint-import-resolver, eslint-import-resolver-babel-module
  * repo: https://github.com/tleunen/eslint-import-resolver-babel-module
-*/
+ */
 
 // TODO: make rules run, add import rules
 export default {
-  extends: [
-    'plugin:import/errors',
-    'plugin:import/warnings',
-  ],
+  extends: ['plugin:import/errors', 'plugin:import/warnings'],
   settings: {
     'import/resolver': {
       node: {},
@@ -20,9 +17,12 @@ export default {
   rules: {
     'import/no-unresolved': 'error',
     'import/default': 'error',
-    'import/namespace': ['error', {
-      allowComputed: true,
-    }],
+    'import/namespace': [
+      'error',
+      {
+        allowComputed: true,
+      },
+    ],
     // TODO wait project plugin: 'import/no-restricted-paths': 'error',
     'import/no-absolute-path': 'error',
     'import/no-internal-modules': 'error',

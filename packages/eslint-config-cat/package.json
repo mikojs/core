@@ -1,23 +1,15 @@
 {
   "name": "@cat-org/eslint-config-cat",
-  "version": "1.0.0-beta.1",
   "description": "eslint config fo cat-org",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "main": "./lib/index.js",
-  "publishConfig": {
-    "access": "public"
-  },
-  "keywords": [
-    "eslint",
-    "config",
-    "cat"
-  ],
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/eslint-config-cat",
+  "version": "1.0.0-beta.1",
+  "main": "./lib/index.js",
   "scripts": {
-    "lint": "eslint --cache --ext .js -c ./../../.eslintrc.js --ignore-path ./../../.eslintignore --cache-location ./../../.eslintcache ./../../",
-    "flow-typed": "flow-typed install -f 0.72.0 --verbose"
+    "flow-typed": "flow-typed install -f 0.72.0 --verbose",
+    "lint": "eslint --cache --ext .js -c ./../../.eslintrc.js --ignore-path ./../../.eslintignore --cache-location ./../../.eslintcache ./../../"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",
@@ -36,5 +28,13 @@
     "@cat-org/utils": "^1.0.0-beta.1",
     "eslint": "^4.19.1",
     "fbjs": "^0.8.16"
+  },
+  "keywords": [
+    "cat",
+    "config",
+    "eslint"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }

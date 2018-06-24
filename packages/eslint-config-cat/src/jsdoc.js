@@ -3,12 +3,10 @@
 /**
  * extends eslint-plugin-jsdoc
  * repo: https://github.com/gajus/eslint-plugin-jsdoc
-*/
+ */
 
 export default {
-  plugins: [
-    'jsdoc',
-  ],
+  plugins: ['jsdoc'],
   settings: {
     jsdoc: {
       tagNamePreference: {

@@ -17,3 +17,6 @@ flow-typed
 
 # jest
 coverage
+
+# for changelog
+.changelog

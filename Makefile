@@ -30,9 +30,11 @@ bebal-lint-staged:
 release:
 	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}
 	@yarn lerna-changelog && \
+		read -p "Input any word..." && \
+		vim CHANGELOG.md && \
 		git add . && \
-		git commit -m "chore(release): publish v${VERSION}" && \
-		git tag -a v${VERSION} -m "v${VERSION}"
+		git commit -m "chore(release): v${VERSION} [skip ci]" && \
+	  git tag -a v${VERSION} -m "v${VERSION}"
 
 babel-clean:
 	rm -rf ./lib ./packages/**/lib

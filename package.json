@@ -5,7 +5,7 @@
   "scripts": {
     "clean:all": "make clean-all",
     "precommit":
-      "make bebal-lint-staged && lint-staged && yarn flow && yarn lint",
+      "make babel-lint-staged && lint-staged && yarn flow && yarn lint",
     "install:all": "make install-all",
     "lint": "lerna run lint --scope @cat-org/eslint-config-cat",
     "prod": "make babel-all",

@@ -24,7 +24,7 @@ jobs:
       - run:
           name: Check code style
           command: |
-            make bebal-lint-staged
+            make babel-lint-staged
             yarn lint
             yarn flow
 

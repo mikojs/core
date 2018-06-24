@@ -23,7 +23,7 @@ babel-all:
   done
 	@node ./lib/copyFlowFiles
 
-bebal-lint-staged:
+babel-lint-staged:
 	@$(call babel-build, ./packages/configs)
 	@$(call babel-build, ./packages/eslint-config-cat)
 

@@ -41,22 +41,18 @@ export default {
       {
         ObjectExpression: {
           multiline: true,
-          minProperties: 4,
           consistent: true,
         },
         ObjectPattern: {
           multiline: true,
-          minProperties: 4,
           consistent: true,
         },
         ImportDeclaration: {
           multiline: true,
-          minProperties: 4,
           consistent: true,
         },
         ExportDeclaration: {
           multiline: true,
-          minProperties: 4,
           consistent: true,
         },
       },

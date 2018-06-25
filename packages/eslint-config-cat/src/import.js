@@ -41,7 +41,6 @@ export default {
         allowComputed: true,
       },
     ],
-    // TODO wait project plugin: 'import/no-restricted-paths': 'error',
     'import/no-absolute-path': 'error',
     'import/no-internal-modules': 'error',
     'import/no-self-import': 'error',

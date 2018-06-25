@@ -21,7 +21,6 @@ babel-all:
 	@for package in $$(node ./lib/findPackages -i utils -s); do \
 	  $(call babel-build, ./packages/$$package); \
   done
-	@node ./lib/copyFlowFiles
 
 babel-lint-staged:
 	@$(call babel-build, ./packages/configs)

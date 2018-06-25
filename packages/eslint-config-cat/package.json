@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/eslint-config-cat",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "main": "./lib/index.js",
   "scripts": {
     "flow-typed": "flow-typed install -f 0.72.0 --verbose",
@@ -26,7 +26,7 @@
     "fbjs": "^0.8.16"
   },
   "devDependencies": {
-    "@cat-org/utils": "^1.0.0-beta.3",
+    "@cat-org/utils": "^1.0.0-beta.4",
     "eslint": "^4.19.1"
   },
   "keywords": [

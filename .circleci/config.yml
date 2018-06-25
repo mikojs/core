@@ -66,7 +66,13 @@ jobs:
 
       - run:
           name: Publish
-          command: bash .circleci/npm-release.sh ${CIRCLE_TAG} --npm-tag=beta
+          command: |
+            yarn lerna publish \
+              --skip-git \
+              --force-publish=* \
+              --repo-version ${CIRCLE_TAG} \
+              --npm-tag=beta \
+              --yes
 
 workflows:
   version: 2

@@ -8,8 +8,6 @@ import {
   moduleDD,
 } from 'eslint-import-resolver-babel-module';
 
-// $expectError object-curly-newline
-// $expectError object-curly-newline
 import { moduleAAA, moduleBBB, moduleCCC, moduleDDD } from 'babel-eslint';
 
 // $expectError object-curly-spacing
@@ -36,7 +34,8 @@ const {
 
 // $expectError object-curly-newline
 // $expectError object-curly-newline
-const { keyAAA, keyBBB, keyCCC, keyDDD } = moduleA;
+const { keyAAA, keyBBB, keyCCC,
+  keyDDD } = moduleA;
 
 // $expectError object-curly-spacing
 const {keyAAAA } = moduleA;

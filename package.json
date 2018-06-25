@@ -9,7 +9,7 @@
     "install:all": "make install-all",
     "lint": "lerna run lint --scope @cat-org/eslint-config-cat",
     "prepare": "patch-package",
-    "prod": "make babel-all",
+    "prod": "make babel-all && node ./lib/copyFlowFiles",
     "release": "make release",
     "test": "make babel-all && NODE_ENV=test yarn jest --silent ./"
   },

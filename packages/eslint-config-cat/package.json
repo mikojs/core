@@ -9,7 +9,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "flow-typed": "flow-typed install -f 0.72.0 --verbose",
-    "lint": "eslint --cache --ext .js -c ./../../.eslintrc.js --ignore-path ./../../.eslintignore --cache-location ./../../.eslintcache ./../../"
+    "lint": "eslint --cache --ext .js -c ./../../.eslintrc.js --ignore-path ./../../.eslintignore --cache-location ./../../.eslintcache"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",

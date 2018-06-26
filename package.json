@@ -4,8 +4,7 @@
   "license": "MIT",
   "scripts": {
     "clean:all": "make clean-all",
-    "precommit":
-      "make babel-lint-staged && lint-staged && yarn flow && yarn lint",
+    "precommit": "make babel-lint-staged && lint-staged",
     "install:all": "make install-all",
     "lint": "lerna run lint --scope @cat-org/eslint-config-cat",
     "prepare": "patch-package",

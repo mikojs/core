@@ -5,6 +5,8 @@ install-all:
 	@node ./lib/checkPackagesPkg
 	@node ./lib/copyFlowFiles
 	@make install-flow-typed
+	@node ./lib/copyDependencies
+	@yarn install
 
 install-flow-typed:
 	rm -rf ./flow-typed

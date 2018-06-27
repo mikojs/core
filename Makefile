@@ -2,7 +2,7 @@ install-all:
 	@yarn install
 	@yarn lerna bootstrap
 	@make babel-core
-	@node ./lib/addScriptsToPkg
+	@node ./lib/checkPackagesPkg
 	@node ./lib/copyFlowFiles
 	@make install-flow-typed
 

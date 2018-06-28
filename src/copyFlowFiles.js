@@ -15,6 +15,7 @@ import showInfo from './showInfo';
 const store = memFs.create();
 const fs = editor.create(store);
 
+// TODO remove findPackages
 findPackages.forEach((packageName: string) => {
   const folderPath = path.resolve(__dirname, './../packages', packageName);
   let countFiles: number = 0;

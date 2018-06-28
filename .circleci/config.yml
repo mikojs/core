@@ -25,7 +25,7 @@ jobs:
           name: Check code style
           command: |
             make babel-lint-staged
-            yarn lint ./../../
+            yarn lint .
             yarn flow
 
       - run:

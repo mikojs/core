@@ -108,8 +108,6 @@ describe('eslint', () => {
   });
 
   it('check amount of rules', () => {
-    // FIXME: https://github.com/babel/babel-eslint/issues/595
-    // eslint-disable-next-line no-undef
     const testRules = Object.keys(configs?.rules || {})
       .filter(
         (ruleName: string): boolean => {

@@ -2,9 +2,11 @@ install-all:
 	@yarn install
 	@yarn lerna bootstrap
 	@make babel-core
-	@node ./lib/addScriptsToPkg
+	@node ./lib/checkPackagesPkg
 	@node ./lib/copyFlowFiles
 	@make install-flow-typed
+	@node ./lib/copyDependencies
+	@yarn install
 
 install-flow-typed:
 	rm -rf ./flow-typed
@@ -43,8 +45,8 @@ clean-all:
 	rm -rf ./node_modules ./packages/**/node_modules
 	rm -rf ./flow-typed
 	rm -rf ./coverage
+	rm -rf ./.eslintcache
 	rm -rf ./*.log
-	rm -rf ./packages/eslint-config-cat/.eslintcache
 
 define babel-build
 	yarn babel $(1)/src --out-dir $(1)/lib

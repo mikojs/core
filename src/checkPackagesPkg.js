@@ -23,7 +23,8 @@ findPackages.forEach((packageName: string) => {
     'package.json',
   );
 
-  fs.extendJSON(packagePkgPath, {
+  fs.writeJSON(packagePkgPath, {
+    ...require(packagePkgPath),
     scripts: {
       'flow-typed': `flow-typed install -f ${flowVersion} --verbose`,
     },

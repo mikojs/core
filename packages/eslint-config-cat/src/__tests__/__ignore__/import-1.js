@@ -6,7 +6,6 @@ import order from '../../index';
 import eslint from 'eslint';
 
 // $expectError import/no-extraneous-dependencies
-// $expectError import/no-internal-modules
 import babel from '@babel/core/lib/index';
 
 // $expectError import/no-unresolved
@@ -18,7 +17,7 @@ import noUnresolver from './../index';
 import noAbsolutePath from '/etc';
 
 // $expectError import/default
-import arrowFunc from './import-2/import-2';
+import arrowFunc from './import-2';
 
 // $expectError import/no-named-default
 // $expectError import/no-duplicates

@@ -5,7 +5,30 @@ import flowtypeConfig from './flowtype';
 import jsdocConfig from './jsdoc';
 import extendsConfig from './extendsConfigs';
 
-import type { configType } from './definitions/configType.js.flow';
+type configType = {
+  extends?: $ReadOnlyArray<string>,
+  parser?: 'babel-eslint',
+  env?: {
+    jest: true,
+    node: true,
+    browser: true,
+  },
+  plugins?: $ReadOnlyArray<string>,
+  settings?: {
+    [string]: {},
+  },
+  rules?: {
+    [string]:
+      | string
+      | $ReadOnlyArray<
+          | string
+          | number
+          | {
+              [string]: mixed,
+            },
+        >,
+  },
+};
 
 const defaultConfig = {
   extends: ['eslint:recommended'],

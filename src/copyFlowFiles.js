@@ -8,6 +8,8 @@ import editor from 'mem-fs-editor';
 import chalk from 'chalk';
 
 import d3DirTree from '../packages/utils/lib/d3DirTree';
+// eslint-disable-next-line max-len
+import type { d3DirTreeType } from '../packages/utils/src/definitions/d3DirTree.js.flow';
 
 import showInfo from './showInfo';
 
@@ -15,8 +17,9 @@ const store = memFs.create();
 const fs = editor.create(store);
 const packageNames = {};
 
+// TODO can copy with argu
 d3DirTree(path.resolve(__dirname, './../packages')).each(
-  ({ data }: d3DirTree) => {
+  ({ data }: d3DirTreeType) => {
     const { path: filePath, extension } = data;
 
     if (extension !== '.flow' || /node_modules/.test(filePath)) return;

@@ -30,5 +30,7 @@ findPackages.forEach((packageName: string) => {
     },
   });
 
-  fs.commit((err: mixed): void => showInfo(!err, packageName, 'add scripts'));
+  fs.commit(
+    (err: mixed): void => showInfo(!err, packageName, 'modify package.json'),
+  );
 });

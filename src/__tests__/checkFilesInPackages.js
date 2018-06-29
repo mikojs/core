@@ -23,6 +23,8 @@ describe('check files in packages', () => {
         expect(files).toEqual(['.npmignore', 'lib', 'package.json', 'src']);
       });
 
+      // TODO check packages json key
+
       switch (name) {
         case 'eslint-config-cat':
           it('check eslint version', () => {

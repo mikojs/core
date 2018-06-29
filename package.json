@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@cat-org/cat-core",
+  "name": "@cat-org/root",
   "license": "MIT",
   "scripts": {
     "clean:all": "make clean-all",

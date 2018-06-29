@@ -17,9 +17,7 @@ const totalDependencies = {};
 delete pkg.dependencies;
 
 fs.writeJSON(path.resolve(__dirname, '../package.json'), pkg);
-fs.commit(
-  (err: mixed): void => showInfo(!err, 'test-packages', 'reset dependencies'),
-);
+fs.commit((err: mixed): void => showInfo(!err, 'root', 'reset dependencies'));
 
 const MODULES = ['eslint-config-cat'];
 
@@ -50,7 +48,7 @@ Object.keys(totalDependencies).forEach((dependencyName: string) => {
     hasError = true;
     showInfo(
       false,
-      'test-packages',
+      'root',
       // eslint-disable-next-line max-len
       chalk`{blueBright ${dependencyName}} has multiple versions: {red ${totalDependencies[
         dependencyName
@@ -60,7 +58,5 @@ Object.keys(totalDependencies).forEach((dependencyName: string) => {
 });
 
 if (!hasError) {
-  fs.commit(
-    (err: mixed): void => showInfo(!err, 'test-packages', 'write dependencies'),
-  );
+  fs.commit((err: mixed): void => showInfo(!err, 'root', 'write dependencies'));
 }

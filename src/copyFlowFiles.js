@@ -8,37 +8,44 @@ import editor from 'mem-fs-editor';
 import chalk from 'chalk';
 
 import d3DirTree from '../packages/utils/lib/d3DirTree';
+// eslint-disable-next-line max-len
+import type { d3DirTreeType } from '../packages/utils/src/definitions/d3DirTree.js.flow';
 
-import findPackages from './findPackages';
 import showInfo from './showInfo';
 
 const store = memFs.create();
 const fs = editor.create(store);
+const packageNames = {};
 
-findPackages.forEach((packageName: string) => {
-  const folderPath = path.resolve(__dirname, './../packages', packageName);
-  let countFiles: number = 0;
-
-  d3DirTree(path.resolve(folderPath, './src')).each(({ data }: d3DirTree) => {
+// TODO can copy with argu
+d3DirTree(path.resolve(__dirname, './../packages')).each(
+  ({ data }: d3DirTreeType) => {
     const { path: filePath, extension } = data;
 
-    if (extension !== '.flow') return;
+    if (extension !== '.flow' || /node_modules/.test(filePath)) return;
 
-    countFiles += 1;
+    const packageName = filePath
+      .replace(`${path.resolve(__dirname, './../packages')}/`, '')
+      .replace(/\/src\/.*/, '');
+
+    packageNames[packageName] = (packageNames?.[packageName] || 0) + 1;
+
     fs.copy(
       filePath,
-      filePath.replace(`${folderPath}/src/`, `${folderPath}/lib/`),
+      filePath.replace(/packages\/([a-zA-Z-]*)\/src/, 'packages/$1/lib'),
     );
-  });
+  },
+);
 
-  if (countFiles === 0) return;
-
+if (Object.keys(packageNames).length !== 0) {
   fs.commit(
     (err: mixed): void =>
-      showInfo(
-        !err,
-        packageName,
-        chalk`copy {gray (${countFiles})} flow files`,
-      ),
+      Object.keys(packageNames).forEach((packageName: string) => {
+        showInfo(
+          !err,
+          packageName,
+          chalk`copy {gray (${packageNames[packageName]})} flow files`,
+        );
+      }),
   );
-});
+}

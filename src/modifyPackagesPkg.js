@@ -23,11 +23,14 @@ findPackages.forEach((packageName: string) => {
     'package.json',
   );
 
-  fs.extendJSON(packagePkgPath, {
+  fs.writeJSON(packagePkgPath, {
+    ...require(packagePkgPath),
     scripts: {
       'flow-typed': `flow-typed install -f ${flowVersion} --verbose`,
     },
   });
 
-  fs.commit((err: mixed): void => showInfo(!err, packageName, 'add scripts'));
+  fs.commit(
+    (err: mixed): void => showInfo(!err, packageName, 'modify package.json'),
+  );
 });

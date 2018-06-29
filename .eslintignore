@@ -1,18 +1,17 @@
-# default
+# node
 node_modules
 
 # babel
 lib
 
 # flow
-flow-typed/npm
+flow-typed
 
 # jest
 coverage
 
-# add other check
-!.eslintrc.js
-!.babelrc.js
+# add checking other configs
+!.*.js
 
 # ignore for eslint-config-cat
 packages/eslint-config-cat/src/__tests__/__ignore__

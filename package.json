@@ -1,17 +1,31 @@
 {
   "private": true,
-  "name": "@cat-org/cat-core",
+  "name": "@cat-org/root",
   "license": "MIT",
   "scripts": {
     "clean:all": "make clean-all",
-    "precommit":
-      "make babel-lint-staged && lint-staged && yarn flow && yarn lint",
+    "precommit": "make babel-lint-staged && lint-staged",
     "install:all": "make install-all",
-    "lint": "lerna run lint --scope @cat-org/eslint-config-cat",
+    "lint": "eslint --cache --ext .js",
     "prepare": "patch-package",
     "prod": "make babel-all && node ./lib/copyFlowFiles",
     "release": "make release",
-    "test": "make babel-all && NODE_ENV=test yarn jest --silent ./"
+    "test":
+      "make babel-all && node ./lib/copyFlowFiles && NODE_ENV=test jest --silent ./"
+  },
+  "dependencies": {
+    "babel-eslint": "^8.2.3",
+    "eslint-config-fbjs": "^2.0.1",
+    "eslint-config-google": "^0.9.1",
+    "eslint-import-resolver-babel-module": "^5.0.0-beta.0",
+    "eslint-plugin-babel": "^5.0.0",
+    "eslint-plugin-flowtype": "^2.46.2",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsdoc": "^3.6.3",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "eslint-plugin-relay": "^0.0.21",
+    "fbjs": "^0.8.16"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.48",
@@ -26,6 +40,7 @@
     "babel-plugin-transform-imports": "^1.5.0",
     "chalk": "^2.4.1",
     "command-line-args": "^5.0.2",
+    "eslint": "^5.0.1",
     "fbjs": "^0.8.16",
     "flow-bin": "^0.72.0",
     "flow-typed": "^2.4.0",

@@ -1,7 +1,7 @@
 // @flow
 
-const lintStagedrc = require('./packages/configs/lib/lintstagedrc');
+const lintStagedConfigs = require('./packages/configs/lib/lintsteged');
 
-lintStagedrc['package.json'].splice(0, 0, 'node ./lib/copyDependencies');
+lintStagedConfigs['package.json'].splice(0, 0, 'node ./lib/copyDependencies');
 
-module.exports = lintStagedrc;
+module.exports = lintStagedConfigs;

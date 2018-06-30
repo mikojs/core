@@ -1,27 +1,37 @@
 // @flow
 
-module.exports = {
-  presets: ['@babel/preset-env', '@babel/preset-flow'],
-  plugins: [
-    [
-      'transform-imports',
-      {
-        '@cat-org/utils': {
-          transform: '@cat-org/utils/lib/${member}',
-        },
-        fbjs: {
-          transform: 'fbjs/lib/${member}',
-        },
+// eslint-disable-next-line flowtype/require-return-type
+const babelConfigs = (() => {
+  try {
+    return require('./packages/configs/lib/babel');
+  } catch (e) {
+    return {
+      presets: ['@babel/preset-env', '@babel/preset-flow'],
+      plugins: ['@babel/plugin-proposal-optional-chaining'],
+      ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],
+    };
+  }
+})();
+
+babelConfigs.plugins.push(
+  [
+    'transform-imports',
+    {
+      '@cat-org/utils': {
+        transform: '@cat-org/utils/lib/${member}',
       },
-    ],
-    [
-      'module-resolver',
-      {
-        root: ['./src'],
+      fbjs: {
+        transform: 'fbjs/lib/${member}',
       },
-    ],
-    '@babel/plugin-proposal-optional-chaining',
-    'add-module-exports',
+    },
   ],
-  ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],
-};
+  [
+    'module-resolver',
+    {
+      root: ['./src'],
+    },
+  ],
+  'add-module-exports',
+);
+
+module.exports = babelConfigs;

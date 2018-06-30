@@ -2,10 +2,6 @@
 
 const lintStagedrc = require('./packages/configs/lib/lintstagedrc');
 
-module.exports = {
-  ...lintStagedrc,
-  'package.json': [
-    'node ./lib/copyDependencies',
-    ...lintStagedrc['package.json'],
-  ],
-};
+lintStagedrc['package.json'].splice(0, 0, 'node ./lib/copyDependencies');
+
+module.exports = lintStagedrc;

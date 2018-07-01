@@ -3,6 +3,8 @@
 // eslint-disable-next-line flowtype/require-return-type
 const babelConfigs = (() => {
   try {
+    if (process.env.NODE_ENV === 'test') throw new Error('test');
+
     return require('./packages/configs/lib/babel');
   } catch (e) {
     return {

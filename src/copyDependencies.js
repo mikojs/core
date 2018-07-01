@@ -14,14 +14,7 @@ const store = memFs.create();
 const fs = editor.create(store);
 const totalDependencies = {};
 
-delete pkg.dependencies;
-
-fs.writeJSON(path.resolve(__dirname, '../package.json'), pkg);
-fs.commit((err: mixed): void => showInfo(!err, 'root', 'reset dependencies'));
-
-const MODULES = ['eslint-config-cat'];
-
-MODULES.forEach((moduleName: string) => {
+['eslint-config-cat'].forEach((moduleName: string) => {
   const { dependencies } = require(path.resolve(
     __dirname,
     '../packages',
@@ -39,7 +32,10 @@ MODULES.forEach((moduleName: string) => {
     }
   });
 
-  fs.extendJSON(path.resolve(__dirname, '../package.json'), { dependencies });
+  fs.writeJSON(path.resolve(__dirname, '../package.json'), {
+    ...pkg,
+    dependencies,
+  });
 });
 
 let hasError: boolean = false;

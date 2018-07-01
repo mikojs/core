@@ -22,13 +22,13 @@ d3DirTree(path.resolve(__dirname, './../packages')).each(
   ({ data }: d3DirTreeType) => {
     const { path: filePath, extension } = data;
 
-    if (extension !== '.flow' || /node_modules/.test(filePath)) return;
+    if (extension !== '.flow' || /(node_modules)|(lib)/.test(filePath)) return;
 
     const packageName = filePath
       .replace(`${path.resolve(__dirname, './../packages')}/`, '')
       .replace(/\/src\/.*/, '');
 
-    packageNames[packageName] = (packageNames?.[packageName] || 0) + 1;
+    packageNames[packageName] = (packageNames[packageName] || 0) + 1;
 
     fs.copy(
       filePath,

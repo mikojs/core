@@ -12,13 +12,14 @@ install-flow-typed:
 	@yarn lerna run flow-typed
 
 babel-core:
-	@$(call babel-build, ./packages/utils)
 	@$(call babel-build, .)
+	@$(call babel-build, ./packages/utils)
+	@$(call babel-build, ./packages/configs)
 
 babel-all:
 	@make babel-clean
 	@make babel-core
-	@for package in $$(node ./lib/findPackages -i utils -s); do \
+	@for package in $$(node ./lib/findPackages -i utils configs -s); do \
 	  $(call babel-build, ./packages/$$package); \
   done
 

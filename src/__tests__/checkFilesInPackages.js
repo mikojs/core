@@ -24,6 +24,7 @@ describe('check files in packages', () => {
       });
 
       // TODO check packages json key
+      // TODO check npm ignore
 
       switch (name) {
         case 'eslint-config-cat':

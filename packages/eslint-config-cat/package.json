@@ -8,7 +8,7 @@
   "version": "1.0.0-beta.4",
   "main": "./lib/index.js",
   "scripts": {
-    "flow-typed": "flow-typed install -f 0.72.0 --verbose"
+    "flow-typed": "flow-typed install -f 0.75.0 --verbose"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",
@@ -21,12 +21,12 @@
     "eslint-plugin-jsdoc": "^3.6.3",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
-    "eslint-plugin-relay": "^0.0.21"
+    "eslint-plugin-relay": "^0.0.23"
   },
   "devDependencies": {
     "@cat-org/utils": "^1.0.0-beta.4",
     "eslint": "^5.0.1",
-    "fbjs": "^0.8.16"
+    "fbjs": "^0.8.17"
   },
   "keywords": [
     "cat",

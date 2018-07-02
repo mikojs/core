@@ -11,7 +11,7 @@
     "prod": "make babel-all && node ./lib/copyFlowFiles",
     "release": "make release",
     "test":
-      "make babel-all && node ./lib/copyFlowFiles && NODE_ENV=test jest --silent ./"
+      "make babel-all && node ./lib/copyFlowFiles && NODE_ENV=test jest --silent"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",

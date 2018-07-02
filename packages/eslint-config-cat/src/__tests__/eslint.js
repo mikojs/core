@@ -29,7 +29,7 @@ type testDataType = {
   checkErrorAmount: boolean,
 };
 
-const root = path.resolve(__dirname, './../');
+const root = path.resolve(__dirname, './__ignore__');
 
 const cli = new CLIEngine({
   cwd: root,
@@ -47,60 +47,51 @@ const eslintResult = results.filter(
     messages.length !== 0,
 );
 
-const files = d3DirTree(root).leaves();
+const files = d3DirTree(root, {
+  extensions: /\.js$/,
+}).leaves();
 const ruleIds = [];
 
-const testData = files
-  .filter(
-    ({ data }: d3DirTreeType): boolean => {
-      const { path: filePath, extension } = data;
+const testData = files.map(
+  ({ data }: d3DirTreeType): testDataType => {
+    const { path: filePath, name } = data;
 
-      return /__tests__\/__ignore__/.test(filePath) && extension === '.js';
-    },
-  )
-  .map(
-    ({ data }: d3DirTreeType): testDataType => {
-      const { path: filePath, name } = data;
+    const { messages = [] } =
+      eslintResult.find(
+        ({ filePath: eslintFilePath }: { filePath: string }): boolean =>
+          filePath === eslintFilePath,
+      ) || {};
 
-      const { messages = [] } =
-        eslintResult.find(
-          ({ filePath: eslintFilePath }: { filePath: string }): boolean =>
-            filePath === eslintFilePath,
-        ) || {};
-
-      const expectErrors = fs
-        .readFileSync(filePath, 'utf-8')
-        .split(/\n/g)
-        .filter(
-          (text: string): boolean => /^[ ]*\/\/ \$expectError /.test(text),
-        )
-        .map(
-          (text: string): string =>
-            text.replace(/^[ ]*\/\/ \$expectError /, ''),
-        );
-
-      const testTasks = messages.map(
-        (message: eslintInfoType, index: number): testTaskType => {
-          const { ruleId } = message;
-
-          if (!ruleIds.includes(ruleId)) {
-            ruleIds.push(ruleId);
-          }
-
-          return {
-            eslintInfo: message,
-            expectError: expectErrors[index] || null,
-          };
-        },
+    const expectErrors = fs
+      .readFileSync(filePath, 'utf-8')
+      .split(/\n/g)
+      .filter((text: string): boolean => /^[ ]*\/\/ \$expectError /.test(text))
+      .map(
+        (text: string): string => text.replace(/^[ ]*\/\/ \$expectError /, ''),
       );
 
-      return {
-        testName: hyphenate(name.replace(/.js/, '')),
-        testTasks,
-        checkErrorAmount: expectErrors.length === messages.length,
-      };
-    },
-  );
+    const testTasks = messages.map(
+      (message: eslintInfoType, index: number): testTaskType => {
+        const { ruleId } = message;
+
+        if (!ruleIds.includes(ruleId)) {
+          ruleIds.push(ruleId);
+        }
+
+        return {
+          eslintInfo: message,
+          expectError: expectErrors[index] || null,
+        };
+      },
+    );
+
+    return {
+      testName: hyphenate(name.replace(/.js/, '')),
+      testTasks,
+      checkErrorAmount: expectErrors.length === messages.length,
+    };
+  },
+);
 
 describe('eslint', () => {
   it('check amount of test files', () => {

@@ -15,27 +15,27 @@ import showInfo from './showInfo';
 
 const store = memFs.create();
 const fs = editor.create(store);
+const root = path.resolve(__dirname, './../packages');
 const packageNames = {};
 
 // TODO can copy with argu
-d3DirTree(path.resolve(__dirname, './../packages')).each(
-  ({ data }: d3DirTreeType) => {
-    const { path: filePath, extension } = data;
+d3DirTree(root, {
+  extensions: /\.flow$/,
+  exclude: [/node_modules/, /lib/],
+}).each(({ data }: d3DirTreeType) => {
+  const { path: filePath, type } = data;
 
-    if (extension !== '.flow' || /(node_modules)|(lib)/.test(filePath)) return;
+  if (type === 'directory') return;
 
-    const packageName = filePath
-      .replace(`${path.resolve(__dirname, './../packages')}/`, '')
-      .replace(/\/src\/.*/, '');
+  const packageName = filePath.replace(`${root}/`, '').replace(/\/src\/.*/, '');
 
-    packageNames[packageName] = (packageNames[packageName] || 0) + 1;
+  packageNames[packageName] = (packageNames[packageName] || 0) + 1;
 
-    fs.copy(
-      filePath,
-      filePath.replace(/packages\/([a-zA-Z-]*)\/src/, 'packages/$1/lib'),
-    );
-  },
-);
+  fs.copy(
+    filePath,
+    filePath.replace(/packages\/([a-zA-Z-]*)\/src/, 'packages/$1/lib'),
+  );
+});
 
 if (Object.keys(packageNames).length !== 0) {
   fs.commit(

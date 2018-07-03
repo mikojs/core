@@ -1,6 +1,6 @@
 // @flow
 
-import findPackages from '../findPackages';
+import findPackages from '../bin/findPackages';
 
 describe('find packages', () => {
   it('equal', () => {

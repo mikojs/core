@@ -8,10 +8,10 @@
     "install:all": "make install-all",
     "lint": "eslint --cache --ext .js",
     "prepare": "patch-package",
-    "prod": "make babel-all && node ./lib/copyFlowFiles",
+    "prod": "make babel-all && node ./lib/bin/copyFlowFiles",
     "release": "make release",
     "test":
-      "make babel-all && node ./lib/copyFlowFiles && NODE_ENV=test jest --silent"
+      "make babel-all && node ./lib/bin/copyFlowFiles && NODE_ENV=test jest --silent"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",

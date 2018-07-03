@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // @flow
 // FIXME: https://github.com/facebook/flow/issues/5519
 
@@ -7,15 +8,15 @@ import memFs from 'mem-fs';
 import editor from 'mem-fs-editor';
 import chalk from 'chalk';
 
-import d3DirTree from '../packages/utils/lib/d3DirTree';
+import d3DirTree from '../../packages/utils/lib/d3DirTree';
 // eslint-disable-next-line max-len
-import type { d3DirTreeType } from '../packages/utils/src/definitions/d3DirTree.js.flow';
+import type { d3DirTreeType } from '../../packages/utils/src/definitions/d3DirTree.js.flow';
 
-import showInfo from './showInfo';
+import showInfo from '../showInfo';
 
 const store = memFs.create();
 const fs = editor.create(store);
-const root = path.resolve(__dirname, './../packages');
+const root = path.resolve(__dirname, '../../packages');
 const packageNames = {};
 
 // TODO can copy with argu

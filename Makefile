@@ -3,7 +3,6 @@ install-all:
 	@yarn lerna bootstrap
 	@make babel-core
 	@node ./lib/bin/modifyPackagesPkg
-	@node ./lib/bin/copyFlowFiles
 	@make install-flow-typed
 
 install-flow-typed:
@@ -21,7 +20,7 @@ babel-all:
 	@make babel-core
 	@for package in $$(node ./lib/bin/findPackages -i utils configs -s); do \
 	  $(call babel-build, ./packages/$$package); \
-  done
+		done
 
 babel-lint-staged:
 	@$(call babel-build, ./packages/configs)
@@ -34,7 +33,7 @@ release:
 		vim CHANGELOG.md && \
 		git add . && \
 		git commit -m "chore(release): v${VERSION} [skip ci]" && \
-	  git tag -a v${VERSION} -m "v${VERSION}"
+		git tag -a v${VERSION} -m "v${VERSION}"
 
 babel-clean:
 	rm -rf ./lib ./packages/**/lib
@@ -48,5 +47,8 @@ clean-all:
 	rm -rf ./*.log
 
 define babel-build
-	yarn babel $(1)/src --out-dir $(1)/lib
+	yarn babel $(1)/src --out-dir $(1)/lib && \
+		test $(1) != "." && \
+		node ./lib/bin/copyFlowFiles $(subst ./packages/,, $(1)) || \
+	 	printf ""
 endef

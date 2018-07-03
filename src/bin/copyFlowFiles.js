@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 // @flow
-// FIXME: https://github.com/facebook/flow/issues/5519
 
+import nodeFs from 'fs';
 import path from 'path';
 
 import memFs from 'mem-fs';
 import editor from 'mem-fs-editor';
 import chalk from 'chalk';
+import commandLineArgs from 'command-line-args';
 
 import d3DirTree from '../../packages/utils/lib/d3DirTree';
 // eslint-disable-next-line max-len
@@ -16,10 +17,34 @@ import showInfo from '../showInfo';
 
 const store = memFs.create();
 const fs = editor.create(store);
-const root = path.resolve(__dirname, '../../packages');
-const packageNames = {};
 
-// TODO can copy with argu
+const { moduleName } = commandLineArgs([
+  {
+    name: 'moduleName',
+    alias: 'p',
+    type: String,
+    defaultOption: true,
+  },
+]);
+
+if (!moduleName) {
+  showInfo(false, 'copy flow files', 'module name can no be empty');
+  process.exit();
+}
+
+const root = path.resolve(__dirname, '../../packages', moduleName);
+
+if (!nodeFs.existsSync(root)) {
+  showInfo(
+    false,
+    'copy flow files',
+    chalk`can not find {red ${moduleName}} in packages`,
+  );
+  process.exit();
+}
+
+let countFiles: number = 0;
+
 d3DirTree(root, {
   extensions: /\.flow$/,
   exclude: [/node_modules/, /lib/],
@@ -28,25 +53,13 @@ d3DirTree(root, {
 
   if (type === 'directory') return;
 
-  const packageName = filePath.replace(`${root}/`, '').replace(/\/src\/.*/, '');
+  const fileRelativePath = filePath.replace(root, '.');
 
-  packageNames[packageName] = (packageNames[packageName] || 0) + 1;
-
-  fs.copy(
-    filePath,
-    filePath.replace(/packages\/([a-zA-Z-]*)\/src/, 'packages/$1/lib'),
-  );
+  countFiles += 1;
+  fs.copy(filePath, path.resolve(root, fileRelativePath.replace(/src/, 'lib')));
 });
 
-if (Object.keys(packageNames).length !== 0) {
-  fs.commit(
-    (err: mixed): void =>
-      Object.keys(packageNames).forEach((packageName: string) => {
-        showInfo(
-          !err,
-          packageName,
-          chalk`copy {gray (${packageNames[packageName]})} flow files`,
-        );
-      }),
-  );
-}
+fs.commit(
+  (err: mixed): void =>
+    showInfo(!err, moduleName, chalk`copy {gray (${countFiles})} flow files`),
+);

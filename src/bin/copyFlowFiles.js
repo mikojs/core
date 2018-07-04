@@ -10,8 +10,6 @@ import chalk from 'chalk';
 import commandLineArgs from 'command-line-args';
 
 import d3DirTree from '../../packages/utils/lib/d3DirTree';
-// eslint-disable-next-line max-len
-import type { d3DirTreeType } from '../../packages/utils/src/definitions/d3DirTree.js.flow';
 
 import showInfo from '../showInfo';
 
@@ -48,7 +46,7 @@ let countFiles: number = 0;
 d3DirTree(root, {
   extensions: /\.flow$/,
   exclude: [/node_modules/, /lib/],
-}).each(({ data }: d3DirTreeType) => {
+}).each(({ data }: d3DirTree) => {
   const { path: filePath, type } = data;
 
   if (type === 'directory') return;

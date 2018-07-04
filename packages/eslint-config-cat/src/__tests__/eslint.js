@@ -7,8 +7,6 @@ import { CLIEngine } from 'eslint';
 import { hyphenate } from 'fbjs';
 
 import { d3DirTree } from '@cat-org/utils';
-// eslint-disable-next-line max-len
-import type { d3DirTreeType } from '@cat-org/utils/src/definitions/d3DirTree.js.flow';
 
 import configs from '..';
 
@@ -53,7 +51,7 @@ const files = d3DirTree(root, {
 const ruleIds = [];
 
 const testData = files.map(
-  ({ data }: d3DirTreeType): testDataType => {
+  ({ data }: d3DirTree): testDataType => {
     const { path: filePath, name } = data;
 
     const { messages = [] } =

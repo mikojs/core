@@ -3,6 +3,7 @@
 import path from 'path';
 
 import d3DirTree from '../../packages/utils/lib/d3DirTree';
+import type { d3DirTreeNodeType } from '../../packages/utils/lib/d3DirTree';
 
 const packageRoot = path.resolve(__dirname, '../../packages');
 const packages = d3DirTree(packageRoot, {
@@ -10,12 +11,12 @@ const packages = d3DirTree(packageRoot, {
 });
 
 describe('check files in packages', () => {
-  packages.children.forEach(({ data, children }: d3DirTree) => {
+  packages.children.forEach(({ data, children }: d3DirTreeNodeType) => {
     const { name } = data;
 
     describe(name, () => {
       const files = children
-        .map(({ data: childData }: d3DirTree): string => childData.name)
+        .map(({ data: childData }: d3DirTreeNodeType): string => childData.name)
         .sort();
 
       it('files in package root', () => {

@@ -6,6 +6,7 @@ import path from 'path';
 import commandLineArgs from 'command-line-args';
 
 import d3DirTree from '../../packages/utils/lib/d3DirTree';
+import type { d3DirTreeNodeType } from '../../packages/utils/lib/d3DirTree';
 
 const { ignore, showInfo } = commandLineArgs([
   {
@@ -27,9 +28,9 @@ const packages = d3DirTree(path.resolve(__dirname, '../../packages'), {
   exclude: ignore.map((ignoreText: string): RegExp => new RegExp(ignoreText)),
 })
   .children.filter(
-    ({ data }: d3DirTree): boolean => !ignore.includes(data.name),
+    ({ data }: d3DirTreeNodeType): boolean => !ignore.includes(data.name),
   )
-  .map(({ data }: d3DirTree): string => data.name);
+  .map(({ data }: d3DirTreeNodeType): string => data.name);
 
 if (showInfo) {
   console.log(packages.join(' ')); // eslint-disable-line no-console

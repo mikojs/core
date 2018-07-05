@@ -23,8 +23,14 @@ babel-all:
 		done
 
 babel-lint-staged:
-	@$(call babel-build, ./packages/configs)
+	@make babel-core
 	@$(call babel-build, ./packages/eslint-config-cat)
+
+flow:
+	@make babel-core
+	@for package in $$(node ./lib/bin/findPackages -s); do \
+		node ./lib/bin/copyFlowFiles $$package; \
+		done
 
 release:
 	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}

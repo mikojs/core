@@ -15,3 +15,14 @@ export type d3DirTreeNodeType = {|
 
   each: (callback: (node: d3DirTreeNodeType) => void) => void,
 |};
+
+export type d3DirTreeOptionsType = {|
+  normalizePath?: (path: string) => string,
+  exclude?: RegExp | Array<RegExp>,
+  extensions?: RegExp,
+|};
+
+export type d3DirTreeType = (
+  filePath: string,
+  options?: d3DirTreeOptionsType,
+) => d3DirTreeNodeType;

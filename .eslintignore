@@ -5,7 +5,7 @@ node_modules
 lib
 
 # flow
-flow-typed
+flow-typed/npm
 
 # jest
 coverage

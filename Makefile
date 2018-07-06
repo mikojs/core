@@ -12,18 +12,19 @@ install-flow-typed:
 	@yarn lerna run flow-typed
 
 babel-core:
-	@$(call babel-build, ./packages/utils)
 	@$(call babel-build, .)
+	@$(call babel-build, ./packages/utils)
+	@$(call babel-build, ./packages/configs)
 
 babel-all:
 	@make babel-clean
 	@make babel-core
-	@for package in $$(node ./lib/findPackages -i utils -s); do \
+	@for package in $$(node ./lib/findPackages -i utils configs -s); do \
 	  $(call babel-build, ./packages/$$package); \
-  done
+		done
 
 babel-lint-staged:
-	@$(call babel-build, ./packages/configs)
+	@make babel-core
 	@$(call babel-build, ./packages/eslint-config-cat)
 
 release:
@@ -33,7 +34,7 @@ release:
 		vim CHANGELOG.md && \
 		git add . && \
 		git commit -m "chore(release): v${VERSION} [skip ci]" && \
-	  git tag -a v${VERSION} -m "v${VERSION}"
+		git tag -a v${VERSION} -m "v${VERSION}"
 
 babel-clean:
 	rm -rf ./lib ./packages/**/lib

@@ -48,14 +48,62 @@ d3DirTree(root, {
   extensions: /\.flow$/,
   exclude: [/node_modules/, /lib/],
 }).each(({ data }: d3DirTreeNodeType) => {
-  const { path: filePath, type } = data;
+  const { name: fileName, path: filePath, type } = data;
 
   if (type === 'directory') return;
 
   const fileRelativePath = filePath.replace(root, '.');
 
+  if (!/src\/definitions/.test(fileRelativePath)) {
+    showInfo(
+      false,
+      moduleName,
+      // TODO
+      // eslint-disable-next-line max-len
+      chalk`flow definitions must be in {blueBright ${moduleName}/src/definitions}, but find {red ${fileRelativePath.replace(
+        /\./,
+        moduleName,
+      )}}`,
+    );
+    return;
+  }
+
+  const content = fs
+    .read(filePath)
+    .replace(/\/\/ @flow\n\n/, '')
+    .split(/\n/)
+    .map(
+      // TODO
+      // eslint-disable-next-line no-confusing-arrow
+      (text: string): string =>
+        text === '' ? '' : `  ${text.replace(/export/g, 'declare')}`,
+    )
+    .join('\n');
+  const moduleFlowName = fileName.replace(/\.js\.flow/, '');
+
   countFiles += 1;
-  fs.copy(filePath, path.resolve(root, fileRelativePath.replace(/src/, 'lib')));
+  fs.write(
+    path.resolve(
+      root,
+      fileRelativePath
+        .replace(/src\/definitions/, 'lib/flow-typed')
+        .replace(/\.js\.flow/, '.js'),
+    ),
+    // TODO
+    /* eslint-disable indent */
+    `/**
+ * Build files by @cat-org
+ */
+declare module "@cat-org/${moduleName}${
+      moduleFlowName === 'index' ? '' : `/lib/${moduleFlowName}`
+    }" {
+${content}
+  declare module.exports: ${
+    moduleFlowName === 'index' ? moduleName : moduleFlowName
+  }Type;
+}`,
+    /* eslint-enable indent */
+  );
 });
 
 fs.commit(

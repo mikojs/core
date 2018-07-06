@@ -51,7 +51,17 @@ const files = d3DirTree(root, {
 const ruleIds = [];
 
 const testData = files.map(
-  ({ data }: d3DirTree): testDataType => {
+  ({
+    data,
+  }: {
+    data: {|
+      path: string,
+      name: string,
+      size: number,
+      type: 'directory' | 'file',
+      extension: mixed,
+    |},
+  }): testDataType => {
     const { path: filePath, name } = data;
 
     const { messages = [] } =

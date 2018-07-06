@@ -14,6 +14,7 @@ export type d3DirTreeNodeType = {|
   children: $ReadOnlyArray<d3DirTreeNodeType>,
 
   each: (callback: (node: d3DirTreeNodeType) => void) => void,
+  leaves: () => $ReadOnlyArray<d3DirTreeNodeType>,
 |};
 
 export type d3DirTreeOptionsType = {|

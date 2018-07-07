@@ -45,6 +45,7 @@ clean-all:
 	rm -rf ./flow-typed
 	rm -rf ./coverage
 	rm -rf ./.eslintcache
+	rm -rf ./.changelog
 	rm -rf ./*.log
 
 define babel-build

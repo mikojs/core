@@ -7,6 +7,7 @@ import { CLIEngine } from 'eslint';
 import { hyphenate } from 'fbjs';
 
 import { d3DirTree } from '@cat-org/utils';
+import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import configs from '..';
 
@@ -51,17 +52,7 @@ const files = d3DirTree(root, {
 const ruleIds = [];
 
 const testData = files.map(
-  ({
-    data,
-  }: {
-    data: {|
-      path: string,
-      name: string,
-      size: number,
-      type: 'directory' | 'file',
-      extension: mixed,
-    |},
-  }): testDataType => {
+  ({ data }: d3DirTreeNodeType): testDataType => {
     const { path: filePath, name } = data;
 
     const { messages = [] } =

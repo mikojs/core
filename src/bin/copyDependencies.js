@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // @flow
 
 import path from 'path';
@@ -6,9 +7,9 @@ import memFs from 'mem-fs';
 import editor from 'mem-fs-editor';
 import chalk from 'chalk';
 
-import pkg from '../package.json';
+import pkg from '../../package.json';
 
-import showInfo from './showInfo';
+import showInfo from '../showInfo';
 
 const store = memFs.create();
 const fs = editor.create(store);
@@ -17,7 +18,7 @@ const totalDependencies = {};
 ['eslint-config-cat'].forEach((moduleName: string) => {
   const { dependencies } = require(path.resolve(
     __dirname,
-    '../packages',
+    '../../packages',
     moduleName,
     'package.json',
   ));

@@ -2,8 +2,8 @@ install-all:
 	@yarn install
 	@yarn lerna bootstrap
 	@make babel-core
-	@node ./lib/modifyPackagesPkg
-	@node ./lib/copyFlowFiles
+	@node ./lib/bin/modifyPackagesPkg
+	@node ./lib/bin/copyFlowFiles
 	@make install-flow-typed
 
 install-flow-typed:
@@ -19,7 +19,7 @@ babel-core:
 babel-all:
 	@make babel-clean
 	@make babel-core
-	@for package in $$(node ./lib/findPackages -i utils configs -s); do \
+	@for package in $$(node ./lib/bin/findPackages -i utils configs -s); do \
 	  $(call babel-build, ./packages/$$package); \
 		done
 

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // @flow
 
 import path from 'path';
@@ -5,10 +6,11 @@ import path from 'path';
 import memFs from 'mem-fs';
 import editor from 'mem-fs-editor';
 
-import pkg from '../package.json';
+import pkg from '../../package.json';
+
+import showInfo from '../showInfo';
 
 import findPackages from './findPackages';
-import showInfo from './showInfo';
 
 const store = memFs.create();
 const fs = editor.create(store);
@@ -18,7 +20,7 @@ const flowVersion = pkg.devDependencies['flow-bin'].replace(/\^/, '');
 findPackages.forEach((packageName: string) => {
   const packagePkgPath = path.resolve(
     __dirname,
-    './../packages',
+    '../../packages',
     packageName,
     'package.json',
   );

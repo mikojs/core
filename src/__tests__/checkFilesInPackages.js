@@ -4,19 +4,20 @@ import path from 'path';
 
 import d3DirTree from '../../packages/utils/lib/d3DirTree';
 // eslint-disable-next-line max-len
-import type { d3DirTreeType } from '../../packages/utils/src/definitions/d3DirTree.js.flow';
+import type { d3DirTreeNodeType } from '../../packages/utils/src/definitions/d3DirTree.js.flow';
 
 const packageRoot = path.resolve(__dirname, './../../packages');
-const packages = d3DirTree(packageRoot);
+const packages = d3DirTree(packageRoot, {
+  exclude: /node_modules/,
+});
 
 describe('check files in packages', () => {
-  packages.children.forEach(({ data, children }: d3DirTreeType) => {
+  packages.children.forEach(({ data, children }: d3DirTreeNodeType) => {
     const { name } = data;
 
     describe(name, () => {
       const files = children
-        .map(({ data: childData }: d3DirTreeType): string => childData.name)
-        .filter((fileName: string): boolean => fileName !== 'node_modules')
+        .map(({ data: childData }: d3DirTreeNodeType): string => childData.name)
         .sort();
 
       it('files in package root', () => {

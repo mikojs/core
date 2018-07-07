@@ -33,7 +33,7 @@ const totalDependencies = {};
     }
   });
 
-  fs.writeJSON(path.resolve(__dirname, '../package.json'), {
+  fs.writeJSON(path.resolve(__dirname, '../../package.json'), {
     ...pkg,
     dependencies,
   });

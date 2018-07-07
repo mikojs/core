@@ -26,11 +26,7 @@ const { ignore, showInfo } = commandLineArgs([
 
 const packages = d3DirTree(path.resolve(__dirname, '../../packages'), {
   exclude: ignore.map((ignoreText: string): RegExp => new RegExp(ignoreText)),
-})
-  .children.filter(
-    ({ data }: d3DirTreeNodeType): boolean => !ignore.includes(data.name),
-  )
-  .map(({ data }: d3DirTreeNodeType): string => data.name);
+}).children.map(({ data }: d3DirTreeNodeType): string => data.name);
 
 if (showInfo) {
   console.log(packages.join(' ')); // eslint-disable-line no-console

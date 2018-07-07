@@ -18,7 +18,7 @@ export type d3DirTreeNodeType = {|
 |};
 
 export type d3DirTreeOptionsType = {|
-  normalizePath?: (path: string) => string,
+  normalizePath?: (path: string) => boolean,
   exclude?: RegExp | Array<RegExp>,
   extensions?: RegExp,
 |};

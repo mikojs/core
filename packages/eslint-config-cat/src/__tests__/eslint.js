@@ -52,9 +52,7 @@ const files = d3DirTree(root, {
 const ruleIds = [];
 
 const testData = files.map(
-  ({ data }: d3DirTreeNodeType): testDataType => {
-    const { path: filePath, name } = data;
-
+  ({ data: { path: filePath, name } }: d3DirTreeNodeType): testDataType => {
     const { messages = [] } =
       eslintResult.find(
         ({ filePath: eslintFilePath }: { filePath: string }): boolean =>
@@ -124,13 +122,16 @@ describe('eslint', () => {
       index: number,
     ) => {
       describe(testName, () => {
-        testTasks.forEach(({ eslintInfo, expectError }: testTaskType) => {
-          const { ruleId, line, message } = eslintInfo;
-
-          it(`[line: ${line}, rule: ${ruleId}] ${message}`, () => {
-            expect(ruleId).toBe(expectError);
-          });
-        });
+        testTasks.forEach(
+          ({
+            eslintInfo: { ruleId, line, message },
+            expectError,
+          }: testTaskType) => {
+            it(`[line: ${line}, rule: ${ruleId}] ${message}`, () => {
+              expect(ruleId).toBe(expectError);
+            });
+          },
+        );
 
         it('check error amount', () => {
           expect(checkErrorAmount).toBeTruthy();

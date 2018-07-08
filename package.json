@@ -9,7 +9,7 @@
     "install:all": "make install-all",
     "lint": "eslint --cache --ext .js",
     "prepare": "patch-package",
-    "prod": "make babel-all",
+    "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
     "test": "make babel-all && NODE_ENV=test jest --silent"
   },

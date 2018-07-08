@@ -35,10 +35,6 @@ jobs:
           path: coverage
           prefix: coverage
 
-      - run:
-          name: Test prod
-          command: yarn prod
-
   deploy-beta:
     working_directory: ~/repo
 

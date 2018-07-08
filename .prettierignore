@@ -1,1 +1,2 @@
+# ignore for @cat-org/eslint-config-cat
 packages/eslint-config-cat/src/__tests__/__ignore__

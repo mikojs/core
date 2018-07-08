@@ -1,52 +1,112 @@
 #!/usr/bin/env node
 // @flow
-// FIXME: https://github.com/facebook/flow/issues/5519
 
+import nodeFs from 'fs';
 import path from 'path';
 
 import memFs from 'mem-fs';
 import editor from 'mem-fs-editor';
 import chalk from 'chalk';
+import commandLineArgs from 'command-line-args';
 
 import d3DirTree from '../../packages/utils/lib/d3DirTree';
-// eslint-disable-next-line max-len
-import type { d3DirTreeType } from '../../packages/utils/src/definitions/d3DirTree.js.flow';
+import type { d3DirTreeNodeType } from '../../packages/utils/lib/d3DirTree';
 
 import showInfo from '../showInfo';
 
 const store = memFs.create();
 const fs = editor.create(store);
-const packageNames = {};
 
-// TODO can copy with argu
-d3DirTree(path.resolve(__dirname, '../../packages')).each(
-  ({ data }: d3DirTreeType) => {
-    const { path: filePath, extension } = data;
-
-    if (extension !== '.flow' || /(node_modules)|(lib)/.test(filePath)) return;
-
-    const packageName = filePath
-      .replace(`${path.resolve(__dirname, '../../packages')}/`, '')
-      .replace(/\/src\/.*/, '');
-
-    packageNames[packageName] = (packageNames[packageName] || 0) + 1;
-
-    fs.copy(
-      filePath,
-      filePath.replace(/packages\/([a-zA-Z-]*)\/src/, 'packages/$1/lib'),
-    );
+const { moduleName } = commandLineArgs([
+  {
+    name: 'moduleName',
+    alias: 'p',
+    type: String,
+    defaultOption: true,
   },
-);
+]);
 
-if (Object.keys(packageNames).length !== 0) {
-  fs.commit(
-    (err: mixed): void =>
-      Object.keys(packageNames).forEach((packageName: string) => {
-        showInfo(
-          !err,
-          packageName,
-          chalk`copy {gray (${packageNames[packageName]})} flow files`,
-        );
-      }),
-  );
+if (!moduleName) {
+  showInfo(false, 'copy flow files', 'module name can no be empty');
+  process.exit();
 }
+
+const root = path.resolve(__dirname, '../../packages', moduleName);
+
+if (!nodeFs.existsSync(root)) {
+  showInfo(
+    false,
+    'copy flow files',
+    chalk`can not find {red ${moduleName}} in packages`,
+  );
+  process.exit();
+}
+
+let countFiles: number = 0;
+
+d3DirTree(root, {
+  extensions: /\.flow$/,
+  exclude: [/node_modules/, /lib/],
+}).each(({ data }: d3DirTreeNodeType) => {
+  const { name: fileName, path: filePath, type } = data;
+
+  if (type === 'directory') return;
+
+  const fileRelativePath = filePath.replace(root, '.');
+
+  if (!/src\/definitions/.test(fileRelativePath)) {
+    showInfo(
+      false,
+      moduleName,
+      // TODO
+      // eslint-disable-next-line max-len
+      chalk`flow definitions must be in {blueBright ${moduleName}/src/definitions}, but find {red ${fileRelativePath.replace(
+        /\./,
+        moduleName,
+      )}}`,
+    );
+    return;
+  }
+
+  const content = fs
+    .read(filePath)
+    .replace(/\/\/ @flow\n\n/, '')
+    .split(/\n/)
+    .map(
+      // TODO
+      // eslint-disable-next-line no-confusing-arrow
+      (text: string): string =>
+        text === '' ? '' : `  ${text.replace(/export/g, 'declare')}`,
+    )
+    .join('\n');
+  const moduleFlowName = fileName.replace(/\.js\.flow/, '');
+
+  countFiles += 1;
+  fs.write(
+    path.resolve(
+      root,
+      fileRelativePath
+        .replace(/src\/definitions/, 'lib/flow-typed')
+        .replace(/\.js\.flow/, '.js'),
+    ),
+    // TODO
+    /* eslint-disable indent */
+    `/**
+ * Build files by @cat-org
+ */
+declare module "@cat-org/${moduleName}${
+      moduleFlowName === 'index' ? '' : `/lib/${moduleFlowName}`
+    }" {
+${content}
+  declare module.exports: ${
+    moduleFlowName === 'index' ? moduleName : moduleFlowName
+  }Type;
+}`,
+    /* eslint-enable indent */
+  );
+});
+
+fs.commit(
+  (err: mixed): void =>
+    showInfo(!err, moduleName, chalk`copy {gray (${countFiles})} flow files`),
+);

@@ -5,7 +5,9 @@ const babelConfigs = (() => {
   try {
     if (process.env.NODE_ENV === 'test') throw new Error('test');
 
-    return require('./packages/configs/lib/babel');
+    const configs = require('./packages/configs/lib/babel');
+
+    return configs.default || configs;
   } catch (e) {
     return {
       presets: ['@babel/preset-env', '@babel/preset-flow'],

@@ -7,8 +7,7 @@ import { CLIEngine } from 'eslint';
 import { hyphenate } from 'fbjs';
 
 import { d3DirTree } from '@cat-org/utils';
-// eslint-disable-next-line max-len
-import type { d3DirTreeNodeType } from '@cat-org/utils/src/definitions/d3DirTree.js.flow';
+import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import configs from '..';
 

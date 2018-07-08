@@ -5,11 +5,15 @@
 
 [libs]
 ./flow-typed
+./packages/utils/lib/flow-typed
 
 [lints]
 
 [options]
 module.ignore_non_literal_requires=true
 esproposal.optional_chaining=enable
+
+# name mapper
+module.name_mapper='.*\/packages\/\(.*\)\/lib\/\(.*\)$' -> '@cat-org/\1/src/\2'
 
 [strict]

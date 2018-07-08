@@ -3,7 +3,6 @@ install-all:
 	@yarn lerna bootstrap
 	@make babel-core
 	@node ./lib/bin/modifyPackagesPkg
-	@node ./lib/bin/copyFlowFiles
 	@make install-flow-typed
 
 install-flow-typed:
@@ -27,6 +26,12 @@ babel-lint-staged:
 	@make babel-core
 	@$(call babel-build, ./packages/eslint-config-cat)
 
+flow:
+	@make babel-core
+	@for package in $$(node ./lib/bin/findPackages -s); do \
+		node ./lib/bin/copyFlowFiles $$package; \
+		done
+
 release:
 	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}
 	@yarn lerna-changelog && \
@@ -49,5 +54,8 @@ clean-all:
 	rm -rf ./*.log
 
 define babel-build
-	yarn babel $(1)/src --out-dir $(1)/lib
+	yarn babel $(1)/src --out-dir $(1)/lib && \
+		test $(1) != "." && \
+		node ./lib/bin/copyFlowFiles $(subst ./packages/,, $(1)) || \
+	 	printf ""
 endef

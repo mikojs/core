@@ -38,6 +38,7 @@ const packages = d3DirTree(path.resolve(__dirname, '../../packages'), {
 }).children.map(({ data }: d3DirTreeNodeType): string => data.name);
 
 if (showInfo) {
+  // eslint-disable-next-line no-console
   console.log(packages.join(' '));
 }
 

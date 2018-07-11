@@ -1,6 +1,8 @@
 // @flow
 const path = require('path');
 
+/* eslint-disable flowtype/require-return-type */
+/* eslint-disable flowtype/require-parameter-type */
 const babelConfigs = (() => {
   try {
     if (process.env.NODE_ENV === 'test') throw new Error('test');

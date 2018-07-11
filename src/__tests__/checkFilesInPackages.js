@@ -28,19 +28,6 @@ describe('check files in packages', () => {
         // TODO check npm ignore
 
         switch (name) {
-          case 'eslint-config-cat':
-            it('check eslint version', () => {
-              const rootPkg = require('../../package.json');
-              const pkg = require(path.resolve(
-                packageRoot,
-                './eslint-config-cat/package.json',
-              ));
-
-              expect(rootPkg.devDependencies.eslint).toBe(
-                pkg.devDependencies.eslint,
-              );
-            });
-            break;
           default:
             break;
         }

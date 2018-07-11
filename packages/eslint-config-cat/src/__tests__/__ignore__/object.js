@@ -1,6 +1,6 @@
 // @flow
 
-import { moduleA, moduleB, moduleC } from 'eslint';
+import { moduleA, moduleB, moduleC } from 'fbjs';
 import {
   moduleAA,
   moduleBB,

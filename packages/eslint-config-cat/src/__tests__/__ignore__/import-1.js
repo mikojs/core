@@ -3,7 +3,7 @@
 // $expectError import/order
 import order from '../../index';
 
-import eslint from 'eslint';
+import fbjs from 'fbjs';
 
 // $expectError import/no-extraneous-dependencies
 import babel from '@babel/core/lib/index';
@@ -26,19 +26,19 @@ import module2, { default as noNamedDefault } from './import-3';
 // $expectError import/no-duplicates
 import noDuplicates from './import-3';
 
-eslint();
+fbjs();
 
 // $expectError import/no-self-import
 // $expectError import/first
 // $expectError import/newline-after-import
 import * as namespace from './import-1';
-eslint();
+fbjs();
 
 // $expectError import/exports-last
 // $expectError import/group-exports
 export const exportFirst = 'test';
 
-eslint();
+fbjs();
 
 // $expectError import/no-named-as-default-member
 module2.test();

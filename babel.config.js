@@ -26,21 +26,6 @@ const babelConfigs = (() => {
 /* eslint-disable no-confusing-arrow */
 /**
  * @example
- * transformImports('utils', false)
- *
- * @param {string} packageName - package name
- * @param {boolean} isRoot - flag for checking this is @cat-org/root
- * @return {Function} - function for "transform imports"
- *
- * $FlowFixMe
- */
-const transformImports = (packageName, isRoot) => (importName, matches) =>
-  isRoot
-    ? path.resolve(__dirname, './packages', packageName, './lib', importName)
-    : `@cat-org/${packageName}/lib/${importName}`;
-
-/**
- * @example
  * transformImportsOptions(false)
  *
  * @param {boolean} isRoot - flag for checking this is @cat-org/root
@@ -48,10 +33,11 @@ const transformImports = (packageName, isRoot) => (importName, matches) =>
  */
 const transformImportsOptions = isRoot => ({
   '@cat-org/utils': {
-    transform: transformImports('utils', isRoot),
-  },
-  '@cat-org/configs': {
-    transform: transformImports('configs', isRoot),
+    // $FlowFixMe
+    transform: (importName, matches) =>
+      isRoot
+        ? path.resolve(__dirname, './packages/utils/lib', importName)
+        : `@cat-org/utils/lib/${importName}`,
   },
   fbjs: {
     transform: 'fbjs/lib/${member}',
@@ -73,12 +59,24 @@ babelConfigs.plugins.push(
   ],
 );
 
-if (!babelConfigs.overrides) babelConfigs.overrides = [];
-
 babelConfigs.overrides.push(
   {
     test: './src',
     plugins: [['transform-imports', transformImportsOptions(true)]],
+  },
+  {
+    test: './src/__tests__',
+    plugins: [
+      [
+        'module-resolver',
+        {
+          root: ['./src'],
+          alias: {
+            '@cat-org/configs': './packages/configs',
+          },
+        },
+      ],
+    ],
   },
   {
     test: './packages',

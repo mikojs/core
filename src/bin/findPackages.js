@@ -8,8 +8,6 @@ import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import commandLineArgs from 'command-line-args';
 
-/**
- */
 const { ignore, showInfo } = ((): {
   ignore: $ReadOnlyArray<string>,
   showInfo: boolean,
@@ -40,7 +38,7 @@ const packages = d3DirTree(path.resolve(__dirname, '../../packages'), {
 }).children.map(({ data }: d3DirTreeNodeType): string => data.name);
 
 if (showInfo) {
-  console.log(packages.join(' ')); // eslint-disable-line no-console
+  console.log(packages.join(' '));
 }
 
 export default packages;

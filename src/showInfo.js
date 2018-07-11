@@ -7,7 +7,6 @@ export default (
   packageName: string,
   message: string,
 ): void =>
-  // eslint-disable-next-line no-console
   console.log(
     isSuccess
       ? chalk`{bgGreen  ${packageName} } ${message} {cyan (done)}`

@@ -46,7 +46,6 @@ Object.keys(totalDependencies).forEach((dependencyName: string) => {
     showInfo(
       false,
       'root',
-      // eslint-disable-next-line max-len
       chalk`{blueBright ${dependencyName}} has multiple versions: {red ${totalDependencies[
         dependencyName
       ].join(', ')}}`,

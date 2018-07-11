@@ -11,7 +11,7 @@
     "prepare": "patch-package",
     "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
-    "test": "make babel-core && NODE_ENV=test jest --silent"
+    "test": "make babel-test && NODE_ENV=test jest --silent"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",

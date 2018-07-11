@@ -22,6 +22,10 @@ babel-all:
 	  $(call babel-build, ./packages/$$package); \
 		done
 
+babel-test:
+	@make babel-core
+	@$(call babel-build, ./packages/eslint-config-cat)
+
 babel-lint-staged:
 	@make babel-core
 	@$(call babel-build, ./packages/eslint-config-cat)

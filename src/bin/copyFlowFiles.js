@@ -57,8 +57,6 @@ d3DirTree(root, {
       showInfo(
         false,
         moduleName,
-        // TODO
-        // eslint-disable-next-line max-len
         chalk`flow definitions must be in {blueBright ${moduleName}/src/definitions}, but find {red ${fileRelativePath.replace(
           /\./,
           moduleName,
@@ -72,8 +70,6 @@ d3DirTree(root, {
       .replace(/\/\/ @flow\n\n/, '')
       .split(/\n/)
       .map(
-        // TODO
-        // eslint-disable-next-line no-confusing-arrow
         (text: string): string =>
           text === '' ? '' : `  ${text.replace(/export/g, 'declare')}`,
       )
@@ -88,8 +84,6 @@ d3DirTree(root, {
           .replace(/src\/definitions/, 'lib/flow-typed')
           .replace(/\.js\.flow/, '.js'),
       ),
-      // TODO
-      /* eslint-disable indent */
       `/**
  * Build files by @cat-org
  */

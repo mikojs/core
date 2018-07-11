@@ -37,6 +37,7 @@ const cli = new CLIEngine({
   rules: {
     'no-unused-vars': 'off',
     'no-warning-comments': 'off',
+    'prettier/prettier': 'off',
   },
 });
 

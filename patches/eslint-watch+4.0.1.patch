@@ -1,0 +1,19 @@
+patch-package
+--- a/node_modules/eslint-watch/build/watcher.js
++++ b/node_modules/eslint-watch/build/watcher.js
+@@ -29,12 +29,13 @@ const events = {
+ const chokidarOptions = {
+   ignored: /\.git|node_modules|bower_components/
+ };
+-const cliOptionProperties = ['config', 'eslintrc', 'ext', 'parser', 'cache', 'cacheLocation', 'ignore', 'ignorePath', 'ignorePattern', 'fix', 'parserOptions', 'global'];
++const cliOptionProperties = ['config', 'eslintrc', 'ext', 'parser', 'cache', 'cacheLocation', 'ignore', 'ignorePath', 'ignorePattern', 'fix', 'parserOptions', 'global', 'rule'];
+ const cliOptionMap = {
+   config: 'configFile',
+   eslintrc: 'useEslintrc',
+   ext: 'extensions',
+-  cacheFile: 'cacheLocation'
++  cacheFile: 'cacheLocation',
++  rule: 'rules'
+ };
+ 
+ function filterWarnings(results) {

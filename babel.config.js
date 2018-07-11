@@ -1,7 +1,8 @@
 // @flow
 const path = require('path');
 
-// eslint-disable-next-line flowtype/require-return-type
+/* eslint-disable flowtype/require-return-type */
+/* eslint-disable flowtype/require-parameter-type */
 const babelConfigs = (() => {
   try {
     if (process.env.NODE_ENV === 'test') throw new Error('test');
@@ -19,11 +20,6 @@ const babelConfigs = (() => {
   }
 })();
 
-/* eslint-disable flowtype/require-return-type */
-/* eslint-disable flowtype/require-parameter-type */
-/* eslint-disable flowtype/require-parameter-type */
-// TODO
-/* eslint-disable no-confusing-arrow */
 /**
  * @example
  * transformImportsOptions(false)
@@ -43,11 +39,6 @@ const transformImportsOptions = isRoot => ({
     transform: 'fbjs/lib/${member}',
   },
 });
-/* eslint-enable flowtype/require-return-type */
-/* eslint-enable flowtype/require-parameter-type */
-/* eslint-enable flowtype/require-parameter-type */
-// TODO
-/* eslint-enable no-confusing-arrow */
 
 babelConfigs.plugins.push(
   ['transform-imports', transformImportsOptions(false)],

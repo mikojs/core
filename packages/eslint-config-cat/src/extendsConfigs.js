@@ -7,25 +7,19 @@
  */
 
 export default {
-  extends: ['fbjs/strict', 'google'],
+  extends: [
+    'fbjs/strict',
+    'google',
+    'plugin:prettier/recommended',
+    'prettier/flowtype',
+    'prettier/standard',
+  ],
   rules: {
     'arrow-parens': ['error', 'as-needed'],
     'arrow-body-style': ['error', 'as-needed'],
 
-    'comma-dangle': ['error', 'always-multiline'],
-
     'default-case': 'error',
 
-    indent: [
-      'error',
-      2,
-      {
-        SwitchCase: 1,
-      },
-    ],
-
-    'no-confusing-arrow': 'error',
-    'no-extra-parens': ['error', 'functions'],
     'no-shadow': 'error',
     'no-warning-comments': [
       'warn',
@@ -34,31 +28,6 @@ export default {
         location: 'anywhere',
       },
     ],
-
-    'object-curly-spacing': ['error', 'always'],
-    'object-curly-newline': [
-      'error',
-      {
-        ObjectExpression: {
-          multiline: true,
-          consistent: true,
-        },
-        ObjectPattern: {
-          multiline: true,
-          consistent: true,
-        },
-        ImportDeclaration: {
-          multiline: true,
-          consistent: true,
-        },
-        ExportDeclaration: {
-          multiline: true,
-          consistent: true,
-        },
-      },
-    ],
-
-    'quote-props': ['error', 'as-needed'],
 
     'require-jsdoc': [
       'error',

@@ -30,18 +30,6 @@ type useObjectType = Object;
 // $expectError flowtype/no-weak-types
 type useFunctionType = Function;
 
-type spaceAfterTypeColonType = {
-  // $expectError flowtype/space-after-type-colon
-  afterType:string,
-  // $expectError flowtype/space-before-type-colon
-  beforeType : string,
-};
-
-// $expectError flowtype/delimiter-dangle
-type delimiterDangleType = {
-  key: string
-};
-
 // $expectError flowtype/type-id-match
 type typeIdMatch = string;
 

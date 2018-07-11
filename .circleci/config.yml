@@ -58,7 +58,7 @@ jobs:
           name: Pre publish
           command: |
             yarn prod
-            yarn jest ./src/__tests__/checkFilesInPkg.js --coverage=false
+            TEST_PRODUCTION=true yarn jest ./src/__tests__/checkFilesInPkg.js --coverage=false
 
       - run:
           name: Publish

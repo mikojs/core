@@ -22,6 +22,10 @@ babel-all:
 	  $(call babel-build, ./packages/$$package); \
 		done
 
+babel-test:
+	@make babel-core
+	@$(call babel-build, ./packages/eslint-config-cat)
+
 babel-lint-staged:
 	@make babel-core
 	@$(call babel-build, ./packages/eslint-config-cat)
@@ -56,6 +60,6 @@ clean-all:
 define babel-build
 	yarn babel $(1)/src --out-dir $(1)/lib && \
 		test $(1) != "." && \
-		node ./lib/bin/copyFlowFiles $(subst ./packages/,, $(1)) || \
+		node ./lib/bin/copyFlowFiles $(subst ./packages/,,$(1)) || \
 	 	printf ""
 endef

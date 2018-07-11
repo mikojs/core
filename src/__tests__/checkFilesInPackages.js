@@ -2,12 +2,12 @@
 
 import path from 'path';
 
-import d3DirTree from '../../packages/utils/lib/d3DirTree';
-import type { d3DirTreeNodeType } from '../../packages/utils/lib/d3DirTree';
+import { d3DirTree } from '@cat-org/utils';
+import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 const packageRoot = path.resolve(__dirname, '../../packages');
 const packages = d3DirTree(packageRoot, {
-  exclude: /node_modules/,
+  exclude: [/node_modules/, ...(process.env.TEST_PRODUCTION ? [] : [/lib/])],
 });
 
 describe('check files in packages', () => {
@@ -21,26 +21,13 @@ describe('check files in packages', () => {
           .sort();
 
         it('files in package root', () => {
-          expect(files).toEqual(['.npmignore', 'lib', 'package.json', 'src']);
+          expect(files).toEqual(['.npmignore', 'package.json', 'src']);
         });
 
         // TODO check packages json key
         // TODO check npm ignore
 
         switch (name) {
-          case 'eslint-config-cat':
-            it('check eslint version', () => {
-              const rootPkg = require('../../package.json');
-              const pkg = require(path.resolve(
-                packageRoot,
-                './eslint-config-cat/package.json',
-              ));
-
-              expect(rootPkg.devDependencies.eslint).toBe(
-                pkg.devDependencies.eslint,
-              );
-            });
-            break;
           default:
             break;
         }

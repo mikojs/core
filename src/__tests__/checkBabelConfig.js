@@ -1,16 +1,25 @@
 // @flow
 
-import babelConfigs from '../../babel.config';
-import pkgBabelConfigs from '../../packages/configs/src/babel';
+import babelConfigs from '@cat-org/configs/lib/babel';
+
+import rootBabelConfigs from '../../babel.config';
 
 describe('check babel config', () => {
   it('equal', () => {
-    pkgBabelConfigs.plugins.push(
+    // $FlowFixMe
+    rootBabelConfigs.plugins.find(
+      (plugin: string | $ReadOnlyArray<string | {}>): boolean =>
+        plugin[0] === 'transform-imports',
+    )[1]['@cat-org/utils'] = {
+      transform: '@cat-org/utils/lib/utils',
+    };
+
+    babelConfigs.plugins.push(
       [
         'transform-imports',
         {
           '@cat-org/utils': {
-            transform: '@cat-org/utils/lib/${member}',
+            transform: '@cat-org/utils/lib/utils',
           },
           fbjs: {
             transform: 'fbjs/lib/${member}',
@@ -23,9 +32,11 @@ describe('check babel config', () => {
           root: ['./src'],
         },
       ],
-      'add-module-exports',
     );
 
-    expect(babelConfigs).toEqual(pkgBabelConfigs);
+    expect({
+      ...rootBabelConfigs,
+      overrides: [],
+    }).toEqual(babelConfigs);
   });
 });

@@ -14,7 +14,7 @@
 module.ignore_non_literal_requires=true
 esproposal.optional_chaining=enable
 
-# name mapper
-module.name_mapper='.*\/packages\/\(.*\)\/lib\/\(.*\)$' -> '@cat-org/\1/src/\2'
+# name mapper for @cat-org/configs
+module.name_mapper='^@cat-org\/configs\/lib\/\(.*\)$' -> '<PROJECT_ROOT>/packages/configs/src/\1'
 
 [strict]

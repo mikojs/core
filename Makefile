@@ -23,15 +23,13 @@ babel-all:
 		done
 
 babel-test:
+	@make babel-clean
 	@make babel-core
 	@$(call babel-build, ./packages/eslint-config-cat)
 
 babel-lint-staged:
 	@make babel-core
 	@$(call babel-build, ./packages/eslint-config-cat)
-
-flow:
-	@make babel-core
 	@for package in $$(node ./lib/bin/findPackages -s); do \
 		node ./lib/bin/copyFlowFiles $$package; \
 		done

@@ -1,11 +1,12 @@
 // @flow
+//
+import babelConfigs from '@cat-org/configs/lib/babel';
 
-import babelConfigs from '../../babel.config';
-import pkgBabelConfigs from '../../packages/configs/src/babel';
+import rootBabelConfigs from '../../babel.config';
 
 describe('check babel config', () => {
   it('equal', () => {
-    pkgBabelConfigs.plugins.push(
+    babelConfigs.plugins.push(
       [
         'transform-imports',
         {
@@ -26,6 +27,6 @@ describe('check babel config', () => {
       'add-module-exports',
     );
 
-    expect(babelConfigs).toEqual(pkgBabelConfigs);
+    expect(rootBabelConfigs).toEqual(babelConfigs);
   });
 });

@@ -2,8 +2,8 @@
 
 import path from 'path';
 
-import d3DirTree from '../../packages/utils/lib/d3DirTree';
-import type { d3DirTreeNodeType } from '../../packages/utils/lib/d3DirTree';
+import { d3DirTree } from '@cat-org/utils';
+import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 const packageRoot = path.resolve(__dirname, '../../packages');
 const packages = d3DirTree(packageRoot, {

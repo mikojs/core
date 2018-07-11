@@ -3,10 +3,10 @@
 
 import path from 'path';
 
-import commandLineArgs from 'command-line-args';
+import { d3DirTree } from '@cat-org/utils';
+import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-import d3DirTree from '../../packages/utils/lib/d3DirTree';
-import type { d3DirTreeNodeType } from '../../packages/utils/lib/d3DirTree';
+import commandLineArgs from 'command-line-args';
 
 const { ignore, showInfo } = commandLineArgs([
   {

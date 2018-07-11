@@ -56,6 +56,6 @@ clean-all:
 define babel-build
 	yarn babel $(1)/src --out-dir $(1)/lib && \
 		test $(1) != "." && \
-		node ./lib/bin/copyFlowFiles $(subst ./packages/,, $(1)) || \
+		node ./lib/bin/copyFlowFiles $(subst ./packages/,,$(1)) || \
 	 	printf ""
 endef

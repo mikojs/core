@@ -4,13 +4,13 @@
 import nodeFs from 'fs';
 import path from 'path';
 
+import { d3DirTree } from '@cat-org/utils';
+import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
+
 import memFs from 'mem-fs';
 import editor from 'mem-fs-editor';
 import chalk from 'chalk';
 import commandLineArgs from 'command-line-args';
-
-import d3DirTree from '../../packages/utils/lib/d3DirTree';
-import type { d3DirTreeNodeType } from '../../packages/utils/lib/d3DirTree';
 
 import showInfo from '../showInfo';
 

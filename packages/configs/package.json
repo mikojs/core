@@ -7,14 +7,14 @@
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/configs",
   "version": "1.0.0-beta.4",
   "main": "./lib/index.js",
+  "dependencies": {
+    "@cat-org/utils": "^1.0.0-beta.4"
+  },
   "keywords": [
     "cat",
     "configs"
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "@cat-org/utils": "^1.0.0-beta.4"
   }
 }

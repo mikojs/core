@@ -1,14 +1,12 @@
 install-all:
 	@yarn install
 	@yarn lerna bootstrap
-	@make babel-core
-	@node ./lib/bin/modifyPackagesPkg
 	@make install-flow-typed
 
 install-flow-typed:
 	rm -rf ./flow-typed
 	@yarn flow-typed install --verbose
-	@yarn lerna run flow-typed
+	@yarn lerna exec --parallel "flow-typed install -f 0.76.0 --verbose"
 
 babel-core:
 	@$(call babel-build, .)

@@ -7,9 +7,6 @@
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/eslint-config-cat",
   "version": "1.0.0-beta.4",
   "main": "./lib/index.js",
-  "scripts": {
-    "flow-typed": "flow-typed install -f 0.76.0 --verbose"
-  },
   "dependencies": {
     "babel-eslint": "^8.2.3",
     "eslint-config-fbjs": "^2.0.1",

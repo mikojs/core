@@ -7,9 +7,6 @@
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/utils",
   "version": "1.0.0-beta.4",
   "main": "./lib/index.js",
-  "scripts": {
-    "flow-typed": "flow-typed install -f 0.76.0 --verbose"
-  },
   "dependencies": {
     "d3-hierarchy": "^1.1.6",
     "directory-tree": "^2.1.0"

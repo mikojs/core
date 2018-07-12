@@ -26,6 +26,7 @@ describe('check files in packages', () => {
 
         // TODO check packages json key
         // TODO check npm ignore
+        // TODO check pacakges dev not in root package
 
         switch (name) {
           default:

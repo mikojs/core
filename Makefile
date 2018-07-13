@@ -37,8 +37,9 @@ babel-clean:
 release:
 	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}
 	@yarn lerna-changelog && \
-		read -p "Input any word..." && \
-		vim CHANGELOG.md && \
+    echo "\nContinue or exit with 'ctrl + c'..." && \
+    read -p ""
+	@vim CHANGELOG.md && \
 		git add . && \
 		git commit -m "chore(release): v${VERSION} [skip ci]" && \
 		git tag -a v${VERSION} -m "v${VERSION}"

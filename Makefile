@@ -9,23 +9,30 @@ install-flow-typed:
 	@yarn lerna exec --parallel "flow-typed install -f 0.76.0 --verbose"
 
 babel-core:
-	@yarn babel src -d lib
-	@$(call babel-build, --scope @cat-org/utils)
-	@$(call babel-build, --scope @cat-org/configs)
+	@make babel-clean
+	@$(call babel-build, \
+		--scope @cat-org/babel-* \
+		--scope @cat-org/configs)
 
 babel-all:
-	@make babel-clean
-	@$(call babel-build)
+	@make babel-core
+	@$(call babel-build, \
+		--ignore @cat-org/babel-* \
+		--ignore @cat-org/configs)
 
 babel-test:
-	@make babel-clean
 	@make babel-core
-	@$(call babel-build, --scope @cat-org/eslint-config-cat)
+	@$(call babel-build, \
+		--scope @cat-org/eslint-config-cat)
 
 babel-lint-staged:
 	@make babel-core
-	@$(call babel-build, --scope @cat-org/eslint-config-cat)
-	@yarn lerna exec --parallel "node \$LERNA_ROOT_PATH/lib/bin/copyFlowFiles"
+	@yarn babel src -d lib
+	@$(call babel-build, \
+		--scope @cat-org/eslint-config-cat)
+
+babel-clean:
+	rm -rf ./lib ./packages/**/lib
 
 release:
 	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}
@@ -35,9 +42,6 @@ release:
 		git add . && \
 		git commit -m "chore(release): v${VERSION} [skip ci]" && \
 		git tag -a v${VERSION} -m "v${VERSION}"
-
-babel-clean:
-	rm -rf ./lib ./packages/**/lib
 
 clean-all:
 	@make babel-clean
@@ -49,6 +53,8 @@ clean-all:
 	rm -rf ./*.log
 
 define babel-build
-	yarn lerna exec --parallel "babel src -d lib --config-file ../../babel.config.js" $(1) && \
-  yarn lerna exec --parallel "node \$LERNA_ROOT_PATH/lib/bin/copyFlowFiles" $(1)
+	yarn lerna exec \
+		"babel src -d lib --config-file ../../babel.config.js" \
+		--parallel \
+		$(1)
 endef

@@ -4,20 +4,35 @@ const path = require('path');
 /* eslint-disable flowtype/require-return-type */
 /* eslint-disable flowtype/require-parameter-type */
 const babelConfigs = (() => {
-  try {
-    if (process.env.NODE_ENV === 'test') throw new Error('test');
+  const USE_DEFAULT_BABEL_CONFIG_PATTERN = /^@cat-org\/(configs|babel-.*)$/;
+  const { name } = require(path.resolve(process.cwd(), './package.json'));
 
-    const configs = require('./packages/configs/lib/babel');
-
-    return configs.default || configs;
-  } catch (e) {
+  if (
+    process.env.NODE_ENV === 'test' ||
+    USE_DEFAULT_BABEL_CONFIG_PATTERN.test(name)
+  )
     return {
       presets: ['@babel/preset-env', '@babel/preset-flow'],
       plugins: ['@babel/plugin-proposal-optional-chaining'],
       ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],
       overrides: [],
     };
-  }
+
+  const configs = (requireConfigs => requireConfigs.default || requireConfigs)(
+    require('./packages/configs/lib/babel'),
+  );
+
+  configs.plugins = configs.plugins.map(
+    plugin =>
+      /^@cat-org/.test(plugin)
+        ? require(plugin.replace(
+            /@cat-org\/(.*)/,
+            './packages/$1/lib/index.js',
+          ))
+        : plugin,
+  );
+
+  return configs;
 })();
 
 /**

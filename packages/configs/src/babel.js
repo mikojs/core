@@ -2,7 +2,10 @@
 
 export default ({
   presets: ['@babel/preset-env', '@babel/preset-flow'],
-  plugins: ['@babel/plugin-proposal-optional-chaining'],
+  plugins: [
+    '@babel/plugin-proposal-optional-chaining',
+    '@cat-org/babel-plugin-transform-flow',
+  ],
   ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],
   overrides: [],
 }: {

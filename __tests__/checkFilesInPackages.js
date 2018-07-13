@@ -29,6 +29,9 @@ describe('check files in packages', () => {
         // TODO check pacakges dev not in root package
 
         switch (name) {
+          case 'eslint-config-cat':
+            // TODO check dependices
+            break;
           default:
             break;
         }

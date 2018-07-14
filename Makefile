@@ -27,7 +27,6 @@ babel-test:
 
 babel-lint-staged:
 	@make babel-core
-	@yarn babel src -d lib
 	@$(call babel-build, \
 		--scope @cat-org/eslint-config-cat)
 

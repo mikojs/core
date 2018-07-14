@@ -22,15 +22,20 @@ const babelConfigs = (() => {
     require('./packages/configs/lib/babel'),
   );
 
-  configs.plugins = configs.plugins.map(
-    plugin =>
-      /^@cat-org/.test(plugin)
-        ? require(plugin.replace(
-            /@cat-org\/(.*)/,
-            './packages/$1/lib/index.js',
-          ))
-        : plugin,
-  );
+  configs.plugins = configs.plugins.map(plugin => {
+    const pluginName = plugin instanceof Array ? plugin[0] : plugin;
+
+    if (!/^@cat-org/.test(pluginName)) return plugin;
+
+    const pluginRequired = require(pluginName.replace(
+      /@cat-org\/(.*)/,
+      './packages/$1/lib/index.js',
+    ));
+
+    if (plugin instanceof Array) return [pluginRequired, plugin[1]];
+
+    return pluginRequired;
+  });
 
   return configs;
 })();

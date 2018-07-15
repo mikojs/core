@@ -13,7 +13,15 @@ const babelConfigs = (() => {
   )
     return {
       presets: ['@babel/preset-env', '@babel/preset-flow'],
-      plugins: ['@babel/plugin-proposal-optional-chaining'],
+      plugins: [
+        '@babel/plugin-proposal-optional-chaining',
+        [
+          'module-resolver',
+          {
+            root: ['./src'],
+          },
+        ],
+      ],
       ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],
       overrides: [],
     };
@@ -60,24 +68,16 @@ const transformImportsOptions = isRoot => ({
   },
 });
 
-babelConfigs.plugins.push(
-  ['transform-imports', transformImportsOptions(false)],
-  [
-    'module-resolver',
-    {
-      root: ['./src'],
-    },
-  ],
-);
+babelConfigs.plugins.push([
+  'transform-imports',
+  transformImportsOptions(false),
+]);
 
 babelConfigs.overrides.push(
   {
-    test: './src',
-    plugins: [['transform-imports', transformImportsOptions(true)]],
-  },
-  {
-    test: './src/__tests__',
+    test: './__tests__',
     plugins: [
+      ['transform-imports', transformImportsOptions(true)],
       [
         'module-resolver',
         {

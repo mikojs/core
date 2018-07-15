@@ -12,7 +12,7 @@
     "directory-tree": "^2.1.0"
   },
   "keywords": [
-    "cat",
+    "cat-org",
     "utils"
   ],
   "publishConfig": {

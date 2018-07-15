@@ -57,6 +57,7 @@ export default declare((api, options) => {
           relativePath,
         );
 
+        // module name
         const { name: pkgName } = require(path.resolve(
           findup.sync(sourcePath, 'package.json'),
           './package.json',

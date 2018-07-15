@@ -4,6 +4,12 @@ export default ({
   presets: ['@babel/preset-env', '@babel/preset-flow'],
   plugins: [
     '@babel/plugin-proposal-optional-chaining',
+    [
+      'module-resolver',
+      {
+        root: ['./src'],
+      },
+    ],
     '@cat-org/babel-plugin-transform-flow',
   ],
   ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],

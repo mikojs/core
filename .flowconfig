@@ -6,7 +6,7 @@
 
 [libs]
 ./flow-typed
-./packages/utils/lib/flow-typed
+./packages/**/lib/flow-typed
 
 [lints]
 

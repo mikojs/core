@@ -1,21 +1,21 @@
 {
   "name": "@cat-org/babel-plugin-transform-flow",
-  "description": "Babel plugin for copying flow files",
+  "description": "Babel plugin for transforming flow files",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/babel-plugin-transform-flow",
   "version": "1.0.0-beta.4",
   "main": "./lib/index.js",
+  "dependencies": {
+    "findup": "^0.1.5"
+  },
   "keywords": [
-    "babel",
-    "cat",
-    "copy flow files"
+    "cat-org",
+    "babel plugin",
+    "transform flow files"
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "findup": "^0.1.5"
   }
 }

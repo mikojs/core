@@ -28,6 +28,5 @@ declare module "${moduleName}" {
 ${content}
   declare module.exports: ${moduleName.split(/\//).slice(-1)[0]}Type;
 }`,
-    /* eslint-enable indent */
   );
 };

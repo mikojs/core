@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/eslint-config-cat",
-  "description": "eslint config fo cat-org",
+  "description": "Eslint config fo cat-org",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/cat-core/",
@@ -23,11 +23,11 @@
     "eslint-plugin-relay": "^0.0.23"
   },
   "devDependencies": {
-    "@cat-org/utils": "^1.0.0-beta.4"
+    "@cat-org/utils": "^1.0.0-beta.4",
+    "fbjs": "^0.8.17"
   },
   "keywords": [
-    "cat",
-    "config",
+    "cat-org",
     "eslint"
   ],
   "publishConfig": {

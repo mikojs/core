@@ -7,6 +7,8 @@ import findup from 'findup';
 
 import writeFile from './writeFile';
 
+import type { flowFileType } from './definitions/index.js.flow';
+
 const pluginOptions = {
   dir: './lib',
   relativeRoot: './src',
@@ -15,66 +17,82 @@ const pluginOptions = {
   extension: /\.js\.flow$/,
 };
 
-const flowFiles = [];
+const flowFiles: Array<flowFileType> = [];
 
-export default declare((api, options) => {
-  api.assertVersion(7);
+export default declare(
+  (
+    api: { assertVersion: (version: number) => void },
+    options: pluginOptions,
+  ): {} => {
+    api.assertVersion(7);
 
-  Object.keys(options).forEach(key => {
-    pluginOptions[key] = options[key];
-  });
+    Object.keys(options).forEach((key: string) => {
+      pluginOptions[key] = options[key];
+    });
 
-  return {
-    visitor: {
-      ImportDeclaration: (
-        {
-          node: {
-            source: { value },
+    return {
+      visitor: {
+        ImportDeclaration: (
+          {
+            node: {
+              source: { value },
+            },
+          }: {
+            node: {
+              source: { value: string },
+            },
           },
-        },
-        { cwd, filename },
-      ) => {
-        if (!pluginOptions.extension.test(value)) return;
+          {
+            cwd,
+            filename,
+          }: {
+            cwd: string,
+            filename: string,
+          },
+        ) => {
+          if (!pluginOptions.extension.test(value)) return;
 
-        const sourcePath = path.resolve(filename, '..', value);
+          const sourcePath = path.resolve(filename, '..', value);
 
-        if (
-          flowFiles.some(
-            ({ sourcePath: flowFilesSource }) => flowFilesSource === sourcePath,
+          if (
+            flowFiles.some(
+              ({ sourcePath: flowFilesSource }: flowFileType): boolean =>
+                flowFilesSource === sourcePath,
+            )
           )
-        )
-          return;
+            return;
 
-        // path setting
-        const relativePath = sourcePath.replace(
-          path.resolve(cwd, pluginOptions.relativeRoot, pluginOptions.source),
-          '.',
-        );
-        const targetPath = path.resolve(
-          cwd,
-          pluginOptions.dir,
-          pluginOptions.target,
-          relativePath,
-        );
+          // path setting
+          const relativePath = sourcePath.replace(
+            path.resolve(cwd, pluginOptions.relativeRoot, pluginOptions.source),
+            '.',
+          );
+          const targetPath = path.resolve(
+            cwd,
+            pluginOptions.dir,
+            pluginOptions.target,
+            relativePath,
+          );
 
-        // module name
-        const { name: pkgName } = require(path.resolve(
-          findup.sync(sourcePath, 'package.json'),
-          './package.json',
-        ));
-        const modulePath = relativePath
-          .replace(pluginOptions.extension, '')
-          .replace(/\/index/, '')
-          .replace(/^\./, '');
-        const moduleName = `${pkgName}${
-          modulePath === '' ? '' : pluginOptions.dir.replace(/\./, '')
-        }${modulePath}`;
+          // module name
+          const { name: pkgName } = require(path.resolve(
+            findup.sync(sourcePath, 'package.json'),
+            './package.json',
+          ));
+          const modulePath = relativePath
+            .replace(pluginOptions.extension, '')
+            .replace(/\/index/, '')
+            .replace(/^\./, '');
+          const moduleName = `${pkgName}${
+            modulePath === '' ? '' : pluginOptions.dir.replace(/\./, '')
+          }${modulePath}`;
 
-        flowFiles.push({ sourcePath, targetPath, moduleName });
+          flowFiles.push({ sourcePath, targetPath, moduleName });
+        },
       },
-    },
-    post: () => {
-      flowFiles.forEach(writeFile);
-    },
-  };
-});
+      post: () => {
+        flowFiles.forEach(writeFile);
+      },
+    };
+  },
+);

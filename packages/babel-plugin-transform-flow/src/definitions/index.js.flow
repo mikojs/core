@@ -1,0 +1,7 @@
+// @flow
+
+export type flowFileType = {|
+  sourcePath: string,
+  targetPath: string,
+  moduleName: string,
+|};

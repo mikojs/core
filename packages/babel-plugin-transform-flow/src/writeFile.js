@@ -5,7 +5,9 @@ import path from 'path';
 
 import mkdirp from 'mkdirp';
 
-export default ({ sourcePath, targetPath, moduleName }) => {
+import type { flowFileType } from './definitions/index.js.flow';
+
+export default ({ sourcePath, targetPath, moduleName }: flowFileType) => {
   mkdirp.sync(path.dirname(targetPath));
 
   const content = fs

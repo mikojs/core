@@ -2,7 +2,7 @@
 
 import babelConfigs from '@cat-org/configs/lib/babel';
 
-import rootBabelConfigs from '../../babel.config';
+import rootBabelConfigs from '../babel.config';
 
 it('check babel config', () => {
   rootBabelConfigs.plugins.find(

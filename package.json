@@ -6,7 +6,7 @@
     "clean:all": "make clean-all",
     "precommit": "make babel-lint-staged && lint-staged",
     "install:all": "make install-all",
-    "lint": "esw --cache --ext .js",
+    "lint": "NODE_ENV=test esw --cache --ext .js",
     "lint:watch": "yarn lint -w --rule \"prettier/prettier: off\" --quiet",
     "prepare": "patch-package",
     "prod": "NODE_ENV=production make babel-all",

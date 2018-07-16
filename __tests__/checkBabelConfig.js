@@ -5,6 +5,7 @@ import babelConfigs from '@cat-org/configs/lib/babel';
 import rootBabelConfigs from '../babel.config';
 
 it('check babel config', () => {
+  /** handle @cat-org/root babel.config.js */
   const transformImports = rootBabelConfigs.plugins.find(
     (plugin: string | $ReadOnlyArray<string | {}>): boolean =>
       plugin[0] === 'transform-imports',
@@ -16,29 +17,26 @@ it('check babel config', () => {
      * $FlowFixMe
      */
     transformImports[1]['@cat-org/utils'] = {
-      transform: '@cat-org/utils/lib/utils',
+      transform: '@cat-org/utils/lib/${member}',
     };
   }
 
-  babelConfigs.plugins.push(
-    [
-      'transform-imports',
-      {
-        '@cat-org/utils': {
-          transform: '@cat-org/utils/lib/utils',
-        },
-        fbjs: {
-          transform: 'fbjs/lib/${member}',
-        },
+  rootBabelConfigs.plugins.push('@cat-org/babel-plugin-transform-flow');
+  rootBabelConfigs.plugins.sort();
+
+  /** add other plugins to @cat-org/configs */
+  babelConfigs.plugins.push([
+    'transform-imports',
+    {
+      '@cat-org/utils': {
+        transform: '@cat-org/utils/lib/${member}',
       },
-    ],
-    [
-      'module-resolver',
-      {
-        root: ['./src'],
+      fbjs: {
+        transform: 'fbjs/lib/${member}',
       },
-    ],
-  );
+    },
+  ]);
+  babelConfigs.plugins.sort();
 
   expect({
     ...rootBabelConfigs,

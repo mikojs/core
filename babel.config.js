@@ -57,6 +57,7 @@ const babelConfigs = (() => {
  */
 const transformImportsOptions = isRoot => ({
   '@cat-org/utils': {
+    // $FlowFixMe
     transform: (importName, matches) =>
       isRoot
         ? path.resolve(__dirname, './packages/utils/lib', importName)

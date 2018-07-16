@@ -17,5 +17,5 @@ export default ({
 }: {
   // just for @cat-org/root test src/__tests__/checkBabelConfig.js
   // eslint-disable-next-line flowtype/no-mutable-array
-  plugins: Array<string | Array<string | {}>>,
+  plugins: Array<string | [string, {}]>,
 });

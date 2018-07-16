@@ -9,11 +9,19 @@ import writeFile from './writeFile';
 
 import type { flowFileType } from './definitions/index.js.flow';
 
-const pluginOptions = {
+type pluginOptionsType = {|
+  dir: string,
+  relativeRoot: string,
+  source: string,
+  target: string,
+  extension: RegExp,
+|};
+
+const pluginOptions: pluginOptionsType = {
   dir: './lib',
   relativeRoot: './src',
   source: 'definitions',
-  target: 'flow-tyed',
+  target: 'flow-typed',
   extension: /\.js\.flow$/,
 };
 
@@ -22,7 +30,7 @@ const flowFiles: Array<flowFileType> = [];
 export default declare(
   (
     api: { assertVersion: (version: number) => void },
-    options: pluginOptions,
+    options: pluginOptionsType,
   ): {} => {
     api.assertVersion(7);
 

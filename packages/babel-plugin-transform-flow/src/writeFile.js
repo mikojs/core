@@ -7,11 +7,15 @@ import mkdirp from 'mkdirp';
 
 import type { flowFileType } from './definitions/index.js.flow';
 
-export default ({ sourcePath, targetPath, moduleName }: flowFileType) => {
+export default ({
+  source,
+  targetPath,
+  moduleName,
+  exportType,
+}: flowFileType) => {
   mkdirp.sync(path.dirname(targetPath));
 
-  const content = fs
-    .readFileSync(sourcePath, 'utf-8')
+  const content = source
     .replace(/\/\/ @flow\n\n/, '')
     .split(/\n/)
     .map(
@@ -28,7 +32,7 @@ export default ({ sourcePath, targetPath, moduleName }: flowFileType) => {
 
 declare module "${moduleName}" {
 ${content}
-  declare module.exports: ${moduleName.split(/\//).slice(-1)[0]}Type;
+  declare module.exports: ${exportType};
 }`,
   );
 };

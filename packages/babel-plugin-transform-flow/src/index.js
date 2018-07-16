@@ -1,13 +1,15 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
 import { declare } from '@babel/helper-plugin-utils';
 import findup from 'findup';
 
 import writeFile from './writeFile';
+import writeTest from './writeTest';
 
-import type { flowFileType } from './definitions/index.js.flow';
+import type { flowFileType, flowTestType } from './definitions/index.js.flow';
 
 type pluginOptionsType = {|
   dir: string,
@@ -15,6 +17,7 @@ type pluginOptionsType = {|
   source: string,
   target: string,
   extension: RegExp,
+  generateFlowTest: false | string,
 |};
 
 const pluginOptions: pluginOptionsType = {
@@ -23,9 +26,13 @@ const pluginOptions: pluginOptionsType = {
   source: 'definitions',
   target: 'flow-typed',
   extension: /\.js\.flow$/,
+  generateFlowTest: './src/__tests__/flowCheck.js.flow',
 };
 
 const flowFiles: Array<flowFileType> = [];
+const flowTests: Array<flowTestType> = [];
+
+let flowTestPath: string = '';
 
 export default declare(
   (
@@ -37,6 +44,13 @@ export default declare(
     Object.keys(options).forEach((key: string) => {
       pluginOptions[key] = options[key];
     });
+
+    if (pluginOptions.generateFlowTest) {
+      flowTestPath = path.resolve(
+        process.cwd(),
+        pluginOptions.generateFlowTest || '',
+      );
+    }
 
     return {
       visitor: {
@@ -89,17 +103,39 @@ export default declare(
           ));
           const modulePath = relativePath
             .replace(pluginOptions.extension, '')
-            .replace(/\/index/, '')
+            .replace(/\/index$/, '')
             .replace(/^\./, '');
           const moduleName = `${pkgName}${
             modulePath === '' ? '' : pluginOptions.dir.replace(/\./, '')
           }${modulePath}`;
 
-          flowFiles.push({ sourcePath, targetPath, moduleName });
+          const exportType = `${moduleName.split(/\//).slice(-1)[0]}Type`;
+          const source = fs.readFileSync(sourcePath, 'utf-8');
+
+          flowFiles.push({
+            source,
+            sourcePath,
+            targetPath,
+            moduleName,
+            exportType,
+          });
+
+          if (!pluginOptions.generateFlowTest || /ignore test/.test(source))
+            return;
+
+          flowTests.push({
+            moduleName,
+            exportType,
+            relativePath: path
+              .relative(path.dirname(pluginOptions.generateFlowTest), filename)
+              .replace(/\.js$/, '')
+              .replace(/\/index$/, ''),
+          });
         },
       },
       post: () => {
         flowFiles.forEach(writeFile);
+        writeTest(flowTests, flowTestPath);
       },
     };
   },

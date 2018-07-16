@@ -8,13 +8,10 @@
   "version": "1.0.0-beta.4",
   "main": "./lib/index.js",
   "keywords": [
-    "cat",
+    "cat-org",
     "configs"
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "@cat-org/utils": "^1.0.0-beta.4"
   }
 }

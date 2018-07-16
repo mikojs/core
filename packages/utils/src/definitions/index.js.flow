@@ -1,5 +1,7 @@
 // @flow
 
+/** ignore test */
+
 import type { d3DirTreeType } from '@cat-org/utils/lib/d3DirTree';
 import type { throwMessageInIndexType } from '@cat-org/utils/lib/throwMessageInIndex';
 

@@ -2,6 +2,9 @@
 # ignore for @cat-org/eslint-config-cat
 <PROJECT_ROOT>/packages/eslint-config-cat/src/__tests__/__ignore__
 
+# ignore findup test
+.*/findup/test
+
 [include]
 
 [libs]

@@ -9,28 +9,31 @@ install-flow-typed:
 	@yarn lerna exec --parallel "flow-typed install -f 0.76.0 --verbose"
 
 babel-core:
-	@$(call babel-build, .)
-	@$(call babel-build, ./packages/utils)
-	@$(call babel-build, ./packages/configs)
+	@make babel-clean
+	@$(call babel-build, \
+		--scope @cat-org/babel-* \
+		--scope @cat-org/configs)
 
 babel-all:
-	@make babel-clean
 	@make babel-core
-	@for package in $$(node ./lib/bin/findPackages -i utils configs -s); do \
-	  $(call babel-build, ./packages/$$package); \
-		done
+	@$(call babel-build, \
+		--ignore @cat-org/babel-* \
+		--ignore @cat-org/configs)
 
 babel-test:
-	@make babel-clean
 	@make babel-core
-	@$(call babel-build, ./packages/eslint-config-cat)
+	@$(call babel-build, \
+		--scope @cat-org/utils \
+		--scope @cat-org/eslint-config-cat)
 
 babel-lint-staged:
 	@make babel-core
-	@$(call babel-build, ./packages/eslint-config-cat)
-	@for package in $$(node ./lib/bin/findPackages -s); do \
-		node ./lib/bin/copyFlowFiles $$package; \
-		done
+	@$(call babel-build, \
+		--scope @cat-org/utils \
+		--scope @cat-org/eslint-config-cat)
+
+babel-clean:
+	rm -rf ./lib ./packages/**/lib
 
 release:
 	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}
@@ -42,9 +45,6 @@ release:
 		git commit -m "chore(release): v${VERSION} [skip ci]" && \
 		git tag -a v${VERSION} -m "v${VERSION}"
 
-babel-clean:
-	rm -rf ./lib ./packages/**/lib
-
 clean-all:
 	@make babel-clean
 	rm -rf ./node_modules ./packages/**/node_modules
@@ -55,8 +55,8 @@ clean-all:
 	rm -rf ./*.log
 
 define babel-build
-	yarn babel $(1)/src --out-dir $(1)/lib && \
-		test $(1) != "." && \
-		node ./lib/bin/copyFlowFiles $(subst ./packages/,,$(1)) || \
-	 	printf ""
+	yarn lerna exec \
+		"babel src -d lib --config-file ../../babel.config.js" \
+		--parallel \
+		$(1)
 endef

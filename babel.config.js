@@ -4,20 +4,48 @@ const path = require('path');
 /* eslint-disable flowtype/require-return-type */
 /* eslint-disable flowtype/require-parameter-type */
 const babelConfigs = (() => {
-  try {
-    if (process.env.NODE_ENV === 'test') throw new Error('test');
+  const USE_DEFAULT_BABEL_CONFIG_PATTERN = /^@cat-org\/(configs|babel-.*)$/;
+  const { name } = require(path.resolve(process.cwd(), './package.json'));
 
-    const configs = require('./packages/configs/lib/babel');
-
-    return configs.default || configs;
-  } catch (e) {
+  if (
+    process.env.NODE_ENV === 'test' ||
+    USE_DEFAULT_BABEL_CONFIG_PATTERN.test(name)
+  )
     return {
       presets: ['@babel/preset-env', '@babel/preset-flow'],
-      plugins: ['@babel/plugin-proposal-optional-chaining'],
+      plugins: [
+        '@babel/plugin-proposal-optional-chaining',
+        [
+          'module-resolver',
+          {
+            root: ['./src'],
+          },
+        ],
+      ],
       ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],
       overrides: [],
     };
-  }
+
+  const configs = (requireConfigs => requireConfigs.default || requireConfigs)(
+    require('./packages/configs/lib/babel'),
+  );
+
+  configs.plugins = configs.plugins.map(plugin => {
+    const pluginName = plugin instanceof Array ? plugin[0] : plugin;
+
+    if (!/^@cat-org/.test(pluginName)) return plugin;
+
+    const pluginRequired = require(pluginName.replace(
+      /@cat-org\/(.*)/,
+      './packages/$1/lib/index.js',
+    ));
+
+    if (plugin instanceof Array) return [pluginRequired, plugin[1]];
+
+    return pluginRequired;
+  });
+
+  return configs;
 })();
 
 /**
@@ -40,24 +68,16 @@ const transformImportsOptions = isRoot => ({
   },
 });
 
-babelConfigs.plugins.push(
-  ['transform-imports', transformImportsOptions(false)],
-  [
-    'module-resolver',
-    {
-      root: ['./src'],
-    },
-  ],
-);
+babelConfigs.plugins.push([
+  'transform-imports',
+  transformImportsOptions(false),
+]);
 
 babelConfigs.overrides.push(
   {
-    test: './src',
-    plugins: [['transform-imports', transformImportsOptions(true)]],
-  },
-  {
-    test: './src/__tests__',
+    test: './__tests__',
     plugins: [
+      ['transform-imports', transformImportsOptions(true)],
       [
         'module-resolver',
         {

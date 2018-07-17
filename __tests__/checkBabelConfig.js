@@ -7,7 +7,7 @@ import rootBabelConfigs from '../babel.config';
 it('check babel config', () => {
   /** handle @cat-org/root babel.config.js */
   const transformImports = rootBabelConfigs.plugins.find(
-    (plugin: string | $ReadOnlyArray<string | {}>): boolean =>
+    (plugin: string | [string, {}]): boolean =>
       plugin[0] === 'transform-imports',
   );
 

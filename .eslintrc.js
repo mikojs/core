@@ -15,16 +15,6 @@ module.exports = {
       },
     },
     {
-      files: ['packages/babel-plugin-transform-flow/**/*.js'],
-      settings: {
-        /**
-         * Install mkdirp with @babel/cli.
-         * Install @babel/helper-plugin-utils with @babel/preset-env.
-         */
-        'import/core-modules': ['mkdirp', '@babel/helper-plugin-utils'],
-      },
-    },
-    {
       files: ['packages/configs/**/*.js'],
       settings: {
         /** Only install @cat-org/utils by user who need */

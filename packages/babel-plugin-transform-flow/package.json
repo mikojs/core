@@ -10,11 +10,19 @@
   "dependencies": {
     "findup": "^0.1.5"
   },
+  "devDependencies": {
+    "@babel/helper-plugin-utils": "^7.0.0-beta.53",
+    "mkdirp": "^0.5.1"
+  },
   "keywords": [
     "cat-org",
     "babel plugin",
     "transform flow files"
   ],
+  "peerDependencies": {
+    "@babel/cli": "^7.0.0-beta.53",
+    "@babel/helper-plugin-utils": "^7.0.0-beta.53"
+  },
   "publishConfig": {
     "access": "public"
   }

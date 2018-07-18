@@ -33,7 +33,6 @@ jobs:
           command: yarn test
       - store_artifacts:
           path: coverage
-          prefix: coverage
 
   deploy-beta:
     working_directory: ~/repo

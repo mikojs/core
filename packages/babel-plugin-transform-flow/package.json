@@ -11,7 +11,7 @@
     "findup": "^0.1.5"
   },
   "devDependencies": {
-    "@babel/helper-plugin-utils": "^7.0.0-beta.53",
+    "@babel/helper-plugin-utils": "^7.0.0-beta.54",
     "mkdirp": "^0.5.1"
   },
   "keywords": [
@@ -20,8 +20,8 @@
     "transform flow files"
   ],
   "peerDependencies": {
-    "@babel/cli": "^7.0.0-beta.53",
-    "@babel/helper-plugin-utils": "^7.0.0-beta.53"
+    "@babel/cli": "^7.0.0-beta.54",
+    "@babel/helper-plugin-utils": "^7.0.0-beta.54"
   },
   "publishConfig": {
     "access": "public"

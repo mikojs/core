@@ -48,49 +48,53 @@ const eslintResult = results.filter(
     messages.length !== 0,
 );
 
-const files = d3DirTree(root, {
-  extensions: /\.js$/,
-}).leaves();
 const ruleIds = [];
 
-const testData = files.map(
-  ({ data: { path: filePath, name } }: d3DirTreeNodeType): testDataType => {
-    const { messages = [] } =
-      eslintResult.find(
-        ({ filePath: eslintFilePath }: { filePath: string }): boolean =>
-          filePath === eslintFilePath,
-      ) || {};
+const testData = d3DirTree(root, {
+  extensions: /\.js$/,
+})
+  .leaves()
+  .map(
+    ({ data: { path: filePath, name } }: d3DirTreeNodeType): testDataType => {
+      const { messages = [] } =
+        eslintResult.find(
+          ({ filePath: eslintFilePath }: { filePath: string }): boolean =>
+            filePath === eslintFilePath,
+        ) || {};
 
-    const expectErrors = fs
-      .readFileSync(filePath, 'utf-8')
-      .split(/\n/g)
-      .filter((text: string): boolean => /^[ ]*\/\/ \$expectError /.test(text))
-      .map(
-        (text: string): string => text.replace(/^[ ]*\/\/ \$expectError /, ''),
+      const expectErrors = fs
+        .readFileSync(filePath, 'utf-8')
+        .split(/\n/g)
+        .filter(
+          (text: string): boolean => /^[ ]*\/\/ \$expectError /.test(text),
+        )
+        .map(
+          (text: string): string =>
+            text.replace(/^[ ]*\/\/ \$expectError /, ''),
+        );
+
+      const testTasks = messages.map(
+        (message: eslintInfoType, index: number): testTaskType => {
+          const { ruleId } = message;
+
+          if (!ruleIds.includes(ruleId)) {
+            ruleIds.push(ruleId);
+          }
+
+          return {
+            eslintInfo: message,
+            expectError: expectErrors[index] || null,
+          };
+        },
       );
 
-    const testTasks = messages.map(
-      (message: eslintInfoType, index: number): testTaskType => {
-        const { ruleId } = message;
-
-        if (!ruleIds.includes(ruleId)) {
-          ruleIds.push(ruleId);
-        }
-
-        return {
-          eslintInfo: message,
-          expectError: expectErrors[index] || null,
-        };
-      },
-    );
-
-    return {
-      testName: hyphenate(name.replace(/.js/, '')),
-      testTasks,
-      checkErrorAmount: expectErrors.length === messages.length,
-    };
-  },
-);
+      return {
+        testName: hyphenate(name.replace(/.js/, '')),
+        testTasks,
+        checkErrorAmount: expectErrors.length === messages.length,
+      };
+    },
+  );
 
 describe('eslint', () => {
   it('check amount of test files', () => {

@@ -41,18 +41,43 @@ export default declare(
   ): {} => {
     api.assertVersion(7);
 
-    Object.keys(options).forEach((key: string) => {
-      pluginOptions[key] = options[key];
-    });
+    type manipulateOptionsPluginsType = {
+      options: pluginOptionsType,
+      manipulateOptions: ({
+        plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
+      }) => void,
+    };
 
-    if (pluginOptions.generateFlowTest) {
-      flowTestPath = path.resolve(
-        process.cwd(),
-        pluginOptions.generateFlowTest || '',
+    /**
+     * @example
+     * manipulateOptions({});
+     *
+     * @param {Object} opts - opts of manipulateOptions
+     */
+    const manipulateOptions = ({
+      plugins,
+    }: {
+      plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
+    }) => {
+      const [{ options: newOptions }] = plugins.filter(
+        (plugin: manipulateOptionsPluginsType): boolean =>
+          plugin.manipulateOptions === manipulateOptions,
       );
-    }
+
+      Object.keys({ ...options, ...newOptions }).forEach((key: string) => {
+        pluginOptions[key] = options[key];
+      });
+
+      if (pluginOptions.generateFlowTest) {
+        flowTestPath = path.resolve(
+          process.cwd(),
+          pluginOptions.generateFlowTest || '',
+        );
+      }
+    };
 
     return {
+      manipulateOptions,
       visitor: {
         ImportDeclaration: (
           {

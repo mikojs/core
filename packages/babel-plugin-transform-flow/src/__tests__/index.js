@@ -52,34 +52,52 @@ declare module "${moduleName === 'test' ? 'test' : `test/lib/${moduleName}`}" {
 describe('test', () => {
   beforeAll((): void => rimraf.sync(libPath));
 
-  describe('no generate flow test', () => {
-    it('generate flow files', () => {
-      ['index', 'foo'].map((fileName: string) => {
-        transformFileSync(
-          path.resolve(srcPath, `./${fileName}.js`),
-          babelConfigs(),
-        );
+  it('no generate flow files with no import flow type', () => {
+    transformFileSync(
+      path.resolve(srcPath, './noFlowType.js'),
+      babelConfigs('./lib/checkFlow.js.flow'),
+    );
 
-        expect(
-          fs.readFileSync(
-            path.resolve(libPath, `./flow-typed/${fileName}.js.flow`),
-            'utf-8',
-          ),
-        ).toBe(content(fileName === 'index' ? 'test' : fileName));
-      });
-    });
+    expect(
+      fs.existsSync(path.resolve(libPath, './checkFlow.js.flow')),
+    ).toBeFalsy();
   });
 
-  describe('generate flow test', () => {
-    it('checkFlow exists', () => {
+  it('generate flow files', () => {
+    ['index', 'foo'].map((fileName: string) => {
       transformFileSync(
-        path.resolve(srcPath, `./index.js`),
-        babelConfigs('./lib/checkFlow.js'),
+        path.resolve(srcPath, `./${fileName}.js`),
+        babelConfigs(),
       );
 
       expect(
-        fs.existsSync(path.resolve(libPath, './checkFlow.js')),
-      ).toBeTruthy();
+        fs.readFileSync(
+          path.resolve(libPath, `./flow-typed/${fileName}.js.flow`),
+          'utf-8',
+        ),
+      ).toBe(content(fileName === 'index' ? 'test' : fileName));
     });
   });
+
+  it('generate flow test', () => {
+    transformFileSync(
+      path.resolve(srcPath, './index.js'),
+      babelConfigs('./lib/checkFlow.js.flow'),
+    );
+
+    expect(
+      fs.readFileSync(path.resolve(libPath, './checkFlow.js.flow'), 'utf-8'),
+    ).toBe(`// @flow
+
+import type testType from 'test';
+import type fooType from 'test/lib/foo';
+
+import test from '../src';
+import foo from '../src/foo';
+
+(test: testType);
+(foo: fooType);`);
+  });
+
+  afterAll((): void => rimraf.sync(libPath));
 });

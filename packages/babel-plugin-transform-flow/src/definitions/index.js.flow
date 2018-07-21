@@ -1,18 +1,10 @@
 // @flow
 
-type moduleType = string;
-type exportType = string;
-
 export type flowFileType = {|
   source: string,
   sourcePath: string,
   targetPath: string,
-  moduleName: moduleType,
-  exportType: exportType,
-|};
-
-export type flowTestType = {|
-  moduleName: moduleType,
-  exportType: exportType,
-  relativePath: string,
+  filename: string,
+  moduleName: string,
+  exportType: string,
 |};

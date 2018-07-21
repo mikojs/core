@@ -9,7 +9,7 @@ import findup from 'findup';
 import writeFile from './writeFile';
 import writeTest from './writeTest';
 
-import type { flowFileType, flowTestType } from './definitions/index.js.flow';
+import type { flowFileType } from './definitions/index.js.flow';
 
 type pluginOptionsType = {|
   dir: string,
@@ -30,7 +30,6 @@ const pluginOptions: pluginOptionsType = {
 };
 
 const flowFiles: Array<flowFileType> = [];
-const flowTests: Array<flowTestType> = [];
 
 let flowTestPath: string = '';
 
@@ -42,6 +41,7 @@ export default declare(
     api.assertVersion(7);
 
     type manipulateOptionsPluginsType = {
+      cwd: string,
       options: pluginOptionsType,
       manipulateOptions: ({
         plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
@@ -55,8 +55,10 @@ export default declare(
      * @param {Object} opts - opts of manipulateOptions
      */
     const manipulateOptions = ({
+      cwd,
       plugins,
     }: {
+      cwd: string,
       plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
     }) => {
       const [{ options: newOptions }] = plugins.filter(
@@ -68,11 +70,8 @@ export default declare(
         pluginOptions[key] = options[key];
       });
 
-      if (pluginOptions.generateFlowTest) {
-        flowTestPath = path.resolve(
-          process.cwd(),
-          pluginOptions.generateFlowTest || '',
-        );
+      if (flowTestPath === '' && pluginOptions.generateFlowTest) {
+        flowTestPath = path.resolve(cwd, pluginOptions.generateFlowTest);
       }
     };
 
@@ -141,26 +140,18 @@ export default declare(
             source,
             sourcePath,
             targetPath,
+            filename,
             moduleName,
             exportType,
-          });
-
-          if (!pluginOptions.generateFlowTest || /ignore test/.test(source))
-            return;
-
-          flowTests.push({
-            moduleName,
-            exportType,
-            relativePath: path
-              .relative(path.dirname(pluginOptions.generateFlowTest), filename)
-              .replace(/\.js$/, '')
-              .replace(/\/index$/, ''),
           });
         },
       },
       post: () => {
         flowFiles.forEach(writeFile);
-        writeTest(flowTests, flowTestPath);
+
+        if (!pluginOptions.generateFlowTest) return;
+
+        writeTest(flowFiles, flowTestPath);
       },
     };
   },

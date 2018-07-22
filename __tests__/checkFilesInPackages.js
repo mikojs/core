@@ -5,13 +5,10 @@ import path from 'path';
 import { d3DirTree } from '@cat-org/utils';
 import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-const packageRoot = path.resolve(__dirname, '../packages');
-const packages = d3DirTree(packageRoot, {
-  exclude: [/node_modules/, ...(process.env.TEST_PRODUCTION ? [] : [/lib/])],
-});
-
 describe('check files in packages', () => {
-  packages.children.forEach(
+  d3DirTree(path.resolve(__dirname, '../packages'), {
+    exclude: [/node_modules/, ...(process.env.TEST_PRODUCTION ? [] : [/lib/])],
+  }).children.forEach(
     ({ data: { name, path: filePath }, children }: d3DirTreeNodeType) => {
       describe(name, () => {
         it('files in package root', () => {

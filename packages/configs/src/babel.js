@@ -12,10 +12,14 @@ export default ({
     ],
     '@cat-org/babel-plugin-transform-flow',
   ],
-  ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],
+  ignore:
+    process.env.NODE_ENV === 'test'
+      ? []
+      : /* istanbul ignore next */ ['**/__tests__/**'],
   overrides: [],
 }: {
-  // just for @cat-org/root test src/__tests__/checkBabelConfig.js
+  // just for tests
   // eslint-disable-next-line flowtype/no-mutable-array
   plugins: Array<string | [string, {}]>,
+  ignore: [] | ['**/__tests__/**'],
 });

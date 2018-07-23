@@ -34,7 +34,6 @@ babel-lint-staged:
 
 babel-clean:
 	rm -rf ./lib ./packages/**/lib
-	rm -rf ./packages/**/src/__tests__/flowCheck.js.flow
 
 release:
 	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}

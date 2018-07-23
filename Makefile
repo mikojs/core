@@ -6,7 +6,10 @@ install-all:
 install-flow-typed:
 	rm -rf ./flow-typed
 	@yarn flow-typed install --verbose
-	@yarn lerna exec --parallel "flow-typed install -f 0.76.0 --verbose"
+	@yarn lerna exec \
+		"flow-typed install -f 0.76.0 --verbose" \
+		--parallel \
+		--stream
 
 babel-core:
 	@make babel-clean
@@ -59,5 +62,6 @@ define babel-build
 	yarn lerna exec \
 		"babel src -d lib --config-file ../../babel.config.js" \
 		--parallel \
+		--stream \
 		$(1)
 endef

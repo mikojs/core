@@ -3,8 +3,8 @@
 import path from 'path';
 
 type optionsType = {|
-  dir: string,
-  relativeRoot: string,
+  src?: string,
+  outDir?: string,
   extension: RegExp,
   generateFlowTest: false | string,
 |};
@@ -12,18 +12,19 @@ type optionsType = {|
 type manipulateOptionsPluginsType = {
   options: optionsType,
   manipulateOptions: ({
-    cwd: string,
     plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
   }) => void,
 };
 
-class Store {
-  options: optionsType = {
-    dir: './lib',
-    relativeRoot: './src',
+class Utils {
+  initialized: boolean = false;
+
+  initialOptions: optionsType = {
     extension: /\.js\.flow$/,
     generateFlowTest: './src/__tests__/flowCheck.js.flow',
   };
+
+  options: optionsType = {};
 
   /**
    * @example
@@ -32,7 +33,6 @@ class Store {
    * @param {Object} opts - opts of manipulateOptions
    */
   manipulateOptions = ({
-    cwd,
     plugins,
   }: $PropertyType<manipulateOptionsPluginsType, 'manipulateOptions'>) => {
     const [{ options }] = plugins.filter(
@@ -40,7 +40,10 @@ class Store {
         manipulateOptions === this.manipulateOptions,
     );
 
-    this.addOptions(options);
+    this.options = {
+      ...this.initialOptions,
+      ...options,
+    };
 
     /*
     if (flowTestPath === '' && options.generateFlowTest) {
@@ -49,15 +52,19 @@ class Store {
     */
   };
 
-  addOptions = options => {
-    Object.keys(options).forEach((key: string) => {
-      this.options[key] = options[key];
+  initializeOptions = options => {
+    if (this.initialized) return;
+
+    options.forEach((key: string) => {
+      this.initialOptions[key] = options[key];
     });
+
+    this.initialized = true;
   };
 
-  get getOptions() {
+  get options() {
     return this.options;
   }
 }
 
-export default new Store();
+export default new Utils();

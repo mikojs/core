@@ -5,7 +5,7 @@ import path from 'path';
 
 import { declare } from '@babel/helper-plugin-utils';
 
-import Store from './Store';
+import Utils from './Utils';
 
 export default declare(
   (
@@ -13,10 +13,10 @@ export default declare(
     options: pluginOptionsType,
   ): {} => {
     api.assertVersion(7);
-    Store.addOptions(options);
+    Utils.initializeOptions(options);
 
     return {
-      manipulateOptions: Store.manipulateOptions,
+      manipulateOptions: Utils.manipulateOptions,
       visitor: {
         ImportDeclaration: (
           {
@@ -36,7 +36,7 @@ export default declare(
             filename: string,
           },
         ) => {
-          console.log(Store.getOptions);
+          console.log(Utils.options);
           /*
           if (!pluginOptions.extension.test(value)) return;
 

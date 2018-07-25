@@ -59,7 +59,7 @@ clean-all:
 
 define babel-build
 	yarn lerna exec \
-		"babel src -d lib --config-file ../../babel.config.js" \
+		"babel src -d lib --config-file ../../babel.config.js --verbose" \
 		--parallel \
 		--stream \
 		$(1)

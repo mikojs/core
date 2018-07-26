@@ -3,14 +3,11 @@
 import fs from 'fs';
 import path from 'path';
 
-import { transformFile } from '@babel/core';
 import { declare } from '@babel/helper-plugin-utils';
-import outputFileSync from 'output-file-sync';
 
-import Utils from './Utils';
-
-const flowFiles = [];
-const writeFilesStore = [];
+import utils from './utils';
+import flowFiles from './flowFiles';
+import writeFiles from './writeFiles';
 
 export default declare(
   (
@@ -18,10 +15,10 @@ export default declare(
     options: pluginOptionsType,
   ): {} => {
     api.assertVersion(7);
-    Utils.initializeOptions(options);
+    utils.initializeOptions(options);
 
     return {
-      manipulateOptions: Utils.manipulateOptions,
+      manipulateOptions: utils.manipulateOptions,
       visitor: {
         ImportDeclaration: (
           {
@@ -41,65 +38,49 @@ export default declare(
             filename: string,
           },
         ) => {
-          if (!Utils.options.extension.test(value)) return;
+          if (!utils.options.extension.test(value)) return;
 
           const filePath = path.resolve(filename, '..', value);
-          const { ctimeMs } = fs.statSync(filePath);
 
           if (
-            flowFiles.some(
-              (flowFile: flowFileType): boolean =>
-                flowFile.srcPath === srcPath && flowFile.ctimeMs === ctimeMs,
+            flowFiles.store.some(
+              (flowFile: flowFileType): boolean => flowFile.srcPath === srcPath,
             )
           )
             return;
 
-          const { srcPath, destPath } = Utils.getFilePaths(filePath, cwd);
-          const flowFileIndex = flowFiles.findIndex(
+          const { srcPath, destPath } = utils.getFilePaths(filePath, cwd);
+          const flowFile = flowFiles.store.find(
             (flowFile: flowFileType): boolean => flowFile.srcPath === srcPath,
           );
 
-          if (flowFileIndex !== -1) {
-            flowFiles[flowFileIndex].ctimeMs = ctimeMs;
-            writeFilesStore.push(flowFileIndex);
-            return;
-          }
-
-          flowFiles.push({
-            srcPath,
-            destPath,
-            ctimeMs,
-          });
-          writeFilesStore.push(flowFiles.length - 1);
+          flowFiles.add({ srcPath, destPath, filePath });
         },
       },
-      post: ({ opts: { cwd, filename } }) => {
-        const { verbose, watch } = Utils.options;
-        const { srcPath, destPath } = Utils.getFilePaths(filename, cwd);
+      post: ({
+        opts: {
+          cwd,
+          filename,
+          parserOpts: { plugins },
+        },
+      }) => {
+        const { verbose, watch, configs } = utils.options;
+        const { srcPath, destPath } = utils.getFilePaths(filename, cwd);
+        const babelConfigs = {
+          ...configs,
+          parserOpts: {
+            plugins,
+            ...configs?.parserOpts,
+          },
+        };
 
-        outputFileSync(`${destPath}.flow`, fs.readFileSync(srcPath, 'utf-8'));
-
-        if (verbose) console.log(`${srcPath} -> ${destPath}.flow`);
-
-        /*
-        while (writeFilesStore.length !== 0) {
-          const flowFileIndex = writeFilesStore.pop();
-          const { srcPath, destPath } = flowFiles[flowFileIndex];
-
-          transformFile(srcPath, opts, (err, result) => {
-            if (err) {
-              if (watch) return console.log(err);
-              else throw new Error(err);
-            }
-
-            console.log(result);
-            // TODO compile with babel
-            outputFileSync(destPath, fs.readFileSync(srcPath, 'utf-8'));
-
-            if (verbose) console.log(srcPath, ' -> ', destPath);
-          });
-        }
-        */
+        flowFiles.store.forEach(flowFile => {
+          if (!flowFile.babelConfigs) {
+            flowFile.babelConfigs = babelConfigs;
+            writeFiles.add(flowFile);
+          }
+        });
+        writeFiles.add({ srcPath, destPath, babelConfigs });
       },
     };
   },

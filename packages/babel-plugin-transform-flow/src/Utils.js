@@ -3,8 +3,9 @@
 import path from 'path';
 
 type optionsType = {|
-  src?: Array<string>,
+  src?: string | Array<string>,
   outDir?: string,
+  configs?: {},
   cli: boolean,
   verbose: boolean,
   watch: boolean,
@@ -78,8 +79,8 @@ class Utils {
 
       this.initialOptions.src = filename ? [path.dirname(filename)] : filenames;
       this.initialOptions.outDir = outFile ? path.dirname(outFile) : outDir;
-      this.initialOptions.verbose = verbose;
-      this.initialOptions.watch = watch;
+      this.initialOptions.verbose = Boolean(verbose);
+      this.initialOptions.watch = Boolean(watch);
     } else {
       this.initializeOptions.src =
         this.initializeOptions.src instanceof Array
@@ -116,17 +117,15 @@ class Utils {
       (result: string, srcDir: string) => result.replace(`${srcDir}/`, ''),
       srcPath,
     );
-    const destPath = path.join(outDir, relativePath);
+    const destPath = path
+      .join(outDir, relativePath)
+      .replace(/\.js$/, '.js.flow');
 
     return {
       srcPath,
       destPath,
     };
   };
-
-  get options() {
-    return this.options;
-  }
 }
 
 export default new Utils();

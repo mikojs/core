@@ -1,5 +1,0 @@
-// @flow
-
-/** ignore test */
-
-export type notCheckFlowFileType = 'no check flow file';

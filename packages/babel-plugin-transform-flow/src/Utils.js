@@ -2,17 +2,19 @@
 
 import path from 'path';
 
-type optionsType = {|
+export type optionsType = {|
   src?: string | Array<string>,
   outDir?: string,
-  configs?: {},
+  configs?: {
+    parserOpts?: {},
+  },
   cli: boolean,
   verbose: boolean,
   watch: boolean,
   extension: RegExp,
 |};
 
-type manipulateOptionsPluginsType = {
+export type manipulateOptionsPluginsType = {
   options: optionsType,
   manipulateOptions: ({
     plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
@@ -29,7 +31,7 @@ class Utils {
     extension: /\.js\.flow$/,
   };
 
-  options: optionsType = {};
+  options: optionsType = this.initialOptions;
 
   /**
    * @example
@@ -64,7 +66,7 @@ class Utils {
     this.validateOptions();
   };
 
-  initializeOptions = options => {
+  initializeOptions = (options: optionsType) => {
     if (this.initialized) return;
 
     Object.keys(options).forEach((key: string) => {
@@ -95,22 +97,36 @@ class Utils {
     [
       {
         name: 'src',
-        validate: values =>
+        validate: (values: $ReadOnlyArray<string>): boolean =>
           values.length !== 0 && !values.some(value => !Boolean(value)),
       },
       {
         name: 'outDir',
-        validate: value => Boolean(value),
+        validate: (value?: string): boolean => Boolean(value),
       },
-    ].forEach(({ name, validate }) => {
-      if (!validate(this.options[name]))
-        throw new Error(
-          `@cat-org/babel-plugin-transform-flow validate: \`${name}\` is invalid.`,
-        );
-    });
+    ].forEach(
+      ({
+        name,
+        validate,
+      }: {
+        name: string,
+        validate: (value: any) => boolean,
+      }) => {
+        if (!validate(this.options[name]))
+          throw new Error(
+            `@cat-org/babel-plugin-transform-flow validate: \`${name}\` is invalid.`,
+          );
+      },
+    );
   };
 
-  getFilePaths = (filePath, cwd) => {
+  getFilePaths = (
+    filePath: string,
+    cwd: string,
+  ): {
+    srcPath: string,
+    destPath: string,
+  } => {
     const { src, outDir } = this.options;
     const srcPath = filePath.replace(`${cwd}/`, '');
     const relativePath = src.reduce(

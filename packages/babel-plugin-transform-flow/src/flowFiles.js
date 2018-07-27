@@ -1,7 +1,14 @@
-import chokidar from 'chokidar';
-
 import utils from './utils';
 import writeFiles from './writeFiles';
+
+export type flowFileType = {
+  srcPath: string,
+  destPath: string,
+  filePath: string,
+  babelConfigs?: {
+    parserOpts: {},
+  },
+};
 
 class FlowFiles {
   store = [];
@@ -15,6 +22,8 @@ class FlowFiles {
   };
 
   openWatcher = () => {
+    const chokidar = require('chokidar');
+
     this.watcher?.close();
     this.watcher = chokidar.watch(this.store.map(({ filePath }) => filePath), {
       ignoreInitial: true,

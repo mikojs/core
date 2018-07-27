@@ -9,10 +9,13 @@ import utils from './utils';
 import flowFiles from './flowFiles';
 import writeFiles from './writeFiles';
 
+import type { optionsType } from './utils';
+import type { flowFileType } from './flowFiles';
+
 export default declare(
   (
     api: { assertVersion: (version: number) => void },
-    options: pluginOptionsType,
+    options: optionsType,
   ): {} => {
     api.assertVersion(7);
     utils.initializeOptions(options);
@@ -50,9 +53,6 @@ export default declare(
             return;
 
           const { srcPath, destPath } = utils.getFilePaths(filePath, cwd);
-          const flowFile = flowFiles.store.find(
-            (flowFile: flowFileType): boolean => flowFile.srcPath === srcPath,
-          );
 
           flowFiles.add({ srcPath, destPath, filePath });
         },

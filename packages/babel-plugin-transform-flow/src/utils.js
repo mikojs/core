@@ -2,8 +2,9 @@
 
 import path from 'path';
 
+// eslint-disable-next-line import/exports-last, import/group-exports
 export type optionsType = {|
-  src?: string | Array<string>,
+  src?: $ReadOnlyArray<string>,
   outDir?: string,
   configs?: {
     parserOpts?: {},
@@ -14,6 +15,7 @@ export type optionsType = {|
   extension: RegExp,
 |};
 
+// eslint-disable-next-line import/exports-last, import/group-exports
 export type manipulateOptionsPluginsType = {
   options: optionsType,
   manipulateOptions: ({
@@ -21,6 +23,10 @@ export type manipulateOptionsPluginsType = {
   }) => void,
 };
 
+/**
+ * @example
+ * new Utils()
+*/
 class Utils {
   initialized: boolean = false;
 
@@ -35,7 +41,7 @@ class Utils {
 
   /**
    * @example
-   * manipulateOptions({});
+   * utils.manipulateOptions({});
    *
    * @param {Object} opts - opts of manipulateOptions
    */
@@ -66,10 +72,23 @@ class Utils {
     this.validateOptions();
   };
 
+  /**
+   * @example
+   * utils.initializeOptions()
+   *
+   * @param {Object} options - options of babel-plugin-transform-flow
+  */
   initializeOptions = (options: optionsType) => {
     if (this.initialized) return;
 
     Object.keys(options).forEach((key: string) => {
+      if (key === 'src') {
+        this.initializeOptions.src =
+          options.src instanceof Array
+            ? options.src
+            : [options.src];
+      }
+
       this.initialOptions[key] = options[key];
     });
 
@@ -83,11 +102,6 @@ class Utils {
       this.initialOptions.outDir = outFile ? path.dirname(outFile) : outDir;
       this.initialOptions.verbose = Boolean(verbose);
       this.initialOptions.watch = Boolean(watch);
-    } else {
-      this.initializeOptions.src =
-        this.initializeOptions.src instanceof Array
-          ? this.initializeOptions.src
-          : [this.initializeOptions.src];
     }
 
     this.initialized = true;
@@ -98,11 +112,11 @@ class Utils {
       {
         name: 'src',
         validate: (values: $ReadOnlyArray<string>): boolean =>
-          values.length !== 0 && !values.some(value => !Boolean(value)),
+          values.length !== 0 && !values.some((value: string): boolean => !value),
       },
       {
         name: 'outDir',
-        validate: (value?: string): boolean => Boolean(value),
+        validate: (value?: string): boolean => !!value,
       },
     ].forEach(
       ({
@@ -110,7 +124,7 @@ class Utils {
         validate,
       }: {
         name: string,
-        validate: (value: any) => boolean,
+        validate: (value: mixed) => boolean,
       }) => {
         if (!validate(this.options[name]))
           throw new Error(
@@ -120,6 +134,14 @@ class Utils {
     );
   };
 
+  /**
+   * @example
+   * utils.getFilePaths('src', '/path');
+   *
+   * @param {string} filePath - the path of the file
+   * @param {string} cwd - the path of cwd
+   * @return {Object} - an object of { srcPath, destPath }
+  */
   getFilePaths = (
     filePath: string,
     cwd: string,
@@ -127,7 +149,7 @@ class Utils {
     srcPath: string,
     destPath: string,
   } => {
-    const { src, outDir } = this.options;
+    const { src = [], outDir = '' } = this.options;
     const srcPath = filePath.replace(`${cwd}/`, '');
     const relativePath = src.reduce(
       (result: string, srcDir: string) => result.replace(`${srcDir}/`, ''),

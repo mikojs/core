@@ -17,7 +17,7 @@ type flowFileType = {
 /**
  * @example
  * new WriteFiles()
-*/
+ */
 class WriteFiles {
   store = [];
 
@@ -28,7 +28,7 @@ class WriteFiles {
    * flowFiles.add({ srcPath, destPath });
    *
    * @param {Object} file - file information
-  */
+   */
   add = (file: flowFileType) => {
     this.store.push(file);
 
@@ -42,18 +42,22 @@ class WriteFiles {
     const { srcPath, destPath, babelConfigs } = this.store.pop();
 
     new Promise((resolve, reject) => {
-      transformFile(srcPath: string, babelConfigs: $PropertyType<flowFileType, 'babelConfigs'>, (
-        err?: mixed, { code }: { code: string }
-      ) => {
-        if (err) {
-          reject(`@cat-org/babel-plugin-transform-flow Error: ${err}`);
-          return;
-        }
+      transformFile(
+        srcPath,
+        babelConfigs,
+        (err?: mixed, { code }: { code: string }) => {
+          if (err) {
+            reject(`@cat-org/babel-plugin-transform-flow Error: ${err}`);
+            return;
+          }
 
-        outputFileSync(destPath, code);
-      });
+          outputFileSync(destPath, code);
+        },
+      );
 
-      this.store = this.store.filter(({ srcPath: src }: flowFileType) => src !== srcPath);
+      this.store = this.store.filter(
+        ({ srcPath: src }: flowFileType) => src !== srcPath,
+      );
       this.isWritting = false;
 
       resolve();
@@ -65,7 +69,8 @@ class WriteFiles {
       })
       .catch((e: mixed) => {
         // eslint-disable-next-line no-console
-        if (watch) console.log(`@cat-org/babel-plugin-transform-flow validate: ${e}`);
+        if (watch)
+          console.log(`@cat-org/babel-plugin-transform-flow validate: ${e}`);
         else throw new Error(e);
       });
   };

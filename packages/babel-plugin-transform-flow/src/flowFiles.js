@@ -27,7 +27,7 @@ class FlowFiles {
    * flowFiles.add({})
    *
    * @param {Object} file - flow file
-  */
+   */
   add = (file: flowFileType) => {
     this.store.push(file);
 
@@ -38,14 +38,19 @@ class FlowFiles {
     const chokidar = require('chokidar');
 
     this.watcher?.close();
-    this.watcher = chokidar.watch(this.store.map(({ filePath }: flowFileType) => filePath), {
-      ignoreInitial: true,
-    });
+    this.watcher = chokidar.watch(
+      this.store.map(({ filePath }: flowFileType) => filePath),
+      {
+        ignoreInitial: true,
+      },
+    );
 
     ['add', 'change'].forEach((type: string) => {
       this.watcher.on(type, (modifyFilePath: string) => {
         writeFiles.add(
-          this.store.find(({ filePath }: flowFileType) => modifyFilePath === filePath),
+          this.store.find(
+            ({ filePath }: flowFileType) => modifyFilePath === filePath,
+          ),
         );
       });
     });

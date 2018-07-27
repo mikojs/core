@@ -26,7 +26,7 @@ export type manipulateOptionsPluginsType = {
 /**
  * @example
  * new Utils()
-*/
+ */
 class Utils {
   initialized: boolean = false;
 
@@ -77,16 +77,14 @@ class Utils {
    * utils.initializeOptions()
    *
    * @param {Object} options - options of babel-plugin-transform-flow
-  */
+   */
   initializeOptions = (options: optionsType) => {
     if (this.initialized) return;
 
     Object.keys(options).forEach((key: string) => {
       if (key === 'src') {
         this.initializeOptions.src =
-          options.src instanceof Array
-            ? options.src
-            : [options.src];
+          options.src instanceof Array ? options.src : [options.src];
       }
 
       this.initialOptions[key] = options[key];
@@ -112,7 +110,8 @@ class Utils {
       {
         name: 'src',
         validate: (values: $ReadOnlyArray<string>): boolean =>
-          values.length !== 0 && !values.some((value: string): boolean => !value),
+          values.length !== 0 &&
+          !values.some((value: string): boolean => !value),
       },
       {
         name: 'outDir',
@@ -141,7 +140,7 @@ class Utils {
    * @param {string} filePath - the path of the file
    * @param {string} cwd - the path of cwd
    * @return {Object} - an object of { srcPath, destPath }
-  */
+   */
   getFilePaths = (
     filePath: string,
     cwd: string,

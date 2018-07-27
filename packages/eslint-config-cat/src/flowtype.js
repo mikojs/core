@@ -14,12 +14,18 @@ export default {
     'flowtype/no-primitive-constructor-types': 'error',
     'flowtype/no-unused-expressions': 'error',
     'flowtype/no-weak-types': 'error',
-    'flowtype/require-parameter-type': ['error', {
-      excludeParameterMatch: "^(resolve|reject)$"
-    }],
-    'flowtype/require-return-type': ['error', {
-      excludeMatching: "Promise"
-    }],
+    'flowtype/require-parameter-type': [
+      'error',
+      {
+        excludeParameterMatch: '^(resolve|reject)$',
+      },
+    ],
+    'flowtype/require-return-type': [
+      'error',
+      {
+        excludeMatching: 'Promise',
+      },
+    ],
     'flowtype/require-valid-file-annotation': ['error', 'always'],
     'flowtype/require-variable-type': [
       'error',

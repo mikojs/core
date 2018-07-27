@@ -92,13 +92,11 @@ export default declare(
         const flowFilePath = srcPath.replace(/\.js$/, '.js.flow');
 
         writeFiles.add({
-          srcPath: (
-            fs.existsSync(path.resolve(cwd, flowFilePath)) ?
-              flowFilePath :
-              srcPath
-          ),
+          srcPath: fs.existsSync(path.resolve(cwd, flowFilePath))
+            ? flowFilePath
+            : srcPath,
           destPath,
-          babelConfigs
+          babelConfigs,
         });
       },
     };

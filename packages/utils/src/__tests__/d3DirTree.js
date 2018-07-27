@@ -3,8 +3,7 @@
 import path from 'path';
 
 import d3DirTree from '../d3DirTree';
-
-import type { d3DirTreeNodeType } from '../definitions/d3DirTree.js.flow';
+import type { d3DirTreeNodeType } from '../d3DirTree';
 
 it('test d3DirTree', () => {
   expect(

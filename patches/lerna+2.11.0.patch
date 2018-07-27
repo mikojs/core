@@ -1,0 +1,12 @@
+patch-package
+--- a/node_modules/lerna/lib/commands/PublishCommand.js
++++ b/node_modules/lerna/lib/commands/PublishCommand.js
+@@ -416,7 +416,7 @@ var PublishCommand = function (_Command) {
+ 
+       if (repoVersion) {
+         return callback(null, {
+-          version: repoVersion
++          version: repoVersion.replace(/^v/, ''),
+         });
+       }
+ 

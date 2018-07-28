@@ -37,7 +37,13 @@ class FlowFiles {
   openWatcher = () => {
     const chokidar = require('chokidar');
 
+    /* eslint-disable flowtype/no-unused-expressions */
+    /**
+     * flow not yet support
+     * $FlowFixMe flow
+     */
     this.watcher?.close();
+    /* eslint-enable flowtype/no-unused-expressions */
     this.watcher = chokidar.watch(
       this.store.map(({ filePath }: flowFileType) => filePath),
       {

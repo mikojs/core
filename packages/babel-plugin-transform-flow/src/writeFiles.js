@@ -68,8 +68,8 @@ class WriteFiles {
         if (this.store.length !== 0) this.writeFiles();
       })
       .catch((e: mixed) => {
-        // eslint-disable-next-line no-console
         if (watch)
+          // eslint-disable-next-line no-console
           console.log(`@cat-org/babel-plugin-transform-flow validate: ${e}`);
         else throw new Error(e);
       });

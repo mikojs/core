@@ -1,4 +1,5 @@
 // @flow
 
+// Use for babel-plugins-transform-imports
 export { default as d3DirTree } from './d3DirTree';
 export { default as throwMessageInIndex } from './throwMessageInIndex';

@@ -39,39 +39,6 @@ class Utils {
 
   /**
    * @example
-   * utils.manipulateOptions({});
-   *
-   * @param {Object} opts - opts of manipulateOptions
-   */
-  manipulateOptions = ({
-    plugins,
-  }: $PropertyType<manipulateOptionsPluginsType, 'manipulateOptions'>) => {
-    const [{ options }] = plugins.filter(
-      ({ manipulateOptions }: manipulateOptionsPluginsType): boolean =>
-        manipulateOptions === this.manipulateOptions,
-    );
-    const {
-      src,
-      outDir,
-      verbose,
-      watch,
-      ...initialOptions
-    } = this.initialOptions;
-
-    this.options = {
-      ...initialOptions,
-      ...options,
-      src,
-      outDir,
-      verbose,
-      watch,
-    };
-
-    this.validateOptions();
-  };
-
-  /**
-   * @example
    * utils.initializeOptions()
    *
    * @param {Object} options - options of babel-plugin-transform-flow
@@ -101,6 +68,39 @@ class Utils {
     }
 
     this.initialized = true;
+  };
+
+  /**
+   * @example
+   * utils.manipulateOptions({});
+   *
+   * @param {Object} opts - opts of manipulateOptions
+   */
+  manipulateOptions = ({
+    plugins,
+  }: $PropertyType<manipulateOptionsPluginsType, 'manipulateOptions'>) => {
+    const [{ options }] = plugins.filter(
+      ({ manipulateOptions }: manipulateOptionsPluginsType): boolean =>
+        manipulateOptions === this.manipulateOptions,
+    );
+    const {
+      src,
+      outDir,
+      verbose,
+      watch,
+      ...initialOptions
+    } = this.initialOptions;
+
+    this.options = {
+      ...initialOptions,
+      ...options,
+      src,
+      outDir,
+      verbose,
+      watch,
+    };
+
+    this.validateOptions();
   };
 
   validateOptions = () => {

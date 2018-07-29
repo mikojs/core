@@ -25,7 +25,9 @@ export type d3DirTreeNodeType = {|
 
 export type d3DirTreeOptionsType = {|
   normalizePath?: (path: string) => boolean,
-  exclude?: RegExp | $ReadOnlyArray<RegExp>,
+  // FIXME: wait merge
+  // eslint-disable-next-line flowtype/no-mutable-array
+  exclude?: RegExp | Array<RegExp>,
   extensions?: RegExp,
 |};
 

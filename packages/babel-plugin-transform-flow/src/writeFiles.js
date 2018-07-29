@@ -5,12 +5,11 @@ import outputFileSync from 'output-file-sync';
 
 import utils from './utils';
 
-type flowFileType = {
+export type writeFileType = {
   srcPath: string,
   destPath: string,
-  filePath?: string,
   babelConfigs: {
-    parserOpts?: {},
+    parserOpts: {},
   },
 };
 
@@ -29,7 +28,7 @@ class WriteFiles {
    *
    * @param {Object} file - file information
    */
-  add = (file: flowFileType) => {
+  add = (file: writeFileType) => {
     this.store.push(file);
 
     if (!this.isWritting) this.writeFiles();
@@ -45,7 +44,7 @@ class WriteFiles {
       transformFile(
         srcPath,
         babelConfigs,
-        (err?: mixed, { code }: { code: string }) => {
+        (err?: string, { code }: { code: string }) => {
           if (err) {
             reject(`@cat-org/babel-plugin-transform-flow Error: ${err}`);
             return;
@@ -56,7 +55,7 @@ class WriteFiles {
       );
 
       this.store = this.store.filter(
-        ({ srcPath: src }: flowFileType) => src !== srcPath,
+        ({ srcPath: src }: writeFileType): boolean => src !== srcPath,
       );
       this.isWritting = false;
 
@@ -67,7 +66,7 @@ class WriteFiles {
         if (verbose) console.log(`${srcPath} -> ${destPath}`);
         if (this.store.length !== 0) this.writeFiles();
       })
-      .catch((e: mixed) => {
+      .catch((e: string) => {
         if (watch)
           // eslint-disable-next-line no-console
           console.log(`@cat-org/babel-plugin-transform-flow validate: ${e}`);

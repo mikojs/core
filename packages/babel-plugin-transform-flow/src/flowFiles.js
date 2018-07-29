@@ -7,7 +7,7 @@ export type flowFileType = {
   srcPath: string,
   destPath: string,
   filePath: string,
-  babelConfigs?: {
+  babelConfigs: {
     parserOpts: {},
   },
 };
@@ -37,26 +37,35 @@ class FlowFiles {
     const chokidar = require('chokidar');
 
     /* eslint-disable flowtype/no-unused-expressions */
-    /**
-     * flow not yet support
-     * $FlowFixMe flow
-     */
+    // $FlowFixMe flow not yet supporte
     this.watcher?.close();
     /* eslint-enable flowtype/no-unused-expressions */
+
     this.watcher = chokidar.watch(
-      this.store.map(({ filePath }: flowFileType) => filePath),
+      this.store.map(({ filePath }: flowFileType): string => filePath),
       {
         ignoreInitial: true,
       },
     );
 
     ['add', 'change'].forEach((type: string) => {
-      this.watcher.on(type, (modifyFilePath: string) => {
-        writeFiles.add(
-          this.store.find(
-            ({ filePath }: flowFileType) => modifyFilePath === filePath,
-          ),
+      /* eslint-disable flowtype/no-unused-expressions */
+      // $FlowFixMe flow not yet support
+      this.watcher?.on(type, (modifyFilePath: string) => {
+        /* eslint-enable flowtype/no-unused-expressions */
+        const newFile = this.store.find(
+          ({ filePath }: flowFileType): boolean => modifyFilePath === filePath,
         );
+
+        if (!newFile) return;
+        if (!newFile.babelConfigs)
+          throw new Error(
+            `@cat-org/babel-plugin-transform-flow Error: not find ${
+              newFile.srcPath
+            } babel configs`,
+          );
+
+        writeFiles.add(newFile);
       });
     });
   };

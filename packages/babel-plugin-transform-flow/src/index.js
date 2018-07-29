@@ -54,7 +54,12 @@ export default declare(
 
           const { srcPath, destPath } = utils.getFilePaths(filePath, cwd);
 
-          flowFiles.add({ srcPath, destPath, filePath });
+          flowFiles.add({
+            srcPath,
+            destPath,
+            filePath,
+            babelConfigs: { parserOpts: {} },
+          });
         },
       },
       post: ({
@@ -83,7 +88,7 @@ export default declare(
         };
 
         flowFiles.store.forEach((flowFile: flowFileType) => {
-          if (!flowFile.babelConfigs) {
+          if (Object.keys(flowFile.babelConfigs.parserOpts).length === 0) {
             flowFile.babelConfigs = babelConfigs;
             writeFiles.add(flowFile);
           }

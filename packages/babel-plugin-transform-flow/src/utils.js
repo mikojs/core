@@ -121,7 +121,9 @@ class Utils {
         validate,
       }: {
         name: string,
-        validate: (value: mixed) => boolean,
+        validate:
+          | ((value: $ReadOnlyArray<string>) => boolean)
+          | ((value?: string) => boolean),
       }) => {
         if (!validate(this.options[name]))
           throw new Error(
@@ -149,7 +151,8 @@ class Utils {
     const { src = [], outDir = '' } = this.options;
     const srcPath = filePath.replace(`${cwd}/`, '');
     const relativePath = src.reduce(
-      (result: string, srcDir: string) => result.replace(`${srcDir}/`, ''),
+      (result: string, srcDir: string): string =>
+        result.replace(`${srcDir}/`, ''),
       srcPath,
     );
     const destPath = path

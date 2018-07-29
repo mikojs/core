@@ -111,6 +111,8 @@ describe('eslint', () => {
             case 'flowtype/no-flow-fix-me-comments':
             case 'flowtype/generic-spacing':
             case 'no-warning-comments':
+            case 'no-invalid-this':
+            case 'babel/no-invalid-this':
               return false;
             default:
               return true;

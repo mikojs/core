@@ -91,10 +91,20 @@ const functionDeclarationRequiredJsDoc = (): number => 10;
 
 // $expectError require-jsdoc
 class classDeclarationRequiredJsDoc {
+  test = 'test';
+
   // $expectError require-jsdoc
   methodDefinitionRequiredJsdoc(): number {
     return 10;
   }
+
+  /**
+   * @example
+   * example.showInfo()
+   *
+   * @return {string} test
+  */
+  showInfo = (): string => this.test;
 }
 
 const testObj = {

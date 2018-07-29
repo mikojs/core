@@ -2,7 +2,6 @@
 
 import path from 'path';
 
-// eslint-disable-next-line import/exports-last, import/group-exports
 export type optionsType = {|
   src?: $ReadOnlyArray<string>,
   outDir?: string,
@@ -15,7 +14,6 @@ export type optionsType = {|
   extension: RegExp,
 |};
 
-// eslint-disable-next-line import/exports-last, import/group-exports
 export type manipulateOptionsPluginsType = {
   options: optionsType,
   manipulateOptions: ({

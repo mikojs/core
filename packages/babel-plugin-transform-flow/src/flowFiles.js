@@ -3,7 +3,6 @@
 import utils from './utils';
 import writeFiles from './writeFiles';
 
-// eslint-disable-next-line import/exports-last
 export type flowFileType = {
   srcPath: string,
   destPath: string,

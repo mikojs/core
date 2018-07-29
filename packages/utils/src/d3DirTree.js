@@ -3,7 +3,6 @@
 import dirTree from 'directory-tree';
 import * as d3 from 'd3-hierarchy';
 
-// eslint-disable-next-line import/group-exports
 export type d3DirTreeNodeType = {|
   data: {|
     path: string,
@@ -24,7 +23,6 @@ export type d3DirTreeNodeType = {|
   leaves: () => Array<d3DirTreeNodeType>,
 |};
 
-// eslint-disable-next-line import/group-exports
 export type d3DirTreeOptionsType = {|
   normalizePath?: (path: string) => boolean,
   exclude?: RegExp | $ReadOnlyArray<RegExp>,

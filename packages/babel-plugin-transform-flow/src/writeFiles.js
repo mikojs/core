@@ -44,13 +44,13 @@ class WriteFiles {
       transformFile(
         srcPath,
         babelConfigs,
-        (err?: string, { code }: { code: string }) => {
+        (err?: string, result?: { code: string }) => {
           if (err) {
             reject(`@cat-org/babel-plugin-transform-flow Error: ${err}`);
             return;
           }
 
-          outputFileSync(destPath, code);
+          outputFileSync(destPath, result?.code);
         },
       );
 

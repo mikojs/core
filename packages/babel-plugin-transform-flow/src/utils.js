@@ -48,8 +48,11 @@ class Utils {
 
     Object.keys(options).forEach((key: string) => {
       if (key === 'src') {
-        this.initializeOptions.src =
-          options.src instanceof Array ? options.src : [options.src];
+        this.initialOptions.src =
+          !options.src || options.src instanceof Array
+            ? options.src
+            : [options.src];
+        return;
       }
 
       this.initialOptions[key] = options[key];

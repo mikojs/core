@@ -38,10 +38,10 @@ export default declare(
             filename,
           }: {
             cwd: string,
-            filename: string,
+            filename?: string,
           },
         ) => {
-          if (!utils.options.extension.test(value)) return;
+          if (!utils.options.extension.test(value) || !filename) return;
 
           const filePath = path.resolve(filename, '..', value);
 
@@ -71,12 +71,14 @@ export default declare(
       }: {
         opts: {
           cwd: string,
-          filename: string,
+          filename?: string,
           parserOpts: {
             plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
           },
         },
       }) => {
+        if (!filename) return;
+
         const { configs } = utils.options;
         const { srcPath, destPath } = utils.getFilePaths(filename, cwd);
         const babelConfigs = {

@@ -12,8 +12,8 @@ import babel from '@babel/core/lib/index';
 // $expectError import/no-useless-path-segments
 import noUnresolver from './../index';
 
-// $expectError import/no-absolute-path
 // $expectError import/no-unresolved
+// $expectError import/no-absolute-path
 import noAbsolutePath from '/etc';
 
 // $expectError import/default
@@ -28,15 +28,11 @@ import noDuplicates from './import-3';
 
 fbjs();
 
-// $expectError import/no-self-import
 // $expectError import/first
 // $expectError import/newline-after-import
+// $expectError import/no-self-import
 import * as namespace from './import-1';
 fbjs();
-
-// $expectError import/exports-last
-// $expectError import/group-exports
-export const exportFirst = 'test';
 
 fbjs();
 
@@ -46,6 +42,7 @@ module2.test();
 // $expectError import/namespace
 namespace.test();
 
-// $expectError import/group-exports
 // $expectError import/no-mutable-exports
-export let exportSecond: string = 'test';
+export let exportLet: string = 'test';
+
+export default 'export default';

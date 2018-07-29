@@ -22,8 +22,9 @@ export default {
     ],
     'flowtype/require-return-type': [
       'error',
+      'always',
       {
-        excludeMatching: 'Promise',
+        excludeMatching: ['Promise'],
       },
     ],
     'flowtype/require-valid-file-annotation': ['error', 'always'],

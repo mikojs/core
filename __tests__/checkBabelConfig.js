@@ -25,7 +25,7 @@ it('check babel config', () => {
   rootBabelConfigs.plugins.sort();
 
   /** add other plugins to @cat-org/configs */
-  babelConfigs.plugins.push([
+  babelConfigs.plugins.push('@babel/plugin-proposal-class-properties', [
     'transform-imports',
     {
       '@cat-org/utils': {

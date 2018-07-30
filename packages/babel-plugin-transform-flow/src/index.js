@@ -58,7 +58,7 @@ export default declare(
             srcPath,
             destPath,
             filePath,
-            babelConfigs: { parserOpts: {} },
+            babelConfigs: { parserOpts: {}, notInitialized: true },
           });
         },
       },
@@ -90,7 +90,9 @@ export default declare(
         };
 
         flowFiles.store.forEach((flowFile: flowFileType) => {
-          if (Object.keys(flowFile.babelConfigs.parserOpts).length === 0) {
+          if (flowFile.babelConfigs.notInitialized) {
+            delete flowFile.babelConfigs.notInitialized;
+
             flowFile.babelConfigs = babelConfigs;
             writeFiles.add(flowFile);
           }

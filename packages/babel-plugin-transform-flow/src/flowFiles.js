@@ -1,5 +1,7 @@
 // @flow
 
+import chokidar from 'chokidar';
+
 import utils from './utils';
 import writeFiles from './writeFiles';
 
@@ -9,6 +11,7 @@ export type flowFileType = {
   filePath: string,
   babelConfigs: {
     parserOpts: {},
+    notInitialized?: boolean,
   },
 };
 
@@ -34,8 +37,6 @@ class FlowFiles {
   };
 
   openWatcher = () => {
-    const chokidar = require('chokidar');
-
     /* eslint-disable flowtype/no-unused-expressions */
     // $FlowFixMe flow not yet supporte
     this.watcher?.close();

@@ -10,6 +10,7 @@ export type writeFileType = {
   destPath: string,
   babelConfigs: {
     parserOpts: {},
+    notInitialized?: boolean,
   },
 };
 
@@ -67,9 +68,8 @@ class WriteFiles {
         if (this.store.length !== 0) this.writeFiles();
       })
       .catch((e: string) => {
-        if (watch)
-          // eslint-disable-next-line no-console
-          console.log(`@cat-org/babel-plugin-transform-flow validate: ${e}`);
+        // eslint-disable-next-line no-console
+        if (watch) console.log(e);
         else throw new Error(e);
       });
   };

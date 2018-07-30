@@ -2,13 +2,14 @@
 
 import path from 'path';
 
+import parseArgv from '@babel/cli/lib/babel/options';
+
 export type optionsType = {|
   src?: $ReadOnlyArray<string>,
   outDir?: string,
   configs?: {
     parserOpts?: {},
   },
-  cli: boolean,
   verbose: boolean,
   watch: boolean,
   extension: RegExp,
@@ -29,7 +30,6 @@ class Utils {
   initialized: boolean = false;
 
   initialOptions: optionsType = {
-    cli: true,
     verbose: false,
     watch: false,
     extension: /\.js\.flow$/,
@@ -47,19 +47,10 @@ class Utils {
     if (this.initialized) return;
 
     Object.keys(options).forEach((key: string) => {
-      if (key === 'src') {
-        this.initialOptions.src =
-          !options.src || options.src instanceof Array
-            ? options.src
-            : [options.src];
-        return;
-      }
-
       this.initialOptions[key] = options[key];
     });
 
-    if (this.initialOptions.cli) {
-      const { default: parseArgv } = require('@babel/cli/lib/babel/options');
+    try {
       const {
         cliOptions: { verbose, filename, filenames, outFile, outDir, watch },
       } = parseArgv(process.argv);
@@ -68,9 +59,15 @@ class Utils {
       this.initialOptions.outDir = outFile ? path.dirname(outFile) : outDir;
       this.initialOptions.verbose = Boolean(verbose);
       this.initialOptions.watch = Boolean(watch);
-    }
+      this.initialized = true;
 
-    this.initialized = true;
+      if (!this.initialOptions.src || !this.initialOptions.outDir)
+        throw new Error('Can not find `src` or `outDir`');
+    } catch (e) {
+      throw new Error(
+        `@cat-org/babel-plugin-transform-flow only can be used with @babel/cli: ${e}`,
+      );
+    }
   };
 
   /**

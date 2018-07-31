@@ -43,7 +43,7 @@ class Utils {
    *
    * @param {Object} options - options of babel-plugin-transform-flow
    */
-  initializeOptions = (options: optionsType) => {
+  initializeOptions = (options: {}) => {
     if (this.initialized) return;
 
     Object.keys(options).forEach((key: string) => {
@@ -62,10 +62,13 @@ class Utils {
       this.initialized = true;
 
       if (!this.initialOptions.src || !this.initialOptions.outDir)
-        throw new Error('Can not find `src` or `outDir`');
+        throw new Error('initialized error');
     } catch (e) {
+      if (e.message !== 'initialized error')
+        throw new Error(`@cat-org/babel-plugin-transform-flow error: ${e}`);
+
       throw new Error(
-        `@cat-org/babel-plugin-transform-flow only can be used with @babel/cli: ${e}`,
+        '@cat-org/babel-plugin-transform-flow only can be used with @babel/cli: Can not find `src` or `outDir`',
       );
     }
   };

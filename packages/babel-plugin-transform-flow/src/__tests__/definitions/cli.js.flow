@@ -1,0 +1,10 @@
+// @flow
+
+export type cliType = {
+  cliOptions: {
+    filenames?: $ReadOnlyArray<string>,
+    outDir?: string,
+  },
+};
+
+export type cliFuncType = () => cliType;

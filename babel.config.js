@@ -91,7 +91,7 @@ babelConfigs.overrides.push(
   },
   {
     test: './packages',
-    plugins: ['add-module-exports'],
+    plugins: process.env.NODE_ENV === 'test' ? [] : ['add-module-exports'],
   },
 );
 

@@ -102,38 +102,6 @@ class Utils {
       verbose,
       watch,
     };
-
-    this.validateOptions();
-  };
-
-  validateOptions = () => {
-    [
-      {
-        name: 'src',
-        validate: (values: $ReadOnlyArray<string>): boolean =>
-          values.length !== 0 &&
-          !values.some((value: string): boolean => !value),
-      },
-      {
-        name: 'outDir',
-        validate: (value?: string): boolean => !!value,
-      },
-    ].forEach(
-      ({
-        name,
-        validate,
-      }: {
-        name: string,
-        validate:
-          | ((value: $ReadOnlyArray<string>) => boolean)
-          | ((value?: string) => boolean),
-      }) => {
-        if (!validate(this.options[name]))
-          throw new Error(
-            `@cat-org/babel-plugin-transform-flow validate: \`${name}\` is invalid.`,
-          );
-      },
-    );
   };
 
   /**

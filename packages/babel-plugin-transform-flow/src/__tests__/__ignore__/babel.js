@@ -1,19 +1,26 @@
 // @flow
 
-import { transformSync } from '@babel/core';
+import path from 'path';
+
+import { transformSync, transformFileSync } from '@babel/core';
 
 import babelPluginTransformFlow from '../..';
 import reset from './reset';
 
-const defaultCode = `// @flow
+const babelConfigs = {
+  cwd: __dirname,
+  babelrc: false,
+  presets: ['@babel/preset-env', '@babel/preset-flow'],
+  plugins: [babelPluginTransformFlow],
+};
 
-export default 'no code';`;
+export default (filename?: string) => {
+  reset();
 
-export default (code?: string = defaultCode, options?: {} = {}) => {
-  reset(options);
-  transformSync(code, {
-    cwd: __dirname,
-    babelrc: false,
-    plugins: [babelPluginTransformFlow],
-  });
+  if (filename)
+    transformFileSync(
+      path.resolve(__dirname, './files', filename),
+      babelConfigs,
+    );
+  else transformSync('// no transform;', babelConfigs);
 };

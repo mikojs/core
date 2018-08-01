@@ -3,7 +3,7 @@
 import utils from '../../utils';
 import flowFiles from '../../flowFiles';
 
-export default (options: {}) => {
+export default () => {
   // reset utils
   utils.initialized = false;
   utils.initialOptions = {
@@ -18,5 +18,5 @@ export default (options: {}) => {
   flowFiles.watcher = null;
 
   // reinitialize options
-  utils.initializeOptions(options);
+  utils.initializeOptions({ watch: false });
 };

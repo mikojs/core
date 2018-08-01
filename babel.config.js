@@ -22,7 +22,10 @@ const babelConfigs = (() => {
           },
         ],
       ],
-      ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],
+      ignore:
+        process.env.NODE_ENV === 'test'
+          ? []
+          : ['**/__tests__/**', '**/__mocks__/**'],
       overrides: [],
     };
 

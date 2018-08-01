@@ -15,11 +15,11 @@ export default ({
   ignore:
     process.env.NODE_ENV === 'test'
       ? []
-      : /* istanbul ignore next */ ['**/__tests__/**'],
+      : /* istanbul ignore next */ ['**/__tests__/**', '**/__mocks__/**'],
   overrides: [],
 }: {
   // just for tests
   // eslint-disable-next-line flowtype/no-mutable-array
   plugins: Array<string | [string, {}]>,
-  ignore: [] | ['**/__tests__/**'],
+  ignore: [] | ['**/__tests__/**', '**/__mocks__/**'],
 });

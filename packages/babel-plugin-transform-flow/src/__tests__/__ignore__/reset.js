@@ -11,7 +11,12 @@ export default () => {
     watch: false,
     extension: /\.js\.flow$/,
   };
-  utils.options = utils.initialOptions;
+  utils.options = {
+    ...utils.initialOptions,
+    src: ['src'],
+    outDir: 'lib',
+    configs: { parserOpts: {} },
+  };
 
   // reset flowFiles
   flowFiles.store = [];

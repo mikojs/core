@@ -99,6 +99,9 @@ class classDeclarationRequiredJsDoc {
   }
 
   /**
+   * Use to test babel/no-invalid-this work.
+   * no-invalid-this will fail.
+   *
    * @example
    * example.showInfo()
    *

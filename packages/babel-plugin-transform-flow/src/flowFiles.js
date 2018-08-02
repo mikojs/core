@@ -36,6 +36,18 @@ class FlowFiles {
     if (utils.options.watch) this.openWatcher();
   };
 
+  /**
+   * @example
+   * flowFiles.fileExist('src');
+   *
+   * @param {string} srcPath - check src path exist
+   * @return {boolean} - if path exist, return true
+   */
+  fileExist = (srcPath: string): boolean =>
+    this.store.some(
+      (flowFile: flowFileType): boolean => flowFile.srcPath === srcPath,
+    );
+
   openWatcher = () => {
     /* eslint-disable flowtype/no-unused-expressions */
     // $FlowFixMe flow not yet supporte

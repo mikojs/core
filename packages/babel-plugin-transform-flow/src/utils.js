@@ -4,9 +4,17 @@ import path from 'path';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 
-export type optionsType = {|
+export type initialOptionsType = {|
   src?: $ReadOnlyArray<string>,
   outDir?: string,
+  verbose: boolean,
+  watch: boolean,
+  extension: RegExp,
+|};
+
+export type optionsType = {|
+  src: $ReadOnlyArray<string>,
+  outDir: string,
   configs?: {
     parserOpts?: {},
   },
@@ -29,13 +37,17 @@ export type manipulateOptionsPluginsType = {
 class Utils {
   initialized: boolean = false;
 
-  initialOptions: optionsType = {
+  initialOptions: initialOptionsType = {
     verbose: false,
     watch: false,
     extension: /\.js\.flow$/,
   };
 
-  options: optionsType = this.initialOptions;
+  options: optionsType = {
+    ...this.initialOptions,
+    src: ['src'],
+    outDir: 'lib',
+  };
 
   /**
    * @example
@@ -119,11 +131,10 @@ class Utils {
     srcPath: string,
     destPath: string,
   } => {
-    const { src = [], outDir = '' } = this.options;
+    const { src, outDir } = this.options;
     const srcPath = filePath.replace(`${cwd}/`, '');
     const relativePath = src.reduce(
-      (result: string, srcDir: string): string =>
-        result.replace(`${srcDir}/`, ''),
+      (result: string, srcDir: string): string => result.replace(srcDir, ''),
       srcPath,
     );
     const destPath = path

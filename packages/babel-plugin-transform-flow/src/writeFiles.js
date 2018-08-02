@@ -1,6 +1,6 @@
 // @flow
 
-import { transformFile } from '@babel/core';
+import { transformFileSync } from '@babel/core';
 import outputFileSync from 'output-file-sync';
 
 import utils from './utils';
@@ -41,37 +41,31 @@ class WriteFiles {
     const { verbose, watch } = utils.options;
     const { srcPath, destPath, babelConfigs } = this.store.pop();
 
-    new Promise((resolve, reject) => {
-      transformFile(
+    try {
+      const { code }: { code: string } = transformFileSync(
         srcPath,
         babelConfigs,
-        (err?: string, result?: { code: string }) => {
-          if (err) {
-            reject(`@cat-org/babel-plugin-transform-flow Error: ${err}`);
-            return;
-          }
-
-          outputFileSync(destPath, result?.code);
-        },
       );
 
       this.store = this.store.filter(
-        ({ srcPath: src }: writeFileType): boolean => src !== srcPath,
+        (writeFile: writeFileType): boolean => writeFile.srcPath !== srcPath,
       );
+
+      outputFileSync(destPath, code);
       this.isWritting = false;
 
-      resolve();
-    })
-      .then(() => {
-        // eslint-disable-next-line no-console
-        if (verbose) console.log(`${srcPath} -> ${destPath}`);
-        if (this.store.length !== 0) this.writeFiles();
-      })
-      .catch((e: string) => {
-        // eslint-disable-next-line no-console
-        if (watch) console.log(e);
-        else throw new Error(e);
-      });
+      // eslint-disable-next-line no-console
+      if (verbose) console.log(`${srcPath} -> ${destPath}`);
+      if (this.store.length !== 0) this.writeFiles();
+    } catch (e) {
+      const errorMessage = `@cat-org/babel-plugin-transform-flow Error: ${e}`;
+
+      this.isWritting = false;
+
+      // eslint-disable-next-line no-console
+      if (watch) console.log(errorMessage);
+      else throw new Error(errorMessage);
+    }
   };
 }
 

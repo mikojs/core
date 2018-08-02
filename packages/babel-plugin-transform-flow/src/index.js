@@ -44,15 +44,9 @@ export default declare(
           if (!utils.options.extension.test(value) || !filename) return;
 
           const filePath = path.resolve(filename, '..', value);
-
-          if (
-            flowFiles.store.some(
-              (flowFile: flowFileType): boolean => flowFile.srcPath === srcPath,
-            )
-          )
-            return;
-
           const { srcPath, destPath } = utils.getFilePaths(filePath, cwd);
+
+          if (flowFiles.fileExist(srcPath)) return;
 
           flowFiles.add({
             srcPath,
@@ -98,12 +92,27 @@ export default declare(
           }
         });
 
-        const flowFilePath = srcPath.replace(/\.js$/, '.js.flow');
+        const flowFilePath = filename.replace(/\.js$/, '.js.flow');
+        const flowSrcPath = srcPath.replace(/\.js$/, '.js.flow');
+
+        if (fs.existsSync(flowFilePath)) {
+          if (!flowFiles.fileExist(flowSrcPath)) {
+            const flowFile = {
+              srcPath: flowSrcPath,
+              destPath,
+              filePath: flowFilePath,
+              babelConfigs,
+            };
+
+            flowFiles.add(flowFile);
+            writeFiles.add(flowFile);
+          }
+
+          return;
+        }
 
         writeFiles.add({
-          srcPath: fs.existsSync(path.resolve(cwd, flowFilePath))
-            ? flowFilePath
-            : srcPath,
+          srcPath,
           destPath,
           babelConfigs,
         });

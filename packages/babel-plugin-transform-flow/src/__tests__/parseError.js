@@ -11,6 +11,6 @@ test('parse error', () => {
   );
 
   expect(require('./__ignore__/babel').default).toThrowError(
-    '@cat-org/babel-plugin-transform-flow error',
+    '@cat-org/babel-plugin-transform-flow TypeError',
   );
 });

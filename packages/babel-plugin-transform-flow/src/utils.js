@@ -64,10 +64,17 @@ class Utils {
 
     try {
       const {
-        cliOptions: { verbose, filename, filenames, outFile, outDir, watch },
+        cliOptions: { verbose, filenames, outFile, outDir, watch },
       } = parseArgv(process.argv);
 
-      this.initialOptions.src = filename ? [path.dirname(filename)] : filenames;
+      // $FlowFixMe flow not yet support
+      this.initialOptions.src = filenames?.map(
+        (filename: string): string => {
+          if (outFile) return path.dirname(filename).replace(/^\.\//, '');
+          return filename.replace(/^\.\//, '');
+        },
+      );
+
       this.initialOptions.outDir = outFile ? path.dirname(outFile) : outDir;
       this.initialOptions.verbose = Boolean(verbose);
       this.initialOptions.watch = Boolean(watch);
@@ -77,7 +84,7 @@ class Utils {
         throw new Error('initialized error');
     } catch (e) {
       if (e.message !== 'initialized error')
-        throw new Error(`@cat-org/babel-plugin-transform-flow error: ${e}`);
+        throw new Error(`@cat-org/babel-plugin-transform-flow ${e}`);
 
       throw new Error(
         '@cat-org/babel-plugin-transform-flow only can be used with @babel/cli: Can not find `src` or `outDir`',

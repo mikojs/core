@@ -14,8 +14,19 @@ export default {
     'flowtype/no-primitive-constructor-types': 'error',
     'flowtype/no-unused-expressions': 'error',
     'flowtype/no-weak-types': 'error',
-    'flowtype/require-parameter-type': 'error',
-    'flowtype/require-return-type': ['error', 'always'],
+    'flowtype/require-parameter-type': [
+      'error',
+      {
+        excludeParameterMatch: '^(resolve|reject)$',
+      },
+    ],
+    'flowtype/require-return-type': [
+      'error',
+      'always',
+      {
+        excludeMatching: ['Promise'],
+      },
+    ],
     'flowtype/require-valid-file-annotation': ['error', 'always'],
     'flowtype/require-variable-type': [
       'error',

@@ -29,6 +29,10 @@ export default {
       },
     ],
 
+    // FIXME: remove when eslint upgrade
+    'no-invalid-this': 'off',
+    'babel/no-invalid-this': 'error',
+
     'require-jsdoc': [
       'error',
       {

@@ -58,7 +58,7 @@ class WriteFiles {
       if (verbose) console.log(`${srcPath} -> ${destPath}`);
       if (this.store.length !== 0) this.writeFiles();
     } catch (e) {
-      const errorMessage = `@cat-org/babel-plugin-transform-flow Error: ${e}`;
+      const errorMessage = `@cat-org/babel-plugin-transform-flow ${e}`;
 
       this.isWritting = false;
 

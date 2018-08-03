@@ -1,4 +1,5 @@
 // @flow
+
 const path = require('path');
 
 /* eslint-disable flowtype/require-return-type */

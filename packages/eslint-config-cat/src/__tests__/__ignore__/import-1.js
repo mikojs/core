@@ -17,27 +17,28 @@ import noUnresolver from './../index';
 import noAbsolutePath from '/etc';
 
 // $expectError import/default
+// $expectError import/no-duplicates
 import arrowFunc from './import-2';
 
-// $expectError import/no-named-default
+// $expectError import/default
 // $expectError import/no-duplicates
-import module2, { default as noNamedDefault } from './import-3';
+import noDuplicates from './import-2';
 
-// $expectError import/no-duplicates
-import noDuplicates from './import-3';
+// $expectError import/no-named-default
+import func, { default as noNamedDefault } from './func';
 
 fbjs();
 
-// $expectError import/first
 // $expectError import/newline-after-import
 // $expectError import/no-self-import
+// $expectError import/first
 import * as namespace from './import-1';
 fbjs();
 
 fbjs();
 
 // $expectError import/no-named-as-default-member
-module2.test();
+func.correct();
 
 // $expectError import/namespace
 namespace.test();

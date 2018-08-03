@@ -1,6 +1,6 @@
 // @flow
 
-export default ({
+export default {
   presets: ['@babel/preset-env', '@babel/preset-flow'],
   plugins: [
     '@babel/plugin-proposal-optional-chaining',
@@ -15,11 +15,6 @@ export default ({
   ignore:
     process.env.NODE_ENV === 'test'
       ? []
-      : /* istanbul ignore next */ ['**/__tests__/**'],
+      : /* istanbul ignore next */ ['**/__tests__/**', '**/__mocks__/**'],
   overrides: [],
-}: {
-  // just for tests
-  // eslint-disable-next-line flowtype/no-mutable-array
-  plugins: Array<string | [string, {}]>,
-  ignore: [] | ['**/__tests__/**'],
-});
+};

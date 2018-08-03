@@ -3,6 +3,7 @@
 import path from 'path';
 
 import { d3DirTree } from '@cat-org/utils';
+
 import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 describe('check files in packages', () => {

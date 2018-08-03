@@ -22,7 +22,10 @@ const babelConfigs = (() => {
           },
         ],
       ],
-      ignore: process.env.NODE_ENV === 'test' ? [] : ['**/__tests__/**'],
+      ignore:
+        process.env.NODE_ENV === 'test'
+          ? []
+          : ['**/__tests__/**', '**/__mocks__/**'],
       overrides: [],
     };
 
@@ -50,34 +53,33 @@ const babelConfigs = (() => {
 
 /**
  * @example
- * transformImportsOptions(false)
+ * transformImports(false)
  *
  * @param {boolean} isRoot - flag for checking this is @cat-org/root
- * @return {Object} - options for "transform imports"
+ * @return {Array} - transform imports
  */
-const transformImportsOptions = isRoot => ({
-  '@cat-org/utils': {
-    // $FlowFixMe
-    transform: (importName, matches) =>
-      isRoot
-        ? path.resolve(__dirname, './packages/utils/lib', importName)
-        : `@cat-org/utils/lib/${importName}`,
-  },
-  fbjs: {
-    transform: 'fbjs/lib/${member}',
-  },
-});
-
-babelConfigs.plugins.push([
+const transformImports = isRoot => [
   'transform-imports',
-  transformImportsOptions(false),
-]);
+  {
+    '@cat-org/utils': {
+      // $FlowFixMe
+      transform: (importName, matches) =>
+        isRoot
+          ? path.resolve(__dirname, './packages/utils/lib', importName)
+          : `@cat-org/utils/lib/${importName}`,
+    },
+    fbjs: {
+      transform: 'fbjs/lib/${member}',
+    },
+  },
+];
 
+babelConfigs.plugins.push(transformImports(false));
 babelConfigs.overrides.push(
   {
     test: './__tests__',
     plugins: [
-      ['transform-imports', transformImportsOptions(true)],
+      transformImports(true),
       [
         'module-resolver',
         {
@@ -91,7 +93,7 @@ babelConfigs.overrides.push(
   },
   {
     test: './packages',
-    plugins: ['add-module-exports'],
+    plugins: process.env.NODE_ENV === 'test' ? [] : ['add-module-exports'],
   },
 );
 

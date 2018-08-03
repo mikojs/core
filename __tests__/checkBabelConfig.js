@@ -4,6 +4,7 @@ import babelConfigs from '@cat-org/configs/lib/babel';
 
 import rootBabelConfigs from '../babel.config';
 
+// TODO modify
 it('check babel config', () => {
   /** handle @cat-org/root babel.config.js */
   const transformImports = rootBabelConfigs.plugins.find(

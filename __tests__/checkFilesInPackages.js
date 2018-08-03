@@ -3,6 +3,7 @@
 import path from 'path';
 
 import { d3DirTree } from '@cat-org/utils';
+
 import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 describe('check files in packages', () => {
@@ -34,8 +35,12 @@ describe('check files in packages', () => {
         // TODO check pacakges dev not in root package
 
         switch (name) {
+          case 'babel-plugin-transform-flow':
+            // TODO check babel version
+            break;
           case 'eslint-config-cat':
             // TODO check dependices
+            // TODO check eslint version
             break;
           default:
             break;

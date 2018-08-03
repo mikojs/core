@@ -1,4 +1,5 @@
 // @flow
+
 const path = require('path');
 
 /* eslint-disable flowtype/require-return-type */
@@ -53,26 +54,29 @@ const babelConfigs = (() => {
 
 /**
  * @example
- * transformImportsOptions(false)
+ * transformImports(false)
  *
  * @param {boolean} isRoot - flag for checking this is @cat-org/root
- * @return {Object} - options for "transform imports"
+ * @return {Array} - transform imports
  */
-const transformImportsOptions = isRoot => ({
-  '@cat-org/utils': {
-    // $FlowFixMe
-    transform: (importName, matches) =>
-      isRoot
-        ? path.resolve(__dirname, './packages/utils/lib', importName)
-        : `@cat-org/utils/lib/${importName}`,
+const transformImports = isRoot => [
+  'transform-imports',
+  {
+    '@cat-org/utils': {
+      // $FlowFixMe
+      transform: (importName, matches) =>
+        isRoot
+          ? path.resolve(__dirname, './packages/utils/lib', importName)
+          : `@cat-org/utils/lib/${importName}`,
+    },
+    fbjs: {
+      transform: 'fbjs/lib/${member}',
+    },
   },
-  fbjs: {
-    transform: 'fbjs/lib/${member}',
-  },
-});
+];
 
 babelConfigs.plugins.push(
-  ['transform-imports', transformImportsOptions(false)],
+  transformImports(false),
   '@babel/plugin-proposal-class-properties',
 );
 
@@ -80,7 +84,7 @@ babelConfigs.overrides.push(
   {
     test: './__tests__',
     plugins: [
-      ['transform-imports', transformImportsOptions(true)],
+      transformImports(true),
       [
         'module-resolver',
         {

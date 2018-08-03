@@ -1,2 +1,3 @@
 # ignore for @cat-org/eslint-config-cat
+# TODO maybe remove
 packages/eslint-config-cat/src/__tests__/__ignore__

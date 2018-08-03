@@ -7,7 +7,7 @@
  * @param {string} argu - any
  * @return {'value'} - value
  */
-const correct = (argu: string): string => 'value';
+export const correct = (argu: string): string => 'value';
 
 /**
  * @example
@@ -33,3 +33,5 @@ const correctNotDirectReturn = (argu: string): string => {
 const shouldDirectReturn = (argu: string): string => {
   return 'value';
 };
+
+export default correct;

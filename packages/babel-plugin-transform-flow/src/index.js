@@ -41,7 +41,7 @@ export default declare(
             filename: string,
           },
         ) => {
-          if (!utils.options.extension.test(value)) return;
+          if (!/\.js\.flow$/.test(value)) return;
 
           const filePath = path.resolve(filename, '..', value);
           const { srcPath, destPath } = utils.getFilePaths(filePath, cwd);

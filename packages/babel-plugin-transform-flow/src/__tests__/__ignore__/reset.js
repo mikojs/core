@@ -9,7 +9,6 @@ export default () => {
   utils.initialOptions = {
     verbose: false,
     watch: false,
-    extension: /\.js\.flow$/,
   };
   utils.options = {
     ...utils.initialOptions,

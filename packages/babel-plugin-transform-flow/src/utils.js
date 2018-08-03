@@ -9,7 +9,6 @@ export type initialOptionsType = {|
   outDir?: string,
   verbose: boolean,
   watch: boolean,
-  extension: RegExp,
 |};
 
 export type optionsType = {|
@@ -20,7 +19,6 @@ export type optionsType = {|
   },
   verbose: boolean,
   watch: boolean,
-  extension: RegExp,
 |};
 
 export type manipulateOptionsPluginsType = {
@@ -40,7 +38,6 @@ class Utils {
   initialOptions: initialOptionsType = {
     verbose: false,
     watch: false,
-    extension: /\.js\.flow$/,
   };
 
   options: optionsType = {

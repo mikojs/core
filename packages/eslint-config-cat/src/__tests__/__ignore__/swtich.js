@@ -2,5 +2,6 @@
 
 // $expectError default-case
 switch ('test') {
-  case 'test': break;
+  case 'test':
+    break;
 }

@@ -63,7 +63,8 @@ const requireParameterType = (argu): string => argu;
  * @param {any} argu - any
  * @return {Promise} - any
  */
-const promiseIngore = (argu: string): Promise => new Promise((resolve, reject) => {
-  if (argu) resolve();
-  else reject();
-});
+const promiseIngore = (argu: string): Promise =>
+  new Promise((resolve, reject) => {
+    if (argu) resolve();
+    else reject();
+  });

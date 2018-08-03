@@ -106,7 +106,7 @@ class classDeclarationRequiredJsDoc {
    * example.showInfo()
    *
    * @return {string} test
-  */
+   */
   showInfo = (): string => this.test;
 }
 

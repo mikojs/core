@@ -1,18 +1,13 @@
 // @flow
 
-import type { cliType, cliFuncType } from './definitions/cli.js.flow';
+import reset from './__ignore__/reset';
+import babel from './__ignore__/babel';
 
 test('transform file', () => {
-  jest.mock(
-    '@babel/cli/lib/babel/options',
-    (): cliFuncType => (): cliType => ({
-      cliOptions: {
-        filenames: ['not use, just mock'],
-        outFile: 'lib/index.js',
-      },
-    }),
-  );
-
+  reset({
+    filenames: ['not use, just mock'],
+    outFile: 'lib/index.js',
+  });
   // TODO should check with file-output-sync
-  require('./__ignore__/babel').default('index.js');
+  babel();
 });

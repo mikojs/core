@@ -1,16 +1,11 @@
 // @flow
 
-import type { cliType } from './definitions/cli.js.flow';
+import reset from './__ignore__/reset';
+import babel from './__ignore__/babel';
 
 test('parse error', () => {
-  jest.mock(
-    '@babel/cli/lib/babel/options',
-    (): cliType => ({
-      cliOptions: {},
-    }),
-  );
-
-  expect(require('./__ignore__/babel').default).toThrowError(
-    '@cat-org/babel-plugin-transform-flow TypeError',
-  );
+  expect(() => {
+    reset();
+    babel();
+  }).toThrowError('@cat-org/babel-plugin-transform-flow TypeError');
 });

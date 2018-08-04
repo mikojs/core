@@ -17,6 +17,7 @@ flow-typed/npm
 
 # jest
 coverage
+!**/__mocks__/**/*.js
 
 # lerna-changelog
 .changelog

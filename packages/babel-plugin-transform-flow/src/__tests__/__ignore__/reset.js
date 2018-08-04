@@ -1,9 +1,11 @@
 // @flow
 
+import { setCliOptions } from '@babel/cli/lib/babel/options';
+
 import utils from '../../utils';
 import flowFiles from '../../flowFiles';
 
-export default () => {
+export default (options?: null | {} = null) => {
   // reset utils
   utils.initialized = false;
   utils.initialOptions = {
@@ -22,5 +24,6 @@ export default () => {
   flowFiles.watcher = null;
 
   // reinitialize options
+  setCliOptions(options);
   utils.initializeOptions({ watch: false });
 };

@@ -5,7 +5,6 @@ import path from 'path';
 import { transformFileSync } from '@babel/core';
 
 import babelPluginTransformFlow from '../..';
-import reset from './reset';
 
 const babelConfigs = {
   babelrc: false,
@@ -13,11 +12,5 @@ const babelConfigs = {
   plugins: [babelPluginTransformFlow],
 };
 
-export default (
-  filename?: string = 'index.js',
-  needToReset?: boolean = true,
-) => {
-  if (needToReset) reset();
-
+export default (filename?: string = 'index.js'): string =>
   transformFileSync(path.resolve(__dirname, './files', filename), babelConfigs);
-};

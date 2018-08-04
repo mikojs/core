@@ -1,16 +1,13 @@
 // @flow
 
-import type { cliType, cliFuncType } from './definitions/cli.js.flow';
+import reset from './__ignore__/reset';
+import babel from './__ignore__/babel';
 
 test('can not use without @babel/cli', () => {
-  jest.mock(
-    '@babel/cli/lib/babel/options',
-    (): cliFuncType => (): cliType => ({
-      cliOptions: {},
-    }),
-  );
-
-  expect(require('./__ignore__/babel').default).toThrowError(
+  expect(() => {
+    reset({});
+    babel();
+  }).toThrowError(
     '@cat-org/babel-plugin-transform-flow only can be used with @babel/cli: Can not find `src` or `outDir`',
   );
 });

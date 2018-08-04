@@ -1,31 +1,27 @@
 // @flow
 
-import type { cliType, cliFuncType } from './definitions/cli.js.flow';
+import reset from './__ignore__/reset';
+import babel from './__ignore__/babel';
 
 describe('transform folder', () => {
   beforeEach(() => {
-    jest.mock(
-      '@babel/cli/lib/babel/options',
-      (): cliFuncType => (): cliType => ({
-        cliOptions: {
-          filenames: ['not use, just mock'],
-          outDir: 'lib',
-        },
-      }),
-    );
+    reset({
+      filenames: ['not use, just mock'],
+      outDir: 'lib',
+    });
   });
 
   it('transform file which do not have the same name file and extension is `.js.flow`', () => {
     // TODO should check with file-output-sync
-    require('./__ignore__/babel').default('index.js');
+    babel();
     // TODO should test not write again
-    require('./__ignore__/babel').default('index.js', false);
+    babel();
   });
 
   it('transform file which have the same name file and extension is `.js.flow`', () => {
     // TODO should check with file-output-sync
-    require('./__ignore__/babel').default('hasFlowFile.js');
+    babel('hasFlowFile.js');
     // TODO should test not write again
-    require('./__ignore__/babel').default('hasFlowFile.js', false);
+    babel('hasFlowFile.js');
   });
 });

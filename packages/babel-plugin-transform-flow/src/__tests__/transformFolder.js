@@ -1,23 +1,18 @@
 // @flow
 
-import path from 'path';
-
 import { resetDestPaths, getDestPaths } from 'output-file-sync';
 
 import reset from './__ignore__/reset';
 import babel from './__ignore__/babel';
-import { indexFiles, hasFlowFileFiles } from './__ignore__/constants';
+import {
+  transformFolderOptions,
+  indexFiles,
+  hasFlowFileFiles,
+} from './__ignore__/constants';
 
 describe('transform folder', () => {
   beforeEach(() => {
-    reset({
-      filenames: [
-        path
-          .resolve(__dirname, './__ignore__/files')
-          .replace(process.cwd(), '.'),
-      ],
-      outDir: 'lib',
-    });
+    reset(transformFolderOptions);
     resetDestPaths();
   });
 

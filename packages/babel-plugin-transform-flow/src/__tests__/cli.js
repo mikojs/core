@@ -4,8 +4,19 @@ import reset from './__ignore__/reset';
 import babel from './__ignore__/babel';
 import { root, transformFileOptions } from './__ignore__/constants';
 
-describe('cli', () => {
-  test('verbose: true', () => {
+describe('cli error', () => {
+  it('can not use without @babel/cli', () => {
+    expect(() => {
+      reset({});
+      babel();
+    }).toThrowError(
+      '@cat-org/babel-plugin-transform-flow only can be used with @babel/cli: Can not find `src` or `outDir`',
+    );
+  });
+});
+
+describe('cli work', () => {
+  it('verbose: true', () => {
     global.console.log = jest.fn();
     reset({
       ...transformFileOptions,

@@ -1,25 +1,32 @@
 version: 2
+defaults: &defaults
+  docker:
+    - image: node:latest
+  working_directory: ~/repo
+
+restore-cache: &restore-cache
+  keys:
+    - v1-dependencies-{{ checksum "package.json" }}
+    - v1-dependencies-
+
+save-cache: &save-cache
+  paths:
+    - node_modules
+  key: v1-dependencies-{{ checksum "package.json" }}
+
+install-all: &install-all
+  name: Install packages
+  command: yarn install:all
+
 jobs:
   test:
-    working_directory: ~/repo
-
-    docker:
-      - image: node:latest
-
+    <<: *defaults
     steps:
       - checkout
+      - restore_cache: *restore-cache
+      - run: *install-all
 
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
-      - run:
-          name: Install packages
-          command: yarn install:all
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+      - save_cache: *save-cache
 
       - run:
           name: Check code style
@@ -35,29 +42,19 @@ jobs:
           path: coverage
 
   deploy-beta:
-    working_directory: ~/repo
-
-    docker:
-      - image: node:latest
-
+    <<: *defaults
     steps:
       - checkout
-
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
-      - run:
-          name: Install packages
-          command: yarn install:all
+      - restore_cache: *restore-cache
+      - run: *install-all
 
       - run:
           name: Pre publish
           command: |
             yarn prod
             TEST_PRODUCTION=true yarn jest ./__tests__/checkFilesInPackages.js --coverage=false
+
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
 
       - run:
           name: Publish

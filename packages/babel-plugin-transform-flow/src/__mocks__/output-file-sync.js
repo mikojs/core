@@ -7,6 +7,8 @@
 class OutPutFileSync {
   destPaths = [];
 
+  mainFunction = () => {};
+
   /**
    * @example
    * outputFileSync.resetDestPaths()
@@ -25,11 +27,23 @@ class OutPutFileSync {
 
   /**
    * @example
+   * outputFileSync.setMainFunction()
+   *
+   * @param {Function} mainFunction - main function to mock event
+   */
+  setMainFunction = (mainFunction: () => {}) => {
+    this.mainFunction = mainFunction;
+  };
+
+  /**
+   * @example
    * outputFileSync.main('test');
    *
    * @param {string} destPath - dest path to add
    */
   main = (destPath: string) => {
+    this.mainFunction();
+    this.mainFunction = () => {};
     this.destPaths.push(destPath);
   };
 }
@@ -38,4 +52,5 @@ const outputFileSync = new OutPutFileSync();
 
 export const resetDestPaths = outputFileSync.resetDestPaths;
 export const getDestPaths = outputFileSync.getDestPaths;
+export const setMainFunction = outputFileSync.setMainFunction;
 export default outputFileSync.main;

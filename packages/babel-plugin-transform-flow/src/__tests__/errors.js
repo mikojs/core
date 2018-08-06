@@ -20,6 +20,17 @@ test('parse error', () => {
   }).toThrowError('@cat-org/babel-plugin-transform-flow TypeError');
 });
 
+describe('cli error', () => {
+  it('can not use without @babel/cli', () => {
+    expect(() => {
+      reset({});
+      babel();
+    }).toThrowError(
+      '@cat-org/babel-plugin-transform-flow only can be used with @babel/cli: Can not find `src` or `outDir`',
+    );
+  });
+});
+
 test('write error', () => {
   expect(() => {
     setMainFunction(() => {
@@ -28,6 +39,28 @@ test('write error', () => {
     reset(transformFileOptions);
     babel();
   }).toThrowError(`@cat-org/babel-plugin-transform-flow Error: error`);
+});
+
+test('write error with watch mode', () => {
+  reset({
+    ...transformFileOptions,
+    watch: true,
+  });
+  babel();
+
+  global.console.log = jest.fn();
+  setMainFunction(() => {
+    throw new Error('error');
+  });
+  chokidar.watchCallback(
+    path.resolve(__dirname, './__ignore__/files/justDefinition.js.flow'),
+  );
+
+  expect(global.console.log).toHaveBeenCalled();
+  expect(global.console.log).toHaveBeenCalledTimes(1);
+  expect(global.console.log).toHaveBeenCalledWith(
+    `@cat-org/babel-plugin-transform-flow Error: error`,
+  );
 });
 
 test('watch error', () => {

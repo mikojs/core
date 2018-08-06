@@ -9,11 +9,15 @@ export const root = path
 export const transformFileOptions = {
   filenames: [`${root}/index.js`],
   outFile: 'lib/index.js',
+  watch: false,
+  verbose: false,
 };
 
 export const transformFolderOptions = {
   filenames: [root],
   outDir: 'lib',
+  watch: false,
+  verbose: false,
 };
 
 export const indexFiles = ['lib/justDefinition.js.flow', 'lib/index.js.flow'];

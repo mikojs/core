@@ -63,7 +63,7 @@ test('write error with watch mode', () => {
   );
 });
 
-test('watch error', () => {
+test('watch error when not finding babel configs', () => {
   const justDefinitionPath = path.resolve(
     __dirname,
     './__ignore__/files/justDefinition.js.flow',

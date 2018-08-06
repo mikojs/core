@@ -39,7 +39,10 @@ babel-clean:
 	rm -rf ./lib ./packages/**/lib
 
 release:
-	@yarn lerna publish --skip-npm --skip-git --repo-version ${VERSION}
+	@yarn lerna publish \
+		--skip-npm \
+		--skip-git \
+		--repo-version ${VERSION}
 	@yarn lerna-changelog && \
     echo "\nContinue or exit with 'ctrl + c'..." && \
     read -p ""

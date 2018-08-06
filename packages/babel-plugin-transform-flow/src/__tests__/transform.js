@@ -65,8 +65,10 @@ describe('write file before previous file is done', () => {
 
     expect(getDestPaths()).toEqual(indexFiles);
     expect(
-      !!writeFiles.store.find(
-        ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+      Boolean(
+        writeFiles.store.find(
+          ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+        ),
       ),
     ).toBeTruthy();
   });
@@ -76,8 +78,10 @@ describe('write file before previous file is done', () => {
 
     expect(getDestPaths()).toEqual(indexFiles);
     expect(
-      !!writeFiles.store.find(
-        ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+      Boolean(
+        writeFiles.store.find(
+          ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+        ),
       ),
     ).toBeTruthy();
 
@@ -86,8 +90,10 @@ describe('write file before previous file is done', () => {
 
     expect(getDestPaths()).toEqual([...indexFiles, flowFile.destPath]);
     expect(
-      !!writeFiles.store.find(
-        ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+      Boolean(
+        writeFiles.store.find(
+          ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+        ),
       ),
     ).toBeFalsy();
   });
@@ -107,8 +113,10 @@ test('Store is not clean after writting file', () => {
 
   expect(getDestPaths()).toEqual(indexFiles);
   expect(
-    !!writeFiles.store.find(
-      ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+    Boolean(
+      writeFiles.store.find(
+        ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+      ),
     ),
   ).toBeTruthy();
 

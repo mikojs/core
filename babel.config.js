@@ -63,7 +63,7 @@ const transformImports = isRoot => [
   'transform-imports',
   {
     '@cat-org/utils': {
-      // $FlowFixMe
+      // $FlowFixMe not use flow
       transform: (importName, matches) =>
         isRoot
           ? path.resolve(__dirname, './packages/utils/lib', importName)

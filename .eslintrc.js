@@ -6,19 +6,12 @@ module.exports = {
     {
       files: ['__tests__/**/*.js'],
       settings: {
-        /** In packages/**. */
+        /** In packages/** modules */
         'import/core-modules': [
           '@cat-org/configs',
           '@cat-org/utils',
           '@cat-org/utils/lib/d3DirTree',
         ],
-      },
-    },
-    {
-      files: ['packages/configs/**/*.js'],
-      settings: {
-        /** Only install @cat-org/utils by user who need */
-        'import/core-modules': ['@cat-org/utils'],
       },
     },
   ],

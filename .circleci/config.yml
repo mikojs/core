@@ -12,6 +12,7 @@ restore-cache: &restore-cache
 save-cache: &save-cache
   paths:
     - node_modules
+    - flow-typed
   key: v1-dependencies-{{ checksum "package.json" }}
 
 install-all: &install-all

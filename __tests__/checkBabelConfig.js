@@ -9,9 +9,10 @@ it('check babel config', () => {
   const plugins = [
     ...rootBabelConfigs.plugins.filter(
       (plugin: string | [string, {}]): boolean =>
-        !['transform-imports'].includes(
-          plugin instanceof Array ? plugin[0] : plugin,
-        ),
+        ![
+          'transform-imports',
+          '@babel/plugin-proposal-class-properties',
+        ].includes(plugin instanceof Array ? plugin[0] : plugin),
     ),
     '@cat-org/babel-plugin-transform-flow',
   ].sort();

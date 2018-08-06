@@ -4,79 +4,24 @@ import fs from 'fs';
 import path from 'path';
 
 import { declare } from '@babel/helper-plugin-utils';
-import findup from 'findup';
 
-import writeFile from './writeFile';
-import writeTest from './writeTest';
+import utils from './utils';
+import flowFiles from './flowFiles';
+import writeFiles from './writeFiles';
 
-import type { flowFileType } from './definitions/index.js.flow';
-
-type pluginOptionsType = {|
-  dir: string,
-  relativeRoot: string,
-  source: string,
-  target: string,
-  extension: RegExp,
-  generateFlowTest: false | string,
-|};
-
-const pluginOptions: pluginOptionsType = {
-  dir: './lib',
-  relativeRoot: './src',
-  source: 'definitions',
-  target: 'flow-typed',
-  extension: /\.js\.flow$/,
-  generateFlowTest: './src/__tests__/flowCheck.js.flow',
-};
-
-const flowFiles: Array<flowFileType> = [];
-
-let flowTestPath: string = '';
+import type { optionsType, manipulateOptionsPluginsType } from './utils';
+import type { flowFileType } from './flowFiles';
 
 export default declare(
   (
     api: { assertVersion: (version: number) => void },
-    options: pluginOptionsType,
+    options: optionsType,
   ): {} => {
     api.assertVersion(7);
-
-    type manipulateOptionsPluginsType = {
-      cwd: string,
-      options: pluginOptionsType,
-      manipulateOptions: ({
-        plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
-      }) => void,
-    };
-
-    /**
-     * @example
-     * manipulateOptions({});
-     *
-     * @param {Object} opts - opts of manipulateOptions
-     */
-    const manipulateOptions = ({
-      cwd,
-      plugins,
-    }: {
-      cwd: string,
-      plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
-    }) => {
-      const [{ options: newOptions }] = plugins.filter(
-        (plugin: manipulateOptionsPluginsType): boolean =>
-          plugin.manipulateOptions === manipulateOptions,
-      );
-
-      Object.keys({ ...options, ...newOptions }).forEach((key: string) => {
-        pluginOptions[key] = options[key];
-      });
-
-      if (flowTestPath === '' && pluginOptions.generateFlowTest) {
-        flowTestPath = path.resolve(cwd, pluginOptions.generateFlowTest);
-      }
-    };
+    utils.initializeOptions(options);
 
     return {
-      manipulateOptions,
+      manipulateOptions: utils.manipulateOptions,
       visitor: {
         ImportDeclaration: (
           {
@@ -96,62 +41,79 @@ export default declare(
             filename: string,
           },
         ) => {
-          if (!pluginOptions.extension.test(value)) return;
+          if (!/\.js\.flow$/.test(value)) return;
 
-          const sourcePath = path.resolve(filename, '..', value);
+          const filePath = path.resolve(filename, '..', value);
+          const { srcPath, destPath } = utils.getFilePaths(filePath, cwd);
 
-          if (
-            flowFiles.some(
-              ({ sourcePath: flowFilesSource }: flowFileType): boolean =>
-                flowFilesSource === sourcePath,
-            )
-          )
-            return;
+          if (flowFiles.fileExist(srcPath)) return;
 
-          // path setting
-          const relativePath = sourcePath.replace(
-            path.resolve(cwd, pluginOptions.relativeRoot, pluginOptions.source),
-            '.',
-          );
-          const targetPath = path.resolve(
-            cwd,
-            pluginOptions.dir,
-            pluginOptions.target,
-            relativePath,
-          );
-
-          // module name
-          const { name: pkgName } = require(path.resolve(
-            findup.sync(sourcePath, 'package.json'),
-            './package.json',
-          ));
-          const modulePath = relativePath
-            .replace(pluginOptions.extension, '')
-            .replace(/\/index$/, '')
-            .replace(/^\./, '');
-          const moduleName = `${pkgName}${
-            modulePath === '' ? '' : pluginOptions.dir.replace(/\./, '')
-          }${modulePath}`;
-
-          const exportType = `${moduleName.split(/\//).slice(-1)[0]}Type`;
-          const source = fs.readFileSync(sourcePath, 'utf-8');
-
-          flowFiles.push({
-            source,
-            sourcePath,
-            targetPath,
-            filename,
-            moduleName,
-            exportType,
+          flowFiles.add({
+            srcPath,
+            destPath,
+            filePath,
+            babelConfigs: { parserOpts: {}, notInitialized: true },
           });
         },
       },
-      post: () => {
-        flowFiles.forEach(writeFile);
+      post: ({
+        opts: {
+          cwd,
+          filename,
+          parserOpts: { plugins },
+        },
+      }: {
+        opts: {
+          cwd: string,
+          filename: string,
+          parserOpts: {
+            plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
+          },
+        },
+      }) => {
+        const { configs } = utils.options;
+        const { srcPath, destPath } = utils.getFilePaths(filename, cwd);
+        const babelConfigs = {
+          ...configs,
+          parserOpts: {
+            plugins,
+            ...configs?.parserOpts,
+          },
+        };
 
-        if (!pluginOptions.generateFlowTest) return;
+        flowFiles.store.forEach((flowFile: flowFileType) => {
+          if (flowFile.babelConfigs.notInitialized) {
+            delete flowFile.babelConfigs.notInitialized;
 
-        writeTest(flowFiles, flowTestPath);
+            flowFile.babelConfigs = babelConfigs;
+            writeFiles.add(flowFile);
+          }
+        });
+
+        const flowFilePath = filename.replace(/\.js$/, '.js.flow');
+        const flowSrcPath = srcPath.replace(/\.js$/, '.js.flow');
+
+        if (fs.existsSync(flowFilePath)) {
+          if (!flowFiles.fileExist(flowSrcPath)) {
+            const flowFile = {
+              srcPath: flowSrcPath,
+              destPath,
+              filePath: flowFilePath,
+              babelConfigs,
+            };
+
+            flowFiles.add(flowFile);
+            writeFiles.add(flowFile);
+          }
+
+          return;
+        }
+
+        writeFiles.add({
+          srcPath,
+          destPath,
+          babelConfigs,
+        });
       },
     };
   },

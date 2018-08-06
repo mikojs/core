@@ -2,14 +2,10 @@
 # ignore for @cat-org/eslint-config-cat
 <PROJECT_ROOT>/packages/eslint-config-cat/src/__tests__/__ignore__
 
-# ignore findup test
-.*/findup/test
-
 [include]
 
 [libs]
 ./flow-typed
-./packages/utils/lib/flow-typed
 
 [lints]
 
@@ -17,7 +13,8 @@
 module.ignore_non_literal_requires=true
 esproposal.optional_chaining=enable
 
-# name mapper for @cat-org/configs
-module.name_mapper='^@cat-org\/configs\/lib\/\(.*\)$' -> '<PROJECT_ROOT>/packages/configs/src/\1'
+# name mapper for @cat-org/<packages>
+module.name_mapper='^@cat-org\/\(.*\)\/lib\/\(.*\)$' -> '<PROJECT_ROOT>/packages/\1/src/\2'
+module.name_mapper='^@cat-org\/\(.*\)$' -> '<PROJECT_ROOT>/packages/\1'
 
 [strict]

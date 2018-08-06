@@ -7,14 +7,12 @@
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/babel-plugin-transform-flow",
   "version": "1.0.0-beta.5",
   "main": "./lib/index.js",
-  "dependencies": {
-    "findup": "^0.1.5"
-  },
   "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.54",
     "@babel/core": "^7.0.0-beta.54",
     "@babel/helper-plugin-utils": "^7.0.0-beta.54",
-    "mkdirp": "^0.5.1",
-    "rimraf": "^2.6.2"
+    "chokidar": "^2.0.4",
+    "output-file-sync": "^2.0.1"
   },
   "keywords": [
     "cat-org",
@@ -23,6 +21,7 @@
   ],
   "peerDependencies": {
     "@babel/cli": "^7.0.0-beta.54",
+    "@babel/core": "^7.0.0-beta.54",
     "@babel/helper-plugin-utils": "^7.0.0-beta.54"
   },
   "publishConfig": {

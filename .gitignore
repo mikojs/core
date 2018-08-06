@@ -20,6 +20,3 @@ coverage
 
 # lerna-changelog
 .changelog
-
-# @cat-org/babel-plugin-transform-flow generate flowCheck
-flowCheck.js.flow

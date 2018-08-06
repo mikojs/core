@@ -75,7 +75,11 @@ const transformImports = isRoot => [
   },
 ];
 
-babelConfigs.plugins.push(transformImports(false));
+babelConfigs.plugins.push(
+  transformImports(false),
+  '@babel/plugin-proposal-class-properties',
+);
+
 babelConfigs.overrides.push(
   {
     test: './__tests__',

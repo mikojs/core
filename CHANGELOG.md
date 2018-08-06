@@ -1,5 +1,35 @@
 # CHANGELOG
 
+## 1.0.0-beta.6 (2018-08-06)
+
+#### :boom: Breaking Change
+
+- `babel-plugin-transform-flow`, `utils`
+  - [#38](https://github.com/cat-org/cat-core/pull/38) Modify babel plugin transform flow ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `babel-plugin-transform-flow`, `utils`
+  - [#38](https://github.com/cat-org/cat-core/pull/38) Modify babel plugin transform flow ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-cat`
+  - [#39](https://github.com/cat-org/cat-core/pull/39) new rules in eslint-config-cat ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `eslint-config-cat`
+  - [#39](https://github.com/cat-org/cat-core/pull/39) new rules in eslint-config-cat ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `configs`, `eslint-config-cat`
+  - [#43](https://github.com/cat-org/cat-core/pull/43) Modify testing ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-cat`, `utils`
+  - [#42](https://github.com/cat-org/cat-core/pull/42) Modify eslint config cat ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.5 (2018-07-22)
 
 #### :rocket: New Feature

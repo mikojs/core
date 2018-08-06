@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/configs",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "main": "./lib/index.js",
   "keywords": [
     "cat-org",
@@ -15,6 +15,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@cat-org/utils": "^1.0.0-beta.5"
+    "@cat-org/utils": "^1.0.0-beta.6"
   }
 }

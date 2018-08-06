@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/utils",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "main": "./lib/index.js",
   "dependencies": {
     "d3-hierarchy": "^1.1.6",

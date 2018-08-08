@@ -46,6 +46,8 @@ export default {
       },
     ],
 
+    'prefer-destructuring': 'error',
+
     strict: ['error', 'never'],
 
     'valid-jsdoc': 'error',

@@ -50,7 +50,5 @@ class OutPutFileSync {
 
 const outputFileSync = new OutPutFileSync();
 
-export const resetDestPaths = outputFileSync.resetDestPaths;
-export const getDestPaths = outputFileSync.getDestPaths;
-export const setMainFunction = outputFileSync.setMainFunction;
+export const { resetDestPaths, getDestPaths, setMainFunction } = outputFileSync;
 export default outputFileSync.main;

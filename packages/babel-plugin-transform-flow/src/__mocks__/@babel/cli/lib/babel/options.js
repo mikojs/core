@@ -30,5 +30,5 @@ class Options {
 
 const options = new Options();
 
-export const setCliOptions = options.setCliOptions;
+export const { setCliOptions } = options;
 export default options.main;

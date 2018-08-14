@@ -30,76 +30,29 @@ const babelConfigs = (() => {
       overrides: [],
     };
 
-  const configs = (requireConfigs => requireConfigs.default || requireConfigs)(
+  return (requireConfigs => requireConfigs.default || requireConfigs)(
     require('./packages/configs/lib/babel'),
   );
-
-  configs.plugins = configs.plugins.map(plugin => {
-    const pluginName = plugin instanceof Array ? plugin[0] : plugin;
-
-    if (!/^@cat-org/.test(pluginName)) return plugin;
-
-    const pluginRequired = require(pluginName.replace(
-      /@cat-org\/(.*)/,
-      './packages/$1/lib/index.js',
-    ));
-
-    if (plugin instanceof Array) return [pluginRequired, plugin[1]];
-
-    return pluginRequired;
-  });
-
-  return configs;
 })();
 
-/**
- * @example
- * transformImports(false)
- *
- * @param {boolean} isRoot - flag for checking this is @cat-org/root
- * @return {Array} - transform imports
- */
-const transformImports = isRoot => [
-  'transform-imports',
-  {
-    '@cat-org/utils': {
-      // $FlowFixMe not use flow
-      transform: (importName, matches) =>
-        isRoot
-          ? path.resolve(__dirname, './packages/utils/lib', importName)
-          : `@cat-org/utils/lib/${importName}`,
-    },
-    fbjs: {
-      transform: 'fbjs/lib/${member}',
-    },
-  },
-];
-
 babelConfigs.plugins.push(
-  transformImports(false),
+  [
+    'transform-imports',
+    {
+      '@cat-org/utils': {
+        transform: '@cat-org/utils/lib/${member}',
+      },
+      fbjs: {
+        transform: 'fbjs/lib/${member}',
+      },
+    },
+  ],
   '@babel/plugin-proposal-class-properties',
 );
 
-babelConfigs.overrides.push(
-  {
-    test: './__tests__',
-    plugins: [
-      transformImports(true),
-      [
-        'module-resolver',
-        {
-          root: ['./src'],
-          alias: {
-            '@cat-org/configs': './packages/configs',
-          },
-        },
-      ],
-    ],
-  },
-  {
-    test: './packages',
-    plugins: process.env.NODE_ENV === 'test' ? [] : ['add-module-exports'],
-  },
-);
+babelConfigs.overrides.push({
+  test: './packages',
+  plugins: process.env.NODE_ENV === 'test' ? [] : ['add-module-exports'],
+});
 
 module.exports = babelConfigs;

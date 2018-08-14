@@ -1,3 +1,3 @@
 // @flow
 
-module.exports = require('./packages/configs/lib/configs/lintsteged');
+module.exports = require('./packages/configs/lib/lintsteged');

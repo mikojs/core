@@ -1,3 +1,3 @@
 // @flow
 
-module.exports = require('./packages/configs/lib/prettier');
+module.exports = require('@cat-org/configs/lib/prettier');

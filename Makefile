@@ -1,5 +1,5 @@
 install-all:
-	@yarn install
+	@yarn install && ln -snf $(shell pwd)/packages ./node_modules/@cat-org
 	@yarn lerna bootstrap
 	@make install-flow-typed
 
@@ -42,14 +42,14 @@ release:
 	@yarn lerna publish \
 		--skip-npm \
 		--skip-git \
-		--repo-version ${VERSION}
+		--repo-version $(VERSION)
 	@yarn lerna-changelog && \
-    echo "\nContinue or exit with 'ctrl + c'..." && \
+    echo "\nContinue with any keyword or exit with 'ctrl + c'..." && \
     read -p ""
 	@vim CHANGELOG.md && \
 		git add . && \
-		git commit -m "chore(release): v${VERSION} [skip ci]" && \
-		git tag -a v${VERSION} -m "v${VERSION}"
+		git commit -m "chore(release): v$(VERSION) [skip ci]" && \
+		git tag -a v$(VERSION) -m "v$(VERSION)"
 
 clean-all:
 	@make babel-clean

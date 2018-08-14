@@ -1,5 +1,5 @@
 install-all:
-	@yarn install && mkdir ./node_modules/@cat-org
+	@yarn install && ln -snf $(shell pwd)/packages ./node_modules/@cat-org
 	@yarn lerna bootstrap
 	@make install-flow-typed
 
@@ -62,8 +62,7 @@ clean-all:
 
 define babel-build
 	yarn lerna exec \
-		"babel src -d lib --config-file ../../babel.config.js --verbose && \
-			ln -s \$$(pwd) ../../node_modules/@cat-org || echo ''" \
+		"babel src -d lib --config-file ../../babel.config.js --verbose" \
 		--parallel \
 		--stream \
 		$(1)

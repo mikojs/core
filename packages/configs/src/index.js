@@ -1,5 +1,12 @@
 // @flow
 
-import { throwMessageInIndex } from '@cat-org/utils';
-
-throwMessageInIndex('@cat-org/configs');
+export default {
+  babel: {
+    config: './configs/babel',
+  },
+  'babel/react': {
+    // TODO
+    config: './configs/babel',
+    cliName: 'babel',
+  },
+};

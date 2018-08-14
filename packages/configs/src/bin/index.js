@@ -19,13 +19,16 @@ const CONFIG_OPTION_NAME = {
 };
 
 const settings = require(cliOptions.settingsPath);
+const cliSetting = settings[cliOptions.cliName];
 
 invariant(
-  settings[cliOptions.cliName] && settings[cliOptions.cliName].config,
+  cliSetting,
   `can not find the config in the setting of \`${cliOptions.cliName}\``,
 );
 
-const { config, cliName = cliOptions.cliName } = settings[cliOptions.cliName];
+const { config, cliName = cliOptions.cliName } = cliSetting.config
+  ? cliSetting
+  : { config: cliSetting };
 const argv = [...cliOptions.argv];
 const configPath = path
   .resolve(cliOptions.settingsPath, config)

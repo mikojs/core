@@ -31,7 +31,7 @@ const babelConfigs = (() => {
     };
 
   return (requireConfigs => requireConfigs.default || requireConfigs)(
-    require('./packages/configs/lib/babel'),
+    require('@cat-org/configs/lib/babel'),
   );
 })();
 

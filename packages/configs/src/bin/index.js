@@ -10,6 +10,12 @@ import runCommand from './core/runCommand';
 
 const CONFIG_OPTION_NAME = {
   babel: '--config-file',
+  'lint-staged': '-c',
+  prettier: '--config',
+  jest: {
+    name: '--config',
+    useEqual: true,
+  },
 };
 
 const settings = require(cliOptions.settingsPath);
@@ -21,11 +27,14 @@ invariant(
 
 const { config, cliName = cliOptions.cliName } = settings[cliOptions.cliName];
 const argv = [...cliOptions.argv];
+const configPath = path
+  .resolve(cliOptions.settingsPath, config)
+  .replace(process.cwd(), '.');
 
 argv[1] = path.resolve(path.dirname(argv[1]), cliName);
-argv.push(
-  CONFIG_OPTION_NAME[cliName],
-  path.resolve(cliOptions.settingsPath, config),
-);
+
+if (CONFIG_OPTION_NAME[cliName].useEqual)
+  argv.push(`${CONFIG_OPTION_NAME[cliName].name}=${configPath}`);
+else argv.push(CONFIG_OPTION_NAME[cliName], configPath);
 
 runCommand(argv);

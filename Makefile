@@ -1,5 +1,7 @@
+ROOT=$(shell pwd)
+
 install-all:
-	@yarn install && ln -snf $(shell pwd)/packages ./node_modules/@cat-org
+	@yarn install && ln -snf $(ROOT)/packages ./node_modules/@cat-org
 	@yarn lerna bootstrap
 	@make install-flow-typed
 
@@ -16,6 +18,7 @@ babel-core:
 	@$(call babel-build, \
 		--scope @cat-org/babel-* \
 		--scope @cat-org/configs)
+	@ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs-scripts
 
 babel-all:
 	@make babel-core

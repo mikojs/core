@@ -3,18 +3,9 @@
 import childProcess from 'child_process';
 
 export default ([command, ...args]) => {
-  const runCmd = childProcess.spawn(command, args);
-
-  runCmd.stdout.on('data', chunk => {
-    const str = chunk.toString().replace(/\n$/, '');
-
-    if (str !== '') console.log(str);
-  });
-
-  runCmd.stderr.on('data', chunk => {
-    const str = chunk.toString().replace(/\n$/, '');
-
-    if (str !== '') console.log(str);
+  const runCmd = childProcess.spawn(command, args, {
+    detached: true,
+    stdio: 'inherit',
   });
 
   runCmd.on('close', exitCode => {

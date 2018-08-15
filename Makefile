@@ -1,5 +1,5 @@
 install-all:
-	@yarn install && ln -snf $(shell pwd)/packages ./node_modules/@cat-org
+	@yarn install
 	@yarn lerna bootstrap
 	@make install-flow-typed
 

@@ -35,20 +35,17 @@ const babelConfigs = (() => {
   );
 })();
 
-babelConfigs.plugins.push(
-  [
-    'transform-imports',
-    {
-      '@cat-org/utils': {
-        transform: '@cat-org/utils/lib/${member}',
-      },
-      fbjs: {
-        transform: 'fbjs/lib/${member}',
-      },
+babelConfigs.plugins.push('@babel/plugin-proposal-class-properties', [
+  'transform-imports',
+  {
+    '@cat-org/utils': {
+      transform: '@cat-org/utils/lib/${member}',
     },
-  ],
-  '@babel/plugin-proposal-class-properties',
-);
+    fbjs: {
+      transform: 'fbjs/lib/${member}',
+    },
+  },
+]);
 
 babelConfigs.overrides.push({
   test: './packages',

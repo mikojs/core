@@ -1,28 +1,30 @@
 #! /usr/bin/env node
 // @flow
 
-import commander from 'commander';
-import chalk from 'chalk';
+import { invariant } from 'fbjs';
 
 import getSettings from 'utils/getSettings';
+import handlers from 'handlers';
 
-import { name, version } from '../../package.json';
+import findFile from 'middleware/findFile';
+import compareFile from 'middleware/compareFile';
 
 import config from '../config';
 
-let projectDir = null;
+const settings = getSettings(config);
 
-const program = new commander.Command(name)
-  .version(version, '-v, --version')
-  .arguments('<project-directory>')
-  .usage(chalk`{green <project-directory>} {gray [options]}`)
-  .action(arguProjectDir => {
-    projectDir = arguProjectDir;
-  });
+settings.forEach(node => {
+  findFile(node);
 
-// TODO
-program.parse(process.argv);
+  const {
+    data: { name, relativeFilePath },
+  } = node;
+  const handler = handlers(relativeFilePath);
 
-getSettings(config).forEach(node => {
-  console.log(node);
+  invariant(handler, `can not find \`${name}\` handler`);
+
+  handler(node);
+  compareFile(node);
+  console.log(node.data);
+  console.log();
 });

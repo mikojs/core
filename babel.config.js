@@ -35,6 +35,13 @@ const babelConfigs = (() => {
   );
 })();
 
+babelConfigs.presets[0] = [
+  '@babel/preset-env',
+  {
+    useBuiltIns: 'usage',
+  },
+];
+
 babelConfigs.plugins.push('@babel/plugin-proposal-class-properties', [
   'transform-imports',
   {

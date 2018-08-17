@@ -13,18 +13,20 @@ import config from '../config';
 
 const settings = getSettings(config);
 
-settings.forEach(node => {
-  findFile(node);
+(async () => {
+  for (const index in settings) {
+    const node = settings[index];
 
-  const {
-    data: { name, relativeFilePath },
-  } = node;
-  const handler = handlers(relativeFilePath);
+    findFile(node);
 
-  invariant(handler, `can not find \`${name}\` handler`);
+    const {
+      data: { name, relativeFilePath },
+    } = node;
+    const handler = handlers(relativeFilePath);
 
-  handler(node);
-  compareFile(node);
-  console.log(node.data);
-  console.log();
-});
+    invariant(handler, `can not find \`${name}\` handler`);
+    handler(node);
+
+    await compareFile(node);
+  }
+})();

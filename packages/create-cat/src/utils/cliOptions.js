@@ -12,12 +12,12 @@ const program = new commander.Command(name)
   .version(version, '-v, --version')
   .arguments('<project-directory>')
   .usage(chalk`{green <project-directory>} {gray [options]}`)
+  .option('--overwrite-all', 'overwrite all files')
   .action(arguProjectDir => {
     projectDir = arguProjectDir;
   });
 
-// TODO
-program.parse(process.argv);
+const { overwriteAll = false } = program.parse(process.argv);
 
 if (!projectDir) {
   program.outputHelp(
@@ -39,4 +39,5 @@ if (!projectDir) {
 
 export default {
   projectDir,
+  overwriteAll,
 };

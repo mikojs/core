@@ -90,10 +90,21 @@ export default async node => {
           cliOptions.overwriteAll = true;
           break;
 
-        case 'diff':
+        case 'diff': {
           showDiff(relativeFilePath, filePath, diffContent);
-          // TODO
+
+          const { shouldOverwrite } = await inquirer.prompt([
+            {
+              name: 'shouldOverwrite',
+              type: 'confirm',
+              message: 'overwrite or not?',
+              default: 'y',
+            },
+          ]);
+
+          node.data.output = shouldOverwrite ? content : fileContent;
           break;
+        }
 
         case 'abort':
           node.data.output = fileContent;

@@ -4,16 +4,19 @@
 import { invariant } from 'fbjs';
 
 import getSettings from 'utils/getSettings';
-import handlers from 'handlers';
 
 import findFile from 'middleware/findFile';
 import compareFile from 'middleware/compareFile';
 
 import config from '../config';
 
-const settings = getSettings(config);
+process.on('unhandledRejection', error => {
+  throw error;
+});
 
 (async () => {
+  const settings = getSettings(config);
+
   for (const index in settings) {
     const node = settings[index];
 
@@ -22,10 +25,15 @@ const settings = getSettings(config);
     const {
       data: { name, relativeFilePath },
     } = node;
-    const handler = handlers(relativeFilePath);
+    const handlerPath = relativeFilePath
+      .replace(/^\.\/[.]?/, '../handlers/')
+      .replace(/.json$/, '');
 
-    invariant(handler, `can not find \`${name}\` handler`);
-    handler(node);
+    try {
+      require(handlerPath)(node);
+    } catch (e) {
+      // TODO throw new Error(`can not find \`${name}\` handler`);
+    }
 
     await compareFile(node);
   }

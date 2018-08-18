@@ -27,7 +27,7 @@ const checkOverwrite = name =>
         },
         {
           key: 'a',
-          name: 'overwrite this one and all next',
+          name: chalk`overwrite {green ${name}} and all next`,
           value: 'overwriteAll',
         },
         {

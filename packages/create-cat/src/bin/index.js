@@ -7,6 +7,7 @@ import getSettings from 'utils/getSettings';
 
 import findFile from 'middleware/findFile';
 import compareFile from 'middleware/compareFile';
+import writeFile from 'middleware/writeFile';
 
 import config from '../config';
 
@@ -36,5 +37,7 @@ process.on('unhandledRejection', error => {
     }
 
     await compareFile(node);
+
+    writeFile(node);
   }
 })();

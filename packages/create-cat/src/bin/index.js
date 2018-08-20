@@ -31,9 +31,12 @@ process.on('unhandledRejection', error => {
       .replace(/.json$/, '');
 
     try {
-      require(handlerPath)(node);
+      await require(handlerPath)(node);
     } catch (e) {
-      // TODO throw new Error(`can not find \`${name}\` handler`);
+      if (/Cannot find module/.test(e.message)) {
+        // throw new Error(`can not find \`${name}\` handler`);
+      } else
+        throw e;
     }
 
     await compareFile(node);

@@ -13,7 +13,15 @@ const babelConfigs = (() => {
     USE_DEFAULT_BABEL_CONFIG_PATTERN.test(name)
   )
     return {
-      presets: ['@babel/preset-env', '@babel/preset-flow'],
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            useBuiltIns: 'usage',
+          },
+        ],
+        '@babel/preset-flow',
+      ],
       plugins: [
         '@babel/plugin-proposal-optional-chaining',
         [
@@ -34,13 +42,6 @@ const babelConfigs = (() => {
     require('@cat-org/configs/lib/babel'),
   );
 })();
-
-babelConfigs.presets[0] = [
-  '@babel/preset-env',
-  {
-    useBuiltIns: 'usage',
-  },
-];
 
 babelConfigs.plugins.push('@babel/plugin-proposal-class-properties', [
   'transform-imports',

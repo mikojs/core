@@ -29,8 +29,8 @@ coverage
     'lint:watch': 'yarn lint -w --rule \"prettier/prettier: off\" --quiet',
   };
 
-  pkg.dependencies = {
-    ...pkg.dependencies,
+  pkg.devDependencies = {
+    ...pkg.devDependencies,
     '@cat-org/eslint-config-cat': true,
     'eslint': true,
     'eslint-watch': true,

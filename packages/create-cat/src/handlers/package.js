@@ -12,34 +12,41 @@ import git from 'utils/git';
 
 const noEmpty = str => (str.length > 0 ? true : 'Can not empty');
 
-const addGitConfig = (userName, userEmail) =>
+const addAuthor = async () => {
+  const gitUserName = await git.rawP(
+    ['config', '--global', '--get', 'user.name'],
+    val => val?.replace(/\n$/, ''),
+  );
+  const gitUserEmail = await git.rawP(
+    ['config', '--global', '--get', 'user.email'],
+    val => val?.replace(/\n$/, ''),
+  );
+
   inquirer
     .prompt([
       {
         name: 'userName',
         message: 'the user name of Github',
-        when: !userName,
+        when: !gitUserName,
         validate: noEmpty,
       },
       {
         name: 'userEmail',
         message: 'the user email of Github',
-        when: !userEmail,
+        when: !gitUserEmail,
         validate: str => (isEmail(str) ? true : 'Use like: example@gmail.com'),
       },
     ])
-    .then(async ({ userName, userEmail }) => {
-      if (userName)
+    .then(async ({ userName = gitUserName, userEmail = gitUserEmail }) => {
+      if (!gitUserName)
         await git.rawP(['config', '--global', 'user.name', userName]);
 
-      if (userEmail)
+      if (!gitUserEmail)
         await git.rawP(['config', '--global', 'user.email', userEmail]);
 
-      return {
-        userName,
-        userEmail,
-      };
+      pkg.author = `${userName} <${userEmail}>`;
     });
+};
 
 const addInfo = async () =>
   inquirer
@@ -70,31 +77,26 @@ const addInfo = async () =>
         filter: str => str.split(/\s*,\s*/g),
       },
     ])
-    .then(({ description, homepage, repository, keywords }) => {
-      pkg.description = description;
-      pkg.homepage = homepage;
-      pkg.repository = repository;
-      pkg.keywords = keywords;
-    });
+    .then(
+      ({
+        description = pkg.description,
+        homepage = pkg.homepage,
+        repository = pkg.repository,
+        keywords = pkg.keywords,
+      }) => {
+        pkg.description = description;
+        pkg.homepage = homepage;
+        pkg.repository = repository;
+        pkg.keywords = keywords;
+      },
+    );
 
 export default async () => {
   if (!pkg.name) pkg.name = path.basename(path.resolve(cliOptions.projectDir));
   if (!pkg.version) pkg.version = '1.0.0';
   if (!pkg.license) pkg.license = 'MIT';
   if (!pkg.main) pkg.main = './lib/index.js';
-
-  if (!pkg.author) {
-    const userName = await git.rawP(['config', '--get', 'user.name'], val =>
-      val.replace(/\n$/, ''),
-    );
-    const userEmail = await git.rawP(['config', '--get', 'user.email'], val =>
-      val.replace(/\n$/, ''),
-    );
-    const newConfig = await addGitConfig(userName, userEmail);
-
-    pkg.author = `${newConfig.userName || userName} <${newConfig.userEmail ||
-      userEmail}>`;
-  }
+  if (!pkg.author) await addAuthor();
 
   if (!pkg.engines) {
     const { Binaries: bin } = JSON.parse(

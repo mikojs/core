@@ -26,6 +26,8 @@
     "envinfo": "^5.10.0",
     "fbjs": "^0.8.17",
     "inquirer": "^6.1.0",
-    "output-file-sync": "^2.0.1"
+    "output-file-sync": "^2.0.1",
+    "simple-git": "^1.96.0",
+    "validator": "^10.6.0"
   }
 }

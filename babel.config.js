@@ -51,6 +51,9 @@ babelConfigs.plugins.push('@babel/plugin-proposal-class-properties', [
     fbjs: {
       transform: 'fbjs/lib/${member}',
     },
+    validator: {
+      transform: 'validator/lib/${member}',
+    },
   },
 ]);
 

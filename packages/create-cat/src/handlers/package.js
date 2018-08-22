@@ -17,13 +17,13 @@ const addGitConfig = (userName, userEmail) =>
     .prompt([
       {
         name: 'userName',
-        message: 'the userName of Github',
+        message: 'the user name of Github',
         when: !userName,
         validate: noEmpty,
       },
       {
         name: 'userEmail',
-        message: 'the email of Github',
+        message: 'the user email of Github',
         when: !userEmail,
         validate: str => (isEmail(str) ? true : 'Use like: example@gmail.com'),
       },
@@ -59,7 +59,7 @@ const addInfo = async () =>
       /** TODO remove */
       {
         name: 'repository',
-        message: 'the url of the project',
+        message: 'the repository url of the project',
         when: !pkg.repository,
         validate: str => (isURL(str) ? true : 'Must be link'),
       },

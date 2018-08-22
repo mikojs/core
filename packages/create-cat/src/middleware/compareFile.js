@@ -77,10 +77,8 @@ export default async node => {
 
   if (diffContent.length > 1) {
     if (cliOptions.overwriteAll) node.data.output = content;
-    else {
-      const { overwrite } = await checkOverwrite(name);
-
-      switch (overwrite) {
+    else
+      switch ((await checkOverwrite(name)).overwrite) {
         case 'overwrite':
           node.data.output = content;
           break;
@@ -113,6 +111,5 @@ export default async node => {
         default:
           break;
       }
-    }
   }
 };

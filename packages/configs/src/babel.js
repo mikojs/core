@@ -1,7 +1,15 @@
 // @flow
 
 export default {
-  presets: ['@babel/preset-env', '@babel/preset-flow'],
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        useBuiltIns: 'usage',
+      },
+    ],
+    '@babel/preset-flow',
+  ],
   plugins: [
     '@babel/plugin-proposal-optional-chaining',
     [

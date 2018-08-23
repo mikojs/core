@@ -9,14 +9,12 @@ import findFile from 'middleware/findFile';
 import compareFile from 'middleware/compareFile';
 import writeFile from 'middleware/writeFile';
 
-import config from '../config';
-
 process.on('unhandledRejection', error => {
   throw error;
 });
 
 (async () => {
-  const settings = getSettings(config);
+  const settings = await getSettings();
 
   for (const index in settings) {
     const node = settings[index];
@@ -33,10 +31,9 @@ process.on('unhandledRejection', error => {
     try {
       await require(handlerPath)(node);
     } catch (e) {
-      if (/Cannot find module/.test(e.message)) {
-        // throw new Error(`can not find \`${name}\` handler`);
-      } else
-        throw e;
+      if (/Cannot find module/.test(e.message))
+        throw new Error(`can not find \`${name}\` handler`);
+      else throw e;
     }
 
     await compareFile(node);

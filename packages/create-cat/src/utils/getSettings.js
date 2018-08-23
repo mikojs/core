@@ -1,6 +1,11 @@
 // @flow
 
+import fs from 'fs';
+import path from 'path';
+
 import * as d3 from 'd3-hierarchy';
+import inquirer from 'inquirer';
+import { snakeCase } from 'lodash';
 
 const transformConfig = config =>
   config.reduce(
@@ -19,4 +24,32 @@ const getTreeStructure = d3
   .id(({ name }) => name)
   .parentId(({ parent }) => parent);
 
-export default config => getTreeStructure(transformConfig(config)).leaves();
+const configsDir = path.resolve(__dirname, '../configs');
+
+export default async () =>
+  getTreeStructure(
+    transformConfig(
+      await inquirer
+        .prompt([
+          {
+            name: 'configName',
+            type: 'list',
+            message: 'choose config',
+            choices: fs
+              .readdirSync(configsDir)
+              .filter(name => /\.js$/.test(name))
+              .map(name => {
+                const configName = name.replace(/\.js$/, '');
+
+                return {
+                  name: snakeCase(configName).replace(/_/g, ' '),
+                  value: configName,
+                };
+              }),
+          },
+        ])
+        .then(({ configName }) =>
+          require(path.resolve(configsDir, configName)),
+        ),
+    ),
+  ).leaves();

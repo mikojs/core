@@ -26,6 +26,7 @@
     "fbjs": "^0.8.17",
     "find-cache-dir": "^2.0.0",
     "inquirer": "^6.1.0",
+    "lodash": "^4.17.10",
     "output-file-sync": "^2.0.1",
     "simple-git": "^1.96.0",
     "validator": "^10.6.0"

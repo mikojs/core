@@ -10,7 +10,7 @@ git.rawP = (argu, callback = val => val) =>
   new Promise((resolve, reject) =>
     git.raw(argu, (err, result) => {
       if (err) reject(err);
-      else resolve(callback(result));
+      else resolve(callback(result?.replace(/\n$/, '')));
     }),
   );
 

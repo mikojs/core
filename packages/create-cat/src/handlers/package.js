@@ -10,6 +10,7 @@ import { invariant } from 'fbjs';
 import pkg from 'utils/pkg';
 import cliOptions from 'utils/cliOptions';
 import git from 'utils/git';
+import storeCache from 'utils/storeCache';
 
 const noEmpty = str => (str.length > 0 ? true : 'Can not empty');
 
@@ -83,41 +84,51 @@ const addEngines = async () => {
   );
 };
 
-const addInfo = () =>
-  inquirer
+const addInfo = () => {
+  const pkgCache = storeCache.get('pkg') || {};
+
+  return inquirer
     .prompt([
       {
         name: 'description',
         message: 'the description of the project',
         when: !pkg.description,
         validate: noEmpty,
+        default: pkgCache.description,
       },
       {
         name: 'homepage',
         message: 'the homepage of the project',
         when: !pkg.homepage,
         validate: str => (isURL(str) ? true : 'Must be link'),
+        default: pkgCache.homepage,
       },
       {
         name: 'keywords',
         message: 'the keywords of the project (comma to split)',
         when: !pkg.keywords,
         filter: str => str.split(/\s*,\s*/g),
+        default: pkgCache.keywords?.join(','),
       },
     ])
     .then(
       ({
         description = pkg.description,
         homepage = pkg.homepage,
-        repository = pkg.repository,
         keywords = pkg.keywords,
       }) => {
         pkg.description = description;
         pkg.homepage = homepage;
-        pkg.repository = repository;
         pkg.keywords = keywords;
+
+        storeCache.set('pkg', {
+          description,
+          homepage,
+          keywords,
+        });
       },
     );
+};
 
 export default async () => {
   if (!pkg.name) pkg.name = path.basename(path.resolve(cliOptions.projectDir));

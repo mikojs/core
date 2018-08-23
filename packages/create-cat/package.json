@@ -24,6 +24,7 @@
     "diff": "^3.5.0",
     "envinfo": "^5.10.0",
     "fbjs": "^0.8.17",
+    "find-cache-dir": "^2.0.0",
     "inquirer": "^6.1.0",
     "output-file-sync": "^2.0.1",
     "simple-git": "^1.96.0",

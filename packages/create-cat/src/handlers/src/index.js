@@ -1,6 +1,9 @@
 // @flow
 
+import path from 'path';
+
 export default node => {
+  node.data.filePath = path.resolve(node.data.filePath, './index.js');
   node.data.content = `// @flow
 
 export default () => {

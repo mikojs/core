@@ -40,4 +40,5 @@ if (!projectDir) {
 export default {
   projectDir,
   overwriteAll,
+  configName: null,
 };

@@ -40,4 +40,7 @@ process.on('unhandledRejection', error => {
 
     writeFile(node);
   }
+
+  // TODO write package.json
+  // TODO git status
 })();

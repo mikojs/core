@@ -73,7 +73,7 @@ export default async node => {
     !content || !fileContent ? [] : diff.diffTrimmedLines(fileContent, content);
 
   node.data.diff = diffContent;
-  node.data.output = null;
+  node.data.output = content;
 
   if (diffContent.length > 1) {
     if (cliOptions.overwriteAll) node.data.output = content;

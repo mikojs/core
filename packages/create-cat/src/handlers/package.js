@@ -28,7 +28,7 @@ const addAuthor = async () => {
     'user.email',
   ]);
 
-  inquirer
+  return inquirer
     .prompt([
       {
         name: 'userName',
@@ -57,6 +57,7 @@ const addAuthor = async () => {
 const addRepository = async () => {
   const repository = await git.rawP(['config', '--get', 'remote.origin.url']);
 
+  // TODO remove
   invariant(
     repository,
     'can not find git.remote.origin.url. Set the remote.origin.url before creating project.',

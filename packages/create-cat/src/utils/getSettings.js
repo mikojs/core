@@ -7,6 +7,8 @@ import * as d3 from 'd3-hierarchy';
 import inquirer from 'inquirer';
 import { snakeCase } from 'lodash';
 
+import cliOptions from './cliOptions';
+
 const transformConfig = config =>
   config.reduce(
     (result, [parent, childData]) => [
@@ -48,8 +50,10 @@ export default async () =>
               }),
           },
         ])
-        .then(({ configName }) =>
-          require(path.resolve(configsDir, configName)),
-        ),
+        .then(({ configName }) => {
+          cliOptions.configName = configName;
+
+          return require(path.resolve(configsDir, configName));
+        }),
     ),
   ).leaves();

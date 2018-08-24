@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 import cliOptions from 'utils/cliOptions';
+import findFileContent from 'utils/findFileContent';
 
 const getPath = ({ parent, depth, data: { name } }) => {
   if (depth === 0) return ['.'];
@@ -19,7 +20,5 @@ export default node => {
   node.data.filePath = filePath;
 
   node.data.content = null;
-  node.data.fileContent = fs.existsSync(filePath)
-    ? fs.readFileSync(filePath, 'utf-8')
-    : null;
+  node.data.fileContent = findFileContent(filePath);
 };

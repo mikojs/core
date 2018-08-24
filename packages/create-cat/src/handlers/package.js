@@ -55,7 +55,13 @@ const addAuthor = async () => {
 };
 
 const addRepository = async () => {
-  const repository = await git.rawP(['config', '--get', 'remote.origin.url']);
+  const repository = await git.rawP(
+    ['config', '--get', 'remote.origin.url'],
+    val =>
+      val
+        .replace(/^git@github\.com:/, 'https://github.com/')
+        .replace(/\.git$/, ''),
+  );
 
   // TODO remove
   invariant(

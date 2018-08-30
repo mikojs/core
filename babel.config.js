@@ -13,7 +13,15 @@ const babelConfigs = (() => {
     USE_DEFAULT_BABEL_CONFIG_PATTERN.test(name)
   )
     return {
-      presets: ['@babel/preset-env', '@babel/preset-flow'],
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            useBuiltIns: 'usage',
+          },
+        ],
+        '@babel/preset-flow',
+      ],
       plugins: [
         '@babel/plugin-proposal-optional-chaining',
         [
@@ -35,20 +43,17 @@ const babelConfigs = (() => {
   );
 })();
 
-babelConfigs.plugins.push(
-  [
-    'transform-imports',
-    {
-      '@cat-org/utils': {
-        transform: '@cat-org/utils/lib/${member}',
-      },
-      fbjs: {
-        transform: 'fbjs/lib/${member}',
-      },
+babelConfigs.plugins.push('@babel/plugin-proposal-class-properties', [
+  'transform-imports',
+  {
+    '@cat-org/utils': {
+      transform: '@cat-org/utils/lib/${member}',
     },
-  ],
-  '@babel/plugin-proposal-class-properties',
-);
+    fbjs: {
+      transform: 'fbjs/lib/${member}',
+    },
+  },
+]);
 
 babelConfigs.overrides.push({
   test: './packages',

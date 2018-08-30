@@ -2,11 +2,11 @@
 // @flow
 
 import path from 'path';
+import childProcess from 'child_process';
 
 import { invariant } from 'fbjs';
 
 import cliOptions from './core/cliOptions';
-import runCommand from './core/runCommand';
 
 const CONFIG_OPTION_NAME = {
   babel: '--config-file',
@@ -41,4 +41,11 @@ if (CONFIG_OPTION_NAME[cliName].useEqual)
   argv.push(`${CONFIG_OPTION_NAME[cliName].name}=${configPath}`);
 else argv.push(CONFIG_OPTION_NAME[cliName], configPath);
 
-runCommand(argv);
+const runCmd = childProcess.spawn(argv[0], argv.slice(1), {
+  detached: true,
+  stdio: 'inherit',
+});
+
+runCmd.on('close', (exitCode: number) => {
+  process.exit(exitCode);
+});

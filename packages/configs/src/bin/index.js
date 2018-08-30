@@ -26,6 +26,7 @@ invariant(
   `can not find the config in the setting of \`${cliOptions.cliName}\``,
 );
 
+// $FlowFixMe
 const { config, cliName = cliOptions.cliName } = cliSetting.config
   ? cliSetting
   : { config: cliSetting };

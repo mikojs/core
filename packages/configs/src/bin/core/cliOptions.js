@@ -9,6 +9,7 @@ import chalk from 'chalk';
 
 import { version } from '../../../package.json';
 
+// $FlowFixMe
 const program = new commander.Command('configs-scripts')
   .version(version, '-v, --version')
   .arguments('[arguments...]')
@@ -32,7 +33,8 @@ const cliOptions = {
   settingsPath: configsSettings,
   cliName,
   argv: rawArgs.filter(
-    arg => !['--configs-settings', configsSettings, cliName].includes(arg),
+    (arg: string): boolean =>
+      !['--configs-settings', configsSettings, cliName].includes(arg),
   ),
 };
 

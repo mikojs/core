@@ -2,6 +2,9 @@
 
 module.exports = {
   extends: ['@cat-org/eslint-config-cat'],
+  rules: {
+    'prettier/prettier': ['error', require('@cat-org/configs/lib/prettier')],
+  },
   overrides: [
     {
       files: [
@@ -10,6 +13,7 @@ module.exports = {
         'jest.config.js',
         '.lintstagedrc.js',
         '.prettierrc.js',
+        '.eslintrc.js',
       ],
       settings: {
         /** In packages/** modules */

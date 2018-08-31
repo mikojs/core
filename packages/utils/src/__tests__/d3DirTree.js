@@ -14,6 +14,7 @@ it('test d3DirTree', () => {
   ).toEqual([
     '__tests__',
     'd3DirTree.js',
+    'handleRejection.js',
     'index.js',
     'index.js.flow',
     'throwMessageInIndex.js',

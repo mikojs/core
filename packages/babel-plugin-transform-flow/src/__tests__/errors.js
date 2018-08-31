@@ -5,6 +5,8 @@ import path from 'path';
 import { setMainFunction } from 'output-file-sync';
 import chokidar from 'chokidar';
 
+import { name as pkgName } from '../../package.json';
+
 import flowFiles from '../flowFiles';
 
 import type { flowFileType } from '../flowFiles';
@@ -17,7 +19,7 @@ test('parse error', () => {
   expect(() => {
     reset();
     babel();
-  }).toThrowError('@cat-org/babel-plugin-transform-flow TypeError');
+  }).toThrowError(`${pkgName} TypeError`);
 });
 
 describe('cli error', () => {
@@ -26,7 +28,7 @@ describe('cli error', () => {
       reset({});
       babel();
     }).toThrowError(
-      '@cat-org/babel-plugin-transform-flow only can be used with @babel/cli: Can not find `src` or `outDir`',
+      `${pkgName} only can be used with @babel/cli: Can not find \`src\` or \`outDir\``,
     );
   });
 });
@@ -38,7 +40,7 @@ test('write error', () => {
     });
     reset(transformFileOptions);
     babel();
-  }).toThrowError(`@cat-org/babel-plugin-transform-flow Error: error`);
+  }).toThrowError(`${pkgName} Error: error`);
 });
 
 test('write error with watch mode', () => {
@@ -58,9 +60,7 @@ test('write error with watch mode', () => {
 
   expect(global.console.log).toHaveBeenCalled();
   expect(global.console.log).toHaveBeenCalledTimes(1);
-  expect(global.console.log).toHaveBeenCalledWith(
-    `@cat-org/babel-plugin-transform-flow Error: error`,
-  );
+  expect(global.console.log).toHaveBeenCalledWith(`${pkgName} Error: error`);
 });
 
 test('watch error when not finding babel configs', () => {
@@ -85,7 +85,7 @@ test('watch error when not finding babel configs', () => {
 
     chokidar.watchCallback(justDefinitionPath);
   }).toThrowError(
-    `@cat-org/babel-plugin-transform-flow Error: not find ${justDefinitionPath.replace(
+    `${pkgName} Error: not find ${justDefinitionPath.replace(
       `${process.cwd()}/`,
       '',
     )} babel configs`,

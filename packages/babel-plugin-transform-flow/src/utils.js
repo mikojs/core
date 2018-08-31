@@ -4,6 +4,8 @@ import path from 'path';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 
+import { name as pkgName } from '../package.json';
+
 export type initialOptionsType = {|
   src?: $ReadOnlyArray<string>,
   outDir?: string,
@@ -80,11 +82,10 @@ class Utils {
       if (!this.initialOptions.src || !this.initialOptions.outDir)
         throw new Error('initialized error');
     } catch (e) {
-      if (e.message !== 'initialized error')
-        throw new Error(`@cat-org/babel-plugin-transform-flow ${e}`);
+      if (e.message !== 'initialized error') throw new Error(`${pkgName} ${e}`);
 
       throw new Error(
-        '@cat-org/babel-plugin-transform-flow only can be used with @babel/cli: Can not find `src` or `outDir`',
+        `${pkgName} only can be used with @babel/cli: Can not find \`src\` or \`outDir\``,
       );
     }
   };

@@ -3,22 +3,22 @@
 export default {
   presets: [
     [
-      '@babel/preset-env',
+      '@babel/env',
       {
         useBuiltIns: 'usage',
       },
     ],
-    '@babel/preset-flow',
+    '@babel/flow',
   ],
   plugins: [
-    '@babel/plugin-proposal-optional-chaining',
+    '@babel/proposal-optional-chaining',
     [
       'module-resolver',
       {
         root: ['./src'],
       },
     ],
-    '@cat-org/babel-plugin-transform-flow',
+    '@cat-org/transform-flow',
   ],
   ignore:
     process.env.NODE_ENV === 'test'

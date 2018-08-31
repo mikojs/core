@@ -2,6 +2,8 @@
 
 import chokidar from 'chokidar';
 
+import { name as pkgName } from '../package.json';
+
 import utils from './utils';
 import writeFiles from './writeFiles';
 
@@ -73,9 +75,7 @@ class FlowFiles {
         if (!newFile) return;
         if (!newFile.babelConfigs)
           throw new Error(
-            `@cat-org/babel-plugin-transform-flow Error: not find ${
-              newFile.srcPath
-            } babel configs`,
+            `${pkgName} Error: not find ${newFile.srcPath} babel configs`,
           );
 
         writeFiles.add(newFile);

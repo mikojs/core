@@ -3,6 +3,8 @@
 import { transformFileSync } from '@babel/core';
 import outputFileSync from 'output-file-sync';
 
+import { name as pkgName } from '../package.json';
+
 import utils from './utils';
 
 export type writeFileType = {
@@ -58,7 +60,7 @@ class WriteFiles {
       if (verbose) console.log(`${srcPath} -> ${destPath}`);
       if (this.store.length !== 0) this.writeFiles();
     } catch (e) {
-      const errorMessage = `@cat-org/babel-plugin-transform-flow ${e}`;
+      const errorMessage = `${pkgName} ${e}`;
 
       this.isWritting = false;
 

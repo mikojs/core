@@ -15,15 +15,15 @@ const babelConfigs = (() => {
     return {
       presets: [
         [
-          '@babel/preset-env',
+          '@babel/env',
           {
             useBuiltIns: 'usage',
           },
         ],
-        '@babel/preset-flow',
+        '@babel/flow',
       ],
       plugins: [
-        '@babel/plugin-proposal-optional-chaining',
+        '@babel/proposal-optional-chaining',
         [
           'module-resolver',
           {
@@ -43,7 +43,7 @@ const babelConfigs = (() => {
   );
 })();
 
-babelConfigs.plugins.push('@babel/plugin-proposal-class-properties', [
+babelConfigs.plugins.push('@babel/proposal-class-properties', [
   'transform-imports',
   {
     '@cat-org/utils': {

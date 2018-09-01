@@ -6,10 +6,10 @@ import { invariant } from 'fbjs';
 
 import commander from 'commander';
 import chalk from 'chalk';
+import findUp from 'find-up';
 
 import { version } from '../../../package.json';
 
-// $FlowFixMe
 const program = new commander.Command('configs-scripts')
   .version(version, '-v, --version')
   .arguments('[arguments...]')
@@ -17,43 +17,37 @@ const program = new commander.Command('configs-scripts')
   .description(
     chalk`{green Arguments} can be any commands, like {cyan \`babel src -d lib\`}.`,
   )
-  .allowUnknownOption()
-  .option(
-    '--configs-settings <path or module name>',
-    'set the settings of the configs',
-  );
+  .option('--info', 'print more info about configs')
+  .allowUnknownOption();
 
 const {
-  configsSettings = path.resolve(__dirname, '../..'),
   args: [cliName],
   rawArgs,
+  info = false,
 } = program.parse(process.argv);
 
-const cliOptions = {
-  settingsPath: configsSettings,
-  cliName,
-  argv: rawArgs.filter(
-    (arg: string): boolean =>
-      !['--configs-settings', configsSettings, cliName].includes(arg),
-  ),
-};
+const configPath = findUp.sync('cat.config.js') || path.resolve(__dirname, '../..');
+const config = require(configPath);
+
+if (info) {
+  program.outputHelp((): string => `${JSON.stringify({
+    cliNames: Object.keys(config),
+  }, null, 2)}
+`);
+  process.exit();
+}
 
 invariant(
   cliName,
-  'should give an argument at least, use `-h` to get the more information',
+  chalk`should give an argument at least, use {green \`-h\`} to get the more information`,
 );
 
-if (!fs.existsSync(configsSettings)) {
-  try {
-    cliOptions.settingsPath = require.resolve(configsSettings);
-  } catch (e) {
-    if (/Cannot find module/.test(e.message))
-      throw new Error(
-        `can not get the settings from the module: ${configsSettings}`,
-      );
-
-    throw e;
-  }
-}
-
-export default cliOptions;
+export default {
+  configPath,
+  config,
+  cliName,
+  argv: rawArgs.filter(
+    (arg: string): boolean =>
+      ![cliName].includes(arg),
+  ),
+};

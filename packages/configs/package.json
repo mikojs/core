@@ -18,8 +18,10 @@
     "access": "public"
   },
   "dependencies": {
+    "@cat-org/utils": "^1.0.0-beta.6",
     "chalk": "^2.4.1",
     "commander": "^2.17.1",
-    "fbjs": "^0.8.17"
+    "fbjs": "^0.8.17",
+    "find-up": "^3.0.0"
   }
 }

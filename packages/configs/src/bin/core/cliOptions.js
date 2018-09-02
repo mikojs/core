@@ -1,8 +1,6 @@
 // @flow
 
-import fs from 'fs';
 import path from 'path';
-import { invariant } from 'fbjs';
 
 import commander from 'commander';
 import chalk from 'chalk';
@@ -10,6 +8,10 @@ import findUp from 'find-up';
 
 import { version } from '../../../package.json';
 
+/*
+ * Should be fixed in `https://github.com/flow-typed/flow-typed/pull/2690`
+ * $FlowFixMe
+ */
 const program = new commander.Command('configs-scripts')
   .version(version, '-v, --version')
   .arguments('[arguments...]')
@@ -26,28 +28,27 @@ const {
   info = false,
 } = program.parse(process.argv);
 
-const configPath = findUp.sync('cat.config.js') || path.resolve(__dirname, '../..');
+const configPath =
+  findUp.sync('cat.config.js') || path.resolve(__dirname, '../..');
 const config = require(configPath);
 
 if (info) {
-  program.outputHelp((): string => `${JSON.stringify({
-    cliNames: Object.keys(config),
-  }, null, 2)}
-`);
+  program.outputHelp(
+    (): string => `${JSON.stringify(
+      {
+        cliNames: Object.keys(config),
+      },
+      null,
+      2,
+    )}
+`,
+  );
   process.exit();
 }
-
-invariant(
-  cliName,
-  chalk`should give an argument at least, use {green \`-h\`} to get the more information`,
-);
 
 export default {
   configPath,
   config,
   cliName,
-  argv: rawArgs.filter(
-    (arg: string): boolean =>
-      ![cliName].includes(arg),
-  ),
+  argv: rawArgs.filter((arg: string): boolean => ![cliName].includes(arg)),
 };

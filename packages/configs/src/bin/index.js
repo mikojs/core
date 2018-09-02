@@ -5,47 +5,70 @@ import path from 'path';
 import childProcess from 'child_process';
 
 import { invariant } from 'fbjs';
+import chalk from 'chalk';
+import findUp from 'find-up';
 
+import { CLI_MODULES, CLI_CONFIG } from './core/constants';
 import cliOptions from './core/cliOptions';
 
-const CONFIG_OPTION_NAME = {
-  babel: '--config-file',
-  'lint-staged': '-c',
-  prettier: '--config',
-  jest: {
-    name: '--config',
-    useEqual: true,
-  },
-};
-
-const settings = require(cliOptions.settingsPath);
-const cliSetting = settings[cliOptions.cliName];
-
-invariant(
-  cliSetting,
-  `can not find the config in the setting of \`${cliOptions.cliName}\``,
-);
-
-// $FlowFixMe
-const { config, cliName = cliOptions.cliName } = cliSetting.config
-  ? cliSetting
-  : { config: cliSetting };
-const argv = [...cliOptions.argv];
-const configPath = path
-  .resolve(cliOptions.settingsPath, config)
-  .replace(process.cwd(), '.');
-
-argv[1] = path.resolve(path.dirname(argv[1]), cliName);
-
-if (CONFIG_OPTION_NAME[cliName].useEqual)
-  argv.push(`${CONFIG_OPTION_NAME[cliName].name}=${configPath}`);
-else argv.push(CONFIG_OPTION_NAME[cliName], configPath);
-
-const runCmd = childProcess.spawn(argv[0], argv.slice(1), {
-  detached: true,
-  stdio: 'inherit',
+process.on('unhandledRejection', (error: mixed) => {
+  throw error;
 });
 
-runCmd.on('close', (exitCode: number) => {
-  process.exit(exitCode);
-});
+const { configPath, config, cliName, argv } = cliOptions;
+
+export default ((): mixed => {
+  if (process.env.USE_CONFIGS_SCRIPTS)
+    return (config[process.env.USE_CONFIGS_SCRIPTS].config ||
+      config[process.env.USE_CONFIGS_SCRIPTS])();
+
+  invariant(
+    cliName,
+    chalk`should give an argument at least, use {green \`-h\`} to get the more information`,
+  );
+
+  invariant(
+    config[cliName],
+    chalk`can not find {cyan \`${cliName}\`} in {gray \`${configPath}\`}
+                     use {green \`--info\`} to get the more information`,
+  );
+
+  const cli = config[cliName].alias || cliName;
+  const modulePkgPath = (CLI_MODULES[cli] || [cli]: [string]).reduce(
+    (result: string | false, moduleName: string): string | false => {
+      try {
+        return (
+          result ||
+          findUp.sync('package.json', { cwd: require.resolve(moduleName) })
+        );
+      } catch (e) {
+        if (!/Cannot find module/.test(e.message)) throw e;
+
+        return result;
+      }
+    },
+    false,
+  );
+
+  invariant(modulePkgPath, `Cannot find cli '${cli}'`);
+
+  const modulePkg = require(modulePkgPath);
+
+  argv[1] = path.resolve(
+    path.dirname(modulePkgPath),
+    modulePkg.bin[cli] || modulePkg.bin,
+  );
+  argv.push(...CLI_CONFIG[cli]);
+
+  return childProcess
+    .spawn(argv[0], argv.slice(1), {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        USE_CONFIGS_SCRIPTS: cliName,
+      },
+    })
+    .on('close', (exitCode: number) => {
+      process.exit(exitCode);
+    });
+})();

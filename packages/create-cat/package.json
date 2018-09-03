@@ -1,0 +1,34 @@
+{
+  "name": "@cat-org/create-cat",
+  "description": "Create project for cat-org",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/cat-core/",
+  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/create-cat",
+  "version": "1.0.0-beta.6",
+  "main": "./lib/index.js",
+  "bin": {
+    "create-cat": "./lib/bin/index.js"
+  },
+  "keywords": [
+    "cat-org",
+    "create-cat"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "commander": "^2.17.1",
+    "d3-hierarchy": "^1.1.6",
+    "diff": "^3.5.0",
+    "envinfo": "^5.10.0",
+    "fbjs": "^0.8.17",
+    "find-cache-dir": "^2.0.0",
+    "inquirer": "^6.1.0",
+    "lodash": "^4.17.10",
+    "output-file-sync": "^2.0.1",
+    "simple-git": "^1.96.0",
+    "validator": "^10.6.0"
+  }
+}

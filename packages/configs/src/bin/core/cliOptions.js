@@ -4,7 +4,7 @@ import path from 'path';
 
 import commander from 'commander';
 import chalk from 'chalk';
-import findUp from 'find-up';
+import cosmiconfig from 'cosmiconfig';
 
 import { version } from '../../../package.json';
 
@@ -29,7 +29,7 @@ const {
 } = program.parse(process.argv);
 
 const configPath =
-  findUp.sync('cat.config.js') || path.resolve(__dirname, '../..');
+  cosmiconfig('cat').searchSync()?.filepath || path.resolve(__dirname, '../..');
 const config = require(configPath);
 
 if (info) {

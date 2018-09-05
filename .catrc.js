@@ -10,7 +10,7 @@ module.exports = {
         files: ['__tests__/**/*.js', '.catrc.js'],
         settings: {
           /** In packages/** modules */
-          'import/core-modules': ['@cat-org/configs', '@cat-org/utils'],
+          'import/core-modules': ['@cat-org/configs'],
         },
       },
     ],

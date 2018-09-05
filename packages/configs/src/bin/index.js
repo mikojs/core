@@ -56,21 +56,36 @@ export default ((): mixed => {
       false,
     );
 
-  const CLI_CONFIG = {
-    babel: ['--config-file', __filename],
-    eslint: ['-c', __filename],
-    esw: ['-c', __filename],
-    prettier: ['--config', __filename],
-    'lint-staged': ['-c', __filename],
-    jest: [`--config=${__filename}`],
-  };
   const which = npmWhich(process.cwd());
   const cli = configs[cliName].alias || cliName;
+  const setConfig =
+    /**
+     * Flow does not yet support method or property calls in optional chains.
+     * $FlowFixMe
+     */
+    configs[cliName]?.setConfig?.(__filename) ||
+    {
+      babel: ['--config-file', __filename],
+      eslint: ['-c', __filename],
+      esw: ['-c', __filename],
+      prettier: ['--config', __filename],
+      'lint-staged': ['-c', __filename],
+      jest: [`--config=${__filename}`],
+    }[cli];
 
-  // TODO check CLI_CONFIG
+  if (!setConfig)
+    printInfo(
+      [
+        chalk`Can not set the config path for {green ${cli}}`,
+        chalk`Use {green configs.${cliName}.setConfig} to set the config path`,
+        'For example:',
+        `  { ${cliName}: { config: {}, setConfig: (configPath) => ['--config', configPath] } }`,
+      ],
+      true,
+    );
 
   argv[1] = which.sync(cli);
-  argv.push(...CLI_CONFIG[cli]);
+  argv.push(...setConfig);
 
   return childProcess
     .spawn(argv[0], argv.slice(1), {

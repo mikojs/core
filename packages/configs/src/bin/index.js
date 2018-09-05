@@ -18,9 +18,14 @@ process.on('unhandledRejection', (error: mixed) => {
 const { configPath, config, cliName, argv } = cliOptions;
 
 export default ((): mixed => {
-  if (process.env.USE_CONFIGS_SCRIPTS)
-    return (config[process.env.USE_CONFIGS_SCRIPTS].config ||
-      config[process.env.USE_CONFIGS_SCRIPTS])();
+  if (process.env.USE_CONFIGS_SCRIPTS) {
+    const { USE_CONFIGS_SCRIPTS } = process.env;
+
+    delete process.env.USE_CONFIGS_SCRIPTS;
+
+    return (config[USE_CONFIGS_SCRIPTS].config ||
+      config[USE_CONFIGS_SCRIPTS])();
+  }
 
   invariant(
     cliName,

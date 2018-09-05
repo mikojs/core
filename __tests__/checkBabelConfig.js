@@ -1,6 +1,6 @@
 // @flow
 
-import babelConfigs from '@cat-org/configs/lib/babel';
+import babelConfigs from '@cat-org/configs/lib/configs/babel';
 
 import rootBabelConfigs from '../babel.config';
 

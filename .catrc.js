@@ -11,7 +11,12 @@ module.exports = {
       ...config,
       overrides: [
         {
-          files: ['__tests__/**/*.js', '.catrc.js'],
+          files: [
+            'checkBabelConfig.js',
+            'checkFilesInPackages.js',
+            '.catrc.js',
+            'babel.config.js',
+          ],
           settings: {
             /** In packages/** modules */
             'import/core-modules': ['@cat-org/configs'],

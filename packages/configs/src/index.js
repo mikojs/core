@@ -1,7 +1,7 @@
 // @flow
 
 const eslint = {
-  config: (): {} => require('./eslint'),
+  config: (): {} => require('./configs/eslint'),
   run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
     ...argv,
     '--cache',
@@ -10,18 +10,18 @@ const eslint = {
 
 export default {
   // babel
-  babel: (): {} => require('./babel'),
+  babel: (): {} => require('./configs/babel'),
 
   // eslint
   eslint,
   esw: eslint,
 
   // prettier
-  prettier: (): {} => require('./prettier'),
+  prettier: (): {} => require('./configs/prettier'),
 
   // lint-staged
-  'lint-staged': (): {} => require('./lintsteged'),
+  'lint-staged': (): {} => require('./configs/lintsteged'),
 
   // jest
-  jest: (): {} => require('./jest'),
+  jest: (): {} => require('./configs/jest'),
 };

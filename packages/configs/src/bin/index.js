@@ -8,6 +8,7 @@ import chalk from 'chalk';
 import npmWhich from 'npm-which';
 
 import defaultConfigs from '..';
+
 import cliOptions from './core/cliOptions';
 import printInfo from './core/printInfo';
 
@@ -18,6 +19,7 @@ process.on('unhandledRejection', (error: mixed) => {
 export default ((): mixed => {
   const { configsPath, configs, cliName, argv } = cliOptions;
 
+  // Return real config
   if (process.env.USE_CONFIGS_SCRIPTS) {
     const { USE_CONFIGS_SCRIPTS } = process.env;
     const useConfig =
@@ -60,6 +62,7 @@ export default ((): mixed => {
   const cli = configs[cliName].alias || cliName;
   const setConfig =
     /**
+     * Run custom set config
      * Flow does not yet support method or property calls in optional chains.
      * $FlowFixMe
      */
@@ -84,11 +87,20 @@ export default ((): mixed => {
       true,
     );
 
-  argv[1] = which.sync(cli);
-  argv.push(...setConfig);
+  /**
+   * Run custom argv
+   * Flow does not yet support method or property calls in optional chains.
+   * $FlowFixMe
+   */
+  const realArgv = configs[cliName]?.run?.(argv) || argv;
 
+  // Use real cli and set config
+  realArgv[1] = which.sync(cli);
+  realArgv.push(...setConfig);
+
+  // Start
   return childProcess
-    .spawn(argv[0], argv.slice(1), {
+    .spawn(realArgv[0], realArgv.slice(1), {
       stdio: 'inherit',
       env: {
         ...process.env,

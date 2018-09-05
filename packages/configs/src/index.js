@@ -1,12 +1,19 @@
 // @flow
 
 export default {
-  'babel/react': {
-    alias: 'babel',
-    config: (): {} => require('./babel'),
-  },
+  // babel
   babel: (): {} => require('./babel'),
-  'lint-staged': (): {} => require('./lintsteged'),
+
+  // eslint
+  eslint: (): {} => require('./eslint'),
+  esw: (): {} => require('./eslint'),
+
+  // prettier
   prettier: (): {} => require('./prettier'),
+
+  // lint-staged
+  'lint-staged': (): {} => require('./lintsteged'),
+
+  // jest
   jest: (): {} => require('./jest'),
 };

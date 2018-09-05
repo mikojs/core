@@ -1,23 +1,21 @@
 #! /usr/bin/env node
 // @flow
 
-import path from 'path';
 import childProcess from 'child_process';
 
 import { invariant } from 'fbjs';
 import chalk from 'chalk';
-import findUp from 'find-up';
+import npmWhich from 'npm-which';
 
-import { CLI_MODULES, CLI_CONFIG } from './core/constants';
 import cliOptions from './core/cliOptions';
 
 process.on('unhandledRejection', (error: mixed) => {
   throw error;
 });
 
-const { configPath, config, cliName, argv } = cliOptions;
-
 export default ((): mixed => {
+  const { configPath, config, cliName, argv } = cliOptions;
+
   if (process.env.USE_CONFIGS_SCRIPTS) {
     const { USE_CONFIGS_SCRIPTS } = process.env;
 
@@ -38,31 +36,16 @@ export default ((): mixed => {
                      use {green \`--info\`} to get the more information`,
   );
 
+  const CLI_CONFIG = {
+    babel: ['--config-file', __filename],
+    prettier: ['--config', __filename],
+    'lint-staged': ['-c', __filename],
+    jest: [`--config=${__filename}`],
+  };
+  const which = npmWhich(process.cwd());
   const cli = config[cliName].alias || cliName;
-  const modulePkgPath = (CLI_MODULES[cli] || [cli]: [string]).reduce(
-    (result: string | false, moduleName: string): string | false => {
-      try {
-        return (
-          result ||
-          findUp.sync('package.json', { cwd: require.resolve(moduleName) })
-        );
-      } catch (e) {
-        if (!/Cannot find module/.test(e.message)) throw e;
 
-        return result;
-      }
-    },
-    false,
-  );
-
-  invariant(modulePkgPath, `Cannot find cli '${cli}'`);
-
-  const modulePkg = require(modulePkgPath);
-
-  argv[1] = path.resolve(
-    path.dirname(modulePkgPath),
-    modulePkg.bin[cli] || modulePkg.bin,
-  );
+  argv[1] = which.sync(cli);
   argv.push(...CLI_CONFIG[cli]);
 
   return childProcess

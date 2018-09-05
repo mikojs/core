@@ -7,7 +7,7 @@
     "precommit": "make babel-lint-staged && configs-scripts lint-staged",
     "preinstall": "rm -rf ./node_modules/@cat-org",
     "install:all": "make install-all",
-    "lint": "NODE_ENV=test esw --cache --ext .js",
+    "lint": "NODE_ENV=test configs-scripts esw --cache --ext .js",
     "lint:watch": "yarn lint -w --rule \"prettier/prettier: off\" --quiet",
     "prepare":
       "patch-package && ln -snf $(pwd)/packages ./node_modules/@cat-org",

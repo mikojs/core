@@ -28,15 +28,15 @@ const {
   info = false,
 } = program.parse(process.argv);
 
-const configPath =
+const configsPath =
   cosmiconfig('cat').searchSync()?.filepath || path.resolve(__dirname, '../..');
-const config = require(configPath);
+const configs = require(configsPath);
 
 if (info) {
   program.outputHelp(
     (): string => `${JSON.stringify(
       {
-        cliNames: Object.keys(config),
+        cliNames: Object.keys(configs),
       },
       null,
       2,
@@ -47,8 +47,8 @@ if (info) {
 }
 
 export default {
-  configPath,
-  config,
+  configsPath,
+  configs,
   cliName,
   argv: rawArgs.filter((arg: string): boolean => ![cliName].includes(arg)),
 };

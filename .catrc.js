@@ -1,12 +1,8 @@
 // @flow
 
-const { esw, ...configs } = require('@cat-org/configs');
-
 /* eslint-disable flowtype/require-return-type, flowtype/require-parameter-type */
-module.exports = {
-  ...configs,
+module.exports = require('@cat-org/configs/lib/mergeConfigs')({
   esw: {
-    ...esw,
     config: config => ({
       ...config,
       overrides: [
@@ -19,10 +15,10 @@ module.exports = {
           ],
           settings: {
             /** In packages/** modules */
-            'import/core-modules': ['@cat-org/configs'],
+            'import/core-modules': ['@cat-org/configs', '@cat-org/utils'],
           },
         },
       ],
     }),
   },
-};
+});

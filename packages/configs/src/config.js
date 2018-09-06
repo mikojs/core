@@ -1,9 +1,9 @@
 // @flow
 
+import defaultConfigs from '.';
+
 import cliOptions from 'utils/cliOptions';
 import printInfo from 'utils/printInfo';
-
-import defaultConfigs from '.';
 
 export default ((): mixed => {
   const { configs } = cliOptions;
@@ -21,5 +21,5 @@ export default ((): mixed => {
 
   delete process.env.USE_CONFIGS_SCRIPTS;
 
-  return useConfig(useConfig !== useDefaultConfig || useDefaultConfig());
+  return useConfig(useConfig === useDefaultConfig ? null : useDefaultConfig());
 })();

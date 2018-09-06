@@ -29,7 +29,8 @@ const {
 } = program.parse(process.argv);
 
 const configsPath =
-  cosmiconfig('cat').searchSync()?.filepath || path.resolve(__dirname, '../..');
+  cosmiconfig('cat').searchSync()?.filepath ||
+  path.resolve(__dirname, '../index.js');
 const configs = require(configsPath);
 
 if (info) {

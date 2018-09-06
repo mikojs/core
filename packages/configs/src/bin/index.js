@@ -10,8 +10,6 @@ import npmWhich from 'npm-which';
 import cliOptions from 'utils/cliOptions';
 import printInfo from 'utils/printInfo';
 
-import defaultConfigs from '..';
-
 process.on('unhandledRejection', (error: mixed) => {
   throw error;
 });

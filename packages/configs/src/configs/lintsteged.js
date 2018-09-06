@@ -3,8 +3,8 @@
 export default {
   '*.js': [
     'yarn configs-scripts prettier --write',
+    'yarn configs-scripts lint',
     'yarn flow focus-check',
-    'yarn lint',
     'git add',
   ],
   '*.js.flow': [

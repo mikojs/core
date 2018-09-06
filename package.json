@@ -7,8 +7,7 @@
     "precommit": "make babel-lint-staged && configs-scripts lint-staged",
     "preinstall": "rm -rf ./node_modules/@cat-org",
     "install:all": "make install-all",
-    "lint": "configs-scripts esw",
-    "lint:watch": "yarn lint -w --rule \"prettier/prettier: off\" --quiet",
+    "lint": "configs-scripts lint",
     "prepare":
       "patch-package && ln -snf $(pwd)/packages ./node_modules/@cat-org",
     "prod": "NODE_ENV=production make babel-all",

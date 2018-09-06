@@ -1,6 +1,7 @@
 // @flow
 
-const eslint = {
+const lint = {
+  alias: 'esw',
   config: (): {} => require('./configs/eslint'),
   run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
     ...argv,
@@ -20,8 +21,17 @@ export default {
   babel: (): {} => require('./configs/babel'),
 
   // eslint
-  eslint,
-  esw: eslint,
+  lint,
+  'lint:watch': {
+    ...lint,
+    alias: 'esw',
+    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+      ...argv,
+      '-w',
+      '--rule "prettier/prettier: off"',
+      '--quiet',
+    ],
+  },
 
   // prettier
   prettier: (): {} => require('./configs/prettier'),

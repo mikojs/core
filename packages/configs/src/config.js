@@ -5,10 +5,11 @@ import printInfo from 'utils/printInfo';
 
 import defaultConfigs from '.';
 
-export default (() => {
+export default ((): mixed => {
   const { configs } = cliOptions;
 
-  if (!process.env.USE_CONFIGS_SCRIPTS) printInfo(['can not get config'], true);
+  if (!process.env.USE_CONFIGS_SCRIPTS)
+    return printInfo(['can not get config'], true);
 
   // Return real config
   const { USE_CONFIGS_SCRIPTS } = process.env;

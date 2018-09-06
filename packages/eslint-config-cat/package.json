@@ -23,6 +23,7 @@
     "eslint-plugin-relay": "^0.0.24"
   },
   "devDependencies": {
+    "@cat-org/configs": "^1.0.0-beta.6",
     "@cat-org/utils": "^1.0.0-beta.6",
     "eslint": "^5.1.0",
     "fbjs": "^0.8.17"

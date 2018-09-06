@@ -31,9 +31,12 @@ type testDataType = {
 
 const root = path.resolve(__dirname, './__ignore__');
 
+process.env.USE_CONFIGS_SCRIPTS = 'lint';
+
 const cli = new CLIEngine({
   cwd: root,
   ignore: false,
+  configFile: require.resolve('@cat-org/configs/lib/config'),
   rules: {
     'no-unused-vars': 'off',
     'no-warning-comments': 'off',

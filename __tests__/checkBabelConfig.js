@@ -13,7 +13,6 @@ it('check babel config', () => {
           plugin instanceof Array ? plugin[0] : plugin,
         ),
     ),
-    '@cat-org/transform-flow',
   ].sort();
 
   babelConfigs.plugins.sort();

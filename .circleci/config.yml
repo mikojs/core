@@ -33,7 +33,7 @@ jobs:
           name: Check code style
           command: |
             make babel-lint-staged
-            yarn lint .
+            yarn configs-scripts lint .
             yarn flow
 
       - run:
@@ -53,7 +53,9 @@ jobs:
           name: Pre publish
           command: |
             yarn prod
-            TEST_PRODUCTION=true yarn jest ./__tests__/checkFilesInPackages.js --coverage=false
+            TEST_PRODUCTION=true yarn configs-scripts jest \
+              ./__tests__/checkFilesInPackages.js \
+              --coverage=false
 
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
 

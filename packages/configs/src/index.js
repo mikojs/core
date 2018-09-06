@@ -7,6 +7,9 @@ const lint = {
     ...argv,
     '--cache',
   ],
+  env: {
+    NODE_ENV: 'test',
+  },
 };
 
 const jest = {

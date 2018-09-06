@@ -18,7 +18,7 @@ export default {
         root: ['./src'],
       },
     ],
-    '@cat-org/transform-flow',
+    ...(process.env.NODE_ENV === 'test' ? [] : ['@cat-org/transform-flow']),
   ],
   ignore:
     process.env.NODE_ENV === 'test'

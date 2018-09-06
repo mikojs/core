@@ -6,7 +6,7 @@ import commander from 'commander';
 import chalk from 'chalk';
 import cosmiconfig from 'cosmiconfig';
 
-import { version } from '../../../package.json';
+import { version } from '../../package.json';
 
 /*
  * Should be fixed in `https://github.com/flow-typed/flow-typed/pull/2690`

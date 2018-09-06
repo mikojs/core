@@ -8,6 +8,13 @@ const eslint = {
   ],
 };
 
+const jest = {
+  config: (): {} => require('./configs/jest'),
+  env: {
+    NODE_ENV: 'test',
+  },
+};
+
 export default {
   // babel
   babel: (): {} => require('./configs/babel'),
@@ -23,5 +30,13 @@ export default {
   'lint-staged': (): {} => require('./configs/lintsteged'),
 
   // jest
-  jest: (): {} => require('./configs/jest'),
+  jest,
+  test: {
+    ...jest,
+    alias: 'jest',
+    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+      ...argv,
+      '--silent',
+    ],
+  },
 };

@@ -54,7 +54,7 @@ export default ((): mixed => {
 
   if (configsPath !== path.resolve(__dirname, '../index.js'))
     printInfo(
-      ['Using external babel configsuration', `Location: ${configsPath}`],
+      ['Using external configsuration', `Location: ${configsPath}`],
       false,
     );
 
@@ -66,7 +66,7 @@ export default ((): mixed => {
      * Flow does not yet support method or property calls in optional chains.
      * $FlowFixMe
      */
-    configs[cliName]?.setConfig?.(__filename) ||
+    configs[cliName].setConfig?.(__filename) ||
     {
       babel: ['--config-file', __filename],
       eslint: ['-c', __filename],
@@ -92,7 +92,7 @@ export default ((): mixed => {
    * Flow does not yet support method or property calls in optional chains.
    * $FlowFixMe
    */
-  const realArgv = configs[cliName]?.run?.(argv) || argv;
+  const realArgv = configs[cliName].run?.(argv) || argv;
 
   // Use real cli and set config
   realArgv[1] = which.sync(cli);
@@ -104,6 +104,7 @@ export default ((): mixed => {
       stdio: 'inherit',
       env: {
         ...process.env,
+        ...configs[cliName].env,
         USE_CONFIGS_SCRIPTS: cliName,
       },
     })

@@ -13,7 +13,7 @@
       "patch-package && ln -snf $(pwd)/packages ./node_modules/@cat-org",
     "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
-    "test": "make babel-test && NODE_ENV=test configs-scripts jest --silent"
+    "test": "make babel-test && configs-scripts test"
   },
   "dependencies": {
     "babel-eslint": "^8.2.3",

@@ -5,6 +5,7 @@ const lint = {
   config: (): {} => require('./configs/eslint'),
   run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
     ...argv,
+    ...require('./configs/eslint/ignore'),
     '--cache',
   ],
   env: {
@@ -29,9 +30,10 @@ export default {
     ...lint,
     alias: 'esw',
     run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...argv,
+      ...lint.run(argv),
       '-w',
-      '--rule "prettier/prettier: off"',
+      '--rule',
+      'prettier/prettier: off',
       '--quiet',
     ],
   },

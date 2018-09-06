@@ -7,6 +7,8 @@ import childProcess from 'child_process';
 import chalk from 'chalk';
 import npmWhich from 'npm-which';
 
+import defaultConfigs from '..';
+
 import cliOptions from 'utils/cliOptions';
 import printInfo from 'utils/printInfo';
 
@@ -74,7 +76,9 @@ if (!setConfig)
  * Flow does not yet support method or property calls in optional chains.
  * $FlowFixMe
  */
-const realArgv = configs[cliName].run?.(argv) || argv;
+const defaultArgv = defaultConfigs[cliName]?.run?.(argv) || argv;
+// $FlowFixMe
+const realArgv = configs[cliName].run?.(defaultArgv) || defaultArgv;
 
 // Use real cli and set config
 realArgv[1] = which.sync(cli);

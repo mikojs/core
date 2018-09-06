@@ -1,6 +1,6 @@
 // @flow
 
-import prettier from './prettier';
+import prettier from 'configs/prettier';
 
 export default {
   extends: ['@cat-org/eslint-config-cat'],

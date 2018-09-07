@@ -1,57 +1,31 @@
 // @flow
 
-const lint = {
-  alias: 'esw',
-  config: (): {} => require('./configs/eslint'),
-  run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-    ...argv,
-    ...require('./configs/eslint/ignore'),
-    '--cache',
-  ],
-  env: {
-    NODE_ENV: 'test',
-  },
-};
+import getConfig from 'utils/getConfig';
 
-const jest = {
-  config: (): {} => require('./configs/jest'),
-  env: {
-    NODE_ENV: 'test',
-  },
-};
+export default (
+  newConfigs: {},
+  defaultConfigs?: {} = require('utils/defaultConfigs'),
+): {} =>
+  getConfig(
+    (Object.keys({
+      ...defaultConfigs,
+      ...newConfigs,
+    }): $ReadOnlyArray<string>).reduce((result: {}, key: string): {} => {
+      if (
+        Object.keys(defaultConfigs[key] || {}).length !== 0 &&
+        Object.keys(newConfigs[key] || {}).length !== 0
+      )
+        return {
+          ...result,
+          [key]: {
+            ...defaultConfigs[key],
+            ...newConfigs[key],
+          },
+        };
 
-export default {
-  // babel
-  babel: (): {} => require('./configs/babel'),
-
-  // eslint
-  lint,
-  'lint:watch': {
-    ...lint,
-    alias: 'esw',
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...lint.run(argv),
-      '-w',
-      '--rule',
-      'prettier/prettier: off',
-      '--quiet',
-    ],
-  },
-
-  // prettier
-  prettier: (): {} => require('./configs/prettier'),
-
-  // lint-staged
-  'lint-staged': (): {} => require('./configs/lintsteged'),
-
-  // jest
-  jest,
-  test: {
-    ...jest,
-    alias: 'jest',
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...argv,
-      '--silent',
-    ],
-  },
-};
+      return {
+        ...result,
+        [key]: newConfigs[key] || defaultConfigs[key],
+      };
+    }, {}),
+  );

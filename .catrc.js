@@ -28,7 +28,7 @@ const lint = {
   }),
 };
 
-module.exports = require('@cat-org/configs/lib/mergeConfigs')({
+module.exports = require('@cat-org/configs')({
   lint,
   'lint:watch': lint,
 });

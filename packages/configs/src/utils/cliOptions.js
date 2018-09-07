@@ -30,7 +30,7 @@ const {
 
 const configsPath =
   cosmiconfig('cat').searchSync()?.filepath ||
-  path.resolve(__dirname, '../index.js');
+  path.resolve(__dirname, '../config.js');
 const configs = require(configsPath);
 
 if (info) {

@@ -7,8 +7,7 @@ import childProcess from 'child_process';
 import chalk from 'chalk';
 import npmWhich from 'npm-which';
 
-import defaultConfigs from '..';
-
+import defaultConfigs from 'utils/defaultConfigs';
 import cliOptions from 'utils/cliOptions';
 import printInfo from 'utils/printInfo';
 
@@ -16,7 +15,6 @@ process.on('unhandledRejection', (error: mixed) => {
   throw error;
 });
 
-const CONFIG_PATH = path.resolve(__dirname, '../config.js');
 const { configsPath, configs, cliName, argv } = cliOptions;
 
 if (!cliName)
@@ -36,7 +34,7 @@ if (!configs[cliName])
     true,
   );
 
-if (configsPath !== path.resolve(__dirname, '../index.js'))
+if (configsPath !== path.resolve(__dirname, '../config.js'))
   printInfo(
     ['Using external configsuration', `Location: ${configsPath}`],
     false,
@@ -50,14 +48,14 @@ const setConfig =
    * Flow does not yet support method or property calls in optional chains.
    * $FlowFixMe
    */
-  configs[cliName].setConfig?.(CONFIG_PATH) ||
+  configs[cliName].setConfig?.(configsPath) ||
   {
-    babel: ['--config-file', CONFIG_PATH],
-    eslint: ['-c', CONFIG_PATH],
-    esw: ['-c', CONFIG_PATH],
-    prettier: ['--config', CONFIG_PATH],
-    'lint-staged': ['-c', CONFIG_PATH],
-    jest: [`--config=${CONFIG_PATH}`],
+    babel: ['--config-file', configsPath],
+    eslint: ['-c', configsPath],
+    esw: ['-c', configsPath],
+    prettier: ['--config', configsPath],
+    'lint-staged': ['-c', configsPath],
+    jest: [`--config=${configsPath}`],
   }[cli];
 
 if (!setConfig)

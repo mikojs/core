@@ -22,7 +22,19 @@ const jest = {
 
 export default {
   // babel
-  babel: (): {} => require('configs/babel'),
+  babel: {
+    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+      ...argv,
+      'src',
+      '-d',
+      'lib',
+      '--verbose',
+      ...(process.env.NODE_ENV === 'test'
+        ? []
+        : ['--ignore', '**/__tests__/**,**/__mocks__/**']),
+    ],
+    config: (): {} => require('configs/babel'),
+  },
 
   // eslint
   lint,

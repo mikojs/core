@@ -20,9 +20,6 @@ export default {
     ],
     ...(process.env.NODE_ENV === 'test' ? [] : ['@cat-org/transform-flow']),
   ],
-  ignore:
-    process.env.NODE_ENV === 'test'
-      ? []
-      : /* istanbul ignore next */ ['**/__tests__/**', '**/__mocks__/**'],
+  ignore: [],
   overrides: [],
 };

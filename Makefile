@@ -15,9 +15,12 @@ install-flow-typed:
 
 babel-core:
 	@make babel-clean
-	@$(call babel-build, \
+	@yarn lerna exec \
+		"babel src -d lib --config-file ../../.catrc.js --verbose" \
+		--parallel \
+		--stream \
 		--scope @cat-org/babel-* \
-		--scope @cat-org/configs)
+		--scope @cat-org/configs
 	@ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs-scripts
 
 babel-all:
@@ -65,7 +68,7 @@ clean-all:
 
 define babel-build
 	yarn lerna exec \
-		"babel src -d lib --config-file ../../babel.config.js --verbose" \
+		"configs-scripts babel" \
 		--parallel \
 		--stream \
 		$(1)

@@ -35,7 +35,7 @@ const defaultBabelConfig = {
 const babel = {
   config: config => {
     // TODO check config is same
-    config.plugins.push('@babel/proposal-class-properties', [
+    config.plugins.push([
       'transform-imports',
       {
         '@cat-org/utils': {
@@ -47,10 +47,22 @@ const babel = {
       },
     ]);
 
-    config.overrides.push({
-      test: './packages',
-      plugins: process.env.NODE_ENV === 'test' ? [] : ['add-module-exports'],
-    });
+    config.overrides.push(
+      {
+        test: './packages/configs',
+        plugins: [
+          ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
+          '@babel/proposal-class-properties',
+        ],
+      },
+      {
+        test: './packages/babel-plugin-transform-flow',
+        plugins: ['@babel/proposal-class-properties'],
+      },
+    );
+
+    if (process.env.NODE_ENV !== 'test')
+      config.plugins.push('add-module-exports');
 
     return config;
   },
@@ -85,18 +97,17 @@ module.exports = (() => {
   const USE_DEFAULT_BABEL_CONFIG_PATTERN = /^@cat-org\/(configs|babel-.*)$/;
   const { name } = require(path.resolve(process.cwd(), './package.json'));
 
-  /* TODO not work */
   if (
-    /babel$/.test(process.argv[1]) ||
+    /babel$/.test(process.argv[1]) &&
     USE_DEFAULT_BABEL_CONFIG_PATTERN.test(name)
   )
     return babel.config(defaultBabelConfig);
 
   return {
     // babel
-    babel,
+    'babel:lerna': babel,
 
-    // lint
+    // eslint
     lint,
     'lint:watch': lint,
   };

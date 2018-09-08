@@ -68,7 +68,7 @@ clean-all:
 
 define babel-build
 	yarn lerna exec \
-		"configs-scripts babel" \
+		"configs-scripts babel:lerna" \
 		--parallel \
 		--stream \
 		$(1)

@@ -1,5 +1,16 @@
 // @flow
 
+const babel = {
+  config: (): {} => require('configs/babel'),
+  run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+    ...argv,
+    'src',
+    '-d',
+    'lib',
+    '--verbose',
+  ],
+};
+
 const lint = {
   alias: 'esw',
   config: (): {} => require('configs/eslint'),
@@ -22,14 +33,14 @@ const jest = {
 
 export default {
   // babel
-  babel: {
-    config: (): {} => require('configs/babel'),
+  babel,
+  'babel:lerna': {
+    ...babel,
+    alias: 'babel',
     run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...argv,
-      'src',
-      '-d',
-      'lib',
-      '--verbose',
+      ...babel.run(argv),
+      '--config-file',
+      '../../babel.config.js',
     ],
   },
 
@@ -48,7 +59,13 @@ export default {
   },
 
   // prettier
-  prettier: (): {} => require('configs/prettier'),
+  prettier: {
+    config: (): {} => require('configs/prettier'),
+    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+      ...argv,
+      '--write',
+    ],
+  },
 
   // lint-staged
   'lint-staged': (): {} => require('configs/lintsteged'),

@@ -6,7 +6,6 @@
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/configs",
   "version": "1.0.0-beta.6",
-  "main": "./lib/index.js",
   "bin": {
     "configs-scripts": "./lib/bin/index.js"
   },

@@ -85,18 +85,19 @@ module.exports = (() => {
   const USE_DEFAULT_BABEL_CONFIG_PATTERN = /^@cat-org\/(configs|babel-.*)$/;
   const { name } = require(path.resolve(process.cwd(), './package.json'));
 
+  /* TODO not work */
   if (
-    (/babel$/.test(process.argv[1]) && !process.env.USE_CONFIGS_SCRIPTS) ||
+    /babel$/.test(process.argv[1]) ||
     USE_DEFAULT_BABEL_CONFIG_PATTERN.test(name)
   )
     return babel.config(defaultBabelConfig);
 
-  return require('@cat-org/configs')({
+  return {
     // babel
     babel,
 
     // lint
     lint,
     'lint:watch': lint,
-  });
+  };
 })();

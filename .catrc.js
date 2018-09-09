@@ -91,6 +91,10 @@ const lint = {
       },
     ],
   }),
+  configFiles: {
+    babel: false,
+    'babel:lerna': true,
+  },
 };
 
 module.exports = (() => {

@@ -103,7 +103,7 @@ class Configs {
   handleConfigFiles = (cli: string, cliName: string) => {
     let configFiles = { ...this.store[cliName].configFiles };
 
-    if (!configFiles[cli]) {
+    if (!configFiles[cliName]) {
       if (!CONFIG_FILES[cli])
         printInfos(
           [
@@ -113,23 +113,21 @@ class Configs {
           true,
         );
 
-      configFiles[cli] = path.resolve(this.rootDir, CONFIG_FILES[cli]);
+      configFiles[cliName] = path.resolve(this.rootDir, CONFIG_FILES[cli]);
     }
 
     Object.keys(configFiles).forEach((key: string) => {
-      const subCliName = configFiles[key];
+      const configFile = configFiles[key];
 
-      if (this.store[subCliName]) {
-        delete configFiles[key];
+      if (typeof configFile === 'string') return;
 
+      delete configFiles[key];
+
+      if (configFile)
         configFiles = {
-          ...this.handleConfigFiles(
-            this.store[subCliName].alias || subCliName,
-            subCliName,
-          ),
           ...configFiles,
+          ...this.handleConfigFiles(this.store[key].alias || key, key),
         };
-      }
     });
 
     return configFiles;
@@ -147,7 +145,10 @@ class Configs {
 
     if (this.customConfigsPath)
       printInfos(
-        ['Using external configsuration', `Location: ${this.customConfigsPath}`],
+        [
+          'Using external configsuration',
+          `Location: ${this.customConfigsPath}`,
+        ],
         false,
       );
 
@@ -169,7 +170,9 @@ class Configs {
     (() => {
       const cache = fs.existsSync(cachePath) ? require(cachePath) : {};
 
-      Object.values(configFiles).forEach((configFile: string) => {
+      Object.keys(configFiles).forEach((key: string) => {
+        const configFile = configFiles[key];
+
         if (!cache[configFile]) cache[configFile] = [];
 
         cache[configFile].push({
@@ -178,7 +181,7 @@ class Configs {
         });
         outputFileSync(
           configFile,
-          `module.exports = require('@cat-org/configs')('${cliName}');`,
+          `/* eslint-disable */ module.exports = require('@cat-org/configs')('${key}');`,
         );
       });
 

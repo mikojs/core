@@ -22,6 +22,9 @@ const lint = {
   env: {
     NODE_ENV: 'test',
   },
+  configFiles: {
+    babel: true,
+  },
 };
 
 const jest = {

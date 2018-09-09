@@ -14,9 +14,24 @@ const babel = {
 const lint = {
   alias: 'esw',
   config: (): {} => require('configs/eslint'),
+  ignore: (): $ReadOnlyArray<string> => [
+    // node
+    'node_modules',
+
+    // babel
+    'lib',
+
+    // flow
+    'flow-typed/npm',
+
+    // jest
+    'coverage',
+
+    // add checking other configs
+    '!.*.js',
+  ],
   run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
     ...argv,
-    ...require('configs/eslint/ignore'),
     '--cache',
   ],
   env: {

@@ -1,7 +1,6 @@
 // @flow
 
 export default {
-  rootDir: process.cwd(),
   testPathIgnorePatterns: ['__tests__/__ignore__'],
   collectCoverage: true,
   collectCoverageFrom: ['**/src/**/*.js'],

@@ -69,11 +69,6 @@ const babel = {
 };
 
 const lint = {
-  run: argv => [
-    ...argv,
-    '--ignore-pattern',
-    'packages/eslint-config-cat/src/__tests__/__ignore__',
-  ],
   config: config => ({
     ...config,
     overrides: [
@@ -91,6 +86,11 @@ const lint = {
       },
     ],
   }),
+  ignore: ignore => [
+    ...ignore,
+    // ignore for @cat-org/eslint-config-cat
+    'packages/eslint-config-cat/src/__tests__/__ignore__',
+  ],
   configFiles: {
     babel: false,
     'babel:lerna': true,

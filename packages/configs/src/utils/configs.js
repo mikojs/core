@@ -27,6 +27,12 @@ const CONFIG_FILES = {
   jest: 'jest.config.js',
 };
 
+const CONFIG_IGNORE = {
+  eslint: '.eslintignore',
+  esw: '.eslintignore',
+  prettier: '.prettierignore',
+};
+
 /**
  * Use to store configs
  */
@@ -108,6 +114,11 @@ class Configs {
             (typeof customConfigs[key] === 'function'
               ? customConfigs[key]
               : emptyFunction.thatReturnsArgument),
+        ignore: (ignore: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
+          ignore
+          |> defaultConfigs[key].ignore || emptyFunction.thatReturnsArgument
+          |> customConfigs[key].ignore || emptyFunction.thatReturnsArgument,
+        ignoreName: customConfigs[key].ignoreName,
         run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
           argv
           |> defaultConfigs[key].run || emptyFunction.thatReturnsArgument
@@ -211,6 +222,8 @@ class Configs {
     const cachePath = cacheDir('configs-scripts.json');
     const configFiles = this.handleConfigFiles(cli, cliName);
 
+    const ignoreFiles = [];
+
     // generate configs and set in cache
     (() => {
       const cache = fs.existsSync(cachePath) ? require(cachePath) : {};
@@ -218,6 +231,7 @@ class Configs {
       Object.keys(configFiles).forEach((key: string) => {
         const configFile = configFiles[key];
 
+        /** handle config */
         if (!cache[configFile]) cache[configFile] = [];
 
         cache[configFile].push({
@@ -228,6 +242,28 @@ class Configs {
           configFile,
           `/* eslint-disable */ module.exports = require('@cat-org/configs')('${key}');`,
         );
+
+        /** handle ignore */
+        const {
+          ignoreName,
+          alias: ignoreCli = key,
+          ignore: getIgnore,
+        } = this.store[key];
+        const ignoreFileName = ignoreName || CONFIG_IGNORE[ignoreCli];
+        const ignore = getIgnore?.([]) || [];
+
+        if (ignore.length !== 0 && ignoreFileName) {
+          const ignorePath = path.resolve(
+            path.dirname(configFile),
+            ignoreFileName,
+          );
+
+          ignoreFiles.push({
+            configPath: configFile,
+            ignorePath,
+          });
+          outputFileSync(ignorePath, ignore.join('\n'));
+        }
       });
 
       outputFileSync(cachePath, JSON.stringify(cache, null, 2));
@@ -255,7 +291,15 @@ class Configs {
 
             removeFilesP.push(
               new Promise(resolve => {
-                rimraf(configFile, resolve);
+                const ignoreFile = ignoreFiles.find(
+                  ({ configPath }: { configPath: string }): boolean =>
+                    configPath === configFile,
+                );
+
+                rimraf.sync(configFile);
+
+                if (ignoreFile) rimraf.sync(ignoreFile.ignorePath);
+                resolve();
               }),
             );
           });

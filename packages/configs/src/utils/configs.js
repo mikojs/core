@@ -27,6 +27,8 @@ class Configs {
 
   rootDir = null;
 
+  customConfigsPath = false;
+
   findRootDir = () => {
     if (this.rootDir) return;
 
@@ -53,12 +55,9 @@ class Configs {
 
     const customConfigs = require(customConfigsPath);
 
-    printInfos(
-      ['Using external configsuration', `Location: ${customConfigsPath}`],
-      false,
-    );
-
+    this.customConfigsPath = customConfigsPath;
     this.rootDir = path.dirname(customConfigsPath);
+
     Object.keys(customConfigs).forEach((key: string) => {
       // handle custom configs is not in default customConfigs
       if (!this.store[key]) {
@@ -144,6 +143,12 @@ class Configs {
           chalk`Use {green \`--info\`} to get the more information`,
         ],
         true,
+      );
+
+    if (this.customConfigsPath)
+      printInfos(
+        ['Using external configsuration', `Location: ${this.customConfigsPath}`],
+        false,
       );
 
     const {

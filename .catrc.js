@@ -97,6 +97,14 @@ const lint = {
   },
 };
 
+const jest = {
+  configFiles: {
+    babel: false,
+    'babel:lerna': true,
+    lint: true,
+  },
+};
+
 module.exports = (() => {
   const USE_DEFAULT_BABEL_CONFIG_PATTERN = /^@cat-org\/(configs|babel-.*)$/;
   const { name } = require(path.resolve(process.cwd(), './package.json'));
@@ -114,5 +122,9 @@ module.exports = (() => {
     // eslint
     lint,
     'lint:watch': lint,
+
+    // jest
+    jest,
+    test: jest,
   };
 })();

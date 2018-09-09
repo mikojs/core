@@ -32,6 +32,9 @@ const jest = {
   env: {
     NODE_ENV: 'test',
   },
+  configFiles: {
+    babel: true,
+  },
 };
 
 export default {

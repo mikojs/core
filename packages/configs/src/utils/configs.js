@@ -24,6 +24,7 @@ const CONFIG_FILES = {
   esw: '.eslintrc.js',
   prettier: '.prettierrc.js',
   'lint-staged': '.lintstagedrc.js',
+  jest: 'jest.config.js',
 };
 
 /**

@@ -1,10 +1,7 @@
 // @flow
 
-import path from 'path';
-
 import commander from 'commander';
 import chalk from 'chalk';
-import cosmiconfig from 'cosmiconfig';
 
 import { version } from '../../package.json';
 

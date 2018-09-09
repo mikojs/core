@@ -1,4 +1,8 @@
-// @flow
+/**
+ * Flow not support @babel/plugin-proposal-pipeline-operator
+ * https://github.com/facebook/flow/issues/5443
+ */
+/* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
 import fs from 'fs';
 import path from 'path';
@@ -22,6 +26,9 @@ const CONFIG_FILES = {
   'lint-staged': '.lintstagedrc.js',
 };
 
+/**
+ * Use to store configs
+ */
 class Configs {
   store = { ...defaultConfigs };
 
@@ -29,6 +36,12 @@ class Configs {
 
   customConfigsPath = false;
 
+  /**
+   * Find root directory
+   *
+   * @example
+   * configs.findRootDir()
+   */
   findRootDir = () => {
     if (this.rootDir) return;
 
@@ -50,6 +63,16 @@ class Configs {
       );
   };
 
+  /**
+   * handle custom configs
+   *
+   * @example
+   * configs.handleCustomConfigs()
+   *
+   * @param {string} customConfigsPath - give a custom config path
+   *
+   * @return {void} - no return
+   */
   handleCustomConfigs = (customConfigsPath?: string) => {
     if (!customConfigsPath) return;
 
@@ -67,14 +90,14 @@ class Configs {
 
       // handle default and custom configs is object
       if (!this.store[key].config && !customConfigs[key].config) {
-        this.store[key] = () =>
+        this.store[key] = (): {} =>
           null |> defaultConfigs[key] |> customConfigs[key];
         return;
       }
 
       this.store[key] = {
         alias: customConfigs[key].alias || defaultConfigs[key].alias || key,
-        config: () =>
+        config: (): {} =>
           null
           |> defaultConfigs[key].config ||
             (typeof defaultConfigs[key] === 'function'
@@ -100,8 +123,19 @@ class Configs {
     });
   };
 
-  handleConfigFiles = (cli: string, cliName: string) => {
-    let configFiles = { ...this.store[cliName].configFiles };
+  /**
+   * handle config files
+   *
+   * @example
+   * configs.handleConfigFiles('cli', 'cliName');
+   *
+   * @param {string} cli - cli of command
+   * @param {string} cliName - cliName of configs
+   *
+   * @return {Object} - return config files
+   */
+  handleConfigFiles = (cli: string, cliName: string): {} => {
+    let configFiles: {} = { ...this.store[cliName].configFiles };
 
     if (!configFiles[cliName]) {
       if (!CONFIG_FILES[cli])
@@ -133,6 +167,16 @@ class Configs {
     return configFiles;
   };
 
+  /**
+   * get ths config from cliName
+   *
+   * @example
+   * configs.getConfig('cliName')
+   *
+   * @param {string} cliName - cliName to get config
+   *
+   * @return {Object} - config
+   */
   getConfig = (cliName: string): {} => {
     if (!this.store[cliName])
       printInfos(
@@ -193,13 +237,13 @@ class Configs {
         run,
         env,
         cli: npmWhich(process.cwd()).sync(cli),
-        removeConfigFiles: () => {
+        removeConfigFiles: (): Promise => {
           const cache = fs.existsSync(cachePath) ? require(cachePath) : {};
           const removeFilesP = [];
 
           Object.values(configFiles).forEach((configFile: string) => {
             cache[configFile] = cache[configFile].filter(
-              (cacheConfig: {}) =>
+              (cacheConfig: {}): boolean =>
                 !areEqual(cacheConfig, {
                   cwd: process.cwd(),
                   argv: process.argv,

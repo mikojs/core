@@ -44,9 +44,6 @@ const lint = {
 
 const jest = {
   config: (): {} => require('configs/jest'),
-  env: {
-    NODE_ENV: 'test',
-  },
   configFiles: {
     babel: true,
   },

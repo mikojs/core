@@ -10,32 +10,12 @@ import path from 'path';
 import cosmiconfig from 'cosmiconfig';
 import npmWhich from 'npm-which';
 import chalk from 'chalk';
-import { areEqual, emptyFunction } from 'fbjs';
-import outputFileSync from 'output-file-sync';
-import rimraf from 'rimraf';
-import findCacheDir from 'find-cache-dir';
+import { emptyFunction } from 'fbjs';
 
 import defaultConfigs from './defaultConfigs';
 import printInfos from './printInfos';
 
-const CONFIG_FILES = {
-  babel: 'babel.config.js',
-  eslint: '.eslintrc.js',
-  esw: '.eslintrc.js',
-  prettier: '.prettierrc.js',
-  'lint-staged': '.lintstagedrc.js',
-  jest: 'jest.config.js',
-};
-
-const CONFIG_IGNORE = {
-  eslint: '.eslintignore',
-  esw: '.eslintignore',
-  prettier: '.prettierignore',
-};
-
-/**
- * Use to store configs
- */
+/** Store configs */
 class Configs {
   store = { ...defaultConfigs };
 
@@ -71,16 +51,14 @@ class Configs {
   };
 
   /**
-   * handle custom configs
+   * Handle custom configs
    *
    * @example
    * configs.handleCustomConfigs()
-   *
-   * @param {string} customConfigsPath - give a custom config path
-   *
-   * @return {void} - no return
    */
-  handleCustomConfigs = (customConfigsPath?: string) => {
+  handleCustomConfigs = () => {
+    const customConfigsPath = cosmiconfig('cat').searchSync()?.filepath;
+
     if (!customConfigsPath) return;
 
     const customConfigs = require(customConfigsPath);
@@ -136,60 +114,22 @@ class Configs {
   };
 
   /**
-   * handle config files
+   * Get ths config from cliName
    *
    * @example
-   * configs.handleConfigFiles('cli', 'cliName');
+   * configs.getConfig(cliOptions)
    *
-   * @param {string} cli - cli of command
-   * @param {string} cliName - cliName of configs
-   *
-   * @return {Object} - return config files
-   */
-  handleConfigFiles = (cli: string, cliName: string): {} => {
-    let configFiles: {} = { ...this.store[cliName].configFiles };
-
-    if (!configFiles[cliName]) {
-      if (!CONFIG_FILES[cli])
-        printInfos(
-          [
-            'Can not generate the config file',
-            chalk`Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
-          ],
-          true,
-        );
-
-      configFiles[cliName] = path.resolve(this.rootDir, CONFIG_FILES[cli]);
-    }
-
-    Object.keys(configFiles).forEach((key: string) => {
-      const configFile = configFiles[key];
-
-      if (typeof configFile === 'string') return;
-
-      delete configFiles[key];
-
-      if (configFile)
-        configFiles = {
-          ...configFiles,
-          ...this.handleConfigFiles(this.store[key].alias || key, key),
-        };
-    });
-
-    return configFiles;
-  };
-
-  /**
-   * get ths config from cliName
-   *
-   * @example
-   * configs.getConfig('cliName')
-   *
-   * @param {string} cliName - cliName to get config
+   * @param {Object} cliOptions - cliOptions in utils
    *
    * @return {Object} - config
    */
-  getConfig = (cliName: string): {} => {
+  getConfig = ({
+    cliName,
+    argv,
+  }: {
+    cliName: string,
+    argv: $ReadOnlyArray<string>,
+  }): {} => {
     if (!this.store[cliName])
       printInfos(
         [
@@ -214,100 +154,11 @@ class Configs {
       alias: cli = cliName,
     } = this.store[cliName];
 
-    const cacheDir = findCacheDir({
-      name: 'configs',
-      thunk: true,
-      cwd: this.rootDir,
-    });
-    const cachePath = cacheDir('configs-scripts.json');
-    const configFiles = this.handleConfigFiles(cli, cliName);
-
-    const ignoreFiles = [];
-
-    // generate configs and set in cache
-    (() => {
-      const cache = fs.existsSync(cachePath) ? require(cachePath) : {};
-
-      Object.keys(configFiles).forEach((key: string) => {
-        const configFile = configFiles[key];
-
-        /** handle config */
-        if (!cache[configFile]) cache[configFile] = [];
-
-        cache[configFile].push({
-          cwd: process.cwd(),
-          argv: process.argv,
-        });
-        outputFileSync(
-          configFile,
-          `/* eslint-disable */ module.exports = require('@cat-org/configs')('${key}');`,
-        );
-
-        /** handle ignore */
-        const {
-          ignoreName,
-          alias: ignoreCli = key,
-          ignore: getIgnore,
-        } = this.store[key];
-        const ignoreFileName = ignoreName || CONFIG_IGNORE[ignoreCli];
-        const ignore = getIgnore?.([]) || [];
-
-        if (ignore.length !== 0 && ignoreFileName) {
-          const ignorePath = path.resolve(
-            path.dirname(configFile),
-            ignoreFileName,
-          );
-
-          ignoreFiles.push({
-            configPath: configFile,
-            ignorePath,
-          });
-          outputFileSync(ignorePath, ignore.join('\n'));
-        }
-      });
-
-      outputFileSync(cachePath, JSON.stringify(cache, null, 2));
-    })();
-
     try {
       return {
-        run,
+        argv: run(argv),
         env,
         cli: npmWhich(process.cwd()).sync(cli),
-        removeConfigFiles: (): Promise => {
-          const cache = fs.existsSync(cachePath) ? require(cachePath) : {};
-          const removeFilesP = [];
-
-          Object.values(configFiles).forEach((configFile: string) => {
-            cache[configFile] = cache[configFile].filter(
-              (cacheConfig: {}): boolean =>
-                !areEqual(cacheConfig, {
-                  cwd: process.cwd(),
-                  argv: process.argv,
-                }),
-            );
-
-            if (cache[configFile].length !== 0) return;
-
-            removeFilesP.push(
-              new Promise(resolve => {
-                const ignoreFile = ignoreFiles.find(
-                  ({ configPath }: { configPath: string }): boolean =>
-                    configPath === configFile,
-                );
-
-                rimraf.sync(configFile);
-
-                if (ignoreFile) rimraf.sync(ignoreFile.ignorePath);
-                resolve();
-              }),
-            );
-          });
-
-          outputFileSync(cachePath, JSON.stringify(cache, null, 2));
-
-          return Promise.all(removeFilesP);
-        },
       };
     } catch (e) {
       if (/not found/.test(e.message))
@@ -320,7 +171,7 @@ class Configs {
 
 const configs = new Configs();
 
-configs.handleCustomConfigs(cosmiconfig('cat').searchSync()?.filepath);
+configs.handleCustomConfigs();
 configs.findRootDir();
 
 export default configs;

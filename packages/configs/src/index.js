@@ -5,6 +5,9 @@
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
 import configs from 'utils/configs';
+import worker from 'utils/worker';
 
-export default (cliName: string): {} =>
-  null |> configs.store[cliName].config || configs.store[cliName];
+export default (cliName: string, filename: string): {} => {
+  worker.usingFile(filename);
+  return null |> configs.store[cliName].config || configs.store[cliName];
+};

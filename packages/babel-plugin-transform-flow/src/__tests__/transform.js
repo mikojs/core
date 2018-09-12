@@ -21,7 +21,11 @@ test('transform file', () => {
   resetDestPaths();
   babel();
 
-  expect(getDestPaths()).toEqual(indexFiles);
+  expect(
+    getDestPaths().filter(
+      (filePath: string): boolean => /\.js\.flow$/.test(filePath),
+    ),
+  ).toEqual(indexFiles);
 });
 
 describe('transform folder', () => {

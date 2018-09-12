@@ -86,7 +86,13 @@ export default {
   },
 
   // lint-staged
-  'lint-staged': (): {} => require('configs/lintsteged'),
+  'lint-staged': {
+    config: (): {} => require('configs/lintsteged'),
+    configFiles: {
+      prettier: true,
+      lint: true,
+    },
+  },
 
   // jest
   jest,

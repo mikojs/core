@@ -23,6 +23,7 @@
     "cosmiconfig": "^5.0.6",
     "fbjs": "^0.8.17",
     "find-cache-dir": "^2.0.0",
+    "moment": "^2.22.2",
     "npm-which": "^3.0.1",
     "output-file-sync": "^2.0.1",
     "rimraf": "^2.6.2"

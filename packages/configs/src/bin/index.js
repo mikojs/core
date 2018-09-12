@@ -5,25 +5,31 @@ import childProcess from 'child_process';
 
 import cliOptions from 'utils/cliOptions';
 import configs from 'utils/configs';
+import generateFiles from 'utils/generateFiles';
+import worker from 'utils/worker';
 
 process.on('unhandledRejection', (error: mixed) => {
   throw error;
 });
 
-const { cliName, argv } = cliOptions;
-const { run, env, cli, removeConfigFiles } = configs.getConfig(cliName);
-const realArgv = run(argv);
+const { argv, env, cli } = configs.getConfig(cliOptions);
 
-childProcess
-  .spawn(realArgv[0], [cli, ...realArgv.slice(2)], {
-    stdio: 'inherit',
-    env: {
-      ...process.env,
-      ...env,
-    },
-  })
-  .on('close', (exitCode: number) => {
-    removeConfigFiles().then(() => {
-      process.exit(exitCode);
+(async (): Promise<void> => {
+  // handle config and ignore files
+  await generateFiles();
+
+  // run command
+  childProcess
+    .spawn(argv[0], [cli, ...argv.slice(2)], {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        ...env,
+      },
+    })
+    .on('close', (exitCode: number) => {
+      worker.removeFiles().then(() => {
+        process.exit(exitCode);
+      });
     });
-  });
+})();

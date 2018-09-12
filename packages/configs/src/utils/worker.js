@@ -15,8 +15,8 @@ const cacheDir = findCacheDir({
   thunk: true,
   cwd: configs.rootDir,
 });
-const cachePath = cacheDir('configs-scripts.json');
-const cacheLockPath = cacheDir('configs-scripts.lock');
+export const cachePath = cacheDir('configs-scripts.json');
+export const cacheLockPath = cacheDir('configs-scripts.lock');
 
 /** Use to control file */
 class Worker {
@@ -28,10 +28,19 @@ class Worker {
    *
    * @return {Object} - cache
    */
-  openCache = (): {} =>
-    fs.existsSync(cachePath)
-      ? JSON.parse(fs.readFileSync(cachePath, 'utf-8'))
-      : {};
+  openCache = (): {} => {
+    try {
+      if (fs.existsSync(cachePath)) {
+        const { lastUsed, ...cache } = JSON.parse(
+          fs.readFileSync(cachePath, 'utf-8'),
+        );
+
+        if (moment().diff(lastUsed, 'minutes') < 1) return cache;
+      }
+    } catch (e) {}
+
+    return {};
+  };
 
   /**
    * get cache
@@ -68,7 +77,17 @@ class Worker {
    * @param {string} cache - cache
    */
   writeCache = async (cache: {}): Promise<void> => {
-    outputFileSync(cachePath, JSON.stringify(cache, null, 2));
+    outputFileSync(
+      cachePath,
+      JSON.stringify(
+        {
+          ...cache,
+          lastUsed: moment().format(),
+        },
+        null,
+        2,
+      ),
+    );
     rimraf.sync(cacheLockPath);
   };
 
@@ -134,9 +153,7 @@ class Worker {
         if (moment().diff(cache[filePath].using, 'seconds') > 0.5) {
           delete cache[filePath];
           rimraf.sync(filePath);
-        } else {
-          removeFilesAgain = true;
-        }
+        } else removeFilesAgain = true;
       }
     });
 

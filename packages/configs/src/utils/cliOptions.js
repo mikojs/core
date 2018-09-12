@@ -2,10 +2,13 @@
 
 import commander from 'commander';
 import chalk from 'chalk';
+import rimraf from 'rimraf';
 
 import { version } from '../../package.json';
 
 import printInfos from './printInfos';
+import { cachePath, cacheLockPath } from './worker';
+import configs from './configs';
 
 /*
  * Should be fixed in `https://github.com/flow-typed/flow-typed/pull/2690`
@@ -18,6 +21,7 @@ const program = new commander.Command('configs-scripts')
   .description(
     chalk`{green Arguments} can be any commands, like {cyan \`babel src -d lib\`}.`,
   )
+  .option('--no-cache', 'clean the cache')
   .option('--info', 'print more info about configs')
   .allowUnknownOption();
 
@@ -25,10 +29,101 @@ const {
   args: [cliName],
   rawArgs,
   info = false,
+  cache,
 } = program.parse(process.argv);
 
+if (!cache) {
+  rimraf.sync(cachePath);
+  rimraf.sync(cacheLockPath);
+}
+
 if (info) {
-  program.outputHelp((): string => 'TODO');
+  /**
+   * Handle data
+   *
+   * @example
+   * handleData({})
+   *
+   * @param {Object | Array<string>} data - data to handle
+   *
+   * @return {string} - return data string
+   */
+  const handleData = (data: {} | $ReadOnlyArray<string>): string =>
+    JSON.stringify(data, null, 2);
+
+  /**
+   * Get data
+   *
+   * @example
+   * getData('command', 'content')
+   *
+   * @param {string} key - the key of the data
+   * @param {string} content - data
+   *
+   * @return {string} - data string
+   */
+  const getData = (key: string, content: string): string =>
+    chalk`{bold {cyan ${key}}} = ${content}`;
+
+  program.outputHelp(
+    (): string =>
+      (Object.keys(configs.store): $ReadOnlyArray<string>)
+        .reduce((result: $ReadOnlyArray<string>, key: string): $ReadOnlyArray<
+          string,
+        > => {
+          const {
+            config,
+            ignore,
+            ignoreName,
+            alias,
+            run,
+            env = {},
+            configFiles = {},
+            ...data
+          } = configs.store[key];
+
+          if (!config)
+            return [
+              ...result,
+              chalk`{underline {bold {green ${key}}}}
+
+{bold {cyan config}} = ${handleData(configs.store[key]({}))}`,
+            ];
+
+          if (Object.keys(data).length !== 0)
+            printInfos(
+              [
+                chalk`{cyan \`${Object.keys(data).join(
+                  '` ,`',
+                )}\`} should not be in {green ${key}} config`,
+              ],
+              true,
+            );
+
+          return [
+            ...result,
+            chalk`{underline {bold {green ${key}}}}
+
+${[
+              getData('command', `"${run?.([alias || key]).join(' ') || key}"`),
+              getData('config', handleData(config({}))),
+              !ignoreName ? false : getData('ignoreName', ignoreName),
+              (ignore?.([]) || []).length === 0
+                ? false
+                : getData('ignore', handleData(ignore?.([]) || [])),
+              Object.keys(env).length === 0
+                ? false
+                : getData('env', handleData(env)),
+              Object.keys(configFiles).length === 0
+                ? false
+                : getData('configFiles', handleData(configFiles)),
+            ]
+              .filter((text: string | false): boolean => !!text)
+              .join('\n')}`,
+          ];
+        }, [])
+        .join('\n\n'),
+  );
   process.exit();
 }
 

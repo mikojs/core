@@ -3,13 +3,21 @@
 
 import childProcess from 'child_process';
 
+import rimraf from 'rimraf';
+
 import cliOptions from 'utils/cliOptions';
 import configs from 'utils/configs';
 import generateFiles from 'utils/generateFiles';
-import worker from 'utils/worker';
+import worker, { cachePath, cacheLockPath } from 'utils/worker';
 
 process.on('unhandledRejection', (error: mixed) => {
   throw error;
+});
+
+process.on('SIGINT', () => {
+  rimraf.sync(cachePath);
+  rimraf.sync(cacheLockPath);
+  process.exit();
 });
 
 const { argv, env, cli } = configs.getConfig(cliOptions);

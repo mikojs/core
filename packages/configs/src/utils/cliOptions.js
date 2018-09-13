@@ -3,12 +3,15 @@
 import commander from 'commander';
 import chalk from 'chalk';
 import rimraf from 'rimraf';
+import debug from 'debug';
 
 import { version } from '../../package.json';
 
 import printInfos from './printInfos';
 import { cachePath, cacheLockPath } from './worker';
 import configs from './configs';
+
+const debugLog = debug('configs-scripts:cliOption');
 
 /*
  * Should be fixed in `https://github.com/flow-typed/flow-typed/pull/2690`
@@ -28,9 +31,16 @@ const program = new commander.Command('configs-scripts')
 const {
   args: [cliName],
   rawArgs,
+  cache = false,
   info = false,
-  cache,
 } = program.parse(process.argv);
+
+debugLog({
+  cliName,
+  rawArgs,
+  info,
+  cache,
+});
 
 if (!cache) {
   rimraf.sync(cachePath);

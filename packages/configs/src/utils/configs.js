@@ -11,9 +11,12 @@ import cosmiconfig from 'cosmiconfig';
 import npmWhich from 'npm-which';
 import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
+import debug from 'debug';
 
 import defaultConfigs from './defaultConfigs';
 import printInfos from './printInfos';
+
+const debugLog = debug('configs-scripts:configs');
 
 /** Store configs */
 class Configs {
@@ -40,6 +43,8 @@ class Configs {
     )
       this.rootDir = path.resolve(this.rootDir, '..');
 
+    debugLog(`Find rood dir: ${this.rootDir}`);
+
     if (this.rootDir === '/')
       printInfos(
         [
@@ -63,6 +68,7 @@ class Configs {
 
     const customConfigs = require(customConfigsPath);
 
+    debugLog(`Find custom configs path: ${customConfigsPath}`);
     this.customConfigsPath = customConfigsPath;
     this.rootDir = path.dirname(customConfigsPath);
 
@@ -110,6 +116,9 @@ class Configs {
           ...customConfigs[key].configFiles,
         },
       };
+
+      debugLog('Configs');
+      debugLog(this.store);
     });
   };
 
@@ -153,6 +162,13 @@ class Configs {
       env = {},
       alias: cli = cliName,
     } = this.store[cliName];
+
+    debugLog('Get config');
+    debugLog({
+      run,
+      env,
+      cli,
+    });
 
     try {
       return {

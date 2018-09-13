@@ -32,40 +32,38 @@ const defaultBabelConfig = {
   overrides: [],
 };
 
-const babel = {
-  config: config => {
-    // TODO check config is same
-    config.plugins.push([
-      'transform-imports',
-      {
-        '@cat-org/utils': {
-          transform: '@cat-org/utils/lib/${member}',
-        },
-        fbjs: {
-          transform: 'fbjs/lib/${member}',
-        },
+const babel = config => {
+  // TODO check config is same
+  config.plugins.push([
+    'transform-imports',
+    {
+      '@cat-org/utils': {
+        transform: '@cat-org/utils/lib/${member}',
       },
-    ]);
-
-    config.overrides.push(
-      {
-        test: './packages/configs',
-        plugins: [
-          ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
-          '@babel/proposal-class-properties',
-        ],
+      fbjs: {
+        transform: 'fbjs/lib/${member}',
       },
-      {
-        test: './packages/babel-plugin-transform-flow',
-        plugins: ['@babel/proposal-class-properties'],
-      },
-    );
+    },
+  ]);
 
-    if (process.env.NODE_ENV !== 'test')
-      config.plugins.push('add-module-exports');
+  config.overrides.push(
+    {
+      test: './packages/configs',
+      plugins: [
+        ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
+        '@babel/proposal-class-properties',
+      ],
+    },
+    {
+      test: './packages/babel-plugin-transform-flow',
+      plugins: ['@babel/proposal-class-properties'],
+    },
+  );
 
-    return config;
-  },
+  if (process.env.NODE_ENV !== 'test')
+    config.plugins.push('add-module-exports');
+
+  return config;
 };
 
 const lint = {
@@ -113,7 +111,7 @@ module.exports = (() => {
     /babel$/.test(process.argv[1]) &&
     USE_DEFAULT_BABEL_CONFIG_PATTERN.test(name)
   )
-    return babel.config(defaultBabelConfig);
+    return babel(defaultBabelConfig);
 
   return {
     // babel

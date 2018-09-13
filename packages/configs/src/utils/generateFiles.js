@@ -3,11 +3,14 @@
 import path from 'path';
 
 import chalk from 'chalk';
+import debug from 'debug';
 
 import printInfos from './printInfos';
 import cliOptions from './cliOptions';
 import configs from './configs';
 import worker from './worker';
+
+const debugLog = debug('configs-scripts:generateFiles');
 
 const CONFIG_FILES = {
   babel: 'babel.config.js',
@@ -74,6 +77,7 @@ const findConfigFiles = (cliName: string): {} => {
 export default async (): Promise<void> => {
   const configFiles = findConfigFiles(cliOptions.cliName);
 
+  debugLog(`Config files: ${JSON.stringify(configFiles, null, 2)}`);
   await Promise.all(
     Object.keys(configFiles).map(
       async (configCliName: string): Promise<void> => {
@@ -85,16 +89,19 @@ export default async (): Promise<void> => {
         const configPath = configFiles[configCliName];
         const ignore = getIgnore?.([]) || [];
 
+        debugLog(`Generate config: ${configPath}`);
         await worker.writeFile(
           configPath,
           `/* eslint-disable */ module.exports = require('@cat-org/configs')('${configCliName}', __filename);`,
         );
 
-        if (ignoreName && ignore.length !== 0)
+        if (ignoreName && ignore.length !== 0) {
+          debugLog(`Generate ignore: ${ignoreName}`);
           await worker.writeFile(
             path.resolve(path.dirname(configPath), ignoreName),
             ignore.join('\n'),
           );
+        }
       },
     ),
   );

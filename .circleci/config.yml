@@ -19,6 +19,12 @@ install-all: &install-all
   name: Install packages
   command: yarn install:all
 
+set-debug-env: &set-debug-env
+  name: Set debug env
+  command: |
+    echo 'DEBUG=configs-scripts*' >> $BASH_ENV
+    source $BASH_ENV
+
 jobs:
   test:
     <<: *defaults
@@ -26,6 +32,7 @@ jobs:
       - checkout
       - restore_cache: *restore-cache
       - run: *install-all
+      - run: *set-debug-env
 
       - save_cache: *save-cache
 
@@ -48,6 +55,7 @@ jobs:
       - checkout
       - restore_cache: *restore-cache
       - run: *install-all
+      - run: *set-debug-env
 
       - run:
           name: Pre publish

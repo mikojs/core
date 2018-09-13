@@ -7,16 +7,22 @@ import { areEqual } from 'fbjs';
 import moment from 'moment';
 import outputFileSync from 'output-file-sync';
 import rimraf from 'rimraf';
+import debug from 'debug';
 
 import configs from './configs';
 
+const debugLog = debug('configs-scripts:worker');
 const cacheDir = findCacheDir({
   name: 'configs',
   thunk: true,
   cwd: configs.rootDir,
 });
+
 export const cachePath = cacheDir('configs-scripts.json');
 export const cacheLockPath = cacheDir('configs-scripts.lock');
+
+debugLog(`Cache path: ${cachePath}`);
+debugLog(`Cache lock path: ${cacheLockPath}`);
 
 /** Use to control file */
 class Worker {
@@ -35,9 +41,16 @@ class Worker {
           fs.readFileSync(cachePath, 'utf-8'),
         );
 
-        if (moment().diff(lastUsed, 'minutes') < 1) return cache;
-      }
-    } catch (e) {}
+        if (moment().diff(lastUsed, 'minutes') < 1) {
+          debugLog('Use cache');
+          return cache;
+        }
+
+        debugLog('Reset cache, cache out time');
+      } else debugLog('Not find cache');
+    } catch (e) {
+      debugLog(`Parse error: ${e}`);
+    }
 
     return {};
   };
@@ -56,8 +69,11 @@ class Worker {
 
       outputFileSync(cacheLockPath, JSON.stringify(cache, null, 2));
       rimraf.sync(cachePath);
+      debugLog('Open cache, set cache lock');
       return cache;
     }
+
+    debugLog('Find cache lock, waiting');
 
     const newCache = await new Promise(resolve => {
       setTimeout(() => {
@@ -77,18 +93,18 @@ class Worker {
    * @param {string} cache - cache
    */
   writeCache = async (cache: {}): Promise<void> => {
-    outputFileSync(
-      cachePath,
-      JSON.stringify(
-        {
-          ...cache,
-          lastUsed: moment().format(),
-        },
-        null,
-        2,
-      ),
+    const newCache = JSON.stringify(
+      {
+        ...cache,
+        lastUsed: moment().format(),
+      },
+      null,
+      2,
     );
+
+    outputFileSync(cachePath, newCache);
     rimraf.sync(cacheLockPath);
+    debugLog(`Write cache: ${newCache}`);
   };
 
   /**
@@ -112,6 +128,7 @@ class Worker {
       argv: process.argv,
     });
     cache[filePath].using = moment().format();
+    debugLog(`Write file: ${JSON.stringify({ filePath, content }, null, 2)}`);
     this.writeCache(cache);
   };
 
@@ -127,6 +144,13 @@ class Worker {
     const cache = this.openCache();
 
     cache[filePath].using = moment().format();
+    debugLog(
+      `Using file: ${JSON.stringify(
+        { filePath, using: moment().format() },
+        null,
+        2,
+      )}`,
+    );
     this.writeCache(cache);
   };
 
@@ -153,6 +177,7 @@ class Worker {
         if (moment().diff(cache[filePath].using, 'seconds') > 0.5) {
           delete cache[filePath];
           rimraf.sync(filePath);
+          debugLog(`Remove file: ${filePath}`);
         } else removeFilesAgain = true;
       }
     });
@@ -160,6 +185,7 @@ class Worker {
     this.writeCache(cache);
 
     if (removeFilesAgain) {
+      debugLog('Wait 0.5s to remove file');
       await new Promise(resolve => {
         setTimeout(() => {
           this.removeFiles().then(resolve);

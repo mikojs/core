@@ -56,7 +56,7 @@ class Worker {
   };
 
   /**
-   * get cache
+   * Get cache
    *
    * @example
    * worker.getCache();
@@ -64,6 +64,11 @@ class Worker {
    * @return {Object} - cache
    */
   getCache = async (): Promise<{}> => {
+    // Use to block getting cache, avoid getting in the same time
+    await new Promise(resolve => {
+      setTimeout(resolve, Math.floor(Math.random() * 100));
+    });
+
     if (!fs.existsSync(cacheLockPath)) {
       const cache = this.openCache();
 

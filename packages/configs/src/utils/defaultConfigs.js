@@ -1,6 +1,14 @@
 // @flow
 
 const babel = {
+  install: (): $ReadOnlyArray<string> => [
+    '@babel/cli',
+    '@babel/core',
+    '@babel/preset-env',
+    '@babel/preset-flow',
+    '@babel/plugin-proposal-optional-chaining',
+    '@cat-org/babel-plugin-transform-flow',
+  ],
   config: (): {} => require('configs/babel'),
   run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
     ...argv,
@@ -12,6 +20,24 @@ const babel = {
 };
 
 const lint = {
+  install: (): $ReadOnlyArray<string> => [
+    '@cat-org/eslint-config-cat',
+    'babel-eslint',
+    'eslint',
+    'eslint-watch',
+    'eslint-config-fbjs',
+    'eslint-config-google',
+    'eslint-config-prettier',
+    'eslint-import-resolver-babel-module',
+    'eslint-plugin-babel',
+    'eslint-plugin-flowtype',
+    'eslint-plugin-import',
+    'eslint-plugin-jsdoc',
+    'eslint-plugin-jsx-a11y',
+    'eslint-plugin-prettier',
+    'eslint-plugin-react',
+    'eslint-plugin-relay',
+  ],
   alias: 'esw',
   config: (): {} => require('configs/eslint'),
   ignore: (): $ReadOnlyArray<string> => [
@@ -43,6 +69,11 @@ const lint = {
 };
 
 const jest = {
+  install: (): $ReadOnlyArray<string> => [
+    'jest',
+    'babel-jest',
+    'babel-core@^7.0.0-0',
+  ],
   config: (): {} => require('configs/jest'),
   configFiles: {
     babel: true,
@@ -78,6 +109,7 @@ export default {
 
   // prettier
   prettier: {
+    install: (): $ReadOnlyArray<string> => ['prettier'],
     config: (): {} => require('configs/prettier'),
     run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
       ...argv,
@@ -87,6 +119,7 @@ export default {
 
   // lint-staged
   'lint-staged': {
+    install: (): $ReadOnlyArray<string> => ['husky', 'lint-staged'],
     config: (): {} => require('configs/lintsteged'),
     configFiles: {
       prettier: true,

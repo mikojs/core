@@ -88,6 +88,10 @@ class Configs {
 
       this.store[key] = {
         alias: customConfigs[key].alias || defaultConfigs[key].alias || key,
+        install: (): $ReadOnlyArray<string> =>
+          []
+          |> defaultConfigs[key].install || emptyFunction.thatReturnsArgument
+          |> customConfigs[key].install || emptyFunction.thatReturnsArgument,
         config: (): {} =>
           null
           |> defaultConfigs[key].config ||
@@ -98,8 +102,8 @@ class Configs {
             (typeof customConfigs[key] === 'function'
               ? customConfigs[key]
               : emptyFunction.thatReturnsArgument),
-        ignore: (ignore: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
-          ignore
+        ignore: (): $ReadOnlyArray<string> =>
+          []
           |> defaultConfigs[key].ignore || emptyFunction.thatReturnsArgument
           |> customConfigs[key].ignore || emptyFunction.thatReturnsArgument,
         ignoreName: customConfigs[key].ignoreName,

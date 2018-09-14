@@ -18,18 +18,24 @@ const program = new commander.Command('configs-scripts')
   .description(
     chalk`{green Arguments} can be any commands, like {cyan \`babel src -d lib\`}.`,
   )
+  .option('--install', 'install packages by config')
+  .option('--npm', 'use npm to install packages')
   .option('--info', 'print more info about configs')
   .allowUnknownOption();
 
 const {
   args: [cliName],
   rawArgs,
+  install: shouldInstall = false,
+  npm: shouldUseNpm = false,
   info = false,
 } = program.parse(process.argv);
 
 debugLog({
   cliName,
   rawArgs,
+  shouldInstall,
+  shouldUseNpm,
   info,
 });
 
@@ -68,10 +74,11 @@ if (info) {
           string,
         > => {
           const {
+            alias,
+            install,
             config,
             ignore,
             ignoreName,
-            alias,
             run,
             env = {},
             configFiles = {},
@@ -102,11 +109,10 @@ if (info) {
 
 ${[
               getData('command', `"${run?.([alias || key]).join(' ') || key}"`),
+              !install ? false : getData('install', handleData(install([]))),
               getData('config', handleData(config({}))),
+              !ignore ? false : getData('ignore', handleData(ignore())),
               !ignoreName ? false : getData('ignoreName', ignoreName),
-              (ignore?.([]) || []).length === 0
-                ? false
-                : getData('ignore', handleData(ignore?.([]) || [])),
               Object.keys(env).length === 0
                 ? false
                 : getData('env', handleData(env)),
@@ -135,4 +141,6 @@ if (!cliName)
 export default {
   cliName,
   argv: rawArgs.filter((arg: string): boolean => ![cliName].includes(arg)),
+  shouldInstall,
+  shouldUseNpm,
 };

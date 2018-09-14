@@ -95,7 +95,7 @@ export default () => {
       ignore: getIgnore,
     } = configs.store[configCliName];
     const configPath = configFiles[configCliName];
-    const ignore = getIgnore?.([]) || [];
+    const ignore = getIgnore?.() || [];
 
     debugLog(`Generate config: ${configPath}`);
     outputFileSync(

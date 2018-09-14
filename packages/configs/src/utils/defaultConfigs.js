@@ -65,6 +65,7 @@ const lint = {
   },
   configFiles: {
     babel: true,
+    prettier: true,
   },
 };
 

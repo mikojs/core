@@ -69,7 +69,9 @@ if (info) {
 
   program.outputHelp(
     (): string =>
-      (Object.keys(configs.store): $ReadOnlyArray<string>)
+      (Object.keys(
+        cliName ? { [cliName]: configs.store[cliName] } : configs.store,
+      ): $ReadOnlyArray<string>)
         .reduce((result: $ReadOnlyArray<string>, key: string): $ReadOnlyArray<
           string,
         > => {

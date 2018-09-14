@@ -3,7 +3,6 @@
 
 import childProcess from 'child_process';
 
-import rimraf from 'rimraf';
 import debug from 'debug';
 
 import cliOptions from 'utils/cliOptions';
@@ -21,8 +20,17 @@ process.on('unhandledRejection', (error: mixed) => {
 
 (async (): Promise<void> => {
   const server = await worker.init();
-  const removeFiles = () => {
-    worker.writeCache({
+
+  /**
+   * Remove files
+   *
+   * @example
+   * removeFiles(0);
+   *
+   * @param {number} exitCode - process exit code
+   */
+  const removeFiles = (exitCode: number) => {
+    const client = worker.writeCache({
       key: {
         cwd: process.cwd(),
         argv: process.argv,
@@ -30,10 +38,26 @@ process.on('unhandledRejection', (error: mixed) => {
       using: false,
     });
 
-    if (server && Object.keys(worker.cache).length !== 0)
-      setTimeout(removeFiles, 500);
-    else
-      server?.close();
+    if (server) {
+      if (Object.keys(worker.cache).length !== 0) {
+        setTimeout(removeFiles, 500, exitCode);
+        return;
+      }
+
+      server.close(() => {
+        process.exit(exitCode);
+      });
+      return;
+    }
+
+    if (client) {
+      client.on('end', () => {
+        process.exit(exitCode);
+      });
+      return;
+    }
+
+    process.exit(exitCode);
   };
 
   // handle config and ignore files
@@ -53,6 +77,6 @@ process.on('unhandledRejection', (error: mixed) => {
     })
     .on('close', (exitCode: number) => {
       debugLog('Run command done, remove files');
-      removeFiles();
+      removeFiles(exitCode);
     });
 })();

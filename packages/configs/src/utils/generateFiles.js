@@ -88,39 +88,34 @@ export default () => {
 
   debugLog(`Config files: ${JSON.stringify(configFiles, null, 2)}`);
 
-  Object.keys(configFiles).forEach(
-    (configCliName: string) => {
-      const {
-        alias: configCli = configCliName,
-        ignoreName = CONFIG_IGNORE[configCli],
-        ignore: getIgnore,
-      } = configs.store[configCliName];
-      const configPath = configFiles[configCliName];
-      const ignore = getIgnore?.([]) || [];
+  Object.keys(configFiles).forEach((configCliName: string) => {
+    const {
+      alias: configCli = configCliName,
+      ignoreName = CONFIG_IGNORE[configCli],
+      ignore: getIgnore,
+    } = configs.store[configCliName];
+    const configPath = configFiles[configCliName];
+    const ignore = getIgnore?.([]) || [];
 
-      debugLog(`Generate config: ${configPath}`);
-      outputFileSync(
-        configPath,
-        `/* eslint-disable */ module.exports = require('@cat-org/configs')('${configCliName}', __filename);`,
-      );
+    debugLog(`Generate config: ${configPath}`);
+    outputFileSync(
+      configPath,
+      `/* eslint-disable */ module.exports = require('@cat-org/configs')('${configCliName}', __filename);`,
+    );
+    worker.writeCache({
+      ...cache,
+      filePath: configPath,
+    });
+
+    if (ignoreName && ignore.length !== 0) {
+      const ignorePath = path.resolve(path.dirname(configPath), ignoreName);
+
+      debugLog(`Generate ignore: ${ignoreName}`);
+      outputFileSync(ignorePath, ignore.join('\n'));
       worker.writeCache({
         ...cache,
-        filePath: configPath,
+        filePath: ignorePath,
       });
-
-      if (ignoreName && ignore.length !== 0) {
-        const ignorePath = path.resolve(path.dirname(configPath), ignoreName);
-
-        debugLog(`Generate ignore: ${ignoreName}`);
-        outputFileSync(
-          ignorePath,
-          ignore.join('\n'),
-        );
-        worker.writeCache({
-          ...cache,
-          filePath: ignorePath,
-        });
-      }
-    },
-  );
+    }
+  });
 };

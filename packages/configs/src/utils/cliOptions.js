@@ -2,7 +2,6 @@
 
 import commander from 'commander';
 import chalk from 'chalk';
-import rimraf from 'rimraf';
 import debug from 'debug';
 
 import { version } from '../../package.json';
@@ -12,10 +11,6 @@ import configs from './configs';
 
 const debugLog = debug('configs-scripts:cliOption');
 
-/*
- * Should be fixed in `https://github.com/flow-typed/flow-typed/pull/2690`
- * $FlowFixMe
- */
 const program = new commander.Command('configs-scripts')
   .version(version, '-v, --version')
   .arguments('[arguments...]')

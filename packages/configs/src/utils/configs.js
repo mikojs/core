@@ -139,9 +139,13 @@ class Configs {
   getConfig = ({
     cliName,
     argv,
+    shouldInstall,
+    shouldUseNpm,
   }: {
     cliName: string,
     argv: $ReadOnlyArray<string>,
+    shouldInstall: boolean,
+    shouldUseNpm: boolean,
   }): {} => {
     if (!this.store[cliName])
       printInfos(
@@ -162,23 +166,32 @@ class Configs {
       );
 
     const {
+      alias: cli = cliName,
+      install = emptyFunction.thatReturnsArgument,
       run = emptyFunction.thatReturnsArgument,
       env = {},
-      alias: cli = cliName,
     } = this.store[cliName];
 
     debugLog('Get config');
     debugLog({
+      cli,
+      install,
       run,
       env,
-      cli,
     });
 
     try {
       return {
-        argv: run(argv),
+        argv: shouldInstall
+          ? [
+              ...(shouldUseNpm
+                ? ['npm', 'install', '-D']
+                : ['yarn', 'add', '--dev']),
+              ...install(),
+            ]
+          : run(argv),
         env,
-        cli: npmWhich(process.cwd()).sync(cli),
+        cli: shouldInstall ? 'install' : npmWhich(process.cwd()).sync(cli),
       };
     } catch (e) {
       if (/not found/.test(e.message))

@@ -9,7 +9,7 @@ import debug from 'debug';
 import cliOptions from 'utils/cliOptions';
 import configs from 'utils/configs';
 import generateFiles from 'utils/generateFiles';
-import worker, { cachePath, cacheLockPath } from 'utils/worker';
+import worker from 'utils/worker';
 
 const { cliName } = cliOptions;
 const { argv, env, cli } = configs.getConfig(cliOptions);
@@ -19,16 +19,25 @@ process.on('unhandledRejection', (error: mixed) => {
   throw error;
 });
 
-process.on('SIGINT', () => {
-  debugLog('Detect `SIGINT`, remove cache');
-  rimraf.sync(cachePath);
-  rimraf.sync(cacheLockPath);
-  process.exit();
-});
-
 (async (): Promise<void> => {
+  const server = await worker.init();
+  const removeFiles = () => {
+    worker.writeCache({
+      key: {
+        cwd: process.cwd(),
+        argv: process.argv,
+      },
+      using: false,
+    });
+
+    if (server && Object.keys(worker.cache).length !== 0)
+      setTimeout(removeFiles, 500);
+    else
+      server?.close();
+  };
+
   // handle config and ignore files
-  await generateFiles();
+  generateFiles();
 
   // run command
   debugLog(
@@ -44,9 +53,6 @@ process.on('SIGINT', () => {
     })
     .on('close', (exitCode: number) => {
       debugLog('Run command done, remove files');
-      worker.removeFiles().then(() => {
-        debugLog('Remove files done, close process');
-        process.exit(exitCode);
-      });
+      removeFiles();
     });
 })();

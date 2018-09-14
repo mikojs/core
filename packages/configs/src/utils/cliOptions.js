@@ -8,7 +8,6 @@ import debug from 'debug';
 import { version } from '../../package.json';
 
 import printInfos from './printInfos';
-import { cachePath, cacheLockPath } from './worker';
 import configs from './configs';
 
 const debugLog = debug('configs-scripts:cliOption');
@@ -24,14 +23,12 @@ const program = new commander.Command('configs-scripts')
   .description(
     chalk`{green Arguments} can be any commands, like {cyan \`babel src -d lib\`}.`,
   )
-  .option('--no-cache', 'clean the cache')
   .option('--info', 'print more info about configs')
   .allowUnknownOption();
 
 const {
   args: [cliName],
   rawArgs,
-  cache = false,
   info = false,
 } = program.parse(process.argv);
 
@@ -39,13 +36,7 @@ debugLog({
   cliName,
   rawArgs,
   info,
-  cache,
 });
-
-if (!cache) {
-  rimraf.sync(cachePath);
-  rimraf.sync(cacheLockPath);
-}
 
 if (info) {
   /**

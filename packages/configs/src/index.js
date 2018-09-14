@@ -4,10 +4,12 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
+import moment from 'moment';
+
 import configs from 'utils/configs';
 import worker from 'utils/worker';
 
 export default (cliName: string, filename: string): {} => {
-  worker.usingFile(filename);
+  worker.writeCache({ filePath: filename, using: moment().format() });
   return null |> configs.store[cliName].config || configs.store[cliName];
 };

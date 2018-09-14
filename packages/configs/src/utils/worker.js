@@ -1,8 +1,8 @@
 // @flow
 
 import fs from 'fs';
+import net from 'net';
 
-import findCacheDir from 'find-cache-dir';
 import { areEqual } from 'fbjs';
 import moment from 'moment';
 import outputFileSync from 'output-file-sync';
@@ -12,82 +12,33 @@ import debug from 'debug';
 import configs from './configs';
 
 const debugLog = debug('configs-scripts:worker');
-const cacheDir = findCacheDir({
-  name: 'configs',
-  thunk: true,
-  cwd: configs.rootDir,
-});
-
-export const cachePath = cacheDir('configs-scripts.json');
-export const cacheLockPath = cacheDir('configs-scripts.lock');
-
-debugLog(`Cache path: ${cachePath}`);
-debugLog(`Cache lock path: ${cacheLockPath}`);
 
 /** Use to control file */
 class Worker {
-  /**
-   * Open cache file
-   *
-   * @example
-   * worker.openCache()
-   *
-   * @return {Object} - cache
-   */
-  openCache = (): {} => {
-    try {
-      if (fs.existsSync(cachePath)) {
-        const { lastUsed, ...cache } = JSON.parse(
-          fs.readFileSync(cachePath, 'utf-8'),
-        );
+  cache = {};
 
-        if (moment().diff(lastUsed, 'minutes') < 1) {
-          debugLog('Use cache');
-          return cache;
-        }
+  server = null;
 
-        debugLog('Reset cache, cache out time');
-      } else debugLog('Not find cache');
-    } catch (e) {
-      debugLog(`Parse error: ${e}`);
-    }
-
-    return {};
-  };
-
-  /**
-   * Get cache
-   *
-   * @example
-   * worker.getCache();
-   *
-   * @return {Object} - cache
-   */
-  getCache = async (): Promise<{}> => {
-    // Use to block getting cache, avoid getting in the same time
-    await new Promise(resolve => {
-      setTimeout(resolve, Math.floor(Math.random() * 100));
+  init = (): Promise<{}> => new Promise(resolve => {
+    this.server = net.createServer((socket) => {
+      socket.setEncoding('utf8');
+      socket.on('data', (data) => {
+        this.writeCache(JSON.parse(data));
+      });
     });
 
-    if (!fs.existsSync(cacheLockPath)) {
-      const cache = this.openCache();
-
-      outputFileSync(cacheLockPath, JSON.stringify(cache, null, 2));
-      rimraf.sync(cachePath);
-      debugLog('Open cache, set cache lock');
-      return cache;
-    }
-
-    debugLog('Find cache lock, waiting');
-
-    const newCache = await new Promise(resolve => {
-      setTimeout(() => {
-        this.getCache().then(resolve);
-      }, 100);
+    this.server.on('error', (err: mixed) => {
+      if (err) {
+        this.server = null;
+        resolve(null);
+      }
     });
 
-    return newCache;
-  };
+    this.server.listen(8888, () => {
+      debugLog('Open server at 8888');
+      resolve(this.server);
+    });
+  });
 
   /**
    * Write cache
@@ -97,107 +48,49 @@ class Worker {
    *
    * @param {string} cache - cache
    */
-  writeCache = async (cache: {}): Promise<void> => {
-    const newCache = JSON.stringify(
-      {
-        ...cache,
-        lastUsed: moment().format(),
-      },
-      null,
-      2,
-    );
+  writeCache = (data: {
+    filePath?: string,
+    key?: {
+      cwd: string,
+      argv: string,
+    },
+    using: string | false,
+  }) => {
+    const { filePath, key, using } = data;
 
-    outputFileSync(cachePath, newCache);
-    rimraf.sync(cacheLockPath);
-    debugLog(`Write cache: ${newCache}`);
-  };
+    if (this.server) {
+      debugLog(`Write cache: ${JSON.stringify(data, null, 2)}`);
 
-  /**
-   * Write file
-   *
-   * @example
-   * worker.writeFile('file path', 'content')
-   *
-   * @param {string} filePath - file path to write file
-   * @param {string} content - file content
-   */
-  writeFile = async (filePath: string, content: string): Promise<void> => {
-    const cache = await this.getCache();
+      if (!using) {
+        Object.keys(this.cache).forEach((cacheFilePath: string) => {
+          this.cache[cacheFilePath].keys = this.cache[cacheFilePath].keys.filter(
+            (cacheKey: {}): boolean =>
+              !areEqual(key, cacheKey)
+          );
 
-    outputFileSync(filePath, content);
+          if (this.cache[cacheFilePath].keys.length === 0 && fs.existsSync(cacheFilePath)) {
+            if (moment().diff(this.cache[cacheFilePath].using, 'seconds') > 0.5) {
+              delete this.cache[cacheFilePath];
+              rimraf.sync(cacheFilePath);
+              debugLog(`Remove file: ${cacheFilePath}`);
+            }
+          }
+        });
 
-    if (!cache[filePath]) cache[filePath] = { keys: [] };
-
-    cache[filePath].keys.push({
-      cwd: process.cwd(),
-      argv: process.argv,
-    });
-    cache[filePath].using = moment().format();
-    debugLog(`Write file: ${JSON.stringify({ filePath, content }, null, 2)}`);
-    this.writeCache(cache);
-  };
-
-  /**
-   * Set file to be used
-   *
-   * @example
-   * worker.usingFile('file path');
-   *
-   * @param {string} filePath - file path to be used
-   */
-  usingFile = (filePath: string) => {
-    const cache = this.openCache();
-
-    cache[filePath].using = moment().format();
-    debugLog(
-      `Using file: ${JSON.stringify(
-        { filePath, using: moment().format() },
-        null,
-        2,
-      )}`,
-    );
-    this.writeCache(cache);
-  };
-
-  /**
-   * Remove files
-   *
-   * @example
-   * worker.removeFiles()
-   */
-  removeFiles = async (): Promise<void> => {
-    const cache = await this.getCache();
-    let removeFilesAgain: boolean = false;
-
-    Object.keys(cache).forEach((filePath: string) => {
-      cache[filePath].keys = cache[filePath].keys.filter(
-        (key: string): boolean =>
-          !areEqual(key, {
-            cwd: process.cwd(),
-            argv: process.argv,
-          }),
-      );
-
-      if (cache[filePath].keys.length === 0 && fs.existsSync(filePath)) {
-        if (moment().diff(cache[filePath].using, 'seconds') > 0.5) {
-          delete cache[filePath];
-          rimraf.sync(filePath);
-          debugLog(`Remove file: ${filePath}`);
-        } else removeFilesAgain = true;
+        debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
+        return;
       }
-    });
 
-    this.writeCache(cache);
+      if (!this.cache[filePath]) this.cache[filePath] = { keys: [] };
+      if (key) this.cache[filePath].keys.push(key);
 
-    if (removeFilesAgain) {
-      debugLog('Wait 0.5s to remove file');
-      await new Promise(resolve => {
-        setTimeout(() => {
-          this.removeFiles().then(resolve);
-        }, 500);
-      });
+      this.cache[filePath].using = using;
+      debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
       return;
     }
+
+    net.connect({ port: 8888 })
+      .end(JSON.stringify(data));
   };
 }
 

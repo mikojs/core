@@ -4,6 +4,8 @@ import path from 'path';
 
 import chalk from 'chalk';
 import debug from 'debug';
+import moment from 'moment';
+import outputFileSync from 'output-file-sync';
 
 import printInfos from './printInfos';
 import cliOptions from './cliOptions';
@@ -74,35 +76,51 @@ const findConfigFiles = (cliName: string): {} => {
   );
 };
 
-export default async (): Promise<void> => {
+export default () => {
   const configFiles = findConfigFiles(cliOptions.cliName);
+  const cache = {
+    key: {
+      cwd: process.cwd(),
+      argv: process.argv,
+    },
+    using: moment().format(),
+  };
 
   debugLog(`Config files: ${JSON.stringify(configFiles, null, 2)}`);
-  await Promise.all(
-    Object.keys(configFiles).map(
-      async (configCliName: string): Promise<void> => {
-        const {
-          alias: configCli = configCliName,
-          ignoreName = CONFIG_IGNORE[configCli],
-          ignore: getIgnore,
-        } = configs.store[configCliName];
-        const configPath = configFiles[configCliName];
-        const ignore = getIgnore?.([]) || [];
 
-        debugLog(`Generate config: ${configPath}`);
-        await worker.writeFile(
-          configPath,
-          `/* eslint-disable */ module.exports = require('@cat-org/configs')('${configCliName}', __filename);`,
+  Object.keys(configFiles).forEach(
+    (configCliName: string) => {
+      const {
+        alias: configCli = configCliName,
+        ignoreName = CONFIG_IGNORE[configCli],
+        ignore: getIgnore,
+      } = configs.store[configCliName];
+      const configPath = configFiles[configCliName];
+      const ignore = getIgnore?.([]) || [];
+
+      debugLog(`Generate config: ${configPath}`);
+      outputFileSync(
+        configPath,
+        `/* eslint-disable */ module.exports = require('@cat-org/configs')('${configCliName}', __filename);`,
+      );
+      worker.writeCache({
+        ...cache,
+        filePath: configPath,
+      });
+
+      if (ignoreName && ignore.length !== 0) {
+        const ignorePath = path.resolve(path.dirname(configPath), ignoreName);
+
+        debugLog(`Generate ignore: ${ignoreName}`);
+        outputFileSync(
+          ignorePath,
+          ignore.join('\n'),
         );
-
-        if (ignoreName && ignore.length !== 0) {
-          debugLog(`Generate ignore: ${ignoreName}`);
-          await worker.writeFile(
-            path.resolve(path.dirname(configPath), ignoreName),
-            ignore.join('\n'),
-          );
-        }
-      },
-    ),
+        worker.writeCache({
+          ...cache,
+          filePath: ignorePath,
+        });
+      }
+    },
   );
 };

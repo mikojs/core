@@ -8,7 +8,6 @@ import moment from 'moment';
 import outputFileSync from 'output-file-sync';
 
 import printInfos from './printInfos';
-import cliOptions from './cliOptions';
 import configs from './configs';
 import worker from './worker';
 
@@ -76,8 +75,8 @@ const findConfigFiles = (cliName: string): {} => {
   );
 };
 
-export default () => {
-  const configFiles = findConfigFiles(cliOptions.cliName);
+export default ({ cliName }: { cliName: string }) => {
+  const configFiles = findConfigFiles(cliName);
   const cache = {
     key: {
       cwd: process.cwd(),

@@ -69,7 +69,7 @@ process.on('unhandledRejection', (error: mixed) => {
       };
 
       // handle config and ignore files
-      generateFiles();
+      generateFiles(cliOptions);
 
       // run command
       debugLog(

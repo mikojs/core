@@ -1,28 +1,46 @@
 // @flow
 
 export default {
-  presets: [
-    [
-      '@babel/env',
-      {
-        useBuiltIns: 'usage',
-      },
-    ],
-    '@babel/flow',
+  install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+    ...install,
+    '@babel/cli',
+    '@babel/core',
+    '@babel/preset-env',
+    '@babel/preset-flow',
+    '@babel/plugin-proposal-optional-chaining',
+    '@cat-org/babel-plugin-transform-flow',
   ],
-  plugins: [
-    '@babel/proposal-optional-chaining',
-    [
-      'module-resolver',
-      {
-        root: ['./src'],
-      },
+  config: (): {} => ({
+    presets: [
+      [
+        '@babel/env',
+        {
+          useBuiltIns: 'usage',
+        },
+      ],
+      '@babel/flow',
     ],
-    ...(process.env.NODE_ENV === 'test' ? [] : ['@cat-org/transform-flow']),
+    plugins: [
+      '@babel/proposal-optional-chaining',
+      [
+        'module-resolver',
+        {
+          root: ['./src'],
+        },
+      ],
+      ...(process.env.NODE_ENV === 'test' ? [] : ['@cat-org/transform-flow']),
+    ],
+    ignore:
+      process.env.NODE_ENV === 'test'
+        ? []
+        : ['**/__tests__/**', '**/__mocks__/**'],
+    overrides: [],
+  }),
+  run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+    ...argv,
+    'src',
+    '-d',
+    'lib',
+    '--verbose',
   ],
-  ignore:
-    process.env.NODE_ENV === 'test'
-      ? []
-      : ['**/__tests__/**', '**/__mocks__/**'],
-  overrides: [],
 };

@@ -15,6 +15,9 @@ export default (infos: $ReadOnlyArray<string>, isError: boolean) => {
   if (isError) {
     // eslint-disable-next-line no-console
     console.log();
-    process.exit(1);
+
+    /* istanbul ignore if */
+    if (process.env.NODE_ENV !== 'test') process.exit(1);
+    else throw new Error('process exit');
   }
 };

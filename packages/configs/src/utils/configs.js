@@ -19,7 +19,7 @@ import printInfos from './printInfos';
 const debugLog = debug('configs-scripts:configs');
 
 /** Store configs */
-class Configs {
+export class Configs {
   store = { ...defaultConfigs };
 
   rootDir = null;
@@ -27,43 +27,14 @@ class Configs {
   customConfigsPath = false;
 
   /**
-   * Find root directory
-   *
-   * @example
-   * configs.findRootDir()
-   */
-  findRootDir = () => {
-    if (this.rootDir) return;
-
-    this.rootDir = process.cwd();
-
-    while (
-      this.rootDir !== '/' &&
-      !fs.existsSync(path.resolve(this.rootDir, './.git'))
-    )
-      this.rootDir = path.resolve(this.rootDir, '..');
-
-    debugLog(`Find rood dir: ${this.rootDir}`);
-
-    if (this.rootDir === '/')
-      printInfos(
-        [
-          'Can not find the root directory',
-          chalk`Run {cyan \`git init\`} in the root directory`,
-        ],
-        true,
-      );
-  };
-
-  /**
    * Handle custom configs
    *
    * @example
    * configs.handleCustomConfigs()
+   *
+   * @param {string} customConfigsPath - set custom configsPath
    */
-  handleCustomConfigs = () => {
-    const customConfigsPath = cosmiconfig('cat').searchSync()?.filepath;
-
+  handleCustomConfigs = (customConfigsPath?: string) => {
     if (!customConfigsPath) return;
 
     const customConfigs = require(customConfigsPath);
@@ -79,21 +50,22 @@ class Configs {
         return;
       }
 
-      // handle default and custom configs is object
+      // handle default and custom configs are function
       if (!this.store[key].config && !customConfigs[key].config) {
         this.store[key] = (): {} =>
-          null |> defaultConfigs[key] |> customConfigs[key];
+          ({} |> defaultConfigs[key] |> customConfigs[key]);
         return;
       }
 
+      // handle default or custom configs is object
       this.store[key] = {
         alias: customConfigs[key].alias || defaultConfigs[key].alias || key,
-        install: (): $ReadOnlyArray<string> =>
-          []
+        install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
+          install
           |> defaultConfigs[key].install || emptyFunction.thatReturnsArgument
           |> customConfigs[key].install || emptyFunction.thatReturnsArgument,
         config: (): {} =>
-          null
+          ({}
           |> defaultConfigs[key].config ||
             (typeof defaultConfigs[key] === 'function'
               ? defaultConfigs[key]
@@ -101,7 +73,7 @@ class Configs {
           |> customConfigs[key].config ||
             (typeof customConfigs[key] === 'function'
               ? customConfigs[key]
-              : emptyFunction.thatReturnsArgument),
+              : emptyFunction.thatReturnsArgument)),
         ignore: (): $ReadOnlyArray<string> =>
           []
           |> defaultConfigs[key].ignore || emptyFunction.thatReturnsArgument
@@ -124,6 +96,37 @@ class Configs {
       debugLog('Configs');
       debugLog(this.store);
     });
+  };
+
+  /**
+   * Find root directory
+   *
+   * @example
+   * configs.findRootDir()
+   *
+   * @param {string} cwd - cwd to find the root dir
+   */
+  findRootDir = (cwd?: string = process.cwd()) => {
+    if (this.rootDir) return;
+
+    this.rootDir = cwd;
+
+    while (
+      this.rootDir !== '/' &&
+      !fs.existsSync(path.resolve(this.rootDir, './.git'))
+    )
+      this.rootDir = path.resolve(this.rootDir, '..');
+
+    debugLog(`Find rood dir: ${this.rootDir}`);
+
+    if (this.rootDir === '/')
+      printInfos(
+        [
+          'Can not find the root directory',
+          chalk`Run {cyan \`git init\`} in the root directory`,
+        ],
+        true,
+      );
   };
 
   /**
@@ -183,12 +186,11 @@ class Configs {
     try {
       return {
         argv: shouldInstall
-          ? [
-              ...(shouldUseNpm
+          ? install(
+              shouldUseNpm
                 ? ['npm', 'install', '-D']
-                : ['yarn', 'add', '--dev']),
-              ...install(),
-            ]
+                : ['yarn', 'add', '--dev'],
+            )
           : run(argv),
         env,
         cli: shouldInstall ? 'install' : npmWhich(process.cwd()).sync(cli),
@@ -204,7 +206,7 @@ class Configs {
 
 const configs = new Configs();
 
-configs.handleCustomConfigs();
+configs.handleCustomConfigs(cosmiconfig('cat').searchSync()?.filepath);
 configs.findRootDir();
 
 export default configs;

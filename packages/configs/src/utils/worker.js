@@ -13,7 +13,17 @@ import printInfos from './printInfos';
 const debugLog = debug('configs-scripts:worker');
 
 /** Use to control file */
-class Worker {
+export class Worker {
+  /**
+   * @example
+   * new Worker();
+   *
+   * @param {number} port - port of server
+   */
+  constructor(port?: number = 8888) {
+    this.port = port;
+  }
+
   cache = {};
 
   server = null;
@@ -36,17 +46,14 @@ class Worker {
       });
 
       this.server.on('error', (err: mixed) => {
-        if (err) {
-          this.server = null;
-          resolve(null);
-        }
+        this.server = null;
+        resolve(null);
       });
 
-      if (this.server)
-        this.server.listen(8888, undefined, undefined, () => {
-          debugLog('Open server at 8888');
-          resolve(this.server);
-        });
+      this.server.listen(this.port, undefined, undefined, () => {
+        debugLog(`Open server at ${this.port}`);
+        resolve(this.server);
+      });
     });
 
   /**
@@ -96,13 +103,11 @@ class Worker {
         return null;
       }
 
-      if (!filePath) {
-        printInfos(
+      if (!filePath)
+        return printInfos(
           ['filePath can not be undefined in worker.writeCache'],
           true,
         );
-        return null;
-      }
 
       if (!this.cache[filePath]) this.cache[filePath] = { keys: [] };
       if (key) this.cache[filePath].keys.push(key);
@@ -112,7 +117,7 @@ class Worker {
       return null;
     }
 
-    const client = net.connect({ port: 8888 });
+    const client = net.connect({ port: this.port });
 
     client.end(JSON.stringify(data));
     return client;

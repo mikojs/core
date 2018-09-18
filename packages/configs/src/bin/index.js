@@ -5,7 +5,8 @@ import childProcess from 'child_process';
 
 import debug from 'debug';
 
-import cliOptions from 'utils/cliOptions';
+import cliOptions from './core/cliOptions';
+
 import configs from 'utils/configs';
 import generateFiles from 'utils/generateFiles';
 import worker from 'utils/worker';
@@ -48,6 +49,9 @@ process.on('unhandledRejection', (error: mixed) => {
 
         if (server) {
           if (Object.keys(worker.cache).length !== 0) {
+            debug('configs-scripts:remove:cache')(
+              JSON.stringify(worker.cache, null, 2),
+            );
             setTimeout(removeFiles, 500, exitCode);
             return;
           }

@@ -11,5 +11,5 @@ import worker from 'utils/worker';
 
 export default (cliName: string, filename: string): {} => {
   worker.writeCache({ filePath: filename, using: moment().format() });
-  return null |> configs.store[cliName].config || configs.store[cliName];
+  return {} |> configs.store[cliName].config || configs.store[cliName];
 };

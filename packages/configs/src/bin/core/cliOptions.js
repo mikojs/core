@@ -4,10 +4,10 @@ import commander from 'commander';
 import chalk from 'chalk';
 import debug from 'debug';
 
-import { version } from '../../package.json';
+import { version } from '../../../package.json';
 
-import printInfos from './printInfos';
-import configs from './configs';
+import printInfos from 'utils/printInfos';
+import configs from 'utils/configs';
 
 const debugLog = debug('configs-scripts:cliOption');
 

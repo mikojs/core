@@ -62,6 +62,13 @@ const babel = config => {
 
   if (process.env.NODE_ENV !== 'test')
     config.plugins.push('add-module-exports');
+  else
+    config.overrides[0].plugins.push([
+      'module-resolver',
+      {
+        root: ['./src', './packages/configs/src'],
+      },
+    ]);
 
   return config;
 };

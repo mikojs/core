@@ -19,7 +19,7 @@ test('parse error', () => {
   expect(() => {
     reset();
     babel();
-  }).toThrowError(`${pkgName} TypeError`);
+  }).toThrow(`${pkgName} TypeError`);
 });
 
 describe('cli error', () => {
@@ -27,7 +27,7 @@ describe('cli error', () => {
     expect(() => {
       reset({});
       babel();
-    }).toThrowError(
+    }).toThrow(
       `${pkgName} only can be used with @babel/cli: Can not find \`src\` or \`outDir\``,
     );
   });
@@ -40,7 +40,7 @@ test('write error', () => {
     });
     reset(transformFileOptions);
     babel();
-  }).toThrowError(`${pkgName} Error: error`);
+  }).toThrow(`${pkgName} Error: error`);
 });
 
 test('write error with watch mode', () => {
@@ -84,7 +84,7 @@ test('watch error when not finding babel configs', () => {
     ).babelConfigs;
 
     chokidar.watchCallback(justDefinitionPath);
-  }).toThrowError(
+  }).toThrow(
     `${pkgName} Error: not find ${justDefinitionPath.replace(
       `${process.cwd()}/`,
       '',

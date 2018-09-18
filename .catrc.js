@@ -62,13 +62,18 @@ const babel = config => {
 
   if (process.env.NODE_ENV !== 'test')
     config.plugins.push('add-module-exports');
-  else
+  else {
     config.overrides[0].plugins.push([
       'module-resolver',
       {
         root: ['./src', './packages/configs/src'],
       },
     ]);
+    config.overrides.push({
+      test: './__mocks__',
+      plugins: ['@babel/proposal-class-properties'],
+    });
+  }
 
   return config;
 };

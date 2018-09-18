@@ -19,6 +19,12 @@ install-all: &install-all
   name: Install packages
   command: yarn install:all
 
+set-debug-env: &set-debug-env
+  name: Set debug env
+  command: |
+    echo 'DEBUG=configs-scripts*' >> $BASH_ENV
+    source $BASH_ENV
+
 jobs:
   test:
     <<: *defaults
@@ -26,6 +32,7 @@ jobs:
       - checkout
       - restore_cache: *restore-cache
       - run: *install-all
+      - run: *set-debug-env
 
       - save_cache: *save-cache
 
@@ -33,7 +40,7 @@ jobs:
           name: Check code style
           command: |
             make babel-lint-staged
-            yarn lint .
+            yarn configs-scripts lint .
             yarn flow
 
       - run:
@@ -48,12 +55,15 @@ jobs:
       - checkout
       - restore_cache: *restore-cache
       - run: *install-all
+      - run: *set-debug-env
 
       - run:
           name: Pre publish
           command: |
             yarn prod
-            TEST_PRODUCTION=true yarn jest ./__tests__/checkFilesInPackages.js --coverage=false
+            TEST_PRODUCTION=true yarn configs-scripts jest \
+              ./__tests__/checkFilesInPackages.js \
+              --coverage=false
 
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
 

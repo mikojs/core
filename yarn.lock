@@ -179,6 +179,10 @@
   version "7.0.0-beta.54"
   resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.0.0-beta.54.tgz#61d2a9a0f9a3e31838a458debb9eebd7bdd249b4"
 
+"@babel/helper-plugin-utils@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.0.0.tgz#bbb3fbee98661c569034237cc03967ba99b4f250"
+
 "@babel/helper-regex@7.0.0-beta.54":
   version "7.0.0-beta.54"
   resolved "https://registry.yarnpkg.com/@babel/helper-regex/-/helper-regex-7.0.0-beta.54.tgz#8ac562f855f132fc68dfd10b132552555ac870d9"
@@ -309,6 +313,13 @@
     "@babel/helper-plugin-utils" "7.0.0-beta.54"
     "@babel/plugin-syntax-optional-chaining" "7.0.0-beta.54"
 
+"@babel/plugin-proposal-pipeline-operator@^7.0.0-beta.54":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-pipeline-operator/-/plugin-proposal-pipeline-operator-7.0.0.tgz#ab60169a5c4a598292de59a14f9810d4e47b00b8"
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/plugin-syntax-pipeline-operator" "^7.0.0"
+
 "@babel/plugin-proposal-unicode-property-regex@7.0.0-beta.54":
   version "7.0.0-beta.54"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-unicode-property-regex/-/plugin-proposal-unicode-property-regex-7.0.0-beta.54.tgz#1624631faf688bcbde4918712bd0af7186f7d245"
@@ -352,6 +363,12 @@
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-optional-chaining/-/plugin-syntax-optional-chaining-7.0.0-beta.54.tgz#40dc10c00d9acd523c6ac1f9332652b1e5af4f20"
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.54"
+
+"@babel/plugin-syntax-pipeline-operator@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-pipeline-operator/-/plugin-syntax-pipeline-operator-7.0.0.tgz#29106ddb293898192780ff48159c77e6f20c1768"
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.0.0"
 
 "@babel/plugin-transform-arrow-functions@7.0.0-beta.54":
   version "7.0.0-beta.54"
@@ -5335,9 +5352,9 @@ prettier-package-json@^1.6.0:
     sort-object-keys "^1.1.2"
     sort-order "^1.0.1"
 
-prettier@^1.13.7:
-  version "1.13.7"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.13.7.tgz#850f3b8af784a49a6ea2d2eaa7ed1428a34b7281"
+prettier@^1.14.2:
+  version "1.14.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.14.2.tgz#0ac1c6e1a90baa22a62925f41963c841983282f9"
 
 pretty-format@^23.0.0:
   version "23.0.0"

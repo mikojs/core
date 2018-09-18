@@ -7,6 +7,9 @@
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/configs",
   "version": "1.0.0-beta.6",
   "main": "./lib/index.js",
+  "bin": {
+    "configs-scripts": "./lib/bin/index.js"
+  },
   "keywords": [
     "cat-org",
     "configs"
@@ -15,6 +18,17 @@
     "access": "public"
   },
   "dependencies": {
-    "@cat-org/utils": "^1.0.0-beta.6"
+    "chalk": "^2.4.1",
+    "commander": "^2.17.1",
+    "cosmiconfig": "^5.0.6",
+    "debug": "^4.0.1",
+    "fbjs": "^0.8.17",
+    "moment": "^2.22.2",
+    "npm-which": "^3.0.1",
+    "output-file-sync": "^2.0.1",
+    "rimraf": "^2.6.2"
+  },
+  "devDependencies": {
+    "get-port": "^4.0.0"
   }
 }

@@ -47,7 +47,7 @@ process.on('unhandledRejection', (error: mixed) => {
           using: false,
         });
 
-        if (server) {
+        if (server && !client) {
           if (Object.keys(worker.cache).length !== 0) {
             debug('configs-scripts:remove:cache')(
               JSON.stringify(worker.cache, null, 2),
@@ -62,14 +62,10 @@ process.on('unhandledRejection', (error: mixed) => {
           return;
         }
 
-        if (client) {
-          client.on('end', () => {
-            process.exit(exitCode);
-          });
-          return;
-        }
-
-        process.exit(exitCode);
+        client.on('end', () => {
+          process.exit(exitCode);
+        });
+        return;
       };
 
       // handle config and ignore files

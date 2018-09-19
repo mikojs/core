@@ -14,18 +14,25 @@ const defaultParameter = {
   shouldUseNpm: false,
 };
 
+// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.noCli = emptyFunction.thatReturnsArgument;
+// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.funcConfig = emptyFunction.thatReturnsArgument;
+// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.emptyConfig = {
   config: emptyFunction.thatReturnsArgument,
 };
+// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.funcMergeObject = emptyFunction.thatReturnsArgument;
+// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.objectMergeFunc = {
   config: emptyFunction.thatReturnsArgument,
 };
+// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.customNoConfig = {
   config: emptyFunction.thatReturnsArgument,
 };
+// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.defaultNoConfig = {};
 
 describe('configs', () => {

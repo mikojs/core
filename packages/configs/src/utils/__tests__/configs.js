@@ -19,6 +19,14 @@ defaultConfigs.funcConfig = emptyFunction.thatReturnsArgument;
 defaultConfigs.emptyConfig = {
   config: emptyFunction.thatReturnsArgument,
 };
+defaultConfigs.funcMergeObject = emptyFunction.thatReturnsArgument;
+defaultConfigs.objectMergeFunc = {
+  config: emptyFunction.thatReturnsArgument,
+};
+defaultConfigs.customNoConfig = {
+  config: emptyFunction.thatReturnsArgument,
+};
+defaultConfigs.defaultNoConfig = {};
 
 describe('configs', () => {
   it('can not find the root dir', () => {
@@ -173,6 +181,22 @@ describe('configs', () => {
         expect(emptyConfig.config()).toEqual({});
         expect(emptyConfig.ignore()).toEqual([]);
         expect(emptyConfig.run([])).toEqual([]);
+      });
+
+      it('func merge object', () => {
+        expect(configs.store.funcMergeObject.config()).toEqual({});
+      });
+
+      it('object merge func', () => {
+        expect(configs.store.objectMergeFunc.config()).toEqual({});
+      });
+
+      it('custom no config', () => {
+        expect(configs.store.customNoConfig.config()).toEqual({});
+      });
+
+      it('default no config', () => {
+        expect(configs.store.defaultNoConfig.config()).toEqual({});
       });
     });
   });

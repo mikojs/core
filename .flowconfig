@@ -1,6 +1,6 @@
 [ignore]
-# ignore for @cat-org/eslint-config-cat
-<PROJECT_ROOT>/packages/eslint-config-cat/src/__tests__/__ignore__
+# ignore testing in node_modules
+<PROJECT_ROOT>/node_modules/prettier-package-json/tests/__fixtures__/invalid.json
 
 [include]
 

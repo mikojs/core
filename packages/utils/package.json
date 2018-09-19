@@ -8,7 +8,7 @@
   "version": "1.0.0-beta.6",
   "main": "./lib/index.js",
   "dependencies": {
-    "d3-hierarchy": "^1.1.6",
+    "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.1.0"
   },
   "keywords": [

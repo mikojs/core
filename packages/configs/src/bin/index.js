@@ -68,6 +68,11 @@ process.on('unhandledRejection', (error: mixed) => {
         return;
       };
 
+      // caught interrupt signal to remove files
+      process.on('SIGINT', () => {
+        removeFiles(0);
+      });
+
       // handle config and ignore files
       generateFiles(cliOptions);
 

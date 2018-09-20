@@ -44,7 +44,7 @@ process.on('unhandledRejection', (error: mixed) => {
           using: false,
         });
 
-        if (server && !client) {
+        if (server) {
           if (Object.keys(worker.cache).length !== 0) {
             debug('configs-scripts:remove:cache')(
               JSON.stringify(worker.cache, null, 2),
@@ -59,7 +59,10 @@ process.on('unhandledRejection', (error: mixed) => {
           return;
         }
 
-        client.on('end', () => {
+        /* eslint-disable flowtype/no-unused-expressions */
+        // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+        client?.on('end', () => {
+          /* eslint-enable flowtype/no-unused-expressions */
           process.exit(exitCode);
         });
         return;

@@ -33,16 +33,19 @@ describe('generate files', () => {
     );
   });
 
-  it('generate', async (): void => {
+  it('generate', async (): Promise<void> => {
     await new Promise(resolve => {
       generateFiles({ cliName: 'jest' });
 
+      /* eslint-disable flowtype/no-unused-expressions */
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
       worker
         .writeCache({
           pid: process.pid,
           using: false,
         })
-        .on('end', resolve);
+        ?.on('end', resolve);
+      /* eslint-enable flowtype/no-unused-expressions */
     });
 
     expect(worker.server).toBeNull();

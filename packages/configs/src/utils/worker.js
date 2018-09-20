@@ -11,6 +11,12 @@ import printInfos from './printInfos';
 
 const debugLog = debug('configs-scripts:worker');
 
+export type cacheType = {
+  filePath?: string,
+  pid?: number,
+  using: string | false,
+};
+
 /** Use to control file */
 export class Worker {
   /**
@@ -26,6 +32,8 @@ export class Worker {
   cache = {};
 
   server = null;
+
+  port = 8888;
 
   /**
    * Init a worker
@@ -49,6 +57,7 @@ export class Worker {
         resolve(null);
       });
 
+      // $FlowFixMe server will be null only when server is error
       this.server.listen(this.port, undefined, undefined, () => {
         debugLog(`Open server at ${this.port}`);
         resolve(this.server);
@@ -65,11 +74,7 @@ export class Worker {
    *
    * @return {client | null} - a client or null
    */
-  writeCache = (data: {
-    filePath?: string,
-    pid?: number,
-    using: string | false,
-  }): ?net.Socket => {
+  writeCache = (data: cacheType): ?net.Socket => {
     const { filePath, pid, using } = data;
 
     if (this.server) {

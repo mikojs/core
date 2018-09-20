@@ -21,7 +21,9 @@ export type writeFileType = {
  * new WriteFiles()
  */
 class WriteFiles {
-  store = [];
+  // This can be modify in class
+  // eslint-disable-next-line flowtype/no-mutable-array
+  store: Array<writeFileType> = [];
 
   isWritting = false;
 

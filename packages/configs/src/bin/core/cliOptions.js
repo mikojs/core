@@ -23,11 +23,17 @@ const program = new commander.Command('configs-scripts')
   .option('--info', 'print more info about configs')
   .allowUnknownOption();
 
+// https://github.com/flow-typed/flow-typed/pull/2741
 const {
+  // $FlowFixMe
   args: [cliName],
+  // $FlowFixMe
   rawArgs,
+  // $FlowFixMe
   install: shouldInstall = false,
+  // $FlowFixMe
   npm: shouldUseNpm = false,
+  // $FlowFixMe
   info = false,
 } = program.parse(process.argv);
 
@@ -68,6 +74,7 @@ if (info) {
     chalk`{bold {cyan ${key}}} = ${content}`;
 
   program.outputHelp(
+    // $FlowFixMe
     (): string =>
       (Object.keys(
         cliName ? { [cliName]: configs.store[cliName] } : configs.store,

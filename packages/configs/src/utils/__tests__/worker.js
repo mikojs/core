@@ -9,6 +9,8 @@ import moment from 'moment';
 
 import { Worker } from '../worker';
 
+import type { cacheType } from '../worker';
+
 const cache = {
   filePath: path.resolve(process.cwd(), 'jest.config.js'),
   using: moment().format(),
@@ -26,25 +28,29 @@ let server: net.Server;
  *
  * @return {Promise} - not return
  */
-const writeCache = (cacheData: {}): Promise<void> =>
+const writeCache = (cacheData: cacheType): Promise<void> =>
   new Promise(resolve => {
-    clientWorker.writeCache(cacheData).on('end', resolve);
+    /* eslint-disable flowtype/no-unused-expressions */
+    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    clientWorker.writeCache(cacheData)?.on('end', resolve);
+    /* eslint-enable flowtype/no-unused-expressions */
   });
 
 describe('worker', () => {
-  beforeAll(async (): void => {
+  beforeAll(async (): Promise<void> => {
     const port = await getPort();
 
     serverWorker = new Worker(port);
     clientWorker = new Worker(port);
-    server = await serverWorker.init();
+    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    server = await serverWorker?.init();
   });
 
-  it('can not open second server', async (): void => {
+  it('can not open second server', async (): Promise<void> => {
     expect(await clientWorker.init()).toBeNull();
   });
 
-  it('write cache', async (): void => {
+  it('write cache', async (): Promise<void> => {
     await writeCache({
       ...cache,
       pid: 1,
@@ -70,7 +76,7 @@ describe('worker', () => {
     });
   });
 
-  it('remove cache but not over 0.5s', async (): void => {
+  it('remove cache but not over 0.5s', async (): Promise<void> => {
     await writeCache({
       pid: 1,
       using: false,
@@ -96,7 +102,7 @@ describe('worker', () => {
     });
   });
 
-  it('update cache time and remove again', async (): void => {
+  it('update cache time and remove again', async (): Promise<void> => {
     const newTime = moment()
       .subtract(1, 'seconds')
       .format();
@@ -138,7 +144,7 @@ describe('worker', () => {
     );
   });
 
-  afterAll(async (): void => {
+  afterAll(async (): Promise<void> => {
     await new Promise(resolve => {
       server.close(resolve);
     });

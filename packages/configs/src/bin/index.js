@@ -40,10 +40,7 @@ process.on('unhandledRejection', (error: mixed) => {
        */
       const removeFiles = (exitCode: number) => {
         const client = worker.writeCache({
-          key: {
-            cwd: process.cwd(),
-            argv: process.argv,
-          },
+          pid: process.pid,
           using: false,
         });
 

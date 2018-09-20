@@ -78,10 +78,7 @@ const findConfigFiles = (cliName: string): {} => {
 export default ({ cliName }: { cliName: string }) => {
   const configFiles = findConfigFiles(cliName);
   const cache = {
-    key: {
-      cwd: process.cwd(),
-      argv: process.argv,
-    },
+    pid: process.pid,
     using: moment().format(),
   };
 

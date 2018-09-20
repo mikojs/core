@@ -3,7 +3,6 @@
 import fs from 'fs';
 import net from 'net';
 
-import { areEqual } from 'fbjs';
 import moment from 'moment';
 import rimraf from 'rimraf';
 import debug from 'debug';
@@ -68,25 +67,22 @@ export class Worker {
    */
   writeCache = (data: {
     filePath?: string,
-    key?: {
-      cwd: string,
-      argv: $ReadOnlyArray<string>,
-    },
+    pid?: number,
     using: string | false,
   }): ?net.Socket => {
-    const { filePath, key, using } = data;
+    const { filePath, pid, using } = data;
 
     if (this.server) {
       debugLog(`Write cache: ${JSON.stringify(data, null, 2)}`);
 
       if (!using && !filePath) {
         Object.keys(this.cache).forEach((cacheFilePath: string) => {
-          this.cache[cacheFilePath].keys = this.cache[
+          this.cache[cacheFilePath].pids = this.cache[
             cacheFilePath
-          ].keys.filter((cacheKey: {}): boolean => !areEqual(key, cacheKey));
+          ].pids.filter((cachePid: number): boolean => pid !== cachePid);
 
           if (
-            this.cache[cacheFilePath].keys.length === 0 &&
+            this.cache[cacheFilePath].pids.length === 0 &&
             fs.existsSync(cacheFilePath)
           ) {
             if (
@@ -109,8 +105,8 @@ export class Worker {
           true,
         );
 
-      if (!this.cache[filePath]) this.cache[filePath] = { keys: [] };
-      if (key) this.cache[filePath].keys.push(key);
+      if (!this.cache[filePath]) this.cache[filePath] = { pids: [] };
+      if (pid) this.cache[filePath].pids.push(pid);
 
       this.cache[filePath].using = using;
       debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);

@@ -13,16 +13,6 @@ const cache = {
   filePath: path.resolve(process.cwd(), 'jest.config.js'),
   using: moment().format(),
 };
-const cacheKeys = [
-  {
-    cwd: 'cwd',
-    argv: [],
-  },
-  {
-    cwd: 'cwd1',
-    argv: [],
-  },
-];
 
 let serverWorker: Worker;
 let clientWorker: Worker;
@@ -57,24 +47,24 @@ describe('worker', () => {
   it('write cache', async (): void => {
     await writeCache({
       ...cache,
-      key: cacheKeys[0],
+      pid: 1,
     });
 
     expect(serverWorker.cache).toEqual({
       [cache.filePath]: {
-        keys: [cacheKeys[0]],
+        pids: [1],
         using: cache.using,
       },
     });
 
     await writeCache({
       ...cache,
-      key: cacheKeys[1],
+      pid: 2,
     });
 
     expect(serverWorker.cache).toEqual({
       [cache.filePath]: {
-        keys: cacheKeys,
+        pids: [1, 2],
         using: cache.using,
       },
     });
@@ -82,25 +72,25 @@ describe('worker', () => {
 
   it('remove cache but not over 0.5s', async (): void => {
     await writeCache({
-      key: cacheKeys[0],
+      pid: 1,
       using: false,
     });
 
     expect(serverWorker.cache).toEqual({
       [cache.filePath]: {
-        keys: [cacheKeys[1]],
+        pids: [2],
         using: cache.using,
       },
     });
 
     await writeCache({
-      key: cacheKeys[1],
+      pid: 2,
       using: false,
     });
 
     expect(serverWorker.cache).toEqual({
       [cache.filePath]: {
-        keys: [],
+        pids: [],
         using: cache.using,
       },
     });
@@ -118,13 +108,13 @@ describe('worker', () => {
 
     expect(serverWorker.cache).toEqual({
       [cache.filePath]: {
-        keys: [],
+        pids: [],
         using: newTime,
       },
     });
 
     await writeCache({
-      key: cacheKeys[1],
+      pid: 2,
       using: false,
     });
 
@@ -138,7 +128,7 @@ describe('worker', () => {
 
     expect(() => {
       serverWorker.writeCache({
-        key: cacheKeys[0],
+        pid: 1,
         using: moment().format(),
       });
     }).toThrow('process exit');

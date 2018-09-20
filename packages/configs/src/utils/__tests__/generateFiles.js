@@ -39,10 +39,7 @@ describe('generate files', () => {
 
       worker
         .writeCache({
-          key: {
-            cwd: process.cwd(),
-            argv: process.argv,
-          },
+          pid: process.pid,
           using: false,
         })
         .on('end', resolve);

@@ -1,6 +1,4 @@
 [ignore]
-# ignore testing in node_modules
-<PROJECT_ROOT>/node_modules/prettier-package-json/tests/__fixtures__/invalid.json
 
 [include]
 

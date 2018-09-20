@@ -71,6 +71,8 @@ process.on('unhandledRejection', (error: mixed) => {
       // caught interrupt signal to remove files
       process.on('SIGINT', () => {
         removeFiles(0);
+
+        if (server) setTimeout(process.exit, 500, 0);
       });
 
       // handle config and ignore files

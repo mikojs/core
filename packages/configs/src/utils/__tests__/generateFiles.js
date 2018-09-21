@@ -33,20 +33,8 @@ describe('generate files', () => {
     );
   });
 
-  it('generate', async (): void => {
-    await new Promise(resolve => {
-      generateFiles({ cliName: 'jest' });
-
-      worker
-        .writeCache({
-          key: {
-            cwd: process.cwd(),
-            argv: process.argv,
-          },
-          using: false,
-        })
-        .on('end', resolve);
-    });
+  it('generate', () => {
+    generateFiles({ cliName: 'jest' });
 
     expect(worker.server).toBeNull();
     expect(getDestPaths()).toEqual(

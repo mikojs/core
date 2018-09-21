@@ -15,4 +15,12 @@ module.exports = {
     alias: 'jest',
     config: emptyFunction.thatReturnsArgument,
   },
+  funcMergeObject: {
+    config: emptyFunction.thatReturnsArgument,
+  },
+  objectMergeFunc: emptyFunction.thatReturnsArgument,
+  customNoConfig: {},
+  defaultNoConfig: {
+    config: emptyFunction.thatReturnsArgument,
+  },
 };

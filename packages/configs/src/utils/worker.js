@@ -3,7 +3,6 @@
 import fs from 'fs';
 import net from 'net';
 
-import { areEqual } from 'fbjs';
 import moment from 'moment';
 import rimraf from 'rimraf';
 import debug from 'debug';
@@ -11,6 +10,12 @@ import debug from 'debug';
 import printInfos from './printInfos';
 
 const debugLog = debug('configs-scripts:worker');
+
+export type cacheType = {
+  filePath?: string,
+  pid?: number,
+  using: string | false,
+};
 
 /** Use to control file */
 export class Worker {
@@ -28,6 +33,8 @@ export class Worker {
 
   server = null;
 
+  port = 8888;
+
   /**
    * Init a worker
    *
@@ -36,25 +43,27 @@ export class Worker {
    *
    * @return {Promise} - a server or null
    */
-  init = (): Promise<net.Server | null> =>
-    new Promise(resolve => {
-      this.server = net.createServer((socket: net.Socket) => {
+  init = async (): Promise<net.Server | null> => {
+    this.server = await new Promise(resolve => {
+      const server = net.createServer((socket: net.Socket) => {
         socket.setEncoding('utf8');
         socket.on('data', (data: string) => {
           this.writeCache(JSON.parse(data));
         });
       });
 
-      this.server.on('error', (err: mixed) => {
-        this.server = null;
+      server.on('error', (err: mixed) => {
         resolve(null);
       });
 
-      this.server.listen(this.port, undefined, undefined, () => {
+      server.listen(this.port, undefined, undefined, () => {
         debugLog(`Open server at ${this.port}`);
-        resolve(this.server);
+        resolve(server);
       });
     });
+
+    return this.server;
+  };
 
   /**
    * Write cache
@@ -64,31 +73,29 @@ export class Worker {
    *
    * @param {string} data - cache
    *
-   * @return {client | null} - a client or null
+   * @return {client | null} - a client socket or null
    */
-  writeCache = (data: {
-    filePath?: string,
-    key?: {
-      cwd: string,
-      argv: $ReadOnlyArray<string>,
-    },
-    using: string | false,
-  }): ?net.Socket => {
-    const { filePath, key, using } = data;
+  writeCache = (data: cacheType): ?net.Socket => {
+    const { filePath, pid, using } = data;
 
     if (this.server) {
       debugLog(`Write cache: ${JSON.stringify(data, null, 2)}`);
 
       if (!using && !filePath) {
         Object.keys(this.cache).forEach((cacheFilePath: string) => {
-          this.cache[cacheFilePath].keys = this.cache[
+          this.cache[cacheFilePath].pids = this.cache[
             cacheFilePath
-          ].keys.filter((cacheKey: {}): boolean => !areEqual(key, cacheKey));
+          ].pids.filter((cachePid: number): boolean => pid !== cachePid);
 
           if (
-            this.cache[cacheFilePath].keys.length === 0 &&
+            this.cache[cacheFilePath].pids.length === 0 &&
             fs.existsSync(cacheFilePath)
           ) {
+            /**
+             * Avoid main process have child_process, but main process exit before child_process done.
+             * For example, run `jest` with `--coverage`.
+             * Building coverage will do after jest close
+             */
             if (
               moment().diff(this.cache[cacheFilePath].using, 'seconds') > 0.5
             ) {
@@ -104,18 +111,22 @@ export class Worker {
       }
 
       if (!filePath)
-        return printInfos(
+        printInfos(
           ['filePath can not be undefined in worker.writeCache'],
           true,
         );
+      else {
+        if (!this.cache[filePath]) this.cache[filePath] = { pids: [] };
+        if (pid) this.cache[filePath].pids.push(pid);
 
-      if (!this.cache[filePath]) this.cache[filePath] = { keys: [] };
-      if (key) this.cache[filePath].keys.push(key);
+        this.cache[filePath].using = using;
+        debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
+      }
 
-      this.cache[filePath].using = using;
-      debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
       return null;
     }
+
+    if (!using) printInfos(['client can not remove cache'], true);
 
     const client = net.connect({ port: this.port });
 

@@ -18,5 +18,6 @@
   ],
   "packages": [
     "packages/*"
-  ]
+  ],
+  "useWorkspaces": true
 }

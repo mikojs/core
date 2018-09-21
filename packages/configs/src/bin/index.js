@@ -4,6 +4,7 @@
 import childProcess from 'child_process';
 
 import debug from 'debug';
+import isRunning from 'is-running';
 
 import cliOptions from './core/cliOptions';
 
@@ -39,16 +40,30 @@ process.on('unhandledRejection', (error: mixed) => {
        * @param {number} exitCode - process exit code
        */
       const removeFiles = (exitCode: number) => {
-        const client = worker.writeCache({
-          pid: process.pid,
-          using: false,
-        });
-
         if (server) {
+          worker.writeCache({
+            pid: process.pid,
+            using: false,
+          });
+
+          debug('configs-scripts:remove:cache')(
+            JSON.stringify(worker.cache, null, 2),
+          );
+
+          Object.keys(worker.cache).forEach((key: string) => {
+            /* eslint-disable flowtype/no-unused-expressions */
+            // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+            worker.cache[key]?.pids.forEach((pid: number) => {
+              /* eslint-enable flowtype/no-unused-expressions */
+              if (!isRunning(pid))
+                worker.writeCache({
+                  pid,
+                  using: false,
+                });
+            });
+          });
+
           if (Object.keys(worker.cache).length !== 0) {
-            debug('configs-scripts:remove:cache')(
-              JSON.stringify(worker.cache, null, 2),
-            );
             setTimeout(removeFiles, 500, exitCode);
             return;
           }
@@ -59,20 +74,13 @@ process.on('unhandledRejection', (error: mixed) => {
           return;
         }
 
-        /* eslint-disable flowtype/no-unused-expressions */
-        // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-        client?.on('end', () => {
-          /* eslint-enable flowtype/no-unused-expressions */
-          process.exit(exitCode);
-        });
+        process.exit(exitCode);
         return;
       };
 
       // caught interrupt signal to remove files
       process.on('SIGINT', () => {
         removeFiles(0);
-
-        if (server) setTimeout(process.exit, 500, 0);
       });
 
       // handle config and ignore files

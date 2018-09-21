@@ -73,7 +73,7 @@ export class Worker {
    *
    * @param {string} data - cache
    *
-   * @return {client | null} - a client or null
+   * @return {client | null} - a client socket or null
    */
   writeCache = (data: cacheType): ?net.Socket => {
     const { filePath, pid, using } = data;
@@ -91,6 +91,11 @@ export class Worker {
             this.cache[cacheFilePath].pids.length === 0 &&
             fs.existsSync(cacheFilePath)
           ) {
+            /**
+             * Avoid main process have child_process, but main process exit before child_process done.
+             * For example, run `jest` with `--coverage`.
+             * Building coverage will do after jest close
+             */
             if (
               moment().diff(this.cache[cacheFilePath].using, 'seconds') > 0.5
             ) {
@@ -106,18 +111,22 @@ export class Worker {
       }
 
       if (!filePath)
-        return printInfos(
+        printInfos(
           ['filePath can not be undefined in worker.writeCache'],
           true,
         );
+      else {
+        if (!this.cache[filePath]) this.cache[filePath] = { pids: [] };
+        if (pid) this.cache[filePath].pids.push(pid);
 
-      if (!this.cache[filePath]) this.cache[filePath] = { pids: [] };
-      if (pid) this.cache[filePath].pids.push(pid);
+        this.cache[filePath].using = using;
+        debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
+      }
 
-      this.cache[filePath].using = using;
-      debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
       return null;
     }
+
+    if (!using) printInfos(['client can not remove cache'], true);
 
     const client = net.connect({ port: this.port });
 

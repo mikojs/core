@@ -78,7 +78,7 @@ describe('worker', () => {
   });
 
   it('remove cache but not over 0.5s', async (): Promise<void> => {
-    await writeCache({
+    serverWorker.writeCache({
       pid: 1,
       using: false,
     });
@@ -90,7 +90,7 @@ describe('worker', () => {
       },
     });
 
-    await writeCache({
+    serverWorker.writeCache({
       pid: 2,
       using: false,
     });
@@ -108,7 +108,7 @@ describe('worker', () => {
       .subtract(1, 'seconds')
       .format();
 
-    await writeCache({
+    serverWorker.writeCache({
       filePath: cache.filePath,
       using: newTime,
     });
@@ -120,7 +120,7 @@ describe('worker', () => {
       },
     });
 
-    await writeCache({
+    serverWorker.writeCache({
       pid: 2,
       using: false,
     });
@@ -142,6 +142,23 @@ describe('worker', () => {
     expect(mockLog).toHaveBeenCalledTimes(2);
     expect(mockLog).toHaveBeenCalledWith(
       '  {red configs-scripts} filePath can not be undefined in worker.writeCache',
+    );
+  });
+
+  it('error when try to use client remove cache', () => {
+    const mockLog = jest.fn();
+
+    global.console.log = mockLog;
+
+    expect(() => {
+      clientWorker.writeCache({
+        pid: 1,
+        using: false,
+      });
+    }).toThrow('process exit');
+    expect(mockLog).toHaveBeenCalledTimes(2);
+    expect(mockLog).toHaveBeenCalledWith(
+      '  {red configs-scripts} client can not remove cache',
     );
   });
 

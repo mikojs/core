@@ -13,6 +13,7 @@ save-cache: &save-cache
   paths:
     - node_modules
     - flow-typed
+    - ~/.flow-typed
   key: v1-dependencies-{{ checksum "yarn.lock" }}
 
 install-all: &install-all

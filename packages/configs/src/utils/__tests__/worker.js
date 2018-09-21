@@ -13,7 +13,9 @@ import type { cacheType } from '../worker';
 
 const cache = {
   filePath: path.resolve(process.cwd(), 'jest.config.js'),
-  using: moment().format(),
+  using: moment()
+    .add(5, 'seconds')
+    .format(),
 };
 
 let serverWorker: Worker;

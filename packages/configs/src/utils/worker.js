@@ -43,26 +43,27 @@ export class Worker {
    *
    * @return {Promise} - a server or null
    */
-  init = (): Promise<net.Server | null> =>
-    new Promise(resolve => {
-      this.server = net.createServer((socket: net.Socket) => {
+  init = async (): Promise<net.Server | null> => {
+    this.server = await new Promise(resolve => {
+      const server = net.createServer((socket: net.Socket) => {
         socket.setEncoding('utf8');
         socket.on('data', (data: string) => {
           this.writeCache(JSON.parse(data));
         });
       });
 
-      this.server.on('error', (err: mixed) => {
-        this.server = null;
+      server.on('error', (err: mixed) => {
         resolve(null);
       });
 
-      // $FlowFixMe server will be null only when server is error
-      this.server.listen(this.port, undefined, undefined, () => {
+      server.listen(this.port, undefined, undefined, () => {
         debugLog(`Open server at ${this.port}`);
-        resolve(this.server);
+        resolve(server);
       });
     });
+
+    return this.server;
+  };
 
   /**
    * Write cache

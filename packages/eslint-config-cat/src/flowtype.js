@@ -24,6 +24,7 @@ export default {
       'error',
       'always',
       {
+        excludeArrowFunctions: 'expressionsOnly',
         excludeMatching: ['Promise'],
       },
     ],

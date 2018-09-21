@@ -28,13 +28,14 @@ let server: net.Server;
  *
  * @return {Promise} - not return
  */
-const writeCache = (cacheData: cacheType): Promise<void> =>
-  new Promise(resolve => {
+const writeCache = async (cacheData: cacheType): Promise<void> => {
+  await new Promise(resolve => {
     /* eslint-disable flowtype/no-unused-expressions */
     // $FlowFixMe Flow does not yet support method or property calls in optional chains.
     clientWorker.writeCache(cacheData)?.on('end', resolve);
     /* eslint-enable flowtype/no-unused-expressions */
   });
+};
 
 describe('worker', () => {
   beforeAll(async (): Promise<void> => {

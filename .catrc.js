@@ -2,6 +2,9 @@
 
 const path = require('path');
 
+const areEqual = require('fbjs/lib/areEqual');
+const invariant = require('fbjs/lib/invariant');
+
 /* eslint-disable flowtype/require-return-type */
 /* eslint-disable flowtype/require-parameter-type */
 /* eslint-disable require-jsdoc */
@@ -33,7 +36,17 @@ const defaultBabelConfig = {
 };
 
 const babel = config => {
-  // TODO check config is same
+  invariant(
+    areEqual(
+      {
+        ...config,
+        plugins: config.plugins.filter(plugin => !/^@cat-org/.test(plugin)),
+      },
+      defaultBabelConfig,
+    ),
+    'babel config should be equal to default config',
+  );
+
   config.plugins.push([
     'transform-imports',
     {

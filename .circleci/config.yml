@@ -72,10 +72,7 @@ jobs:
           name: Publish
           command: |
             yarn lerna publish \
-              --skip-git \
-              --force-publish=* \
-              --repo-version ${CIRCLE_TAG} \
-              --npm-tag=beta \
+              --npm-tag beta \
               --yes
 
 workflows:

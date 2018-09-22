@@ -1,5 +1,13 @@
 {
   "version": "1.0.0-beta.6",
+  "command": {
+    "publish": {
+      "message": "chore(release): publish %s [skip ci]",
+      "allowBranch": [
+        "master"
+      ]
+    }
+  },
   "changelog": {
     "repo": "cat-org/cat-core",
     "cacheDir": ".changelog",
@@ -11,7 +19,7 @@
       "PR: Internal :house:": ":house: Internal"
     }
   },
-  "lerna": "2.11.0",
+  "lerna": "3.3.2",
   "npmClient": "yarn",
   "npmClientArgs": [
     "--no-lockfile"

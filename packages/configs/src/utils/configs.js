@@ -8,6 +8,7 @@ import fs from 'fs';
 import path from 'path';
 
 import cosmiconfig from 'cosmiconfig';
+import readPkgUp from 'read-pkg-up';
 import npmWhich from 'npm-which';
 import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
@@ -206,7 +207,9 @@ export class Configs {
 
 const configs = new Configs();
 
-configs.handleCustomConfigs(cosmiconfig('cat').searchSync()?.filepath);
+configs.handleCustomConfigs(
+  readPkgUp.sync()?.pkg.configs || cosmiconfig('cat').searchSync()?.filepath,
+);
 configs.findRootDir();
 
 export default configs;

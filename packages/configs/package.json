@@ -10,13 +10,6 @@
   "bin": {
     "configs-scripts": "./lib/bin/index.js"
   },
-  "keywords": [
-    "cat-org",
-    "configs"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
     "chalk": "^2.4.1",
     "commander": "^2.17.1",
@@ -31,5 +24,12 @@
   },
   "devDependencies": {
     "get-port": "^4.0.0"
+  },
+  "keywords": [
+    "cat-org",
+    "configs"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }

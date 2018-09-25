@@ -129,7 +129,7 @@ const jest = {
 };
 
 module.exports = (() => {
-  const USE_DEFAULT_BABEL_CONFIG_PATTERN = /^@cat-org\/(configs|babel-.*)$/;
+  const USE_DEFAULT_BABEL_CONFIG_PATTERN = /^@cat-org\/(configs|logger|babel-.*)$/;
   const { name } = require(path.resolve(process.cwd(), './package.json'));
 
   if (

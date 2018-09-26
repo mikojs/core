@@ -22,4 +22,8 @@ describe('handle unhandleRejection', () => {
     ExecutionEnvironment.canUseEventListeners = true;
     expect(handleUnhandledRejection).not.toThrow();
   });
+
+  afterEach(() => {
+    ExecutionEnvironment.canUseEventListeners = false;
+  });
 });

@@ -96,4 +96,8 @@ describe('logger', () => {
       );
     });
   });
+
+  afterEach(() => {
+    ExecutionEnvironment.canUseEventListeners = false;
+  });
 });

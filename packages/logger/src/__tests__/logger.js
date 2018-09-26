@@ -26,41 +26,46 @@ describe('hide logger in production', () => {
 
 describe('logger', () => {
   describe('node', () => {
+    beforeEach(() => {
+      ExecutionEnvironment.canUseEventListeners = false;
+    });
+
     it('info', () => {
       const mockLog = jest.fn();
 
       global.console.log = mockLog;
-      ExecutionEnvironment.canUseEventListeners = false;
 
       const log = logger('node');
 
       log.info('info message');
 
       expect(mockLog).toHaveBeenCalledTimes(1);
-      expect(mockLog).toHaveBeenCalledWith('{green node} info message');
+      expect(mockLog).toHaveBeenCalledWith('  {green node} info message');
     });
 
     it('error', () => {
       const mockError = jest.fn();
 
       global.console.error = mockError;
-      ExecutionEnvironment.canUseEventListeners = false;
 
       const log = logger('node');
 
       log.error('error message');
 
       expect(mockError).toHaveBeenCalledTimes(1);
-      expect(mockError).toHaveBeenCalledWith('{red node} error message');
+      expect(mockError).toHaveBeenCalledWith('  {red node} error message');
     });
   });
 
   describe('brwoser', () => {
+    beforeEach(() => {
+      ExecutionEnvironment.canUseEventListeners = true;
+    });
+
     it('info', () => {
       const mockLog = jest.fn();
 
       global.console.log = mockLog;
-      ExecutionEnvironment.canUseEventListeners = true;
 
       const log = logger('brwoser');
 
@@ -68,7 +73,7 @@ describe('logger', () => {
 
       expect(mockLog).toHaveBeenCalledTimes(1);
       expect(mockLog).toHaveBeenCalledWith(
-        '%cbrwoser%c info message',
+        '  %cbrwoser%c info message',
         'color: green',
         'color: black',
       );
@@ -78,7 +83,6 @@ describe('logger', () => {
       const mockError = jest.fn();
 
       global.console.error = mockError;
-      ExecutionEnvironment.canUseEventListeners = true;
 
       const log = logger('brwoser');
 
@@ -86,7 +90,7 @@ describe('logger', () => {
 
       expect(mockError).toHaveBeenCalledTimes(1);
       expect(mockError).toHaveBeenCalledWith(
-        '%cbrwoser%c error message',
+        '  %cbrwoser%c error message',
         'color: red',
         'color: black',
       );

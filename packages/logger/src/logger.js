@@ -49,7 +49,9 @@ export default (
           texts.reduce(
             (result: string, text: string, index: number): string => {
               if (/\{[a-zA-Z]* /.test(text)) {
-                const color = text.replace(/\{([a-zA-Z]*) /, '$1');
+                const color = text
+                  .replace(/\{([a-zA-Z]*) /, '$1')
+                  .replace(/ /g, '');
 
                 colorStore.push(color);
                 return `${result}${text.replace(/\{([a-zA-Z]*) /, '%c')}${keys[
@@ -102,8 +104,8 @@ export default (
       messages.forEach((message: string) => {
         logFunc(
           isError
-            ? chalk`{red ${name}} ${message}`
-            : chalk`{green ${name}} ${message}`,
+            ? chalk`  {red ${name}} ${message}`
+            : chalk`  {green ${name}} ${message}`,
         );
       });
 

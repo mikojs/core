@@ -47,46 +47,35 @@ const babel = config => {
     'babel config should be equal to default config',
   );
 
-  config.plugins.push([
-    'transform-imports',
-    {
-      '@cat-org/utils': {
-        transform: '@cat-org/utils/lib/${member}',
+  config.plugins.push(
+    '@babel/proposal-export-default-from',
+    '@babel/proposal-class-properties',
+    'add-module-exports',
+    [
+      'transform-imports',
+      {
+        '@cat-org/utils': {
+          transform: '@cat-org/utils/lib/${member}',
+        },
+        fbjs: {
+          transform: 'fbjs/lib/${member}',
+        },
       },
-      fbjs: {
-        transform: 'fbjs/lib/${member}',
-      },
-    },
-  ]);
-
-  config.overrides.push(
-    {
-      test: './packages/configs',
-      plugins: [
-        ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
-        '@babel/proposal-class-properties',
-      ],
-    },
-    {
-      test: './packages/babel-plugin-transform-flow',
-      plugins: ['@babel/proposal-class-properties'],
-    },
+    ],
   );
 
-  if (process.env.NODE_ENV !== 'test')
-    config.plugins.push('add-module-exports');
-  else {
+  config.overrides.push({
+    test: './packages/configs',
+    plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
+  });
+
+  if (process.env.NODE_ENV === 'test')
     config.overrides[0].plugins.push([
       'module-resolver',
       {
         root: ['./src', './packages/configs/src'],
       },
     ]);
-    config.overrides.push({
-      test: './__mocks__',
-      plugins: ['@babel/proposal-class-properties'],
-    });
-  }
 
   return config;
 };

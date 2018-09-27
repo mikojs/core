@@ -37,29 +37,16 @@ defaultConfigs.defaultNoConfig = {};
 
 describe('configs', () => {
   it('can not find the root dir', () => {
-    const mockLog = jest.fn();
     const configs = new Configs();
-
-    global.console.log = mockLog;
 
     expect(() => {
       configs.findRootDir(os.homedir());
     }).toThrow('process exit');
-    expect(configs.rootDir).toBe('/');
-    expect(mockLog).toHaveBeenCalledTimes(3);
-    expect(mockLog).toHaveBeenCalledWith(
-      '  {red configs-scripts} Can not find the root directory',
-    );
-    expect(mockLog).toHaveBeenCalledWith(
-      '  {red configs-scripts} Run {cyan `git init`} in the root directory',
-    );
   });
 
   it('default configs with finding the root dir', () => {
-    const mockLog = jest.fn();
     const configs = new Configs();
 
-    global.console.log = mockLog;
     configs.handleCustomConfigs();
     configs.findRootDir(__dirname);
 
@@ -75,7 +62,6 @@ describe('configs', () => {
       env: {},
       cli: path.resolve(process.cwd(), './node_modules/.bin/jest'),
     });
-    expect(mockLog).toHaveBeenCalledTimes(0);
   });
 
   describe('get config', () => {
@@ -89,46 +75,21 @@ describe('configs', () => {
     configs.findRootDir();
 
     it('not find command', () => {
-      const mockLog = jest.fn();
-
-      global.console.log = mockLog;
-
       expect(() => {
         configs.getConfig({
           ...defaultParameter,
           cliName: 'not find command',
         });
       }).toThrow('process exit');
-      expect(mockLog).toHaveBeenCalledTimes(3);
-      expect(mockLog).toHaveBeenCalledWith(
-        '  {red configs-scripts} Can not find {cyan `not find command`} in configs',
-      );
-      expect(mockLog).toHaveBeenCalledWith(
-        '  {red configs-scripts} Use {green `--info`} to get the more information',
-      );
     });
 
     it('show custom path info and not find cli', () => {
-      const mockLog = jest.fn();
-
-      global.console.log = mockLog;
-
       expect(() => {
         configs.getConfig({
           ...defaultParameter,
           cliName: 'noCli',
         });
       }).toThrow('process exit');
-      expect(mockLog).toHaveBeenCalledTimes(4);
-      expect(mockLog).toHaveBeenCalledWith(
-        '  {green configs-scripts} Using external configsuration',
-      );
-      expect(mockLog).toHaveBeenCalledWith(
-        `  {green configs-scripts} Location: ${customConfigsPath}`,
-      );
-      expect(mockLog).toHaveBeenCalledWith(
-        '  {red configs-scripts} Not found cli: noCli',
-      );
     });
 
     it('get config error', () => {

@@ -7,7 +7,7 @@ import debug from 'debug';
 import moment from 'moment';
 import outputFileSync from 'output-file-sync';
 
-import printInfos from './printInfos';
+import logger from './logger';
 import configs from './configs';
 import worker from './worker';
 
@@ -43,12 +43,9 @@ const findConfigFiles = (cliName: string): {} => {
 
   if (!configFiles[cliName]) {
     if (!CONFIG_FILES[cli])
-      printInfos(
-        [
-          'Can not generate the config file',
-          chalk`Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
-        ],
-        true,
+      logger.error(
+        'Can not generate the config file',
+        chalk`Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
       );
 
     configFiles[cliName] = path.resolve(configs.rootDir, CONFIG_FILES[cli]);

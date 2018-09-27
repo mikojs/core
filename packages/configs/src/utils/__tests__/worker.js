@@ -131,37 +131,21 @@ describe('worker', () => {
   });
 
   it('error when filePath is undefined', () => {
-    const mockLog = jest.fn();
-
-    global.console.log = mockLog;
-
     expect(() => {
       serverWorker.writeCache({
         pid: 1,
         using: moment().format(),
       });
     }).toThrow('process exit');
-    expect(mockLog).toHaveBeenCalledTimes(2);
-    expect(mockLog).toHaveBeenCalledWith(
-      '  {red configs-scripts} filePath can not be undefined in worker.writeCache',
-    );
   });
 
   it('error when try to use client remove cache', () => {
-    const mockLog = jest.fn();
-
-    global.console.log = mockLog;
-
     expect(() => {
       clientWorker.writeCache({
         pid: 1,
         using: false,
       });
     }).toThrow('process exit');
-    expect(mockLog).toHaveBeenCalledTimes(2);
-    expect(mockLog).toHaveBeenCalledWith(
-      '  {red configs-scripts} client can not remove cache',
-    );
   });
 
   afterAll(async (): Promise<void> => {

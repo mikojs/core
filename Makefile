@@ -19,15 +19,17 @@ babel-core:
 		"babel src -d lib --config-file ../../.catrc.js --verbose" \
 		--parallel \
 		--stream \
-		--scope @cat-org/babel-* \
-		--scope @cat-org/configs
+		--scope @cat-org/configs \
+		--scope @cat-org/logger \
+		--scope @cat-org/babel-*
 	@ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs-scripts
 
 babel-all:
 	@make babel-core
 	@$(call babel-build, \
-		--ignore @cat-org/babel-* \
-		--ignore @cat-org/configs)
+		--ignore @cat-org/configs \
+		--ignore @cat-org/logger \
+		--ignore @cat-org/babel-*)
 
 babel-test:
 	@make babel-core

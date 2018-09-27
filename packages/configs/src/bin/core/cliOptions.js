@@ -6,7 +6,7 @@ import debug from 'debug';
 
 import { version } from '../../../package.json';
 
-import printInfos from 'utils/printInfos';
+import logger from 'utils/logger';
 import configs from 'utils/configs';
 
 const debugLog = debug('configs-scripts:cliOption');
@@ -96,13 +96,10 @@ if (info) {
             ];
 
           if (Object.keys(data).length !== 0)
-            printInfos(
-              [
-                chalk`{cyan \`${Object.keys(data).join(
-                  '` ,`',
-                )}\`} should not be in {green ${key}} config`,
-              ],
-              true,
+            logger.error(
+              chalk`{cyan \`${Object.keys(data).join(
+                '` ,`',
+              )}\`} should not be in {green ${key}} config`,
             );
 
           return [
@@ -132,12 +129,9 @@ ${[
 }
 
 if (!cliName)
-  printInfos(
-    [
-      chalk`Should give an argument at least`,
-      chalk`Use {green \`-h\`} to get the more information`,
-    ],
-    true,
+  logger.error(
+    chalk`Should give an argument at least`,
+    chalk`Use {green \`-h\`} to get the more information`,
   );
 
 export default {

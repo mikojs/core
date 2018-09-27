@@ -5,7 +5,7 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "clean:all": "make clean-all",
-    "precommit": "make babel-lint-staged && yarn flow && configs-scripts lint-staged",
+    "precommit": "make babel-lint-staged && configs-scripts lint-staged && yarn flow",
     "preinstall": "rm -rf ./node_modules/@cat-org",
     "install:all": "make install-all",
     "prepare": "ln -snf $(pwd)/packages ./node_modules/@cat-org",
@@ -32,6 +32,7 @@
     "@babel/cli": "^7.1.0",
     "@babel/core": "^7.1.0",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
     "@babel/plugin-proposal-optional-chaining": "^7.0.0",
     "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
     "@babel/preset-env": "^7.1.0",

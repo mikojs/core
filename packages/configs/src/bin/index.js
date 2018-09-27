@@ -6,6 +6,8 @@ import childProcess from 'child_process';
 import debug from 'debug';
 import isRunning from 'is-running';
 
+import { handleUnhandledRejection } from '@cat-org/logger';
+
 import cliOptions from './core/cliOptions';
 
 import configs from 'utils/configs';
@@ -16,9 +18,7 @@ const { cliName } = cliOptions;
 const { cli, argv, env } = configs.getConfig(cliOptions);
 const debugLog = debug(`configs-scripts:bin[${cliName}]`);
 
-process.on('unhandledRejection', (error: mixed) => {
-  throw error;
-});
+handleUnhandledRejection();
 
 (async (): Promise<void> => {
   switch (cli) {

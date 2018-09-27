@@ -15,7 +15,7 @@ import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
 import defaultConfigs from './defaultConfigs';
-import printInfos from './printInfos';
+import logger from './logger';
 
 const debugLog = debug('configs-scripts:configs');
 
@@ -121,12 +121,9 @@ export class Configs {
     debugLog(`Find rood dir: ${this.rootDir}`);
 
     if (this.rootDir === '/')
-      printInfos(
-        [
-          'Can not find the root directory',
-          chalk`Run {cyan \`git init\`} in the root directory`,
-        ],
-        true,
+      logger.error(
+        'Can not find the root directory',
+        chalk`Run {cyan \`git init\`} in the root directory`,
       );
   };
 
@@ -152,21 +149,15 @@ export class Configs {
     shouldUseNpm: boolean,
   }): {} => {
     if (!this.store[cliName])
-      printInfos(
-        [
-          chalk`Can not find {cyan \`${cliName}\`} in configs`,
-          chalk`Use {green \`--info\`} to get the more information`,
-        ],
-        true,
+      logger.error(
+        chalk`Can not find {cyan \`${cliName}\`} in configs`,
+        chalk`Use {green \`--info\`} to get the more information`,
       );
 
     if (this.customConfigsPath)
-      printInfos(
-        [
-          'Using external configsuration',
-          `Location: ${this.customConfigsPath}`,
-        ],
-        false,
+      logger.info(
+        'Using external configsuration',
+        `Location: ${this.customConfigsPath}`,
       );
 
     const {
@@ -198,7 +189,7 @@ export class Configs {
       };
     } catch (e) {
       if (/not found/.test(e.message))
-        printInfos([e.message.replace(/not found/, 'Not found cli')], true);
+        logger.error(e.message.replace(/not found/, 'Not found cli'));
 
       throw e;
     }

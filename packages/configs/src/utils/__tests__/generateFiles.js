@@ -17,20 +17,9 @@ describe('generate files', () => {
   });
 
   it('error', () => {
-    const mockLog = jest.fn();
-
-    global.console.log = mockLog;
-
     expect(() => {
       generateFiles({ cliName: 'not-find-cli-setting' });
     }).toThrow('process exit');
-    expect(mockLog).toHaveBeenCalledTimes(3);
-    expect(mockLog).toHaveBeenCalledWith(
-      '  {red configs-scripts} Can not generate the config file',
-    );
-    expect(mockLog).toHaveBeenCalledWith(
-      '  {red configs-scripts} Add the path of the config in {cyan `configs.not-find-cli-setting.configFiles.not-find-cli-setting`}',
-    );
   });
 
   it('generate', () => {

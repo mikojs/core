@@ -43,35 +43,32 @@ export default (
         texts: $ReadOnlyArray<string>,
         ...keys: $ReadOnlyArray<string>
       ): $ReadOnlyArray<string> => {
+        const colorpattern = /(\{[a-zA-Z]* )|(\})/g;
         const colorStore = [];
+        const transformString = texts
+          .map(
+            (text: string): string => {
+              colorStore.push(
+                // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+                ...(text.match(colorpattern)?.map(
+                  (color: string): string => {
+                    if (/\}/.test(color)) return 'color: black';
 
-        return [
-          texts.reduce(
-            (result: string, text: string, index: number): string => {
-              if (/\{[a-zA-Z]* /.test(text)) {
-                const color = text
-                  .replace(/\{([a-zA-Z]*) /, '$1')
-                  .replace(/ /g, '');
+                    return `color: ${color.replace(/\{([a-zA-Z]*) /, '$1')}`;
+                  },
+                ) || []),
+              );
 
-                colorStore.push(color);
-                return `${result}${text.replace(/\{([a-zA-Z]*) /, '%c')}${keys[
-                  index
-                ] || ''}`;
-              }
-
-              if (/\}/.test(text)) {
-                colorStore.push('black');
-
-                return `${result}${text.replace(/\}/, '%c')}${keys[index] ||
-                  ''}`;
-              }
-
-              return `${result}${text}${keys[index] || ''}`;
+              return text.replace(colorpattern, '%c');
             },
+          )
+          .reduce(
+            (result: string, text: string, index: number): string =>
+              `${result}${text}${keys[index] || ''}`,
             '',
-          ),
-          ...colorStore.map((color: string) => `color: ${color}`),
-        ];
+          );
+
+        return [transformString, ...colorStore];
       };
 
   /**

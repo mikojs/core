@@ -28,14 +28,12 @@ export default {
           root: ['./src'],
         },
       ],
-      ...(process.env.NODE_ENV === 'test'
-        ? []
-        : /* istanbul ignore next */ ['@cat-org/transform-flow']),
+      ...(process.env.NODE_ENV === 'test' ? [] : ['@cat-org/transform-flow']),
     ],
     ignore:
       process.env.NODE_ENV === 'test'
         ? []
-        : /* istanbul ignore next */ ['**/__tests__/**', '**/__mocks__/**'],
+        : ['**/__tests__/**', '**/__mocks__/**'],
     overrides: [],
   }),
   run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [

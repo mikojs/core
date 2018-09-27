@@ -1,7 +1,7 @@
 ROOT=$(shell pwd)
 
 install-all:
-	@yarn install && ln -snf $(ROOT)/packages ./node_modules/@cat-org
+	@yarn install
 	@yarn lerna bootstrap
 	@make install-flow-typed
 

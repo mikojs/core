@@ -1,0 +1,30 @@
+{
+  "name": "@cat-org/babel-plugin-transform-flow",
+  "description": "Babel plugin for transforming flow files",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/cat-core/",
+  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/babel-plugin-transform-flow",
+  "version": "1.0.0-beta.6",
+  "main": "./lib/index.js",
+  "peerDependencies": {
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.1.0",
+    "@babel/helper-plugin-utils": "^7.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.0",
+    "@babel/core": "^7.1.0",
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "chokidar": "^2.0.4",
+    "output-file-sync": "^2.0.1"
+  },
+  "keywords": [
+    "babel plugin",
+    "cat-org",
+    "transform flow files"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

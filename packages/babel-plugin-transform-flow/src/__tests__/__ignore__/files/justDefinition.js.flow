@@ -1,0 +1,3 @@
+// @flow
+
+export type justDefinitionType = 'just definition';

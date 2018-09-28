@@ -35,9 +35,6 @@ describe('check files in packages', () => {
         // TODO check pacakges dev not in root package
 
         switch (name) {
-          case 'babel-plugin-transform-flow':
-            // TODO check babel version
-            break;
           case 'eslint-config-cat':
             // TODO check dependices
             // TODO check eslint version

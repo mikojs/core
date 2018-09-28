@@ -15,7 +15,6 @@ it('test d3DirTree', () => {
     '__tests__',
     'd3DirTree.js',
     'index.js',
-    'index.js.flow',
     'throwMessageInIndex.js',
   ]);
 });

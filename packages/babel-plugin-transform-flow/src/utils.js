@@ -16,7 +16,7 @@ export type initialOptionsType = {|
 export type optionsType = {|
   src: $ReadOnlyArray<string>,
   outDir: string,
-  configs?: {
+  config?: {
     parserOpts?: {},
   },
   verbose: boolean,

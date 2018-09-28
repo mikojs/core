@@ -63,7 +63,7 @@ test('write error with watch mode', () => {
   expect(global.console.log).toHaveBeenCalledWith(`${pkgName} Error: error`);
 });
 
-test('watch error when not finding babel configs', () => {
+test('watch error when not finding babel config', () => {
   const justDefinitionPath = path.resolve(
     __dirname,
     './__ignore__/files/justDefinition.js.flow',
@@ -81,13 +81,13 @@ test('watch error when not finding babel configs', () => {
         ({ filePath }: flowFileType): boolean =>
           filePath === justDefinitionPath,
       ) || {}
-    ).babelConfigs;
+    ).babelConfig;
 
     chokidar.watchCallback(justDefinitionPath);
   }).toThrow(
     `${pkgName} Error: not find ${justDefinitionPath.replace(
       `${process.cwd()}/`,
       '',
-    )} babel configs`,
+    )} babel config`,
   );
 });

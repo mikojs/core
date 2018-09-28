@@ -10,7 +10,7 @@ import utils from './utils';
 export type writeFileType = {
   srcPath: string,
   destPath: string,
-  babelConfigs: {
+  babelConfig: {
     parserOpts: {},
     notInitialized?: boolean,
   },
@@ -43,12 +43,12 @@ class WriteFiles {
     this.isWritting = true;
 
     const { verbose, watch } = utils.options;
-    const { srcPath, destPath, babelConfigs } = this.store.pop();
+    const { srcPath, destPath, babelConfig } = this.store.pop();
 
     try {
       const { code }: { code: string } = transformFileSync(
         srcPath,
-        babelConfigs,
+        babelConfig,
       );
 
       this.store = this.store.filter(

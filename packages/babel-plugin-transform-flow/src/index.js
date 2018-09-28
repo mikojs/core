@@ -52,7 +52,7 @@ export default declare(
             srcPath,
             destPath,
             filePath,
-            babelConfigs: { parserOpts: {}, notInitialized: true },
+            babelConfig: { parserOpts: {}, notInitialized: true },
           });
         },
       },
@@ -71,21 +71,21 @@ export default declare(
           },
         },
       }) => {
-        const { configs } = utils.options;
+        const { config } = utils.options;
         const { srcPath, destPath } = utils.getFilePaths(filename, cwd);
-        const babelConfigs = {
-          ...configs,
+        const babelConfig = {
+          ...config,
           parserOpts: {
             plugins,
-            ...configs?.parserOpts,
+            ...config?.parserOpts,
           },
         };
 
         flowFiles.store.forEach((flowFile: flowFileType) => {
-          if (flowFile.babelConfigs.notInitialized) {
-            delete flowFile.babelConfigs.notInitialized;
+          if (flowFile.babelConfig.notInitialized) {
+            delete flowFile.babelConfig.notInitialized;
 
-            flowFile.babelConfigs = babelConfigs;
+            flowFile.babelConfig = babelConfig;
             writeFiles.add(flowFile);
           }
         });
@@ -99,7 +99,7 @@ export default declare(
               srcPath: flowSrcPath,
               destPath,
               filePath: flowFilePath,
-              babelConfigs,
+              babelConfig,
             };
 
             flowFiles.add(flowFile);
@@ -112,7 +112,7 @@ export default declare(
         writeFiles.add({
           srcPath,
           destPath,
-          babelConfigs,
+          babelConfig,
         });
       },
     };

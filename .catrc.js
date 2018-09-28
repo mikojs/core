@@ -18,6 +18,7 @@ const defaultBabelConfig = {
     '@babel/flow',
   ],
   plugins: [
+    '@babel/transform-flow-comments',
     '@babel/proposal-optional-chaining',
     [
       'module-resolver',

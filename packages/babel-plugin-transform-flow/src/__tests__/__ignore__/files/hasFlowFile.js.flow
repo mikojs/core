@@ -1,5 +1,0 @@
-// @flow
-
-export type canExportOtherType = 'not in file type';
-
-export type hasFlowFileType = 'has flow file';

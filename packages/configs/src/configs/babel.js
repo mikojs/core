@@ -7,8 +7,8 @@ export default {
     '@babel/core',
     '@babel/preset-env',
     '@babel/preset-flow',
+    '@babel/plugin-transform-flow-comments',
     '@babel/plugin-proposal-optional-chaining',
-    '@cat-org/babel-plugin-transform-flow',
   ],
   config: (): {} => ({
     presets: [
@@ -21,6 +21,7 @@ export default {
       '@babel/flow',
     ],
     plugins: [
+      '@babel/transform-flow-comments',
       '@babel/proposal-optional-chaining',
       [
         'module-resolver',
@@ -28,7 +29,6 @@ export default {
           root: ['./src'],
         },
       ],
-      ...(process.env.NODE_ENV === 'test' ? [] : ['@cat-org/transform-flow']),
     ],
     ignore:
       process.env.NODE_ENV === 'test'

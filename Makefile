@@ -19,8 +19,7 @@ babel-core:
 		--parallel \
 		--stream \
 		--scope @cat-org/configs \
-		--scope @cat-org/logger \
-		--scope @cat-org/babel-*
+		--scope @cat-org/logger
 	@ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs-scripts
 
 babel-all:

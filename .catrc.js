@@ -74,6 +74,14 @@ const babel = config => {
         root: ['./src', './packages/configs/src'],
       },
     ]);
+  else if (!process.env.USE_DEFAULT_BABEL)
+    config.plugins
+      .find(plugin => plugin[0] === '@cat-org/transform-flow')[1]
+      .config.plugins.push(
+        // FIXME: remove after flow support
+        '@babel/proposal-export-default-from',
+        ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
+      );
 
   return config;
 };

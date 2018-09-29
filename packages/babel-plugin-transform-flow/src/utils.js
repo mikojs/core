@@ -16,9 +16,7 @@ export type initialOptionsType = {|
 export type optionsType = {|
   src: $ReadOnlyArray<string>,
   outDir: string,
-  config?: {
-    parserOpts?: {},
-  },
+  plugins?: [],
   verbose: boolean,
   watch: boolean,
 |};

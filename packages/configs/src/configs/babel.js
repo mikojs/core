@@ -34,12 +34,16 @@ export default {
             [
               '@cat-org/transform-flow',
               {
-                config: {
-                  plugins: [
-                    // FIXME: remove when flow support optional-chaining
-                    '@babel/proposal-optional-chaining',
+                plugins: [
+                  [
+                    'module-resolver',
+                    {
+                      root: ['./src'],
+                    },
                   ],
-                },
+                  // FIXME: remove when flow support optional-chaining
+                  '@babel/proposal-optional-chaining',
+                ],
               },
             ],
           ]),

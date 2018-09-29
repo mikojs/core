@@ -12,7 +12,6 @@ export type flowFileType = {
   destPath: string,
   filePath: string,
   babelConfig: {
-    parserOpts: {},
     notInitialized?: boolean,
   },
 };

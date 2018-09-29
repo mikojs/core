@@ -9,7 +9,7 @@ import utils from './utils';
 import flowFiles from './flowFiles';
 import writeFiles from './writeFiles';
 
-import type { optionsType, manipulateOptionsPluginsType } from './utils';
+import type { optionsType } from './utils';
 import type { flowFileType } from './flowFiles';
 
 export default declare(
@@ -52,33 +52,24 @@ export default declare(
             srcPath,
             destPath,
             filePath,
-            babelConfig: { parserOpts: {}, notInitialized: true },
+            babelConfig: { notInitialized: true },
           });
         },
       },
       post: ({
-        opts: {
-          cwd,
-          filename,
-          parserOpts: { plugins },
-        },
+        opts: { cwd, filename, parserOpts },
       }: {
         opts: {
           cwd: string,
           filename: string,
-          parserOpts: {
-            plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
-          },
+          parserOpts: {},
         },
       }) => {
-        const { config } = utils.options;
+        const { plugins } = utils.options;
         const { srcPath, destPath } = utils.getFilePaths(filename, cwd);
         const babelConfig = {
-          ...config,
-          parserOpts: {
-            plugins,
-            ...config?.parserOpts,
-          },
+          plugins,
+          parserOpts,
         };
 
         flowFiles.store.forEach((flowFile: flowFileType) => {

@@ -11,7 +11,6 @@ export type writeFileType = {
   srcPath: string,
   destPath: string,
   babelConfig: {
-    parserOpts: {},
     notInitialized?: boolean,
   },
 };

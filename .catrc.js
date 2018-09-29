@@ -1,5 +1,7 @@
 // @flow
 
+const path = require('path');
+
 const areEqual = require('fbjs/lib/areEqual');
 const invariant = require('fbjs/lib/invariant');
 
@@ -18,7 +20,6 @@ const defaultBabelConfig = {
     '@babel/flow',
   ],
   plugins: [
-    '@babel/transform-flow-comments',
     '@babel/proposal-optional-chaining',
     [
       'module-resolver',
@@ -117,7 +118,13 @@ const jest = {
 };
 
 module.exports = (() => {
-  if (/babel$/.test(process.argv[1]) && process.env.USE_DEFAULT_BABEL)
+  const USE_DEFAULT_BABEL_CONFIG_PATTERN = /^@cat-org\/(configs|logger|babel-.*)$/;
+  const { name } = require(path.resolve(process.cwd(), './package.json'));
+
+  if (
+    /babel$/.test(process.argv[1]) &&
+    USE_DEFAULT_BABEL_CONFIG_PATTERN.test(name)
+  )
     return babel(defaultBabelConfig);
 
   return {

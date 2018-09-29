@@ -16,16 +16,20 @@ install-flow-typed:
 babel-core:
 	@make babel-clean
 	@yarn lerna exec \
-		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
+		"babel src -d lib --config-file ../../.catrc.js --verbose" \
 		--parallel \
 		--stream \
 		--scope @cat-org/configs \
-		--scope @cat-org/logger
+		--scope @cat-org/logger \
+		--scope @cat-org/babel-*
 	@ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs-scripts
 
 babel-all:
 	@make babel-core
-	@$(call babel-build)
+	@$(call babel-build, \
+		--ignore @cat-org/configs \
+		--ignore @cat-org/logger \
+		--ignore @cat-org/babel-*)
 
 babel-test:
 	@make babel-core

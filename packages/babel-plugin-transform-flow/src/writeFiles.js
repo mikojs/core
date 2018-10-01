@@ -54,7 +54,10 @@ class WriteFiles {
         (writeFile: writeFileType): boolean => writeFile.srcPath !== srcPath,
       );
 
-      outputFileSync(destPath, code);
+      outputFileSync(
+        destPath,
+        code.replace(/fixme-flow-file-annotation/, '@flow'),
+      );
       this.isWritting = false;
 
       // eslint-disable-next-line no-console

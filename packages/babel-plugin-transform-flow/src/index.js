@@ -9,7 +9,7 @@ import utils from './utils';
 import flowFiles from './flowFiles';
 import writeFiles from './writeFiles';
 
-import type { optionsType, manipulateOptionsPluginsType } from './utils';
+import type { optionsType } from './utils';
 import type { flowFileType } from './flowFiles';
 
 export default declare(
@@ -52,40 +52,31 @@ export default declare(
             srcPath,
             destPath,
             filePath,
-            babelConfigs: { parserOpts: {}, notInitialized: true },
+            babelConfig: { notInitialized: true },
           });
         },
       },
       post: ({
-        opts: {
-          cwd,
-          filename,
-          parserOpts: { plugins },
-        },
+        opts: { cwd, filename, parserOpts },
       }: {
         opts: {
           cwd: string,
           filename: string,
-          parserOpts: {
-            plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
-          },
+          parserOpts: {},
         },
       }) => {
-        const { configs } = utils.options;
+        const { plugins } = utils.options;
         const { srcPath, destPath } = utils.getFilePaths(filename, cwd);
-        const babelConfigs = {
-          ...configs,
-          parserOpts: {
-            plugins,
-            ...configs?.parserOpts,
-          },
+        const babelConfig = {
+          plugins,
+          parserOpts,
         };
 
         flowFiles.store.forEach((flowFile: flowFileType) => {
-          if (flowFile.babelConfigs.notInitialized) {
-            delete flowFile.babelConfigs.notInitialized;
+          if (flowFile.babelConfig.notInitialized) {
+            delete flowFile.babelConfig.notInitialized;
 
-            flowFile.babelConfigs = babelConfigs;
+            flowFile.babelConfig = babelConfig;
             writeFiles.add(flowFile);
           }
         });
@@ -99,7 +90,7 @@ export default declare(
               srcPath: flowSrcPath,
               destPath,
               filePath: flowFilePath,
-              babelConfigs,
+              babelConfig,
             };
 
             flowFiles.add(flowFile);
@@ -112,7 +103,7 @@ export default declare(
         writeFiles.add({
           srcPath,
           destPath,
-          babelConfigs,
+          babelConfig,
         });
       },
     };

@@ -11,8 +11,7 @@ export type flowFileType = {
   srcPath: string,
   destPath: string,
   filePath: string,
-  babelConfigs: {
-    parserOpts: {},
+  babelConfig: {
     notInitialized?: boolean,
   },
 };
@@ -73,9 +72,9 @@ class FlowFiles {
         );
 
         if (!newFile) return;
-        if (!newFile.babelConfigs)
+        if (!newFile.babelConfig)
           throw new Error(
-            `${pkgName} Error: not find ${newFile.srcPath} babel configs`,
+            `${pkgName} Error: not find ${newFile.srcPath} babel config`,
           );
 
         writeFiles.add(newFile);

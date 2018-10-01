@@ -28,7 +28,25 @@ export default {
           root: ['./src'],
         },
       ],
-      ...(process.env.NODE_ENV === 'test' ? [] : ['@cat-org/transform-flow']),
+      ...(process.env.NODE_ENV === 'test'
+        ? []
+        : [
+            [
+              '@cat-org/transform-flow',
+              {
+                plugins: [
+                  [
+                    'module-resolver',
+                    {
+                      root: ['./src'],
+                    },
+                  ],
+                  // FIXME: remove when flow support optional-chaining
+                  '@babel/proposal-optional-chaining',
+                ],
+              },
+            ],
+          ]),
     ],
     ignore:
       process.env.NODE_ENV === 'test'

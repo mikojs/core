@@ -5,7 +5,6 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "clean:all": "make clean-all",
-    "precommit": "make babel-lint-staged && configs-scripts lint-staged && yarn flow",
     "install:all": "make install-all",
     "prepare": "patch-package",
     "prod": "NODE_ENV=production make babel-all",
@@ -60,5 +59,10 @@
     "node": ">= 10.2.1",
     "npm": ">= 6.1.0",
     "yarn": ">= 1.7.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "make babel-lint-staged && configs-scripts lint-staged && yarn flow"
+    }
   }
 }

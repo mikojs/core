@@ -16,7 +16,7 @@ export default (options?: null | {} = null) => {
     ...utils.initialOptions,
     src: ['src'],
     outDir: 'lib',
-    configs: { parserOpts: {} },
+    plugins: [],
   };
 
   // reset flowFiles

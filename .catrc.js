@@ -1,7 +1,5 @@
 // @flow
 
-const path = require('path');
-
 const areEqual = require('fbjs/lib/areEqual');
 const invariant = require('fbjs/lib/invariant');
 
@@ -76,6 +74,14 @@ const babel = config => {
         root: ['./src', './packages/configs/src'],
       },
     ]);
+  else if (!process.env.USE_DEFAULT_BABEL)
+    config.plugins
+      .find(plugin => plugin[0] === '@cat-org/transform-flow')[1]
+      .plugins.push(
+        // FIXME: remove after flow support
+        '@babel/proposal-export-default-from',
+        ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
+      );
 
   return config;
 };
@@ -118,13 +124,7 @@ const jest = {
 };
 
 module.exports = (() => {
-  const USE_DEFAULT_BABEL_CONFIG_PATTERN = /^@cat-org\/(configs|logger|babel-.*)$/;
-  const { name } = require(path.resolve(process.cwd(), './package.json'));
-
-  if (
-    /babel$/.test(process.argv[1]) &&
-    USE_DEFAULT_BABEL_CONFIG_PATTERN.test(name)
-  )
+  if (/babel$/.test(process.argv[1]) && process.env.USE_DEFAULT_BABEL)
     return babel(defaultBabelConfig);
 
   return {

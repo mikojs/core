@@ -1,4 +1,6 @@
 /**
+ * fixme-flow-file-annotation
+ *
  * Flow not support @babel/plugin-proposal-pipeline-operator
  * https://github.com/facebook/flow/issues/5443
  */

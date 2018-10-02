@@ -24,7 +24,8 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.11.1",
-    "eslint-plugin-relay": "^0.0.28"
+    "eslint-plugin-relay": "^0.0.28",
+    "patch-package": "^5.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",

@@ -7,15 +7,15 @@
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/logger",
   "version": "1.0.0-beta.6",
   "main": "./lib/index.js",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "fbjs": "^1.0.0"
+  },
   "keywords": [
     "cat-org",
     "logger"
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "chalk": "^2.4.1",
-    "fbjs": "^1.0.0"
   }
 }

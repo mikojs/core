@@ -9,7 +9,7 @@ install-flow-typed:
 	rm -rf ./flow-typed
 	@yarn flow-typed install --verbose
 	@yarn lerna exec \
-		"flow-typed install -f 0.81.0 --verbose" \
+		"flow-typed install -f 0.82.0 --verbose" \
 		--parallel \
 		--stream
 

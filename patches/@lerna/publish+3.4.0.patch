@@ -1,16 +1,15 @@
 patch-package
 --- a/node_modules/@lerna/publish/lib/get-npm-username.js
 +++ b/node_modules/@lerna/publish/lib/get-npm-username.js
-@@ -9,7 +9,13 @@ module.exports = getNpmUsername;
+@@ -9,7 +9,12 @@ module.exports = getNpmUsername;
  function getNpmUsername(opts) {
    log.info("", "Verifying npm credentials");
  
 -  return fetch.json("-/whoami", opts).then(success, failure);
-+  const findToken = opts.list.find(data => !!data['//registry.npmjs.org/:_authToken']);
-+
 +  return fetch.json(
 +    "-/whoami", {
-+      token: opts.list.find(data => !!data['//registry.npmjs.org/:_authToken']),
++      token: opts.list
++        .find(data => !!data['//registry.npmjs.org/:_authToken'])['//registry.npmjs.org/:_authToken'],
 +    },
 +  ).then(success, failure);
  

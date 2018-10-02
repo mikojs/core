@@ -7,6 +7,7 @@
     "clean:all": "make clean-all",
     "precommit": "make babel-lint-staged && configs-scripts lint-staged && yarn flow",
     "install:all": "make install-all",
+    "prepare": "patch-package",
     "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
     "test": "make babel-test && configs-scripts test"
@@ -24,8 +25,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.11.1",
-    "eslint-plugin-relay": "^0.0.28",
-    "patch-package": "^5.1.1"
+    "eslint-plugin-relay": "^0.0.28"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -48,9 +48,11 @@
     "flow-typed": "^2.5.1",
     "husky": "^1.1.0",
     "jest": "^23.6.0",
-    "lerna": "^3.3.2",
+    "lerna": "^3.4.0",
     "lerna-changelog": "^0.8.0",
     "lint-staged": "^7.3.0",
+    "patch-package": "^5.1.1",
+    "postinstall-prepare": "^1.0.1",
     "prettier": "^1.14.3",
     "prettier-package-json": "^2.0.1"
   },

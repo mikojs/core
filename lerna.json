@@ -24,6 +24,10 @@
   "npmClientArgs": [
     "--no-lockfile"
   ],
+  "ignoreChanges": [
+    "**/__tests__/**",
+    "**/*.md"
+  ],
   "packages": [
     "packages/*"
   ],

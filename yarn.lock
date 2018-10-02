@@ -4907,7 +4907,7 @@ lerna-changelog@^0.8.0:
     string.prototype.padend "^3.0.0"
     yargs "^11.0.0"
 
-lerna@^3.3.2:
+lerna@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/lerna/-/lerna-3.4.0.tgz#c1403852b4b3fa986072de11d7f549604fd41775"
   dependencies:

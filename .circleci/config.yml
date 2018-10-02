@@ -71,7 +71,7 @@ jobs:
       - run:
           name: Publish
           command: |
-            yarn lerna publish \
+            yarn lerna publish from-git \
               --npm-tag beta \
               --yes
 

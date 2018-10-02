@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.0-beta.8 (2018-10-02)
+
+FIX publish error
+
 ## 1.0.0-beta.7 (2018-10-02)
 
 #### :boom: Breaking Change

@@ -1,5 +1,43 @@
 # CHANGELOG
 
+## 1.0.0-beta.7 (2018-10-02)
+
+#### :boom: Breaking Change
+
+- `babel-plugin-transform-flow`, `configs`, `utils`
+  - [#64](https://github.com/cat-org/cat-core/pull/64) remove @cat-org/babel-transform-flow-comments ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `configs`, `logger`, `utils`
+  - [#61](https://github.com/cat-org/cat-core/pull/61) Add @cat-org/logger ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#58](https://github.com/cat-org/cat-core/pull/58) configs-scripts read pkg configs, first ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `configs`, `eslint-config-cat`, `utils`
+  - [#53](https://github.com/cat-org/cat-core/pull/53) coverage 100%, fix bug, upgrade packages, flow, lint ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `configs`, `utils`
+  - [#47](https://github.com/cat-org/cat-core/pull/47) Configs scripts ([@HsuTing](https://github.com/HsuTing))
+- `utils`
+  - [#50](https://github.com/cat-org/cat-core/pull/50) feat(utils): add handleRejection to utils ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `eslint-config-cat`
+  - [#45](https://github.com/cat-org/cat-core/pull/45) Add prefer-destructuring to eslint-config-cat ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `babel-plugin-transform-flow`, `configs`
+  - [#66](https://github.com/cat-org/cat-core/pull/66) Fix transform flow ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `babel-plugin-transform-flow`, `configs`, `eslint-config-cat`, `utils`
+  - [#53](https://github.com/cat-org/cat-core/pull/53) coverage 100%, fix bug, upgrade packages, flow, lint ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#48](https://github.com/cat-org/cat-core/pull/48) Link packages in the root folder ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.6 (2018-08-06)
 
 #### :boom: Breaking Change

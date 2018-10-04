@@ -56,7 +56,7 @@ release:
 
 clean-all:
 	@make babel-clean
-	@yarn lerna clean
+	@yarn lerna clean && rm -rf ./node_modules
 	rm -rf ./flow-typed
 	rm -rf ./coverage
 	rm -rf ./.eslintcache

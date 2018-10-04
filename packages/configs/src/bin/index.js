@@ -1,8 +1,7 @@
 #! /usr/bin/env node
 // @flow
 
-import childProcess from 'child_process';
-
+import execa from 'execa';
 import debug from 'debug';
 import isRunning from 'is-running';
 
@@ -23,7 +22,7 @@ handleUnhandledRejection();
 (async (): Promise<void> => {
   switch (cli) {
     case 'install':
-      childProcess.spawn(argv[0], argv.slice(1), {
+      execa(argv[0], argv.slice(1), {
         stdio: 'inherit',
       });
       return;
@@ -94,18 +93,22 @@ handleUnhandledRejection();
           2,
         )}`,
       );
-      childProcess
-        .spawn(argv[0], [cli, ...argv.slice(2)], {
+
+      try {
+        const { code } = await execa(argv[0], [cli, ...argv.slice(2)], {
           stdio: 'inherit',
-          env: {
-            ...process.env,
-            ...env,
-          },
-        })
-        .on('close', (exitCode: number) => {
-          debugLog('Run command done, remove files');
-          removeFiles(exitCode);
+          env,
         });
+
+        debugLog('Run command success, remove files');
+
+        removeFiles(code);
+      } catch (e) {
+        debugLog('Run command fail, remove files');
+        debugLog(e);
+
+        removeFiles(e.code);
+      }
       return;
     }
   }

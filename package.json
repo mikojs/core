@@ -6,7 +6,6 @@
   "scripts": {
     "clean:all": "make clean-all",
     "install:all": "make install-all",
-    "prepare": "patch-package",
     "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
     "test": "make babel-test && configs-scripts test"
@@ -50,8 +49,6 @@
     "lerna": "^3.4.0",
     "lerna-changelog": "^0.8.0",
     "lint-staged": "^7.3.0",
-    "patch-package": "^5.1.1",
-    "postinstall-prepare": "^1.0.1",
     "prettier": "^1.14.3",
     "prettier-package-json": "^2.0.1"
   },

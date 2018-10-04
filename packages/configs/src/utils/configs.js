@@ -201,7 +201,7 @@ export class Configs {
 const configs = new Configs();
 
 configs.handleCustomConfigs(
-  readPkgUp.sync()?.pkg.configs || cosmiconfig('cat').searchSync()?.filepath,
+  readPkgUp.sync()?.pkg?.configs || cosmiconfig('cat').searchSync()?.filepath,
 );
 configs.findRootDir();
 

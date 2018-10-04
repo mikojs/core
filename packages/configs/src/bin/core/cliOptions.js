@@ -123,7 +123,7 @@ ${[
               .join('\n')}`,
           ];
         }, [])
-        .join('\n\n'),
+        .join('\n\n') + '\n',
   );
   process.exit();
 }

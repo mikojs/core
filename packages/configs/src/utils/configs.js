@@ -16,8 +16,9 @@ import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
-import defaultConfigs from './defaultConfigs';
 import logger from './logger';
+
+import defaultConfigs from 'configs/defaultConfigs';
 
 const debugLog = debug('configs-scripts:configs');
 

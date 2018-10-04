@@ -6,7 +6,8 @@ import path from 'path';
 import { emptyFunction } from 'fbjs';
 
 import { Configs } from '../configs';
-import defaultConfigs from '../defaultConfigs';
+
+import defaultConfigs from 'configs/defaultConfigs';
 
 const defaultParameter = {
   argv: [],

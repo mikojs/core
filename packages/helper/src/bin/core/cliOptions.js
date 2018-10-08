@@ -9,7 +9,10 @@ const debugLog = debug('run-env:cliOptions');
 
 const program = new commander.Command('run-dev')
   .version(version, '-v, --version')
-  .option('-r, --root [root folder]', 'the root folder of project');
+  .option(
+    '-r, --root [root folder]',
+    'the root folder of project. Default: src',
+  );
 
 const { root = 'src' } = program.parse(process.argv);
 

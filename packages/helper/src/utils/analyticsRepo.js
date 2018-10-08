@@ -3,11 +3,12 @@
 import fs from 'fs';
 import path from 'path';
 
+import chalk from 'chalk';
 import readPkgUp from 'read-pkg-up';
 
-type analyticsRepoType = {
-  hasRootFolder: boolean,
-};
+import logger from './logger';
+
+type analyticsRepoType = {};
 
 const pkgInfo = readPkgUp.sync();
 
@@ -46,6 +47,12 @@ const getList = (
 export default (rootFolder: string): analyticsRepoType => {
   const { hasRootFolder, folderList } = getList(rootFolder);
 
+  if (!hasRootFolder)
+    logger.error(
+      'Can not find the root folder',
+      chalk`Use {cyan \`-h\`} to get the more information`,
+    );
+
   return folderList.reduce(
     (result: analyticsRepoType, key: string): analyticsRepoType => {
       // TODO
@@ -54,9 +61,6 @@ export default (rootFolder: string): analyticsRepoType => {
           return result;
       }
     },
-    {
-      hasRootFolder,
-      ...pkgInfo.pkg,
-    },
+    pkgInfo.pkg,
   );
 };

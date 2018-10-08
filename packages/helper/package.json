@@ -1,0 +1,28 @@
+{
+  "name": "@cat-org/helper",
+  "description": "Help for cat-org to run scripts",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/cat-core/",
+  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/helper",
+  "version": "1.0.0-beta.8",
+  "main": "./lib/index.js",
+  "bin": {
+    "run-env": "./lib/bin/run-env.js"
+  },
+  "keywords": [
+    "cat-org",
+    "helper"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@cat-org/logger": "^1.0.0-beta.8",
+    "chalk": "^2.4.1",
+    "commander": "^2.17.1",
+    "debug": "^4.0.1",
+    "execa": "^1.0.0",
+    "read-pkg-up": "^4.0.0"
+  }
+}

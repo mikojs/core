@@ -10,13 +10,6 @@
   "bin": {
     "run-env": "./lib/bin/run-env.js"
   },
-  "keywords": [
-    "cat-org",
-    "helper"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
     "@cat-org/logger": "^1.0.0-beta.8",
     "chalk": "^2.4.1",
@@ -25,5 +18,9 @@
     "execa": "^1.0.0",
     "npm-registry-fetch": "^3.8.0",
     "read-pkg-up": "^4.0.0"
+  },
+  "keywords": ["cat-org", "helper"],
+  "publishConfig": {
+    "access": "public"
   }
 }

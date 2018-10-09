@@ -12,6 +12,10 @@ type analyticsRepoType = {};
 
 const pkgInfo = readPkgUp.sync();
 
+export const pkgFolder = pkgInfo.path
+  ? path.dirname(pkgInfo.path)
+  : process.cwd();
+
 /**
  * @example
  * getList('root')
@@ -29,12 +33,7 @@ const getList = (
   try {
     return {
       hasRootFolder: true,
-      folderList: fs.readdirSync(
-        path.resolve(
-          pkgInfo.path ? path.dirname(pkgInfo.path) : process.cwd(),
-          rootFolder,
-        ),
-      ),
+      folderList: fs.readdirSync(path.resolve(pkgFolder, rootFolder)),
     };
   } catch (e) {
     return {

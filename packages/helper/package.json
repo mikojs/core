@@ -16,7 +16,7 @@
     "commander": "^2.17.1",
     "debug": "^4.0.1",
     "execa": "^1.0.0",
-    "npm-registry-fetch": "^3.8.0",
+    "mkdirp": "^0.5.1",
     "read-pkg-up": "^4.0.0"
   },
   "keywords": ["cat-org", "helper"],

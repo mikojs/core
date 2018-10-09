@@ -17,7 +17,7 @@ handleUnhandledRejection();
 // TODO data
 analyticsRepo(cliOptions.root);
 
-logger.info(chalk`{bold {gray [dev]}} Root folder: ${cliOptions.root}`);
+logger.info(chalk`Root folder: ${cliOptions.root}`);
 
 (async (): Promise<void> => {
   let errCode: ?number;

@@ -1,43 +1,51 @@
 // @flow
 
-import npmFetch from 'npm-registry-fetch';
+import path from 'path';
+
+import execa from 'execa';
+import mkdirp from 'mkdirp';
+
+import { pkgFolder } from './analyticsRepo';
+import logger from './logger';
 
 /**
  * @example
- * findPackage('babel');
+ * handleNotFound(': babel: command not found');
  *
- * @param {string} packageName - package name
- *
- * @return {string} - redirect package name
+ * @param {string} notFoundModule - not found module
  */
-const findPackage = (packageName: string): string => {
-  switch (packageName) {
-    case 'babel':
-      return '@babel/cli';
+const handleCommandNotFound = async (notFoundModule: string): Promise<?{}> => {
+  const packageName =
+    {
+      babel: '@babel/core @babel/cli',
+    }[notFoundModule] || notFoundModule;
 
-    default:
-      return packageName;
+  try {
+    // make dir
+    const tempPackages = path.resolve(
+      pkgFolder,
+      './node_modules/temp-packages',
+    );
+
+    mkdirp.sync(tempPackages);
+    logger.info(`Can not find command: ${notFoundModule}`);
+    logger.info(`Try to install ${packageName}`);
+
+    return execa.shell(`npm i --no-package-lock ${packageName}`, {
+      cwd: tempPackages,
+    });
+  } catch (e) {
+    if (e.statusCode === 404) return null;
+
+    throw e;
   }
 };
 
-export default async (errMessage: string): Promise<?string> => {
-  if (/command not found/.test(errMessage)) {
-    const packageName = findPackage(
+export default (errMessage: string): ?Promise<?{}> => {
+  if (/command not found/.test(errMessage))
+    return handleCommandNotFound(
       errMessage.replace(/.*: (.*): command not found\n/, '$1'),
     );
-
-    try {
-      const fetchPackage = await npmFetch.json(packageName);
-      const [lastVersion] = Object.keys(fetchPackage.versions).slice(-1);
-      const {
-        dist: { tarball },
-      } = fetchPackage.versions[lastVersion];
-
-      return `install ${tarball}`;
-    } catch (e) {
-      return null;
-    }
-  }
 
   return null;
 };

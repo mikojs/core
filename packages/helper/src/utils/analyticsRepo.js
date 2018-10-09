@@ -61,6 +61,8 @@ export default (rootFolder: string): analyticsRepoType => {
           return result;
       }
     },
-    pkgInfo.pkg,
+    {
+      ...pkgInfo.pkg,
+    },
   );
 };

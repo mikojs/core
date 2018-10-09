@@ -14,12 +14,14 @@ const program = new commander.Command('run-dev')
     'the root folder of project. Default: src',
   );
 
-const { root = 'src' } = program.parse(process.argv);
+const { root = 'src', args } = program.parse(process.argv);
 
 debugLog({
   root,
+  args,
 });
 
 export default {
   root,
+  args,
 };

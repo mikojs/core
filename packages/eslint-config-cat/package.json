@@ -27,10 +27,7 @@
     "eslint": "^5.6.1",
     "fbjs": "^1.0.0"
   },
-  "keywords": [
-    "cat-org",
-    "eslint"
-  ],
+  "keywords": ["cat-org", "eslint"],
   "publishConfig": {
     "access": "public"
   }

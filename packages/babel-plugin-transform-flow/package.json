@@ -18,11 +18,7 @@
     "chokidar": "^2.0.4",
     "output-file-sync": "^2.0.1"
   },
-  "keywords": [
-    "babel plugin",
-    "cat-org",
-    "transform flow files"
-  ],
+  "keywords": ["babel plugin", "cat-org", "transform flow files"],
   "publishConfig": {
     "access": "public"
   }

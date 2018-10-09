@@ -17,7 +17,12 @@ handleUnhandledRejection();
 // TODO data
 analyticsRepo(cliOptions.root);
 
-logger.info(chalk`Root folder: ${cliOptions.root}`);
+logger.info(
+  chalk`Run env → {cyan dev}`,
+  chalk`Root folder → {cyan ${cliOptions.root}}`,
+);
+
+process.env.NODE_ENV = 'development';
 
 (async (): Promise<void> => {
   let errCode: ?number;

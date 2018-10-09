@@ -4,6 +4,7 @@ import path from 'path';
 
 import execa from 'execa';
 import mkdirp from 'mkdirp';
+import chalk from 'chalk';
 
 import { pkgFolder } from './analyticsRepo';
 import logger from './logger';
@@ -28,8 +29,11 @@ const handleCommandNotFound = async (notFoundModule: string): Promise<?{}> => {
     );
 
     mkdirp.sync(tempPackages);
-    logger.info(`Can not find command: ${notFoundModule}`);
-    logger.info(`Try to install ${packageName}`);
+
+    logger.info(
+      chalk`Can not find command → {red ${notFoundModule}}`,
+      chalk`Try to install → {cyan ${packageName.replace(/ /g, ', ')}}`,
+    );
 
     return execa.shell(`npm i --no-package-lock ${packageName}`, {
       cwd: tempPackages,

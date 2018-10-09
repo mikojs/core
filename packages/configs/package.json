@@ -28,10 +28,7 @@
   "devDependencies": {
     "get-port": "^4.0.0"
   },
-  "keywords": [
-    "cat-org",
-    "configs"
-  ],
+  "keywords": ["cat-org", "configs"],
   "publishConfig": {
     "access": "public"
   }

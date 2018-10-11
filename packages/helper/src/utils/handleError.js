@@ -31,8 +31,8 @@ const handleCommandNotFound = async (notFoundModule: string): Promise<?{}> => {
     mkdirp.sync(tempPackages);
 
     logger.info(
-      chalk`Can not find command → {red ${notFoundModule}}`,
-      chalk`Try to install → {cyan ${packageName.replace(/ /g, ', ')}}`,
+      chalk`Can not find command: {red ${notFoundModule}}`,
+      chalk`Try to install: {cyan ${packageName.replace(/ /g, ', ')}}`,
     );
 
     return execa.shell(`npm i --no-package-lock ${packageName}`, {

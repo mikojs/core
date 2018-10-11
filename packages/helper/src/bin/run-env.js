@@ -2,7 +2,6 @@
 // @flow
 
 import execa from 'execa';
-import chalk from 'chalk';
 
 import { handleUnhandledRejection } from '@cat-org/logger';
 
@@ -17,10 +16,7 @@ handleUnhandledRejection();
 // TODO data
 analyticsRepo(cliOptions.root);
 
-logger.info(
-  chalk`Run env → {cyan dev}`,
-  chalk`Root folder → {cyan ${cliOptions.root}}`,
-);
+logger.info('Run env: dev', `Root folder: ${cliOptions.root}`);
 
 process.env.NODE_ENV = 'development';
 

@@ -5,6 +5,50 @@ import { ExecutionEnvironment, emptyFunction } from 'fbjs';
 type loggerType = (...message: $ReadOnlyArray<string>) => void;
 
 /**
+ * remove when chalk support browser
+ * https://github.com/chalk/chalk/issues/300
+ *
+ * @example
+ * clientChalk`{red ${test}}`;
+ *
+ * @param {Array} texts - texts array
+ * @param {Array} keys - keys array
+ *
+ * @return {Array} - console.log string
+ */
+const clientChalk = (
+  texts: $ReadOnlyArray<string>,
+  ...keys: $ReadOnlyArray<string>
+): $ReadOnlyArray<string> => {
+  const colorpattern = /(\{[a-zA-Z]* )|(\})/g;
+  const colorStore = [];
+  const transformString = texts
+    .map(
+      (text: string): string => {
+        colorStore.push(
+          // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+          ...(text.match(colorpattern)?.map(
+            (color: string): string => {
+              if (/\}/.test(color)) return 'color: black';
+
+              return `color: ${color.replace(/\{([a-zA-Z]*) /, '$1')}`;
+            },
+          ) || []),
+        );
+
+        return text.replace(colorpattern, '%c');
+      },
+    )
+    .reduce(
+      (result: string, text: string, index: number): string =>
+        `${result}${text}${keys[index] || ''}`,
+      '',
+    );
+
+  return [transformString, ...colorStore];
+};
+
+/**
  * @example
  * hideLoggerInProduction(true, () => {});
  *
@@ -25,51 +69,9 @@ export default (
   error: loggerType,
   info: loggerType,
 } => {
-  /**
-   * remove when chalk support browser
-   * https://github.com/chalk/chalk/issues/300
-   *
-   * @example
-   * chalk`{red ${test}}`;
-   *
-   * @param {Array} texts - texts array
-   * @param {Array} keys - keys array
-   *
-   * @return {Array} - console.log string
-   */
   const chalk = !ExecutionEnvironment.canUseEventListeners
     ? require('chalk')
-    : (
-        texts: $ReadOnlyArray<string>,
-        ...keys: $ReadOnlyArray<string>
-      ): $ReadOnlyArray<string> => {
-        const colorpattern = /(\{[a-zA-Z]* )|(\})/g;
-        const colorStore = [];
-        const transformString = texts
-          .map(
-            (text: string): string => {
-              colorStore.push(
-                // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-                ...(text.match(colorpattern)?.map(
-                  (color: string): string => {
-                    if (/\}/.test(color)) return 'color: black';
-
-                    return `color: ${color.replace(/\{([a-zA-Z]*) /, '$1')}`;
-                  },
-                ) || []),
-              );
-
-              return text.replace(colorpattern, '%c');
-            },
-          )
-          .reduce(
-            (result: string, text: string, index: number): string =>
-              `${result}${text}${keys[index] || ''}`,
-            '',
-          );
-
-        return [transformString, ...colorStore];
-      };
+    : clientChalk;
 
   /**
    * @example

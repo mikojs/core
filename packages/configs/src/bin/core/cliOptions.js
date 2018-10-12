@@ -13,10 +13,13 @@ const debugLog = debug('configs-scripts:cliOption');
 
 const program = new commander.Command('configs-scripts')
   .version(version, '-v, --version')
-  .arguments('[arguments...]')
-  .usage(chalk`{green [arguments...]} {gray [options]}`)
+  .arguments('[command type, arguments...]')
+  .usage(chalk`{green [command type, arguments...]} {gray [options]}`)
   .description(
-    chalk`{green Arguments} can be any commands, like {cyan \`babel src -d lib\`}.`,
+    chalk`Example:
+  configs-scripts {green babel -w}
+  configs-scripts {green babel:lerna -w}
+  configs-scripts {green babel:lerna} {gray --info}`,
   )
   .option('--install', 'install packages by config')
   .option('--npm', 'use npm to install packages')

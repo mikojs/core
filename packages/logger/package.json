@@ -11,6 +11,9 @@
     "chalk": "^2.4.1",
     "fbjs": "^1.0.0"
   },
+  "devDependencies": {
+    "ora": "^3.0.0"
+  },
   "keywords": ["cat-org", "logger"],
   "publishConfig": {
     "access": "public"

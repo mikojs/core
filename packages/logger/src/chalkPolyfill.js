@@ -26,7 +26,6 @@ const browserChalk = (
     '',
   );
 
-export default (() =>
-  !ExecutionEnvironment.canUseEventListeners
-    ? require('chalk')
-    : browserChalk)();
+export default (!ExecutionEnvironment.canUseEventListeners
+  ? require('chalk')
+  : browserChalk);

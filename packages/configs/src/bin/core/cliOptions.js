@@ -99,7 +99,7 @@ if (info) {
             ];
 
           if (Object.keys(data).length !== 0)
-            logger.error(
+            logger.warn(
               chalk`{cyan \`${Object.keys(data).join(
                 '` ,`',
               )}\`} should not be in {green ${key}} config`,
@@ -132,7 +132,7 @@ ${[
 }
 
 if (!cliName)
-  logger.error(
+  logger.fail(
     chalk`Should give an argument at least`,
     chalk`Use {green \`-h\`} to get the more information`,
   );

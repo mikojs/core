@@ -18,7 +18,7 @@ export default (name: string, logSettings: {} = defaultLogSettings) =>
   Object.keys(logSettings).reduce(
     (result: {}, key: string) => ({
       ...result,
-      [key]: (...messages: $ReadOnlyArray<string>) => {
+      [key]: (...messages: $ReadOnlyArray<string>): mixed => {
         const {
           getName = GET_NAME[key] || GET_NAME.log,
           print,
@@ -30,7 +30,7 @@ export default (name: string, logSettings: {} = defaultLogSettings) =>
           print(`${printName} ${message}`);
         });
 
-        after();
+        return after(name);
       },
     }),
     {},

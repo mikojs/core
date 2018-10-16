@@ -6,6 +6,12 @@ import chalk from './chalkPolyfill';
 
 import defaultLogSettings from './settings/log';
 
+type logType = (...messages: $ReadOnlyArray<string>) => logType;
+
+type logsType = {
+  [string]: logType,
+};
+
 const GET_NAME = {
   log: (name: string): string => chalk`{gray   {bold ${name}}}`,
   succeed: (name: string): string => chalk`{green ✔ {bold ${name}}}`,
@@ -16,7 +22,7 @@ const GET_NAME = {
 
 export default (name: string, logSettings: {} = defaultLogSettings) =>
   Object.keys(logSettings).reduce(
-    (result: {}, key: string) => ({
+    (result: logsType, key: string) => ({
       ...result,
       [key]: (...messages: $ReadOnlyArray<string>): mixed => {
         const {
@@ -33,5 +39,5 @@ export default (name: string, logSettings: {} = defaultLogSettings) =>
         return after(name);
       },
     }),
-    {},
+    ({}: logsType),
   );

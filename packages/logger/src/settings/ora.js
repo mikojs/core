@@ -5,11 +5,9 @@ import chalk from 'chalk';
 import { invariant } from 'fbjs';
 
 type oraType = {
-  init: boolean,
+  notInit: boolean,
   isSpinning: boolean,
 };
-
-const { log } = console;
 
 const GET_NAME = {
   log: (name: string): string => chalk`{gray {bold ${name}}}`,
@@ -22,7 +20,7 @@ const GET_NAME = {
 /** ora store */
 class OraStore {
   store = {
-    init: false,
+    notInit: true,
     isSpinning: false,
   };
 
@@ -46,6 +44,10 @@ class OraStore {
       log: {
         getName: GET_NAME.log,
         print: (message: string) => {
+          const { log } = console;
+
+          invariant(!this.store.notInit, 'Run `init` before running `log`');
+
           if (!this.store.isSpinning) log(`  ${message}`);
         },
         after: this.after,
@@ -56,7 +58,10 @@ class OraStore {
       this.func[key] = {
         getName: GET_NAME[key] || GET_NAME.log,
         print: (message: string) => {
-          invariant(this.store.init, `Run \`init\` before running \`${key}\``);
+          invariant(
+            !this.store.notInit,
+            `Run \`init\` before running \`${key}\``,
+          );
 
           this.store = this.store[key](message);
         },

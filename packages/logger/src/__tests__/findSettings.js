@@ -3,6 +3,7 @@
 import findSettings from '../findSettings';
 
 import logSettings from '../settings/log';
+import oraSettings from '../settings/ora';
 
 /**
  * Wait flow-typed fix
@@ -13,6 +14,7 @@ import logSettings from '../settings/log';
 describe.each`
   name     | expected
   ${'log'} | ${logSettings}
+  ${'ora'} | ${oraSettings}
   ${'aaa'} | ${null}
 `('find settings', ({ name, expected }: { name: string, expected: ?{} }) => {
   it(`find ${name}`, () => {

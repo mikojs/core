@@ -1,6 +1,7 @@
 // @flow
 
 import oraSettings from '../ora';
+
 import logger from '../../logger';
 
 const logs = logger('ora', oraSettings);

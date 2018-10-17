@@ -5,4 +5,6 @@
 /* eslint-disable flowtype/require-valid-file-annotation */
 
 export handleUnhandledRejection from './handleUnhandledRejection';
+export findSettings from './findSettings';
+export prodLogger from './prodLogger';
 export default from './logger';

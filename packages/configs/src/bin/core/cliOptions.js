@@ -17,7 +17,6 @@ const program = new commander.Command('configs-scripts')
   .usage(chalk`{green [command type, arguments...]} {gray [options]}`)
   .description(
     chalk`Example:
-
   configs-scripts {green babel -w}
   configs-scripts {green babel:lerna -w}
   configs-scripts {green babel:lerna} {gray --info}`,
@@ -100,7 +99,7 @@ if (info) {
             ];
 
           if (Object.keys(data).length !== 0)
-            logger.error(
+            logger.warn(
               chalk`{cyan \`${Object.keys(data).join(
                 '` ,`',
               )}\`} should not be in {green ${key}} config`,
@@ -133,7 +132,7 @@ ${[
 }
 
 if (!cliName)
-  logger.error(
+  logger.fail(
     chalk`Should give an argument at least`,
     chalk`Use {green \`-h\`} to get the more information`,
   );

@@ -127,7 +127,7 @@ export class Configs {
     debugLog(`Find rood dir: ${this.rootDir}`);
 
     if (this.rootDir === '/')
-      logger.error(
+      logger.fail(
         'Can not find the root directory',
         chalk`Run {cyan \`git init\`} in the root directory`,
       );
@@ -155,7 +155,7 @@ export class Configs {
     shouldUseNpm: boolean,
   }): {} => {
     if (!this.store[cliName])
-      logger.error(
+      logger.fail(
         chalk`Can not find {cyan \`${cliName}\`} in configs`,
         chalk`Use {green \`--info\`} to get the more information`,
       );
@@ -195,7 +195,7 @@ export class Configs {
       };
     } catch (e) {
       if (/not found/.test(e.message))
-        logger.error(e.message.replace(/not found/, 'Not found cli'));
+        logger.fail(e.message.replace(/not found/, 'Not found cli'));
 
       throw e;
     }

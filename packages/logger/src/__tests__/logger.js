@@ -1,103 +1,53 @@
 // @flow
 
-import { ExecutionEnvironment } from 'fbjs';
+import logger from '../logger';
 
-import logger, { hideLoggerInProduction } from '../logger';
-
-describe('hide logger in production', () => {
-  it('production', () => {
-    const mockLogger = jest.fn();
-
-    hideLoggerInProduction(true, mockLogger)('production');
-
-    expect(mockLogger).toHaveBeenCalledTimes(0);
-    expect(mockLogger).not.toHaveBeenCalledWith('production');
-  });
-
-  it('not production', () => {
-    const mockLogger = jest.fn();
-
-    hideLoggerInProduction(false, mockLogger)('not production');
-
-    expect(mockLogger).toHaveBeenCalledTimes(1);
-    expect(mockLogger).toHaveBeenCalledWith('not production');
-  });
-});
-
-describe('logger', () => {
-  describe('node', () => {
-    beforeEach(() => {
-      ExecutionEnvironment.canUseEventListeners = false;
-    });
-
-    it('info', () => {
+/**
+ * Wait flow-typed fix
+ * https://github.com/flow-typed/flow-typed/pull/2840
+ *
+ * $FlowFixMe
+ */
+describe.each`
+  name         | prefix | color
+  ${'log'}     | ${' '} | ${'gray'}
+  ${'succeed'} | ${'✔'} | ${'green'}
+  ${'fail'}    | ${'✖'} | ${'red'}
+  ${'warn'}    | ${'⚠'} | ${'yellow'}
+  ${'info'}    | ${'ℹ'} | ${'blue'}
+  ${'aaa'}     | ${' '} | ${'gray'}
+`(
+  'logger',
+  ({
+    name,
+    prefix,
+    color,
+  }: {
+    name: string,
+    prefix: string,
+    color: string,
+  }) => {
+    it(name, () => {
       const mockLog = jest.fn();
 
-      global.console.log = mockLog;
-
-      const log = logger('node');
-
-      log.info('info message');
-
-      expect(mockLog).toHaveBeenCalledTimes(1);
-      expect(mockLog).toHaveBeenCalledWith('  {green node} info message');
-    });
-
-    it('error', () => {
-      const mockError = jest.fn();
-
-      global.console.error = mockError;
-
-      const log = logger('node');
-
-      log.error('error message');
-
-      expect(mockError).toHaveBeenCalledTimes(1);
-      expect(mockError).toHaveBeenCalledWith('  {red node} error message');
-    });
-  });
-
-  describe('brwoser', () => {
-    beforeEach(() => {
-      ExecutionEnvironment.canUseEventListeners = true;
-    });
-
-    it('info', () => {
-      const mockLog = jest.fn();
-
-      global.console.log = mockLog;
-
-      const log = logger('brwoser');
-
-      log.info('info message');
+      logger('test', {
+        [name]: {
+          print: mockLog,
+        },
+      })[name]('message');
 
       expect(mockLog).toHaveBeenCalledTimes(1);
       expect(mockLog).toHaveBeenCalledWith(
-        '  %cbrwoser%c info message',
-        'color: green',
-        'color: black',
+        `{${color} ${prefix} {bold test}} message`,
       );
     });
+  },
+);
 
-    it('error', () => {
-      const mockError = jest.fn();
+test('default settings work', () => {
+  const logs = logger('test');
 
-      global.console.error = mockError;
-
-      const log = logger('brwoser');
-
-      log.error('error message');
-
-      expect(mockError).toHaveBeenCalledTimes(1);
-      expect(mockError).toHaveBeenCalledWith(
-        '  %cbrwoser%c error message',
-        'color: red',
-        'color: black',
-      );
-    });
-  });
-
-  afterEach(() => {
-    ExecutionEnvironment.canUseEventListeners = false;
+  Object.keys(logs).forEach((key: string) => {
+    logs[key]('message');
   });
 });

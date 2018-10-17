@@ -4,6 +4,8 @@ import ora from 'ora';
 import chalk from 'chalk';
 import { invariant } from 'fbjs';
 
+import type { settingsType } from '../logger';
+
 type oraType = {
   notInit: boolean,
   isSpinning: boolean,
@@ -32,15 +34,8 @@ class OraStore {
    *
    * @return {Object} - settings
    */
-  getFunc = (): {} => {
+  getFunc = (): settingsType => {
     this.func = {
-      init: {
-        getName: GET_NAME.log,
-        print: (options: mixed) => {
-          this.store = ora(options);
-        },
-        after: this.after,
-      },
       log: {
         getName: GET_NAME.log,
         print: (message: string) => {
@@ -69,7 +64,12 @@ class OraStore {
       };
     });
 
-    return this.func;
+    return {
+      ...this.func,
+      init: (options: mixed) => {
+        this.store = ora(options);
+      },
+    };
   };
 
   /**

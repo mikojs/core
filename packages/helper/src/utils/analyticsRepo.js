@@ -47,7 +47,7 @@ export default (rootFolder: string): analyticsRepoType => {
   const { hasRootFolder, folderList } = getList(rootFolder);
 
   if (!hasRootFolder)
-    logger.error(
+    logger.fail(
       'Can not find the root folder',
       chalk`Use {cyan \`-h\`} to get the more information`,
     );

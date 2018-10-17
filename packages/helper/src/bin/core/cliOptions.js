@@ -16,7 +16,6 @@ const program = new commander.Command('run-dev')
   .usage(chalk`{green [commands...]} {gray [options]}`)
   .description(
     chalk`Example:
-
   run-env {green 'babel -w'}
   run-env {green 'babel -w'} {gray -r root}`,
   )
@@ -33,7 +32,7 @@ debugLog({
 });
 
 if (args.length === 0)
-  logger.error(
+  logger.fail(
     chalk`Should give an argument at least`,
     chalk`Use {green \`-h\`} to get the more information`,
   );

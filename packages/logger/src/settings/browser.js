@@ -5,6 +5,8 @@
  * @flow
  */
 
+import type { settingsType } from '../logger';
+
 const { log, error, warn, info } = console;
 
 const CHALK_PATTERN = /(\{[a-zA-Z]* )|(\})/g;
@@ -46,7 +48,7 @@ const transformLog = (logFunc: (message: string) => void) => (
   );
 };
 
-export default {
+export default ({
   log: {
     print: transformLog(log),
   },
@@ -62,4 +64,4 @@ export default {
   info: {
     print: transformLog(info),
   },
-};
+}: settingsType);

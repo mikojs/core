@@ -4,9 +4,7 @@ import oraSettings from '../ora';
 
 import logger from '../../logger';
 
-const logs = logger('ora', oraSettings);
-
-logs.init('init');
+const logs = logger('ora', oraSettings).init('init');
 
 /**
  * Wait flow-typed fix

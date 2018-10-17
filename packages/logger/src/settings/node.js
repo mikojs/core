@@ -1,8 +1,10 @@
 // @flow
 
+import type { settingsType } from '../logger';
+
 const { log, error, warn, info } = console;
 
-export default {
+export default ({
   log: {
     print: log,
   },
@@ -18,4 +20,4 @@ export default {
   info: {
     print: info,
   },
-};
+}: settingsType);

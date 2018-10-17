@@ -7,6 +7,7 @@ import { handleUnhandledRejection } from '@cat-org/logger';
 
 import cliOptions from './core/cliOptions';
 
+import logger from 'utils/logger';
 import analyticsRepo from 'utils/analyticsRepo';
 import handleError from 'utils/handleError';
 
@@ -14,6 +15,8 @@ handleUnhandledRejection();
 
 // TODO data
 analyticsRepo(cliOptions.root);
+
+logger.info('Run env: dev', `Root folder: ${cliOptions.root}`);
 
 process.env.NODE_ENV = 'development';
 

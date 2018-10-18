@@ -5,12 +5,6 @@ import findSettings from '../findSettings';
 import logSettings from '../settings/log';
 import oraSettings from '../settings/ora';
 
-/**
- * Wait flow-typed fix
- * https://github.com/flow-typed/flow-typed/pull/2840
- *
- * $FlowFixMe
- */
 describe.each`
   name     | expected
   ${'log'} | ${logSettings}

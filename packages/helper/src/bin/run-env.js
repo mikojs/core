@@ -16,7 +16,10 @@ handleUnhandledRejection();
 // TODO data
 analyticsRepo(cliOptions.root);
 
-logger.info('Run env: dev', `Root folder: ${cliOptions.root}`);
+logger.info(
+  'process.env.NODE_ENV ➜ development',
+  `Root folder ➜ ${cliOptions.root}`,
+);
 
 process.env.NODE_ENV = 'development';
 

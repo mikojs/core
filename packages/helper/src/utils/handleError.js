@@ -27,21 +27,29 @@ const handleCommandNotFound = async (notFoundModule: string): Promise<?{}> => {
       pkgFolder,
       './node_modules/temp-packages',
     );
+    const printPackageName = chalk`{cyan ${packageName.replace(/ /g, ', ')}}`;
 
     mkdirp.sync(tempPackages);
 
-    logger.info(
-      chalk`Can not find command: {red ${notFoundModule}}`,
-      chalk`Try to install: {cyan ${packageName.replace(/ /g, ', ')}}`,
-    );
+    logger
+      .warn(chalk`Can not find command: {red ${notFoundModule}}`)
+      .start(`Try to install: ${printPackageName}`);
 
-    return execa.shell(`npm i --no-package-lock ${packageName}`, {
-      cwd: tempPackages,
-    });
+    return execa
+      .shell(`npm i --no-package-lock ${packageName}`, {
+        cwd: tempPackages,
+      })
+      .then(
+        (result: {}): {} => {
+          logger.succeed(`${printPackageName} have installed`);
+
+          return result;
+        },
+      );
   } catch (e) {
     if (e.statusCode === 404) return null;
 
-    throw e;
+    return logger.fail(e);
   }
 };
 

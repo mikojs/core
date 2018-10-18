@@ -13,8 +13,4 @@ oraSettings.fail.after = () => {
   process.exit(1);
 };
 
-const logs = logger('helper', oraSettings);
-
-logs.init('init');
-
-export default logs;
+export default logger('helper', oraSettings).init();

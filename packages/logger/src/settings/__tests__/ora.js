@@ -6,12 +6,6 @@ import logger from '../../logger';
 
 const logs = logger('ora', oraSettings).init('init');
 
-/**
- * Wait flow-typed fix
- * https://github.com/flow-typed/flow-typed/pull/2840
- *
- * $FlowFixMe
- */
 describe.each`
   name         | expected
   ${'start'}   | ${'{gray {bold ora}} message'}

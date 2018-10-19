@@ -6,6 +6,16 @@ import lint from 'configs/lint';
 import lintsteged from 'configs/lintsteged';
 import jest from 'configs/jest';
 
+type configType = {
+  alias?: string,
+  install?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+  config?: (argv: $ReadOnlyArray<mixed>) => mixed,
+  ignore?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+  ignoreName?: string,
+  env?: {},
+  configFiles?: {},
+};
+
 export default ({
   // babel
   babel,
@@ -50,24 +60,13 @@ export default ({
     ],
   },
 }: {
-  [string]: {
-    alias?: string,
-    install?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-    config?: (argv: $ReadOnlyArray<mixed>) => mixed,
-    ignore?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-    ignoreName?: string,
+  [string]: configType & {
     run?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-    env?: {},
-    configFiles?: {},
   },
-  babel: {
-    install: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-    config: (argv: $ReadOnlyArray<mixed>) => mixed,
+  babel: configType & {
     run: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
   },
-  lint: {
-    install: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-    config: (argv: $ReadOnlyArray<mixed>) => mixed,
+  lint: configType & {
     run: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
   },
 });

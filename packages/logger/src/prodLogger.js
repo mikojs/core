@@ -1,15 +1,9 @@
 // @flow
 
-import { emptyFunction } from 'fbjs';
+import type { logsType } from './logger';
 
-import type { emptyFunction as emptyFunctionType } from 'fbjs';
-
-type prodLoggerType = {
-  [string]: emptyFunctionType,
-};
-
-export default (logNames?: $ReadOnlyArray<string> = []) =>
-  [
+export default (logNames?: $ReadOnlyArray<string> = []): logsType => {
+  const logs = [
     'log',
     'succeed',
     'fail',
@@ -19,9 +13,12 @@ export default (logNames?: $ReadOnlyArray<string> = []) =>
     'start',
     ...logNames,
   ].reduce(
-    (result: prodLoggerType, key: string) => ({
+    (result: logsType, key: string) => ({
       ...result,
-      [key]: emptyFunction,
+      [key]: () => logs,
     }),
-    ({}: prodLoggerType),
+    ({}: logsType),
   );
+
+  return logs;
+};

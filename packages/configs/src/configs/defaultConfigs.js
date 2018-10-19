@@ -6,7 +6,7 @@ import lint from 'configs/lint';
 import lintsteged from 'configs/lintsteged';
 import jest from 'configs/jest';
 
-export default {
+export default ({
   // babel
   babel,
   'babel:lerna': {
@@ -49,4 +49,25 @@ export default {
       '--silent',
     ],
   },
-};
+}: {
+  [string]: {
+    alias?: string,
+    install?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+    config?: (argv: $ReadOnlyArray<mixed>) => mixed,
+    ignore?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+    ignoreName?: string,
+    run?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+    env?: {},
+    configFiles?: {},
+  },
+  babel: {
+    install: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+    config: (argv: $ReadOnlyArray<mixed>) => mixed,
+    run: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+  },
+  lint: {
+    install: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+    config: (argv: $ReadOnlyArray<mixed>) => mixed,
+    run: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+  },
+});

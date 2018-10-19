@@ -62,7 +62,10 @@ export class Configs {
         return;
       }
 
-      const configs = { ...this.store[key] };
+      const configs =
+        typeof this.store[key] === 'function'
+          ? this.store[key]
+          : { ...this.store[key] };
 
       // handle default or custom configs is object
       this.store[key] = {

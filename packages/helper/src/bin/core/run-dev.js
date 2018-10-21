@@ -1,27 +1,17 @@
-#! /usr/bin/env node
 // @flow
 
 import execa from 'execa';
 
 import { handleUnhandledRejection } from '@cat-org/logger';
 
-import cliOptions from './core/cliOptions';
+import cliOptions from './cliOptions';
 
 import logger from 'utils/logger';
-import analyticsRepo from 'utils/analyticsRepo';
-import handleError from 'utils/handleError';
 
 handleUnhandledRejection();
 
-// TODO data
-analyticsRepo(cliOptions.root);
-
-logger.info(
-  'process.env.NODE_ENV ➜ development',
-  `Root folder ➜ ${cliOptions.root}`,
-);
-
-process.env.NODE_ENV = 'development';
+if (process.env.NODE_ENV !== 'development')
+  logger.fail('Do not use `run-dev` file directly');
 
 (async (): Promise<void> => {
   let errCode: ?number;
@@ -40,7 +30,7 @@ process.env.NODE_ENV = 'development';
       errMessage = stderr;
 
       // TODO result
-      await handleError(errMessage);
+      // await handleError(errMessage);
     }
   }
 })();

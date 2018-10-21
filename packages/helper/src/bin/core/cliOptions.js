@@ -8,26 +8,28 @@ import { version } from '../../../package.json';
 
 import logger from 'utils/logger';
 
-const debugLog = debug('run-env:cliOptions');
+const debugLog = debug('helper:cliOptions');
 
-const program = new commander.Command('run-dev')
+const program = new commander.Command('helper')
   .version(version, '-v, --version')
   .arguments('[commands...]')
   .usage(chalk`{green [commands...]} {gray [options]}`)
   .description(
     chalk`Example:
-  run-env {green 'babel -w'}
-  run-env {green 'babel -w'} {gray -r root}`,
+  helper {green 'babel -w'}
+  helper {green 'babel -w'} {gray -r root}`,
   )
+  .option('-p, --production', 'use production mode')
   .option(
-    '-r, --root [root folder]',
+    '-r, --root <root folder>',
     'the root folder of project. Default: src',
   );
 
-const { root = 'src', args } = program.parse(process.argv);
+const { root = 'src', production = false, args } = program.parse(process.argv);
 
 debugLog({
   root,
+  production,
   args,
 });
 
@@ -39,5 +41,6 @@ if (args.length === 0)
 
 export default {
   root,
+  production,
   args,
 };

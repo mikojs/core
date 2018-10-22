@@ -1,13 +1,13 @@
 // @flow
 
-import path from 'path';
-
+import debug from 'debug';
 import execa from 'execa';
-import mkdirp from 'mkdirp';
 import chalk from 'chalk';
 
-import { pkgFolder } from './analyticsRepo';
 import logger from './logger';
+import cache from './cache';
+
+const debugLog = debug('helper:handleError');
 
 /**
  * @example
@@ -16,44 +16,35 @@ import logger from './logger';
  * @param {string} notFoundModule - not found module
  */
 const handleCommandNotFound = async (notFoundModule: string): Promise<?{}> => {
-  const packageName =
-    {
-      babel: '@babel/core @babel/cli',
-    }[notFoundModule] || notFoundModule;
+  const packages = {
+    babel: ['@babel/core', '@babel/cli'],
+  }[notFoundModule] || [notFoundModule];
+
+  debugLog(`notFoundModule: ${notFoundModule}`);
+  logger.warn(chalk`Can not find command: {red ${notFoundModule}}`);
+  logger.start(chalk`Try to install: {red ${packages.join(', ')}}`);
 
   try {
-    // make dir
-    const tempPackages = path.resolve(
-      pkgFolder,
-      './node_modules/temp-packages',
+    const result = await execa.shell(
+      `npm i --no-package-lock ${packages.join(' ')}`,
     );
-    const printPackageName = chalk`{cyan ${packageName.replace(/ /g, ', ')}}`;
 
-    mkdirp.sync(tempPackages);
+    logger.succeed(chalk`{cyan ${packages.join(', ')}} have installed`);
+    cache.push('packages', packages);
 
-    logger
-      .warn(chalk`Can not find command: {red ${notFoundModule}}`)
-      .start(`Try to install: ${printPackageName}`);
-
-    return execa
-      .shell(`npm i --no-package-lock ${packageName}`, {
-        cwd: tempPackages,
-      })
-      .then(
-        (result: {}): {} => {
-          logger.succeed(`${printPackageName} have installed`);
-
-          return result;
-        },
-      );
+    return result;
   } catch (e) {
-    if (e.statusCode === 404) return null;
+    debugLog(e);
 
-    return logger.fail(e);
+    return logger.fail(chalk`Install fail
+
+{gray ${e?.stderr || e.message}}`);
   }
 };
 
 export default (errMessage: string): ?Promise<?{}> => {
+  debugLog(`errMessage: ${errMessage}`);
+
   if (/command not found/.test(errMessage))
     return handleCommandNotFound(
       errMessage.replace(/.*: (.*): command not found\n/, '$1'),

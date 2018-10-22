@@ -16,8 +16,7 @@
     "debug": "^4.0.1",
     "execa": "^1.0.0",
     "find-cache-dir": "^2.0.0",
-    "output-file-sync": "^2.0.1",
-    "read-pkg-up": "^4.0.0"
+    "output-file-sync": "^2.0.1"
   },
   "keywords": ["cat-org", "helper"],
   "publishConfig": {

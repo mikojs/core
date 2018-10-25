@@ -25,7 +25,11 @@ const program = new commander.Command('helper')
     'the root folder of project. Default: src',
   );
 
-const { root = 'src', production = false, args } = program.parse(process.argv);
+const {
+  root = 'src',
+  production = false,
+  args: [args],
+} = program.parse(process.argv);
 
 debugLog({
   root,

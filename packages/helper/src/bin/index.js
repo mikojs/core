@@ -21,7 +21,7 @@ handleUnhandledRejection();
   try {
     await execa(
       'node',
-      [path.resolve(__dirname, './core/run-dev'), process.argv.slice(2)],
+      [path.resolve(__dirname, './core/runDev'), ...process.argv.slice(2)],
       {
         stdio: 'inherit',
         env: {

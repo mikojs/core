@@ -6,7 +6,6 @@ import debug from 'debug';
 import execa from 'execa';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
-import { areEqual } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/logger';
 
@@ -23,7 +22,7 @@ if (process.env.NODE_ENV !== 'development')
 
 (async (): Promise<void> => {
   let errCode: ?number;
-  let errData: ?string;
+  let errMessage: ?string;
 
   while (errCode !== 0) {
     try {
@@ -32,14 +31,36 @@ if (process.env.NODE_ENV !== 'development')
         chalk`${errCode ? 'Rerun' : 'Run'} {green \`${cliOptions.args}\`}`,
       );
 
-      // TODO result
-      await execa.shell(cliOptions.args, {
-        stdio: 'inherit',
+      errCode = await new Promise((resolve, reject) => {
+        const runCmd = execa.shell(cliOptions.args);
+        let stderr: string = '';
+
+        runCmd.stdout.on('data', (chunk: string) => {
+          process.stdout.write(chunk.toString());
+        });
+
+        runCmd.stderr.on('data', (chunk: string) => {
+          process.stdout.write(chunk.toString());
+          stderr += chunk;
+        });
+
+        runCmd.on('close', (exitCode: number) => {
+          if (exitCode === 0) resolve(exitCode);
+          else
+            reject(
+              new Error(
+                JSON.stringify({
+                  stderr,
+                  exitCode,
+                }),
+              ),
+            );
+        });
       });
     } catch (e) {
-      const { code } = e;
+      const { stderr, exitCode } = JSON.parse(e.message);
 
-      if (areEqual(e, errData)) {
+      if (stderr === errMessage) {
         // FIXME should use with pkg
         const watcher = chokidar.watch(path.resolve(cliOptions.root), {
           ignoreInitial: true,
@@ -48,8 +69,11 @@ if (process.env.NODE_ENV !== 'development')
         clearConsole();
         logger.warn(chalk`Can not run {red \`${cliOptions.args}\`}
 
-{gray ${e}}`);
-        debug('helper:runDev')(e);
+{gray ${stderr}}`);
+        debug('helper:runDev')({
+          stderr,
+          exitCode,
+        });
 
         await new Promise(resolve => {
           watcher.on('all', () => {
@@ -58,11 +82,11 @@ if (process.env.NODE_ENV !== 'development')
           });
         });
       } else {
-        errCode = code;
-        errData = e;
+        errCode = exitCode;
+        errMessage = stderr;
 
         // TODO result
-        await handleError(errData);
+        await handleError(errMessage);
       }
     }
   }

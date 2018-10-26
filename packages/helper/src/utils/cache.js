@@ -15,7 +15,7 @@ const DEFAULT_STORE = {
 };
 
 /** cache class */
-class Cache {
+export class Cache {
   cachePath = '';
 
   store = DEFAULT_STORE;
@@ -58,7 +58,7 @@ class Cache {
     this.store[name].push(...newData);
     this.writeStore();
 
-    debugLog(`push: [${newData.join(', ')}]`);
+    debugLog(`push: ${name}, [${newData.join(', ')}]`);
   };
 }
 

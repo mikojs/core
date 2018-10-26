@@ -26,7 +26,8 @@ if (process.env.NODE_ENV !== 'development')
 
   while (errCode !== 0) {
     // Run command
-    clearConsole();
+    if (errCode) clearConsole();
+
     logger.info(
       chalk`${errCode ? 'Rerun' : 'Run'} {green \`${cliOptions.args}\`}`,
     );
@@ -57,11 +58,16 @@ if (process.env.NODE_ENV !== 'development')
 
     process.stdout.write('\n');
 
-    // Rerun command when error handle done
     if (errMessage !== stderr) {
       errCode = exitCode;
       errMessage = stderr;
 
+      debug('helper:runDev')({
+        stderr,
+        exitCode,
+      });
+
+      // Rerun command when error handle done
       if (await handleError(stderr)) continue;
     }
 
@@ -77,11 +83,6 @@ if (process.env.NODE_ENV !== 'development')
       logger.warn(chalk`Can not run {red \`${cliOptions.args}\`}
 
 {gray ${stderr}}`);
-
-      debug('helper:runDev')({
-        stderr,
-        exitCode,
-      });
 
       ['add', 'addDir', 'change'].forEach((eventName: string) => {
         watcher.on(eventName, () => {

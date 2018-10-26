@@ -22,7 +22,6 @@ const handleCommandNotFound = async (
     babel: ['@babel/core', '@babel/cli'],
   }[notFoundModule] || [notFoundModule];
 
-  debugLog(`notFoundModule: ${notFoundModule}`);
   logger.warn(chalk`Can not find command: {red ${notFoundModule}}`);
   logger.start(chalk`Try to install: {red ${packages.join(', ')}}`);
 
@@ -46,8 +45,6 @@ const handleCommandNotFound = async (
 };
 
 export default (errMessage: string): Promise<boolean> | boolean => {
-  debugLog(`errMessage: ${errMessage}`);
-
   if (/command not found/.test(errMessage))
     return handleCommandNotFound(
       errMessage.replace(/.*: (.*): command not found\n/, '$1'),

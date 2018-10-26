@@ -25,71 +25,70 @@ if (process.env.NODE_ENV !== 'development')
   let errMessage: ?string;
 
   while (errCode !== 0) {
-    try {
-      clearConsole();
-      logger.info(
-        chalk`${errCode ? 'Rerun' : 'Run'} {green \`${cliOptions.args}\`}`,
-      );
+    // Run command
+    clearConsole();
+    logger.info(
+      chalk`${errCode ? 'Rerun' : 'Run'} {green \`${cliOptions.args}\`}`,
+    );
 
-      errCode = await new Promise((resolve, reject) => {
-        const runCmd = execa.shell(cliOptions.args);
-        let stderr: string = '';
+    const { exitCode, stderr } = await new Promise((resolve, reject) => {
+      const runCmd = execa.shell(cliOptions.args);
+      let cmdErr: string = '';
 
-        runCmd.stdout.on('data', (chunk: string) => {
-          process.stdout.write(chunk.toString());
-        });
+      runCmd.stdout.on('data', (chunk: string) => {
+        process.stdout.write(chunk.toString());
+      });
 
-        runCmd.stderr.on('data', (chunk: string) => {
-          process.stdout.write(chunk.toString());
-          stderr += chunk;
-        });
+      runCmd.stderr.on('data', (chunk: string) => {
+        process.stdout.write(chunk.toString());
+        cmdErr += chunk;
+      });
 
-        runCmd.on('close', (exitCode: number) => {
-          if (exitCode === 0) resolve(exitCode);
-          else
-            reject(
-              new Error(
-                JSON.stringify({
-                  stderr,
-                  exitCode,
-                }),
-              ),
-            );
+      runCmd.on('close', (cmdCode: number) => {
+        resolve({
+          exitCode: cmdCode,
+          stderr: cmdErr,
         });
       });
-    } catch (e) {
-      const { stderr, exitCode } = JSON.parse(e.message);
+    });
 
-      process.stdout.write('\n');
+    // Close command without any error
+    if (exitCode === 0) break;
 
-      if (stderr === errMessage) {
-        // FIXME should use with pkg
-        const watcher = chokidar.watch(path.resolve(cliOptions.root), {
-          ignoreInitial: true,
-        });
+    process.stdout.write('\n');
 
-        clearConsole();
-        logger.warn(chalk`Can not run {red \`${cliOptions.args}\`}
+    // Rerun command when error handle done
+    if (errMessage !== stderr) {
+      errCode = exitCode;
+      errMessage = stderr;
+
+      if (await handleError(stderr)) continue;
+    }
+
+    // Watching files to rerun command
+    await new Promise(resolve => {
+      // FIXME should use with pkg
+      const watcher = chokidar.watch(path.resolve(cliOptions.root), {
+        ignored: /.swp/,
+        ignoreInitial: true,
+      });
+
+      clearConsole();
+      logger.warn(chalk`Can not run {red \`${cliOptions.args}\`}
 
 {gray ${stderr}}`);
-        debug('helper:runDev')({
-          stderr,
-          exitCode,
-        });
 
-        await new Promise(resolve => {
-          watcher.on('all', () => {
-            watcher.close();
-            resolve();
-          });
-        });
-      } else {
-        errCode = exitCode;
-        errMessage = stderr;
+      debug('helper:runDev')({
+        stderr,
+        exitCode,
+      });
 
-        // TODO result
-        await handleError(errMessage);
-      }
-    }
+      ['add', 'addDir', 'change'].forEach((eventName: string) => {
+        watcher.on(eventName, () => {
+          watcher.close();
+          resolve();
+        });
+      });
+    });
   }
 })();

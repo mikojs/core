@@ -37,7 +37,7 @@ debugLog({
   args,
 });
 
-if (args.length === 0)
+if (!args)
   logger.fail(
     chalk`Should give an argument at least`,
     chalk`Use {green \`-h\`} to get the more information`,

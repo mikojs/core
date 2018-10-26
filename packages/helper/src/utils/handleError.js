@@ -15,7 +15,9 @@ const debugLog = debug('helper:handleError');
  *
  * @param {string} notFoundModule - not found module
  */
-const handleCommandNotFound = async (notFoundModule: string): Promise<?{}> => {
+const handleCommandNotFound = async (
+  notFoundModule: string,
+): Promise<boolean> => {
   const packages = {
     babel: ['@babel/core', '@babel/cli'],
   }[notFoundModule] || [notFoundModule];
@@ -25,24 +27,25 @@ const handleCommandNotFound = async (notFoundModule: string): Promise<?{}> => {
   logger.start(chalk`Try to install: {red ${packages.join(', ')}}`);
 
   try {
-    const result = await execa.shell(
+    await execa.shell(
       `npm i --no-package-lock --no-save ${packages.join(' ')}`,
     );
 
     logger.succeed(chalk`{cyan ${packages.join(', ')}} have installed`);
     cache.push('packages', packages);
 
-    return result;
+    return true;
   } catch (e) {
     debugLog(e);
 
-    return logger.fail(chalk`Install fail
+    logger.warn(chalk`Install {cyan ${packages.join(', ')}} fail
 
 {gray ${e.stderr || e.message}}`);
+    return false;
   }
 };
 
-export default (errMessage: string): ?Promise<?{}> => {
+export default (errMessage: string): Promise<boolean> | boolean => {
   debugLog(`errMessage: ${errMessage}`);
 
   if (/command not found/.test(errMessage))
@@ -50,5 +53,5 @@ export default (errMessage: string): ?Promise<?{}> => {
       errMessage.replace(/.*: (.*): command not found\n/, '$1'),
     );
 
-  return null;
+  return false;
 };

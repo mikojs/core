@@ -26,7 +26,7 @@ const handleCommandNotFound = async (notFoundModule: string): Promise<?{}> => {
 
   try {
     const result = await execa.shell(
-      `npm i --no-package-lock ${packages.join(' ')}`,
+      `npm i --no-package-lock --no-save ${packages.join(' ')}`,
     );
 
     logger.succeed(chalk`{cyan ${packages.join(', ')}} have installed`);

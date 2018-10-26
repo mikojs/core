@@ -60,6 +60,8 @@ if (process.env.NODE_ENV !== 'development')
     } catch (e) {
       const { stderr, exitCode } = JSON.parse(e.message);
 
+      process.stdout.write('\n');
+
       if (stderr === errMessage) {
         // FIXME should use with pkg
         const watcher = chokidar.watch(path.resolve(cliOptions.root), {

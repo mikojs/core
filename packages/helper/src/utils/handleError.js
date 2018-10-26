@@ -38,7 +38,7 @@ const handleCommandNotFound = async (notFoundModule: string): Promise<?{}> => {
 
     return logger.fail(chalk`Install fail
 
-{gray ${e?.stderr || e.message}}`);
+{gray ${e.stderr || e.message}}`);
   }
 };
 

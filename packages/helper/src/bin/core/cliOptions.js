@@ -12,8 +12,8 @@ const debugLog = debug('helper:cliOptions');
 
 const program = new commander.Command('helper')
   .version(version, '-v, --version')
-  .arguments('[commands...]')
-  .usage(chalk`{green [commands...]} {gray [options]}`)
+  .arguments('<commands>')
+  .usage(chalk`{green <commands>} {gray [options]}`)
   .description(
     chalk`Example:
   helper {green 'babel -w'}

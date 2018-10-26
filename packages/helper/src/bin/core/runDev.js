@@ -10,9 +10,9 @@ import chalk from 'chalk';
 import { handleUnhandledRejection } from '@cat-org/logger';
 
 import cliOptions from './cliOptions';
-import clearConsole from './clearConsole';
 
 import logger from 'utils/logger';
+import clearConsole from 'utils/clearConsole';
 import handleError from 'utils/handleError';
 
 handleUnhandledRejection();

@@ -12,8 +12,8 @@ import babel from '@babel/core/lib/index';
 // $expectError import/no-useless-path-segments
 import noUnresolver from './../index';
 
-// $expectError import/no-unresolved
 // $expectError import/no-absolute-path
+// $expectError import/no-unresolved
 import noAbsolutePath from '/etc';
 
 // $expectError import/default
@@ -29,9 +29,9 @@ import func, { default as noNamedDefault } from './func';
 
 fbjs();
 
+// $expectError import/first
 // $expectError import/newline-after-import
 // $expectError import/no-self-import
-// $expectError import/first
 import * as namespace from './import-1';
 fbjs();
 

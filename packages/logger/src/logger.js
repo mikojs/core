@@ -8,7 +8,7 @@ import defaultLogSettings from './settings/log';
 
 type logType = (...messages: $ReadOnlyArray<string>) => logsType;
 
-type logsType = {
+export type logsType = {
   [string]: logType,
 };
 

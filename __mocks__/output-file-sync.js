@@ -2,10 +2,7 @@
 
 import { emptyFunction } from 'fbjs';
 
-/**
- * @example
- * new OutPutFileSync()
- */
+/** mock outputFileSync */
 class OutPutFileSync {
   destPaths = [];
 

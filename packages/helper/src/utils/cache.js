@@ -9,16 +9,16 @@ import outputFileSync from 'output-file-sync';
 import logger from './logger';
 
 const debugLog = debug('helper:cache');
-const cacheDir = findCacheDir({ name: 'helper', thunk: true });
-const DEFAULT_STORE = {
-  packages: [],
-};
+
+export const cacheDir = findCacheDir({ name: 'helper', thunk: true });
 
 /** cache class */
 export class Cache {
   cachePath = '';
 
-  store = DEFAULT_STORE;
+  store: {
+    packages: $ReadOnlyArray<string>,
+  } = { packages: [] };
 
   /**
    * @example
@@ -27,13 +27,12 @@ export class Cache {
    * @param {boolean} isProd - is Production
    */
   constructor(isProd: boolean) {
-    if (!cacheDir)
+    this.cachePath =
+      cacheDir?.(isProd ? 'prod.json' : 'dev.json') ||
       logger.fail('Run `yarn init` or `npm init` before running `helper`');
-
-    this.cachePath = cacheDir(isProd ? 'prod.json' : 'dev.json');
     this.store = fs.existsSync(this.cachePath)
       ? require(this.cachePath)
-      : DEFAULT_STORE;
+      : { packages: [] };
 
     debugLog(`cachePath: ${this.cachePath}`);
     debugLog(`store: ${JSON.stringify(this.store, null, 2)}`);

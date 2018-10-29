@@ -2,10 +2,7 @@
 
 import { emptyFunction } from 'fbjs';
 
-/**
- * @example
- * new Chokidar()
- */
+/** mock chokidar */
 class Chokidar {
   watchCallback = emptyFunction;
 

@@ -1,9 +1,6 @@
 // @flow
 
-/**
- * @example
- * new Options()
- */
+/** mock options */
 class Options {
   cliOptions = null;
 

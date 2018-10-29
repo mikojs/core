@@ -18,8 +18,8 @@ const correctFunction = (argu: string): number => 10;
  */
 const noExample = (argu: string): number => 10;
 
-// $expectError jsdoc/check-tag-names
 // $expectError jsdoc/require-param
+// $expectError jsdoc/check-tag-names
 /**
  * @example
  * correctFunction('test');
@@ -29,8 +29,8 @@ const noExample = (argu: string): number => 10;
  */
 const noParams = (argu: string): number => 10;
 
-// $expectError jsdoc/require-hyphen-before-param-description
 // $expectError valid-jsdoc
+// $expectError jsdoc/require-hyphen-before-param-description
 /**
  * @example
  * correctFunction('test');
@@ -61,10 +61,10 @@ const checkTypes = (argu: string): number => 10;
 
 // $expectError jsdoc/check-param-names
 // $expectError jsdoc/require-param
+// $expectError valid-jsdoc
 // $expectError jsdoc/require-param-description
 // $expectError jsdoc/require-param-name
 // $expectError jsdoc/require-param-type
-// $expectError valid-jsdoc
 /**
  * @example
  * requireParamName('test');
@@ -74,9 +74,9 @@ const checkTypes = (argu: string): number => 10;
  */
 const requireParam = (argu: string): number => 10;
 
+// $expectError valid-jsdoc
 // $expectError jsdoc/require-returns-description
 // $expectError jsdoc/require-returns-type
-// $expectError valid-jsdoc
 /**
  * @example
  * requireReturn('test');

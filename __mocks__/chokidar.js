@@ -1,11 +1,13 @@
 // @flow
 
+import { emptyFunction } from 'fbjs';
+
 /**
  * @example
  * new Chokidar()
  */
 class Chokidar {
-  watchCallback = () => {};
+  watchCallback = emptyFunction;
 
   /**
    * @example
@@ -14,7 +16,7 @@ class Chokidar {
    * @param {string} type - type to mock
    * @param {Function} callback - callback to mock
    */
-  on = (type: string, callback: () => {}) => {
+  on = (type: string, callback: emptyFunction) => {
     this.watchCallback = callback;
   };
 

@@ -1,6 +1,6 @@
 // @flow
 
-import { resetDestPaths, getDestPaths } from 'output-file-sync';
+import { outputFileSync } from 'output-file-sync';
 
 import flowFiles from '../flowFiles';
 import writeFiles from '../writeFiles';
@@ -18,32 +18,33 @@ import {
 
 test('transform file', () => {
   reset(transformFileOptions);
-  resetDestPaths();
   babel();
 
-  expect(getDestPaths()).toEqual(indexFiles);
+  expect(outputFileSync.destPaths).toEqual(indexFiles);
 });
 
 describe('transform folder', () => {
   beforeEach(() => {
     reset(transformFolderOptions);
-    resetDestPaths();
   });
 
   it('transform file which do not have the same name file and extension is `.js.flow`', () => {
     babel();
-    expect(getDestPaths()).toEqual(indexFiles);
+    expect(outputFileSync.destPaths).toEqual(indexFiles);
 
     babel();
-    expect(getDestPaths()).toEqual([...indexFiles, 'lib/index.js.flow']);
+    expect(outputFileSync.destPaths).toEqual([
+      ...indexFiles,
+      'lib/index.js.flow',
+    ]);
   });
 
   it('transform file which have the same name file and extension is `.js.flow`', () => {
     babel('hasFlowFile.js');
-    expect(getDestPaths()).toEqual(hasFlowFileFiles);
+    expect(outputFileSync.destPaths).toEqual(hasFlowFileFiles);
 
     babel('hasFlowFile.js');
-    expect(getDestPaths()).toEqual(hasFlowFileFiles);
+    expect(outputFileSync.destPaths).toEqual(hasFlowFileFiles);
   });
 });
 
@@ -51,19 +52,18 @@ describe('write file before previous file is done', () => {
   beforeAll(() => {
     // Generate flow file in store
     reset(transformFileOptions);
-    resetDestPaths();
     babel();
   });
 
   it('Add file when previous file is not done.', () => {
     const [flowFile] = flowFiles.store;
 
-    expect(getDestPaths()).toEqual(indexFiles);
+    expect(outputFileSync.destPaths).toEqual(indexFiles);
 
     writeFiles.isWritting = true;
     writeFiles.add(flowFile);
 
-    expect(getDestPaths()).toEqual(indexFiles);
+    expect(outputFileSync.destPaths).toEqual(indexFiles);
     expect(
       Boolean(
         writeFiles.store.find(
@@ -76,7 +76,7 @@ describe('write file before previous file is done', () => {
   it('Previous file is done. Write file and remove same file in the store.', () => {
     const [flowFile] = flowFiles.store;
 
-    expect(getDestPaths()).toEqual(indexFiles);
+    expect(outputFileSync.destPaths).toEqual(indexFiles);
     expect(
       Boolean(
         writeFiles.store.find(
@@ -88,7 +88,10 @@ describe('write file before previous file is done', () => {
     writeFiles.isWritting = false;
     writeFiles.add(flowFile);
 
-    expect(getDestPaths()).toEqual([...indexFiles, flowFile.destPath]);
+    expect(outputFileSync.destPaths).toEqual([
+      ...indexFiles,
+      flowFile.destPath,
+    ]);
     expect(
       Boolean(
         writeFiles.store.find(
@@ -101,17 +104,16 @@ describe('write file before previous file is done', () => {
 
 test('Store is not clean after writting file', () => {
   reset(transformFolderOptions);
-  resetDestPaths();
   babel();
 
   const [flowFile] = flowFiles.store;
 
-  expect(getDestPaths()).toEqual(indexFiles);
+  expect(outputFileSync.destPaths).toEqual(indexFiles);
 
   writeFiles.isWritting = true;
   writeFiles.add(flowFile);
 
-  expect(getDestPaths()).toEqual(indexFiles);
+  expect(outputFileSync.destPaths).toEqual(indexFiles);
   expect(
     Boolean(
       writeFiles.store.find(
@@ -123,7 +125,7 @@ test('Store is not clean after writting file', () => {
   writeFiles.isWritting = false;
   babel('hasFlowFile.js');
 
-  expect(getDestPaths()).toEqual([
+  expect(outputFileSync.destPaths).toEqual([
     ...indexFiles,
     ...hasFlowFileFiles,
     flowFile.destPath,

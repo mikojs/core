@@ -2,7 +2,7 @@
 
 import path from 'path';
 
-import { setMainFunction } from 'output-file-sync';
+import { outputFileSync } from 'output-file-sync';
 import chokidar from 'chokidar';
 
 import { name as pkgName } from '../../package.json';
@@ -35,32 +35,34 @@ describe('cli error', () => {
 
 test('write error', () => {
   expect(() => {
-    setMainFunction(() => {
+    outputFileSync.mainFunction = () => {
       throw new Error('error');
-    });
+    };
     reset(transformFileOptions);
     babel();
   }).toThrow(`${pkgName} Error: error`);
 });
 
 test('write error with watch mode', () => {
+  const mockLog = jest.fn();
+
   reset({
     ...transformFileOptions,
     watch: true,
   });
   babel();
 
-  global.console.log = jest.fn();
-  setMainFunction(() => {
+  global.console.log = mockLog;
+  outputFileSync.mainFunction = () => {
     throw new Error('error');
-  });
+  };
   chokidar.watchCallback(
     path.resolve(__dirname, './__ignore__/files/justDefinition.js.flow'),
   );
 
-  expect(global.console.log).toHaveBeenCalled();
-  expect(global.console.log).toHaveBeenCalledTimes(1);
-  expect(global.console.log).toHaveBeenCalledWith(`${pkgName} Error: error`);
+  expect(mockLog).toHaveBeenCalled();
+  expect(mockLog).toHaveBeenCalledTimes(1);
+  expect(mockLog).toHaveBeenCalledWith(`${pkgName} Error: error`);
 });
 
 test('watch error when not finding babel config', () => {

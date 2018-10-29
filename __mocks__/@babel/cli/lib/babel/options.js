@@ -9,14 +9,6 @@ class Options {
 
   /**
    * @example
-   * options.setCliOptions();
-   */
-  setCliOptions = (cliOptions: {} | null) => {
-    this.cliOptions = cliOptions;
-  };
-
-  /**
-   * @example
    * options.main();
    *
    * @return {Object} - object of cliOptions
@@ -28,7 +20,5 @@ class Options {
   });
 }
 
-const options = new Options();
-
-export const { setCliOptions } = options;
+export const options = new Options();
 export default options.main;

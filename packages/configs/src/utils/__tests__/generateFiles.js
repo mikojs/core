@@ -2,7 +2,7 @@
 
 import path from 'path';
 
-import { resetDestPaths, getDestPaths } from 'output-file-sync';
+import { outputFileSync } from 'output-file-sync';
 import { emptyFunction } from 'fbjs';
 
 import generateFiles from '../generateFiles';
@@ -13,7 +13,7 @@ configs.store['not-find-cli-setting'] = emptyFunction.thatReturnsArgument;
 
 describe('generate files', () => {
   beforeEach(() => {
-    resetDestPaths();
+    outputFileSync.destPaths = [];
   });
 
   it('error', () => {
@@ -26,7 +26,7 @@ describe('generate files', () => {
     generateFiles({ cliName: 'jest' });
 
     expect(worker.server).toBeNull();
-    expect(getDestPaths()).toEqual(
+    expect(outputFileSync.destPaths).toEqual(
       [
         'babel.config.js',
         '.prettierrc.js',

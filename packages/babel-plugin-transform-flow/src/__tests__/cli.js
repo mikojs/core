@@ -2,7 +2,7 @@
 
 import path from 'path';
 
-import { resetDestPaths, getDestPaths } from 'output-file-sync';
+import { outputFileSync } from 'output-file-sync';
 import chokidar from 'chokidar';
 
 import reset from './__ignore__/reset';
@@ -10,19 +10,21 @@ import babel from './__ignore__/babel';
 import { root, transformFileOptions, indexFiles } from './__ignore__/constants';
 
 test('verbose: true', () => {
-  global.console.log = jest.fn();
+  const mockLog = jest.fn();
+
+  global.console.log = mockLog;
   reset({
     ...transformFileOptions,
     verbose: true,
   });
   babel();
 
-  expect(global.console.log).toHaveBeenCalled();
-  expect(global.console.log).toHaveBeenCalledTimes(2);
-  expect(global.console.log).toHaveBeenCalledWith(
+  expect(mockLog).toHaveBeenCalled();
+  expect(mockLog).toHaveBeenCalledTimes(2);
+  expect(mockLog).toHaveBeenCalledWith(
     `${root.replace(/^\.\//, '')}/index.js -> lib/index.js.flow`,
   );
-  expect(global.console.log).toHaveBeenCalledWith(
+  expect(mockLog).toHaveBeenCalledWith(
     `${root.replace(
       /^\.\//,
       '',
@@ -36,28 +38,27 @@ describe('watch: true', () => {
       ...transformFileOptions,
       watch: true,
     });
-    resetDestPaths();
     babel();
   });
 
   it('can watch modifying file', () => {
-    expect(getDestPaths()).toEqual(indexFiles);
+    expect(outputFileSync.destPaths).toEqual(indexFiles);
 
     chokidar.watchCallback(
       path.resolve(__dirname, './__ignore__/files/justDefinition.js.flow'),
     );
-    expect(getDestPaths()).toEqual([
+    expect(outputFileSync.destPaths).toEqual([
       ...indexFiles,
       'lib/justDefinition.js.flow',
     ]);
   });
 
   it('modify file is not .js.flow', () => {
-    expect(getDestPaths()).toEqual(indexFiles);
+    expect(outputFileSync.destPaths).toEqual(indexFiles);
 
     chokidar.watchCallback(
       path.resolve(__dirname, './__ignore__/files/index.js'),
     );
-    expect(getDestPaths()).toEqual(indexFiles);
+    expect(outputFileSync.destPaths).toEqual(indexFiles);
   });
 });

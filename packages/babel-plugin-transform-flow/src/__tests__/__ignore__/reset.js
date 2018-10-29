@@ -1,11 +1,12 @@
 // @flow
 
-import { setCliOptions } from '@babel/cli/lib/babel/options';
+import { options } from '@babel/cli/lib/babel/options';
+import { outputFileSync } from 'output-file-sync';
 
 import utils from '../../utils';
 import flowFiles from '../../flowFiles';
 
-export default (options?: null | {} = null) => {
+export default (newOptions?: null | {} = null) => {
   // reset utils
   utils.initialized = false;
   utils.initialOptions = {
@@ -24,6 +25,9 @@ export default (options?: null | {} = null) => {
   flowFiles.watcher = null;
 
   // reinitialize options
-  setCliOptions(options);
+  options.cliOptions = newOptions;
   utils.initializeOptions({ watch: false });
+
+  // reset outputFileSync
+  outputFileSync.destPaths = [];
 };

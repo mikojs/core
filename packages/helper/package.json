@@ -6,11 +6,13 @@
   "homepage": "https://cat-org.github.io/cat-core/",
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/helper",
   "version": "1.0.0-beta.8",
+  "main": "./lib/index.js",
   "bin": {
     "helper": "./lib/bin/index.js"
   },
   "dependencies": {
     "@cat-org/logger": "^1.0.0-beta.8",
+    "@cat-org/utils": "^1.0.0-beta.8",
     "chalk": "^2.4.1",
     "chokidar": "^2.0.4",
     "commander": "^2.17.1",

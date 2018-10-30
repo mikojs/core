@@ -16,8 +16,9 @@ import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
-import defaultConfigs from './defaultConfigs';
 import logger from './logger';
+
+import defaultConfigs from 'configs/defaultConfigs';
 
 const debugLog = debug('configs-scripts:configs');
 
@@ -55,23 +56,29 @@ export class Configs {
 
       // handle default and custom configs are function
       if (!this.store[key].config && !customConfigs[key].config) {
-        this.store[key] = (): {} =>
-          ({} |> defaultConfigs[key] |> customConfigs[key]);
+        const configs = this.store[key];
+
+        this.store[key] = (): {} => ({} |> configs |> customConfigs[key]);
         return;
       }
 
+      const configs =
+        typeof this.store[key] === 'function'
+          ? this.store[key]
+          : { ...this.store[key] };
+
       // handle default or custom configs is object
       this.store[key] = {
-        alias: customConfigs[key].alias || defaultConfigs[key].alias || key,
+        alias: customConfigs[key].alias || configs.alias || key,
         install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
           install
-          |> defaultConfigs[key].install || emptyFunction.thatReturnsArgument
+          |> configs.install || emptyFunction.thatReturnsArgument
           |> customConfigs[key].install || emptyFunction.thatReturnsArgument,
         config: (): {} =>
           ({}
-          |> defaultConfigs[key].config ||
-            (typeof defaultConfigs[key] === 'function'
-              ? defaultConfigs[key]
+          |> configs.config ||
+            (typeof configs === 'function'
+              ? configs
               : emptyFunction.thatReturnsArgument)
           |> customConfigs[key].config ||
             (typeof customConfigs[key] === 'function'
@@ -79,19 +86,19 @@ export class Configs {
               : emptyFunction.thatReturnsArgument)),
         ignore: (): $ReadOnlyArray<string> =>
           []
-          |> defaultConfigs[key].ignore || emptyFunction.thatReturnsArgument
+          |> configs.ignore || emptyFunction.thatReturnsArgument
           |> customConfigs[key].ignore || emptyFunction.thatReturnsArgument,
         ignoreName: customConfigs[key].ignoreName,
         run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
           argv
-          |> defaultConfigs[key].run || emptyFunction.thatReturnsArgument
+          |> configs.run || emptyFunction.thatReturnsArgument
           |> customConfigs[key].run || emptyFunction.thatReturnsArgument,
         env: {
-          ...defaultConfigs[key].env,
+          ...configs.env,
           ...customConfigs[key].env,
         },
         configFiles: {
-          ...defaultConfigs[key].configFiles,
+          ...configs.configFiles,
           ...customConfigs[key].configFiles,
         },
       };
@@ -123,7 +130,7 @@ export class Configs {
     debugLog(`Find rood dir: ${this.rootDir}`);
 
     if (this.rootDir === '/')
-      logger.error(
+      logger.fail(
         'Can not find the root directory',
         chalk`Run {cyan \`git init\`} in the root directory`,
       );
@@ -151,7 +158,7 @@ export class Configs {
     shouldUseNpm: boolean,
   }): {} => {
     if (!this.store[cliName])
-      logger.error(
+      logger.fail(
         chalk`Can not find {cyan \`${cliName}\`} in configs`,
         chalk`Use {green \`--info\`} to get the more information`,
       );
@@ -191,7 +198,7 @@ export class Configs {
       };
     } catch (e) {
       if (/not found/.test(e.message))
-        logger.error(e.message.replace(/not found/, 'Not found cli'));
+        logger.fail(e.message.replace(/not found/, 'Not found cli'));
 
       throw e;
     }
@@ -200,9 +207,8 @@ export class Configs {
 
 const configs = new Configs();
 
-configs.handleCustomConfigs(
-  readPkgUp.sync()?.pkg?.configs || cosmiconfig('cat').searchSync()?.filepath,
-);
+configs.handleCustomConfigs(readPkgUp.sync().pkg?.configs);
+configs.handleCustomConfigs(cosmiconfig('cat').searchSync()?.filepath);
 configs.findRootDir();
 
 export default configs;

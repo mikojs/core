@@ -6,7 +6,8 @@ import path from 'path';
 import { emptyFunction } from 'fbjs';
 
 import { Configs } from '../configs';
-import defaultConfigs from '../defaultConfigs';
+
+import defaultConfigs from 'configs/defaultConfigs';
 
 const defaultParameter = {
   argv: [],
@@ -14,25 +15,22 @@ const defaultParameter = {
   shouldUseNpm: false,
 };
 
-// $FlowFixMe add value to defaultConfigs for testing
+// for testing get config
 defaultConfigs.noCli = emptyFunction.thatReturnsArgument;
-// $FlowFixMe add value to defaultConfigs for testing
+
+// for testing config and install
 defaultConfigs.funcConfig = emptyFunction.thatReturnsArgument;
-// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.emptyConfig = {
   config: emptyFunction.thatReturnsArgument,
 };
-// $FlowFixMe add value to defaultConfigs for testing
+
 defaultConfigs.funcMergeObject = emptyFunction.thatReturnsArgument;
-// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.objectMergeFunc = {
   config: emptyFunction.thatReturnsArgument,
 };
-// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.customNoConfig = {
   config: emptyFunction.thatReturnsArgument,
 };
-// $FlowFixMe add value to defaultConfigs for testing
 defaultConfigs.defaultNoConfig = {};
 
 describe('configs', () => {
@@ -66,74 +64,60 @@ describe('configs', () => {
 
   describe('get config', () => {
     const configs = new Configs();
-    const customConfigsPath = path.resolve(
-      __dirname,
-      './__ignore__/configs.js',
-    );
 
-    configs.handleCustomConfigs(customConfigsPath);
+    configs.handleCustomConfigs(
+      path.resolve(__dirname, './__ignore__/configs.js'),
+    );
     configs.findRootDir();
 
-    it('not find command', () => {
-      expect(() => {
-        configs.getConfig({
-          ...defaultParameter,
-          cliName: 'not find command',
-        });
-      }).toThrow('process exit');
-    });
-
-    it('show custom path info and not find cli', () => {
-      expect(() => {
-        configs.getConfig({
-          ...defaultParameter,
-          cliName: 'noCli',
-        });
-      }).toThrow('process exit');
-    });
-
-    it('get config error', () => {
-      expect(() => {
-        configs.getConfig({
-          ...defaultParameter,
-          cliName: 'runError',
-        });
-      }).toThrow('run error');
-    });
-
-    describe('install', () => {
-      const defaultResultConfig = {
-        env: {},
-        cli: 'install',
-      };
-
-      it('use yarn', () => {
-        expect(
+    test.each`
+      testName                                    | cliName               | expected
+      ${'not find command'}                       | ${'not find command'} | ${'process exit'}
+      ${'show custom path info and not find cli'} | ${'noCli'}            | ${'process exit'}
+      ${'get config error'}                       | ${'runError'}         | ${'run error'}
+    `(
+      '$testName',
+      ({ cliName, expected }: { cliName: string, expected: string }) => {
+        expect(() => {
           configs.getConfig({
             ...defaultParameter,
-            shouldInstall: true,
-            cliName: 'emptyConfig',
-          }),
-        ).toEqual({
-          ...defaultResultConfig,
-          argv: ['yarn', 'add', '--dev'],
-        });
-      });
+            cliName,
+          });
+        }).toThrow(expected);
+      },
+    );
 
-      it('use npm', () => {
-        expect(
-          configs.getConfig({
-            ...defaultParameter,
-            shouldInstall: true,
-            shouldUseNpm: true,
-            cliName: 'emptyConfig',
-          }),
-        ).toEqual({
-          ...defaultResultConfig,
-          argv: ['npm', 'install', '-D'],
+    describe.each`
+      type      | shouldUseNpm | argv
+      ${'yarn'} | ${false}     | ${['yarn', 'add', '--dev']}
+      ${'npm'}  | ${true}      | ${['npm', 'install', '-D']}
+    `(
+      'install',
+      ({
+        type,
+        shouldUseNpm,
+        argv,
+      }: {
+        type: string,
+        shouldUseNpm: boolean,
+        argv: $ReadOnlyArray<string>,
+      }) => {
+        it(`use ${type}`, () => {
+          expect(
+            configs.getConfig({
+              ...defaultParameter,
+              cliName: 'emptyConfig',
+              shouldInstall: true,
+              shouldUseNpm,
+            }),
+          ).toEqual({
+            env: {},
+            cli: 'install',
+            argv,
+          });
         });
-      });
-    });
+      },
+    );
 
     describe('config', () => {
       it('func config', () => {
@@ -151,20 +135,14 @@ describe('configs', () => {
         expect(emptyConfig.run([])).toEqual([]);
       });
 
-      it('func merge object', () => {
-        expect(configs.store.funcMergeObject.config()).toEqual({});
-      });
-
-      it('object merge func', () => {
-        expect(configs.store.objectMergeFunc.config()).toEqual({});
-      });
-
-      it('custom no config', () => {
-        expect(configs.store.customNoConfig.config()).toEqual({});
-      });
-
-      it('default no config', () => {
-        expect(configs.store.defaultNoConfig.config()).toEqual({});
+      test.each`
+        testName               | configName
+        ${'func merge object'} | ${'funcMergeObject'}
+        ${'object merge func'} | ${'objectMergeFunc'}
+        ${'custom no config'}  | ${'customNoConfig'}
+        ${'default no config'} | ${'defaultNoConfig'}
+      `('$testName', ({ configName }: { configName: string }) => {
+        expect(configs.store[configName].config()).toEqual({});
       });
     });
   });

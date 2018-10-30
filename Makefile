@@ -44,15 +44,13 @@ babel-clean:
 	rm -rf ./lib ./packages/**/lib
 
 release:
-	@test $(VERSION) && echo "Run with version: $(VERSION)" || \
-		(echo "use like: make release VERSION=(version)" && exit 1)
 	@yarn lerna-changelog && \
 		echo "\nContinue with any keyword or exit with 'ctrl + c'..." && \
 		read -p ""
 	@vim CHANGELOG.md && \
 		git add CHANGELOG.md && \
 		git commit -m "chore(root): add CHANGELOG.md"
-	@yarn lerna version $(VERSION)
+	@yarn lerna version
 
 clean-all:
 	@make babel-clean

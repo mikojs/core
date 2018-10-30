@@ -7,11 +7,17 @@
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
 import moment from 'moment';
+import debug from 'debug';
 
 import configs from 'utils/configs';
 import worker from 'utils/worker';
 
+const debugLog = debug('configs-scripts:config');
+
 export default (cliName: string, filename: string): {} => {
+  debugLog(`cliName: ${cliName}`);
+  debugLog(`filename: ${filename}`);
   worker.writeCache({ filePath: filename, using: moment().format() });
+
   return {} |> configs.store[cliName].config || configs.store[cliName];
 };

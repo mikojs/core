@@ -14,7 +14,7 @@ export default {
     ],
     '*.js.flow': ['yarn configs-scripts prettier --parser flow', 'git add'],
     '*.md': ['yarn configs-scripts prettier --parser markdown', 'git add'],
-    'package.json': [
+    '**/package.json': [
       'yarn prettier-package-json --write',
       'yarn configs-scripts prettier --parser json',
       'git add',

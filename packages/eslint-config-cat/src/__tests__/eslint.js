@@ -13,25 +13,18 @@ import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 import configs from '..';
 
 type eslintInfoType = {
-  ruleId: string,
   line: number,
+  ruleId: string,
   message: string,
 };
 
-type testTaskType = {
-  eslintInfo: eslintInfoType,
-  expectError: ?string,
-};
+type testTaskType = [number, string, string, ?string];
 
-type testDataType = {
-  testName: string,
-  testTasks: $ReadOnlyArray<testTaskType>,
-  checkErrorAmount: boolean,
-};
+type testDataType = [string, $ReadOnlyArray<testTaskType>, boolean];
 
 const root = path.resolve(__dirname, './__ignore__');
 
-const cli = new CLIEngine({
+const eslintResult = new CLIEngine({
   cwd: root,
   ignore: false,
   rules: {
@@ -39,14 +32,12 @@ const cli = new CLIEngine({
     'no-warning-comments': 'off',
     'prettier/prettier': 'off',
   },
-});
-
-const { results } = cli.executeOnFiles(['.']);
-
-const eslintResult = results.filter(
-  ({ messages }: { messages: $ReadOnlyArray<string> }): boolean =>
-    messages.length !== 0,
-);
+})
+  .executeOnFiles(['.'])
+  .results.filter(
+    ({ messages }: { messages: $ReadOnlyArray<string> }): boolean =>
+      messages.length !== 0,
+  );
 
 const ruleIds = [];
 
@@ -73,26 +64,29 @@ const testData = d3DirTree(root, {
             text.replace(/^[ ]*\/\/ \$expectError /, ''),
         );
 
-      const testTasks = messages.map(
-        (message: eslintInfoType, index: number): testTaskType => {
-          const { ruleId } = message;
+      const testTasks = messages
+        .sort(
+          (a: eslintInfoType, b: eslintInfoType) =>
+            a.line === b.line
+              ? a.ruleId.localeCompare(b.ruleId)
+              : a.line - b.line,
+        )
+        .map(
+          (
+            { ruleId, line, message }: eslintInfoType,
+            index: number,
+          ): testTaskType => {
+            if (!ruleIds.includes(ruleId)) ruleIds.push(ruleId);
 
-          if (!ruleIds.includes(ruleId)) {
-            ruleIds.push(ruleId);
-          }
+            return [line, ruleId, message, expectErrors[index] || null];
+          },
+        );
 
-          return {
-            eslintInfo: message,
-            expectError: expectErrors[index] || null,
-          };
-        },
-      );
-
-      return {
-        testName: hyphenate(name.replace(/.js/, '')),
+      return [
+        hyphenate(name.replace(/.js/, '')),
         testTasks,
-        checkErrorAmount: expectErrors.length === messages.length,
-      };
+        expectErrors.length === messages.length,
+      ];
     },
   );
 
@@ -124,26 +118,26 @@ describe('eslint', () => {
     expect(ruleIds.sort()).toEqual(testRules);
   });
 
-  testData.forEach(
+  describe.each(testData)(
+    '%s',
     (
-      { testName, testTasks, checkErrorAmount }: testDataType,
-      index: number,
+      testName: string,
+      testTasks: $ReadOnlyArray<testTaskType>,
+      checkErrorAmount: boolean,
     ) => {
-      describe(testName, () => {
-        testTasks.forEach(
-          ({
-            eslintInfo: { ruleId, line, message },
-            expectError,
-          }: testTaskType) => {
-            it(`[line: ${line}, rule: ${ruleId}] ${message}`, () => {
-              expect(ruleId).toBe(expectError);
-            });
-          },
-        );
+      ([testName, testTasks, checkErrorAmount]: testDataType);
 
-        it('check error amount', () => {
-          expect(checkErrorAmount).toBeTruthy();
-        });
+      test.each(testTasks)(
+        '[line: %d, rule: %s] %s',
+        (line: number, ruleId: string, message: string, expected: string) => {
+          ([line, ruleId, message, expected]: testTaskType);
+
+          expect(ruleId).toBe(expected);
+        },
+      );
+
+      it('check error amount', () => {
+        expect(checkErrorAmount).toBeTruthy();
       });
     },
   );

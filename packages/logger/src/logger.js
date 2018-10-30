@@ -1,123 +1,66 @@
 // @flow
 
-import { ExecutionEnvironment, emptyFunction } from 'fbjs';
+import { emptyFunction } from 'fbjs';
 
-type loggerType = (...message: $ReadOnlyArray<string>) => void;
+import chalk from './chalkPolyfill';
 
-/**
- * @example
- * hideLoggerInProduction(true, () => {});
- *
- * @param {boolean} isProduction - is production
- * @param {Function} logger - logger function
- *
- * @return {Function} - logger or empty function
- */
-export const hideLoggerInProduction = (
-  isProduction: boolean,
-  logger: loggerType,
-) => (isProduction ? emptyFunction : logger);
+import defaultLogSettings from './settings/log';
+
+type logType = (...messages: $ReadOnlyArray<string>) => logsType;
+
+export type logsType = {
+  [string]: logType,
+};
+
+export type settingsType = {
+  init?: (...args: $ReadOnlyArray<mixed>) => void,
+  [string]: {
+    getName?: (message: string) => string,
+    print: (message: string) => void,
+    after?: (name: string) => mixed,
+  },
+};
+
+const GET_NAME = {
+  log: (name: string): string => chalk`{gray   {bold ${name}}}`,
+  succeed: (name: string): string => chalk`{green ✔ {bold ${name}}}`,
+  fail: (name: string): string => chalk`{red ✖ {bold ${name}}}`,
+  warn: (name: string): string => chalk`{yellow ⚠ {bold ${name}}}`,
+  info: (name: string): string => chalk`{blue ℹ {bold ${name}}}`,
+};
 
 export default (
   name: string,
-  runAfterError?: () => void = emptyFunction,
-): {
-  error: loggerType,
-  info: loggerType,
-} => {
-  /**
-   * remove when chalk support browser
-   * https://github.com/chalk/chalk/issues/300
-   *
-   * @example
-   * chalk`{red ${test}}`;
-   *
-   * @param {Array} texts - texts array
-   * @param {Array} keys - keys array
-   *
-   * @return {Array} - console.log string
-   */
-  const chalk = !ExecutionEnvironment.canUseEventListeners
-    ? require('chalk')
-    : (
-        texts: $ReadOnlyArray<string>,
-        ...keys: $ReadOnlyArray<string>
-      ): $ReadOnlyArray<string> => {
-        const colorpattern = /(\{[a-zA-Z]* )|(\})/g;
-        const colorStore = [];
-        const transformString = texts
-          .map(
-            (text: string): string => {
-              colorStore.push(
-                // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-                ...(text.match(colorpattern)?.map(
-                  (color: string): string => {
-                    if (/\}/.test(color)) return 'color: black';
+  { init, ...logSettings }: settingsType = defaultLogSettings,
+): { init: (...args: $ReadOnlyArray<mixed>) => logsType } | logsType => {
+  const logs = Object.keys(logSettings).reduce(
+    (result: logsType, key: string) => ({
+      ...result,
+      [key]: (...messages: $ReadOnlyArray<string>): mixed => {
+        const {
+          getName = GET_NAME[key] || GET_NAME.log,
+          print,
+          after = emptyFunction,
+        } = logSettings[key];
+        const printName = getName(name);
 
-                    return `color: ${color.replace(/\{([a-zA-Z]*) /, '$1')}`;
-                  },
-                ) || []),
-              );
+        messages.forEach((message: string) => {
+          print(`${printName} ${message}`);
+        });
 
-              return text.replace(colorpattern, '%c');
-            },
-          )
-          .reduce(
-            (result: string, text: string, index: number): string =>
-              `${result}${text}${keys[index] || ''}`,
-            '',
-          );
+        return after(name);
+      },
+    }),
+    ({}: logsType),
+  );
 
-        return [transformString, ...colorStore];
-      };
+  return init
+    ? {
+        init: (...args: $ReadOnlyArray<mixed>): logsType => {
+          init(...args);
 
-  /**
-   * @example
-   * logger(true)
-   *
-   * @param {boolean} isError - show error log
-   *
-   * @return {Function} - logger function
-   */
-  const logger = (isError: boolean): loggerType => {
-    const { log, error } = console;
-
-    /**
-     * simple when chalk can use in browser
-     * just need to `const logFunc = isError ? error : log`
-     *
-     * @example
-     * logFunc('test');
-     *
-     * @param {string | Array<string>} message - message to log
-     */
-    const logFunc = (message: string | $ReadOnlyArray<string>) => {
-      if (ExecutionEnvironment.canUseEventListeners)
-        (isError ? error : log)(...message);
-      else (isError ? error : log)(message);
-    };
-
-    return (...messages: $ReadOnlyArray<string>) => {
-      messages.forEach((message: string) => {
-        logFunc(
-          isError
-            ? chalk`  {red ${name}} ${message}`
-            : chalk`  {green ${name}} ${message}`,
-        );
-      });
-
-      if (isError) runAfterError();
-    };
-  };
-
-  return {
-    error: hideLoggerInProduction(
-      process.env.NODE_ENV === 'production',
-      logger(true),
-    ),
-    info: hideLoggerInProduction(
-      process.env.NODE_ENV === 'production',
-      logger(false),
-    ),
-  };
+          return logs;
+        },
+      }
+    : logs;
 };

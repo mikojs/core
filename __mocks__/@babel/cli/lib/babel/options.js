@@ -1,19 +1,8 @@
 // @flow
 
-/**
- * @example
- * new Options()
- */
+/** mock options */
 class Options {
   cliOptions = null;
-
-  /**
-   * @example
-   * options.setCliOptions();
-   */
-  setCliOptions = (cliOptions: {} | null) => {
-    this.cliOptions = cliOptions;
-  };
 
   /**
    * @example
@@ -28,7 +17,5 @@ class Options {
   });
 }
 
-const options = new Options();
-
-export const { setCliOptions } = options;
+export const options = new Options();
 export default options.main;

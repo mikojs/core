@@ -1,9 +1,5 @@
 // @flow
 
-it('can not import @cat-org/utils', () => {
-  expect(() => {
-    require('..');
-  }).toThrow(
-    'Do not import module with `@cat-org/utils`. Use `@cat-org/utils/lib/<module>`.',
-  );
-});
+import throwMessageInIndex from '../throwMessageInIndex';
+
+throwMessageInIndex.test('@cat-org/utils', () => require('..'));

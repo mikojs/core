@@ -1,5 +1,38 @@
 # CHANGELOG
 
+## 1.0.0-beta.9 (2018-10-30)
+
+#### :boom: Breaking Change
+
+- `configs`, `logger`
+  - [#75](https://github.com/cat-org/cat-core/pull/75) Add ora logger ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `helper`
+  - [#72](https://github.com/cat-org/cat-core/pull/72) Add @cat-org/helper@beta.1 ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `logger`
+  - [#75](https://github.com/cat-org/cat-core/pull/75) Add ora logger ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#71](https://github.com/cat-org/cat-core/pull/71) Can read pkg configs and custom configs at the same time ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `configs`
+  - [#69](https://github.com/cat-org/cat-core/pull/69) Use execa ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `configs`, `logger`
+  - [#78](https://github.com/cat-org/cat-core/pull/78) Fix detail ([@HsuTing](https://github.com/HsuTing))
+- `logger`
+  - [#77](https://github.com/cat-org/cat-core/pull/77) fix ora setting in @cat-org/logger ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `configs`, `eslint-config-cat`, `logger`, `utils`
+  - [#73](https://github.com/cat-org/cat-core/pull/73) Fix lint-staged not checking package.json ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#68](https://github.com/cat-org/cat-core/pull/68) fix husky upgrade ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.8 (2018-10-02)
 
 FIX publish error

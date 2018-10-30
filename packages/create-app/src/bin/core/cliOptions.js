@@ -2,8 +2,13 @@
 
 import commander from 'commander';
 import chalk from 'chalk';
+import debug from 'debug';
 
 import { version } from '../../../package.json';
+
+import logger from 'utils/logger';
+
+const debugLog = debug('create-cat:cliOptions');
 
 const program = new commander.Command('create-cat')
   .version(version, '-v, --version')
@@ -14,15 +19,12 @@ const {
   args: [projectDir],
 } = program.parse(process.argv);
 
-if (!projectDir) {
-  program.outputHelp(
-    (defaultHelp: string) => chalk`
-{red Error: <project-directory> is required.}
+debugLog({
+  projectDir,
+});
 
-${defaultHelp}`,
-  );
-  process.exit(1);
-}
+if (!projectDir)
+  logger.fail(chalk`{red Error: <project-directory> is required.}`);
 
 export default {
   projectDir,

@@ -8,24 +8,28 @@ import { version } from '../../../package.json';
 
 import logger from 'utils/logger';
 
-const debugLog = debug('create-cat:cliOptions');
+const debugLog = debug('create-app:cliOptions');
 
-const program = new commander.Command('create-cat')
+const program = new commander.Command('create-app')
   .version(version, '-v, --version')
   .arguments('<project-directory>')
-  .usage(chalk`{green <project-directory>}`);
+  .usage(chalk`{green <project-directory>}`)
+  .option('--npm', 'use npm to install packages');
 
 const {
   args: [projectDir],
+  npm = false,
 } = program.parse(process.argv);
 
-debugLog({
+const cliOptions = {
   projectDir,
-});
-
-if (!projectDir)
-  logger.fail(chalk`{red Error: <project-directory> is required.}`);
-
-export default {
-  projectDir,
+  cmd: npm ? 'npm' : 'yarn',
+  install: npm ? 'install' : 'add',
+  dev: npm ? '-D' : '--dev',
 };
+
+debugLog(cliOptions);
+
+if (!projectDir) logger.fail(chalk`{red \`project-directory\`} is required.`);
+
+export default cliOptions;

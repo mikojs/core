@@ -13,4 +13,4 @@ logSettings.fail.after = () => {
   process.exit(1);
 };
 
-export default logger('create-cat', logSettings);
+export default logger('create-app', logSettings);

@@ -9,11 +9,14 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
+    "@cat-org/configs": "^1.0.0-beta.8",
     "@cat-org/logger": "^1.0.0-beta.8",
     "@cat-org/utils": "^1.0.0-beta.8",
     "chalk": "^2.4.1",
     "commander": "^2.18.0",
-    "debug": "^4.1.0"
+    "debug": "^4.1.0",
+    "execa": "^1.0.0",
+    "listr": "^0.14.2"
   },
   "keywords": ["cat-org", "create app"],
   "publishConfig": {

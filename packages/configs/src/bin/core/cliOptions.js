@@ -9,7 +9,7 @@ import { version } from '../../../package.json';
 import logger from 'utils/logger';
 import configs from 'utils/configs';
 
-const debugLog = debug('configs-scripts:cliOption');
+const debugLog = debug('configs-scripts:cliOptions');
 
 const program = new commander.Command('configs-scripts')
   .version(version, '-v, --version')

@@ -12,44 +12,66 @@ import { handleUnhandledRejection } from '@cat-org/logger';
 
 import cliOptions from './core/cliOptions';
 
-const DEFAULT_CONFIGS = ['babel', 'prettier', 'lint', 'lint-staged', 'jest'];
-
 if (!fs.existsSync(cliOptions.projectDir)) fs.mkdirSync(cliOptions.projectDir);
 
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
-  const root = path.resolve(cliOptions.projectDir);
+  const execaOptions = {
+    cwd: path.resolve(cliOptions.projectDir),
+  };
 
   await new Listr([
     {
-      title: 'Git init',
+      title: 'Initialization',
       // TODO check git exist
-      task: () => execa('git', ['init']),
-    },
-    {
-      title: chalk`Install {green @cat-org/configs}`,
-      // TODO remove after @cat-org/configs production
       task: () =>
-        execa(
-          cliOptions.cmd,
-          [cliOptions.install, '@cat-org/configs@beta', cliOptions.dev],
-          {
-            cwd: root,
-          },
+        new Listr(
+          [
+            {
+              title: 'git',
+              cmds: ['git', 'init'],
+            },
+            {
+              title: chalk`install {green @cat-org/configs}`,
+              cmds: [
+                cliOptions.cmd,
+                // TODO remove after @cat-org/configs production
+                cliOptions.install,
+                '@cat-org/configs@beta',
+                'regenerator-runtime',
+                cliOptions.dev,
+              ],
+            },
+          ].map(
+            ({
+              title,
+              cmds,
+            }: {
+              title: string,
+              cmds: $ReadOnlyArray<string>,
+            }) => ({
+              title,
+              task: () => execa(cmds[0], cmds.slice(1), execaOptions),
+            }),
+          ),
         ),
     },
     {
       title: 'Install default packages',
       task: () =>
         new Listr(
-          DEFAULT_CONFIGS.map((configName: string) => ({
-            title: chalk`Install devDependencies in {green ${configName}}`,
-            task: () =>
-              execa('configs-scripts', ['--install', configName], {
-                cwd: root,
-              }),
-          })),
+          ['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
+            (configName: string) => ({
+              title: configName,
+              task: () =>
+                execa(
+                  'configs-scripts',
+                  ['--install', configName],
+                  execaOptions,
+                ),
+            }),
+          ),
         ),
     },
   ]).run();

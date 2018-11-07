@@ -31,8 +31,6 @@ handleUnhandledRejection();
       const server = await worker.init();
 
       /**
-       * Remove files
-       *
        * @example
        * removeFiles(0);
        *

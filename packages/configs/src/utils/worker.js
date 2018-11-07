@@ -36,8 +36,6 @@ export class Worker {
   port = 8888;
 
   /**
-   * Init a worker
-   *
    * @example
    * worker.init()
    *
@@ -66,8 +64,6 @@ export class Worker {
   };
 
   /**
-   * Write cache
-   *
    * @example
    * worker.writeCache({})
    *

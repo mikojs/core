@@ -31,8 +31,6 @@ export class Configs {
   customConfigsPath = false;
 
   /**
-   * Handle custom configs
-   *
    * @example
    * configs.handleCustomConfigs()
    *
@@ -109,8 +107,6 @@ export class Configs {
   };
 
   /**
-   * Find root directory
-   *
    * @example
    * configs.findRootDir()
    *
@@ -137,8 +133,6 @@ export class Configs {
   };
 
   /**
-   * Get ths config from cliName
-   *
    * @example
    * configs.getConfig(cliOptions)
    *

@@ -29,8 +29,6 @@ const CONFIG_IGNORE = {
 };
 
 /**
- * find config files with merging by cliName
- *
  * @example
  * findConfigFiles('cliName')
  *

@@ -7,12 +7,12 @@ import isRunning from 'is-running';
 
 import { handleUnhandledRejection } from '@cat-org/logger';
 
-import cliOptions from './core/cliOptions';
-
+import makeCliOptions from 'utils/cliOptions';
 import configs from 'utils/configs';
 import generateFiles from 'utils/generateFiles';
 import worker from 'utils/worker';
 
+const cliOptions = makeCliOptions(process.argv);
 const { cliName } = cliOptions;
 const { cli, argv, env } = configs.getConfig(cliOptions);
 const debugLog = debug(`configs-scripts:bin[${cliName}]`);

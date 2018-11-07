@@ -10,7 +10,7 @@ export default {
   config: (): {} => ({
     testPathIgnorePatterns: ['__tests__/__ignore__'],
     collectCoverage: true,
-    collectCoverageFrom: ['**/src/**/*.js', '!**/bin/**/*.js'],
+    collectCoverageFrom: ['**/src/**/*.js', '!**/bin/*.js'],
     coverageDirectory: 'coverage',
     coverageReporters: ['html', 'text'],
     coverageThreshold: {

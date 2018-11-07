@@ -6,7 +6,8 @@ import chalk from './chalkPolyfill';
 
 import defaultLogSettings from './settings/log';
 
-type logType = (...messages: $ReadOnlyArray<string>) => logsType;
+type messageType = string | {};
+type logType = (...messages: $ReadOnlyArray<messageType>) => logsType;
 
 export type logsType = {
   [string]: logType,
@@ -15,28 +16,33 @@ export type logsType = {
 export type settingsType = {
   init?: (...args: $ReadOnlyArray<mixed>) => void,
   [string]: {
-    getName?: (message: string) => string,
+    getName?: (name: string) => string,
     print: (message: string) => void,
     after?: (name: string) => mixed,
   },
 };
 
 const GET_NAME = {
-  log: (name: string): string => chalk`{gray   {bold ${name}}}`,
-  succeed: (name: string): string => chalk`{green ✔ {bold ${name}}}`,
-  fail: (name: string): string => chalk`{red ✖ {bold ${name}}}`,
-  warn: (name: string): string => chalk`{yellow ⚠ {bold ${name}}}`,
-  info: (name: string): string => chalk`{blue ℹ {bold ${name}}}`,
+  log: (name: string) => chalk`{gray   {bold ${name}}}`,
+  succeed: (name: string) => chalk`{green ✔ {bold ${name}}}`,
+  fail: (name: string) => chalk`{red ✖ {bold ${name}}}`,
+  warn: (name: string) => chalk`{yellow ⚠ {bold ${name}}}`,
+  info: (name: string) => chalk`{blue ℹ {bold ${name}}}`,
 };
 
 export default (
   name: string,
   { init, ...logSettings }: settingsType = defaultLogSettings,
-): { init: (...args: $ReadOnlyArray<mixed>) => logsType } | logsType => {
+):
+  | {
+      init: (...args: $ReadOnlyArray<mixed>) => logsType,
+      log: (...messages: $ReadOnlyArray<messageType>) => logsType,
+    }
+  | logsType => {
   const logs = Object.keys(logSettings).reduce(
     (result: logsType, key: string) => ({
       ...result,
-      [key]: (...messages: $ReadOnlyArray<string>): mixed => {
+      [key]: (...messages: $ReadOnlyArray<messageType>): mixed => {
         const {
           getName = GET_NAME[key] || GET_NAME.log,
           print,
@@ -44,8 +50,18 @@ export default (
         } = logSettings[key];
         const printName = getName(name);
 
-        messages.forEach((message: string) => {
-          print(`${printName} ${message}`);
+        messages.forEach((message: messageType) => {
+          print(
+            message instanceof Object
+              ? JSON.stringify(message, null, 2)
+              : /**
+                 * https://github.com/facebook/flow/issues/2282
+                 * instanceof not work
+                 *
+                 * $FlowFixMe
+                 */
+                `${printName} ${(message: string)}`,
+          );
         });
 
         return after(name);

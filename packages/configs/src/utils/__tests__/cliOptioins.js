@@ -9,7 +9,7 @@ import configs from '../configs';
 const defaultArgv = ['node', 'configs-scripts'];
 const babelCli = npmWhich(process.cwd()).sync('babel');
 
-describe('cliOptions', () => {
+describe('cli options', () => {
   beforeAll(() => {
     configs.store['funcConfigInfo'] = emptyFunction.thatReturnsArgument;
     configs.store['install-package'] = {

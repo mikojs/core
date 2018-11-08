@@ -5,7 +5,7 @@ import execa from 'execa';
 import debug from 'debug';
 import isRunning from 'is-running';
 
-import { handleUnhandledRejection } from '@cat-org/logger';
+import { handleUnhandledRejection } from '@cat-org/utils';
 
 import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';

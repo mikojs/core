@@ -5,7 +5,7 @@ import path from 'path';
 
 import execa from 'execa';
 
-import { handleUnhandledRejection } from '@cat-org/logger';
+import { handleUnhandledRejection } from '@cat-org/utils';
 
 import cliOptions from './core/cliOptions';
 

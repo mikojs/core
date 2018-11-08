@@ -14,8 +14,10 @@ it('test d3DirTree', () => {
   ).toEqual([
     '__tests__',
     'd3DirTree.js',
+    'handleUnhandledRejection.js',
     'index.js',
     'index.js.flow',
+    'mockEnv.js',
     'throwMessageInIndex.js',
   ]);
 });

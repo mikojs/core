@@ -7,7 +7,7 @@ import execa from 'execa';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
 
-import { handleUnhandledRejection } from '@cat-org/logger';
+import { handleUnhandledRejection } from '@cat-org/utils';
 
 import cliOptions from './cliOptions';
 

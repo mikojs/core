@@ -34,7 +34,7 @@ describe('generate files', () => {
         '.eslintignore',
         'jest.config.js',
       ].map(
-        (fileName: string): string => path.resolve(process.cwd(), fileName),
+        (fileName: string): string => path.resolve(fileName),
       ),
     );
   });

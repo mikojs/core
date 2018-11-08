@@ -58,7 +58,7 @@ describe('configs', () => {
     ).toEqual({
       argv: [],
       env: {},
-      cli: path.resolve(process.cwd(), './node_modules/.bin/jest'),
+      cli: path.resolve('./node_modules/.bin/jest'),
     });
   });
 

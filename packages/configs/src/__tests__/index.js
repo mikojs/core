@@ -11,6 +11,6 @@ test('get config', () => {
   configs.store['get config'] = emptyFunction.thatReturnsArgument;
 
   expect(
-    getConfig('get config', path.resolve(process.cwd(), 'jest.config.js')),
+    getConfig('get config', path.resolve('jest.config.js')),
   ).toEqual({});
 });

@@ -17,7 +17,7 @@ it('test d3DirTree', () => {
     'handleUnhandledRejection.js',
     'index.js',
     'index.js.flow',
-    'mockEnv.js',
+    'mockChoice.js',
     'throwMessageInIndex.js',
   ]);
 });

@@ -6,3 +6,4 @@ export { default as throwMessageInIndex } from './throwMessageInIndex';
 export {
   default as handleUnhandledRejection,
 } from './handleUnhandledRejection';
+export { default as mockChoice } from './mockChoice';

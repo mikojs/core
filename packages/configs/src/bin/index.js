@@ -7,9 +7,11 @@ import isRunning from 'is-running';
 
 import { handleUnhandledRejection } from '@cat-org/logger';
 
+import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';
 import generateFiles from 'utils/generateFiles';
 import worker from 'utils/worker';
+import logger from 'utils/logger';
 
 const { cli, argv, env, cliName } = cliOptions(process.argv);
 const debugLog = debug(`configs-scripts:bin[${cliName}]`);
@@ -23,6 +25,12 @@ debugLog({
 });
 
 (async (): Promise<void> => {
+  if (configs.customConfigsPath)
+    logger.info(
+      'Using external configsuration',
+      `Location: ${configs.customConfigsPath}`,
+    );
+
   switch (cli) {
     case 'install':
       execa(argv[0], argv.slice(1), {

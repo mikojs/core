@@ -13,22 +13,6 @@ import configs from './configs';
 
 const debugLog = debug('configs-scripts:cliOptions');
 
-const program = new commander.Command('configs-scripts')
-  .version(version, '-v, --version')
-  .arguments('[command type, arguments...]')
-  .usage(chalk`{green [command type, arguments...]} {gray [options]}`)
-  .description(
-    chalk`Example:
-  configs-scripts {green babel -w}
-  configs-scripts {green babel:lerna -w}
-  configs-scripts {gray --info}
-  configs-scripts {green babel:lerna} {gray --info}`,
-  )
-  .option('--install', 'install packages by config')
-  .option('--npm', 'use npm to install packages')
-  .option('--info', 'print more info about configs')
-  .allowUnknownOption();
-
 export default (
   argv: $ReadOnlyArray<string>,
 ): {
@@ -37,6 +21,22 @@ export default (
   env: {},
   cliName: string,
 } => {
+  const program = new commander.Command('configs-scripts')
+    .version(version, '-v, --version')
+    .arguments('[command type, arguments...]')
+    .usage(chalk`{green [command type, arguments...]} {gray [options]}`)
+    .description(
+      chalk`Example:
+  configs-scripts {green babel -w}
+  configs-scripts {green babel:lerna -w}
+  configs-scripts {gray --info}
+  configs-scripts {green babel:lerna} {gray --info}`,
+    )
+    .option('--install', 'install packages by config')
+    .option('--npm', 'use npm to install packages')
+    .option('--info', 'print more info about configs')
+    .allowUnknownOption();
+
   const {
     args: [cliName],
     rawArgs,
@@ -117,12 +117,6 @@ export default (
       chalk`Use {green \`--info\`} to get the more information`,
     );
 
-  if (configs.customConfigsPath)
-    logger.info(
-      'Using external configsuration',
-      `Location: ${configs.customConfigsPath}`,
-    );
-
   const {
     alias: cli = cliName,
     install = emptyFunction.thatReturnsArgument,
@@ -130,14 +124,14 @@ export default (
     env = {},
   } = configs.store[cliName];
 
-  debugLog({
-    cli,
-    install: install([]),
-    run: run([]),
-    env,
-  });
-
   try {
+    debugLog({
+      cli,
+      install: install([]),
+      run: run([]),
+      env,
+    });
+
     return {
       cli: shouldInstall ? 'install' : npmWhich(process.cwd()).sync(cli),
       argv: shouldInstall

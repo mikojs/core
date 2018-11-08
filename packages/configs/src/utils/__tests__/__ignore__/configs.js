@@ -3,15 +3,6 @@
 import { emptyFunction } from 'fbjs';
 
 module.exports = {
-  // for testing get config
-  noCli: emptyFunction.thatReturnsArgument,
-  runError: {
-    config: emptyFunction.thatReturnsArgument,
-    run: () => {
-      throw new Error('run error');
-    },
-  },
-
   // for testing config and install
   funcConfig: emptyFunction.thatReturnsArgument,
   emptyConfig: {

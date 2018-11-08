@@ -40,7 +40,7 @@ describe('cli options', () => {
   `('Run $argv', ({ argv }: { argv: $ReadOnlyArray<string> }) => {
     expect(() => {
       cliOptions([...defaultArgv, ...argv]);
-    }).toThrowError('process exit');
+    }).toThrow('process exit');
   });
 
   test.each`
@@ -79,7 +79,7 @@ describe('cli options', () => {
     ({ cliName, expected }: { cliName: string, expected: string }) => {
       expect(() => {
         cliOptions([...defaultArgv, cliName]);
-      }).toThrowError(expected);
+      }).toThrow(expected);
     },
   );
 });

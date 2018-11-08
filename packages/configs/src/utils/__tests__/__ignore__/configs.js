@@ -10,6 +10,9 @@ module.exports = {
     config: emptyFunction.thatReturnsArgument,
   },
 
+  notInDefault: {
+    config: emptyFunction.thatReturns({}),
+  },
   funcMergeObject: {
     config: emptyFunction.thatReturnsArgument,
   },

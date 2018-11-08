@@ -69,6 +69,7 @@ describe('configs', () => {
 
     test.each`
       testName               | configName
+      ${'not in default'}    | ${'notInDefault'}
       ${'func merge object'} | ${'funcMergeObject'}
       ${'object merge func'} | ${'objectMergeFunc'}
       ${'custom no config'}  | ${'customNoConfig'}

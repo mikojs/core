@@ -6,6 +6,8 @@ import debug from 'debug';
 import npmWhich from 'npm-which';
 import { emptyFunction } from 'fbjs';
 
+import { mockChoice } from '@cat-org/utils';
+
 import { version } from '../../package.json';
 
 import logger from './logger';
@@ -100,9 +102,13 @@ export default (
       log();
     }
 
-    if (process.env.NODE_ENV === 'test') throw new Error('process exit');
-
-    process.exit();
+    mockChoice(
+      process.env.NODE_ENV === 'test',
+      () => {
+        throw new Error('process exit');
+      },
+      process.exit,
+    );
   }
 
   if (!cliName)

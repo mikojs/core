@@ -1,5 +1,9 @@
 // @flow
 
+import { emptyFunction } from 'fbjs';
+
+import { mockChoice } from '@cat-org/utils';
+
 export default {
   install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
     ...install,
@@ -26,32 +30,37 @@ export default {
         'module-resolver',
         {
           root: ['./src'],
+          cwd: 'packagejson',
         },
       ],
-      ...(process.env.NODE_ENV === 'test'
-        ? []
-        : [
-            [
-              '@cat-org/transform-flow',
-              {
-                plugins: [
-                  [
-                    'module-resolver',
-                    {
-                      root: ['./src'],
-                    },
-                  ],
-                  // FIXME: remove when flow support optional-chaining
-                  '@babel/proposal-optional-chaining',
+      ...mockChoice(
+        process.env.NODE_ENV === 'test',
+        emptyFunction.thatReturns([]),
+        emptyFunction.thatReturns([
+          [
+            '@cat-org/transform-flow',
+            {
+              plugins: [
+                [
+                  'module-resolver',
+                  {
+                    root: ['./src'],
+                    cwd: 'packagejson',
+                  },
                 ],
-              },
-            ],
-          ]),
+                // FIXME: remove when flow support optional-chaining
+                '@babel/proposal-optional-chaining',
+              ],
+            },
+          ],
+        ]),
+      ),
     ],
-    ignore:
-      process.env.NODE_ENV === 'test'
-        ? []
-        : ['**/__tests__/**', '**/__mocks__/**'],
+    ignore: mockChoice(
+      process.env.NODE_ENV === 'test',
+      emptyFunction.thatReturns([]),
+      emptyFunction.thatReturns(['**/__tests__/**', '**/__mocks__/**']),
+    ),
     overrides: [],
   }),
   run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [

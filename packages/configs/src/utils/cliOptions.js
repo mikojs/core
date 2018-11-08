@@ -3,6 +3,8 @@
 import commander from 'commander';
 import chalk from 'chalk';
 import debug from 'debug';
+import npmWhich from 'npm-which';
+import { emptyFunction } from 'fbjs';
 
 import { version } from '../../package.json';
 
@@ -30,10 +32,10 @@ const program = new commander.Command('configs-scripts')
 export default (
   argv: $ReadOnlyArray<string>,
 ): {
-  cliName: string,
+  cli: string,
   argv: $ReadOnlyArray<string>,
-  shouldInstall: boolean,
-  shouldUseNpm: boolean,
+  env: {},
+  cliName: string,
 } => {
   const {
     args: [cliName],
@@ -109,10 +111,47 @@ export default (
       chalk`Use {green \`-h\`} to get the more information`,
     );
 
-  return {
-    cliName,
-    argv: rawArgs.filter((arg: string): boolean => ![cliName].includes(arg)),
-    shouldInstall,
-    shouldUseNpm,
-  };
+  if (!configs.store[cliName])
+    logger.fail(
+      chalk`Can not find {cyan \`${cliName}\`} in configs`,
+      chalk`Use {green \`--info\`} to get the more information`,
+    );
+
+  if (configs.customConfigsPath)
+    logger.info(
+      'Using external configsuration',
+      `Location: ${configs.customConfigsPath}`,
+    );
+
+  const {
+    alias: cli = cliName,
+    install = emptyFunction.thatReturnsArgument,
+    run = emptyFunction.thatReturnsArgument,
+    env = {},
+  } = configs.store[cliName];
+
+  debugLog({
+    cli,
+    install: install([]),
+    run: run([]),
+    env,
+  });
+
+  try {
+    return {
+      cli: shouldInstall ? 'install' : npmWhich(process.cwd()).sync(cli),
+      argv: shouldInstall
+        ? install(
+            shouldUseNpm ? ['npm', 'install', '-D'] : ['yarn', 'add', '--dev'],
+          )
+        : run(rawArgs.filter((arg: string) => ![cliName].includes(arg))),
+      env,
+      cliName,
+    };
+  } catch (e) {
+    if (/not found/.test(e.message))
+      logger.fail(e.message.replace(/not found/, 'Not found cli'));
+
+    throw e;
+  }
 };

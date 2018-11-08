@@ -103,6 +103,7 @@ export class Worker {
         });
 
         debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
+
         return null;
       }
 
@@ -124,6 +125,7 @@ export class Worker {
     const client = net.connect({ port: this.port });
 
     client.end(JSON.stringify(data));
+
     return client;
   };
 }

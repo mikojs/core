@@ -7,17 +7,20 @@ import isRunning from 'is-running';
 
 import { handleUnhandledRejection } from '@cat-org/logger';
 
-import makeCliOptions from 'utils/cliOptions';
-import configs from 'utils/configs';
+import cliOptions from 'utils/cliOptions';
 import generateFiles from 'utils/generateFiles';
 import worker from 'utils/worker';
 
-const cliOptions = makeCliOptions(process.argv);
-const { cliName } = cliOptions;
-const { cli, argv, env } = configs.getConfig(cliOptions);
+const { cli, argv, env, cliName } = cliOptions(process.argv);
 const debugLog = debug(`configs-scripts:bin[${cliName}]`);
 
 handleUnhandledRejection();
+debugLog({
+  cli,
+  argv,
+  env,
+  cliName,
+});
 
 (async (): Promise<void> => {
   switch (cli) {
@@ -37,42 +40,41 @@ handleUnhandledRejection();
        * @param {number} exitCode - process exit code
        */
       const removeFiles = (exitCode: number) => {
-        if (server) {
-          worker.writeCache({
-            pid: process.pid,
-            using: false,
-          });
-
-          debug('configs-scripts:remove:cache')(
-            JSON.stringify(worker.cache, null, 2),
-          );
-
-          Object.keys(worker.cache).forEach((key: string) => {
-            /* eslint-disable flowtype/no-unused-expressions */
-            // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-            worker.cache[key]?.pids.forEach((pid: number) => {
-              /* eslint-enable flowtype/no-unused-expressions */
-              if (!isRunning(pid))
-                worker.writeCache({
-                  pid,
-                  using: false,
-                });
-            });
-          });
-
-          if (Object.keys(worker.cache).length !== 0) {
-            setTimeout(removeFiles, 500, exitCode);
-            return;
-          }
-
-          server.close(() => {
-            process.exit(exitCode);
-          });
+        if (!server) {
+          process.exit(exitCode);
           return;
         }
 
-        process.exit(exitCode);
-        return;
+        worker.writeCache({
+          pid: process.pid,
+          using: false,
+        });
+
+        debug('configs-scripts:remove:cache')(
+          JSON.stringify(worker.cache, null, 2),
+        );
+
+        Object.keys(worker.cache).forEach((key: string) => {
+          /* eslint-disable flowtype/no-unused-expressions */
+          // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+          worker.cache[key]?.pids.forEach((pid: number) => {
+            /* eslint-enable flowtype/no-unused-expressions */
+            if (!isRunning(pid))
+              worker.writeCache({
+                pid,
+                using: false,
+              });
+          });
+        });
+
+        if (Object.keys(worker.cache).length !== 0) {
+          setTimeout(removeFiles, 500, exitCode);
+          return;
+        }
+
+        server.close(() => {
+          process.exit(exitCode);
+        });
       };
 
       // caught interrupt signal to remove files
@@ -80,8 +82,9 @@ handleUnhandledRejection();
         removeFiles(0);
       });
 
+      // [start]
       // handle config and ignore files
-      generateFiles(cliOptions);
+      generateFiles(cliName);
 
       // run command
       debugLog(

@@ -18,12 +18,12 @@ describe('generate files', () => {
 
   it('error', () => {
     expect(() => {
-      generateFiles({ cliName: 'not-find-cli-setting' });
+      generateFiles('not-find-cli-setting');
     }).toThrow('process exit');
   });
 
   it('generate', () => {
-    generateFiles({ cliName: 'jest' });
+    generateFiles('jest');
 
     expect(worker.server).toBeNull();
     expect(outputFileSync.destPaths).toEqual(
@@ -33,9 +33,7 @@ describe('generate files', () => {
         '.eslintrc.js',
         '.eslintignore',
         'jest.config.js',
-      ].map(
-        (fileName: string): string => path.resolve(fileName),
-      ),
+      ].map((fileName: string): string => path.resolve(fileName)),
     );
   });
 });

@@ -11,7 +11,6 @@ import path from 'path';
 
 import cosmiconfig from 'cosmiconfig';
 import readPkgUp from 'read-pkg-up';
-import npmWhich from 'npm-which';
 import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
 import debug from 'debug';
@@ -100,10 +99,9 @@ export class Configs {
           ...customConfigs[key].configFiles,
         },
       };
-
-      debugLog('Configs');
-      debugLog(this.store);
     });
+
+    debugLog(this.store);
   };
 
   /**
@@ -130,72 +128,6 @@ export class Configs {
         'Can not find the root directory',
         chalk`Run {cyan \`git init\`} in the root directory`,
       );
-  };
-
-  /**
-   * @example
-   * configs.getConfig(cliOptions)
-   *
-   * @param {Object} cliOptions - cliOptions in utils
-   *
-   * @return {Object} - config
-   */
-  getConfig = ({
-    cliName,
-    argv,
-    shouldInstall,
-    shouldUseNpm,
-  }: {
-    cliName: string,
-    argv: $ReadOnlyArray<string>,
-    shouldInstall: boolean,
-    shouldUseNpm: boolean,
-  }): {} => {
-    if (!this.store[cliName])
-      logger.fail(
-        chalk`Can not find {cyan \`${cliName}\`} in configs`,
-        chalk`Use {green \`--info\`} to get the more information`,
-      );
-
-    if (this.customConfigsPath)
-      logger.info(
-        'Using external configsuration',
-        `Location: ${this.customConfigsPath}`,
-      );
-
-    const {
-      alias: cli = cliName,
-      install = emptyFunction.thatReturnsArgument,
-      run = emptyFunction.thatReturnsArgument,
-      env = {},
-    } = this.store[cliName];
-
-    debugLog('Get config');
-    debugLog({
-      cli,
-      install,
-      run,
-      env,
-    });
-
-    try {
-      return {
-        argv: shouldInstall
-          ? install(
-              shouldUseNpm
-                ? ['npm', 'install', '-D']
-                : ['yarn', 'add', '--dev'],
-            )
-          : run(argv),
-        env,
-        cli: shouldInstall ? 'install' : npmWhich(process.cwd()).sync(cli),
-      };
-    } catch (e) {
-      if (/not found/.test(e.message))
-        logger.fail(e.message.replace(/not found/, 'Not found cli'));
-
-      throw e;
-    }
   };
 }
 

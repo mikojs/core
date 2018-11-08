@@ -70,7 +70,7 @@ const findConfigFiles = (cliName: string): {} => {
   );
 };
 
-export default ({ cliName }: { cliName: string }) => {
+export default (cliName: string) => {
   const configFiles = findConfigFiles(cliName);
   const cache = {
     pid: process.pid,

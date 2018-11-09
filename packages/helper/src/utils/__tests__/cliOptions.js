@@ -10,7 +10,7 @@ describe('cli options', () => {
     expect(cliOptions([...defaultArgv, args])).toEqual({
       root: 'src',
       production: false,
-      args: args,
+      args,
     });
   });
 

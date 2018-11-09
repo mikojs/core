@@ -9,10 +9,9 @@ import chalk from 'chalk';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
-import cliOptions from './cliOptions';
-
 import logger from 'utils/logger';
 import clearConsole from 'utils/clearConsole';
+import cliOptions from 'utils/cliOptions';
 import handleError from 'utils/handleError';
 
 handleUnhandledRejection();
@@ -21,6 +20,7 @@ if (process.env.NODE_ENV !== 'development')
   logger.fail('Do not use `runDev` file directly');
 
 (async (): Promise<void> => {
+  const { args, root } = cliOptions(process.argv);
   let errCode: ?number;
   let errMessage: ?string;
 
@@ -28,12 +28,10 @@ if (process.env.NODE_ENV !== 'development')
     // Run command
     if (errCode) clearConsole();
 
-    logger.info(
-      chalk`${errCode ? 'Rerun' : 'Run'} {green \`${cliOptions.args}\`}`,
-    );
+    logger.info(chalk`${errCode ? 'Rerun' : 'Run'} {green \`${args}\`}`);
 
     const { exitCode, stderr } = await new Promise((resolve, reject) => {
-      const runCmd = execa.shell(cliOptions.args);
+      const runCmd = execa.shell(args);
       let cmdErr: string = '';
 
       runCmd.stdout.on('data', (chunk: string) => {
@@ -74,13 +72,13 @@ if (process.env.NODE_ENV !== 'development')
     // Watching files to rerun command
     await new Promise(resolve => {
       // FIXME should use with pkg
-      const watcher = chokidar.watch(path.resolve(cliOptions.root), {
+      const watcher = chokidar.watch(path.resolve(root), {
         ignored: /.swp/,
         ignoreInitial: true,
       });
 
       clearConsole();
-      logger.warn(chalk`Can not run {red \`${cliOptions.args}\`}
+      logger.warn(chalk`Can not run {red \`${args}\`}
 
 {gray ${stderr}}`);
 

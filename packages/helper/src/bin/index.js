@@ -7,24 +7,24 @@ import execa from 'execa';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
-import cliOptions from './core/cliOptions';
-
 import logger from 'utils/logger';
+import cliOptions from 'utils/cliOptions';
 import clearConsole from 'utils/clearConsole';
 
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
-  const NODE_ENV = cliOptions.production ? 'production' : 'development';
+  const { production, root } = cliOptions(process.argv);
+  const NODE_ENV = production ? 'production' : 'development';
 
-  if (!cliOptions.production) clearConsole();
+  if (!production) clearConsole();
 
-  logger.info(`Root folder ➜ ${cliOptions.root}`, `NODE_ENV ➜ ${NODE_ENV}`);
+  logger.info(`Root folder ➜ ${root}`, `NODE_ENV ➜ ${NODE_ENV}`);
 
   try {
     await execa(
       'node',
-      [path.resolve(__dirname, './core/runDev'), ...process.argv.slice(2)],
+      [path.resolve(__dirname, './runDev'), ...process.argv.slice(2)],
       {
         stdio: 'inherit',
         env: {

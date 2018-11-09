@@ -9,17 +9,13 @@ describe('cli options', () => {
   it(`Run '${args}'`, () => {
     expect(cliOptions([...defaultArgv, args])).toEqual({
       root: 'src',
-      production: false,
       args,
     });
   });
 
   it(`Run '${args}' --production --root test`, () => {
-    expect(
-      cliOptions([...defaultArgv, args, '--production', '--root', 'test']),
-    ).toEqual({
+    expect(cliOptions([...defaultArgv, args, '--root', 'test'])).toEqual({
       root: 'test',
-      production: true,
       args,
     });
   });

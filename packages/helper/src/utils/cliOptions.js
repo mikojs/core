@@ -14,7 +14,6 @@ export default (
   argv: $ReadOnlyArray<string>,
 ): {
   root: string,
-  production: boolean,
   args: string,
 } => {
   const program = new commander.Command('helper')
@@ -26,7 +25,6 @@ export default (
   helper {green 'babel -w'}
   helper {green 'babel -w'} {gray -r root}`,
     )
-    .option('-p, --production', 'use production mode')
     .option(
       '-r, --root <root folder>',
       'the root folder of project. Default: src',
@@ -34,13 +32,11 @@ export default (
 
   const {
     root = 'src',
-    production = false,
     args: [args],
   } = program.parse([...argv]);
 
   debugLog({
     root,
-    production,
     args,
   });
 
@@ -52,7 +48,6 @@ export default (
 
   return {
     root,
-    production,
     args,
   };
 };

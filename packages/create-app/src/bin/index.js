@@ -8,18 +8,19 @@ import chalk from 'chalk';
 import execa from 'execa';
 import Listr from 'listr';
 
-import { handleUnhandledRejection } from '@cat-org/logger';
+import { handleUnhandledRejection } from '@cat-org/utils';
 
-import cliOptions from './core/cliOptions';
-
-if (!fs.existsSync(cliOptions.projectDir)) fs.mkdirSync(cliOptions.projectDir);
+import cliOptions from 'utils/cliOptions';
 
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
+  const { projectDir, cmd, install, dev } = cliOptions(process.argv);
   const execaOptions = {
-    cwd: path.resolve(cliOptions.projectDir),
+    cwd: path.resolve(projectDir),
   };
+
+  if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
 
   await new Listr([
     {
@@ -35,12 +36,12 @@ handleUnhandledRejection();
             {
               title: chalk`install {green @cat-org/configs}`,
               cmds: [
-                cliOptions.cmd,
+                cmd,
                 // TODO remove after @cat-org/configs production
-                cliOptions.install,
+                install,
                 '@cat-org/configs@beta',
                 'regenerator-runtime',
-                cliOptions.dev,
+                dev,
               ],
             },
           ].map(

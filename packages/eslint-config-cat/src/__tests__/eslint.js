@@ -65,11 +65,10 @@ const testData = d3DirTree(root, {
         );
 
       const testTasks = messages
-        .sort(
-          (a: eslintInfoType, b: eslintInfoType) =>
-            a.line === b.line
-              ? a.ruleId.localeCompare(b.ruleId)
-              : a.line - b.line,
+        .sort((a: eslintInfoType, b: eslintInfoType) =>
+          a.line === b.line
+            ? a.ruleId.localeCompare(b.ruleId)
+            : a.line - b.line,
         )
         .map(
           (

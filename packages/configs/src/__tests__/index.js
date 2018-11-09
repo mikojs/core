@@ -10,7 +10,5 @@ import configs from 'utils/configs';
 test('get config', () => {
   configs.store['get config'] = emptyFunction.thatReturnsArgument;
 
-  expect(
-    getConfig('get config', path.resolve('jest.config.js')),
-  ).toEqual({});
+  expect(getConfig('get config', path.resolve('jest.config.js'))).toEqual({});
 });

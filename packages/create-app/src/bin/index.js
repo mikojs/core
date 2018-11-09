@@ -16,7 +16,7 @@ handleUnhandledRejection();
 
 (async (): Promise<void> => {
   const { projectDir, cmd, install, dev } = cliOptions(process.argv);
-  const execaOptions = {
+  const cmdOptions = {
     cwd: path.resolve(projectDir),
   };
 
@@ -53,7 +53,7 @@ handleUnhandledRejection();
               cmds: $ReadOnlyArray<string>,
             }) => ({
               title,
-              task: () => execa(cmds[0], cmds.slice(1), execaOptions),
+              task: () => execa(cmds[0], cmds.slice(1), cmdOptions),
             }),
           ),
         ),
@@ -66,11 +66,7 @@ handleUnhandledRejection();
             (configName: string) => ({
               title: configName,
               task: () =>
-                execa(
-                  'configs-scripts',
-                  ['--install', configName],
-                  execaOptions,
-                ),
+                execa('configs-scripts', ['--install', configName], cmdOptions),
             }),
           ),
         ),

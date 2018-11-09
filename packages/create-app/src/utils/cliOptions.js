@@ -15,14 +15,12 @@ export default (
 ): {
   projectDir: string,
   cmd: string,
-  install: string,
-  dev: string,
 } => {
   const program = new commander.Command('create-app')
     .version(version, '-v, --version')
     .arguments('<project-directory>')
     .usage(chalk`{green <project-directory>}`)
-    .option('--npm', 'use npm to install packages');
+    .option('--npm', 'use npm');
 
   const {
     args: [projectDir],
@@ -32,8 +30,6 @@ export default (
   const cliOptions = {
     projectDir,
     cmd: npm ? 'npm' : 'yarn',
-    install: npm ? 'install' : 'add',
-    dev: npm ? '-D' : '--dev',
   };
 
   debugLog(cliOptions);

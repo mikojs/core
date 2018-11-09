@@ -15,7 +15,7 @@ import cliOptions from 'utils/cliOptions';
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
-  const { projectDir, cmd, install, dev } = cliOptions(process.argv);
+  const { projectDir, cmd } = cliOptions(process.argv);
   const cmdOptions = {
     cwd: path.resolve(projectDir),
   };
@@ -38,10 +38,9 @@ handleUnhandledRejection();
               cmds: [
                 cmd,
                 // TODO remove after @cat-org/configs production
-                install,
+                ...(cmd === 'npm' ? ['install', '-D'] : ['add', '--dev']),
                 '@cat-org/configs@beta',
                 'regenerator-runtime',
-                dev,
               ],
             },
           ].map(

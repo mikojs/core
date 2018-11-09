@@ -29,13 +29,16 @@ handleUnhandledRejection();
   let errMessage: ?string;
 
   clearConsole();
-  logger.info(`Root folder ➜ ${root}`, `NODE_ENV ➜ ${NODE_ENV}`);
 
   while (errCode !== 0) {
     // Run command
     if (errCode) clearConsole();
 
-    logger.info(chalk`${errCode ? 'Rerun' : 'Run'} {green \`${args}\`}`);
+    logger.info(
+      `Root folder ➜ ${root}`,
+      `NODE_ENV ➜ ${NODE_ENV}`,
+      chalk`${errCode ? 'Rerun' : 'Run'} {green \`${args}\`}`,
+    );
 
     const { exitCode, stderr } = await new Promise((resolve, reject) => {
       const runCmd = execa.shell(args, cmdOptions);

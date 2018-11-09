@@ -8,7 +8,7 @@
   "version": "1.0.0-beta.9",
   "main": "./lib/index.js",
   "bin": {
-    "helper-dev": "./lib/bin/runDev.js"
+    "helper-dev": "./lib/bin/dev.js"
   },
   "dependencies": {
     "@cat-org/logger": "^1.0.0-beta.9",

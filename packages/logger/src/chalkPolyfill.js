@@ -5,7 +5,9 @@
  * @flow
  */
 
-import { ExecutionEnvironment } from 'fbjs';
+import { emptyFunction, ExecutionEnvironment } from 'fbjs';
+
+import { mockChoice } from '@cat-org/utils';
 
 /**
  * @example
@@ -26,6 +28,8 @@ const browserChalk = (
     '',
   );
 
-export default (!ExecutionEnvironment.canUseEventListeners
-  ? require('chalk')
-  : browserChalk);
+export default mockChoice(
+  ExecutionEnvironment.canUseEventListeners,
+  emptyFunction.thatReturns(browserChalk),
+  emptyFunction.thatReturns(require('chalk')),
+);

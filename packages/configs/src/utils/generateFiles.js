@@ -29,8 +29,6 @@ const CONFIG_IGNORE = {
 };
 
 /**
- * find config files with merging by cliName
- *
  * @example
  * findConfigFiles('cliName')
  *
@@ -72,7 +70,7 @@ const findConfigFiles = (cliName: string): {} => {
   );
 };
 
-export default ({ cliName }: { cliName: string }) => {
+export default (cliName: string) => {
   const configFiles = findConfigFiles(cliName);
   const cache = {
     pid: process.pid,

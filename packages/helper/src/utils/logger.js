@@ -1,16 +1,21 @@
 // @flow
 
+import { mockChoice } from '@cat-org/utils';
 import logger, { findSettings } from '@cat-org/logger';
 
 const oraSettings = findSettings('ora');
+const { error } = console;
 
 oraSettings.fail.after = () => {
-  // eslint-disable-next-line no-console
-  console.error();
-
-  if (process.env.NODE_ENV === 'test') throw new Error('process exit');
-
-  process.exit(1);
+  error();
+  mockChoice(
+    process.env.NODE_ENV === 'test',
+    () => {
+      throw new Error('process exit');
+    },
+    process.exit,
+    1,
+  );
 };
 
 export default logger('helper', oraSettings).init();

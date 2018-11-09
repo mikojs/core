@@ -9,15 +9,6 @@ import { Configs } from '../configs';
 
 import defaultConfigs from 'configs/defaultConfigs';
 
-const defaultParameter = {
-  argv: [],
-  shouldInstall: false,
-  shouldUseNpm: false,
-};
-
-// for testing get config
-defaultConfigs.noCli = emptyFunction.thatReturnsArgument;
-
 // for testing config and install
 defaultConfigs.funcConfig = emptyFunction.thatReturnsArgument;
 defaultConfigs.emptyConfig = {
@@ -50,19 +41,9 @@ describe('configs', () => {
 
     expect(configs.store).toEqual(defaultConfigs);
     expect(configs.rootDir).toBe(process.cwd());
-    expect(
-      configs.getConfig({
-        ...defaultParameter,
-        cliName: 'jest',
-      }),
-    ).toEqual({
-      argv: [],
-      env: {},
-      cli: path.resolve(process.cwd(), './node_modules/.bin/jest'),
-    });
   });
 
-  describe('get config', () => {
+  describe('test config', () => {
     const configs = new Configs();
 
     configs.handleCustomConfigs(
@@ -70,80 +51,31 @@ describe('configs', () => {
     );
     configs.findRootDir();
 
+    it('func config', () => {
+      const { funcConfig } = configs.store;
+
+      expect(typeof funcConfig).toBe('function');
+      expect(funcConfig()).toEqual({});
+    });
+
+    it('empty config', () => {
+      const { emptyConfig } = configs.store;
+
+      expect(emptyConfig.config()).toEqual({});
+      expect(emptyConfig.ignore()).toEqual([]);
+      expect(emptyConfig.run([])).toEqual([]);
+      expect(emptyConfig.install([])).toEqual([]);
+    });
+
     test.each`
-      testName                                    | cliName               | expected
-      ${'not find command'}                       | ${'not find command'} | ${'process exit'}
-      ${'show custom path info and not find cli'} | ${'noCli'}            | ${'process exit'}
-      ${'get config error'}                       | ${'runError'}         | ${'run error'}
-    `(
-      '$testName',
-      ({ cliName, expected }: { cliName: string, expected: string }) => {
-        expect(() => {
-          configs.getConfig({
-            ...defaultParameter,
-            cliName,
-          });
-        }).toThrow(expected);
-      },
-    );
-
-    describe.each`
-      type      | shouldUseNpm | argv
-      ${'yarn'} | ${false}     | ${['yarn', 'add', '--dev']}
-      ${'npm'}  | ${true}      | ${['npm', 'install', '-D']}
-    `(
-      'install',
-      ({
-        type,
-        shouldUseNpm,
-        argv,
-      }: {
-        type: string,
-        shouldUseNpm: boolean,
-        argv: $ReadOnlyArray<string>,
-      }) => {
-        it(`use ${type}`, () => {
-          expect(
-            configs.getConfig({
-              ...defaultParameter,
-              cliName: 'emptyConfig',
-              shouldInstall: true,
-              shouldUseNpm,
-            }),
-          ).toEqual({
-            env: {},
-            cli: 'install',
-            argv,
-          });
-        });
-      },
-    );
-
-    describe('config', () => {
-      it('func config', () => {
-        const { funcConfig } = configs.store;
-
-        expect(typeof funcConfig).toBe('function');
-        expect(funcConfig()).toEqual({});
-      });
-
-      it('empty config', () => {
-        const { emptyConfig } = configs.store;
-
-        expect(emptyConfig.config()).toEqual({});
-        expect(emptyConfig.ignore()).toEqual([]);
-        expect(emptyConfig.run([])).toEqual([]);
-      });
-
-      test.each`
-        testName               | configName
-        ${'func merge object'} | ${'funcMergeObject'}
-        ${'object merge func'} | ${'objectMergeFunc'}
-        ${'custom no config'}  | ${'customNoConfig'}
-        ${'default no config'} | ${'defaultNoConfig'}
-      `('$testName', ({ configName }: { configName: string }) => {
-        expect(configs.store[configName].config()).toEqual({});
-      });
+      testName               | configName
+      ${'not in default'}    | ${'notInDefault'}
+      ${'func merge object'} | ${'funcMergeObject'}
+      ${'object merge func'} | ${'objectMergeFunc'}
+      ${'custom no config'}  | ${'customNoConfig'}
+      ${'default no config'} | ${'defaultNoConfig'}
+    `('$testName', ({ configName }: { configName: string }) => {
+      expect(configs.store[configName].config()).toEqual({});
     });
   });
 });

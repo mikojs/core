@@ -10,7 +10,7 @@ import { d3DirTree } from '@cat-org/utils';
 
 import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-import configs from '..';
+import configs from '../index';
 
 type eslintInfoType = {
   line: number,
@@ -65,11 +65,10 @@ const testData = d3DirTree(root, {
         );
 
       const testTasks = messages
-        .sort(
-          (a: eslintInfoType, b: eslintInfoType) =>
-            a.line === b.line
-              ? a.ruleId.localeCompare(b.ruleId)
-              : a.line - b.line,
+        .sort((a: eslintInfoType, b: eslintInfoType) =>
+          a.line === b.line
+            ? a.ruleId.localeCompare(b.ruleId)
+            : a.line - b.line,
         )
         .map(
           (

@@ -2,4 +2,4 @@
 
 import throwMessageInIndex from '../throwMessageInIndex';
 
-throwMessageInIndex.test('@cat-org/utils', () => require('..'));
+throwMessageInIndex.test('@cat-org/utils', () => require('../index'));

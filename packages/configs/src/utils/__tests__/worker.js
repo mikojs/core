@@ -12,7 +12,7 @@ import { Worker } from '../worker';
 import type { cacheType } from '../worker';
 
 const cache = {
-  filePath: path.resolve(process.cwd(), 'jest.config.js'),
+  filePath: path.resolve('jest.config.js'),
   using: moment()
     .add(5, 'seconds')
     .format(),
@@ -40,14 +40,16 @@ const writeCache = async (cacheData: cacheType): Promise<void> => {
 };
 
 describe('worker', () => {
-  beforeAll(async (): Promise<void> => {
-    const port = await getPort();
+  beforeAll(
+    async (): Promise<void> => {
+      const port = await getPort();
 
-    serverWorker = new Worker(port);
-    clientWorker = new Worker(port);
-    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-    server = await serverWorker?.init();
-  });
+      serverWorker = new Worker(port);
+      clientWorker = new Worker(port);
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      server = await serverWorker?.init();
+    },
+  );
 
   it('can not open second server', async (): Promise<void> => {
     expect(await clientWorker.init()).toBeNull();
@@ -148,9 +150,11 @@ describe('worker', () => {
     }).toThrow('process exit');
   });
 
-  afterAll(async (): Promise<void> => {
-    await new Promise(resolve => {
-      server.close(resolve);
-    });
-  });
+  afterAll(
+    async (): Promise<void> => {
+      await new Promise(resolve => {
+        server.close(resolve);
+      });
+    },
+  );
 });

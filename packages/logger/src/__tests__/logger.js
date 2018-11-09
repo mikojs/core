@@ -45,3 +45,21 @@ test('default settings work', () => {
     logs[key]('message');
   });
 });
+
+test('show json message', () => {
+  const mockLog = jest.fn();
+  const message = {
+    obj: {
+      key: 'value',
+    },
+  };
+
+  logger('test', {
+    log: {
+      print: mockLog,
+    },
+  }).log(message);
+
+  expect(mockLog).toHaveBeenCalledTimes(1);
+  expect(mockLog).toHaveBeenCalledWith(JSON.stringify(message, null, 2));
+});

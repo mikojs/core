@@ -14,10 +14,10 @@ import worker from 'utils/worker';
 
 const debugLog = debug('configs-scripts:config');
 
-export default (cliName: string, filename: string): {} => {
+export default (cliName: string, filePath: string): {} => {
   debugLog(`cliName: ${cliName}`);
-  debugLog(`filename: ${filename}`);
-  worker.writeCache({ filePath: filename, using: moment().format() });
+  debugLog(`filePath: ${filePath}`);
+  worker.writeCache({ filePath, using: moment().format() });
 
   return {} |> configs.store[cliName].config || configs.store[cliName];
 };

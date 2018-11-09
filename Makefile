@@ -19,6 +19,7 @@ babel-core:
 		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
 		--parallel \
 		--stream \
+		--scope @cat-org/utils \
 		--scope @cat-org/configs \
 		--scope @cat-org/logger \
 		--scope @cat-org/babel-*
@@ -31,7 +32,6 @@ babel-all:
 babel-test:
 	@make babel-core
 	@$(call babel-build, \
-		--scope @cat-org/utils \
 		--scope @cat-org/eslint-config-cat)
 
 babel-lint-staged:

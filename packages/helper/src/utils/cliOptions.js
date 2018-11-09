@@ -23,8 +23,8 @@ export default (
     .usage(chalk`{green <commands>} {gray [options]}`)
     .description(
       chalk`Example:
-    helper {green 'babel -w'}
-    helper {green 'babel -w'} {gray -r root}`,
+  helper {green 'babel -w'}
+  helper {green 'babel -w'} {gray -r root}`,
     )
     .option('-p, --production', 'use production mode')
     .option(

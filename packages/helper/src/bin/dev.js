@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 // @flow
 
 import path from 'path';
@@ -16,22 +17,31 @@ import handleError from 'utils/handleError';
 
 handleUnhandledRejection();
 
-if (process.env.NODE_ENV !== 'development')
-  logger.fail('Do not use `runDev` file directly');
-
 (async (): Promise<void> => {
   const { args, root } = cliOptions(process.argv);
+  const NODE_ENV = 'development';
+  const cmdOptions = {
+    env: {
+      NODE_ENV,
+    },
+  };
   let errCode: ?number;
   let errMessage: ?string;
+
+  clearConsole();
 
   while (errCode !== 0) {
     // Run command
     if (errCode) clearConsole();
 
-    logger.info(chalk`${errCode ? 'Rerun' : 'Run'} {green \`${args}\`}`);
+    logger.info(
+      `Root folder ➜ ${root}`,
+      `NODE_ENV ➜ ${NODE_ENV}`,
+      chalk`${errCode ? 'Rerun' : 'Run'} {green \`${args}\`}`,
+    );
 
     const { exitCode, stderr } = await new Promise((resolve, reject) => {
-      const runCmd = execa.shell(args);
+      const runCmd = execa.shell(args, cmdOptions);
       let cmdErr: string = '';
 
       runCmd.stdout.on('data', (chunk: string) => {

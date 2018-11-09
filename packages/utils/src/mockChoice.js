@@ -1,8 +1,8 @@
 // @flow
 
-export default (
+export default <Arg, Result>(
   result: boolean,
-  funcOne: (...args: $ReadOnlyArray<string>) => mixed,
-  funcTwo: (...args: $ReadOnlyArray<string>) => mixed,
-  ...args: $ReadOnlyArray<string>
-) => (result ? funcOne(...args) : funcTwo(...args));
+  funcOne: (...args: $ReadOnlyArray<Arg>) => Result,
+  funcTwo: (...args: $ReadOnlyArray<Arg>) => Result,
+  ...args: $ReadOnlyArray<Arg>
+): Result => (result ? funcOne(...args) : funcTwo(...args));

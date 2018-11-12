@@ -59,6 +59,9 @@ const babel = config => {
         fbjs: {
           transform: 'fbjs/lib/${member}',
         },
+        validator: {
+          transform: 'validator/lib/${member}',
+        },
       },
     ],
   );

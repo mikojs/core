@@ -11,17 +11,18 @@ import Listr from 'listr';
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import cliOptions from 'utils/cliOptions';
+import pkg from 'utils/pkg';
 
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
   const { projectDir, cmd } = cliOptions(process.argv);
-  const cmdOptions = {
-    cwd: path.resolve(projectDir),
-  };
+  const cwd = path.resolve(projectDir);
+  const cmdOptions = { cwd };
 
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
 
+  await pkg.write(cwd);
   await new Listr([
     {
       title: 'Initialization',

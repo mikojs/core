@@ -11,7 +11,7 @@ import Listr from 'listr';
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import cliOptions from 'utils/cliOptions';
-import pkg from 'utils/pkg';
+import pkg from 'templates/pkg';
 
 handleUnhandledRejection();
 

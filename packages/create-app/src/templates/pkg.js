@@ -2,6 +2,7 @@
 
 import path from 'path';
 
+import envinfo from 'envinfo';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { isURL } from 'validator';
@@ -17,15 +18,41 @@ const defaultValidate = (val: string) => val !== '' || 'can not be empty';
 
 /** store pkg */
 class Pkg {
-  store = {
+  store: {
+    [string]: string,
+    engines?: {
+      [string]: string,
+    },
+  } = {
     license: 'MIT',
     author: 'TODO',
     version: '1.0.0',
     main: './lib/index.js',
-    bin: './lib/bin/index.js', // TODO
-    engines: {
-      // TODO
-    },
+  };
+
+  /**
+   * @example
+   * pkg.init()
+   */
+  init = async (): Promise<void> => {
+    const { Binaries } = JSON.parse(
+      await envinfo.run(
+        {
+          Binaries: ['Node', 'Yarn', 'npm'],
+        },
+        { json: true },
+      ),
+    );
+
+    this.store.engines = Object.keys(Binaries)
+      .filter((key: string) => Binaries[key])
+      .reduce(
+        (result: {}, key: string) => ({
+          ...result,
+          [key.toLowerCase()]: `>= ${Binaries[key].version}`,
+        }),
+        {},
+      );
   };
 
   /**

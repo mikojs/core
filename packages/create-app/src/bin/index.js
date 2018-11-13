@@ -22,6 +22,7 @@ handleUnhandledRejection();
 
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
 
+  await pkg.init();
   await pkg.write(cwd);
   await new Listr([
     {

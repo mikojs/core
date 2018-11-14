@@ -18,6 +18,7 @@
     "execa": "^1.0.0",
     "inquirer": "^6.2.0",
     "listr": "^0.14.2",
+    "nunjucks": "^3.1.4",
     "output-file-sync": "^2.0.1",
     "validator": "^10.9.0"
   },

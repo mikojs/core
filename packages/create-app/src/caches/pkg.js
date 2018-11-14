@@ -91,7 +91,7 @@ class Pkg extends Cache<storeType> {
               name: 'repository',
               validate: (val: string) =>
                 isURL(val, {
-                  protocols: 'https',
+                  protocols: ['https'],
                   require_protocol: true,
                   host_whitelist: ['github.com'],
                 }) ||

@@ -7,6 +7,7 @@ import path from 'path';
 import chalk from 'chalk';
 import execa from 'execa';
 import Listr from 'listr';
+import nunjucks from 'nunjucks';
 import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
@@ -15,6 +16,7 @@ import cliOptions from 'utils/cliOptions';
 import pkg from 'caches/pkg';
 
 handleUnhandledRejection();
+nunjucks.configure(path.resolve(__dirname, '../../templates'));
 
 (async (): Promise<void> => {
   const { projectDir, cmd } = cliOptions(process.argv);
@@ -22,14 +24,26 @@ handleUnhandledRejection();
 
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
 
-  // write files
-  outputFileSync(
-    path.resolve(projectDir, './package.json'),
-    JSON.stringify(await pkg.get(projectDir), null, 2),
-  );
+  const store = {
+    'package.json': JSON.stringify(await pkg.get(projectDir), null, 2),
+    '.gitignore': nunjucks.render('gitignore'),
+  };
 
-  // run command
   await new Listr([
+    {
+      title: 'Write files',
+      task: () =>
+        new Listr(
+          Object.keys(store).map((filePath: string) => ({
+            title: filePath,
+            task: () =>
+              outputFileSync(
+                path.resolve(projectDir, filePath),
+                store[filePath],
+              ),
+          })),
+        ),
+    },
     {
       title: 'Initialization',
       // TODO check git exist

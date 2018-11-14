@@ -14,7 +14,9 @@ export default class Cache<StoreType> {
    *
    * @param {string} projectDir - project dir path
    */
-  get = async (projectDir: string): Promise<StoreType> => {
+  get: (projectDir: string) => Promise<StoreType> = async (
+    projectDir: string,
+  ): Promise<StoreType> => {
     if (!this.isInit) {
       await this.init(projectDir);
 

@@ -63,12 +63,6 @@ class Pkg extends Cache<storeType> {
         {},
       );
 
-    /**
-     * get user
-     *
-     * https://github.com/facebook/flow/issues/7169
-     * $FlowFixMe
-     */
     const { username, email } = await user.get(projectDir);
 
     this.store.author = `${username} <${email}>`;

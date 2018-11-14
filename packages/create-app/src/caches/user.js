@@ -9,10 +9,13 @@ import logger from 'utils/logger';
 
 /** user cache */
 class User extends Cache<{
-  username?: string,
-  email?: string,
+  username: string,
+  email: string,
 }> {
-  store = {};
+  store = {
+    username: 'username',
+    email: 'email',
+  };
 
   /**
    * @example

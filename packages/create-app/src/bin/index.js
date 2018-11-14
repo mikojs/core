@@ -2,10 +2,12 @@
 // @flow
 
 import fs from 'fs';
+import path from 'path';
 
 import chalk from 'chalk';
 import execa from 'execa';
 import Listr from 'listr';
+import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -20,7 +22,13 @@ handleUnhandledRejection();
 
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
 
-  await pkg.get(projectDir);
+  // write files
+  outputFileSync(
+    path.resolve(projectDir, './package.json'),
+    JSON.stringify(await pkg.get(projectDir), null, 2),
+  );
+
+  // run command
   await new Listr([
     {
       title: 'Initialization',

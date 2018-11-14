@@ -83,14 +83,20 @@ class Pkg extends Cache<storeType> {
             },
             {
               name: 'homepage',
-              validate: (val: string) => isURL(val) || 'must be url',
+              validate: (val: string) =>
+                isURL(val, { require_protocol: true }) ||
+                'must be url, for example: https://cat.org',
             },
             {
               name: 'repository',
               validate: (val: string) =>
-                isURL(val) ||
+                isURL(val, {
+                  protocols: 'https',
+                  require_protocol: true,
+                  host_whitelist: ['github.com'],
+                }) ||
                 /git@github\.com:[\w-]*\/[\w-]*\.git/.test(val) ||
-                'must be url or git ssh',
+                'must be url or git ssh, for example: https://github.com/cat-org/cat-core.git',
             },
             {
               name: 'keywords',

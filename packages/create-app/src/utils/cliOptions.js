@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import commander from 'commander';
 import chalk from 'chalk';
 import debug from 'debug';
@@ -28,7 +30,7 @@ export default (
   } = program.parse([...argv]);
 
   const cliOptions = {
-    projectDir,
+    projectDir: path.resolve(projectDir),
     cmd: npm ? 'npm' : 'yarn',
   };
 

@@ -2,7 +2,6 @@
 // @flow
 
 import fs from 'fs';
-import path from 'path';
 
 import chalk from 'chalk';
 import execa from 'execa';
@@ -11,19 +10,17 @@ import Listr from 'listr';
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import cliOptions from 'utils/cliOptions';
-import pkg from 'templates/pkg';
+import pkg from 'caches/pkg';
 
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
   const { projectDir, cmd } = cliOptions(process.argv);
-  const cwd = path.resolve(projectDir);
-  const cmdOptions = { cwd };
+  const cmdOptions = { cwd: projectDir };
 
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
 
-  await pkg.init();
-  await pkg.write(cwd);
+  await pkg.get(projectDir);
   await new Listr([
     {
       title: 'Initialization',

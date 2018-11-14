@@ -7,6 +7,16 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { isURL } from 'validator';
 
+import user from './user';
+import Cache from './index';
+
+type storeType = {
+  [string]: string,
+  engines?: {
+    [string]: string,
+  },
+};
+
 /**
  * @example
  * defaultValidate('')
@@ -16,16 +26,10 @@ import { isURL } from 'validator';
  */
 const defaultValidate = (val: string) => val !== '' || 'can not be empty';
 
-/** store pkg */
-class Pkg {
-  store: {
-    [string]: string,
-    engines?: {
-      [string]: string,
-    },
-  } = {
+/** pkg cache */
+class Pkg extends Cache<storeType> {
+  store: storeType = {
     license: 'MIT',
-    author: 'TODO',
     version: '1.0.0',
     main: './lib/index.js',
   };
@@ -33,8 +37,13 @@ class Pkg {
   /**
    * @example
    * pkg.init()
+   *
+   * @param {string} projectDir - project dir path
    */
-  init = async (): Promise<void> => {
+  init = async (projectDir: string): Promise<void> => {
+    this.store.name = path.basename(projectDir);
+
+    // store engines
     const { Binaries } = JSON.parse(
       await envinfo.run(
         {
@@ -53,15 +62,18 @@ class Pkg {
         }),
         {},
       );
-  };
 
-  /**
-   * @example
-   * pkg.write('/root')
-   *
-   * @param {string} root - root to parse name
-   */
-  write = async (root: string): Promise<void> => {
+    /**
+     * get user
+     *
+     * https://github.com/facebook/flow/issues/7169
+     * $FlowFixMe
+     */
+    const { username, email } = await user.get(projectDir);
+
+    this.store.author = `${username} <${email}>`;
+
+    // ask for more information
     this.store = {
       ...this.store,
       ...(await inquirer
@@ -71,10 +83,6 @@ class Pkg {
               name: 'private',
               type: 'confirm',
               default: false,
-            },
-            {
-              name: 'name',
-              default: path.basename(root),
             },
             {
               name: 'description',

@@ -30,11 +30,11 @@ handleUnhandledRejection();
           [
             {
               title: 'git',
-              cmds: ['git', 'init'],
+              command: ['git', 'init'],
             },
             {
               title: chalk`install {green @cat-org/configs}`,
-              cmds: [
+              command: [
                 cmd,
                 // TODO remove after @cat-org/configs production
                 ...(cmd === 'npm' ? ['install', '-D'] : ['add', '--dev']),
@@ -45,13 +45,13 @@ handleUnhandledRejection();
           ].map(
             ({
               title,
-              cmds,
+              command,
             }: {
               title: string,
-              cmds: $ReadOnlyArray<string>,
+              command: $ReadOnlyArray<string>,
             }) => ({
               title,
-              task: () => execa(cmds[0], cmds.slice(1), cmdOptions),
+              task: () => execa(command[0], command.slice(1), cmdOptions),
             }),
           ),
         ),

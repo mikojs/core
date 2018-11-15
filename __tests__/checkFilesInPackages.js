@@ -18,6 +18,7 @@ describe('check files in packages', () => {
               ({ data: { name: childName } }: d3DirTreeNodeType): string =>
                 childName,
             )
+            .filter((folderName: string) => !['templates'].includes(folderName))
             .sort();
 
           expect(files).toEqual(

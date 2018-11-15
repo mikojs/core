@@ -29,14 +29,14 @@ export default (
     npm = false,
   } = program.parse([...argv]);
 
+  if (!projectDir) logger.fail(chalk`{red \`project-directory\`} is required.`);
+
   const cliOptions = {
     projectDir: path.resolve(projectDir),
     cmd: npm ? 'npm' : 'yarn',
   };
 
   debugLog(cliOptions);
-
-  if (!projectDir) logger.fail(chalk`{red \`project-directory\`} is required.`);
 
   return cliOptions;
 };

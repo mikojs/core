@@ -27,11 +27,12 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
   const store = {
     'package.json': JSON.stringify(await pkg.get(projectDir), null, 2),
     '.gitignore': nunjucks.render('gitignore'),
+    '.flowconfig': nunjucks.render('flowconfig'),
   };
 
   await new Listr([
     {
-      title: 'Write files',
+      title: 'write files',
       task: () =>
         new Listr(
           Object.keys(store).map((filePath: string) => ({
@@ -45,7 +46,7 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
         ),
     },
     {
-      title: 'Initialization',
+      title: 'initialization',
       // TODO check git exist
       task: () =>
         new Listr(
@@ -61,7 +62,6 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
                 // TODO remove after @cat-org/configs production
                 ...(cmd === 'npm' ? ['install', '-D'] : ['add', '--dev']),
                 '@cat-org/configs@beta',
-                'regenerator-runtime',
               ],
             },
           ].map(
@@ -79,14 +79,51 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
         ),
     },
     {
-      title: 'Install default packages',
+      title: 'install default packages',
       task: () =>
-        new Listr(
-          ['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
+        new Listr([
+          ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
             (configName: string) => ({
               title: configName,
               task: () =>
-                execa('configs-scripts', ['--install', configName], cmdOptions),
+                execa(
+                  'configs-scripts',
+                  [
+                    '--install',
+                    ...(cmd === 'npm' ? ['--npm'] : []),
+                    configName,
+                  ],
+                  cmdOptions,
+                ),
+            }),
+          ),
+          {
+            title: 'flow',
+            task: () =>
+              execa(
+                cmd,
+                [
+                  ...(cmd === 'npm' ? ['install', '-D'] : ['add', '--dev']),
+                  'flow-bin',
+                  'flow-typed',
+                ],
+                cmdOptions,
+              ),
+          },
+        ]),
+    },
+    {
+      title: 'install flow-typed packages',
+      task: () => execa('yarn', ['flow-typed', 'install'], cmdOptions),
+    },
+    {
+      title: 'git first command',
+      task: () =>
+        new Listr(
+          [['git', 'add', '.'], ['git', 'commit', '-m', '"project init"']].map(
+            (command: $ReadOnlyArray<string>) => ({
+              title: command.join(' '),
+              task: () => execa(command[0], command.slice(1), cmdOptions),
             }),
           ),
         ),

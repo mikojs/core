@@ -15,6 +15,11 @@ type storeType = {
   engines?: {
     [string]: string,
   },
+  husky: {
+    hooks: {
+      [string]: string,
+    },
+  },
 };
 
 /**
@@ -32,6 +37,11 @@ class Pkg extends Cache<storeType> {
     license: 'MIT',
     version: '1.0.0',
     main: './lib/index.js',
+    husky: {
+      hooks: {
+        'pre-commit': 'configs-scripts lint-staged && yarn flow',
+      },
+    },
   };
 
   /**

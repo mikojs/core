@@ -5,6 +5,7 @@ export default {
     ...install,
     'husky',
     'lint-staged',
+    'prettier-package-json',
   ],
   config: (): {} => ({
     '*.js': [

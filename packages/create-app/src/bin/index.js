@@ -114,16 +114,16 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
     },
     {
       title: 'install flow-typed packages',
-      task: () => execa('yarn', ['flow-typed', 'install'], cmdOptions),
+      task: () => execa.shell('yarn flow-typed install', cmdOptions),
     },
     {
       title: 'git first command',
       task: () =>
         new Listr(
-          [['git', 'add', '.'], ['git', 'commit', '-m', '"project init"']].map(
-            (command: $ReadOnlyArray<string>) => ({
-              title: command.join(' '),
-              task: () => execa(command[0], command.slice(1), cmdOptions),
+          ['git add .', 'git commit -m "project init"'].map(
+            (command: string) => ({
+              title: command,
+              task: () => execa.shell(command, cmdOptions),
             }),
           ),
         ),

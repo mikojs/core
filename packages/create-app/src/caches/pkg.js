@@ -10,6 +10,15 @@ import { isURL } from 'validator';
 import user from './user';
 import Cache from './index';
 
+type validateType = (val: string & $ReadOnlyArray<string>) => boolean | string;
+
+type questionOptionType = {
+  name: string,
+  type?: string,
+  default?: mixed,
+  filter?: (val: string) => mixed,
+};
+
 type storeType = {
   [string]: string,
   engines?: {
@@ -29,7 +38,68 @@ type storeType = {
  * @param {string} val - input value
  * @return {boolean} - validate result
  */
-const defaultValidate = (val: string) => val !== '' || 'can not be empty';
+export const defaultValidate = (val: string) =>
+  val !== '' || 'can not be empty';
+
+export const questions: $ReadOnlyArray<
+  questionOptionType & {
+    message: string,
+    validate: validateType,
+    prefix: string,
+    suffix: string,
+  },
+> = [
+  {
+    name: 'private',
+    type: 'confirm',
+    default: false,
+  },
+  {
+    name: 'description',
+  },
+  {
+    name: 'homepage',
+    validate: (val: string) =>
+      isURL(val, { require_protocol: true }) ||
+      'must be url, for example: https://cat.org',
+  },
+  {
+    name: 'repository',
+    validate: (val: string) =>
+      isURL(val, {
+        protocols: ['https'],
+        require_protocol: true,
+        host_whitelist: ['github.com'],
+      }) ||
+      /git@github\.com:[\w-]*\/[\w-]*\.git/.test(val) ||
+      'must be url or git ssh, for example: https://github.com/cat-org/cat-core.git',
+  },
+  {
+    name: 'keywords',
+    message: 'keywords (comma to split)',
+    filter: (val: string) =>
+      val.split(/\s*,\s*/g).filter((d: string) => d !== ''),
+    validate: (val: $ReadOnlyArray<string>) =>
+      val.length !== 0 || 'can not be empty',
+  },
+].map(
+  ({
+    name,
+    message = name,
+    validate = defaultValidate,
+    ...options
+  }: questionOptionType & {
+    message?: string,
+    validate?: validateType,
+  }) => ({
+    ...options,
+    name,
+    message,
+    validate,
+    prefix: chalk`{gray question}`,
+    suffix: chalk`{green  ➜}`,
+  }),
+);
 
 /** pkg cache */
 class Pkg extends Cache<storeType> {
@@ -78,81 +148,20 @@ class Pkg extends Cache<storeType> {
     this.store.author = `${username} <${email}>`;
 
     // ask for more information
+    const { private: isPrivate, ...info } = await inquirer.prompt(questions);
+
     this.store = {
       ...this.store,
-      ...(await inquirer
-        .prompt(
-          [
-            {
-              name: 'private',
-              type: 'confirm',
-              default: false,
+      ...info,
+      ...(isPrivate
+        ? {
+            private: true,
+          }
+        : {
+            publishConfig: {
+              access: 'public',
             },
-            {
-              name: 'description',
-            },
-            {
-              name: 'homepage',
-              validate: (val: string) =>
-                isURL(val, { require_protocol: true }) ||
-                'must be url, for example: https://cat.org',
-            },
-            {
-              name: 'repository',
-              validate: (val: string) =>
-                isURL(val, {
-                  protocols: ['https'],
-                  require_protocol: true,
-                  host_whitelist: ['github.com'],
-                }) ||
-                /git@github\.com:[\w-]*\/[\w-]*\.git/.test(val) ||
-                'must be url or git ssh, for example: https://github.com/cat-org/cat-core.git',
-            },
-            {
-              name: 'keywords',
-              message: 'keywords (comma to split)',
-              filter: (val: string) =>
-                val.split(/\s*,\s*/g).filter((d: string) => d !== ''),
-              validate: (val: $ReadOnlyArray<string>) =>
-                val.length !== 0 ? true : 'can not be empty',
-            },
-          ].map(
-            ({
-              name,
-              message = name,
-              validate = defaultValidate,
-              ...options
-            }: {
-              name: string,
-              type?: string,
-              default?: mixed,
-              message?: string,
-              filter?: (val: string) => mixed,
-              validate?: (
-                val: string & $ReadOnlyArray<string>,
-              ) => boolean | string,
-            }) => ({
-              ...options,
-              name,
-              message,
-              validate,
-              prefix: chalk`{gray question}`,
-              suffix: chalk`{green  ➜}`,
-            }),
-          ),
-        )
-        .then(({ private: isPrivate, ...result }: { private: boolean }) => ({
-          ...result,
-          ...(isPrivate
-            ? {
-                private: true,
-              }
-            : {
-                publishConfig: {
-                  access: 'public',
-                },
-              }),
-        }))),
+          }),
     };
   };
 }

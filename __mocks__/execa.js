@@ -9,10 +9,18 @@ class Execa {
   mainFunction = emptyFunction;
 
   main = {
-    shell: (cmd: string) => {
+    shell: (
+      cmd: string,
+    ): {
+      stdout: string,
+    } => {
       this.mainFunction();
       this.mainFunction = emptyFunction;
       this.cmds.push(cmd);
+
+      return {
+        stdout: cmd,
+      };
     },
   };
 }

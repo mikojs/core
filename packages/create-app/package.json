@@ -1,0 +1,29 @@
+{
+  "name": "@cat-org/create-app",
+  "description": "Create app for cat-org",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/cat-core/",
+  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/create-app",
+  "version": "1.0.0-beta.9",
+  "main": "./lib/index.js",
+  "bin": "./lib/bin/index.js",
+  "dependencies": {
+    "@cat-org/logger": "^1.0.0-beta.9",
+    "@cat-org/utils": "^1.0.0-beta.9",
+    "chalk": "^2.4.1",
+    "commander": "^2.18.0",
+    "debug": "^4.1.0",
+    "envinfo": "^5.12.1",
+    "execa": "^1.0.0",
+    "inquirer": "^6.2.0",
+    "listr": "^0.14.2",
+    "nunjucks": "^3.1.4",
+    "output-file-sync": "^2.0.1",
+    "validator": "^10.9.0"
+  },
+  "keywords": ["cat-org", "create app"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

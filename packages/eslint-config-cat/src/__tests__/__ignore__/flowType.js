@@ -20,6 +20,7 @@ type testType = Number;
 let testUnused: number = 0;
 // $expectError flowtype/no-unused-expressions
 testUnused + 1;
+testUnused += 1;
 
 // $expectError flowtype/no-weak-types
 type useAnyType = any;
@@ -34,7 +35,8 @@ type useFunctionType = Function;
 type typeIdMatch = string;
 
 // $expectError flowtype/require-variable-type
-let requireVariableType = 'test';
+let requireVariableType = 1;
+requireVariableType += 1;
 
 // $expectError flowtype/require-return-type
 /**

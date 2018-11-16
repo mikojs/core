@@ -45,5 +45,6 @@ namespace.test();
 
 // $expectError import/no-mutable-exports
 export let exportLet: string = 'test';
+exportLet += 1;
 
 export default 'export default';

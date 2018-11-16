@@ -25,7 +25,7 @@ handleUnhandledRejection();
       NODE_ENV,
     },
   };
-  let errCode: ?number;
+  let errCode: number = -1;
   let errMessage: ?string;
 
   clearConsole();

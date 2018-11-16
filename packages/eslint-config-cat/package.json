@@ -10,21 +10,21 @@
   "dependencies": {
     "babel-eslint": "^10.0.1",
     "eslint-config-fbjs": "^2.1.0",
-    "eslint-config-google": "^0.10.0",
-    "eslint-config-prettier": "^3.1.0",
+    "eslint-config-google": "^0.11.0",
+    "eslint-config-prettier": "^3.3.0",
     "eslint-import-resolver-babel-module": "^5.0.0-beta.1",
-    "eslint-plugin-babel": "^5.2.1",
-    "eslint-plugin-flowtype": "^2.50.3",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-flowtype": "^3.2.0",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsdoc": "^3.8.0",
-    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-jsdoc": "^3.9.1",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.11.1",
-    "eslint-plugin-relay": "^0.0.28"
+    "eslint-plugin-relay": "^1.0.0"
   },
   "devDependencies": {
     "@cat-org/utils": "^1.0.0-beta.10",
-    "eslint": "^5.6.1",
+    "eslint": "^5.9.0",
     "fbjs": "^1.0.0"
   },
   "keywords": ["cat-org", "eslint"],

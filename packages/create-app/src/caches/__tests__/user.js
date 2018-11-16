@@ -21,6 +21,6 @@ describe('user', () => {
       throw new Error('can not get user.name');
     };
 
-    expect(user.get('test')).rejects.toBe('process.exit');
+    await expect(user.get('test')).rejects.toThrow('process exit');
   });
 });

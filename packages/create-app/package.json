@@ -12,7 +12,7 @@
     "@cat-org/logger": "^1.0.0-beta.10",
     "@cat-org/utils": "^1.0.0-beta.10",
     "chalk": "^2.4.1",
-    "commander": "^2.18.0",
+    "commander": "^2.19.0",
     "debug": "^4.1.0",
     "envinfo": "^5.12.1",
     "execa": "^1.0.0",

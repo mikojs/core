@@ -96,7 +96,7 @@ export const questions: $ReadOnlyArray<
     name,
     message,
     validate,
-    prefix: chalk`{gray question}`,
+    prefix: chalk`{bold {blue ℹ create-app}}`,
     suffix: chalk`{green  ➜}`,
   }),
 );

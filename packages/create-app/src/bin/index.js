@@ -12,6 +12,7 @@ import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
+import logger from 'utils/logger';
 import cliOptions from 'utils/cliOptions';
 import pkg from 'caches/pkg';
 
@@ -23,31 +24,39 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
   const cmdOptions = { cwd: projectDir };
 
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
+  else
+    logger.fail(
+      chalk`The directory {green ${projectDir}} exists`,
+      `Remove this directory or use a new name`,
+    );
 
-  const store = {
+  const caches = {
     'package.json': JSON.stringify(await pkg.get(projectDir), null, 2),
     '.gitignore': nunjucks.render('gitignore'),
     '.flowconfig': nunjucks.render('flowconfig'),
   };
+  const { log } = console;
+
+  logger.info(chalk`Creating a new app in {green ${projectDir}}`);
+  log();
 
   await new Listr([
     {
       title: 'write files',
       task: () =>
         new Listr(
-          Object.keys(store).map((filePath: string) => ({
+          Object.keys(caches).map((filePath: string) => ({
             title: filePath,
             task: () =>
               outputFileSync(
                 path.resolve(projectDir, filePath),
-                store[filePath],
+                caches[filePath],
               ),
           })),
         ),
     },
     {
       title: 'initialization',
-      // TODO check git exist
       task: () =>
         new Listr(
           [
@@ -129,4 +138,7 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
         ),
     },
   ]).run();
+
+  log();
+  logger.succeed('Done.');
 })();

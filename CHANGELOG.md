@@ -1,5 +1,30 @@
 # CHANGELOG
 
+## 1.0.0-beta.10 (2018-11-16)
+
+#### :rocket: New Feature
+
+- `configs`, `create-app`
+  - [#79](https://github.com/cat-org/cat-core/pull/79) Add @cat-org/create-app@beta ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `eslint-config-cat`, `helper`, `logger`, `utils`
+  - [#82](https://github.com/cat-org/cat-core/pull/82) Support json log and remove bin core ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `configs`, `eslint-config-cat`, `helper`, `logger`, `utils`
+  - [#82](https://github.com/cat-org/cat-core/pull/82) Support json log and remove bin core ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `helper`
+  - [#81](https://github.com/cat-org/cat-core/pull/81) Fix regenerator-runtime error ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `helper`
+  - [#83](https://github.com/cat-org/cat-core/pull/83) Modify helper ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.9 (2018-10-30)
 
 #### :boom: Breaking Change

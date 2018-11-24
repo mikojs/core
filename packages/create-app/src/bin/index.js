@@ -4,9 +4,9 @@
 import fs from 'fs';
 import path from 'path';
 
+import debug from 'debug';
 import chalk from 'chalk';
 import execa from 'execa';
-import Listr from 'listr';
 import nunjucks from 'nunjucks';
 import outputFileSync from 'output-file-sync';
 
@@ -16,14 +16,18 @@ import logger from 'utils/logger';
 import cliOptions from 'utils/cliOptions';
 import pkg from 'caches/pkg';
 
+const debugLog = debug('create-app:bin');
+const WAIT_MESSAGE = 'This might take a couple of minutes.';
+
 handleUnhandledRejection();
 nunjucks.configure(path.resolve(__dirname, '../../templates'));
 
 (async (): Promise<void> => {
   const { projectDir, cmd } = cliOptions(process.argv);
-  const cmdOptions = { cwd: projectDir };
+  const execaOptions = { cwd: projectDir };
 
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
+  // TODO: add update
   else
     logger.fail(
       chalk`The directory {green ${projectDir}} exists`,
@@ -35,110 +39,58 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
     '.gitignore': nunjucks.render('gitignore'),
     '.flowconfig': nunjucks.render('flowconfig'),
   };
-  const { log } = console;
+  const configNames = ['babel', 'prettier', 'lint', 'lint-staged', 'jest'];
 
   logger.info(chalk`Creating a new app in {green ${projectDir}}`);
-  log();
 
-  await new Listr([
-    {
-      title: 'write files',
-      task: () =>
-        new Listr(
-          Object.keys(caches).map((filePath: string) => ({
-            title: filePath,
-            task: () =>
-              outputFileSync(
-                path.resolve(projectDir, filePath),
-                caches[filePath],
-              ),
-          })),
-        ),
-    },
-    {
-      title: 'initialization',
-      task: () =>
-        new Listr(
-          [
-            {
-              title: 'git',
-              command: ['git', 'init'],
-            },
-            {
-              title: chalk`install {green @cat-org/configs}`,
-              command: [
-                cmd,
-                // TODO remove after @cat-org/configs production
-                ...(cmd === 'npm' ? ['install', '-D'] : ['add', '--dev']),
-                '@cat-org/configs@beta',
-              ],
-            },
-          ].map(
-            ({
-              title,
-              command,
-            }: {
-              title: string,
-              command: $ReadOnlyArray<string>,
-            }) => ({
-              title,
-              task: () => execa(command[0], command.slice(1), cmdOptions),
-            }),
-          ),
-        ),
-    },
-    {
-      title: 'install default packages',
-      task: () =>
-        new Listr([
-          ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
-            (configName: string) => ({
-              title: configName,
-              task: () =>
-                execa(
-                  'configs-scripts',
-                  [
-                    '--install',
-                    ...(cmd === 'npm' ? ['--npm'] : []),
-                    configName,
-                  ],
-                  cmdOptions,
-                ),
-            }),
-          ),
-          {
-            title: 'flow',
-            task: () =>
-              execa(
-                cmd,
-                [
-                  ...(cmd === 'npm' ? ['install', '-D'] : ['add', '--dev']),
-                  'flow-bin',
-                  'flow-typed',
-                ],
-                cmdOptions,
-              ),
-          },
-        ]),
-    },
-    {
-      title: 'install flow-typed packages',
-      task: () => execa.shell('yarn flow-typed install', cmdOptions),
-    },
-    {
-      title: 'git first command',
-      task: () =>
-        new Listr(
-          ['git add .', 'git commit -m "project init"'].map(
-            (command: string) => ({
-              title: command,
-              task: () => execa.shell(command, cmdOptions),
-            }),
-          ),
-        ),
-    },
-  ]).run();
+  logger.start(`Initializing the app. ${WAIT_MESSAGE}`);
+  Object.keys(caches).map((filePath: string) => {
+    const writeFile = [path.resolve(projectDir, filePath), caches[filePath]];
 
-  log();
+    debugLog(writeFile);
+    outputFileSync(...writeFile);
+  });
+
+  await execa.shell('git init', execaOptions);
+  await execa(
+    cmd,
+    [
+      // TODO remove after @cat-org/configs production
+      ...(cmd === 'npm' ? ['install', '-D'] : ['add', '--dev']),
+      '@cat-org/configs@beta',
+    ],
+    execaOptions,
+  );
+  logger.succeed('The app is initialized.');
+
+  logger.start(`Installing the packages'. ${WAIT_MESSAGE}`);
+  for (const configName of configNames) {
+    await execa(
+      'configs-scripts',
+      ['--install', ...(cmd === 'npm' ? ['--npm'] : []), configName],
+      execaOptions,
+    );
+  }
+  await execa(
+    cmd,
+    [
+      ...(cmd === 'npm' ? ['install', '-D'] : ['add', '--dev']),
+      'flow-bin',
+      'flow-typed',
+    ],
+    execaOptions,
+  );
+  logger.succeed('The packages are installed.');
+
+  logger.start(`Installing the flow-typed packages. ${WAIT_MESSAGE}`);
+  await execa.shell('yarn flow-typed install', execaOptions);
+  logger.succeed('The flow-typed packages are installed.');
+
+  logger.start(`Running the first commit. ${WAIT_MESSAGE}`);
+  await execa.shell('git add .', execaOptions);
+  await execa.shell('git commit -m "project init"', execaOptions);
+  logger.succeed('The first commit run.');
+
+  // TODO checking
   logger.succeed('Done.');
 })();

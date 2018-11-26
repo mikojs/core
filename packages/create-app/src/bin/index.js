@@ -61,9 +61,9 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
     ],
     execaOptions,
   );
-  logger.succeed('The app is initialized.');
+  logger.succeed('The app has initialized.');
 
-  logger.start(`Installing the packages'. ${WAIT_MESSAGE}`);
+  logger.start(`Installing the packages. ${WAIT_MESSAGE}`);
   for (const configName of configNames) {
     await execa(
       'configs-scripts',
@@ -80,16 +80,16 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
     ],
     execaOptions,
   );
-  logger.succeed('The packages are installed.');
+  logger.succeed('The packages have installed.');
 
   logger.start(`Installing the flow-typed packages. ${WAIT_MESSAGE}`);
   await execa.shell('yarn flow-typed install', execaOptions);
-  logger.succeed('The flow-typed packages are installed.');
+  logger.succeed('The flow-typed packages have installed.');
 
   logger.start(`Running the first commit. ${WAIT_MESSAGE}`);
   await execa.shell('git add .', execaOptions);
   await execa.shell('git commit -m "project init"', execaOptions);
-  logger.succeed('The first commit run.');
+  logger.succeed('The first commit has run.');
 
   // TODO checking
   logger.succeed('Done.');

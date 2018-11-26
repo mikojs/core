@@ -89,6 +89,10 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
   logger.start(`Running the first commit. ${WAIT_MESSAGE}`);
   await execa.shell('git add .', execaOptions);
   await execa.shell('git commit -m "project init"', execaOptions);
+  await execa.shell(
+    `git remote add origin ${(await pkg.get(projectDir)).repository}`,
+    execaOptions,
+  );
   logger.succeed('The first commit has run.');
 
   // TODO checking

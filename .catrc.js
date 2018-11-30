@@ -49,6 +49,15 @@ const babel = config => {
   config.plugins.push(
     '@babel/proposal-export-default-from',
     '@babel/proposal-class-properties',
+    [
+      '@babel/transform-runtime',
+      {
+        corejs: false,
+        helpers: false,
+        regenerator: true,
+        useESModules: false,
+      },
+    ],
     'add-module-exports',
     [
       'transform-imports',

@@ -1,7 +1,7 @@
 ROOT=$(shell pwd)
 
 install-all:
-	@yarn install
+	@yarn install --ignore-engines
 	@yarn lerna bootstrap
 	@make install-flow-typed
 

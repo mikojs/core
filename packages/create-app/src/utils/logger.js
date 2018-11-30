@@ -3,10 +3,10 @@
 import { mockChoice } from '@cat-org/utils';
 import logger, { findSettings } from '@cat-org/logger';
 
-const logSettings = findSettings('log');
+const oraSettings = findSettings('ora');
 const { error } = console;
 
-logSettings.fail.after = () => {
+oraSettings.fail.after = () => {
   error();
   mockChoice(
     process.env.NODE_ENV === 'test',
@@ -18,4 +18,4 @@ logSettings.fail.after = () => {
   );
 };
 
-export default logger('create-app', logSettings);
+export default logger('create-app', oraSettings).init();

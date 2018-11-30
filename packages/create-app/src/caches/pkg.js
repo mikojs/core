@@ -96,7 +96,7 @@ export const questions: $ReadOnlyArray<
     name,
     message,
     validate,
-    prefix: chalk`{gray question}`,
+    prefix: chalk`{bold {blue ℹ create-app}}`,
     suffix: chalk`{green  ➜}`,
   }),
 );
@@ -121,6 +121,7 @@ class Pkg extends Cache<storeType> {
    * @param {string} projectDir - project dir path
    */
   init = async (projectDir: string): Promise<void> => {
+    // store name
     this.store.name = path.basename(projectDir);
 
     // store engines
@@ -143,6 +144,7 @@ class Pkg extends Cache<storeType> {
         {},
       );
 
+    // store author
     const { username, email } = await user.get(projectDir);
 
     this.store.author = `${username} <${email}>`;

@@ -7,7 +7,6 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { isURL } from 'validator';
 
-import constants from './constants';
 import user from './user';
 import Cache from './index';
 
@@ -126,28 +125,24 @@ class Pkg extends Cache<storeType> {
     this.store.name = path.basename(projectDir);
 
     // store engines
-    const { useLerna } = await constants.get(projectDir);
+    const { Binaries } = JSON.parse(
+      await envinfo.run(
+        {
+          Binaries: ['Node', 'Yarn', 'npm'],
+        },
+        { json: true },
+      ),
+    );
 
-    if (!useLerna) {
-      const { Binaries } = JSON.parse(
-        await envinfo.run(
-          {
-            Binaries: ['Node', 'Yarn', 'npm'],
-          },
-          { json: true },
-        ),
+    this.store.engines = Object.keys(Binaries)
+      .filter((key: string) => Binaries[key])
+      .reduce(
+        (result: {}, key: string) => ({
+          ...result,
+          [key.toLowerCase()]: `>= ${Binaries[key].version}`,
+        }),
+        {},
       );
-
-      this.store.engines = Object.keys(Binaries)
-        .filter((key: string) => Binaries[key])
-        .reduce(
-          (result: {}, key: string) => ({
-            ...result,
-            [key.toLowerCase()]: `>= ${Binaries[key].version}`,
-          }),
-          {},
-        );
-    }
 
     // store author
     const { username, email } = await user.get(projectDir);

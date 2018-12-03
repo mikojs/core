@@ -7,7 +7,6 @@ import path from 'path';
 import debug from 'debug';
 import chalk from 'chalk';
 import execa from 'execa';
-import nunjucks from 'nunjucks';
 import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
@@ -19,8 +18,18 @@ import pkg from 'caches/pkg';
 const debugLog = debug('create-app:bin');
 const WAIT_MESSAGE = 'This might take a couple of minutes.';
 
+/**
+ * @example
+ * templateRender('file name')
+ *
+ * @param {string} fileName - file name of template
+ *
+ * @return {string} - render content
+ */
+const templateRender = (fileName: string): string =>
+  fs.readFileSync(path.resolve(__dirname, '../../templates', fileName), 'utf8');
+
 handleUnhandledRejection();
-nunjucks.configure(path.resolve(__dirname, '../../templates'));
 
 (async (): Promise<void> => {
   const { projectDir, cmd } = cliOptions(process.argv);
@@ -36,8 +45,8 @@ nunjucks.configure(path.resolve(__dirname, '../../templates'));
 
   const caches = {
     'package.json': JSON.stringify(await pkg.get(projectDir), null, 2),
-    '.gitignore': nunjucks.render('gitignore'),
-    '.flowconfig': nunjucks.render('flowconfig'),
+    '.gitignore': templateRender('gitignore'),
+    '.flowconfig': templateRender('flowconfig'),
   };
   const configNames = ['babel', 'prettier', 'lint', 'lint-staged', 'jest'];
 

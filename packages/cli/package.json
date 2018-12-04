@@ -14,7 +14,10 @@
     "@cat-org/utils": "^1.0.0-beta.10",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
-    "debug": "^4.1.0"
+    "debug": "^4.1.0",
+    "inquirer": "^6.2.1",
+    "npm-which": "^3.0.1",
+    "output-file-sync": "^2.0.1"
   },
   "keywords": ["cat-org", "cli"],
   "publishConfig": {

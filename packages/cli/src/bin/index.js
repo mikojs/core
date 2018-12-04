@@ -1,8 +1,12 @@
 #! /usr/bin/env node
 // @flow
 
-import debug from 'debug';
+import { handleUnhandledRejection } from '@cat-org/utils';
 
-const debugLog = debug('cli');
+import cliOptions from 'utils/cliOptions';
 
-debugLog('cli');
+handleUnhandledRejection();
+
+(async (): Promise<void> => {
+  await cliOptions(process.argv);
+})();

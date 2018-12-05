@@ -25,6 +25,13 @@ export const resolveAction = (
 ) => async (...args: $ReadOnlyArray<string>): Promise<void> => {
   debug('cli:cliOptions')(callbackName);
   await require(path.resolve(__dirname, '../cli', callbackName))(...args);
+  logger.succeed(
+    `${
+      {
+        lernaCreate: 'lerna-create',
+      }[callbackName]
+    } done`,
+  );
   resolve();
 };
 

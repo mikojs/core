@@ -148,47 +148,43 @@ export default async (
     );
 
   // write files
-  await Promise.all(
-    d3DirTree(path.resolve(baseFolder))
-      .children.filter(
-        ({ data: { type } }: d3DirTreeNodeType) => type === 'file',
-      )
-      .map(
-        async ({
-          data: { name, path: filePath },
-        }: d3DirTreeNodeType): Promise<void> => {
-          const newFilePath = path.resolve(
-            targetPath,
-            filePath.replace(`${baseFolder}/`, ''),
-          );
-
-          switch (name) {
-            case 'package.json':
-              outputFileSync(
-                newFilePath,
-                await handlePackageJson(require(filePath), (text: string) =>
-                  // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-                  text?.replace(
-                    new RegExp(path.basename(baseFolder), 'g'),
-                    newFileName,
-                  ),
-                ),
-              );
-              break;
-
-            default:
-              // TODO check if write
-              outputFileSync(newFilePath, fs.readFileSync(filePath));
-              break;
-          }
-
-          logger.succeed(
-            chalk`Copy {gray ${path.relative(
-              process.cwd(),
-              filePath,
-            )}} ➜ {gray ${path.relative(process.cwd(), newFilePath)}}`,
-          );
-        },
-      ),
+  const baseFiles = d3DirTree(path.resolve(baseFolder)).children.filter(
+    ({ data: { type } }: d3DirTreeNodeType) => type === 'file',
   );
+
+  for (const {
+    data: { name, path: filePath },
+  } of baseFiles) {
+    const newFilePath = path.resolve(
+      targetPath,
+      filePath.replace(`${baseFolder}/`, ''),
+    );
+
+    switch (name) {
+      case 'package.json':
+        outputFileSync(
+          newFilePath,
+          await handlePackageJson(require(filePath), (text: string) =>
+            // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+            text?.replace(
+              new RegExp(path.basename(baseFolder), 'g'),
+              newFileName,
+            ),
+          ),
+        );
+        break;
+
+      default:
+        const { writable } = await inquirer.prompt(
+          normalized({
+            type: 'confirm',
+            name: 'writable',
+            message: chalk`copy {cyan ${name}} or not`,
+          }),
+        );
+
+        if (writable) outputFileSync(newFilePath, fs.readFileSync(filePath));
+        break;
+    }
+  }
 };

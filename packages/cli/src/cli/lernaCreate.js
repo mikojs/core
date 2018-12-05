@@ -82,7 +82,7 @@ export default async (
   newFileName: string,
   { base }: { base: string },
 ): Promise<void> => {
-  // TODO check new folder does not exist
+  // Find root path
   const rootPath = await new Promise(resolve => {
     npmWhich(process.cwd())('lerna', (err: mixed, binPath: string) => {
       if (err) logger.fail(chalk`Can not find {red lerna} in the project`);
@@ -90,11 +90,12 @@ export default async (
       resolve(path.resolve(binPath, '../../..'));
     });
   });
-  const { workspaces } = require(path.resolve(rootPath, 'package.json'));
+  const { workspaces = [] } = require(path.resolve(rootPath, 'package.json'));
 
-  if (!workspaces || workspaces.length === 0)
+  if (workspaces.length === 0)
     logger.fail(chalk`Can not find the workspcaes in the {cyan package.json}`);
 
+  // get path
   const {
     baseFolder = path.resolve(base),
     targetWorkspace = workspaces[0].replace(WORKSPACE_PATTERN, ''),
@@ -106,7 +107,13 @@ export default async (
         message: 'the path of the other lerna-managed project',
         when: !base,
         choices: workspaces.reduce(
-          (result: $ReadOnlyArray<string>, workspace: string) => [
+          (
+            result: $ReadOnlyArray<{
+              name: string,
+              value: string,
+            }>,
+            workspace: string,
+          ) => [
             ...result,
             ...d3DirTree(
               path.resolve(rootPath, workspace.replace(WORKSPACE_PATTERN, '')),
@@ -132,6 +139,15 @@ export default async (
     ),
   );
 
+  // get folder path
+  const targetPath = path.resolve(rootPath, targetWorkspace, newFileName);
+
+  if (fs.existsSync(targetPath))
+    logger.fail(
+      chalk`Project exits: {red ${path.relative(process.cwd(), targetPath)}}`,
+    );
+
+  // write files
   await Promise.all(
     d3DirTree(path.resolve(baseFolder))
       .children.filter(
@@ -142,9 +158,7 @@ export default async (
           data: { name, path: filePath },
         }: d3DirTreeNodeType): Promise<void> => {
           const newFilePath = path.resolve(
-            rootPath,
-            targetWorkspace,
-            newFileName,
+            targetPath,
             filePath.replace(`${baseFolder}/`, ''),
           );
 

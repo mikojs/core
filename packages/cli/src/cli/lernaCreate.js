@@ -92,6 +92,9 @@ export default async (
   });
   const { workspaces } = require(path.resolve(rootPath, 'package.json'));
 
+  if (!workspaces || workspaces.length === 0)
+    logger.fail(chalk`Can not find the workspcaes in the {cyan package.json}`);
+
   const {
     baseFolder = path.resolve(base),
     targetWorkspace = workspaces[0].replace(WORKSPACE_PATTERN, ''),
@@ -108,12 +111,7 @@ export default async (
             ...d3DirTree(
               path.resolve(rootPath, workspace.replace(WORKSPACE_PATTERN, '')),
             ).children.map(
-              ({
-                data: { name, path: value },
-              }: d3DirTreeNodeType): {
-                name: string,
-                value: string,
-              } => ({
+              ({ data: { name, path: value } }: d3DirTreeNodeType) => ({
                 name,
                 value,
               }),

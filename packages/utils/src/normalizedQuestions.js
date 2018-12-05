@@ -2,11 +2,11 @@
 
 import chalk from 'chalk';
 
-type validateType = (val: string) => boolean | string;
-type questionType = {
+type validateType<ValueType> = (val: ValueType & string) => true | string;
+type questionType<ValueType> = {
   name: string,
   message?: string,
-  validate?: validateType,
+  validate?: validateType<ValueType>,
 };
 
 /**
@@ -17,11 +17,11 @@ type questionType = {
  *
  * @return {boolean} - validate result
  */
-const defaultValidate: validateType = (val: string) =>
+export const defaultValidate = (val: string) =>
   val !== '' || 'can not be empty';
 
-export default (projectName: string) => (
-  ...questions: $ReadOnlyArray<questionType>
+export default (projectName: string) => <ValueType>(
+  ...questions: $ReadOnlyArray<questionType<ValueType>>
 ) =>
   (questions.map(
     ({
@@ -29,7 +29,7 @@ export default (projectName: string) => (
       message = name,
       validate = defaultValidate,
       ...question
-    }: questionType) => ({
+    }: questionType<ValueType>) => ({
       ...question,
       name,
       message,
@@ -40,7 +40,7 @@ export default (projectName: string) => (
   ): $ReadOnlyArray<{
     name: string,
     message: string,
-    validate: validateType,
+    validate: validateType<ValueType>,
     prefix: string,
     suffix: string,
   }>);

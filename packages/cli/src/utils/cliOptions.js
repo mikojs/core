@@ -59,5 +59,12 @@ export default (argv: $ReadOnlyArray<string>): {} =>
       )
       .action(resolveAction('lernaCreate', resolve));
 
+    program.on('command:*', (cmd: string) => {
+      logger.fail(
+        chalk`Can not use {red cli} with {red ${cmd}}`,
+        chalk`Use {cyan -h} to find the more information`,
+      );
+    });
+
     program.parse([...argv]);
   });

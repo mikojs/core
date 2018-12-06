@@ -30,7 +30,7 @@ describe('cli options', () => {
       );
 
       expect(mockCli).toHaveBeenCalledTimes(1);
-      expect(mockCli).toHaveBeenCalledWith(args);
+      expect(mockCli).toHaveBeenCalledWith(...args);
       expect(mockResolve).toHaveBeenCalledTimes(1);
       expect(mockResolve).toHaveBeenCalledWith();
     });

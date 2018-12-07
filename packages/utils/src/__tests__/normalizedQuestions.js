@@ -14,7 +14,9 @@ it('normalized questions', () => {
     prefix: '{bold {blue ℹ test}}',
     suffix: '{green  ➜}',
   });
+});
 
+it('default validate', () => {
   expect(defaultValidate('value')).toBeTruthy();
   expect(defaultValidate('')).toBe('can not be empty');
 });

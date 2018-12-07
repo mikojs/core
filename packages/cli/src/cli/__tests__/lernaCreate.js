@@ -4,8 +4,9 @@ import path from 'path';
 
 import { inquirer } from 'inquirer';
 import { outputFileSync } from 'output-file-sync';
+import { npmWhich } from 'npm-which';
 
-import lernaCreate from '../lernaCreate';
+import lernaCreate, { keywordQuestion } from '../lernaCreate';
 
 describe('lerna create', () => {
   beforeEach(() => {
@@ -48,4 +49,47 @@ describe('lerna create', () => {
       lernaCreate('cli', { base: './packages/cli' }),
     ).rejects.toThrow('process exit');
   });
+
+  it('can not find lerna', async (): Promise<void> => {
+    npmWhich.throwError = true;
+
+    await expect(
+      lernaCreate('cli', { base: './packages/cli' }),
+    ).rejects.toThrow('process exit');
+
+    npmWhich.throwError = false;
+  });
+
+  it('not find workspaces', async (): Promise<void> => {
+    npmWhich.alias = {
+      lerna: __dirname,
+    };
+
+    await expect(
+      lernaCreate('test', { base: './packages/cli' }),
+    ).rejects.toThrow('process exit');
+
+    npmWhich.alias = {};
+  });
+});
+
+describe('keyword question', () => {
+  test.each`
+    name          | value | expected
+    ${'filter'}   | ${''} | ${[]}
+    ${'validate'} | ${[]} | ${'can not be empty'}
+  `(
+    'test $name',
+    ({
+      name,
+      value,
+      expected,
+    }: {
+      name: string,
+      value: string | $ReadOnlyArray<string>,
+      expected: string | $ReadOnlyArray<string>,
+    }) => {
+      expect(keywordQuestion[name](value)).toEqual(expected);
+    },
+  );
 });

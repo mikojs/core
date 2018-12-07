@@ -25,6 +25,13 @@ const PACKAGE_KEYS = [
 
 const normalized = normalizedQuestions('lerna-create');
 
+export const keywordQuestion = {
+  filter: (val: string): $ReadOnlyArray<string> =>
+    val.split(/\s*,\s*/g).filter((d: string) => d !== ''),
+  validate: (val: $ReadOnlyArray<string>) =>
+    val.length !== 0 || 'can not be empty',
+};
+
 /**
  * @example
  * handlePackageJson({}, text => text.replace(/\//, ''))
@@ -56,13 +63,10 @@ const handlePackageJson = async (
               default: replaceFunc(pkg[key]),
             }
           : {
+              ...keywordQuestion,
               message: 'keywords (comma to split)',
               // $FlowFixMe Flow does not yet support method or property calls in optional chains.
               default: pkg.keywords?.map(replaceFunc).join(','),
-              filter: (val: string) =>
-                val.split(/\s*,\s*/g).filter((d: string) => d !== ''),
-              validate: (val: $ReadOnlyArray<string>) =>
-                val.length !== 0 || 'can not be empty',
             }),
       })),
     ),

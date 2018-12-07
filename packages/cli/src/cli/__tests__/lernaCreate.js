@@ -50,7 +50,7 @@ describe('lerna create', () => {
     ).rejects.toThrow('process exit');
   });
 
-  it('can not find lerna', async (): Promise<void> => {
+  it('not find lerna', async (): Promise<void> => {
     npmWhich.throwError = true;
 
     await expect(

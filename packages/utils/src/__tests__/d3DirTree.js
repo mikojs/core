@@ -18,6 +18,7 @@ it('test d3DirTree', () => {
     'index.js',
     'index.js.flow',
     'mockChoice.js',
+    'normalizedQuestions.js',
     'throwMessageInIndex.js',
   ]);
 });

@@ -1,13 +1,13 @@
 // @flow
 
-import npmWhich from 'npm-which';
+import { npmWhich } from 'npm-which';
 import { emptyFunction } from 'fbjs';
 
 import cliOptions from '../cliOptions';
 import configs from '../configs';
 
 const defaultArgv = ['node', 'configs-scripts'];
-const babelCli = npmWhich(process.cwd()).sync('babel');
+const babelCli = npmWhich.main().sync('babel');
 
 describe('cli options', () => {
   beforeAll(() => {
@@ -77,9 +77,13 @@ describe('cli options', () => {
   `(
     'Run fail with $cliName',
     ({ cliName, expected }: { cliName: string, expected: string }) => {
+      npmWhich.throwError = true;
+
       expect(() => {
         cliOptions([...defaultArgv, cliName]);
       }).toThrow(expected);
+
+      npmWhich.throwError = false;
     },
   );
 });

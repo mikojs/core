@@ -58,64 +58,64 @@ describe('pkg', () => {
       });
     },
   );
+});
 
-  describe('default validate', () => {
-    test.each`
-      value      | expected
-      ${''}      | ${'can not be empty'}
-      ${'value'} | ${true}
+describe('default validate', () => {
+  test.each`
+    value      | expected
+    ${''}      | ${'can not be empty'}
+    ${'value'} | ${true}
+  `(
+    '$value',
+    ({ value, expected }: { value: string, expected: string | boolean }) => {
+      expect(defaultValidate(value)).toBe(expected);
+    },
+  );
+});
+
+describe('questions', () => {
+  describe('validate', () => {
+    describe.each`
+      questionName    | success                                      | fail  | errorMessage
+      ${'homepage'}   | ${'https://cat.org'}                         | ${''} | ${'must be url, for example: https://cat.org'}
+      ${'repository'} | ${'https://github.com/cat-org/cat-core.git'} | ${''} | ${'must be url or git ssh, for example: https://github.com/cat-org/cat-core.git'}
+      ${'keywords'}   | ${['keyword']}                               | ${[]} | ${'can not be empty'}
     `(
-      '$value',
-      ({ value, expected }: { value: string, expected: string | boolean }) => {
-        expect(defaultValidate(value)).toBe(expected);
+      '$questionName',
+      ({
+        questionName,
+        success,
+        fail,
+        errorMessage,
+      }: {
+        questionName: string,
+        success: string & $ReadOnlyArray<string>,
+        fail: string & $ReadOnlyArray<string>,
+        errorMessage: string,
+      }) => {
+        const { validate = notFind } =
+          questions.find(
+            ({ name }: { name: string }) => name === questionName,
+          ) || {};
+
+        it('success', () => {
+          expect(validate(success)).toBe(true);
+        });
+
+        it('fail', () => {
+          expect(validate(fail)).toBe(errorMessage);
+        });
       },
     );
   });
 
-  describe('questions', () => {
-    describe('validate', () => {
-      describe.each`
-        questionName    | success                                      | fail  | errorMessage
-        ${'homepage'}   | ${'https://cat.org'}                         | ${''} | ${'must be url, for example: https://cat.org'}
-        ${'repository'} | ${'https://github.com/cat-org/cat-core.git'} | ${''} | ${'must be url or git ssh, for example: https://github.com/cat-org/cat-core.git'}
-        ${'keywords'}   | ${['keyword']}                               | ${[]} | ${'can not be empty'}
-      `(
-        '$questionName',
-        ({
-          questionName,
-          success,
-          fail,
-          errorMessage,
-        }: {
-          questionName: string,
-          success: string & $ReadOnlyArray<string>,
-          fail: string & $ReadOnlyArray<string>,
-          errorMessage: string,
-        }) => {
-          const { validate = notFind } =
-            questions.find(
-              ({ name }: { name: string }) => name === questionName,
-            ) || {};
+  describe('filter', () => {
+    it('keywords', () => {
+      const { filter = notFind } =
+        questions.find(({ name }: { name: string }) => name === 'keywords') ||
+        {};
 
-          it('success', () => {
-            expect(validate(success)).toBe(true);
-          });
-
-          it('fail', () => {
-            expect(validate(fail)).toBe(errorMessage);
-          });
-        },
-      );
-    });
-
-    describe('filter', () => {
-      it('keywords', () => {
-        const { filter = notFind } =
-          questions.find(({ name }: { name: string }) => name === 'keywords') ||
-          {};
-
-        expect(filter('keyword')).toEqual(['keyword']);
-      });
+      expect(filter('keyword')).toEqual(['keyword']);
     });
   });
 });

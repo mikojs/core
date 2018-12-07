@@ -4,20 +4,12 @@ import path from 'path';
 
 import envinfo from 'envinfo';
 import inquirer from 'inquirer';
-import chalk from 'chalk';
 import { isURL } from 'validator';
+
+import { normalizedQuestions } from '@cat-org/utils';
 
 import user from './user';
 import Cache from './index';
-
-type validateType = (val: string & $ReadOnlyArray<string>) => boolean | string;
-
-type questionOptionType = {
-  name: string,
-  type?: string,
-  default?: mixed,
-  filter?: (val: string) => mixed,
-};
 
 type storeType = {
   [string]: string,
@@ -31,24 +23,7 @@ type storeType = {
   },
 };
 
-/**
- * @example
- * defaultValidate('')
- *
- * @param {string} val - input value
- * @return {boolean} - validate result
- */
-export const defaultValidate = (val: string) =>
-  val !== '' || 'can not be empty';
-
-export const questions: $ReadOnlyArray<
-  questionOptionType & {
-    message: string,
-    validate: validateType,
-    prefix: string,
-    suffix: string,
-  },
-> = [
+export const PKG_QUESTIONS = [
   {
     name: 'private',
     type: 'confirm',
@@ -77,29 +52,12 @@ export const questions: $ReadOnlyArray<
   {
     name: 'keywords',
     message: 'keywords (comma to split)',
-    filter: (val: string) =>
+    filter: (val: string): $ReadOnlyArray<string> =>
       val.split(/\s*,\s*/g).filter((d: string) => d !== ''),
     validate: (val: $ReadOnlyArray<string>) =>
       val.length !== 0 || 'can not be empty',
   },
-].map(
-  ({
-    name,
-    message = name,
-    validate = defaultValidate,
-    ...options
-  }: questionOptionType & {
-    message?: string,
-    validate?: validateType,
-  }) => ({
-    ...options,
-    name,
-    message,
-    validate,
-    prefix: chalk`{bold {blue ℹ create-app}}`,
-    suffix: chalk`{green  ➜}`,
-  }),
-);
+];
 
 /** pkg cache */
 class Pkg extends Cache<storeType> {
@@ -150,7 +108,11 @@ class Pkg extends Cache<storeType> {
     this.store.author = `${username} <${email}>`;
 
     // ask for more information
-    const { private: isPrivate, ...info } = await inquirer.prompt(questions);
+    const { private: isPrivate, ...info } = await inquirer.prompt(
+      normalizedQuestions('create-app')<$ReadOnlyArray<string>>(
+        ...PKG_QUESTIONS,
+      ),
+    );
 
     this.store = {
       ...this.store,

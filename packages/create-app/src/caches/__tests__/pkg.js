@@ -2,7 +2,7 @@
 
 import { inquirer } from 'inquirer';
 
-import pkg, { defaultValidate, questions } from '../pkg';
+import pkg, { PKG_QUESTIONS } from '../pkg';
 
 /**
  * @example
@@ -60,20 +60,7 @@ describe('pkg', () => {
   );
 });
 
-describe('default validate', () => {
-  test.each`
-    value      | expected
-    ${''}      | ${'can not be empty'}
-    ${'value'} | ${true}
-  `(
-    '$value',
-    ({ value, expected }: { value: string, expected: string | boolean }) => {
-      expect(defaultValidate(value)).toBe(expected);
-    },
-  );
-});
-
-describe('questions', () => {
+describe('pkg questions', () => {
   describe('validate', () => {
     describe.each`
       questionName    | success                                      | fail  | errorMessage
@@ -94,7 +81,7 @@ describe('questions', () => {
         errorMessage: string,
       }) => {
         const { validate = notFind } =
-          questions.find(
+          PKG_QUESTIONS.find(
             ({ name }: { name: string }) => name === questionName,
           ) || {};
 
@@ -111,9 +98,14 @@ describe('questions', () => {
 
   describe('filter', () => {
     it('keywords', () => {
-      const { filter = notFind } =
-        questions.find(({ name }: { name: string }) => name === 'keywords') ||
-        {};
+      const {
+        filter = notFind,
+      }: {
+        filter?: (value: string) => $ReadOnlyArray<string>,
+      } =
+        PKG_QUESTIONS.find(
+          ({ name }: { name: string }) => name === 'keywords',
+        ) || {};
 
       expect(filter('keyword')).toEqual(['keyword']);
     });

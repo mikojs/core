@@ -18,4 +18,4 @@ logSettings.fail.after = () => {
   );
 };
 
-export default logger('cli', logSettings);
+export default logger('@cat-org/lerna-create', logSettings);

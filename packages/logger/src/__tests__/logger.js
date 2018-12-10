@@ -1,6 +1,6 @@
 // @flow
 
-import logger from '../logger';
+import logger from '../index';
 
 describe.each`
   name         | prefix | color

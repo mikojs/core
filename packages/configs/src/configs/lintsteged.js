@@ -8,16 +8,12 @@ export default {
     'prettier-package-json',
   ],
   config: (): {} => ({
-    '*.js': [
-      'yarn configs-scripts prettier',
-      'yarn configs-scripts lint',
-      'git add',
-    ],
-    '*.js.flow': ['yarn configs-scripts prettier --parser flow', 'git add'],
-    '*.md': ['yarn configs-scripts prettier --parser markdown', 'git add'],
+    '*.js': ['yarn configs prettier', 'yarn configs lint', 'git add'],
+    '*.js.flow': ['yarn configs prettier --parser flow', 'git add'],
+    '*.md': ['yarn configs prettier --parser markdown', 'git add'],
     '**/package.json': [
       'yarn prettier-package-json --write',
-      'yarn configs-scripts prettier --parser json',
+      'yarn configs prettier --parser json',
       'git add',
     ],
   }),

@@ -19,7 +19,7 @@ import logger from './logger';
 
 import defaultConfigs from 'configs/defaultConfigs';
 
-const debugLog = debug('configs-scripts:configs');
+const debugLog = debug('configs:configs');
 
 /** Store configs */
 export class Configs {

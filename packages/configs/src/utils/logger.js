@@ -18,4 +18,4 @@ logSettings.fail.after = () => {
   );
 };
 
-export default logger('configs-scripts', logSettings);
+export default logger('@cat-org/configs', logSettings);

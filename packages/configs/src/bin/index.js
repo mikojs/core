@@ -14,7 +14,7 @@ import worker from 'utils/worker';
 import logger from 'utils/logger';
 
 const { cli, argv, env, cliName } = cliOptions(process.argv);
-const debugLog = debug(`configs-scripts:bin[${cliName}]`);
+const debugLog = debug(`configs:bin[${cliName}]`);
 
 handleUnhandledRejection();
 debugLog({
@@ -58,9 +58,7 @@ debugLog({
           using: false,
         });
 
-        debug('configs-scripts:remove:cache')(
-          JSON.stringify(worker.cache, null, 2),
-        );
+        debug('configs:remove:cache')(JSON.stringify(worker.cache, null, 2));
 
         Object.keys(worker.cache).forEach((key: string) => {
           /* eslint-disable flowtype/no-unused-expressions */

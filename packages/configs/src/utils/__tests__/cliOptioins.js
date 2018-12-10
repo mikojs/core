@@ -6,7 +6,7 @@ import { emptyFunction } from 'fbjs';
 import cliOptions from '../cliOptions';
 import configs from '../configs';
 
-const defaultArgv = ['node', 'configs-scripts'];
+const defaultArgv = ['node', 'configs'];
 const babelCli = npmWhich.main().sync('babel');
 
 describe('cli options', () => {

@@ -8,7 +8,7 @@
     "install:all": "make install-all",
     "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
-    "test": "make babel-test && configs-scripts test"
+    "test": "make babel-test && configs test"
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.1.0",
@@ -61,7 +61,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "make babel-lint-staged && configs-scripts lint-staged && yarn flow"
+      "pre-commit": "make babel-lint-staged && configs lint-staged && yarn flow"
     }
   }
 }

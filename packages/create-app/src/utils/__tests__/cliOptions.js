@@ -4,7 +4,7 @@ import path from 'path';
 
 import cliOptions from '../cliOptions';
 
-const defaultArgv = ['node', 'configs-scripts'];
+const defaultArgv = ['node', 'configs'];
 const projectDir = path.resolve('test');
 
 describe('cli options', () => {

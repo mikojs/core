@@ -43,7 +43,7 @@ describe('pkg', () => {
         main: './lib/index.js',
         husky: {
           hooks: {
-            'pre-commit': 'configs-scripts lint-staged && yarn flow',
+            'pre-commit': 'configs lint-staged && yarn flow',
           },
         },
         ...(isPrivate

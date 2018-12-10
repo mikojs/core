@@ -9,7 +9,7 @@ import debug from 'debug';
 
 import logger from './logger';
 
-const debugLog = debug('configs-scripts:worker');
+const debugLog = debug('configs:worker');
 
 export type cacheType = {
   filePath?: string,

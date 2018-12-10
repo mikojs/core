@@ -23,7 +23,7 @@ babel-core:
 		--scope @cat-org/configs \
 		--scope @cat-org/logger \
 		--scope @cat-org/babel-*
-	@ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs-scripts
+	@ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
 
 babel-all:
 	@make babel-core
@@ -63,7 +63,7 @@ clean-all:
 
 define babel-build
 	yarn lerna exec \
-		"configs-scripts babel:lerna" \
+		"configs babel:lerna" \
 		--parallel \
 		--stream \
 		$(1)

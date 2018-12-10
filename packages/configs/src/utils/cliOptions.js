@@ -13,7 +13,7 @@ import { version } from '../../package.json';
 import logger from './logger';
 import configs from './configs';
 
-const debugLog = debug('configs-scripts:cliOptions');
+const debugLog = debug('configs:cliOptions');
 
 export default (
   argv: $ReadOnlyArray<string>,
@@ -23,16 +23,16 @@ export default (
   env: {},
   cliName: string,
 } => {
-  const program = new commander.Command('configs-scripts')
+  const program = new commander.Command('configs')
     .version(version, '-v, --version')
     .arguments('[command type, arguments...]')
     .usage(chalk`{green [command type, arguments...]} {gray [options]}`)
     .description(
       chalk`Example:
-  configs-scripts {green babel -w}
-  configs-scripts {green babel:lerna -w}
-  configs-scripts {gray --info}
-  configs-scripts {green babel:lerna} {gray --info}`,
+  configs {green babel -w}
+  configs {green babel:lerna -w}
+  configs {gray --info}
+  configs {green babel:lerna} {gray --info}`,
     )
     .option('--install', 'install packages by config')
     .option('--npm', 'use npm to install packages')

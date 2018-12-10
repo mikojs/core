@@ -11,7 +11,7 @@ import logger from './logger';
 import configs from './configs';
 import worker from './worker';
 
-const debugLog = debug('configs-scripts:generateFiles');
+const debugLog = debug('configs:generateFiles');
 
 const CONFIG_FILES = {
   babel: 'babel.config.js',

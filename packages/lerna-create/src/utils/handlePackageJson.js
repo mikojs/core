@@ -21,8 +21,8 @@ export default async (
 ): Promise<string> => {
   const newPkg = { ...pkg };
 
-  delete pkg.dependencies;
-  delete pkg.devDependencies;
+  delete newPkg.dependencies;
+  delete newPkg.devDependencies;
 
   const result = await inquirer.prompt(
     normalizedQuestions('@cat-org/lerna-create')(

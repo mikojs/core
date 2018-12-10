@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/cli",
-  "description": "Cli for cat-org",
+  "name": "@cat-org/lerna-create",
+  "description": "lerna creating for cat-org",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/cat-core/",
-  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/cli",
+  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/lerna-create",
   "version": "1.0.0-beta.10",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
@@ -19,7 +19,7 @@
     "npm-which": "^3.0.1",
     "output-file-sync": "^2.0.1"
   },
-  "keywords": ["cat-org", "cli"],
+  "keywords": ["cat-org", "lerna-create"],
   "publishConfig": {
     "access": "public"
   }

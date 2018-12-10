@@ -2,4 +2,4 @@
 
 import { throwMessageInIndex } from '@cat-org/utils';
 
-throwMessageInIndex.test('@cat-org/cli', () => require('..'));
+throwMessageInIndex('@cat-org/lerna-create');

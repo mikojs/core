@@ -12,7 +12,7 @@ import debug from 'debug';
 import configs from 'utils/configs';
 import worker from 'utils/worker';
 
-const debugLog = debug('configs-scripts:config');
+const debugLog = debug('configs:config');
 
 export default (cliName: string, filePath: string): {} => {
   debugLog(`cliName: ${cliName}`);

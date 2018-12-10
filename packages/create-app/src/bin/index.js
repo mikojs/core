@@ -75,7 +75,7 @@ handleUnhandledRejection();
   logger.start(`Installing the packages. ${WAIT_MESSAGE}`);
   for (const configName of configNames) {
     await execa(
-      'configs-scripts',
+      'configs',
       ['--install', ...(cmd === 'npm' ? ['--npm'] : []), configName],
       execaOptions,
     );

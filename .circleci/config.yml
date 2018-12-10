@@ -23,7 +23,7 @@ install-all: &install-all
 set-debug-env: &set-debug-env
   name: Set debug env
   command: |
-    echo 'DEBUG=configs-scripts*' >> $BASH_ENV
+    echo 'DEBUG=configs*' >> $BASH_ENV
     source $BASH_ENV
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
           name: Check code style
           command: |
             make babel-lint-staged
-            yarn configs-scripts lint .
+            yarn configs lint .
             yarn flow
 
       - run:
@@ -62,7 +62,7 @@ jobs:
           name: Pre publish
           command: |
             yarn prod
-            TEST_PRODUCTION=true yarn configs-scripts jest \
+            TEST_PRODUCTION=true yarn configs jest \
               ./__tests__/checkFilesInPackages.js \
               --coverage=false
 

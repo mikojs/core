@@ -17,8 +17,9 @@ import {
 import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import cliOptions from 'utils/cliOptions';
+import handlePackageJson from 'utils/handlePackageJson';
 
-const normalized = normalizedQuestions('lerna-create');
+const normalized = normalizedQuestions('@cat-org/lerna-create');
 
 handleUnhandledRejection();
 
@@ -66,7 +67,6 @@ handleUnhandledRejection();
     );
 
     switch (name) {
-      /*
       case 'package.json':
         outputFileSync(
           newFilePath,
@@ -74,12 +74,11 @@ handleUnhandledRejection();
             // $FlowFixMe Flow does not yet support method or property calls in optional chains.
             text?.replace(
               new RegExp(path.basename(existingProject), 'g'),
-              newProject,
+              path.basename(newProject),
             ),
           ),
         );
         break;
-        */
 
       default:
         const { writable } = await inquirer.prompt(

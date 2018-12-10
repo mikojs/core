@@ -8,5 +8,5 @@ import cliOptions from 'utils/cliOptions';
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
-  await cliOptions(process.argv);
+  cliOptions(process.argv);
 })();

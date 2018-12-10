@@ -24,7 +24,7 @@ const normalized = normalizedQuestions('@cat-org/lerna-create');
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
-  const { newProject, rootPath, workspaces } = cliOptions(process.argv);
+  const { newProject, rootPath, workspaces } = cliOptions(process.argv) || {};
 
   const { existingProject } = await inquirer.prompt(
     normalized({

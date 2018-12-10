@@ -69,6 +69,6 @@ export default (
 
     return cliOptions;
   } catch (e) {
-    logger.fail(chalk`Can not find {red lerna} in the project`);
+    return logger.fail(chalk`Can not find {red lerna} in the project`);
   }
 };

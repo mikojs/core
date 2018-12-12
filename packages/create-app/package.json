@@ -14,7 +14,11 @@
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "debug": "^4.1.0",
-    "execa": "^1.0.0"
+    "envinfo": "^6.0.1",
+    "execa": "^1.0.0",
+    "fbjs": "^1.0.0",
+    "memoize-one": "^4.1.0",
+    "output-file-sync": "^2.0.1"
   },
   "keywords": ["cat-org", "create-app"],
   "publishConfig": {

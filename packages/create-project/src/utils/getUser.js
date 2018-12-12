@@ -30,7 +30,7 @@ export default memoizeOne(
           try {
             return (await execa.shell(cmd)).stdout;
           } catch (e) {
-            debug('create-app:getUser')(e);
+            debug('create-project:getUser')(e);
             return logger.fail(
               chalk`Run {green \`${cmd}\`} before creating project`,
             );

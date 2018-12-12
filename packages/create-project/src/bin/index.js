@@ -22,7 +22,7 @@ handleUnhandledRejection();
   await validateProject(projectDir);
 
   logger.info(
-    chalk`Creating a new app in {green ${path.relative(
+    chalk`Creating a new project in {green ${path.relative(
       process.cwd(),
       projectDir,
     )}}`,

@@ -10,7 +10,7 @@ import { version } from '../../package.json';
 
 import logger from './logger';
 
-const debugLog = debug('create-app:cliOptions');
+const debugLog = debug('create-project:cliOptions');
 
 export default (
   argv: $ReadOnlyArray<string>,
@@ -18,7 +18,7 @@ export default (
   projectDir: string,
   cmd: string,
 } => {
-  const program = new commander.Command('create-app')
+  const program = new commander.Command('create-project')
     .version(version, '-v, --version')
     .arguments('<project-directory>')
     .usage(chalk`{green <project-directory>}`)

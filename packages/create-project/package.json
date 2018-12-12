@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/create-app",
-  "description": "Creating app for cat-org",
+  "name": "@cat-org/create-project",
+  "description": "Creating project for cat-org",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/cat-core/",
-  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/create-app",
+  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/create-project",
   "version": "1.0.0-beta.10",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
@@ -22,7 +22,7 @@
     "output-file-sync": "^2.0.1",
     "validator": "^10.9.0"
   },
-  "keywords": ["cat-org", "create-app"],
+  "keywords": ["cat-org", "create-project"],
   "publishConfig": {
     "access": "public"
   }

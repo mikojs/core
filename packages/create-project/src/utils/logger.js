@@ -18,4 +18,4 @@ oraSettings.fail.after = () => {
   );
 };
 
-export default logger('@cat-org/create-app', oraSettings).init();
+export default logger('@cat-org/create-project', oraSettings).init();

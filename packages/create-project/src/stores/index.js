@@ -10,7 +10,7 @@ export type ctxType = {
   projectDir: string,
 };
 
-const debugLog = debug('create-app:store');
+const debugLog = debug('create-project:store');
 
 /** default store */
 export default class Store {

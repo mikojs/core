@@ -8,7 +8,7 @@ import debug from 'debug';
 
 import logger from 'utils/logger';
 
-const debugLog = debug('create-app:validateProject');
+const debugLog = debug('create-project:validateProject');
 
 export default async (projectDir: string): Promise<void> => {
   // check project dir not existing
@@ -26,7 +26,7 @@ export default async (projectDir: string): Promise<void> => {
     });
 
     fs.rmdirSync(projectDir);
-    logger.fail('Can not create a new project under another git project');
+    logger.fail('Can not create a new project in git managed project');
   } catch (e) {
     debugLog(e);
   }

@@ -8,18 +8,13 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import outputFileSync from 'output-file-sync';
 
-import {
-  handleUnhandledRejection,
-  d3DirTree,
-  normalizedQuestions,
-} from '@cat-org/utils';
+import { handleUnhandledRejection, d3DirTree } from '@cat-org/utils';
 
 import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import cliOptions from 'utils/cliOptions';
 import handlePackageJson from 'utils/handlePackageJson';
-
-const normalized = normalizedQuestions('@cat-org/lerna-create');
+import normalizedQuestions from 'utils/normalizedQuestions';
 
 handleUnhandledRejection();
 
@@ -27,7 +22,7 @@ handleUnhandledRejection();
   const { newProject, rootPath, workspaces } = cliOptions(process.argv) || {};
 
   const { existingProject } = await inquirer.prompt(
-    normalized({
+    normalizedQuestions({
       type: 'list',
       name: 'existingProject',
       message: 'the path of the other lerna-managed project',
@@ -82,7 +77,7 @@ handleUnhandledRejection();
 
       default:
         const { writable } = await inquirer.prompt(
-          normalized({
+          normalizedQuestions({
             type: 'confirm',
             name: 'writable',
             message: chalk`copy {cyan ${name}} or not`,

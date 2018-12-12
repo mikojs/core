@@ -2,7 +2,7 @@
 
 import inquirer from 'inquirer';
 
-import { normalizedQuestions } from '@cat-org/utils';
+import normalizedQuestions from './normalizedQuestions';
 
 export const keywordQuestion = {
   filter: (val: string): $ReadOnlyArray<string> =>
@@ -27,7 +27,7 @@ export default async (
   delete newPkg.devDependencies;
 
   const result = await inquirer.prompt(
-    normalizedQuestions('@cat-org/lerna-create')(
+    normalizedQuestions(
       ...['name', 'description', 'homepage', 'repository', 'keywords'].map(
         (key: string) => ({
           name: key,

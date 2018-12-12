@@ -20,6 +20,7 @@ test('handle package.json', async (): Promise<void> => {
     ...result,
   };
 
+  delete expected.bin;
   delete expected.dependencies;
   delete expected.devDependencies;
 

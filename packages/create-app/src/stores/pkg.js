@@ -74,16 +74,16 @@ class Pkg extends Store {
    * @example
    * pkg.defaultInfo('/path')
    *
-   * @param {string} projectDir - project dir
+   * @param {string} appDir - app dir
    */
   defaultInfo = memoizeOne(
-    async (projectDir: string): Promise<void> => {
+    async (appDir: string): Promise<void> => {
       const [username, email] = await getUser();
       const questionResult = await inquirer.prompt(
         normalizedQuestions<$ReadOnlyArray<string>>(...PKG_QUESTIONS),
       );
 
-      this.storePkg.name = path.basename(projectDir);
+      this.storePkg.name = path.basename(appDir);
       this.storePkg.engines = await getEngines();
       this.storePkg.author = `${username} <${email}>`;
 
@@ -105,8 +105,8 @@ class Pkg extends Store {
    *
    * @param {Object} ctx - store context
    */
-  start = async ({ projectDir }: ctxType): Promise<void> => {
-    await this.defaultInfo(projectDir);
+  start = async ({ appDir }: ctxType): Promise<void> => {
+    await this.defaultInfo(appDir);
   };
 
   /**

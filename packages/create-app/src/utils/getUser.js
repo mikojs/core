@@ -32,7 +32,7 @@ export default memoizeOne(
           } catch (e) {
             debug('create-app:getUser')(e);
             return logger.fail(
-              chalk`Run {green \`${cmd}\`} before creating project`,
+              chalk`Run {green \`${cmd}\`} before creating a new app`,
             );
           }
         },

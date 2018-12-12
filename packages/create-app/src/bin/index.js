@@ -9,7 +9,7 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 
 import logger from 'utils/logger';
 import cliOptions from 'utils/cliOptions';
-import validateProject from 'utils/validateProject';
+import validateApp from 'utils/validateApp';
 import base from 'stores/base';
 
 import type StoreType from 'stores';
@@ -17,19 +17,19 @@ import type StoreType from 'stores';
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
-  const { projectDir } = cliOptions(process.argv);
+  const { appDir } = cliOptions(process.argv);
 
-  await validateProject(projectDir);
+  await validateApp(appDir);
 
   logger.info(
     chalk`Creating a new app in {green ${path.relative(
       process.cwd(),
-      projectDir,
+      appDir,
     )}}`,
   );
 
   const storeNames = [];
-  const ctx = { projectDir };
+  const ctx = { appDir };
   const stores = (await base.run(ctx)).filter(
     ({ constructor: { name } }: StoreType): boolean => {
       if (storeNames.includes(name)) return false;

@@ -13,6 +13,7 @@ export const keywordQuestion = {
 
 export default async (
   pkg: {
+    bin?: string,
     dependencies?: string,
     devDependencies?: string,
     keywords?: $ReadOnlyArray<string>,
@@ -21,6 +22,7 @@ export default async (
 ): Promise<string> => {
   const newPkg = { ...pkg };
 
+  delete newPkg.bin;
   delete newPkg.dependencies;
   delete newPkg.devDependencies;
 

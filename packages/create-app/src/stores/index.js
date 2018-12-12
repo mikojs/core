@@ -7,7 +7,7 @@ import outputFileSync from 'output-file-sync';
 import debug from 'debug';
 
 export type ctxType = {
-  appDir: string,
+  projectDir: string,
 };
 
 const debugLog = debug('create-app:store');
@@ -48,10 +48,10 @@ export default class Store {
    * @param {Object} files - files object
    */
   writeFiles = (files: { [string]: string }) => {
-    const { appDir } = this.ctx;
+    const { projectDir } = this.ctx;
 
     Object.keys(files).forEach((key: string) => {
-      const writeFile = [path.resolve(appDir, key), files[key]];
+      const writeFile = [path.resolve(projectDir, key), files[key]];
 
       outputFileSync(...writeFile);
       debugLog(writeFile);

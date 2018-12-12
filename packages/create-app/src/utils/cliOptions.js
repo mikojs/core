@@ -15,24 +15,24 @@ const debugLog = debug('create-app:cliOptions');
 export default (
   argv: $ReadOnlyArray<string>,
 ): {
-  appDir: string,
+  projectDir: string,
   cmd: string,
 } => {
   const program = new commander.Command('create-app')
     .version(version, '-v, --version')
-    .arguments('<app directory>')
-    .usage(chalk`{green <app directory>}`)
+    .arguments('<project-directory>')
+    .usage(chalk`{green <project-directory>}`)
     .option('--npm', 'use npm');
 
   const {
-    args: [appDir],
+    args: [projectDir],
     npm = false,
   } = program.parse([...argv]);
 
-  if (!appDir) logger.fail(chalk`{red \`app directory\`} is required.`);
+  if (!projectDir) logger.fail(chalk`{red \`project-directory\`} is required.`);
 
   const cliOptions = {
-    appDir: path.resolve(appDir),
+    projectDir: path.resolve(projectDir),
     cmd: npm ? 'npm' : 'yarn',
   };
 

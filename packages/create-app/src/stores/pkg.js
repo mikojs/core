@@ -48,7 +48,7 @@ export const PKG_QUESTIONS = [
 
 /** store pkg */
 class Pkg extends Store {
-  store: {
+  storePkg: {
     [string]: string,
     husky: {
       hooks: {
@@ -83,30 +83,40 @@ class Pkg extends Store {
         normalizedQuestions<$ReadOnlyArray<string>>(...PKG_QUESTIONS),
       );
 
-      this.store.name = path.basename(projectDir);
-      this.store.engines = await getEngines();
-      this.store.author = `${username} <${email}>`;
+      this.storePkg.name = path.basename(projectDir);
+      this.storePkg.engines = await getEngines();
+      this.storePkg.author = `${username} <${email}>`;
 
       Object.keys(questionResult).forEach((key: string) => {
         if (key === 'private') {
-          if (questionResult[key]) this.store.private = true;
+          if (questionResult[key]) this.storePkg.private = true;
 
           return;
         }
 
-        this.store[key] = questionResult[key];
+        this.storePkg[key] = questionResult[key];
       });
     },
   );
 
   /**
    * @example
-   * pkg.start({ projectDir: '/path' })
+   * pkg.start(ctx)
    *
    * @param {Object} ctx - store context
    */
   start = async ({ projectDir }: ctxType): Promise<void> => {
     await this.defaultInfo(projectDir);
+  };
+
+  /**
+   * @example
+   * pkg.end(ctx)
+   */
+  end = async (): Promise<void> => {
+    this.writeFiles({
+      'package.json': JSON.stringify(this.storePkg, null, 2),
+    });
   };
 }
 

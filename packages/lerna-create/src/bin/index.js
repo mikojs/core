@@ -12,6 +12,7 @@ import { handleUnhandledRejection, d3DirTree } from '@cat-org/utils';
 
 import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
+import logger from 'utils/logger';
 import cliOptions from 'utils/cliOptions';
 import handlePackageJson from 'utils/handlePackageJson';
 import normalizedQuestions from 'utils/normalizedQuestions';
@@ -21,11 +22,18 @@ handleUnhandledRejection();
 (async (): Promise<void> => {
   const { newProject, rootPath, workspaces } = cliOptions(process.argv) || {};
 
+  logger.info(
+    chalk`Creating a new project in {green ${path.relative(
+      process.cwd(),
+      newProject,
+    )}}`,
+  );
+
   const { existingProject } = await inquirer.prompt(
     normalizedQuestions({
       type: 'list',
       name: 'existingProject',
-      message: 'the path of the other lerna-managed project',
+      message: 'the path of the other lerna managed project',
       choices: workspaces.reduce(
         (
           result: $ReadOnlyArray<{
@@ -88,4 +96,6 @@ handleUnhandledRejection();
         break;
     }
   }
+
+  logger.succeed('Done');
 })();

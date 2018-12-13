@@ -17,6 +17,7 @@ import normalizedQuestions from 'utils/normalizedQuestions';
 export const PKG_QUESTIONS = [
   {
     name: 'private',
+    message: 'is private or not',
     type: 'confirm',
     default: false,
   },

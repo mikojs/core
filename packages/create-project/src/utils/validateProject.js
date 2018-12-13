@@ -21,7 +21,7 @@ export default async (projectDir: string): Promise<void> => {
 
   // not in git project
   try {
-    await execa('git', ['status'], {
+    await execa.shell('git status', {
       cwd: projectDir,
     });
 
@@ -29,5 +29,12 @@ export default async (projectDir: string): Promise<void> => {
     logger.fail('Can not create a new project in git managed project');
   } catch (e) {
     debugLog(e);
+
+    if (
+      !/fatal: not a git repository \(or any of the parent directories\): \.git/.test(
+        e.stderr,
+      )
+    )
+      logger.fail('Run git command fail');
   }
 };

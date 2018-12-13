@@ -1,5 +1,6 @@
 // @flow
 
+import chalk from 'chalk';
 import inquirer from 'inquirer';
 
 import normalizedQuestions from './normalizedQuestions';
@@ -34,10 +35,11 @@ export default async (
           ...(key !== 'keywords'
             ? {
                 default: replaceFunc(pkg[key]),
+                message: chalk`{cyan (package.json)} ${key}`,
               }
             : {
                 ...keywordQuestion,
-                message: 'keywords (comma to split)',
+                message: chalk`{cyan (package.json)} keywords (comma to split)`,
                 // $FlowFixMe Flow does not yet support method or property calls in optional chains.
                 default: pkg.keywords?.map(replaceFunc).join(','),
               }),

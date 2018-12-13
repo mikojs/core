@@ -20,8 +20,8 @@ export default (
 } => {
   const program = new commander.Command('create-project')
     .version(version, '-v, --version')
-    .arguments('<project-directory>')
-    .usage(chalk`{green <project-directory>}`)
+    .arguments('<project directory>')
+    .usage(chalk`{green <project directory>}`)
     .option('--npm', 'use npm');
 
   const {
@@ -29,7 +29,7 @@ export default (
     npm = false,
   } = program.parse([...argv]);
 
-  if (!projectDir) logger.fail(chalk`{red \`project-directory\`} is required.`);
+  if (!projectDir) logger.fail(chalk`{red \`project directory\`} is required.`);
 
   const cliOptions = {
     projectDir: path.resolve(projectDir),

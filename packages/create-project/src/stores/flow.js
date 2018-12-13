@@ -2,6 +2,8 @@
 
 import Store from './index';
 
+import type { ctxType } from './index';
+
 export const template = `[ignore]
 
 [include]
@@ -21,12 +23,20 @@ module.system.node.resolve_dirname=./src
 class Flow extends Store {
   /**
    * @example
-   * flow.end()
+   * flow.end(ctx)
+   *
+   * @param {Object} ctx - store context
    */
-  end = () => {
+  end = async ({ cmd }: ctxType): Promise<void> => {
     this.writeFiles({
       '.flowconfig': template,
     });
+
+    await this.execa(
+      `${
+        cmd === 'npm' ? 'npm install -D' : 'yarn add --dev'
+      } flow-bin flow-typed`,
+    );
   };
 }
 

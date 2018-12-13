@@ -18,7 +18,8 @@ import type StoreType from 'stores';
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
-  const { projectDir } = cliOptions(process.argv);
+  const ctx = cliOptions(process.argv);
+  const { projectDir } = ctx;
 
   await validateProject(projectDir);
 
@@ -30,7 +31,6 @@ handleUnhandledRejection();
   );
 
   const storeNames = [];
-  const ctx = { projectDir };
   const stores = (await base.run(ctx)).filter(
     ({ constructor: { name } }: StoreType): boolean => {
       if (storeNames.includes(name)) return false;

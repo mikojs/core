@@ -2,12 +2,17 @@
 
 import path from 'path';
 
+import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
 import outputFileSync from 'output-file-sync';
+import execa from 'execa';
 import debug from 'debug';
+
+import logger from 'utils/logger';
 
 export type ctxType = {
   projectDir: string,
+  cmd: string,
 };
 
 const debugLog = debug('create-project:store');
@@ -60,5 +65,27 @@ export default class Store {
       outputFileSync(...writeFile);
       debugLog(writeFile);
     });
+  };
+
+  /**
+   * @example
+   * store.execa('command')
+   *
+   * @param {Array} commands - commands array
+   */
+  execa = async (...commands: $ReadOnlyArray<string>): Promise<void> => {
+    const { projectDir } = this.ctx;
+
+    try {
+      for (const command of commands) {
+        logger.info(chalk`Run command: {green ${command}}`);
+        await execa.shell(command, {
+          cwd: projectDir,
+          stdio: 'inherit',
+        });
+      }
+    } catch (e) {
+      debugLog(e);
+    }
   };
 }

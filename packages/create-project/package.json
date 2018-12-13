@@ -22,7 +22,7 @@
     "output-file-sync": "^2.0.1",
     "validator": "^10.9.0"
   },
-  "keywords": ["cat-org", "create-project"],
+  "keywords": ["cat-org", "createt project"],
   "publishConfig": {
     "access": "public"
   }

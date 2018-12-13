@@ -35,6 +35,10 @@ export default class Store {
 
     this.ctx = ctx;
     await this.start(ctx);
+    debugLog({
+      name: this.constructor.name,
+      subStores: this.subStores,
+    });
 
     for (const store of this.subStores) stores.concat(await store.run(ctx));
 

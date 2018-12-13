@@ -2,10 +2,13 @@
 
 import inquirer from 'inquirer';
 import memoizeOne from 'memoize-one';
+import debug from 'debug';
 
 import Store from './index';
 
 import normalizedQuestions from 'utils/normalizedQuestions';
+
+const debugLog = debug('create-project:store:npmignore');
 
 export const template = `# default
 *.log
@@ -53,6 +56,7 @@ class Npmignore extends Store {
       this.storeUseNpm = (await inquirer.prompt(
         normalizedQuestions<string>(...NPMIGNORE_QUESTIONS),
       )).useNpm;
+      debugLog(this.storeUseNpm);
     },
   );
 

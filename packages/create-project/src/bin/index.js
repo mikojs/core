@@ -4,6 +4,7 @@
 import path from 'path';
 
 import chalk from 'chalk';
+import debug from 'debug';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -39,6 +40,7 @@ handleUnhandledRejection();
     },
   );
 
+  debug('create-project:bin')(stores);
   for (const store of stores) await store.end(ctx);
 
   logger.succeed('Done');

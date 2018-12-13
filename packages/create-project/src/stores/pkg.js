@@ -5,6 +5,7 @@ import path from 'path';
 import memoizeOne from 'memoize-one';
 import inquirer from 'inquirer';
 import { isURL } from 'validator';
+import debug from 'debug';
 
 import Store from './index';
 
@@ -13,6 +14,8 @@ import type { ctxType } from './index';
 import getEngines from 'utils/getEngines';
 import getUser from 'utils/getUser';
 import normalizedQuestions from 'utils/normalizedQuestions';
+
+const debugLog = debug('create-project:store:pkg');
 
 export const PKG_QUESTIONS = [
   {
@@ -97,6 +100,8 @@ class Pkg extends Store {
 
         this.storePkg[key] = questionResult[key];
       });
+
+      debugLog(this.storePkg);
     },
   );
 

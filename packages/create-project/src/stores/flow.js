@@ -3,8 +3,6 @@
 import Store from './index';
 
 export const template = `[ignore]
-# just for findup
-.*/node_modules/findup/test/.*
 
 [include]
 
@@ -19,11 +17,11 @@ module.system.node.resolve_dirname=./src
 
 [strict]`;
 
-/** flowconfig store */
-class Flowconfig extends Store {
+/** flow store */
+class Flow extends Store {
   /**
    * @example
-   * flowconfig.end()
+   * flow.end()
    */
   end = () => {
     this.writeFiles({
@@ -32,4 +30,4 @@ class Flowconfig extends Store {
   };
 }
 
-export default new Flowconfig();
+export default new Flow();

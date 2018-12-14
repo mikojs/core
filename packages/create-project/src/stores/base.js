@@ -2,13 +2,14 @@
 
 import pkg from './pkg';
 import gitignore from './gitignore';
-import flow from './flow';
 import npmignore from './npmignore';
+import configs from './configs';
+import flow from './flow';
 import Store from './index';
 
 /** base store */
 class Base extends Store {
-  subStores = [pkg, gitignore, flow, npmignore];
+  subStores = [pkg, gitignore, npmignore, configs, flow];
 }
 
 export default new Base();

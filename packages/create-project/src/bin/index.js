@@ -42,6 +42,7 @@ handleUnhandledRejection();
 
   debug('create-project:bin')(stores);
   for (const store of stores) await store.end(ctx);
+  await base.end(ctx);
 
   logger.succeed('Done');
 })();

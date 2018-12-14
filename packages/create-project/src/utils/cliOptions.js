@@ -10,14 +10,11 @@ import { version } from '../../package.json';
 
 import logger from './logger';
 
+import type { ctxType } from 'stores';
+
 const debugLog = debug('create-project:cliOptions');
 
-export default (
-  argv: $ReadOnlyArray<string>,
-): {
-  projectDir: string,
-  cmd: string,
-} => {
+export default (argv: $ReadOnlyArray<string>): ctxType => {
   const program = new commander.Command('create-project')
     .version(version, '-v, --version')
     .arguments('<project directory>')

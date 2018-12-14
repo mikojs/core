@@ -9,7 +9,7 @@ import debug from 'debug';
 
 import Store from './index';
 
-import type { ctxType } from './index';
+import type { ctxType, pkgType } from './index';
 
 import getEngines from 'utils/getEngines';
 import getUser from 'utils/getUser';
@@ -52,24 +52,14 @@ export const PKG_QUESTIONS = [
 
 /** store pkg */
 class Pkg extends Store {
-  storePkg: {
-    [string]: string,
-    husky: {
-      hooks: {
-        [string]: string,
-      },
-    },
-    engines?: {
-      [string]: string,
-    },
-    private?: boolean,
-  } = {
+  storePkg: pkgType = {
     license: 'MIT',
     version: '1.0.0',
     main: './lib/index.js',
     husky: {
       hooks: {
-        'pre-commit': 'configs lint-staged && yarn flow',
+        // TODO: modify after next version
+        'pre-commit': 'configs-scripts lint-staged && yarn flow',
       },
     },
   };
@@ -111,8 +101,11 @@ class Pkg extends Store {
    *
    * @param {Object} ctx - store context
    */
-  start = async ({ projectDir }: ctxType): Promise<void> => {
+  start = async (ctx: ctxType): Promise<void> => {
+    const { projectDir } = ctx;
+
     await this.defaultInfo(projectDir);
+    ctx.pkg = this.storePkg;
   };
 
   /**

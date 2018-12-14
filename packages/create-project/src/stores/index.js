@@ -10,9 +10,23 @@ import debug from 'debug';
 
 import logger from 'utils/logger';
 
+export type pkgType = {
+  [string]: string,
+  husky: {
+    hooks: {
+      [string]: string,
+    },
+  },
+  engines?: {
+    [string]: string,
+  },
+  private?: boolean,
+};
+
 export type ctxType = {
   projectDir: string,
   cmd: string,
+  pkg?: pkgType,
 };
 
 const debugLog = debug('create-project:store');

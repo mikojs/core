@@ -1,7 +1,7 @@
 // @flow
 
 export default {
-  run: async () =>
+  run: () =>
     JSON.stringify({
       Binaries: {
         Node: {

@@ -11,7 +11,7 @@ it('normalized questions', () => {
     name: 'name',
     message: 'name',
     validate: defaultValidate,
-    prefix: '{bold {blue ℹ test}}',
+    prefix: '{bold {gray • test}}',
     suffix: '{green  ➜}',
   });
 });

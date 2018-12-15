@@ -34,7 +34,7 @@ export default (projectName: string) => <ValueType>(
       name,
       message,
       validate,
-      prefix: chalk`{bold {blue ℹ ${projectName}}}`,
+      prefix: chalk`{bold {gray • ${projectName}}}`,
       suffix: chalk`{green  ➜}`,
     }),
   ): $ReadOnlyArray<{

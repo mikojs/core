@@ -4,9 +4,9 @@ import { emptyFunction } from 'fbjs';
 
 /** mock execa */
 class Execa {
-  cmds = [];
-
   mainFunction = emptyFunction;
+
+  cmds = [];
 
   main = {
     shell: (

@@ -43,6 +43,7 @@ class WriteFiles {
 
     const { verbose, watch } = utils.options;
     const { srcPath, destPath, babelConfig } = this.store.pop();
+    const { log } = console;
 
     try {
       const { code }: { code: string } = transformFileSync(
@@ -60,16 +61,14 @@ class WriteFiles {
       );
       this.isWritting = false;
 
-      // eslint-disable-next-line no-console
-      if (verbose) console.log(`${srcPath} -> ${destPath}`);
+      if (verbose) log(`${srcPath} -> ${destPath}`);
       if (this.store.length !== 0) this.writeFiles();
     } catch (e) {
       const errorMessage = `${pkgName} ${e}`;
 
       this.isWritting = false;
 
-      // eslint-disable-next-line no-console
-      if (watch) console.log(errorMessage);
+      if (watch) log(errorMessage);
       else throw new Error(errorMessage);
     }
   };

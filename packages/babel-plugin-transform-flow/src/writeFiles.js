@@ -15,8 +15,6 @@ export type writeFileType = {
   },
 };
 
-const { log } = console;
-
 /**
  * @example
  * new WriteFiles()
@@ -45,6 +43,7 @@ class WriteFiles {
 
     const { verbose, watch } = utils.options;
     const { srcPath, destPath, babelConfig } = this.store.pop();
+    const { log } = console;
 
     try {
       const { code }: { code: string } = transformFileSync(

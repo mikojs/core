@@ -1,5 +1,38 @@
 # CHANGELOG
 
+## 1.0.0-beta.11 (2018-12-15)
+
+#### :boom: Breaking Change
+
+- `create-app`, `create-project`, `utils`
+  - [#95](https://github.com/cat-org/cat-core/pull/95) Rewrite @cat-org/create-app, and rename as @cat-org/create-project ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-app`, `helper`, `utils`
+  - [#88](https://github.com/cat-org/cat-core/pull/88) Remove helper ([@HsuTing](https://github.com/HsuTing))
+- `create-app`
+  - [#87](https://github.com/cat-org/cat-core/pull/87) create-app@beta-1 ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `lerna-create`
+  - [#94](https://github.com/cat-org/cat-core/pull/94) Remove bin in new pkg ([@HsuTing](https://github.com/HsuTing))
+- `cli`, `lerna-create`, `logger`
+  - [#93](https://github.com/cat-org/cat-core/pull/93) Add @cat-org/lerna-create ([@HsuTing](https://github.com/HsuTing))
+- `cli`, `configs`, `create-app`, `utils`
+  - [#89](https://github.com/cat-org/cat-core/pull/89) Add @cat-org/cli ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `lerna-create`
+  - [#96](https://github.com/cat-org/cat-core/pull/96) @cat-org/lerna-create modify detail ([@HsuTing](https://github.com/HsuTing))
+- `cli`, `configs`, `create-app`
+  - [#92](https://github.com/cat-org/cat-core/pull/92) Rename configs-scripts to configs ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `configs`, `create-app`, `eslint-config-cat`, `helper`
+  - [#85](https://github.com/cat-org/cat-core/pull/85) Upgrade version ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.10 (2018-11-16)
 
 #### :rocket: New Feature

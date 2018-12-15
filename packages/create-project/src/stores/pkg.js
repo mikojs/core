@@ -6,6 +6,9 @@ import memoizeOne from 'memoize-one';
 import inquirer from 'inquirer';
 import { isURL } from 'validator';
 import debug from 'debug';
+import { emptyFunction } from 'fbjs';
+
+import { mockChoice } from '@cat-org/utils';
 
 import Store from './index';
 
@@ -70,30 +73,33 @@ class Pkg extends Store {
    *
    * @param {string} projectDir - project dir
    */
-  defaultInfo = memoizeOne(
-    async (projectDir: string): Promise<void> => {
-      const [username, email] = await getUser();
-      const questionResult = await inquirer.prompt(
-        normalizedQuestions<$ReadOnlyArray<string>>(...PKG_QUESTIONS),
-      );
+  defaultInfo = memoizeOne(async (projectDir: string): Promise<void> => {
+    const [username, email] = await getUser();
+    const questionResult = await inquirer.prompt(
+      normalizedQuestions<$ReadOnlyArray<string>>(...PKG_QUESTIONS),
+    );
 
-      this.storePkg.name = path.basename(projectDir);
-      this.storePkg.engines = await getEngines();
-      this.storePkg.author = `${username} <${email}>`;
+    this.storePkg.name = path.basename(projectDir);
+    this.storePkg.engines = await getEngines();
+    this.storePkg.author = `${username} <${email}>`;
 
-      Object.keys(questionResult).forEach((key: string) => {
-        if (key === 'private') {
-          if (questionResult[key]) this.storePkg.private = true;
+    Object.keys(questionResult).forEach((key: string) => {
+      if (key === 'private') {
+        mockChoice(
+          questionResult[key],
+          () => {
+            this.storePkg.private = true;
+          },
+          emptyFunction,
+        );
+        return;
+      }
 
-          return;
-        }
+      this.storePkg[key] = questionResult[key];
+    });
 
-        this.storePkg[key] = questionResult[key];
-      });
-
-      debugLog(this.storePkg);
-    },
-  );
+    debugLog(this.storePkg);
+  }, emptyFunction.thatReturnsTrue);
 
   /**
    * @example

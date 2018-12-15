@@ -6,6 +6,8 @@ import { emptyFunction } from 'fbjs';
 class Execa {
   mainFunction = emptyFunction;
 
+  cmds = [];
+
   main = {
     shell: (
       cmd: string,
@@ -14,6 +16,7 @@ class Execa {
     } => {
       this.mainFunction();
       this.mainFunction = emptyFunction;
+      this.cmds.push(cmd);
 
       return {
         stdout: cmd,

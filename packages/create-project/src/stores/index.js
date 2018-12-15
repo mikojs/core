@@ -90,16 +90,17 @@ export default class Store {
   execa = async (...commands: $ReadOnlyArray<string>): Promise<void> => {
     const { projectDir } = this.ctx;
 
-    try {
-      for (const command of commands) {
+    for (const command of commands) {
+      try {
         logger.info(chalk`Run command: {green ${command}}`);
         await execa.shell(command, {
           cwd: projectDir,
           stdio: 'inherit',
         });
+      } catch (e) {
+        debugLog(e);
+        logger.fail(chalk`Run command: {red ${command}} fail`);
       }
-    } catch (e) {
-      debugLog(e);
     }
   };
 }

@@ -3,6 +3,7 @@
 import inquirer from 'inquirer';
 import memoizeOne from 'memoize-one';
 import debug from 'debug';
+import { emptyFunction } from 'fbjs';
 
 import Store from './index';
 
@@ -10,7 +11,7 @@ import normalizedQuestions from 'utils/normalizedQuestions';
 
 const debugLog = debug('create-project:store:npmignore');
 
-export const template = `# default
+const template = `# default
 *.log
 
 # node
@@ -34,7 +35,7 @@ __mocks__
 # circleci
 .circleci`;
 
-export const NPMIGNORE_QUESTIONS = [
+const NPMIGNORE_QUESTIONS = [
   {
     name: 'useNpm',
     message: 'use npm or not',
@@ -51,14 +52,12 @@ class Npmignore extends Store {
    * @example
    * npmignore.checkNpm()
    */
-  checkNpm = memoizeOne(
-    async (): Promise<void> => {
-      this.storeUseNpm = (await inquirer.prompt(
-        normalizedQuestions<string>(...NPMIGNORE_QUESTIONS),
-      )).useNpm;
-      debugLog(this.storeUseNpm);
-    },
-  );
+  checkNpm = memoizeOne(async (): Promise<void> => {
+    this.storeUseNpm = (await inquirer.prompt(
+      normalizedQuestions<string>(...NPMIGNORE_QUESTIONS),
+    )).useNpm;
+    debugLog(this.storeUseNpm);
+  }, emptyFunction.thatReturnsTrue);
 
   /**
    * @example

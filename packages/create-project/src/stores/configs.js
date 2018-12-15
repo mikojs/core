@@ -21,9 +21,7 @@ class Configs extends Store {
       } @cat-org/configs@beta`,
       ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
         (configName: string) =>
-          `configs-scripts --install ${
-            cmd === 'npm' ? '--npm ' : ''
-          }${configName}`,
+          `configs --install ${cmd === 'npm' ? '--npm ' : ''}${configName}`,
       ),
     );
   };

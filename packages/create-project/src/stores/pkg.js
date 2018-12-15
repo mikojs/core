@@ -61,8 +61,7 @@ class Pkg extends Store {
     main: './lib/index.js',
     husky: {
       hooks: {
-        // TODO: modify after next version
-        'pre-commit': 'configs-scripts lint-staged && yarn flow',
+        'pre-commit': 'configs lint-staged && yarn flow',
       },
     },
   };

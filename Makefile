@@ -32,6 +32,7 @@ babel-all:
 babel-test:
 	@make babel-core
 	@$(call babel-build, \
+		--scope @cat-org/jest \
 		--scope @cat-org/eslint-config-cat)
 
 babel-lint-staged:

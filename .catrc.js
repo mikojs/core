@@ -122,6 +122,10 @@ const lint = {
 };
 
 const jest = {
+  config: ({ collectCoverageFrom, ...config }) => ({
+    ...config,
+    collectCoverageFrom: [...collectCoverageFrom, '!**/packages/jest/**'],
+  }),
   configFiles: {
     babel: false,
     'babel:lerna': true,

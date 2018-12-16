@@ -8,6 +8,7 @@ export default {
     'babel-core@^7.0.0-0',
   ],
   config: (): {} => ({
+    setupFiles: ['@cat-org/jest'],
     testPathIgnorePatterns: ['__tests__/__ignore__'],
     collectCoverage: true,
     collectCoverageFrom: ['**/src/**/*.js', '!**/bin/*.js'],

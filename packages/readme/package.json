@@ -1,0 +1,14 @@
+{
+  "name": "@cat-org/readme",
+  "description": "Readme cli for cat-org",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/cat-core/",
+  "repository": "https://github.com/cat-org/cat-core/tree/master/packages/readme",
+  "version": "1.0.0-beta.11",
+  "main": "./lib/index.js",
+  "keywords": ["cat-org", "readme"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

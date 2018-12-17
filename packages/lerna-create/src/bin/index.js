@@ -43,14 +43,13 @@ handleUnhandledRejection();
           workspace: string,
         ) => [
           ...result,
-          ...d3DirTree(
-            path.resolve(rootPath, workspace.replace(/\/\*$/, '')),
-          ).children.map(
-            ({ data: { name, path: value } }: d3DirTreeNodeType) => ({
-              name: workspace.replace(/\*$/, name),
-              value,
-            }),
-          ),
+          ...(
+            d3DirTree(path.resolve(rootPath, workspace.replace(/\/\*$/, '')))
+              .children || []
+          ).map(({ data: { name, path: value } }: d3DirTreeNodeType) => ({
+            name: workspace.replace(/\*$/, name),
+            value,
+          })),
         ],
         [],
       ),

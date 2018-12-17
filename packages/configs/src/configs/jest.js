@@ -6,6 +6,7 @@ export default {
     'jest',
     'babel-jest',
     'babel-core@^7.0.0-0',
+    '@cat-org/jest',
   ],
   config: (): {} => ({
     setupFiles: ['@cat-org/jest'],

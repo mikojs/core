@@ -10,8 +10,6 @@ import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
 
-import { version } from '../../package.json';
-
 import license from './license';
 import Store from './index';
 
@@ -61,7 +59,6 @@ class Pkg extends Store {
   subStores = [license];
 
   storePkg: pkgType = {
-    'create-project': version,
     license: 'MIT',
     version: '1.0.0',
     main: './lib/index.js',

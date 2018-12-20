@@ -7,6 +7,15 @@
   "repository": "https://github.com/cat-org/cat-core/tree/master/packages/readme",
   "version": "1.0.0-beta.11",
   "main": "./lib/index.js",
+  "dependencies": {
+    "@cat-org/logger": "^1.0.0-beta.11",
+    "@cat-org/utils": "^1.0.0-beta.11",
+    "chalk": "^2.4.1",
+    "debug": "^4.1.0",
+    "read-pkg-up": "^4.0.0",
+    "remark-parse": "^6.0.3",
+    "unified": "^7.1.0"
+  },
   "keywords": ["cat-org", "readme"],
   "publishConfig": {
     "access": "public"

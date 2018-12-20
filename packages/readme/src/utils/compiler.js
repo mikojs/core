@@ -4,7 +4,7 @@ import debug from 'debug';
 import chalk from 'chalk';
 
 import logger from './logger';
-import generateData from './generateData';
+import generateContent from './generateContent';
 
 type nodeType = {
   type: string,
@@ -56,7 +56,7 @@ const traverse = (
 
     file.contents = file.contents.replace(
       new RegExp(`${startComment}\n(.|\n)*${endComment}`),
-      `${startComment}\n${generateData(startKey)}\n${endComment}`,
+      `${startComment}\n${generateContent(startKey)}\n${endComment}`,
     );
   }
 };

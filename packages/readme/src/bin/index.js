@@ -6,6 +6,7 @@ import path from 'path';
 
 import readPkgUp from 'read-pkg-up';
 import execa from 'execa';
+import chalk from 'chalk';
 import debug from 'debug';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
@@ -20,7 +21,11 @@ handleUnhandledRejection();
 (async (): Promise<void> => {
   const { path: pkgPath, pkg } = await readPkgUp();
 
-  if (!pkgPath) logger.fail('Can not find the root path');
+  if (!pkgPath)
+    logger.fail(
+      'Can not find the root path',
+      chalk`Make a {green package.json} first`,
+    );
 
   const rootPath = path.dirname(pkgPath);
   const readmePath = path.resolve(rootPath, 'README.md');

@@ -31,7 +31,7 @@ export default ({
       filePath: './LICENSE',
       badgeName: 'license',
       image: `https://img.shields.io/github/license/${username}/${projectName}.svg`,
-      link: `https://github.com/${username}/${projectName}/blob/master/LICENSE`,
+      link: `./LICENSE`,
     },
     {
       filePath: './node_modules/.bin/lerna',

@@ -4,7 +4,12 @@ import title from './title';
 
 export type ctxType = {
   rootPath: string,
-  pkg: { [string]: string },
+  pkg: {
+    [string]: string,
+    engines: {
+      [string]: string,
+    },
+  },
   repo: { username: string, projectName: string },
 };
 

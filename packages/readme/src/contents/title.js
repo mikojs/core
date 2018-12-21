@@ -14,7 +14,7 @@ type badgeType = {
 
 export default ({
   rootPath,
-  pkg: { name, homepage },
+  pkg: { name, homepage, engines = {} },
   repo: { username, projectName },
 }: ctxType): string => {
   const badges = [
@@ -34,15 +34,21 @@ export default ({
       filePath: './.npmignore',
       badgeName: 'npm-size',
       image: `https://img.shields.io/bundlephobia/minzip/${name}.svg`,
-      link: `https://www.npmjs.com/package/${name}`,
     },
     {
       filePath: './.npmignore',
       badgeName: 'github-size',
       image: `https://img.shields.io/github/repo-size/${username}/${projectName}.svg`,
-      link: `https://github.com/${username}/${projectName}`,
       filterFunc: (result: boolean) => !result,
     },
+    ...Object.keys(engines).map((key: string) => ({
+      filePath: './README.md',
+      badgeName: `engine-${key}`,
+      image: `https://img.shields.io/badge/${key}-${encodeURI(
+        engines[key],
+      )}-green.svg`,
+      filterFunc: emptyFunction.thatReturnsTrue,
+    })),
     {
       filePath: './LICENSE',
       badgeName: 'license',
@@ -64,9 +70,10 @@ export default ({
   return `# [${readmeName[0].toUpperCase()}${readmeName.slice(1)}][homepage]${
     badges.length === 0 ? '' : ' · '
   }${badges
-    .map(
-      ({ badgeName }: badgeType) =>
-        `[![${badgeName}][${badgeName}-image]][${badgeName}-link]`,
+    .map(({ badgeName, link }: badgeType) =>
+      !link
+        ? `![${badgeName}][${badgeName}-image]`
+        : `[![${badgeName}][${badgeName}-image]][${badgeName}-link]`,
     )
     .join(' ')}
 
@@ -74,7 +81,9 @@ export default ({
 ${badges
     .map(
       ({ badgeName, image, link }: badgeType) =>
-        `[${badgeName}-image]: ${image}\n[${badgeName}-link]: ${link}`,
+        `[${badgeName}-image]: ${image}${
+          !link ? '' : `\n[${badgeName}-link]: ${link}`
+        }`,
     )
     .join('\n')}`;
 };

@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@cat-org/root",
+  "name": "@cat-org/cat-core",
   "license": "MIT",
   "workspaces": ["packages/*"],
   "scripts": {

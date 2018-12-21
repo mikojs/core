@@ -4,7 +4,10 @@ import debug from 'debug';
 import chalk from 'chalk';
 
 import logger from './logger';
-import generateContent from './generateContent';
+
+import contents from 'contents';
+
+import type { ctxType } from 'contents';
 
 type nodeType = {
   type: string,
@@ -25,12 +28,14 @@ const commentArray = [];
  *
  * @param {Object} node - unified node
  * @param {Object} file - unified file
+ * @param {Object} ctx - context
  */
 const traverse = (
   { type, children, value: endComment }: nodeType,
   file: fileType,
+  ctx: ctxType,
 ) => {
-  if (children) children.forEach((node: nodeType) => traverse(node, file));
+  if (children) children.forEach((node: nodeType) => traverse(node, file, ctx));
 
   if (type === 'html') {
     const [endKey, flag] = endComment
@@ -54,16 +59,18 @@ const traverse = (
         chalk`{red <!-- readme.${startKey}.end -->} should be after {green <!-- readme.${startKey}.start -->}`,
       );
 
+    const newContent = contents(startKey, ctx);
+
     file.contents = file.contents.replace(
       new RegExp(`${startComment}\n(.|\n)*${endComment}`),
-      `${startComment}\n${generateContent(startKey)}\n${endComment}`,
+      `${startComment}\n${!newContent ? '' : `${newContent}\n`}${endComment}`,
     );
   }
 };
 
-export default (node: nodeType, file: fileType): string => {
+export default (ctx: ctxType) => (node: nodeType, file: fileType): string => {
   debugLog({ node, file });
-  traverse(node, file);
+  traverse(node, file, ctx);
 
   return String(file.contents);
 };

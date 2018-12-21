@@ -3,15 +3,18 @@
 import fs from 'fs';
 import path from 'path';
 
+import { emptyFunction } from 'fbjs';
+
 import type { ctxType } from '.';
 
 type badgeType = {
   [string]: string,
+  filterFunc?: boolean => boolean,
 };
 
 export default ({
   rootPath,
-  pkg: { name },
+  pkg: { name, homepage },
   repo: { username, projectName },
 }: ctxType): string => {
   const badges = [
@@ -28,6 +31,19 @@ export default ({
       link: `https://www.npmjs.com/package/${name}`,
     },
     {
+      filePath: './.npmignore',
+      badgeName: 'npm-size',
+      image: `https://img.shields.io/bundlephobia/minzip/${name}.svg`,
+      link: `https://www.npmjs.com/package/${name}`,
+    },
+    {
+      filePath: './.npmignore',
+      badgeName: 'github-size',
+      image: `https://img.shields.io/github/repo-size/${username}/${projectName}.svg`,
+      link: `https://github.com/${username}/${projectName}`,
+      filterFunc: (result: boolean) => !result,
+    },
+    {
       filePath: './LICENSE',
       badgeName: 'license',
       image: `https://img.shields.io/github/license/${username}/${projectName}.svg`,
@@ -39,18 +55,22 @@ export default ({
       image: 'https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg',
       link: 'https://lernajs.io',
     },
-  ].filter(({ filePath }: badgeType) =>
-    fs.existsSync(path.resolve(rootPath, filePath)),
+  ].filter(
+    ({ filePath, filterFunc = emptyFunction.thatReturnsArgument }: badgeType) =>
+      filterFunc(fs.existsSync(path.resolve(rootPath, filePath))),
   );
   const readmeName = name.replace(new RegExp(`@?${username}/?`), '');
 
-  return `# ${readmeName[0].toUpperCase()}${readmeName.slice(1)} ${badges
+  return `# [${readmeName[0].toUpperCase()}${readmeName.slice(1)}][homepage]${
+    badges.length === 0 ? '' : ' · '
+  }${badges
     .map(
       ({ badgeName }: badgeType) =>
         `[![${badgeName}][${badgeName}-image]][${badgeName}-link]`,
     )
     .join(' ')}
 
+[homepage]: ${homepage}
 ${badges
     .map(
       ({ badgeName, image, link }: badgeType) =>

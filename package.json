@@ -2,6 +2,7 @@
   "private": true,
   "name": "@cat-org/cat-core",
   "license": "MIT",
+  "homepage": "https://cat-org.github.io/cat-core/",
   "workspaces": ["packages/*"],
   "scripts": {
     "clean:all": "make clean-all",

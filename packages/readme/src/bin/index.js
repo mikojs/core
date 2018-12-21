@@ -5,15 +5,13 @@ import fs from 'fs';
 import path from 'path';
 
 import readPkgUp from 'read-pkg-up';
-import unified from 'unified';
-import markdown from 'remark-parse';
 import execa from 'execa';
 import debug from 'debug';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import logger from 'utils/logger';
-import compiler from 'utils/compiler';
+import parser from 'utils/parser';
 
 const debugLog = debug('readme:bin');
 
@@ -26,7 +24,6 @@ handleUnhandledRejection();
 
   const rootPath = path.dirname(pkgPath);
   const readmePath = path.resolve(rootPath, 'README.md');
-  const processor = unified().use(markdown);
   const ctx = {
     rootPath,
     pkg,
@@ -51,18 +48,12 @@ handleUnhandledRejection();
     logger.fail('Can not find git remote');
   }
 
-  processor.Compiler = compiler(ctx);
-  processor.process(
+  const content = await parser(
     fs.existsSync(readmePath) ? fs.readFileSync(readmePath, 'utf-8') : '',
-    (err: mixed, { contents }: { contents: string }) => {
-      if (err) {
-        debugLog(err);
-        logger.fail('Parser file error');
-      }
-
-      // TODO
-      const { log } = console;
-      log(contents);
-    },
+    ctx,
   );
+
+  // TODO
+  const { log } = console;
+  log(content);
 })();

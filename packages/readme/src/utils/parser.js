@@ -1,7 +1,9 @@
 // @flow
 
-import debug from 'debug';
 import chalk from 'chalk';
+import unified from 'unified';
+import markdown from 'remark-parse';
+import debug from 'debug';
 
 import logger from './logger';
 
@@ -68,9 +70,23 @@ const traverse = (
   }
 };
 
-export default (ctx: ctxType) => (node: nodeType, file: fileType): string => {
-  debugLog({ node, file });
-  traverse(node, file, ctx);
+export default (readme: string, ctx: ctxType) =>
+  new Promise<string>(resolve => {
+    const processor = unified().use(markdown);
 
-  return String(file.contents);
-};
+    processor.Compiler = (node: nodeType, file: fileType): string => {
+      debugLog({ node, file });
+      traverse(node, file, ctx);
+
+      return String(file.contents);
+    };
+
+    processor.process(readme, (err: mixed, file: fileType) => {
+      if (err) {
+        debugLog(err);
+        logger.fail('Parser file error');
+      }
+
+      resolve(file.contents);
+    });
+  });

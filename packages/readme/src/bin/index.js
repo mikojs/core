@@ -24,7 +24,7 @@ handleUnhandledRejection();
   if (!pkgPath)
     logger.fail(
       'Can not find the root path',
-      chalk`Make a {green package.json} first`,
+      chalk`Create a {green package.json} first`,
     );
 
   const rootPath = path.dirname(pkgPath);

@@ -5,7 +5,7 @@ import path from 'path';
 
 import { emptyFunction } from 'fbjs';
 
-import type { ctxType } from '.';
+import type { ctxType } from './index';
 
 type badgeType = {
   [string]: string,

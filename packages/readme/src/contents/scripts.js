@@ -1,6 +1,6 @@
 // @flow
 
-import type { ctxType } from '.';
+import type { ctxType } from './index';
 
 export default ({ pkg: { scripts } }: ctxType) =>
   Object.keys(scripts)

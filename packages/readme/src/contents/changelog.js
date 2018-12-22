@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import type { ctxType } from '.';
+import type { ctxType } from './index';
 
 export default ({ rootPath }: ctxType): ?string => {
   if (!fs.existsSync(path.resolve(rootPath, './CHANGELOG.md'))) return null;

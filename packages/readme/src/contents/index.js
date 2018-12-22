@@ -2,6 +2,7 @@
 
 import title from './title';
 import scripts from './scripts';
+import changelog from './changelog';
 
 export type ctxType = {
   rootPath: string,
@@ -18,14 +19,12 @@ export type ctxType = {
 };
 
 export default (key: string, ctx: ctxType): ?string => {
-  switch (key) {
-    case 'title':
-      return title(ctx);
+  const contents = {
+    title,
+    scripts,
+    changelog,
+  };
 
-    case 'scripts':
-      return scripts(ctx);
-
-    default:
-      return null;
-  }
+  // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+  return contents[key]?.(ctx);
 };

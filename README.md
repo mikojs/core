@@ -1,5 +1,1 @@
-<!-- readme.title.start -->
-<!-- readme.title.end -->
-
-<!-- readme.changelog.start -->
-<!-- readme.changelog.end -->
+# Core <!-- readme.badges.start --><!-- readme.badges.end -->

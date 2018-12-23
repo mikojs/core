@@ -9,7 +9,7 @@
     }
   },
   "changelog": {
-    "repo": "cat-org/cat-core",
+    "repo": "cat-org/core",
     "cacheDir": ".changelog",
     "labels": {
       "PR: Breaking Change :boom:": ":boom: Breaking Change",

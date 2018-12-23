@@ -9,9 +9,9 @@ import ctx from './__ignore__/ctx';
 base.ctx = ctx;
 
 test.each`
-  pkg                                                          | expected
-  ${undefined}                                                 | ${3}
-  ${{ repository: 'https://github.com/cat-org/cat-core.git' }} | ${4}
+  pkg                                                      | expected
+  ${undefined}                                             | ${3}
+  ${{ repository: 'https://github.com/cat-org/core.git' }} | ${4}
 `(
   'base with pkg = $pkg',
   async ({ pkg, expected }: { pkg?: {}, expected: number }): Promise<void> => {

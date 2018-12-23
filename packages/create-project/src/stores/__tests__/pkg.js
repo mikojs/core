@@ -22,8 +22,8 @@ test('pkg', async (): Promise<void> => {
   inquirer.result = {
     private: true,
     description: 'desc',
-    homepage: 'https://github.com/cat-org/cat-core',
-    repository: 'https://github.com/cat-org/cat-core.git',
+    homepage: 'https://github.com/cat-org/core',
+    repository: 'https://github.com/cat-org/core.git',
     keywords: ['keyword'],
   };
 
@@ -36,10 +36,10 @@ test('pkg', async (): Promise<void> => {
 describe('pkg questions', () => {
   describe('validate', () => {
     describe.each`
-      questionName    | success                                      | fail  | errorMessage
-      ${'homepage'}   | ${'https://cat.org'}                         | ${''} | ${'must be url, for example: https://cat.org'}
-      ${'repository'} | ${'https://github.com/cat-org/cat-core.git'} | ${''} | ${'must be url or git ssh, for example: https://github.com/cat-org/cat-core.git'}
-      ${'keywords'}   | ${['keyword']}                               | ${[]} | ${'can not be empty'}
+      questionName    | success                                  | fail  | errorMessage
+      ${'homepage'}   | ${'https://cat.org'}                     | ${''} | ${'must be url, for example: https://cat.org'}
+      ${'repository'} | ${'https://github.com/cat-org/core.git'} | ${''} | ${'must be url or git ssh, for example: https://github.com/cat-org/core.git'}
+      ${'keywords'}   | ${['keyword']}                           | ${[]} | ${'can not be empty'}
     `(
       '$questionName',
       ({

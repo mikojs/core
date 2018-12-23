@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "@cat-org/cat-core",
+  "name": "@cat-org/core",
   "license": "MIT",
-  "homepage": "https://cat-org.github.io/cat-core/",
+  "homepage": "https://cat-org.github.io/core/",
   "workspaces": ["packages/*"],
   "scripts": {
     "clean:all": "make clean-all",

@@ -42,7 +42,7 @@ export const PKG_QUESTIONS = [
     validate: (val: string) =>
       isURL(val, { require_protocol: true }) ||
       /^git@.*:.*\.git$/.test(val) ||
-      'must be url or git ssh, for example: https://github.com/cat-org/cat-core.git',
+      'must be url or git ssh, for example: https://github.com/cat-org/core.git',
   },
   {
     name: 'keywords',

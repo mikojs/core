@@ -6,6 +6,7 @@ import path from 'path';
 
 import readPkgUp from 'read-pkg-up';
 import chalk from 'chalk';
+import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -32,12 +33,11 @@ handleUnhandledRejection();
       chalk`Create a {green README.md} first`,
     );
 
-  const content = await badges(fs.readFileSync(readmePath, 'utf-8'), {
-    rootPath,
-    pkg,
-  });
-
-  // TODO
-  const { log } = console;
-  log(content);
+  outputFileSync(
+    readmePath,
+    await badges(fs.readFileSync(readmePath, 'utf-8'), {
+      rootPath,
+      pkg,
+    }),
+  );
 })();

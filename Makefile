@@ -39,7 +39,9 @@ babel-lint-staged:
 	@make babel-core
 	@$(call babel-build, \
 		--scope @cat-org/utils \
-		--scope @cat-org/eslint-config-cat)
+		--scope @cat-org/eslint-config-cat \
+		--scope @cat-org/badges)
+	@ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
 
 babel-clean:
 	rm -rf ./lib ./packages/**/lib

@@ -7,6 +7,7 @@
   "repository": "https://github.com/cat-org/core/tree/master/packages/badges",
   "version": "1.0.0-beta.11",
   "main": "./lib/index.js",
+  "bin": "./lib/bin/index.js",
   "dependencies": {
     "@cat-org/logger": "^1.0.0-beta.11",
     "@cat-org/utils": "^1.0.0-beta.11",
@@ -14,6 +15,7 @@
     "debug": "^4.1.0",
     "execa": "^1.0.0",
     "fbjs": "^1.0.0",
+    "output-file-sync": "^2.0.1",
     "read-pkg-up": "^4.0.0"
   },
   "keywords": ["badges", "cat-org"],

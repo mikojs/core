@@ -31,6 +31,9 @@ test.each`
         pkg,
       }),
     ).toBeUndefined();
-    expect(outputFileSync.contents[0]).toMatch(new RegExp(author));
+    (expected
+      ? expect(outputFileSync.contents[0])
+      : expect(outputFileSync.contents[0]).not
+    ).toMatch(new RegExp(author));
   },
 );

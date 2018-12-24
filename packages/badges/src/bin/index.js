@@ -10,7 +10,7 @@ import chalk from 'chalk';
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import logger from 'utils/logger';
-import parser from 'utils/parser';
+import badges from 'utils/badges';
 
 handleUnhandledRejection();
 
@@ -32,10 +32,9 @@ handleUnhandledRejection();
       chalk`Create a {green README.md} first`,
     );
 
-  const content = await parser(fs.readFileSync(readmePath, 'utf-8'), {
+  const content = await badges(fs.readFileSync(readmePath, 'utf-8'), {
     rootPath,
     pkg,
-    badges: false,
   });
 
   // TODO

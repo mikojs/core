@@ -5,12 +5,19 @@ import path from 'path';
 
 import execa from 'execa';
 import debug from 'debug';
-import memoizeOne from 'memoize-one';
-import { areEqual, emptyFunction } from 'fbjs';
+import { emptyFunction } from 'fbjs';
 
 import logger from './logger';
 
-import type { fileType, ctxType } from './parser';
+type ctxType = {
+  rootPath: string,
+  pkg: {
+    [string]: string,
+    engines: {
+      [string]: string,
+    },
+  },
+};
 
 type badgeType = {
   [string]: string,
@@ -22,9 +29,9 @@ type repoType = {
   projectName: string,
 };
 
-const debugLog = debug('readme:badges');
-const START_COMMENT = '<!-- readme.badges.start -->';
-const END_COMMENT = '<!-- readme.badges.end -->';
+const debugLog = debug('badges:badges');
+const START_COMMENT = '<!-- badges.start -->';
+const END_COMMENT = '<!-- badges.end -->';
 
 /**
  * @example
@@ -135,16 +142,13 @@ ${badges
 `;
 };
 
-const memoizedGetRepo = memoizeOne(getRepo);
-const memoizedGetBadges = memoizeOne(getBadges, areEqual);
+export default (readme: string, ctx: ctxType): ?string => {
+  const repo = getRepo();
 
-export default (file: fileType, ctx: ctxType) => {
-  const repo = memoizedGetRepo();
-
-  if (!repo) logger.fail('Can not find git remote');
+  if (!repo) return logger.fail('Can not find git remote');
   else
-    file.contents = file.contents.replace(
-      new RegExp(`${START_COMMENT}(.|\n)*${END_COMMENT}`),
-      `${START_COMMENT}${memoizedGetBadges(ctx, repo)}${END_COMMENT}`,
+    return readme.replace(
+      new RegExp(`${START_COMMENT}(.|\n)*${END_COMMENT}`, 'g'),
+      `${START_COMMENT}${getBadges(ctx, repo)}${END_COMMENT}`,
     );
 };

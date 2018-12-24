@@ -2,4 +2,4 @@
 
 import { throwMessageInIndex } from '@cat-org/utils';
 
-throwMessageInIndex('@cat-org/readme');
+throwMessageInIndex('@cat-org/badges');

@@ -18,4 +18,4 @@ logSettings.fail.after = () => {
   );
 };
 
-export default logger('@cat-org/readme', logSettings);
+export default logger('@cat-org/badges', logSettings);

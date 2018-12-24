@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/readme",
-  "description": "Readme cli for cat-org",
+  "name": "@cat-org/badges",
+  "description": "Badges cli for cat-org",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/",
-  "repository": "https://github.com/cat-org/core/tree/master/packages/readme",
+  "repository": "https://github.com/cat-org/core/tree/master/packages/badges",
   "version": "1.0.0-beta.11",
   "main": "./lib/index.js",
   "dependencies": {
@@ -14,12 +14,9 @@
     "debug": "^4.1.0",
     "execa": "^1.0.0",
     "fbjs": "^1.0.0",
-    "memoize-one": "^5.0.0",
-    "read-pkg-up": "^4.0.0",
-    "remark-parse": "^6.0.3",
-    "unified": "^7.1.0"
+    "read-pkg-up": "^4.0.0"
   },
-  "keywords": ["cat-org", "readme"],
+  "keywords": ["badges", "cat-org"],
   "publishConfig": {
     "access": "public"
   }

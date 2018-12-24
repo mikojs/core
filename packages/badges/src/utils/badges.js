@@ -39,9 +39,9 @@ const END_COMMENT = '<!-- badges.end -->';
  *
  * @return {Object} - user name and project name
  */
-export const getRepo = (): ?repoType => {
+const getRepo = async (): Promise<?repoType> => {
   try {
-    const { stdout } = execa.shellSync('git remote -v');
+    const { stdout } = await execa.shell('git remote -v');
     const [username, projectName] = stdout
       .replace(/origin\t.*@.*:(.*).git \(fetch\)(.|\n)*/, '$1')
       .split('/');
@@ -70,7 +70,7 @@ export const getRepo = (): ?repoType => {
  *
  * @return {string} - badges string
  */
-export const getBadges = (
+const getBadges = (
   { rootPath, pkg: { name, homepage, engines = {} } }: ctxType,
   { username, projectName }: repoType,
 ): string => {
@@ -99,7 +99,7 @@ export const getBadges = (
       filterFunc: (result: boolean) => !result,
     },
     ...Object.keys(engines).map((key: string) => ({
-      filePath: './README.md',
+      filePath: './package.json',
       badgeName: `engine-${key}`,
       image: `https://img.shields.io/badge/${key}-${encodeURI(
         engines[key],
@@ -139,11 +139,11 @@ ${badges
         }`,
     )
     .join('\n')}
-`;
+${badges.length === 0 ? '' : '\n'}`;
 };
 
-export default (readme: string, ctx: ctxType): ?string => {
-  const repo = getRepo();
+export default async (readme: string, ctx: ctxType): Promise<?string> => {
+  const repo = await getRepo();
 
   if (!repo) return logger.fail('Can not find git remote');
   else

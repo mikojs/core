@@ -4,7 +4,7 @@ import { emptyFunction } from 'fbjs';
 
 /** mock execa */
 class Execa {
-  mainFunction = emptyFunction;
+  mainFunction = emptyFunction.thatReturnsArgument;
 
   cmds = [];
 
@@ -14,12 +14,13 @@ class Execa {
     ): {
       stdout: string,
     } => {
-      this.mainFunction();
-      this.mainFunction = emptyFunction;
+      const stdout = this.mainFunction(cmd);
+
+      this.mainFunction = emptyFunction.thatReturnsArgument;
       this.cmds.push(cmd);
 
       return {
-        stdout: cmd,
+        stdout,
       };
     },
   };

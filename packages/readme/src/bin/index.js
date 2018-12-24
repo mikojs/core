@@ -35,6 +35,7 @@ handleUnhandledRejection();
   const content = await parser(fs.readFileSync(readmePath, 'utf-8'), {
     rootPath,
     pkg,
+    badges: false,
   });
 
   // TODO

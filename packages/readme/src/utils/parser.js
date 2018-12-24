@@ -5,6 +5,7 @@ import markdown from 'remark-parse';
 import debug from 'debug';
 
 import logger from './logger';
+import badges from './badges';
 
 type nodeType = {
   type: string,
@@ -12,20 +13,26 @@ type nodeType = {
   children?: $ReadOnlyArray<nodeType>,
 };
 
-type fileType = {
+export type fileType = {
   contents: string,
 };
 
-type ctxType = {
+export type ctxType = {
   rootPath: string,
-  pkg: { [string]: string },
+  pkg: {
+    [string]: string,
+    engines: {
+      [string]: string,
+    },
+  },
+  badges: boolean,
 };
 
 const debugLog = debug('readme:parser');
 
 /**
  * @example
- * traverse(node, file)
+ * traverse(node, file, ctx)
  *
  * @param {Object} node - unified node
  * @param {Object} file - unified file
@@ -38,7 +45,19 @@ const traverse = (
 ) => {
   if (children) children.forEach((node: nodeType) => traverse(node, file, ctx));
 
-  // TODO parser and checking
+  switch (type) {
+    case 'html':
+      if (value === '<!-- readme.badges.start -->') ctx.badges = true;
+      else if (ctx.badges && value === '<!-- readme.badges.end -->') {
+        ctx.badges = false;
+        badges(file, ctx);
+      }
+
+      return;
+
+    default:
+      return;
+  }
 };
 
 export default (readme: string, ctx: ctxType) =>

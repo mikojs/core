@@ -1,3 +1,3 @@
-# [Core][homepage] <!-- readme.badges.start --><!-- readme.badges.end -->
+# [Core][homepage] · <!-- readme.badges.start --><!-- readme.badges.end -->
 
-[homepage](https://cat-org.github.io/core/)
+[homepage]: https://cat-org.github.io/core/

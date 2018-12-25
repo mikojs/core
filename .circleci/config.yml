@@ -6,15 +6,15 @@ defaults: &defaults
 
 restore-cache: &restore-cache
   keys:
-    - v1-dependencies-{{ checksum "yarn.lock" }}
-    - v1-dependencies-
+    - dependencies-{{ checksum "yarn.lock" }}
+    - dependencies-
 
 save-cache: &save-cache
   paths:
     - node_modules
     - flow-typed
     - ~/.flow-typed
-  key: v1-dependencies-{{ checksum "yarn.lock" }}
+  key: dependencies-{{ checksum "yarn.lock" }}
 
 install-all: &install-all
   name: Install packages

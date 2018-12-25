@@ -12,7 +12,7 @@ const ctx = {
   rootPath: '/rootPath',
   pkg: {
     name: 'badges',
-    homepage: 'https://cat-org.github.io/core/',
+    homepage: 'https://cat-org.github.io/core',
   },
 };
 

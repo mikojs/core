@@ -13,7 +13,7 @@ type ctxType = {
   rootPath: string,
   pkg: {
     [string]: string,
-    engines: {
+    engines?: {
       [string]: string,
     },
   },
@@ -139,7 +139,8 @@ ${badges
         }`,
     )
     .join('\n')}
-${badges.length === 0 ? '' : '\n'}`;
+
+`;
 };
 
 export default async (readme: string, ctx: ctxType): Promise<?string> => {

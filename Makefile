@@ -10,7 +10,6 @@ install-flow-typed:
 	@yarn flow-typed install --verbose
 	@yarn lerna exec \
 		"flow-typed install -f 0.87.0 --verbose" \
-		--parallel \
 		--stream
 
 babel-core:

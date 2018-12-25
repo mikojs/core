@@ -47,7 +47,7 @@ describe('badges', () => {
       fsExist,
       expected,
     }: {
-      engines: ?{
+      engines?: {
         [string]: string,
       },
       fsExist: boolean,

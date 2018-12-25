@@ -11,7 +11,7 @@ export default {
   config: (): {} => ({
     '*.js': ['yarn configs prettier', 'yarn configs lint', 'git add'],
     '*.js.flow': ['yarn configs prettier --parser flow', 'git add'],
-    '*.md': ['yarn configs prettier --parser markdown', 'git add'],
+    '**/!(README).md': ['yarn configs prettier --parser markdown', 'git add'],
     '**/README.md': [
       'badges',
       'yarn configs prettier --parser markdown',

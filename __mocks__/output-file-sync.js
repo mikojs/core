@@ -6,6 +6,8 @@ import { emptyFunction } from 'fbjs';
 class OutPutFileSync {
   destPaths = [];
 
+  contents = [];
+
   mainFunction = emptyFunction;
 
   /**
@@ -13,11 +15,13 @@ class OutPutFileSync {
    * outputFileSync.main('test');
    *
    * @param {string} destPath - dest path to add
+   * @param {string} content - content to add
    */
-  main = (destPath: string) => {
+  main = (destPath: string, content: string) => {
     this.mainFunction();
     this.mainFunction = emptyFunction;
     this.destPaths.push(destPath);
+    this.contents.push(content);
   };
 }
 

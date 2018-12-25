@@ -8,10 +8,7 @@ install-all:
 install-flow-typed:
 	rm -rf ./flow-typed
 	@yarn flow-typed install --verbose
-	@yarn lerna exec \
-		"flow-typed install -f 0.87.0 --verbose" \
-		--parallel \
-		--stream
+	@yarn lerna exec "flow-typed install -f 0.87.0 --verbose" --stream
 
 babel-core:
 	@make babel-clean
@@ -39,7 +36,9 @@ babel-lint-staged:
 	@make babel-core
 	@$(call babel-build, \
 		--scope @cat-org/utils \
-		--scope @cat-org/eslint-config-cat)
+		--scope @cat-org/eslint-config-cat \
+		--scope @cat-org/badges)
+	@ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
 
 babel-clean:
 	rm -rf ./lib ./packages/**/lib

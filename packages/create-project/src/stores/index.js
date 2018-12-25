@@ -17,6 +17,7 @@ export type pkgType = {
       [string]: string,
     },
   },
+  author?: string,
   engines?: {
     [string]: string,
   },

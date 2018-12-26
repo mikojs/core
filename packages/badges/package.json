@@ -12,6 +12,7 @@
     "@cat-org/logger": "^1.0.0-beta.11",
     "@cat-org/utils": "^1.0.0-beta.11",
     "chalk": "^2.4.1",
+    "commander": "^2.19.0",
     "debug": "^4.1.0",
     "execa": "^1.0.0",
     "fbjs": "^1.0.0",

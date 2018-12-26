@@ -1,0 +1,14 @@
+{
+  "name": "@cat-org/lerna-flow-typed-install",
+  "description": "Flow-typed install with lerna",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/core/lerna-flow-typed-install",
+  "repository": "https://github.com/cat-org/core/tree/master/packages/lerna-flow-typed-install",
+  "version": "1.0.0-beta.11",
+  "main": "./lib/index.js",
+  "keywords": ["cat-org", "flow-typed", "lerna"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

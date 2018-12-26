@@ -60,6 +60,21 @@ handleUnhandledRejection();
     ({ data: { type } }: d3DirTreeNodeType) => type === 'file',
   );
 
+  /**
+   * @example
+   * replaceFunc('test')
+   *
+   * @param {string} text - existing string
+   *
+   * @return {string} - new string
+   */
+  const replaceFunc = (text: string) =>
+    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    text?.replace(
+      new RegExp(path.basename(existingProject), 'g'),
+      path.basename(newProject),
+    );
+
   for (const {
     data: { name, path: filePath },
   } of existingFiles) {
@@ -72,13 +87,7 @@ handleUnhandledRejection();
       case 'package.json':
         outputFileSync(
           newFilePath,
-          await handlePackageJson(require(filePath), (text: string) =>
-            // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-            text?.replace(
-              new RegExp(path.basename(existingProject), 'g'),
-              path.basename(newProject),
-            ),
-          ),
+          await handlePackageJson(require(filePath), replaceFunc),
         );
         break;
 
@@ -91,7 +100,11 @@ handleUnhandledRejection();
           }),
         );
 
-        if (writable) outputFileSync(newFilePath, fs.readFileSync(filePath));
+        if (writable)
+          outputFileSync(
+            newFilePath,
+            replaceFunc(fs.readFileSync(filePath, 'utf-8')),
+          );
         break;
     }
   }

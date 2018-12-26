@@ -3,12 +3,18 @@ ROOT=$(shell pwd)
 install-all:
 	@yarn install
 	@yarn lerna bootstrap
-	@make install-flow-typed
+	@make flow-typed-install
 
-install-flow-typed:
+flow-typed-install:
 	rm -rf ./flow-typed
+	@yarn lerna exec \
+		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
+		--stream \
+		--scope @cat-org/lerna-flow-typed-install \
+		--include-filtered-dependencies
+	@ln -snf $(ROOT)/packages/lerna-flow-typed-install/lib/bin/index.js ./node_modules/.bin/lerna-flow-typed-install
 	@yarn flow-typed install --verbose
-	@yarn lerna exec "flow-typed install -f 0.87.0 --verbose" \
+	@yarn lerna exec "lerna-flow-typed-install --verbose" \
 		--stream \
 		--concurrency 1
 

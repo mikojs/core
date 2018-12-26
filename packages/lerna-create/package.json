@@ -19,7 +19,7 @@
     "npm-which": "^3.0.1",
     "output-file-sync": "^2.0.1"
   },
-  "keywords": ["cat-org", "lerna-create"],
+  "keywords": ["cat-org", "create", "lerna"],
   "publishConfig": {
     "access": "public"
   }

@@ -8,6 +8,8 @@
 
 [website]: https://cat-org.github.io/core/jest
 
+Jest setup for cat-org.
+
 ## Install
 
 ```sh

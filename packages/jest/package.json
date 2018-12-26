@@ -3,7 +3,7 @@
   "description": "Jest setup for cat-org",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core",
+  "homepage": "https://cat-org.github.io/core/jest",
   "repository": "https://github.com/cat-org/core/tree/master/packages/jest",
   "version": "1.0.0-beta.11",
   "main": "./lib/index.js",

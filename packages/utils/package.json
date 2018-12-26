@@ -9,11 +9,9 @@
   "main": "./lib/index.js",
   "dependencies": {
     "chalk": "^2.4.1",
-    "fbjs": "^1.0.0"
-  },
-  "devDependencies": {
     "d3-hierarchy": "^1.1.8",
-    "directory-tree": "^2.1.1"
+    "directory-tree": "^2.1.1",
+    "fbjs": "^1.0.0"
   },
   "keywords": ["cat-org", "utils"],
   "publishConfig": {

@@ -15,4 +15,14 @@
 
 [homepage]: https://cat-org.github.io/core/
 
-## TODO
+The packages in this repo is used to create a `cat` project.
+
+#### Development
+
+This project use `lerna` to manage packages. Commands:
+
+- `clean:all`: Clean the all files which is built by the packages.
+- `install:all`: Install the all pacakges.
+- `prod`: Build the production packages.
+- `release`: Release the packages.
+- `test`: Run the testing.

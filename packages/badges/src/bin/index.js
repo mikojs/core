@@ -11,33 +11,46 @@ import outputFileSync from 'output-file-sync';
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import logger from 'utils/logger';
+import cliOptions from 'utils/cliOptions';
 import badges from 'utils/badges';
 
 handleUnhandledRejection();
 
 (async (): Promise<void> => {
-  const { path: pkgPath, pkg } = await readPkgUp();
+  await Promise.all(
+    cliOptions(process.argv).map(
+      async (cwd: string): Promise<void> => {
+        const { path: pkgPath, pkg } = await readPkgUp({
+          cwd: path.resolve(cwd),
+        });
 
-  if (!pkgPath)
-    logger.fail(
-      'Can not find the root path',
-      chalk`Create a {green package.json} first`,
-    );
+        if (!pkgPath)
+          logger.fail(
+            'Can not find the root path',
+            chalk`Create a {green package.json} first`,
+          );
 
-  const rootPath = path.dirname(pkgPath);
-  const readmePath = path.resolve(rootPath, 'README.md');
+        const rootPath = path.dirname(pkgPath);
+        const readmePath = path.resolve(rootPath, 'README.md');
 
-  if (!fs.existsSync(readmePath))
-    logger.fail(
-      chalk`Can not find the {green README.md} in the root folder`,
-      chalk`Create a {green README.md} first`,
-    );
+        if (!fs.existsSync(readmePath))
+          logger.fail(
+            chalk`Can not find the {green README.md} in the root folder`,
+            chalk`Create a {green README.md} first`,
+          );
 
-  outputFileSync(
-    readmePath,
-    await badges(fs.readFileSync(readmePath, 'utf-8'), {
-      rootPath,
-      pkg,
-    }),
+        outputFileSync(
+          readmePath,
+          await badges(fs.readFileSync(readmePath, 'utf-8'), {
+            rootPath,
+            pkg,
+          }),
+        );
+
+        logger.succeed(
+          `"${path.relative(process.cwd(), path.resolve(cwd))}" done`,
+        );
+      },
+    ),
   );
 })();

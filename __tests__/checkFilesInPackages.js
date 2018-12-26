@@ -25,6 +25,7 @@ describe('check files in packages', () => {
             [
               '.npmignore',
               'package.json',
+              'README.md',
               'src',
               ...(process.env.TEST_PRODUCTION ? ['lib'] : []),
             ].sort(),

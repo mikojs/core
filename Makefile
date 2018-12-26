@@ -8,7 +8,9 @@ install-all:
 install-flow-typed:
 	rm -rf ./flow-typed
 	@yarn flow-typed install --verbose
-	@yarn lerna exec "flow-typed install -f 0.87.0 --verbose" --stream
+	@yarn lerna exec "flow-typed install -f 0.87.0 --verbose" \
+		--stream \
+		--concurrency 1
 
 babel-core:
 	@make babel-clean

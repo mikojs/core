@@ -10,7 +10,7 @@
   "devDependencies": {
     "chalk": "^2.4.1",
     "d3-hierarchy": "^1.1.8",
-    "directory-tree": "^2.1.1",
+    "directory-tree": "^2.2.0",
     "fbjs": "^1.0.0"
   },
   "keywords": ["cat-org", "utils"],

@@ -28,6 +28,7 @@ export type ctxType = {
   projectDir: string,
   cmd: string,
   pkg?: pkgType,
+  useNpm?: boolean,
 };
 
 const debugLog = debug('create-project:store');

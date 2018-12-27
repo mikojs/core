@@ -5,13 +5,15 @@ import gitignore from './gitignore';
 import npmignore from './npmignore';
 import configs from './configs';
 import flow from './flow';
+import license from './license';
+import readme from './readme';
 import Store from './index';
 
 import type { ctxType } from './index';
 
 /** base store */
 class Base extends Store {
-  subStores = [pkg, gitignore, npmignore, configs, flow];
+  subStores = [pkg, gitignore, npmignore, configs, flow, license, readme];
 
   /**
    * @example

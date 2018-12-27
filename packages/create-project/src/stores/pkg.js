@@ -11,6 +11,7 @@ import { emptyFunction } from 'fbjs';
 import { mockChoice } from '@cat-org/utils';
 
 import license from './license';
+import readme from './readme';
 import Store from './index';
 
 import type { ctxType, pkgType } from './index';
@@ -56,7 +57,7 @@ export const PKG_QUESTIONS = [
 
 /** store pkg */
 class Pkg extends Store {
-  subStores = [license];
+  subStores = [license, readme];
 
   storePkg: pkgType = {
     license: 'MIT',

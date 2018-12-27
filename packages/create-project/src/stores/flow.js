@@ -4,7 +4,7 @@ import Store from './index';
 
 import type { ctxType } from './index';
 
-export const template = `[ignore]
+const template = `[ignore]
 # just for findup
 .*/node_modules/findup/test/.*
 

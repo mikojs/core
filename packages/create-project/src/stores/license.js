@@ -12,7 +12,7 @@ import type { ctxType } from './index';
  *
  * @return {string} - license
  */
-export const template = (author?: string = '') => `The MIT License (MIT)
+const template = (author?: string = '') => `The MIT License (MIT)
 
 Copyright (c) ${new Date().getFullYear()} ${author}
 

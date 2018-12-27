@@ -12,8 +12,8 @@
     "@babel/core": ">=7.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.5",
-    "@babel/core": "^7.1.6",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
     "@babel/helper-plugin-utils": "^7.0.0",
     "chokidar": "^2.0.4",
     "output-file-sync": "^2.0.1"

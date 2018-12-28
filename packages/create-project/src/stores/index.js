@@ -22,6 +22,9 @@ export type pkgType = {
     [string]: string,
   },
   private?: boolean,
+  scripts: {
+    [string]: string,
+  },
 };
 
 export type ctxType = {

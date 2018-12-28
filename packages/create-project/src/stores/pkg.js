@@ -68,6 +68,7 @@ class Pkg extends Store {
         'pre-commit': 'configs lint-staged && yarn flow',
       },
     },
+    scripts: {},
   };
 
   /**
@@ -104,6 +105,14 @@ class Pkg extends Store {
     debugLog(this.storePkg);
   }, emptyFunction.thatReturnsTrue);
 
+  addScripts = memoizeOne(() => {
+    this.storePkg.scripts = {
+      dev: 'configs babel -w',
+      prod: 'NODE_ENV=production configs babel',
+      test: 'configs test',
+    };
+  }, emptyFunction.thatReturnsTrue);
+
   /**
    * @example
    * pkg.start(ctx)
@@ -114,6 +123,8 @@ class Pkg extends Store {
     const { projectDir } = ctx;
 
     await this.defaultInfo(projectDir);
+    this.addScripts();
+
     ctx.pkg = this.storePkg;
   };
 

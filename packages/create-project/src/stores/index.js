@@ -22,12 +22,16 @@ export type pkgType = {
     [string]: string,
   },
   private?: boolean,
+  scripts: {
+    [string]: string,
+  },
 };
 
 export type ctxType = {
   projectDir: string,
   cmd: string,
   pkg?: pkgType,
+  useNpm?: boolean,
 };
 
 const debugLog = debug('create-project:store');

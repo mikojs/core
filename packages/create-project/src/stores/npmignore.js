@@ -5,7 +5,10 @@ import memoizeOne from 'memoize-one';
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
+import readme from './readme';
 import Store from './index';
+
+import type { ctxType } from './index';
 
 import normalizedQuestions from 'utils/normalizedQuestions';
 
@@ -46,6 +49,8 @@ const NPMIGNORE_QUESTIONS = [
 
 /** npmignore store */
 class Npmignore extends Store {
+  subStores = [readme];
+
   storeUseNpm = false;
 
   /**
@@ -54,17 +59,21 @@ class Npmignore extends Store {
    */
   checkNpm = memoizeOne(async (): Promise<void> => {
     this.storeUseNpm = (await inquirer.prompt(
-      normalizedQuestions<string>(...NPMIGNORE_QUESTIONS),
+      normalizedQuestions<boolean>(...NPMIGNORE_QUESTIONS),
     )).useNpm;
     debugLog(this.storeUseNpm);
   }, emptyFunction.thatReturnsTrue);
 
   /**
    * @example
-   * npmignore.store()
+   * npmignore.store(ctx)
+   *
+   * @param {Object} ctx - store context
    */
-  start = async (): Promise<void> => {
+  start = async (ctx: ctxType): Promise<void> => {
     await this.checkNpm();
+
+    ctx.useNpm = this.storeUseNpm;
   };
 
   /**

@@ -2,7 +2,7 @@
 
 import Store from './index';
 
-export const template = `# default
+const template = `# default
 *.swp
 *.log
 .DS_Store

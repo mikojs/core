@@ -11,6 +11,7 @@ import { emptyFunction } from 'fbjs';
 import { mockChoice } from '@cat-org/utils';
 
 import license from './license';
+import readme from './readme';
 import Store from './index';
 
 import type { ctxType, pkgType } from './index';
@@ -56,7 +57,7 @@ export const PKG_QUESTIONS = [
 
 /** store pkg */
 class Pkg extends Store {
-  subStores = [license];
+  subStores = [license, readme];
 
   storePkg: pkgType = {
     license: 'MIT',
@@ -67,6 +68,7 @@ class Pkg extends Store {
         'pre-commit': 'configs lint-staged && yarn flow',
       },
     },
+    scripts: {},
   };
 
   /**
@@ -103,6 +105,14 @@ class Pkg extends Store {
     debugLog(this.storePkg);
   }, emptyFunction.thatReturnsTrue);
 
+  addScripts = memoizeOne(() => {
+    this.storePkg.scripts = {
+      dev: 'configs babel -w',
+      prod: 'NODE_ENV=production configs babel',
+      test: 'configs test',
+    };
+  }, emptyFunction.thatReturnsTrue);
+
   /**
    * @example
    * pkg.start(ctx)
@@ -113,6 +123,8 @@ class Pkg extends Store {
     const { projectDir } = ctx;
 
     await this.defaultInfo(projectDir);
+    this.addScripts();
+
     ctx.pkg = this.storePkg;
   };
 

@@ -34,7 +34,9 @@ yarn install
 
 ## Usage
 
-TODO
+- \`dev\`: Run development.
+- \`prod\`: Run production.
+- \`test\`: Run testing.
 `;
 
 /**

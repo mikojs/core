@@ -4,16 +4,14 @@
 import path from 'path';
 
 import chalk from 'chalk';
-import debug from 'debug';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
+
+import runStores from './runStores';
 
 import logger from 'utils/logger';
 import cliOptions from 'utils/cliOptions';
 import validateProject from 'utils/validateProject';
-import base from 'stores/base';
-
-import type StoreType from 'stores';
 
 handleUnhandledRejection();
 
@@ -30,19 +28,7 @@ handleUnhandledRejection();
     )}}`,
   );
 
-  const storeNames = [];
-  const stores = (await base.run(ctx)).filter(
-    ({ constructor: { name } }: StoreType): boolean => {
-      if (storeNames.includes(name)) return false;
-
-      storeNames.push(name);
-      return true;
-    },
-  );
-
-  debug('create-project:bin')(stores);
-  for (const store of stores) await store.end(ctx);
-  await base.end(ctx);
+  await runStores(ctx);
 
   logger.succeed('Done');
 })();

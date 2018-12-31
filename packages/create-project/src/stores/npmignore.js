@@ -59,7 +59,7 @@ class Npmignore extends Store {
    */
   checkNpm = memoizeOne(async (): Promise<void> => {
     this.storeUseNpm = (await inquirer.prompt(
-      normalizedQuestions<string>(...NPMIGNORE_QUESTIONS),
+      normalizedQuestions<boolean>(...NPMIGNORE_QUESTIONS),
     )).useNpm;
     debugLog(this.storeUseNpm);
   }, emptyFunction.thatReturnsTrue);

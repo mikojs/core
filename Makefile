@@ -10,8 +10,8 @@ flow-typed-install:
 	@yarn lerna exec \
 		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
 		--stream \
-		--scope @cat-org/lerna-flow-typed-install \
-		--include-filtered-dependencies
+		--include-filtered-dependencies \
+		--scope @cat-org/lerna-flow-typed-install
 	@ln -snf $(ROOT)/packages/lerna-flow-typed-install/lib/bin/index.js ./node_modules/.bin/lerna-flow-typed-install
 	@yarn flow-typed install --verbose
 	@yarn lerna exec "lerna-flow-typed-install --verbose" \
@@ -24,9 +24,8 @@ babel-core:
 		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
 		--parallel \
 		--stream \
-		--scope @cat-org/utils \
+		--include-filtered-dependencies \
 		--scope @cat-org/configs \
-		--scope @cat-org/logger \
 		--scope @cat-org/babel-*
 	@ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
 

@@ -7,7 +7,7 @@ import { d3DirTree } from '@cat-org/utils';
 import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 describe('check files in packages', () => {
-  d3DirTree(path.resolve(__dirname, '../packages'), {
+  d3DirTree(path.resolve(__dirname, '../../packages'), {
     exclude: [/node_modules/, ...(process.env.TEST_PRODUCTION ? [] : [/lib/])],
   }).children.forEach(
     ({ data: { name, path: filePath }, children }: d3DirTreeNodeType) => {

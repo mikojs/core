@@ -5,10 +5,10 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/logger",
   "repository": "https://github.com/cat-org/core/tree/master/packages/logger",
-  "version": "1.0.0-beta.11",
+  "version": "1.0.0-beta.12",
   "main": "./lib/index.js",
   "dependencies": {
-    "@cat-org/utils": "^1.0.0-beta.11",
+    "@cat-org/utils": "^1.0.0-beta.12",
     "chalk": "^2.4.1",
     "fbjs": "^1.0.0",
     "ora": "^3.0.0"

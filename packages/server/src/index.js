@@ -11,6 +11,8 @@ import bodyparser from 'koa-bodyparser';
 import compress from 'koa-compress';
 import Router from 'koa-router';
 
+import type { ServerType as KoaServerType } from 'koa';
+
 const DEV = process.env.NODE_ENV !== 'production';
 
 /** Server */
@@ -26,13 +28,13 @@ export default class Server {
    * @param {Object} configs - server configs
    */
   constructor(
-    configs: ?{
+    configs?: {
       [string]: boolean | mixed,
-    },
+    } = {},
   ) {
     ['morgan', 'helmet', 'etag', 'bodyparser', 'compress'].forEach(
       (configName: string) => {
-        const config = (configs || {})[configName];
+        const config = configs[configName];
 
         if (config === false) return;
 
@@ -78,7 +80,14 @@ export default class Server {
    *
    * @return {Object} - koa-router
    */
-  router = (options: ?{}): Router => {
+  router = (options?: {
+    prefix?: string,
+    sensitive?: boolean,
+    strict?: boolean,
+    // koa-router flow-typed options
+    // eslint-disable-next-line flowtype/no-mutable-array
+    methods?: Array<string>,
+  }): Router => {
     const router = new Router(options);
 
     this.routers.push(router);
@@ -93,7 +102,7 @@ export default class Server {
    *
    * @return {Object} - koa server
    */
-  run = (port: number = 8000): Koa => {
+  run = (port: number = 8000): KoaServerType => {
     this.routers.forEach((router: Router) => {
       this.app.use(router.routes());
       this.app.use(router.allowedMethods());

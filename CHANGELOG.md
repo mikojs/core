@@ -1,5 +1,36 @@
 # CHANGELOG
 
+## 1.0.0-beta.12 (2019-01-02)
+
+#### :rocket: New Feature
+
+- `create-project`
+  - [#109](https://github.com/cat-org/core/pull/109) Add stores to @cat-org/create-project ([@HsuTing](https://github.com/HsuTing))
+- `lerna-create`, `lerna-flow-typed-install`
+  - [#107](https://github.com/cat-org/core/pull/107) Add @cat-org/lerna-flow-typed-install ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`
+  - [#100](https://github.com/cat-org/core/pull/100) Add license to @cat-org/create-project, add @cat-org/badges ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `jest`
+  - [#99](https://github.com/cat-org/core/pull/99) add @cat-org/jest ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `lerna-create`
+  - [#101](https://github.com/cat-org/core/pull/101) Fix multiple workspaces error ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `utils`
+  - [#108](https://github.com/cat-org/core/pull/108) Minify utils ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `logger`, `utils`
+  - [#105](https://github.com/cat-org/core/pull/105) Write readme and remove slash after link ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `logger`, `utils`
+  - [#103](https://github.com/cat-org/core/pull/103) Rename cat-core to core ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.11 (2018-12-15)
 
 #### :boom: Breaking Change

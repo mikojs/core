@@ -1,0 +1,14 @@
+{
+  "name": "@cat-org/server",
+  "description": "Server for cat-org",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/core/server",
+  "repository": "https://github.com/cat-org/core/tree/master/packages/server",
+  "version": "1.0.0-beta.12",
+  "main": "./lib/index.js",
+  "keywords": ["cat-org", "server"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -11,7 +11,7 @@ describe.each`
   ${'info'}    | ${'ℹ'} | ${'blue'}
   ${'aaa'}     | ${' '} | ${'gray'}
 `(
-  'logger',
+  'use default print',
   ({
     name,
     prefix,
@@ -38,16 +38,8 @@ describe.each`
   },
 );
 
-test('default settings work', () => {
-  const logs = logger('test');
-
-  Object.keys(logs).forEach((key: string) => {
-    if (key === 'fail')
-      expect(() => {
-        logs[key]('message');
-      }).toThrow('process exit');
-    else logs[key]('message');
-  });
+test('not find settings', () => {
+  expect(Object.keys(logger('test', 'not find settings')).length).toBe(0);
 });
 
 test('show json message', () => {

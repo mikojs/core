@@ -49,7 +49,7 @@ const findSettings = (settingsName: string): ?settingsType => {
 
 export default (
   name: string,
-  settingsName?: string = 'log',
+  settingsNameOrObj?: string | settingsType = 'log',
 ):
   | {
       init: (...args: $ReadOnlyArray<mixed>) => logsType,
@@ -57,7 +57,15 @@ export default (
     }
   | logsType => {
   const { init, ...logSettings }: settingsType =
-    findSettings(settingsName) || {};
+    settingsNameOrObj instanceof Object
+      ? settingsNameOrObj
+      : /**
+         * https://github.com/facebook/flow/issues/2282
+         * instanceof not work
+         *
+         * $FlowFixMe
+         */
+        findSettings(settingsNameOrObj) || {};
   const logs = Object.keys(logSettings).reduce(
     (result: logsType, key: string) => ({
       ...result,

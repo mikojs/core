@@ -20,6 +20,7 @@
     "fbjs": "^1.0.0",
     "inquirer": "^6.2.1",
     "memoize-one": "^5.0.0",
+    "ora": "^3.0.0",
     "output-file-sync": "^2.0.1",
     "validator": "^10.10.0"
   },

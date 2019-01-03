@@ -1,5 +1,7 @@
 // @flow
 
+import { mockChoice } from '@cat-org/utils';
+
 import type { settingsType } from '../logger';
 
 const { log, error, warn, info } = console;
@@ -13,6 +15,17 @@ export default ({
   },
   fail: {
     print: error,
+    after: () => {
+      error();
+      mockChoice(
+        process.env.NODE_ENV === 'test',
+        () => {
+          throw new Error('process exit');
+        },
+        process.exit,
+        1,
+      );
+    },
   },
   warn: {
     print: warn,

@@ -1,5 +1,5 @@
 // @flow
 
-import logger, { findSettings } from '@cat-org/logger';
+import logger from '@cat-org/logger';
 
-export default logger('@cat-org/create-project', findSettings('ora')).init();
+export default logger('@cat-org/create-project', 'ora').init();

@@ -4,6 +4,8 @@ import ora from 'ora';
 import chalk from 'chalk';
 import { invariant } from 'fbjs';
 
+import { mockChoice } from '@cat-org/utils';
+
 import type { settingsType } from '../logger';
 
 type oraType = {
@@ -18,6 +20,7 @@ const GET_NAME = {
   warn: (name: string): string => chalk`{yellow {bold ${name}}}`,
   info: (name: string): string => chalk`{blue {bold ${name}}}`,
 };
+const { error } = console;
 
 /** ora store */
 class OraStore {
@@ -60,7 +63,20 @@ class OraStore {
 
           this.store = this.store[key](message);
         },
-        after: this.after,
+        after:
+          key !== 'fail'
+            ? this.after
+            : () => {
+                error();
+                mockChoice(
+                  process.env.NODE_ENV === 'test',
+                  () => {
+                    throw new Error('process exit');
+                  },
+                  process.exit,
+                  1,
+                );
+              },
       };
     });
 

@@ -4,6 +4,5 @@
  */
 /* eslint-disable flowtype/require-valid-file-annotation */
 
-export findSettings from './findSettings';
 export prodLogger from './prodLogger';
 export default from './logger';

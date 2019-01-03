@@ -8,7 +8,11 @@ import node from './node';
 import browser from './browser';
 
 export default mockChoice(
-  ExecutionEnvironment.canUseEventListeners,
+  mockChoice(
+    process.env.NODE_ENV === 'test',
+    emptyFunction.thatReturnsFalse,
+    emptyFunction.thatReturns(ExecutionEnvironment.canUseEventListeners),
+  ),
   emptyFunction.thatReturns(browser),
   emptyFunction.thatReturns(node),
 );

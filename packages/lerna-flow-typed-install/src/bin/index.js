@@ -9,20 +9,14 @@ import debug from 'debug';
 import execa from 'execa';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
-import catLogger, { findSettings } from '@cat-org/logger';
+import catLogger from '@cat-org/logger';
 
 const debugLog = debug('lerna-flow-typed-install:bin');
-const logSettings = findSettings('log');
-const { error } = console;
 
 handleUnhandledRejection();
-logSettings.fail.after = () => {
-  error();
-  process.exit(1);
-};
 
 (async (): Promise<void> => {
-  const logger = catLogger('@cat-org/lerna-flow-typed-install', logSettings);
+  const logger = catLogger('@cat-org/lerna-flow-typed-install');
 
   try {
     const {

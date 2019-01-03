@@ -4,8 +4,6 @@ import { emptyFunction } from 'fbjs';
 
 import chalk from './chalkPolyfill';
 
-import defaultLogSettings from './settings/log';
-
 type messageType = string | {};
 type logType = (...messages: $ReadOnlyArray<messageType>) => logsType;
 
@@ -30,15 +28,36 @@ const GET_NAME = {
   info: (name: string) => chalk`{blue ℹ {bold ${name}}}`,
 };
 
+/**
+ * @example
+ * findSettings('log')
+ *
+ * @param {string} settingsName - name of settings
+ *
+ * @return {Object} - settings
+ */
+const findSettings = (settingsName: string): ?settingsType => {
+  switch (settingsName) {
+    case 'log':
+      return require('./settings/log').default || require('./settings/log');
+    case 'ora':
+      return require('./settings/ora').default || require('./settings/ora');
+    default:
+      return null;
+  }
+};
+
 export default (
   name: string,
-  { init, ...logSettings }: settingsType = defaultLogSettings,
+  settingsName?: string = 'log',
 ):
   | {
       init: (...args: $ReadOnlyArray<mixed>) => logsType,
       log: (...messages: $ReadOnlyArray<messageType>) => logsType,
     }
   | logsType => {
+  const { init, ...logSettings }: settingsType =
+    findSettings(settingsName) || {};
   const logs = Object.keys(logSettings).reduce(
     (result: logsType, key: string) => ({
       ...result,

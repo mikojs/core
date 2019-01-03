@@ -8,5 +8,8 @@
 import browser from '../browser';
 
 test('browser chalk', () => {
-  browser.log.print('message');
+  Object.keys(browser).forEach((key: string) => {
+    browser[key].print('message');
+    browser[key].print('{cyan {bold message}}');
+  });
 });

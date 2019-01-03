@@ -42,7 +42,11 @@ test('default settings work', () => {
   const logs = logger('test');
 
   Object.keys(logs).forEach((key: string) => {
-    logs[key]('message');
+    if (key === 'fail')
+      expect(() => {
+        logs[key]('message');
+      }).toThrow('process exit');
+    else logs[key]('message');
   });
 });
 

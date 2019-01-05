@@ -75,10 +75,16 @@ const babel = config => {
     ],
   );
 
-  config.overrides.push({
-    test: './packages/configs',
-    plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
-  });
+  config.overrides.push(
+    {
+      test: './packages/configs',
+      plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
+    },
+    {
+      test: './packages/server',
+      plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
+    },
+  );
 
   if (process.env.NODE_ENV !== 'test' && !process.env.USE_DEFAULT_BABEL)
     config.plugins

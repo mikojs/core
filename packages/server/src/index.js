@@ -1,113 +1,95 @@
 // @flow
 
-import fs from 'fs';
-import path from 'path';
-
 import Koa from 'koa';
-import morgan from 'koa-morgan';
-import helmet from 'koa-helmet';
-import etag from 'koa-etag';
-import bodyparser from 'koa-bodyparser';
-import compress from 'koa-compress';
 import Router from 'koa-router';
+import chalk from 'chalk';
 
-import type { ServerType as KoaServerType } from 'koa';
+import type { Middleware as koaMiddlewareType } from 'koa';
 
-const DEV = process.env.NODE_ENV !== 'production';
+import { handleUnhandledRejection } from '@cat-org/utils';
 
-/** Server */
-export default class Server {
-  app = new Koa();
+import logger from './utils/logger';
 
-  routers = [];
+import Endpoint from './Endpoint';
 
-  /**
-   * @example
-   * new Server()
-   *
-   * @param {Object} configs - server configs
-   */
-  constructor(
-    configs?: {
-      [string]: boolean | mixed,
-    } = {},
-  ) {
-    ['morgan', 'helmet', 'etag', 'bodyparser', 'compress'].forEach(
-      (configName: string) => {
-        const config = configs[configName];
+handleUnhandledRejection();
 
-        if (config === false) return;
+export default {
+  init: () => new Koa(),
+  all: (prefix: ?string) => (prefix ? new Router({ prefix }) : new Router()),
+  get: (prefix: string) => new Endpoint(prefix, 'get'),
+  post: (prefix: string) => new Endpoint(prefix, 'post'),
+  put: (prefix: string) => new Endpoint(prefix, 'put'),
+  del: (prefix: string) => new Endpoint(prefix, 'del'),
 
-        if (configName === 'morgan') {
-          this.app.use(
-            morgan(
-              ...(config ||
-                (DEV
-                  ? ['dev']
-                  : [
-                      'combined',
-                      {
-                        stream: fs.createWriteStream(
-                          path.resolve('server.log'),
-                          {
-                            flags: 'a',
-                          },
-                        ),
-                      },
-                    ])),
-            ),
+  use: (middleware: koaMiddlewareType) => (
+    router: Router | Endpoint | Koa,
+  ): Router | Endpoint | Koa => {
+    router.use(middleware);
+
+    return router;
+  },
+
+  end: (
+    router: Router | Endpoint,
+  ): ((parentRouter: Router | Endpoint) => Router | Endpoint) => {
+    if (router instanceof Endpoint)
+      return (parentRouter: Router | Endpoint): Router | Endpoint => {
+        /**
+         * https://github.com/facebook/flow/issues/2282
+         * instanceof not work
+         *
+         * $FlowFixMe
+         */
+        const { urlPattern, method, middlewares } = router;
+
+        if (!(parentRouter instanceof Router))
+          throw new TypeError(
+            `\`server.${method}\` is not under \`server.all\``,
           );
-          return;
+
+        switch (method) {
+          case 'get':
+            parentRouter.get(urlPattern, ...middlewares);
+            break;
+
+          case 'post':
+            parentRouter.post(urlPattern, ...middlewares);
+            break;
+
+          case 'put':
+            parentRouter.put(urlPattern, ...middlewares);
+            break;
+
+          case 'del':
+            parentRouter.del(urlPattern, ...middlewares);
+            break;
+
+          default:
+            break;
         }
 
-        this.app.use(
-          {
-            helmet,
-            etag,
-            bodyparser,
-            compress,
-          }[configName](config),
-        );
-      },
-    );
-  }
+        return parentRouter;
+      };
 
-  /**
-   * @example
-   * server.router()
-   *
-   * @param {Object} options - koa-router options
-   *
-   * @return {Object} - koa-router
-   */
-  router = (options?: {
-    prefix?: string,
-    sensitive?: boolean,
-    strict?: boolean,
-    // koa-router flow-typed options
-    // eslint-disable-next-line flowtype/no-mutable-array
-    methods?: Array<string>,
-  }): Router => {
-    const router = new Router(options);
+    return (parentRouter: Router | Endpoint): Router | Endpoint => {
+      /**
+       * https://github.com/facebook/flow/issues/2282
+       * instanceof not work
+       *
+       * $FlowFixMe
+       */
+      parentRouter.use(router.routes());
+      // $FlowFixMe
+      parentRouter.use(router.allowedMethods());
 
-    this.routers.push(router);
-    return router;
-  };
+      return parentRouter;
+    };
+  },
 
-  /**
-   * @example
-   * server.run(80)
-   *
-   * @param {number} port - server port
-   *
-   * @return {Object} - koa server
-   */
-  run = (port: number = 8000): KoaServerType => {
-    this.routers.forEach((router: Router) => {
-      this.app.use(router.routes());
-      this.app.use(router.allowedMethods());
+  run: (port?: number = 8000) => (app: Koa) => {
+    app.listen(port, () => {
+      logger.info(chalk`Running server at port: {gray {bold ${port}}}`);
     });
-
-    return this.app.listen(port);
-  };
-}
+  },
+};

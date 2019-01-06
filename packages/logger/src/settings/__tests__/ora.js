@@ -1,6 +1,6 @@
 // @flow
 
-import logger from '../../logger';
+import logger from '../..';
 
 const logs = logger('ora', 'ora').init('init');
 

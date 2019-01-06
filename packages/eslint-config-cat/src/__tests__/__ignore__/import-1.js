@@ -1,16 +1,16 @@
 // @flow
 
 // $expectError import/order
-import order from '../../index';
+import order from '../..';
 
 import fbjs from 'fbjs';
 
 // $expectError import/no-extraneous-dependencies
-import babel from '@babel/core/lib/index';
+import babel from '@babel/core/lib';
 
 // $expectError import/no-unresolved
 // $expectError import/no-useless-path-segments
-import noUnresolver from './../index';
+import noUnresolver from './../test';
 
 // $expectError import/no-absolute-path
 // $expectError import/no-unresolved

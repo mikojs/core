@@ -5,12 +5,12 @@ import path from 'path';
 
 import { declare } from '@babel/helper-plugin-utils';
 
-import utils from './utils';
-import flowFiles from './flowFiles';
-import writeFiles from './writeFiles';
+import handler from './utils/handler';
+import flowFiles from './utils/flowFiles';
+import writeFiles from './utils/writeFiles';
 
-import type { optionsType } from './utils';
-import type { flowFileType } from './flowFiles';
+import type { optionsType } from './utils/handler';
+import type { flowFileType } from './utils/flowFiles';
 
 export default declare(
   (
@@ -18,10 +18,10 @@ export default declare(
     options: optionsType,
   ): {} => {
     api.assertVersion(7);
-    utils.initializeOptions(options);
+    handler.initializeOptions(options);
 
     return {
-      manipulateOptions: utils.manipulateOptions,
+      manipulateOptions: handler.manipulateOptions,
       visitor: {
         ImportDeclaration: (
           {
@@ -44,7 +44,7 @@ export default declare(
           if (!/\.js\.flow$/.test(value)) return;
 
           const filePath = path.resolve(filename, '..', value);
-          const { srcPath, destPath } = utils.getFilePaths(filePath, cwd);
+          const { srcPath, destPath } = handler.getFilePaths(filePath, cwd);
 
           if (flowFiles.fileExist(srcPath)) return;
 
@@ -65,8 +65,8 @@ export default declare(
           parserOpts: {},
         },
       }) => {
-        const { plugins } = utils.options;
-        const { srcPath, destPath } = utils.getFilePaths(filename, cwd);
+        const { plugins } = handler.options;
+        const { srcPath, destPath } = handler.getFilePaths(filename, cwd);
         const babelConfig = {
           plugins,
           parserOpts,

@@ -3,18 +3,18 @@
 import { options } from '@babel/cli/lib/babel/options';
 import { outputFileSync } from 'output-file-sync';
 
-import utils from '../../utils';
-import flowFiles from '../../flowFiles';
+import handler from 'utils/handler';
+import flowFiles from 'utils/flowFiles';
 
 export default (newOptions?: null | {} = null) => {
-  // reset utils
-  utils.initialized = false;
-  utils.initialOptions = {
+  // reset handler
+  handler.initialized = false;
+  handler.initialOptions = {
     verbose: false,
     watch: false,
   };
-  utils.options = {
-    ...utils.initialOptions,
+  handler.options = {
+    ...handler.initialOptions,
     src: ['src'],
     outDir: 'lib',
     plugins: [],
@@ -26,7 +26,7 @@ export default (newOptions?: null | {} = null) => {
 
   // reinitialize options
   options.cliOptions = newOptions;
-  utils.initializeOptions({ watch: false });
+  handler.initializeOptions({ watch: false });
 
   // reset outputFileSync
   outputFileSync.destPaths = [];

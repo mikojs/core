@@ -2,9 +2,9 @@
 
 import chokidar from 'chokidar';
 
-import { name as pkgName } from '../package.json';
+import { name as pkgName } from '../../package.json';
 
-import utils from './utils';
+import handler from './handler';
 import writeFiles from './writeFiles';
 
 export type flowFileType = {
@@ -34,7 +34,7 @@ class FlowFiles {
   add = (file: flowFileType) => {
     this.store.push(file);
 
-    if (utils.options.watch) this.openWatcher();
+    if (handler.options.watch) this.openWatcher();
   };
 
   /**

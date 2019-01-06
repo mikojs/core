@@ -2,11 +2,6 @@
 
 import { outputFileSync } from 'output-file-sync';
 
-import flowFiles from '../flowFiles';
-import writeFiles from '../writeFiles';
-
-import type { writeFileType } from '../writeFiles';
-
 import reset from './__ignore__/reset';
 import babel from './__ignore__/babel';
 import {
@@ -15,6 +10,11 @@ import {
   indexFiles,
   hasFlowFileFiles,
 } from './__ignore__/constants';
+
+import flowFiles from 'utils/flowFiles';
+import writeFiles from 'utils/writeFiles';
+
+import type { writeFileType } from 'utils/writeFiles';
 
 test('transform file', () => {
   reset(transformFileOptions);

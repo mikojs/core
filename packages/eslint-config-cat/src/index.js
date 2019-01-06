@@ -1,9 +1,9 @@
 // @flow
 
-import importConfig from './import';
-import flowtypeConfig from './flowtype';
-import jsdocConfig from './jsdoc';
-import extendsConfig from './extendsConfigs';
+import importConfig from './configs/import';
+import flowtypeConfig from './configs/flowtype';
+import jsdocConfig from './configs/jsdoc';
+import extendsConfig from './configs/extendsConfigs';
 
 type configType = {
   extends?: $ReadOnlyArray<string>,

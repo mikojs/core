@@ -3,9 +3,9 @@
 import { transformFileSync } from '@babel/core';
 import outputFileSync from 'output-file-sync';
 
-import { name as pkgName } from '../package.json';
+import { name as pkgName } from '../../package.json';
 
-import utils from './utils';
+import handler from './handler';
 
 export type writeFileType = {
   srcPath: string,
@@ -41,7 +41,7 @@ class WriteFiles {
   writeFiles = () => {
     this.isWritting = true;
 
-    const { verbose, watch } = utils.options;
+    const { verbose, watch } = handler.options;
     const { srcPath, destPath, babelConfig } = this.store.pop();
     const { log } = console;
 

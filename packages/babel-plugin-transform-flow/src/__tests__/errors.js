@@ -7,13 +7,13 @@ import chokidar from 'chokidar';
 
 import { name as pkgName } from '../../package.json';
 
-import flowFiles from '../flowFiles';
-
-import type { flowFileType } from '../flowFiles';
-
 import reset from './__ignore__/reset';
 import babel from './__ignore__/babel';
 import { transformFileOptions } from './__ignore__/constants';
+
+import flowFiles from 'utils/flowFiles';
+
+import type { flowFileType } from 'utils/flowFiles';
 
 test('parse error', () => {
   expect(() => {

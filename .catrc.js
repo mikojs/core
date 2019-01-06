@@ -47,7 +47,6 @@ const babel = config => {
   );
 
   config.plugins.push(
-    '@babel/proposal-export-default-from',
     '@babel/proposal-class-properties',
     [
       '@babel/transform-runtime',
@@ -85,7 +84,6 @@ const babel = config => {
       .find(plugin => plugin[0] === '@cat-org/transform-flow')[1]
       .plugins.push(
         // FIXME: remove after flow support
-        '@babel/proposal-export-default-from',
         ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
       );
 

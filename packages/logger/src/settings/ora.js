@@ -6,7 +6,7 @@ import { invariant } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
 
-import type { settingsType } from '../logger';
+import type { settingsType } from '..';
 
 type oraType = {
   notInit: boolean,

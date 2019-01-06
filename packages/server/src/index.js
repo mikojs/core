@@ -9,8 +9,7 @@ import type { Middleware as koaMiddlewareType } from 'koa';
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import logger from './utils/logger';
-
-import Endpoint from './Endpoint';
+import Endpoint from './utils/Endpoint';
 
 handleUnhandledRejection();
 

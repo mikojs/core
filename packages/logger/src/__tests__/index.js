@@ -1,6 +1,11 @@
 // @flow
 
-import logger from '..';
+/**
+ * FIXME:
+ * Owing to jest coverage, can not remove index
+ * Remove it after upgrading jest
+ */
+import logger from '../index';
 
 describe.each`
   name         | prefix | color

@@ -10,7 +10,7 @@ import babel from '@babel/core/lib';
 
 // $expectError import/no-unresolved
 // $expectError import/no-useless-path-segments
-import noUnresolver from './../index';
+import noUnresolver from './../test';
 
 // $expectError import/no-absolute-path
 // $expectError import/no-unresolved

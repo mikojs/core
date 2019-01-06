@@ -10,7 +10,12 @@ import { d3DirTree } from '@cat-org/utils';
 
 import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-import configs from '..';
+/**
+ * FIXME:
+ * Owing to jest coverage, can not remove index
+ * Remove it after upgrading jest
+ */
+import configs from '../index';
 
 type eslintInfoType = {
   line: number,

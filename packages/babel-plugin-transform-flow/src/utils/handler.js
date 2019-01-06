@@ -4,7 +4,7 @@ import path from 'path';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 
-import { name as pkgName } from '../package.json';
+import { name as pkgName } from '../../package.json';
 
 export type initialOptionsType = {|
   src?: $ReadOnlyArray<string>,
@@ -30,9 +30,9 @@ export type manipulateOptionsPluginsType = {
 
 /**
  * @example
- * new Utils()
+ * new Handler()
  */
-class Utils {
+class Handler {
   initialized: boolean = false;
 
   initialOptions: initialOptionsType = {
@@ -48,7 +48,7 @@ class Utils {
 
   /**
    * @example
-   * utils.initializeOptions()
+   * handler.initializeOptions()
    *
    * @param {Object} options - options of babel-plugin-transform-flow
    */
@@ -90,7 +90,7 @@ class Utils {
 
   /**
    * @example
-   * utils.manipulateOptions({});
+   * handler.manipulateOptions({});
    *
    * @param {Object} opts - opts of manipulateOptions
    */
@@ -121,7 +121,7 @@ class Utils {
 
   /**
    * @example
-   * utils.getFilePaths('src', '/path');
+   * handler.getFilePaths('src', '/path');
    *
    * @param {string} filePath - the path of the file
    * @param {string} cwd - the path of cwd
@@ -151,4 +151,4 @@ class Utils {
   };
 }
 
-export default new Utils();
+export default new Handler();

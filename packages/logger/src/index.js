@@ -2,7 +2,7 @@
 
 import { emptyFunction } from 'fbjs';
 
-import chalk from './chalkPolyfill';
+import chalk from './utils/chalkPolyfill';
 
 type messageType = string | {};
 type logType = (...messages: $ReadOnlyArray<messageType>) => logsType;

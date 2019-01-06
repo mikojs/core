@@ -1,10 +1,10 @@
 // @flow
 
-import babel from 'configs/babel';
-import prettier from 'configs/prettier';
-import lint from 'configs/lint';
-import lintsteged from 'configs/lintsteged';
-import jest from 'configs/jest';
+import babel from './babel';
+import prettier from './prettier';
+import lint from './lint';
+import lintsteged from './lintsteged';
+import jest from './jest';
 
 type configType = {
   alias?: string,

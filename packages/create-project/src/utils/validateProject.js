@@ -6,7 +6,7 @@ import chalk from 'chalk';
 import execa from 'execa';
 import debug from 'debug';
 
-import logger from 'utils/logger';
+import logger from './logger';
 
 const debugLog = debug('create-project:validateProject');
 

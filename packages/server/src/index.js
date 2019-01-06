@@ -3,6 +3,7 @@
 import Koa from 'koa';
 import Router from 'koa-router';
 import chalk from 'chalk';
+import debug from 'debug';
 
 import type { Middleware as koaMiddlewareType } from 'koa';
 
@@ -10,16 +11,28 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 
 import logger from './utils/logger';
 import Endpoint from './utils/Endpoint';
+import customMiddlewares from './middlewares';
+
+const debugLog = debug('server');
 
 handleUnhandledRejection();
 
 export default {
   init: () => new Koa(),
-  all: (prefix: ?string) => (prefix ? new Router({ prefix }) : new Router()),
+  all: (prefix: ?string): Router => {
+    debugLog({
+      method: 'all',
+      prefix,
+    });
+
+    return prefix ? new Router({ prefix }) : new Router();
+  },
   get: (prefix: string) => new Endpoint(prefix, 'get'),
   post: (prefix: string) => new Endpoint(prefix, 'post'),
   put: (prefix: string) => new Endpoint(prefix, 'put'),
   del: (prefix: string) => new Endpoint(prefix, 'del'),
+
+  middleware: customMiddlewares,
 
   use: (middleware: koaMiddlewareType) => (
     router: Router | Endpoint | Koa,
@@ -40,7 +53,21 @@ export default {
          *
          * $FlowFixMe
          */
-        const { urlPattern, method, middlewares } = router;
+        const {
+          // $FlowFixMe
+          urlPattern,
+          // $FlowFixMe
+          method,
+          // $FlowFixMe
+          middlewares,
+        } =
+          // $FlowFixMe
+          router;
+
+        debugLog({
+          method,
+          urlPattern,
+        });
 
         if (!(parentRouter instanceof Router))
           throw new TypeError(
@@ -75,18 +102,22 @@ export default {
       /**
        * https://github.com/facebook/flow/issues/2282
        * instanceof not work
-       *
-       * $FlowFixMe
        */
-      parentRouter.use(router.routes());
-      // $FlowFixMe
-      parentRouter.use(router.allowedMethods());
+      parentRouter.use(
+        // $FlowFixMe
+        router.routes(),
+      );
+      parentRouter.use(
+        // $FlowFixMe
+        router.allowedMethods(),
+      );
 
       return parentRouter;
     };
   },
 
   run: (port?: number = 8000) => (app: Koa) => {
+    debugLog(port);
     app.listen(port, () => {
       logger.info(chalk`Running server at port: {gray {bold ${port}}}`);
     });

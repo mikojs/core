@@ -2,7 +2,7 @@
 
 import { execa } from 'execa';
 
-import Store from '../index';
+import Store from '..';
 
 import ctx from './__ignore__/ctx';
 

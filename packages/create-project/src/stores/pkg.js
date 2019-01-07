@@ -12,9 +12,7 @@ import { mockChoice } from '@cat-org/utils';
 
 import license from './license';
 import readme from './readme';
-import Store from './index';
-
-import type { ctxType, pkgType } from './index';
+import Store, { type ctxType, type pkgType } from './index';
 
 import getEngines from 'utils/getEngines';
 import getUser from 'utils/getUser';

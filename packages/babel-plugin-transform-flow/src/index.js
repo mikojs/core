@@ -5,12 +5,9 @@ import path from 'path';
 
 import { declare } from '@babel/helper-plugin-utils';
 
-import handler from './utils/handler';
-import flowFiles from './utils/flowFiles';
+import handler, { type optionsType } from './utils/handler';
+import flowFiles, { type flowFileType } from './utils/flowFiles';
 import writeFiles from './utils/writeFiles';
-
-import type { optionsType } from './utils/handler';
-import type { flowFileType } from './utils/flowFiles';
 
 export default declare(
   (

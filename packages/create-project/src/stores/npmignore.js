@@ -6,9 +6,7 @@ import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
 import readme from './readme';
-import Store from './index';
-
-import type { ctxType } from './index';
+import Store, { type ctxType } from './index';
 
 import normalizedQuestions from 'utils/normalizedQuestions';
 

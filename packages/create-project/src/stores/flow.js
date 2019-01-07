@@ -1,8 +1,6 @@
 // @flow
 
-import Store from './index';
-
-import type { ctxType } from './index';
+import Store, { type ctxType } from './index';
 
 const template = `[ignore]
 # just for findup

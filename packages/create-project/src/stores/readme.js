@@ -1,8 +1,6 @@
 // @flow
 
-import Store from './index';
-
-import type { ctxType, pkgType } from './index';
+import Store, { type ctxType, type pkgType } from './index';
 
 /**
  * @example

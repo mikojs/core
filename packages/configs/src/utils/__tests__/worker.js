@@ -1,15 +1,12 @@
 // @flow
 
 import path from 'path';
-
 import type net from 'net';
 
 import getPort from 'get-port';
 import moment from 'moment';
 
-import { Worker } from '../worker';
-
-import type { cacheType } from '../worker';
+import { Worker, type cacheType } from '../worker';
 
 const cache = {
   filePath: path.resolve('jest.config.js'),

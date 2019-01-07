@@ -12,9 +12,7 @@ import {
 } from './__ignore__/constants';
 
 import flowFiles from 'utils/flowFiles';
-import writeFiles from 'utils/writeFiles';
-
-import type { writeFileType } from 'utils/writeFiles';
+import writeFiles, { type writeFileType } from 'utils/writeFiles';
 
 test('transform file', () => {
   reset(transformFileOptions);

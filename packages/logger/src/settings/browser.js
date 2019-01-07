@@ -5,7 +5,7 @@
  * @flow
  */
 
-import type { settingsType } from '..';
+import { type settingsType } from '..';
 
 const { log, error, warn, info } = console;
 

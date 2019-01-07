@@ -5,7 +5,10 @@ import Router from 'koa-router';
 import chalk from 'chalk';
 import debug from 'debug';
 
-import type { Middleware as koaMiddlewareType } from 'koa';
+import type {
+  Middleware as koaMiddlewareType,
+  ServerType as koaServerType,
+} from 'koa';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -116,9 +119,10 @@ export default {
     };
   },
 
-  run: (port?: number = 8000) => (app: Koa) => {
+  run: (port?: number = 8000) => (app: Koa): koaServerType => {
     debugLog(port);
-    app.listen(port, () => {
+
+    return app.listen(port, () => {
       logger.info(chalk`Running server at port: {gray {bold ${port}}}`);
     });
   },

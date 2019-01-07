@@ -10,6 +10,7 @@ class Fs {
     existsSync: () => this.exist,
     mkdirSync: emptyFunction,
     rmdirSync: emptyFunction,
+    createWriteStream: emptyFunction.thatReturnsArgument,
   };
 }
 

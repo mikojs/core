@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
@@ -31,6 +32,10 @@ handleUnhandledRejection();
         chalk`Can not find {red flow version} in the project`,
         chalk`Install {red flow} before using {green lerna-flow-typed-install}`,
       );
+
+    const nodeModulesPath = path.resolve('./node_modules');
+
+    if (!fs.existsSync(nodeModulesPath)) fs.mkdirSync(nodeModulesPath);
 
     await execa.shell(
       `flow-typed install -f ${flowVersion.replace(

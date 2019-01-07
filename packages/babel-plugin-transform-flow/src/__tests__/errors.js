@@ -11,9 +11,7 @@ import reset from './__ignore__/reset';
 import babel from './__ignore__/babel';
 import { transformFileOptions } from './__ignore__/constants';
 
-import flowFiles from 'utils/flowFiles';
-
-import type { flowFileType } from 'utils/flowFiles';
+import flowFiles, { type flowFileType } from 'utils/flowFiles';
 
 test('parse error', () => {
   expect(() => {

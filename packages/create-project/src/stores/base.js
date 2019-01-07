@@ -7,9 +7,7 @@ import configs from './configs';
 import flow from './flow';
 import license from './license';
 import readme from './readme';
-import Store from './index';
-
-import type { ctxType } from './index';
+import Store, { type ctxType } from './index';
 
 /** base store */
 class Base extends Store {

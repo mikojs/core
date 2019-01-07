@@ -9,8 +9,7 @@ import inquirer from 'inquirer';
 import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection, d3DirTree } from '@cat-org/utils';
-
-import type { d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
+import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import logger from 'utils/logger';
 import cliOptions from 'utils/cliOptions';

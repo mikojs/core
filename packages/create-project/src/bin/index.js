@@ -12,7 +12,6 @@ import logger from 'utils/logger';
 import cliOptions from 'utils/cliOptions';
 import validateProject from 'utils/validateProject';
 import base from 'stores/base';
-
 import type StoreType from 'stores';
 
 handleUnhandledRejection();

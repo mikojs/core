@@ -9,8 +9,7 @@ import debug from 'debug';
 import { version } from '../../package.json';
 
 import logger from './logger';
-
-import type { ctxType } from 'stores';
+import { type ctxType } from 'stores';
 
 const debugLog = debug('create-project:cliOptions');
 

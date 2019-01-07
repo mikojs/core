@@ -1,8 +1,6 @@
 // @flow
 
-import Store from './index';
-
-import type { ctxType } from './index';
+import Store, { type ctxType } from './index';
 
 /** configs store */
 class Configs extends Store {

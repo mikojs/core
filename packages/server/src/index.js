@@ -1,14 +1,12 @@
 // @flow
 
-import Koa from 'koa';
+import Koa, {
+  type Middleware as koaMiddlewareType,
+  type ServerType as koaServerType,
+} from 'koa';
 import Router from 'koa-router';
 import chalk from 'chalk';
 import debug from 'debug';
-
-import type {
-  Middleware as koaMiddlewareType,
-  ServerType as koaServerType,
-} from 'koa';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 

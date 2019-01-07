@@ -3,7 +3,6 @@
 import path from 'path';
 
 import debug from 'debug';
-
 import type koaType, { Middleware as koaMiddlewareType } from 'koa';
 
 const debugLog = debug('server:middlewares:default');

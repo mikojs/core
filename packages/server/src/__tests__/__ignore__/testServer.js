@@ -22,17 +22,16 @@ const customMiddleware = (newBody: string) => async (
   ctx: koaContextType,
   next: Promise<void>,
 ): Promise<void> => {
-  ctx.body =
-    newBody === 'custom middleware'
-      ? ['custom middleware']
-      : [...ctx.body, newBody];
+  ctx.body = [...ctx.body, newBody];
   await next();
 };
+
+server.middleware.config(__dirname);
 
 // $FlowFixMe
 export default server.init()
   |> server.middleware('default')
-  |> server.use(customMiddleware('custom middleware'))
+  |> server.middleware('custom')
   |> (undefined
     |> server.all
     |> server.use(customMiddleware('entry router'))

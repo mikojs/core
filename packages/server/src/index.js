@@ -93,7 +93,9 @@ export default {
             break;
 
           default:
-            break;
+            throw new TypeError(
+              `can not find \`${method}\` method in \`koa-router\``,
+            );
         }
 
         return parentRouter;

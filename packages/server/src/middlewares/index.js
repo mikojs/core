@@ -8,8 +8,8 @@ import type koaType, { Middleware as koaMiddlewareType } from 'koa';
 const debugLog = debug('server:middlewares:default');
 
 /** middlewares controller */
-class Middlewares {
-  folderPath = path.resolve('./middlewares');
+export class Middlewares {
+  folderPath = path.resolve('./src/middlewares');
 
   /**
    * @example
@@ -63,14 +63,16 @@ class Middlewares {
       const middlewares = require(middlewarePath);
 
       debugLog(middlewares);
-      (middlewares instanceof Array ? middlewares : [middlewares]).forEach(
-        (middleware: koaMiddlewareType) => {
+      if (middlewares instanceof Array)
+        middlewares.forEach((middleware: koaMiddlewareType) => {
           app.use(middleware);
-        },
-      );
+        });
+      else middlewares(app);
 
       return true;
     } catch (e) {
+      if (!/Cannot find module/.test(e.message)) throw e;
+
       debugLog(e);
       return false;
     }

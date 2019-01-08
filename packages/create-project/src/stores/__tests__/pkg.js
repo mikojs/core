@@ -62,11 +62,11 @@ describe('pkg questions', () => {
             ({ name }: { name: string }) => name === questionName,
           ) || {};
 
-        it('success', () => {
+        test('success', () => {
           expect(validate(success)).toBe(true);
         });
 
-        it('fail', () => {
+        test('fail', () => {
           expect(validate(fail)).toBe(errorMessage);
         });
       },
@@ -74,7 +74,7 @@ describe('pkg questions', () => {
   });
 
   describe('filter', () => {
-    it('keywords', () => {
+    test('keywords', () => {
       const {
         filter = notFind,
       }: {

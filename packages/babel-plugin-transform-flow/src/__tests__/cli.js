@@ -41,7 +41,7 @@ describe('watch: true', () => {
     babel();
   });
 
-  it('can watch modifying file', () => {
+  test('can watch modifying file', () => {
     expect(outputFileSync.destPaths).toEqual(indexFiles);
 
     chokidar.watchCallback(
@@ -53,7 +53,7 @@ describe('watch: true', () => {
     ]);
   });
 
-  it('modify file is not .js.flow', () => {
+  test('modify file is not .js.flow', () => {
     expect(outputFileSync.destPaths).toEqual(indexFiles);
 
     chokidar.watchCallback(

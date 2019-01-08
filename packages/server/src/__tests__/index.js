@@ -26,7 +26,7 @@ describe('server', () => {
     },
   );
 
-  it('can not find `test` method in `koa-router`', () => {
+  test('can not find `test` method in `koa-router`', () => {
     expect(
       () =>
         server.init()

@@ -11,7 +11,7 @@ describe('check files in packages', () => {
   }).children.forEach(
     ({ data: { name, path: filePath }, children }: d3DirTreeNodeType) => {
       describe(name, () => {
-        it('files in package root', () => {
+        test('files in package root', () => {
           const files = children
             .map(
               ({ data: { name: childName } }: d3DirTreeNodeType): string =>

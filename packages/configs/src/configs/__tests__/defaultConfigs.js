@@ -10,7 +10,7 @@ describe('default config', () => {
       Object.keys(config).forEach((key: string) => {
         const value = config[key];
 
-        it(key, () => {
+        test(key, () => {
           switch (key) {
             case 'alias':
             case 'ignoreName':

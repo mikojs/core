@@ -21,7 +21,7 @@ describe('cli options', () => {
     },
   );
 
-  it('no project directory', () => {
+  test('no project directory', () => {
     expect(() => {
       cliOptions(defaultArgv);
     }).toThrow('process exit');

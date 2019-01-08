@@ -25,7 +25,7 @@ defaultConfigs.customNoConfig = {
 defaultConfigs.defaultNoConfig = {};
 
 describe('configs', () => {
-  it('can not find the root dir', () => {
+  test('can not find the root dir', () => {
     const configs = new Configs();
 
     expect(() => {
@@ -33,7 +33,7 @@ describe('configs', () => {
     }).toThrow('process exit');
   });
 
-  it('default configs with finding the root dir', () => {
+  test('default configs with finding the root dir', () => {
     const configs = new Configs();
 
     configs.handleCustomConfigs();
@@ -51,14 +51,14 @@ describe('configs', () => {
     );
     configs.findRootDir();
 
-    it('func config', () => {
+    test('func config', () => {
       const { funcConfig } = configs.store;
 
       expect(typeof funcConfig).toBe('function');
       expect(funcConfig()).toEqual({});
     });
 
-    it('empty config', () => {
+    test('empty config', () => {
       const { emptyConfig } = configs.store;
 
       expect(emptyConfig.config()).toEqual({});

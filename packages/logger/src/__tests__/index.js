@@ -26,7 +26,7 @@ describe.each`
     prefix: string,
     color: string,
   }) => {
-    it(name, () => {
+    test(name, () => {
       const mockLog = jest.fn();
 
       logger('test', {

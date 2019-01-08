@@ -13,7 +13,7 @@ describe.each`
   ${'info'}    | ${'{blue {bold ora}} message'}
 `('ora settings', ({ name, expected }: { name: string, expected: string }) => {
   describe(name, () => {
-    it(`run ${name}`, () => {
+    test(`run ${name}`, () => {
       const mockLog = jest.fn();
 
       global.console.log = mockLog;
@@ -28,7 +28,7 @@ describe.each`
       expect(mockLog).toHaveBeenLastCalledWith(expected);
     });
 
-    it(`run log after ${name}`, () => {
+    test(`run log after ${name}`, () => {
       const mockLog = jest.fn();
 
       global.console.log = mockLog;

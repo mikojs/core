@@ -23,11 +23,11 @@ describe('default server', () => {
     },
   );
 
-  it('not find method', async (): Promise<void> => {
+  test('not find method', async (): Promise<void> => {
     expect(await fetchServer('/')).toEqual(['custom middleware']);
   });
 
-  it('default middlewares work', async (): Promise<void> => {
+  test('default middlewares work', async (): Promise<void> => {
     expect(
       await fetchServer('/bodyparser', 'post', {
         body: JSON.stringify({ key: 'value' }),

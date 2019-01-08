@@ -7,7 +7,7 @@ describe.each`
   ${true}
   ${false}
 `('mock choice', ({ result }: { result: boolean }) => {
-  it(`type: ${result.toString()}`, () => {
+  test(`type: ${result.toString()}`, () => {
     mockChoice(result, () => true, () => false);
   });
 });

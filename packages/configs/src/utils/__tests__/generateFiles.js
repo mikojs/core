@@ -16,13 +16,13 @@ describe('generate files', () => {
     outputFileSync.destPaths = [];
   });
 
-  it('error', () => {
+  test('error', () => {
     expect(() => {
       generateFiles('not-find-cli-setting');
     }).toThrow('process exit');
   });
 
-  it('generate', () => {
+  test('generate', () => {
     generateFiles('jest');
 
     expect(worker.server).toBeNull();

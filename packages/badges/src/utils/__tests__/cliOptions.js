@@ -5,13 +5,13 @@ import cliOptions from '../cliOptions';
 const defaultArgv = ['node', 'badges'];
 
 describe('cli options', () => {
-  it('work', () => {
+  test('work', () => {
     expect(cliOptions([...defaultArgv, 'readme-path'])).toEqual([
       'readme-path',
     ]);
   });
 
-  it('not give readme path', () => {
+  test('not give readme path', () => {
     expect(() => {
       cliOptions(defaultArgv);
     }).toThrow('process exit');

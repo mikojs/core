@@ -2,7 +2,7 @@
   "private": true,
   "name": "@cat-org/core",
   "license": "MIT",
-  "workspaces": ["packages/*"],
+  "workspaces": ["packages/*", "server/*"],
   "scripts": {
     "clean:all": "make clean-all",
     "install:all": "make install-all",

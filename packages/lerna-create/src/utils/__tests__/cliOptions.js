@@ -13,7 +13,7 @@ describe('cli options', () => {
     expect(cliOptions([...defaultArgv, 'new-project'])).toEqual({
       newProject: path.resolve('new-project'),
       rootPath: process.cwd(),
-      workspaces: ['packages/*'],
+      workspaces: ['packages/*', 'server/*'],
     });
   });
 

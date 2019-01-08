@@ -46,8 +46,9 @@ export default (
             async (ctx: koaContextType, next: () => Promise<void>) => {
               const Component = require(filePath);
 
-              renderToNodeStream(<Component ctx={ctx} />).pipe(ctx.res);
+              renderToNodeStream(<Component />).pipe(ctx.res);
               ctx.status = 200;
+              await next();
             },
           );
           break;

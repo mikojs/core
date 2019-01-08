@@ -26,12 +26,15 @@ export class Middlewares {
    * middlewares.use('middleware name')
    *
    * @param {string} middlewareName - middleware name
+   * @param {Any} options - middleware options
    *
    * @return {Function} - pipline server function
    */
-  use = (middlewareName: string) => (app: koaType): koaType => {
-    if (!this.useMiddleware(app, this.folderPath, middlewareName)) {
-      if (!this.useMiddleware(app, __dirname, middlewareName))
+  use = <optionsType>(middlewareName: string, options: optionsType) => (
+    app: koaType,
+  ): koaType => {
+    if (!this.useMiddleware(app, this.folderPath, middlewareName, options)) {
+      if (!this.useMiddleware(app, __dirname, middlewareName, options))
         throw new Error(
           `can not find \`${middlewareName}\` middleware in ${this.folderPath}`,
         );
@@ -47,13 +50,15 @@ export class Middlewares {
    * @param {Object} app - koa server
    * @param {string} folderPath - folder path
    * @param {string} middlewareName - middleware name
+   * @param {Any} options - middleware options
    *
    * @return {boolean} - use middleware or not
    */
-  useMiddleware = (
+  useMiddleware = <optionsType>(
     app: koaType,
     folderPath: string,
     middlewareName: string,
+    options: optionsType,
   ): boolean => {
     const middlewarePath = path.resolve(folderPath, middlewareName);
 
@@ -67,7 +72,7 @@ export class Middlewares {
         middlewares.forEach((middleware: koaMiddlewareType) => {
           app.use(middleware);
         });
-      else middlewares(app);
+      else middlewares(app, options);
 
       return true;
     } catch (e) {

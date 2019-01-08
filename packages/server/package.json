@@ -25,6 +25,7 @@
     "koa-router": "^7.4.0"
   },
   "devDependencies": {
+    "get-port": "^4.1.0",
     "node-fetch": "^2.3.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0"

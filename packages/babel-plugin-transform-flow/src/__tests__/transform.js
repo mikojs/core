@@ -26,7 +26,7 @@ describe('transform folder', () => {
     reset(transformFolderOptions);
   });
 
-  it('transform file which do not have the same name file and extension is `.js.flow`', () => {
+  test('transform file which do not have the same name file and extension is `.js.flow`', () => {
     babel();
     expect(outputFileSync.destPaths).toEqual(indexFiles);
 
@@ -37,7 +37,7 @@ describe('transform folder', () => {
     ]);
   });
 
-  it('transform file which have the same name file and extension is `.js.flow`', () => {
+  test('transform file which have the same name file and extension is `.js.flow`', () => {
     babel('hasFlowFile.js');
     expect(outputFileSync.destPaths).toEqual(hasFlowFileFiles);
 
@@ -53,7 +53,7 @@ describe('write file before previous file is done', () => {
     babel();
   });
 
-  it('Add file when previous file is not done.', () => {
+  test('Add file when previous file is not done.', () => {
     const [flowFile] = flowFiles.store;
 
     expect(outputFileSync.destPaths).toEqual(indexFiles);
@@ -71,7 +71,7 @@ describe('write file before previous file is done', () => {
     ).toBeTruthy();
   });
 
-  it('Previous file is done. Write file and remove same file in the store.', () => {
+  test('Previous file is done. Write file and remove same file in the store.', () => {
     const [flowFile] = flowFiles.store;
 
     expect(outputFileSync.destPaths).toEqual(indexFiles);

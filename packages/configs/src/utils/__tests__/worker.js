@@ -48,11 +48,11 @@ describe('worker', () => {
     },
   );
 
-  it('can not open second server', async (): Promise<void> => {
+  test('can not open second server', async (): Promise<void> => {
     expect(await clientWorker.init()).toBeNull();
   });
 
-  it('write cache', async (): Promise<void> => {
+  test('write cache', async (): Promise<void> => {
     await writeCache({
       ...cache,
       pid: 1,
@@ -78,7 +78,7 @@ describe('worker', () => {
     });
   });
 
-  it('remove cache but not over 0.5s', async (): Promise<void> => {
+  test('remove cache but not over 0.5s', async (): Promise<void> => {
     serverWorker.writeCache({
       pid: 1,
       using: false,
@@ -104,7 +104,7 @@ describe('worker', () => {
     });
   });
 
-  it('update cache time and remove again', async (): Promise<void> => {
+  test('update cache time and remove again', async (): Promise<void> => {
     const newTime = moment()
       .subtract(1, 'seconds')
       .format();
@@ -129,7 +129,7 @@ describe('worker', () => {
     expect(serverWorker.cache).toEqual({});
   });
 
-  it('error when filePath is undefined', () => {
+  test('error when filePath is undefined', () => {
     expect(() => {
       serverWorker.writeCache({
         pid: 1,
@@ -138,7 +138,7 @@ describe('worker', () => {
     }).toThrow('process exit');
   });
 
-  it('error when try to use client remove cache', () => {
+  test('error when try to use client remove cache', () => {
     expect(() => {
       clientWorker.writeCache({
         pid: 1,

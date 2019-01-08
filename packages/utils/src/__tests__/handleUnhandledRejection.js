@@ -13,12 +13,12 @@ test('default error callback', () => {
 });
 
 describe('handle unhandleRejection', () => {
-  it('node', () => {
+  test('node', () => {
     ExecutionEnvironment.canUseEventListeners = false;
     expect(handleUnhandledRejection).not.toThrow();
   });
 
-  it('brwoser', () => {
+  test('brwoser', () => {
     ExecutionEnvironment.canUseEventListeners = true;
     expect(handleUnhandledRejection).not.toThrow();
   });

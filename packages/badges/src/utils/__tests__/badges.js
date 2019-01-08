@@ -27,7 +27,7 @@ const ALL_BADGES = [
 ];
 
 describe('badges', () => {
-  it('can not find git remote', async (): Promise<void> => {
+  test('can not find git remote', async (): Promise<void> => {
     execa.mainFunction = () => {
       throw new Error('can not find git remote');
     };

@@ -19,11 +19,11 @@ class ParentStore extends Store {
 const parentStore = new ParentStore();
 
 describe('store', () => {
-  it('run', async (): Promise<void> => {
+  test('run', async (): Promise<void> => {
     expect(await parentStore.run(ctx)).toEqual([childStore]);
   });
 
-  it('execa error', async (): Promise<void> => {
+  test('execa error', async (): Promise<void> => {
     execa.mainFunction = () => {
       throw new Error('command error');
     };

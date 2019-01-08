@@ -21,7 +21,7 @@ test('parse error', () => {
 });
 
 describe('cli error', () => {
-  it('can not use without @babel/cli', () => {
+  test('can not use without @babel/cli', () => {
     expect(() => {
       reset({});
       babel();

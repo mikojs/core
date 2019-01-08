@@ -94,11 +94,11 @@ const testData = d3DirTree(root, {
   );
 
 describe('eslint', () => {
-  it('check amount of test files', () => {
+  test('check amount of test files', () => {
     expect(eslintResult.length).toBe(testData.length);
   });
 
-  it('check amount of rules', () => {
+  test('check amount of rules', () => {
     const testRules = Object.keys(configs?.rules || {})
       .filter(
         (ruleName: string): boolean => {
@@ -139,7 +139,7 @@ describe('eslint', () => {
         },
       );
 
-      it('check error amount', () => {
+      test('check error amount', () => {
         expect(checkErrorAmount).toBeTruthy();
       });
     },

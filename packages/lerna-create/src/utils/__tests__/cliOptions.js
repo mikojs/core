@@ -9,7 +9,7 @@ import cliOptions from '../cliOptions';
 const defaultArgv = ['node', 'lerna-create'];
 
 describe('cli options', () => {
-  it('work', () => {
+  test('work', () => {
     expect(cliOptions([...defaultArgv, 'new-project'])).toEqual({
       newProject: path.resolve('new-project'),
       rootPath: process.cwd(),
@@ -27,7 +27,7 @@ describe('cli options', () => {
     }).toThrow('process exit');
   });
 
-  it('not find lerna', () => {
+  test('not find lerna', () => {
     npmWhich.throwError = true;
 
     expect(() => {
@@ -37,7 +37,7 @@ describe('cli options', () => {
     npmWhich.throwError = false;
   });
 
-  it('not find workspaces', () => {
+  test('not find workspaces', () => {
     npmWhich.alias = {
       lerna: __dirname,
     };

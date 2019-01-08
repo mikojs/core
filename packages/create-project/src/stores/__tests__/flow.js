@@ -14,13 +14,7 @@ test.each`
   ${'yarn'} | ${'yarn add --dev'}
 `(
   'flow with cmd = $cmd',
-  async ({
-    cmd,
-    expected,
-  }: {
-    cmd: string,
-    expected: string,
-  }): Promise<void> => {
+  async ({ cmd, expected }: { cmd: string, expected: string }) => {
     execa.cmds = [];
 
     expect(

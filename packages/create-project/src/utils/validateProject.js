@@ -10,7 +10,7 @@ import logger from './logger';
 
 const debugLog = debug('create-project:validateProject');
 
-export default async (projectDir: string): Promise<void> => {
+export default async (projectDir: string) => {
   // check project dir not existing
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
   else

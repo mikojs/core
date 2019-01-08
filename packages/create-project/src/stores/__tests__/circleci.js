@@ -12,20 +12,17 @@ test.each`
   useNpm
   ${false}
   ${true}
-`(
-  'circleci with useNpm = $useNpm',
-  async ({ useNpm }: { useNpm: boolean }): Promise<void> => {
-    outputFileSync.contents = [];
+`('circleci with useNpm = $useNpm', async ({ useNpm }: { useNpm: boolean }) => {
+  outputFileSync.contents = [];
 
-    expect(
-      await circleci.end({
-        ...ctx,
-        useNpm,
-      }),
-    ).toBeUndefined();
-    (useNpm
-      ? expect(outputFileSync.contents[0])
-      : expect(outputFileSync.contents[0]).not
-    ).toMatch(new RegExp('yarn publish'));
-  },
-);
+  expect(
+    await circleci.end({
+      ...ctx,
+      useNpm,
+    }),
+  ).toBeUndefined();
+  (useNpm
+    ? expect(outputFileSync.contents[0])
+    : expect(outputFileSync.contents[0]).not
+  ).toMatch(new RegExp('yarn publish'));
+});

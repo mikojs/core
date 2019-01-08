@@ -21,7 +21,7 @@ test.each`
   }: {
     useNpm: boolean,
     expected: $ReadOnlyArray<string>,
-  }): Promise<void> => {
+  }) => {
     outputFileSync.destPaths = [];
     npmignore.storeUseNpm = useNpm;
     inquirer.result = {

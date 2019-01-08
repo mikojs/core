@@ -16,7 +16,7 @@ const debugLog = debug('lerna-flow-typed-install:bin');
 
 handleUnhandledRejection();
 
-(async (): Promise<void> => {
+(async () => {
   const logger = catLogger('@cat-org/lerna-flow-typed-install');
 
   try {

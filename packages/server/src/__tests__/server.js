@@ -18,16 +18,16 @@ describe('default server', () => {
     }: {
       method: string,
       expected: $ReadOnlyArray<string> | string,
-    }): Promise<void> => {
+    }) => {
       expect(await fetchServer(`/test/${method}`, method)).toEqual(expected);
     },
   );
 
-  test('not find method', async (): Promise<void> => {
+  test('not find method', async () => {
     expect(await fetchServer('/')).toEqual(['custom middleware']);
   });
 
-  test('default middlewares work', async (): Promise<void> => {
+  test('default middlewares work', async () => {
     expect(
       await fetchServer('/bodyparser', 'post', {
         body: JSON.stringify({ key: 'value' }),

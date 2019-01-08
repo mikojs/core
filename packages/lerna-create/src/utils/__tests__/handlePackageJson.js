@@ -6,7 +6,7 @@ import handlePackageJson, { keywordQuestion } from '../handlePackageJson';
 
 import pkg from '../../../package.json';
 
-test('handle package.json', async (): Promise<void> => {
+test('handle package.json', async () => {
   const result = {
     name: 'name',
     description: 'description',

@@ -18,7 +18,7 @@ import normalizedQuestions from 'utils/normalizedQuestions';
 
 handleUnhandledRejection();
 
-(async (): Promise<void> => {
+(async () => {
   const { newProject, rootPath, workspaces } = cliOptions(process.argv) || {};
 
   logger.info(

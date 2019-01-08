@@ -18,7 +18,7 @@ const notFind = (argu: string) => {
 
 pkg.ctx = ctx;
 
-test('pkg', async (): Promise<void> => {
+test('pkg', async () => {
   inquirer.result = {
     private: true,
     description: 'desc',

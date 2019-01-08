@@ -73,7 +73,7 @@ jobs:
           name: Publish
           command: |
             yarn lerna publish from-git \
-              --npm-tag beta \
+              --dist-tag beta \
               --yes
 
 workflows:

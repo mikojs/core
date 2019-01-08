@@ -55,7 +55,7 @@ class Npmignore extends Store {
    * @example
    * npmignore.checkNpm()
    */
-  checkNpm = memoizeOne(async (): Promise<void> => {
+  checkNpm = memoizeOne(async () => {
     this.storeUseNpm = (await inquirer.prompt(
       normalizedQuestions<boolean>(...NPMIGNORE_QUESTIONS),
     )).useNpm;
@@ -68,7 +68,7 @@ class Npmignore extends Store {
    *
    * @param {Object} ctx - store context
    */
-  start = async (ctx: ctxType): Promise<void> => {
+  start = async (ctx: ctxType) => {
     await this.checkNpm();
 
     ctx.useNpm = this.storeUseNpm;

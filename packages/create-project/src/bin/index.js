@@ -16,7 +16,7 @@ import type StoreType from 'stores';
 
 handleUnhandledRejection();
 
-(async (): Promise<void> => {
+(async () => {
   const ctx = cliOptions(process.argv);
   const { projectDir } = ctx;
 

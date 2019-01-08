@@ -8,7 +8,7 @@
 
 [website]: https://cat-org.github.io/core/react-middleware
 
-Cat react-middleware.
+React middleware for cat-org server.
 
 ## Install
 

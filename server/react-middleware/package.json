@@ -1,0 +1,28 @@
+{
+  "name": "@cat-org/react-middleware",
+  "description": "React middleware for cat-org server",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/core/react-middleware",
+  "repository": "https://github.com/cat-org/core/tree/master/server/react-middleware",
+  "version": "1.0.0-beta.12",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@cat-org/utils": "^1.0.0-beta.12",
+    "d3-hierarchy": "^1.1.8",
+    "directory-tree": "^2.2.1",
+    "fbjs": "^1.0.0",
+    "koa-router": "^7.4.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  },
+  "devDependencies": {
+    "get-port": "^4.1.0",
+    "koa": "^2.6.2",
+    "node-fetch": "^2.3.0"
+  },
+  "keywords": ["cat-org", "middleware", "react"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

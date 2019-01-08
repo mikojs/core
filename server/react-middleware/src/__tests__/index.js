@@ -6,9 +6,9 @@ import Koa, { type ServerType as koaServerType } from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
-import react from '../react';
+import react from '..';
 
-describe('react', () => {
+describe('react middleware', () => {
   let server: koaServerType;
   let port: number;
 
@@ -16,7 +16,7 @@ describe('react', () => {
     const app = new Koa();
 
     react(app, {
-      folderPath: path.resolve(__dirname, './__ignore__/react'),
+      folderPath: path.resolve(__dirname, './__ignore__'),
     });
 
     port = await getPort();

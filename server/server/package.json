@@ -12,9 +12,7 @@
     "@cat-org/logger": "^1.0.0-beta.12",
     "@cat-org/utils": "^1.0.0-beta.12",
     "chalk": "^2.4.2",
-    "d3-hierarchy": "^1.1.8",
     "debug": "^4.1.1",
-    "directory-tree": "^2.2.1",
     "fbjs": "^1.0.0",
     "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
@@ -25,10 +23,8 @@
     "koa-router": "^7.4.0"
   },
   "devDependencies": {
-    "get-port": "^4.1.0",
-    "node-fetch": "^2.3.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "@cat-org/react-middleware": "^1.0.0-beta.12",
+    "node-fetch": "^2.3.0"
   },
   "keywords": ["cat-org", "server"],
   "publishConfig": {

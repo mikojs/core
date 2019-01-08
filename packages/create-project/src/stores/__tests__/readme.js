@@ -29,7 +29,7 @@ test.each`
     pkg?: { [string]: string },
     useNpm: boolean,
     expected: ?string,
-  }): Promise<void> => {
+  }) => {
     outputFileSync.contents = [];
 
     expect(

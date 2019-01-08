@@ -92,7 +92,7 @@ export default class Store {
    *
    * @param {Array} commands - commands array
    */
-  execa = async (...commands: $ReadOnlyArray<string>): Promise<void> => {
+  execa = async (...commands: $ReadOnlyArray<string>) => {
     const { projectDir } = this.ctx;
 
     for (const command of commands) {

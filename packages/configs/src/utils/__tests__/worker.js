@@ -27,7 +27,7 @@ let server: net.Server;
  *
  * @return {Promise} - not return
  */
-const writeCache = async (cacheData: cacheType): Promise<void> => {
+const writeCache = async (cacheData: cacheType) => {
   await new Promise(resolve => {
     /* eslint-disable flowtype/no-unused-expressions */
     // $FlowFixMe Flow does not yet support method or property calls in optional chains.
@@ -37,22 +37,20 @@ const writeCache = async (cacheData: cacheType): Promise<void> => {
 };
 
 describe('worker', () => {
-  beforeAll(
-    async (): Promise<void> => {
-      const port = await getPort();
+  beforeAll(async () => {
+    const port = await getPort();
 
-      serverWorker = new Worker(port);
-      clientWorker = new Worker(port);
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-      server = await serverWorker?.init();
-    },
-  );
+    serverWorker = new Worker(port);
+    clientWorker = new Worker(port);
+    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    server = await serverWorker?.init();
+  });
 
-  test('can not open second server', async (): Promise<void> => {
+  test('can not open second server', async () => {
     expect(await clientWorker.init()).toBeNull();
   });
 
-  test('write cache', async (): Promise<void> => {
+  test('write cache', async () => {
     await writeCache({
       ...cache,
       pid: 1,
@@ -78,7 +76,7 @@ describe('worker', () => {
     });
   });
 
-  test('remove cache but not over 0.5s', async (): Promise<void> => {
+  test('remove cache but not over 0.5s', async () => {
     serverWorker.writeCache({
       pid: 1,
       using: false,
@@ -104,7 +102,7 @@ describe('worker', () => {
     });
   });
 
-  test('update cache time and remove again', async (): Promise<void> => {
+  test('update cache time and remove again', async () => {
     const newTime = moment()
       .subtract(1, 'seconds')
       .format();
@@ -147,11 +145,9 @@ describe('worker', () => {
     }).toThrow('process exit');
   });
 
-  afterAll(
-    async (): Promise<void> => {
-      await new Promise(resolve => {
-        server.close(resolve);
-      });
-    },
-  );
+  afterAll(async () => {
+    await new Promise(resolve => {
+      server.close(resolve);
+    });
+  });
 });

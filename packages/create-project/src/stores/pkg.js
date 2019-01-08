@@ -75,7 +75,7 @@ class Pkg extends Store {
    *
    * @param {string} projectDir - project dir
    */
-  defaultInfo = memoizeOne(async (projectDir: string): Promise<void> => {
+  defaultInfo = memoizeOne(async (projectDir: string) => {
     const [username, email] = await getUser();
     const questionResult = await inquirer.prompt(
       normalizedQuestions<$ReadOnlyArray<string>>(...PKG_QUESTIONS),
@@ -117,7 +117,7 @@ class Pkg extends Store {
    *
    * @param {Object} ctx - store context
    */
-  start = async (ctx: ctxType): Promise<void> => {
+  start = async (ctx: ctxType) => {
     const { projectDir } = ctx;
 
     await this.defaultInfo(projectDir);

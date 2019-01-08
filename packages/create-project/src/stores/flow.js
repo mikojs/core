@@ -27,7 +27,7 @@ class Flow extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = async ({ cmd }: ctxType): Promise<void> => {
+  end = async ({ cmd }: ctxType) => {
     this.writeFiles({
       '.flowconfig': template,
     });

@@ -22,7 +22,7 @@ test.each`
   }: {
     pkg?: { author: string },
     expected: boolean,
-  }): Promise<void> => {
+  }) => {
     outputFileSync.contents = [];
 
     expect(

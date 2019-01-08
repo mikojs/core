@@ -10,7 +10,7 @@ class Configs extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = async ({ cmd }: ctxType): Promise<void> => {
+  end = async ({ cmd }: ctxType) => {
     await this.execa(
       'git init',
       // TODO: modify after @cat-org/configs production

@@ -21,7 +21,7 @@ import server from '../..';
 const customMiddleware = (newBody: string) => async (
   ctx: koaContextType,
   next: Promise<void>,
-): Promise<void> => {
+) => {
   ctx.body = [...ctx.body, newBody];
   await next();
 };
@@ -57,12 +57,10 @@ export default server.init()
       |> server.end)
     |> ('/bodyparser'
       |> server.post
-      |> server.use(
-        async (ctx: koaContextType, next: Promise<void>): Promise<void> => {
-          ctx.body = ctx.request.body;
-          await next();
-        },
-      )
+      |> server.use(async (ctx: koaContextType, next: Promise<void>) => {
+        ctx.body = ctx.request.body;
+        await next();
+      })
       |> server.end)
     |> server.end)
   |> server.run();

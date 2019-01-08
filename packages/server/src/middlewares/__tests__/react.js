@@ -12,34 +12,29 @@ describe('react', () => {
   let server: koaServerType;
   let port: number;
 
-  beforeAll(
-    async (): Promise<void> => {
-      const app = new Koa();
+  beforeAll(async () => {
+    const app = new Koa();
 
-      react(app, {
-        folderPath: path.resolve(__dirname, './__ignore__/react'),
-      });
+    react(app, {
+      folderPath: path.resolve(__dirname, './__ignore__/react'),
+    });
 
-      port = await getPort();
-      server = app.listen(port);
-    },
-  );
+    port = await getPort();
+    server = app.listen(port);
+  });
 
   test.each`
     urlPath
     ${'/'}
     ${'/temp'}
     ${'/test/temp'}
-  `(
-    'get $urlPath',
-    async ({ urlPath }: { urlPath: string }): Promise<void> => {
-      expect(
-        await fetch(`http://localhost:${port}${urlPath}`).then(
-          (res: ResponseType) => res.text(),
-        ),
-      ).toBe(`<div data-reactroot="">${urlPath}</div>`);
-    },
-  );
+  `('get $urlPath', async ({ urlPath }: { urlPath: string }) => {
+    expect(
+      await fetch(`http://localhost:${port}${urlPath}`).then(
+        (res: ResponseType) => res.text(),
+      ),
+    ).toBe(`<div data-reactroot="">${urlPath}</div>`);
+  });
 
   test('can not find folder', () => {
     expect(() => {

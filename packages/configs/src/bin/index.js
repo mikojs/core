@@ -24,7 +24,7 @@ debugLog({
   cliName,
 });
 
-(async (): Promise<void> => {
+(async () => {
   if (configs.customConfigsPath)
     logger.info(
       'Using external configsuration',

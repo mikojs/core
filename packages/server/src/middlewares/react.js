@@ -43,10 +43,7 @@ export default (
         default:
           router.get(
             redirect(urlPattern) || `/${urlPattern}`,
-            async (
-              ctx: koaContextType,
-              next: () => Promise<void>,
-            ): Promise<void> => {
+            async (ctx: koaContextType, next: () => Promise<void>) => {
               const Component = require(filePath);
 
               renderToNodeStream(<Component ctx={ctx} />).pipe(ctx.res);

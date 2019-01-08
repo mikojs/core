@@ -10,7 +10,7 @@ import validateProject from '../validateProject';
 jest.mock('fs');
 
 describe('validate project', () => {
-  test('project dir pass', async (): Promise<void> => {
+  test('project dir pass', async () => {
     fs.exist = false;
     execa.mainFunction = () => {
       const error = new Error('error');
@@ -24,7 +24,7 @@ describe('validate project', () => {
     expect(await validateProject('project dir')).toBeUndefined();
   });
 
-  test('project dir exist', async (): Promise<void> => {
+  test('project dir exist', async () => {
     fs.exist = true;
 
     await expect(validateProject('project dir')).rejects.toThrow(
@@ -32,7 +32,7 @@ describe('validate project', () => {
     );
   });
 
-  test('in git managed project', async (): Promise<void> => {
+  test('in git managed project', async () => {
     fs.exist = false;
     execa.mainFunction = emptyFunction;
 
@@ -41,7 +41,7 @@ describe('validate project', () => {
     );
   });
 
-  test('unexpected error', async (): Promise<void> => {
+  test('unexpected error', async () => {
     fs.exist = false;
     execa.mainFunction = () => {
       const error = new Error('error');

@@ -27,7 +27,7 @@ const ALL_BADGES = [
 ];
 
 describe('badges', () => {
-  test('can not find git remote', async (): Promise<void> => {
+  test('can not find git remote', async () => {
     execa.mainFunction = () => {
       throw new Error('can not find git remote');
     };
@@ -52,7 +52,7 @@ describe('badges', () => {
       },
       fsExist: boolean,
       expected: $ReadOnlyArray<string>,
-    }): Promise<void> => {
+    }) => {
       execa.mainFunction = () =>
         'origin\tgit@github.com:cat-org/core.git (fetch)';
       fs.exist = fsExist;

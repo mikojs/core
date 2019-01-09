@@ -48,7 +48,9 @@ babel-lint-staged:
 	@ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
 
 babel-clean:
-	rm -rf ./lib ./packages/**/lib
+	rm -rf ./lib \
+		./packages/**/lib \
+		./server/**/lib
 
 release:
 	@yarn lerna-changelog && \

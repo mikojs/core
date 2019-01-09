@@ -66,13 +66,12 @@ class OraStore {
         after:
           key !== 'fail'
             ? this.after
-            : () => {
+            : (): Error => {
                 error();
-                mockChoice(
+
+                return mockChoice(
                   process.env.NODE_ENV === 'test',
-                  () => {
-                    throw new Error('process exit');
-                  },
+                  () => new Error('process exit'),
                   process.exit,
                   1,
                 );

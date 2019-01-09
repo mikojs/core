@@ -25,7 +25,8 @@ export default (argv: $ReadOnlyArray<string>): ctxType => {
     npm = false,
   } = program.parse([...argv]);
 
-  if (!projectDir) logger.fail(chalk`{red \`project directory\`} is required.`);
+  if (!projectDir)
+    throw logger.fail(chalk`{red \`project directory\`} is required.`);
 
   const cliOptions = {
     projectDir: path.resolve(projectDir),

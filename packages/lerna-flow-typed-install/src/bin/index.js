@@ -28,7 +28,7 @@ handleUnhandledRejection();
     ));
 
     if (!flowVersion)
-      logger.fail(
+      throw logger.fail(
         chalk`Can not find {red flow version} in the project`,
         chalk`Install {red flow} before using {green lerna-flow-typed-install}`,
       );
@@ -48,6 +48,6 @@ handleUnhandledRejection();
     );
   } catch (e) {
     debugLog(e);
-    logger.fail(chalk`Can not find {red lerna} in the project`);
+    throw logger.fail(chalk`Can not find {red lerna} in the project`);
   }
 })();

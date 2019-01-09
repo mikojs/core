@@ -14,7 +14,7 @@ export default async (projectDir: string) => {
   // check project dir not existing
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
   else
-    logger.fail(
+    throw logger.fail(
       chalk`The directory {green ${projectDir}} exists`,
       `Remove this directory or use a new name`,
     );
@@ -26,7 +26,7 @@ export default async (projectDir: string) => {
     });
 
     fs.rmdirSync(projectDir);
-    logger.fail('Can not create a new project in git managed project');
+    throw logger.fail('Can not create a new project in git managed project');
   } catch (e) {
     debugLog(e);
 
@@ -35,6 +35,6 @@ export default async (projectDir: string) => {
         e.stderr,
       )
     )
-      logger.fail('Run git command fail');
+      throw logger.fail('Run git command fail');
   }
 };

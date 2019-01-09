@@ -1,7 +1,7 @@
 version: 2
 defaults: &defaults
   docker:
-    - image: node:11.1.0
+    - image: node:latest
   working_directory: ~/repo
 
 restore-cache: &restore-cache

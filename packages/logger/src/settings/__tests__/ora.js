@@ -20,7 +20,7 @@ describe.each`
 
       if (name === 'fail')
         expect(() => {
-          logs[name]('message');
+          throw logs[name]('message');
         }).toThrow('process exit');
       else logs[name]('message');
 

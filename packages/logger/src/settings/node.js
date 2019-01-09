@@ -15,7 +15,7 @@ export default ({
   },
   fail: {
     print: error,
-    after: (): Error => {
+    after: (): Error | void => {
       error();
 
       return mockChoice(

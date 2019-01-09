@@ -66,7 +66,7 @@ class OraStore {
         after:
           key !== 'fail'
             ? this.after
-            : (): Error => {
+            : (): Error | void => {
                 error();
 
                 return mockChoice(

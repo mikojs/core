@@ -9,7 +9,7 @@ type logType = (...messages: $ReadOnlyArray<messageType>) => logsType;
 
 export type logsType = {
   [string]: logType,
-  fail: (...messages: $ReadOnlyArray<messageType>) => Error,
+  fail: (...messages: $ReadOnlyArray<messageType>) => Error | void,
 };
 
 export type settingsType = {
@@ -55,7 +55,6 @@ export default (
   | {
       [string]: (...messages: $ReadOnlyArray<messageType>) => logsType,
       init: (...args: $ReadOnlyArray<mixed>) => logsType,
-      fail: (...messages: $ReadOnlyArray<messageType>) => Error,
     }
   | logsType => {
   const { init, ...logSettings }: settingsType =

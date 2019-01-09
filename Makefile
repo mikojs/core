@@ -1,54 +1,20 @@
 ROOT=$(shell pwd)
 
-install-all:
+install:
 	@yarn install
 	@yarn lerna bootstrap
-	@make flow-typed-install
-
-flow-typed-install:
-	rm -rf ./flow-typed
-	@yarn lerna exec \
-		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
-		--stream \
-		--include-filtered-dependencies \
-		--scope @cat-org/lerna-flow-typed-install
+	@make babel-all
 	@ln -snf $(ROOT)/packages/lerna-flow-typed-install/lib/bin/index.js ./node_modules/.bin/lerna-flow-typed-install
 	@yarn flow-typed install --verbose
 	@yarn lerna exec "lerna-flow-typed-install --verbose" \
 		--stream \
 		--concurrency 1
 
-babel-core:
-	@make babel-clean
-	@yarn lerna exec \
-		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
-		--parallel \
-		--stream \
-		--include-filtered-dependencies \
-		--scope @cat-org/configs \
-		--scope @cat-org/babel-*
-	@ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
-
 babel-all:
-	@make babel-core
 	@$(call babel-build)
 
-babel-test:
-	@make babel-core
-	@$(call babel-build, \
-		--scope @cat-org/jest \
-		--scope @cat-org/eslint-config-cat)
-
-babel-lint-staged:
-	@make babel-core
-	@$(call babel-build, \
-		--scope @cat-org/utils \
-		--scope @cat-org/eslint-config-cat \
-		--scope @cat-org/badges)
-	@ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
-
-babel-clean:
-	rm -rf ./lib ./packages/**/lib
+babel-changed:
+	@$(call babel-build, --since $(shell git branch | grep \* | cut -d ' ' -f2))
 
 release:
 	@yarn lerna-changelog && \
@@ -59,9 +25,11 @@ release:
 		git commit -m "chore(root): add CHANGELOG.md"
 	@yarn lerna version
 
-clean-all:
-	@make babel-clean
+clean:
 	@yarn lerna clean && rm -rf ./node_modules
+	rm -rf ./lib \
+		./packages/**/lib \
+		./server/**/lib
 	rm -rf ./flow-typed
 	rm -rf ./coverage
 	rm -rf ./.eslintcache
@@ -69,6 +37,15 @@ clean-all:
 	rm -rf ./*.log
 
 define babel-build
+	yarn lerna exec \
+		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
+		--parallel \
+		--stream \
+		--include-filtered-dependencies \
+		--scope @cat-org/configs \
+		--scope @cat-org/babel-* \
+		$(1)
+	ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
 	yarn lerna exec \
 		"configs babel:lerna" \
 		--parallel \

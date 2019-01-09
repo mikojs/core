@@ -80,7 +80,7 @@ const babel = config => {
       plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
     },
     {
-      test: './packages/server',
+      test: './server/server',
       plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
     },
   );
@@ -101,15 +101,10 @@ const lint = {
     ...config,
     overrides: [
       {
-        files: [
-          'checkBabelConfig.js',
-          'checkFilesInPackages.js',
-          '.catrc.js',
-          'babel.config.js',
-        ],
+        files: ['checkFilesInPackages.js'],
         settings: {
           /** In packages/** modules */
-          'import/core-modules': ['@cat-org/configs', '@cat-org/utils'],
+          'import/core-modules': ['@cat-org/utils'],
         },
       },
     ],

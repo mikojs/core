@@ -112,13 +112,13 @@ export default (
   }
 
   if (!cliName)
-    logger.fail(
+    throw logger.fail(
       chalk`Should give an argument at least`,
       chalk`Use {green \`-h\`} to get the more information`,
     );
 
   if (!configs.store[cliName])
-    logger.fail(
+    throw logger.fail(
       chalk`Can not find {cyan \`${cliName}\`} in configs`,
       chalk`Use {green \`--info\`} to get the more information`,
     );
@@ -150,7 +150,7 @@ export default (
     };
   } catch (e) {
     if (/not found/.test(e.message))
-      logger.fail(e.message.replace(/not found/, 'Not found cli'));
+      throw logger.fail(e.message.replace(/not found/, 'Not found cli'));
 
     throw e;
   }

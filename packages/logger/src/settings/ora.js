@@ -6,7 +6,7 @@ import { invariant } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
 
-import { type settingsType } from '..';
+import { type settingsType } from '../index';
 
 type oraType = {
   notInit: boolean,
@@ -66,13 +66,12 @@ class OraStore {
         after:
           key !== 'fail'
             ? this.after
-            : () => {
+            : (): Error | void => {
                 error();
-                mockChoice(
+
+                return mockChoice(
                   process.env.NODE_ENV === 'test',
-                  () => {
-                    throw new Error('process exit');
-                  },
+                  () => new Error('process exit'),
                   process.exit,
                   1,
                 );

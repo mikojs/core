@@ -104,7 +104,7 @@ export default class Store {
         });
       } catch (e) {
         debugLog(e);
-        logger.fail(chalk`Run command: {red ${command}} fail`);
+        throw logger.fail(chalk`Run command: {red ${command}} fail`);
       }
     }
   };

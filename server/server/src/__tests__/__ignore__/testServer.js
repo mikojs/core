@@ -8,7 +8,7 @@
 
 import { type Context as koaContextType } from 'koa';
 
-import server from '../..';
+import server from '../../index';
 
 /**
  * @example

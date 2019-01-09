@@ -1,6 +1,6 @@
 // @flow
 
-import logger from '../..';
+import logger from '../../index';
 
 const logs = logger('ora', 'ora').init('init');
 
@@ -20,7 +20,7 @@ describe.each`
 
       if (name === 'fail')
         expect(() => {
-          logs[name]('message');
+          throw logs[name]('message');
         }).toThrow('process exit');
       else logs[name]('message');
 
@@ -35,7 +35,7 @@ describe.each`
 
       if (name === 'fail') {
         expect(() => {
-          logs[name]('message').log('log');
+          throw logs[name]('message');
         }).toThrow('process exit');
         expect(mockLog).toHaveBeenCalledTimes(1);
         expect(mockLog).toHaveBeenNthCalledWith(1, expected);

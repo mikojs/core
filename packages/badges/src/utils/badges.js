@@ -146,7 +146,7 @@ ${badges
 export default async (readme: string, ctx: ctxType): Promise<?string> => {
   const repo = await getRepo();
 
-  if (!repo) return logger.fail('Can not find git remote');
+  if (!repo) throw logger.fail('Can not find git remote');
   else
     return readme.replace(
       new RegExp(`${START_COMMENT}(.|\n)*${END_COMMENT}`, 'g'),

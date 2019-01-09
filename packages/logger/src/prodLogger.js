@@ -1,6 +1,6 @@
 // @flow
 
-import { type logsType } from '.';
+import { type logsType } from './index';
 
 export default (logNames?: $ReadOnlyArray<string> = []): logsType => {
   const logs = [

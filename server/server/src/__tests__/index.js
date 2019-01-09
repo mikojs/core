@@ -6,7 +6,7 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
-import server from '..';
+import server from '../index';
 
 import Endpoint from 'utils/Endpoint';
 

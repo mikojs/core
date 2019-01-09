@@ -2,13 +2,13 @@
   "private": true,
   "name": "@cat-org/core",
   "license": "MIT",
-  "workspaces": ["packages/*"],
+  "workspaces": ["packages/*", "server/*"],
   "scripts": {
-    "clean:all": "make clean-all",
-    "install:all": "make install-all",
+    "clean": "make clean",
+    "install:all": "make install",
     "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
-    "test": "make babel-test && configs test"
+    "test": "make babel-changed && configs test"
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.2.0",
@@ -60,7 +60,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "make babel-lint-staged && configs lint-staged && yarn flow"
+      "pre-commit": "make babel-changed && configs lint-staged && yarn flow",
+      "post-merge": "make babel-changed"
     }
   }
 }

@@ -29,7 +29,8 @@
     "**/*.md"
   ],
   "packages": [
-    "packages/*"
+    "packages/*",
+    "server/*"
   ],
   "useWorkspaces": true
 }

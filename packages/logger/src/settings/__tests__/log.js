@@ -1,6 +1,6 @@
 // @flow
 
-import logger from '../..';
+import logger from '../../index';
 
 import browser from '../browser';
 
@@ -10,7 +10,7 @@ test('log', () => {
   Object.keys(logs).forEach((key: string) => {
     if (key === 'fail')
       expect(() => {
-        logs[key]('message');
+        throw logs[key]('message');
       }).toThrow('process exit');
     else logs[key]('message');
   });

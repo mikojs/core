@@ -4,7 +4,7 @@ import path from 'path';
 
 import { transformFileSync } from '@babel/core';
 
-import babelPluginTransformFlow from '../..';
+import babelPluginTransformFlow from '../../index';
 
 export default (filename?: string = 'index.js'): string =>
   transformFileSync(path.resolve(__dirname, './files', filename), {

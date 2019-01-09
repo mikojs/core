@@ -1,6 +1,6 @@
 // @flow
 
-import logger from '../..';
+import logger from '../../index';
 
 import browser from '../browser';
 

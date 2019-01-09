@@ -2,7 +2,7 @@
 
 import Koa from 'koa';
 
-import middlewares from '..';
+import middlewares from '../index';
 
 describe('middlewares', () => {
   test('can not find `test` middleware', () => {

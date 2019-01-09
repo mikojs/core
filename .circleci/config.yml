@@ -40,7 +40,6 @@ jobs:
       - run:
           name: Check code style
           command: |
-            make babel-lint-staged
             yarn configs lint .
             yarn flow
 

@@ -6,6 +6,8 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
+import path from 'path';
+
 import { type Context as koaContextType } from 'koa';
 
 import server from '../../index';
@@ -32,6 +34,9 @@ server.middleware.config(__dirname);
 export default server.init()
   |> server.middleware('default')
   |> server.middleware('custom')
+  |> server.middleware('react', {
+    folderPath: path.resolve(__dirname, './pages'),
+  })
   |> (undefined
     |> server.all
     |> server.use(customMiddleware('entry router'))

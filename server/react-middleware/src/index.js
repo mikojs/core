@@ -3,8 +3,12 @@
 import fs from 'fs';
 import path from 'path';
 
-import type koaType, { Context as koaContextType } from 'koa';
+import {
+  type Middleware as koaMiddlewareType,
+  type Context as koaContextType,
+} from 'koa';
 import Router from 'koa-router';
+import compose from 'koa-compose';
 import { emptyFunction } from 'fbjs';
 import React from 'react';
 import { renderToNodeStream } from 'react-dom/server';
@@ -12,16 +16,13 @@ import { renderToNodeStream } from 'react-dom/server';
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-export default (
-  app: koaType,
-  {
-    folderPath = path.resolve('./src/pages'),
-    redirect = emptyFunction.thatReturnsNull,
-  }: {
-    folderPath?: string,
-    redirect?: (urlPattern: string) => ?string,
-  } = {},
-) => {
+export default ({
+  folderPath = path.resolve('./src/pages'),
+  redirect = emptyFunction.thatReturnsNull,
+}: {
+  folderPath?: string,
+  redirect?: (urlPattern: string) => ?string,
+} = {}): koaMiddlewareType => {
   if (!fs.existsSync(folderPath))
     throw new Error(
       `\`${path.relative(
@@ -55,6 +56,5 @@ export default (
       }
     });
 
-  app.use(router.routes());
-  app.use(router.allowedMethods());
+  return compose([router.routes(), router.allowedMethods()]);
 };

@@ -3,6 +3,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { emptyFunction } from 'fbjs';
+
 export default (): [
   string,
   {
@@ -22,6 +24,7 @@ export default (): [
           flags: 'a',
         },
       ),
+      skip: emptyFunction.thatReturns(process.env.NODE_ENV === 'test'),
     },
   ];
 };

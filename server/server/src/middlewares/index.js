@@ -3,7 +3,7 @@
 import path from 'path';
 
 import debug from 'debug';
-import type koaType, { Middleware as koaMiddlewareType } from 'koa';
+import type koaType from 'koa';
 
 const debugLog = debug('server:middlewares:default');
 
@@ -30,7 +30,7 @@ export class Middlewares {
    *
    * @return {Function} - pipline server function
    */
-  use = <optionsType>(middlewareName: string, options: optionsType) => (
+  use = <optionsType>(middlewareName: string, options?: optionsType) => (
     app: koaType,
   ): koaType => {
     if (!this.useMiddleware(app, this.folderPath, middlewareName, options)) {
@@ -58,21 +58,16 @@ export class Middlewares {
     app: koaType,
     folderPath: string,
     middlewareName: string,
-    options: optionsType,
+    options?: optionsType,
   ): boolean => {
     const middlewarePath = path.resolve(folderPath, middlewareName);
 
     debugLog(folderPath, middlewareName);
 
     try {
-      const middlewares = require(middlewarePath);
+      const middleware = require(middlewarePath);
 
-      debugLog(middlewares);
-      if (middlewares instanceof Array)
-        middlewares.forEach((middleware: koaMiddlewareType) => {
-          app.use(middleware);
-        });
-      else middlewares(app, options);
+      app.use(folderPath === __dirname ? middleware(options) : middleware);
 
       return true;
     } catch (e) {

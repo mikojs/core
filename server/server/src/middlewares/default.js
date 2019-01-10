@@ -1,6 +1,7 @@
 // @flow
 
 import { emptyFunction } from 'fbjs';
+import compose from 'koa-compose';
 import bodyparser from 'koa-bodyparser';
 import compress from 'koa-compress';
 import etag from 'koa-etag';
@@ -11,16 +12,22 @@ import { mockChoice } from '@cat-org/utils';
 
 import createLogs from 'utils/createLogs';
 
-export default [
-  morgan(
-    ...mockChoice(
-      process.env.NODE_ENV === 'production',
-      createLogs,
-      emptyFunction.thatReturns(['dev']),
+export default () =>
+  compose([
+    morgan(
+      ...mockChoice(
+        process.env.NODE_ENV === 'production',
+        createLogs,
+        emptyFunction.thatReturns([
+          'dev',
+          {
+            skip: emptyFunction.thatReturns(process.env.NODE_ENV === 'test'),
+          },
+        ]),
+      ),
     ),
-  ),
-  helmet(),
-  etag(),
-  bodyparser(),
-  compress(),
-];
+    helmet(),
+    etag(),
+    bodyparser(),
+    compress(),
+  ]);

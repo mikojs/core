@@ -15,9 +15,11 @@ describe('react middleware', () => {
   beforeAll(async () => {
     const app = new Koa();
 
-    react(app, {
-      folderPath: path.resolve(__dirname, './__ignore__'),
-    });
+    app.use(
+      react({
+        folderPath: path.resolve(__dirname, './__ignore__'),
+      }),
+    );
 
     port = await getPort();
     server = app.listen(port);
@@ -38,7 +40,7 @@ describe('react middleware', () => {
 
   test('can not find folder', () => {
     expect(() => {
-      react(new Koa());
+      react();
     }).toThrow('folder can not be found.');
   });
 

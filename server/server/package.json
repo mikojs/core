@@ -23,6 +23,7 @@
     "koa-router": "^7.4.0"
   },
   "devDependencies": {
+    "@cat-org/react-middleware": "^1.0.0-beta.12",
     "node-fetch": "^2.3.0"
   },
   "keywords": ["cat-org", "server"],

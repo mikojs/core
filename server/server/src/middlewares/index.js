@@ -8,8 +8,8 @@ import type koaType, { Middleware as koaMiddlewareType } from 'koa';
 const debugLog = debug('server:middlewares:default');
 
 /** middlewares controller */
-class Middlewares {
-  folderPath = path.resolve('./middlewares');
+export class Middlewares {
+  folderPath = path.resolve('./src/middlewares');
 
   /**
    * @example
@@ -26,12 +26,15 @@ class Middlewares {
    * middlewares.use('middleware name')
    *
    * @param {string} middlewareName - middleware name
+   * @param {Any} options - middleware options
    *
    * @return {Function} - pipline server function
    */
-  use = (middlewareName: string) => (app: koaType): koaType => {
-    if (!this.useMiddleware(app, this.folderPath, middlewareName)) {
-      if (!this.useMiddleware(app, __dirname, middlewareName))
+  use = <optionsType>(middlewareName: string, options: optionsType) => (
+    app: koaType,
+  ): koaType => {
+    if (!this.useMiddleware(app, this.folderPath, middlewareName, options)) {
+      if (!this.useMiddleware(app, __dirname, middlewareName, options))
         throw new Error(
           `can not find \`${middlewareName}\` middleware in ${this.folderPath}`,
         );
@@ -47,13 +50,15 @@ class Middlewares {
    * @param {Object} app - koa server
    * @param {string} folderPath - folder path
    * @param {string} middlewareName - middleware name
+   * @param {Any} options - middleware options
    *
    * @return {boolean} - use middleware or not
    */
-  useMiddleware = (
+  useMiddleware = <optionsType>(
     app: koaType,
     folderPath: string,
     middlewareName: string,
+    options: optionsType,
   ): boolean => {
     const middlewarePath = path.resolve(folderPath, middlewareName);
 
@@ -63,14 +68,16 @@ class Middlewares {
       const middlewares = require(middlewarePath);
 
       debugLog(middlewares);
-      (middlewares instanceof Array ? middlewares : [middlewares]).forEach(
-        (middleware: koaMiddlewareType) => {
+      if (middlewares instanceof Array)
+        middlewares.forEach((middleware: koaMiddlewareType) => {
           app.use(middleware);
-        },
-      );
+        });
+      else middlewares(app, options);
 
       return true;
     } catch (e) {
+      if (!/Cannot find module/.test(e.message)) throw e;
+
       debugLog(e);
       return false;
     }

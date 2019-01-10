@@ -119,10 +119,10 @@ export default {
     };
   },
 
-  run: (port?: number = 8000) => (app: Koa): koaServerType => {
+  run: (port: ?(number | string) = 8000) => (app: Koa): koaServerType => {
     debugLog(port);
 
-    return app.listen(port, () => {
+    return app.listen(parseInt(port, 10), () => {
       logger.info(chalk`Running server at port: {gray {bold ${port}}}`);
     });
   },

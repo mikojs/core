@@ -1,8 +1,10 @@
 // @flow
 
-import { type Context as koaContextType } from 'koa';
+import type koaType, { Context as koaContextType } from 'koa';
 
-export default async (ctx: koaContextType, next: () => Promise<void>) => {
-  ctx.body = ['custom middleware'];
-  await next();
+export default (app: koaType) => {
+  app.use(async (ctx: koaContextType, next: () => Promise<void>) => {
+    ctx.body = ['custom middleware'];
+    await next();
+  });
 };

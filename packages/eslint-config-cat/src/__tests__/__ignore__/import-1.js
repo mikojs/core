@@ -1,7 +1,7 @@
 // @flow
 
 // $expectError import/order
-import order from '../..';
+import order from '../../index';
 
 import fbjs from 'fbjs';
 

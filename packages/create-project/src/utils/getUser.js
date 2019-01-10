@@ -31,7 +31,7 @@ export const getUser = () =>
           return (await execa.shell(cmd)).stdout;
         } catch (e) {
           debug('create-project:getUser')(e);
-          return logger.fail(
+          throw logger.fail(
             chalk`Run {green \`${cmd}\`} before creating project`,
           );
         }

@@ -6,7 +6,7 @@ import Koa, { type ServerType as koaServerType } from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
-import react from '..';
+import react from '../index';
 
 describe('react middleware', () => {
   let server: koaServerType;

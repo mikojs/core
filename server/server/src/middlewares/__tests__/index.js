@@ -4,7 +4,7 @@ import path from 'path';
 
 import Koa from 'koa';
 
-import { Middlewares } from '..';
+import { Middlewares } from '../index';
 
 describe('middlewares', () => {
   test('can not find `test` middleware', () => {

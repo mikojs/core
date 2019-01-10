@@ -23,7 +23,7 @@ export default (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
   const { args } = program.parse([...argv]);
 
   if (args.length === 0)
-    logger.fail(
+    throw logger.fail(
       chalk`Must give {green readme path}`,
       chalk`Use {green \`--help\`} to get the more information`,
     );

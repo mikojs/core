@@ -7,7 +7,7 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
-import server from '..';
+import server from '../index';
 
 // TODO: add checking should use middleware
 // eslint-disable-next-line flowtype/no-unused-expressions

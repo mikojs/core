@@ -1,25 +1,20 @@
 // @flow
 
-import Store, { type ctxType } from './index';
+import Store from './index';
 
 /** configs store */
 class Configs extends Store {
   /**
    * @example
-   * configs.end(ctx)
-   *
-   * @param {Object} ctx - store context
+   * configs.end()
    */
-  end = async ({ cmd }: ctxType) => {
+  end = async () => {
     await this.execa(
       'git init',
       // TODO: modify after @cat-org/configs production
-      `${
-        cmd === 'npm' ? 'npm install -D' : 'yarn add --dev'
-      } @cat-org/configs@beta`,
+      'yarn add --dev @cat-org/configs@beta',
       ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
-        (configName: string) =>
-          `configs --install ${cmd === 'npm' ? '--npm ' : ''}${configName}`,
+        (configName: string) => `configs --install ${configName}`,
       ),
     );
   };

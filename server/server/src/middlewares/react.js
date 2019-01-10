@@ -1,3 +1,3 @@
 // @flow
 
-export default from '@cat-org/react-middleware';
+export { default } from '@cat-org/react-middleware';

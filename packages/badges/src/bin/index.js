@@ -24,7 +24,7 @@ handleUnhandledRejection();
       });
 
       if (!pkgPath)
-        logger.fail(
+        throw logger.fail(
           'Can not find the root path',
           chalk`Create a {green package.json} first`,
         );
@@ -33,7 +33,7 @@ handleUnhandledRejection();
       const readmePath = path.resolve(rootPath, 'README.md');
 
       if (!fs.existsSync(readmePath))
-        logger.fail(
+        throw logger.fail(
           chalk`Can not find the {green README.md} in the root folder`,
           chalk`Create a {green README.md} first`,
         );

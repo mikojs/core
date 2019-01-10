@@ -35,7 +35,6 @@ export default (
   configs {green babel:lerna} {gray --info}`,
     )
     .option('--install', 'install packages by config')
-    .option('--npm', 'use npm to install packages')
     .option('--info', 'print more info about configs')
     .allowUnknownOption();
 
@@ -43,7 +42,6 @@ export default (
     args: [cliName],
     rawArgs,
     install: shouldInstall = false,
-    npm: shouldUseNpm = false,
     info = false,
   } = program.parse([...argv]);
 
@@ -51,7 +49,6 @@ export default (
     cliName,
     rawArgs,
     shouldInstall,
-    shouldUseNpm,
     info,
   });
 
@@ -112,13 +109,13 @@ export default (
   }
 
   if (!cliName)
-    logger.fail(
+    throw logger.fail(
       chalk`Should give an argument at least`,
       chalk`Use {green \`-h\`} to get the more information`,
     );
 
   if (!configs.store[cliName])
-    logger.fail(
+    throw logger.fail(
       chalk`Can not find {cyan \`${cliName}\`} in configs`,
       chalk`Use {green \`--info\`} to get the more information`,
     );
@@ -141,16 +138,14 @@ export default (
     return {
       cli: shouldInstall ? 'install' : npmWhich(process.cwd()).sync(cli),
       argv: shouldInstall
-        ? install(
-            shouldUseNpm ? ['npm', 'install', '-D'] : ['yarn', 'add', '--dev'],
-          )
+        ? install(['yarn', 'add', '--dev'])
         : run(rawArgs.filter((arg: string) => ![cliName].includes(arg))),
       env,
       cliName,
     };
   } catch (e) {
     if (/not found/.test(e.message))
-      logger.fail(e.message.replace(/not found/, 'Not found cli'));
+      throw logger.fail(e.message.replace(/not found/, 'Not found cli'));
 
     throw e;
   }

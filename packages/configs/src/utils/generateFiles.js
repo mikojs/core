@@ -41,7 +41,7 @@ const findConfigFiles = (cliName: string): {} => {
 
   if (!configFiles[cliName]) {
     if (!CONFIG_FILES[cli])
-      logger.fail(
+      throw logger.fail(
         'Can not generate the config file',
         chalk`Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
       );

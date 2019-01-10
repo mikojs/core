@@ -108,7 +108,7 @@ export class Worker {
       }
 
       if (!filePath)
-        logger.fail('filePath can not be undefined in worker.writeCache');
+        throw logger.fail('filePath can not be undefined in worker.writeCache');
       else {
         if (!this.cache[filePath]) this.cache[filePath] = { pids: [] };
         if (pid) this.cache[filePath].pids.push(pid);
@@ -120,7 +120,7 @@ export class Worker {
       return null;
     }
 
-    if (!using) logger.fail('client can not remove cache');
+    if (!using) throw logger.fail('client can not remove cache');
 
     const client = net.connect({ port: this.port });
 

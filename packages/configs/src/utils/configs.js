@@ -124,7 +124,7 @@ export class Configs {
     debugLog(`Find rood dir: ${this.rootDir}`);
 
     if (this.rootDir === '/')
-      logger.fail(
+      throw logger.fail(
         'Can not find the root directory',
         chalk`Run {cyan \`git init\`} in the root directory`,
       );

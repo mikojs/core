@@ -35,7 +35,7 @@ export default (
   } = program.parse([...argv]);
 
   if (!relativeNewProject)
-    logger.fail(
+    throw logger.fail(
       chalk`Must give {green new project name}`,
       chalk`Use {green \`--help\`} to get the more information`,
     );
@@ -43,7 +43,7 @@ export default (
   const newProject = path.resolve(relativeNewProject);
 
   if (fs.existsSync(newProject))
-    logger.fail(
+    throw logger.fail(
       chalk`Project exits: {red ${path.relative(process.cwd(), newProject)}}`,
     );
 
@@ -55,7 +55,7 @@ export default (
     const { workspaces = [] } = require(path.resolve(rootPath, 'package.json'));
 
     if (workspaces.length === 0)
-      logger.fail(
+      throw logger.fail(
         chalk`Can not find the workspcaes in the {cyan package.json}`,
       );
 
@@ -69,6 +69,7 @@ export default (
 
     return cliOptions;
   } catch (e) {
-    return logger.fail(chalk`Can not find {red lerna} in the project`);
+    debugLog(e);
+    throw logger.fail(chalk`Can not find {red lerna} in the project`);
   }
 };

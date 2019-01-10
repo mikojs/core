@@ -18,7 +18,12 @@ export default () =>
       ...mockChoice(
         process.env.NODE_ENV === 'production',
         createLogs,
-        emptyFunction.thatReturns(['dev']),
+        emptyFunction.thatReturns([
+          'dev',
+          {
+            skip: emptyFunction.thatReturns(process.env.NODE_ENV === 'test'),
+          },
+        ]),
       ),
     ),
     helmet(),

@@ -19,7 +19,7 @@ class Base extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = async ({ cmd, pkg: { repository } = {} }: ctxType) => {
+  end = async ({ pkg: { repository } = {} }: ctxType) => {
     await this.execa(
       'yarn flow-typed install',
       'git add .',

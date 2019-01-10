@@ -17,12 +17,10 @@ export default (argv: $ReadOnlyArray<string>): ctxType => {
   const program = new commander.Command('create-project')
     .version(version, '-v, --version')
     .arguments('<project directory>')
-    .usage(chalk`{green <project directory>}`)
-    .option('--npm', 'use npm');
+    .usage(chalk`{green <project directory>}`);
 
   const {
     args: [projectDir],
-    npm = false,
   } = program.parse([...argv]);
 
   if (!projectDir)
@@ -30,7 +28,6 @@ export default (argv: $ReadOnlyArray<string>): ctxType => {
 
   const cliOptions = {
     projectDir: path.resolve(projectDir),
-    cmd: npm ? 'npm' : 'yarn',
   };
 
   debugLog(cliOptions);

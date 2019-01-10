@@ -29,7 +29,6 @@ export type pkgType = {
 
 export type ctxType = {
   projectDir: string,
-  cmd: string,
   pkg?: pkgType,
   useNpm?: boolean,
 };

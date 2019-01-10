@@ -40,7 +40,7 @@ describe('react middleware', () => {
 
   test('can not find folder', () => {
     expect(() => {
-      react(new Koa());
+      react();
     }).toThrow('folder can not be found.');
   });
 

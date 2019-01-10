@@ -35,7 +35,6 @@ export default (
   configs {green babel:lerna} {gray --info}`,
     )
     .option('--install', 'install packages by config')
-    .option('--npm', 'use npm to install packages')
     .option('--info', 'print more info about configs')
     .allowUnknownOption();
 
@@ -43,7 +42,6 @@ export default (
     args: [cliName],
     rawArgs,
     install: shouldInstall = false,
-    npm: shouldUseNpm = false,
     info = false,
   } = program.parse([...argv]);
 
@@ -51,7 +49,6 @@ export default (
     cliName,
     rawArgs,
     shouldInstall,
-    shouldUseNpm,
     info,
   });
 
@@ -141,9 +138,7 @@ export default (
     return {
       cli: shouldInstall ? 'install' : npmWhich(process.cwd()).sync(cli),
       argv: shouldInstall
-        ? install(
-            shouldUseNpm ? ['npm', 'install', '-D'] : ['yarn', 'add', '--dev'],
-          )
+        ? install(['yarn', 'add', '--dev'])
         : run(rawArgs.filter((arg: string) => ![cliName].includes(arg))),
       env,
       cliName,

@@ -44,10 +44,9 @@ describe('cli options', () => {
   });
 
   test.each`
-    cliName              | options                   | cli          | argv
-    ${'install-package'} | ${['--install']}          | ${'install'} | ${['yarn', 'add', '--dev']}
-    ${'install-package'} | ${['--install', '--npm']} | ${'install'} | ${['npm', 'install', '-D']}
-    ${'run-cmd'}         | ${[]}                     | ${babelCli}  | ${defaultArgv}
+    cliName              | options          | cli          | argv
+    ${'install-package'} | ${['--install']} | ${'install'} | ${['yarn', 'add', '--dev']}
+    ${'run-cmd'}         | ${[]}            | ${babelCli}  | ${defaultArgv}
   `(
     'Run $cliName successfully with $options',
     ({

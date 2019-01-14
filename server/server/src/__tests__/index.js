@@ -36,4 +36,10 @@ describe('server', () => {
           |> server.end),
     ).toThrow('can not find `test` method in `koa-router`');
   });
+
+  test('not use koa to run server', () => {
+    expect(() => {
+      server.run()();
+    }).toThrow('server is not koa server');
+  });
 });

@@ -119,8 +119,7 @@ export default {
   run: (port: ?(number | string) = 8000) => (
     app: routerType,
   ): koaServerType => {
-    if (!(app instanceof Koa))
-      throw new TypeError('Argument is not koa server');
+    if (!(app instanceof Koa)) throw new TypeError('server is not koa server');
 
     debugLog(port);
 

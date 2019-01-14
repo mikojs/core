@@ -8,7 +8,7 @@
 
 [website]: https://cat-org.github.io/core/default-middleware
 
-Cat default-middleware.
+Default middleware for cat-org server.
 
 ## Install
 

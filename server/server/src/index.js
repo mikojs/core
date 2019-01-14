@@ -62,11 +62,6 @@ export default {
           // $FlowFixMe
           router;
 
-        debugLog({
-          method,
-          urlPattern,
-        });
-
         if (!(parentRouter instanceof Router))
           throw new TypeError(
             `\`server.${method}\` is not under \`server.all\``,

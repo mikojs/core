@@ -7,11 +7,14 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
+import defaultMiddleware from '@cat-org/default-middleware';
+import react from '@cat-org/react-middleware';
+
 import server from '../index';
 
 // TODO: add checking should use middleware
 // eslint-disable-next-line flowtype/no-unused-expressions
 server.init()
-  |> server.middleware('default')
-  |> server.middleware('react')
+  |> server.use(defaultMiddleware)
+  |> server.use(react())
   |> server.run(process.env.PORT);

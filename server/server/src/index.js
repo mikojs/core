@@ -12,7 +12,8 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 
 import logger from './utils/logger';
 import Endpoint from './utils/Endpoint';
-import customMiddlewares from './middlewares';
+
+type routerType = Router | Endpoint | Koa;
 
 const debugLog = debug('server');
 
@@ -33,11 +34,7 @@ export default {
   put: (prefix: string) => new Endpoint(prefix, 'put'),
   del: (prefix: string) => new Endpoint(prefix, 'del'),
 
-  middleware: customMiddlewares,
-
-  use: (middleware: koaMiddlewareType) => (
-    router: Router | Endpoint | Koa,
-  ): Router | Endpoint | Koa => {
+  use: (middleware: koaMiddlewareType) => (router: routerType): routerType => {
     router.use(middleware);
 
     return router;
@@ -119,7 +116,12 @@ export default {
     };
   },
 
-  run: (port: ?(number | string) = 8000) => (app: Koa): koaServerType => {
+  run: (port: ?(number | string) = 8000) => (
+    app: routerType,
+  ): koaServerType => {
+    if (!(app instanceof Koa))
+      throw new TypeError('Argument is not koa server');
+
     debugLog(port);
 
     return app.listen(parseInt(port, 10), () => {

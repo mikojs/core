@@ -13,17 +13,11 @@
     "@cat-org/utils": "^1.0.0-beta.12",
     "chalk": "^2.4.2",
     "debug": "^4.1.1",
-    "fbjs": "^1.0.0",
     "koa": "^2.6.2",
-    "koa-bodyparser": "^4.2.1",
-    "koa-compose": "^4.1.0",
-    "koa-compress": "^3.0.0",
-    "koa-etag": "^3.0.0",
-    "koa-helmet": "^4.0.0",
-    "koa-morgan": "^1.0.1",
     "koa-router": "^7.4.0"
   },
   "devDependencies": {
+    "@cat-org/default-middleware": "^1.0.0-beta.12",
     "@cat-org/react-middleware": "^1.0.0-beta.12",
     "node-fetch": "^2.3.0"
   },

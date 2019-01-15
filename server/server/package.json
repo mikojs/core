@@ -14,7 +14,8 @@
     "chalk": "^2.4.2",
     "debug": "^4.1.1",
     "koa": "^2.6.2",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "ora": "^3.0.0"
   },
   "devDependencies": {
     "@cat-org/default-middleware": "^1.0.0-beta.12",

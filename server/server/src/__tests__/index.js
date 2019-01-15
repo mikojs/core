@@ -22,7 +22,7 @@ describe('server', () => {
     ({ method }: { method: string }) => {
       expect(
         () => server.init() |> ('/test' |> server[method] |> server.end),
-      ).toThrow(`\`server.${method}\` is not under \`server.all\``);
+      ).toThrow('process exit');
     },
   );
 
@@ -34,12 +34,12 @@ describe('server', () => {
           |> server.all
           |> (new Endpoint('/test', 'test') |> server.end)
           |> server.end),
-    ).toThrow('can not find `test` method in `koa-router`');
+    ).toThrow('process exit');
   });
 
   test('not use koa to run server', () => {
     expect(() => {
       server.run()();
-    }).toThrow('server is not koa server');
+    }).toThrow('process exit');
   });
 });

@@ -4,7 +4,6 @@ install:
 	@yarn install
 	@yarn lerna bootstrap
 	@make babel-all
-	@ln -snf $(ROOT)/packages/lerna-flow-typed-install/lib/bin/index.js ./node_modules/.bin/lerna-flow-typed-install
 	@yarn flow-typed install --verbose
 	@yarn lerna exec "lerna-flow-typed-install --verbose" \
 		--stream \
@@ -46,6 +45,8 @@ define babel-build
 		--scope @cat-org/babel-* \
 		$(1)
 	ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
+	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
+	ln -snf $(ROOT)/packages/lerna-flow-typed-install/lib/bin/index.js ./node_modules/.bin/lerna-flow-typed-install
 	yarn lerna exec \
 		"configs babel:lerna" \
 		--parallel \

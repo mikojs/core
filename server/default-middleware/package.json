@@ -1,0 +1,29 @@
+{
+  "name": "@cat-org/default-middleware",
+  "description": "Default middleware for cat-org server",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/core/default-middleware",
+  "repository": "https://github.com/cat-org/core/tree/master/server/default-middleware",
+  "version": "1.0.0-beta.12",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@cat-org/utils": "^1.0.0-beta.12",
+    "fbjs": "^1.0.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-compose": "^4.1.0",
+    "koa-compress": "^3.0.0",
+    "koa-etag": "^3.0.0",
+    "koa-helmet": "^4.0.0",
+    "koa-morgan": "^1.0.1"
+  },
+  "devDependencies": {
+    "get-port": "^4.1.0",
+    "koa": "^2.6.2",
+    "node-fetch": "^2.3.0"
+  },
+  "keywords": ["cat-org", "default", "middleware"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

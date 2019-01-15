@@ -12,14 +12,19 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 
 import logger from './utils/logger';
 import Endpoint from './utils/Endpoint';
-import customMiddlewares from './middlewares';
+
+type routerType = Router | Endpoint | Koa;
 
 const debugLog = debug('server');
 
 handleUnhandledRejection();
 
 export default {
-  init: () => new Koa(),
+  init: (): Koa => {
+    logger.start('Server start');
+    return new Koa();
+  },
+
   all: (prefix: ?string): Router => {
     debugLog({
       method: 'all',
@@ -28,16 +33,13 @@ export default {
 
     return prefix ? new Router({ prefix }) : new Router();
   },
+
   get: (prefix: string) => new Endpoint(prefix, 'get'),
   post: (prefix: string) => new Endpoint(prefix, 'post'),
   put: (prefix: string) => new Endpoint(prefix, 'put'),
   del: (prefix: string) => new Endpoint(prefix, 'del'),
 
-  middleware: customMiddlewares,
-
-  use: (middleware: koaMiddlewareType) => (
-    router: Router | Endpoint | Koa,
-  ): Router | Endpoint | Koa => {
+  use: (middleware: koaMiddlewareType) => (router: routerType): routerType => {
     router.use(middleware);
 
     return router;
@@ -65,15 +67,8 @@ export default {
           // $FlowFixMe
           router;
 
-        debugLog({
-          method,
-          urlPattern,
-        });
-
         if (!(parentRouter instanceof Router))
-          throw new TypeError(
-            `\`server.${method}\` is not under \`server.all\``,
-          );
+          throw logger.fail(`\`server.${method}\` is not under \`server.all\``);
 
         switch (method) {
           case 'get':
@@ -93,7 +88,7 @@ export default {
             break;
 
           default:
-            throw new TypeError(
+            throw logger.fail(
               `can not find \`${method}\` method in \`koa-router\``,
             );
         }
@@ -119,11 +114,15 @@ export default {
     };
   },
 
-  run: (port: ?(number | string) = 8000) => (app: Koa): koaServerType => {
+  run: (port: ?(number | string) = 8000) => (
+    app: routerType,
+  ): koaServerType => {
+    if (!(app instanceof Koa)) throw logger.fail('server is not koa server');
+
     debugLog(port);
 
     return app.listen(parseInt(port, 10), () => {
-      logger.info(chalk`Running server at port: {gray {bold ${port}}}`);
+      logger.succeed(chalk`Running server at port: {gray {bold ${port}}}`);
     });
   },
 };

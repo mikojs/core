@@ -6,8 +6,6 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
-import path from 'path';
-
 import { type Context as koaContextType } from 'koa';
 
 import server from '../../index';
@@ -22,50 +20,33 @@ import server from '../../index';
  */
 const customMiddleware = (newBody: string) => async (
   ctx: koaContextType,
-  next: Promise<void>,
+  next: () => Promise<void>,
 ) => {
-  ctx.body = [...ctx.body, newBody];
+  ctx.body = [...(ctx.body || []), newBody];
   await next();
 };
 
-server.middleware.config(__dirname);
-
 // $FlowFixMe
 export default server.init()
-  |> server.middleware('default')
-  |> server.middleware('custom')
-  |> server.middleware('react', {
-    folderPath: path.resolve(__dirname, './pages'),
-  })
-  |> (undefined
+  |> server.use(customMiddleware('entry router'))
+  |> ('/test'
     |> server.all
-    |> server.use(customMiddleware('entry router'))
-    |> ('/test'
-      |> server.all
-      |> server.use(customMiddleware('test'))
-      |> ('/get'
-        |> server.get
-        |> server.use(customMiddleware('get'))
-        |> server.end)
-      |> ('/post'
-        |> server.post
-        |> server.use(customMiddleware('post'))
-        |> server.end)
-      |> ('/put'
-        |> server.put
-        |> server.use(customMiddleware('put'))
-        |> server.end)
-      |> ('/del'
-        |> server.del
-        |> server.use(customMiddleware('del'))
-        |> server.end)
+    |> server.use(customMiddleware('test'))
+    |> ('/get'
+      |> server.get
+      |> server.use(customMiddleware('get'))
       |> server.end)
-    |> ('/bodyparser'
+    |> ('/post'
       |> server.post
-      |> server.use(async (ctx: koaContextType, next: Promise<void>) => {
-        ctx.body = ctx.request.body;
-        await next();
-      })
+      |> server.use(customMiddleware('post'))
+      |> server.end)
+    |> ('/put'
+      |> server.put
+      |> server.use(customMiddleware('put'))
+      |> server.end)
+    |> ('/del'
+      |> server.del
+      |> server.use(customMiddleware('del'))
       |> server.end)
     |> server.end)
   |> server.run();

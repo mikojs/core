@@ -6,9 +6,9 @@ import fetchServer from './__ignore__/fetchServer';
 describe('default server', () => {
   test.each`
     method    | expected
-    ${'get'}  | ${['custom middleware', 'entry router', 'test', 'get']}
-    ${'post'} | ${['custom middleware', 'entry router', 'test', 'post']}
-    ${'put'}  | ${['custom middleware', 'entry router', 'test', 'put']}
+    ${'get'}  | ${['entry router', 'test', 'get']}
+    ${'post'} | ${['entry router', 'test', 'post']}
+    ${'put'}  | ${['entry router', 'test', 'put']}
     ${'del'}  | ${''}
   `(
     '$method',
@@ -24,18 +24,7 @@ describe('default server', () => {
   );
 
   test('not find method', async () => {
-    expect(await fetchServer('/')).toEqual(['custom middleware']);
-  });
-
-  test('default middlewares work', async () => {
-    expect(
-      await fetchServer('/bodyparser', 'post', {
-        body: JSON.stringify({ key: 'value' }),
-        headers: { 'Content-Type': 'application/json' },
-      }),
-    ).toEqual({
-      key: 'value',
-    });
+    expect(await fetchServer('/')).toEqual(['entry router']);
   });
 
   afterAll(() => {

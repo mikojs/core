@@ -1,6 +1,9 @@
 // @flow
 
 import type { Middleware as koaMiddlewareType } from 'koa';
+import debug from 'debug';
+
+const debugLog = debug('server:endpoint');
 
 /** router endpoint */
 export default class Endpoint {
@@ -20,6 +23,7 @@ export default class Endpoint {
    * @param {string} method - method of endpoint
    */
   constructor(urlPattern: string, method: string) {
+    debugLog({ urlPattern, method });
     this.urlPattern = urlPattern;
     this.method = method;
     this.middlewares = [];

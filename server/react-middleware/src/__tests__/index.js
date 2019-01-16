@@ -16,7 +16,7 @@ describe('react middleware', () => {
     const app = new Koa();
 
     app.use(
-      react({
+      await react({
         folderPath: path.resolve(__dirname, './__ignore__'),
       }),
     );

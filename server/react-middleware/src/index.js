@@ -9,6 +9,7 @@ import {
 } from 'koa';
 import Router from 'koa-router';
 import compose from 'koa-compose';
+import webpack from 'koa-webpack';
 import { emptyFunction } from 'fbjs';
 import React from 'react';
 import { renderToNodeStream } from 'react-dom/server';
@@ -16,13 +17,19 @@ import { renderToNodeStream } from 'react-dom/server';
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-export default ({
+import getConfig, { type entryType } from './utils/getConfig';
+
+export default async ({
   folderPath = path.resolve('./src/pages'),
-  redirect = emptyFunction.thatReturnsNull,
+  redirect = emptyFunction.thatReturnsArgument,
+  dev = true,
+  config: configFunc = emptyFunction.thatReturnsArgument,
 }: {
   folderPath?: string,
-  redirect?: (urlPattern: string) => ?string,
-} = {}): koaMiddlewareType => {
+  redirect?: (urlPattern: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+  dev?: boolean,
+  config?: (cnofig: {}) => {},
+} = {}): Promise<koaMiddlewareType> => {
   if (!fs.existsSync(folderPath))
     throw new Error(
       `\`${path.relative(
@@ -32,29 +39,44 @@ export default ({
     );
 
   const router = new Router();
+  const entry: entryType = {};
 
-  d3DirTree(folderPath)
+  d3DirTree(folderPath, {
+    extensions: /.jsx?$/,
+  })
     .leaves()
-    .forEach(({ data: { name, path: filePath } }: d3DirTreeNodeType) => {
-      const urlPattern = path
+    .forEach(({ data: { path: filePath } }: d3DirTreeNodeType) => {
+      const relativePath = path
         .relative(folderPath, filePath)
-        .replace(/(index)?\.jsx?$/, '');
+        .replace(/\.jsx?$/, '');
 
-      switch (urlPattern) {
-        default:
-          router.get(
-            redirect(urlPattern) || `/${urlPattern}`,
-            async (ctx: koaContextType, next: () => Promise<void>) => {
-              const Component = require(filePath);
+      entry[relativePath.replace(/\//g, '-')] = [filePath];
 
-              ctx.type = 'text/html; charset=utf-8';
-              ctx.body = renderToNodeStream(<Component />);
-              await next();
-            },
-          );
-          break;
-      }
+      redirect([
+        relativePath.replace(/(index)?$/, '').replace(/^/, '/'),
+      ]).forEach((routerPath: string) => {
+        router.get(
+          routerPath,
+          async (ctx: koaContextType, next: () => Promise<void>) => {
+            const Component = require(filePath);
+
+            ctx.type = 'text/html; charset=utf-8';
+            ctx.body = renderToNodeStream(<Component />);
+            await next();
+          },
+        );
+      });
     });
 
-  return compose([router.routes(), router.allowedMethods()]);
+  return compose([
+    router.routes(),
+    router.allowedMethods(),
+    dev
+      ? await webpack({
+          config: configFunc(getConfig(dev, entry)),
+        })
+      : async (ctx: koaContextType, next: () => Promise<void>) => {
+          await next();
+        },
+  ]);
 };

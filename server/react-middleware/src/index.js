@@ -11,13 +11,13 @@ import Router from 'koa-router';
 import compose from 'koa-compose';
 import webpack from 'koa-webpack';
 import { emptyFunction } from 'fbjs';
-import React from 'react';
-import { renderToNodeStream } from 'react-dom/server';
 
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import getConfig, { type entryType } from './utils/getConfig';
+import findTemplate from './utils/findTemplate';
+import render from './utils/render';
 
 export default async ({
   folderPath = path.resolve('./src/pages'),
@@ -58,10 +58,14 @@ export default async ({
         router.get(
           routerPath,
           async (ctx: koaContextType, next: () => Promise<void>) => {
-            const Component = require(filePath);
-
             ctx.type = 'text/html; charset=utf-8';
-            ctx.body = renderToNodeStream(<Component />);
+            ctx.body = await render(
+              ctx,
+              findTemplate(folderPath, 'Document'),
+              findTemplate(folderPath, 'Container'),
+              require(filePath),
+            );
+
             await next();
           },
         );

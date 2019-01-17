@@ -16,8 +16,10 @@
     "koa-compose": "^4.1.0",
     "koa-router": "^7.4.0",
     "koa-webpack": "^5.2.1",
+    "multistream": "^2.1.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "react-helmet": "^5.2.0",
     "terser-webpack-plugin": "^1.2.1",
     "webpack": "^4.28.1"
   },

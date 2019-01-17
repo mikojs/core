@@ -1,7 +1,7 @@
 // @flow
 
 import path from 'path';
-import type net from 'net';
+import { type Server as ServerType } from 'net';
 
 import getPort from 'get-port';
 import moment from 'moment';
@@ -17,7 +17,7 @@ const cache = {
 
 let serverWorker: Worker;
 let clientWorker: Worker;
-let server: net.Server;
+let server: ServerType;
 
 /**
  * @example

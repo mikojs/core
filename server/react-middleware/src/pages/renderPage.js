@@ -10,7 +10,7 @@ import stream, { type Readable as ReadableType } from 'stream';
 import crypto from 'crypto';
 
 import { type Context as koaContextType } from 'koa';
-import React, { type ComponentType } from 'react';
+import React from 'react';
 import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
 import multistream from 'multistream';
 import { emptyFunction } from 'fbjs';

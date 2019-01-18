@@ -7,17 +7,12 @@ import {
   type Middleware as koaMiddlewareType,
   type Context as koaContextType,
 } from 'koa';
-import Router from 'koa-router';
 import compose from 'koa-compose';
 import webpack from 'koa-webpack';
 import { emptyFunction } from 'fbjs';
 
-import { d3DirTree } from '@cat-org/utils';
-import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
-
-import getConfig, { type entryType } from './utils/getConfig';
-import findTemplate from './utils/findTemplate';
-import render from './utils/render';
+import pages, { type redirectType } from './pages';
+import getConfig from './utils/getConfig';
 
 export default async ({
   folderPath = path.resolve('./src/pages'),
@@ -26,7 +21,7 @@ export default async ({
   config: configFunc = emptyFunction.thatReturnsArgument,
 }: {
   folderPath?: string,
-  redirect?: (urlPattern: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+  redirect?: redirectType,
   dev?: boolean,
   config?: (cnofig: {}) => {},
 } = {}): Promise<koaMiddlewareType> => {
@@ -38,39 +33,7 @@ export default async ({
       )}\` folder can not be found.`,
     );
 
-  const router = new Router();
-  const entry: entryType = {};
-
-  d3DirTree(folderPath, {
-    extensions: /.jsx?$/,
-  })
-    .leaves()
-    .forEach(({ data: { path: filePath } }: d3DirTreeNodeType) => {
-      const relativePath = path
-        .relative(folderPath, filePath)
-        .replace(/\.jsx?$/, '');
-
-      entry[relativePath.replace(/\//g, '-')] = [filePath];
-
-      redirect([
-        relativePath.replace(/(index)?$/, '').replace(/^/, '/'),
-      ]).forEach((routerPath: string) => {
-        router.get(
-          routerPath,
-          async (ctx: koaContextType, next: () => Promise<void>) => {
-            ctx.type = 'text/html; charset=utf-8';
-            ctx.body = await render(
-              ctx,
-              findTemplate(folderPath, 'Document'),
-              findTemplate(folderPath, 'Container'),
-              require(filePath),
-            );
-
-            await next();
-          },
-        );
-      });
-    });
+  const { router, entry } = pages.get(folderPath, redirect);
 
   return compose([
     router.routes(),
@@ -79,7 +42,8 @@ export default async ({
       ? await webpack({
           config: configFunc(getConfig(dev, entry)),
         })
-      : async (ctx: koaContextType, next: () => Promise<void>) => {
+      : // TODO: prod router
+        async (ctx: koaContextType, next: () => Promise<void>) => {
           await next();
         },
   ]);

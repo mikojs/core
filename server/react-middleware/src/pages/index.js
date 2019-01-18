@@ -20,8 +20,9 @@ export type redirectType = (
 /** get pages */
 class Pages {
   router = new Router();
-
   entry = {};
+  Document = Document;
+  Container = Container;
 
   /**
    * @example
@@ -42,8 +43,8 @@ class Pages {
             ctx.type = 'text/html; charset=utf-8';
             ctx.body = await renderPage(
               ctx,
-              Document,
-              Container,
+              this.Document,
+              this.Container,
               require(filePath),
             );
 
@@ -78,6 +79,20 @@ class Pages {
         const relativePath = path
           .relative(folderPath, filePath)
           .replace(/\.jsx?$/, '');
+
+        if (/^\.templates\//.test(relativePath))
+          switch (relativePath.replace(/^\.templates\//, '')) {
+            case 'Document':
+              this.Document = require(filePath);
+              return;
+
+            case 'Container':
+              this.Container = require(filePath);
+              return;
+
+            default:
+              return;
+          }
 
         this.page(relativePath, filePath, redirect);
       });

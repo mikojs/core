@@ -19,6 +19,41 @@ export type redirectType = (
 
 /** get pages */
 class Pages {
+  router = new Router();
+
+  entry = {};
+
+  /**
+   * @example
+   * pages.page('relative path', 'file path', urlPatterns => urlPatterns)
+   *
+   * @param {string} relativePath - relative path
+   * @param {string} filePath - file path
+   * @param {Function} redirect - redirect function
+   */
+  page = (relativePath: string, filePath: string, redirect: redirectType) => {
+    this.entry[relativePath.replace(/\//g, '-')] = [filePath];
+
+    redirect([relativePath.replace(/(index)?$/, '').replace(/^/, '/')]).forEach(
+      (routerPath: string) => {
+        this.router.get(
+          routerPath,
+          async (ctx: koaContextType, next: () => Promise<void>) => {
+            ctx.type = 'text/html; charset=utf-8';
+            ctx.body = await renderPage(
+              ctx,
+              Document,
+              Container,
+              require(filePath),
+            );
+
+            await next();
+          },
+        );
+      },
+    );
+  };
+
   /**
    * @example
    * pages.get('folder path', urlPatterns => urlPatterns)
@@ -35,9 +70,6 @@ class Pages {
     router: Router,
     entry: entryType,
   } => {
-    const router = new Router();
-    const entry: entryType = {};
-
     d3DirTree(folderPath, {
       extensions: /.jsx?$/,
     })
@@ -47,31 +79,12 @@ class Pages {
           .relative(folderPath, filePath)
           .replace(/\.jsx?$/, '');
 
-        entry[relativePath.replace(/\//g, '-')] = [filePath];
-
-        redirect([
-          relativePath.replace(/(index)?$/, '').replace(/^/, '/'),
-        ]).forEach((routerPath: string) => {
-          router.get(
-            routerPath,
-            async (ctx: koaContextType, next: () => Promise<void>) => {
-              ctx.type = 'text/html; charset=utf-8';
-              ctx.body = await renderPage(
-                ctx,
-                Document,
-                Container,
-                require(filePath),
-              );
-
-              await next();
-            },
-          );
-        });
+        this.page(relativePath, filePath, redirect);
       });
 
     return {
-      router,
-      entry,
+      router: this.router,
+      entry: this.entry,
     };
   };
 }

@@ -21,7 +21,7 @@ export type redirectType = (
 class Pages {
   /**
    * @example
-   * pages.get('folder path', value => value)
+   * pages.get('folder path', urlPatterns => urlPatterns)
    *
    * @param {string} folderPath - folder path
    * @param {Function} redirect - redirect function

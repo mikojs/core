@@ -8,7 +8,7 @@ import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import Document from './Document';
-import Container from './Container';
+import Main from './Main';
 import renderPage from './renderPage';
 
 import { type entryType } from 'utils/getConfig';
@@ -22,7 +22,7 @@ class Pages {
   router = new Router();
   entry = {};
   Document = Document;
-  Container = Container;
+  Main = Main;
 
   /**
    * @example
@@ -44,7 +44,7 @@ class Pages {
             ctx.body = await renderPage(
               ctx,
               this.Document,
-              this.Container,
+              this.Main,
               require(filePath),
             );
 
@@ -86,8 +86,8 @@ class Pages {
               this.Document = require(filePath);
               return;
 
-            case 'Container':
-              this.Container = require(filePath);
+            case 'Main':
+              this.Main = require(filePath);
               return;
 
             default:

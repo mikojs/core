@@ -13,16 +13,24 @@ import { Helmet } from 'react-helmet';
 export default async (
   ctx: koaContextType,
   Document,
-  Container,
+  Main,
   Page,
 ): multistream => {
   const { head = null } =
-    (await (Container.getInitialProps || emptyFunction.thatReturnsArgument)({
+    (await (Main.getInitialProps || emptyFunction.thatReturnsArgument)({
       ctx,
       Page,
     })) || {};
 
-  renderToStaticMarkup(head);
+  renderToStaticMarkup(
+    <>
+      {head}
+
+      <Helmet>
+        <script async src="/assets/index.js" />
+      </Helmet>
+    </>,
+  );
 
   const helmet = Helmet.renderStatic();
   const hash = crypto

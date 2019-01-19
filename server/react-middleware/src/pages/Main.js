@@ -5,7 +5,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-export default class Container extends React.PureComponent {
+export default class Main extends React.PureComponent {
   static getInitialProps = async ({ Page, ...ctx }) => {
     const head = (
       <Helmet>

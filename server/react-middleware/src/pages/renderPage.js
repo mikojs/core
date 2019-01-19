@@ -1,10 +1,4 @@
-/**
- * fixme-flow-file-annotation
- *
- * Flow not support @babel/plugin-proposal-pipeline-operator
- * https://github.com/facebook/flow/issues/5443
- */
-/* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
+// @flow
 
 import stream, { type Readable as ReadableType } from 'stream';
 import crypto from 'crypto';
@@ -22,12 +16,13 @@ export default async (
   Container,
   Page,
 ): multistream => {
-  const { head } =
-    { ctx, head: null }
-    |> (await (Page.getInitialProps || emptyFunction.thatReturnsArgument))
-    |> (await (Container.getInitialProps || emptyFunction.thatReturnsArgument));
+  const { head = null } =
+    (await (Container.getInitialProps || emptyFunction.thatReturnsArgument)({
+      ctx,
+      Page,
+    })) || {};
 
-  renderToStaticMarkup(<Helmet>{head}</Helmet>);
+  renderToStaticMarkup(head);
 
   const helmet = Helmet.renderStatic();
   const hash = crypto
@@ -35,6 +30,9 @@ export default async (
     .digest('hex');
   const [upperDocument, lowerDocument] = renderToStaticMarkup(
     <Document
+      {...(!Document.getInitialProps
+        ? null
+        : Document.getInitialProps({ ctx, helmet }))}
       head={
         <>
           {helmet.title.toComponent()}

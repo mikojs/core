@@ -7,21 +7,21 @@ import {
   type Middleware as koaMiddlewareType,
   type Context as koaContextType,
 } from 'koa';
-import Router from 'koa-router';
 import compose from 'koa-compose';
 import { emptyFunction } from 'fbjs';
 import React from 'react';
 import { renderToNodeStream } from 'react-dom/server';
+import { StaticRouter as Router, Switch, Route } from 'react-router-dom';
 
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 export default ({
   folderPath = path.resolve('./src/pages'),
-  redirect = emptyFunction.thatReturnsNull,
+  redirect = emptyFunction.thatReturnsArgument,
 }: {
   folderPath?: string,
-  redirect?: (urlPattern: string) => ?string,
+  redirect?: (urlPattern: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
 } = {}): koaMiddlewareType => {
   if (!fs.existsSync(folderPath))
     throw new Error(
@@ -31,30 +31,42 @@ export default ({
       )}\` folder can not be found.`,
     );
 
-  const router = new Router();
+  const routes = [];
 
-  d3DirTree(folderPath)
+  d3DirTree(folderPath, {
+    extensions: /.jsx?$/,
+  })
     .leaves()
     .forEach(({ data: { name, path: filePath } }: d3DirTreeNodeType) => {
-      const urlPattern = path
+      const relativePath = path
         .relative(folderPath, filePath)
-        .replace(/(index)?\.jsx?$/, '');
+        .replace(/\.jsx?$/, '');
 
-      switch (urlPattern) {
-        default:
-          router.get(
-            redirect(urlPattern) || `/${urlPattern}`,
-            async (ctx: koaContextType, next: () => Promise<void>) => {
-              const Component = require(filePath);
-
-              renderToNodeStream(<Component />).pipe(ctx.res);
-              ctx.status = 200;
-              await next();
-            },
-          );
-          break;
-      }
+      redirect([
+        relativePath.replace(/(index)?$/, '').replace(/^/, '/'),
+      ]).forEach((routePath: string) => {
+        routes.push(
+          <Route
+            key={routePath}
+            path={routePath}
+            component={require(filePath)}
+            exact
+          />,
+        );
+      });
     });
 
-  return compose([router.routes(), router.allowedMethods()]);
+  return compose([
+    async (ctx: koaContextType, next: () => Promise<void>) => {
+      ctx.type = 'text/html; charset=utf-8';
+      // TODO: render not found
+      ctx.body = renderToNodeStream(
+        <Router location={ctx.req.url} context={{}}>
+          <Switch>{routes}</Switch>
+        </Router>,
+      );
+
+      await next();
+    },
+  ]);
 };

@@ -16,7 +16,7 @@ describe('react middleware', () => {
     const app = new Koa();
 
     app.use(
-      react({
+      await react({
         folderPath: path.resolve(__dirname, './__ignore__'),
       }),
     );
@@ -38,10 +38,8 @@ describe('react middleware', () => {
     ).toBe(`<div data-reactroot="">${urlPath}</div>`);
   });
 
-  test('can not find folder', () => {
-    expect(() => {
-      react();
-    }).toThrow('folder can not be found.');
+  test('can not find folder', async () => {
+    await expect(react()).rejects.toThrow('folder can not be found.');
   });
 
   afterAll(() => {

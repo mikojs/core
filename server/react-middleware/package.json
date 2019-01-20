@@ -12,10 +12,14 @@
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.1",
     "fbjs": "^1.0.0",
+    "friendly-errors-webpack-plugin": "^1.7.0",
     "koa-compose": "^4.1.0",
+    "koa-webpack": "^5.2.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "terser-webpack-plugin": "^1.2.1",
+    "webpack": "^4.28.4"
   },
   "devDependencies": {
     "get-port": "^4.1.0",

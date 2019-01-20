@@ -27,7 +27,7 @@ export default async (
       {head}
 
       <Helmet>
-        <script async src="/assets/index.js" />
+        <script async src="/assets/client.js" />
       </Helmet>
     </>,
   );
@@ -50,7 +50,7 @@ export default async (
       }
       scripts={helmet.script.toComponent()}
     >
-      <main id="__cat">{hash}</main>
+      <main id="__cat__">{hash}</main>
     </Document>,
   )
     .split(hash)

@@ -20,7 +20,9 @@ export type redirectType = (
 /** get pages */
 class Pages {
   router = new Router();
-  entry = {};
+  entry = {
+    client: [path.resolve('../utils/client.js')],
+  };
   Document = Document;
   Main = Main;
 

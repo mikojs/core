@@ -4,8 +4,9 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { hot } from 'react-hot-loader/root';
 
-export default class Main extends React.PureComponent {
+class Main extends React.PureComponent {
   static getInitialProps = async ({ Page, ...ctx }) => {
     const head = (
       <Helmet>
@@ -23,6 +24,8 @@ export default class Main extends React.PureComponent {
   };
 
   render() {
-    return null;
+    return <div>TODO</div>;
   }
 }
+
+export default hot(Main);

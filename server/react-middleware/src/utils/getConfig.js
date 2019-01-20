@@ -3,7 +3,6 @@
 import path from 'path';
 
 import TerserPlugin from 'terser-webpack-plugin';
-import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 
 export default (dev: boolean) => ({
   mode: dev ? 'development' : 'production',
@@ -34,11 +33,4 @@ export default (dev: boolean) => ({
       },
     },
   },
-  plugins: dev
-    ? [
-        new FriendlyErrorsWebpackPlugin({
-          clearConsole: false,
-        }),
-      ]
-    : [],
 });

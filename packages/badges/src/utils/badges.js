@@ -132,13 +132,13 @@ const getBadges = (
     .join(' ')}
 
 ${badges
-    .map(
-      ({ badgeName, image, link }: badgeType) =>
-        `[${badgeName}-image]: ${image}${
-          !link ? '' : `\n[${badgeName}-link]: ${link}`
-        }`,
-    )
-    .join('\n')}
+  .map(
+    ({ badgeName, image, link }: badgeType) =>
+      `[${badgeName}-image]: ${image}${
+        !link ? '' : `\n[${badgeName}-link]: ${link}`
+      }`,
+  )
+  .join('\n')}
 
 `;
 };

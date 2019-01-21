@@ -65,9 +65,13 @@ export default async ({
 
   return compose([
     dev
-      ? await webpack({
-          config: configFunc(getConfig(dev)),
-        })
+      ? await webpack(
+          configFunc({
+            config: getConfig(dev),
+            devMiddleware: { logLevel: 'warn' },
+            hotClient: { logLevel: 'warn' },
+          }),
+        )
       : async (ctx: koaContextType, next: () => Promise<void>) => {
           await next();
         },

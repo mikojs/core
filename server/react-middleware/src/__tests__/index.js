@@ -35,7 +35,9 @@ describe('react middleware', () => {
       await fetch(`http://localhost:${port}${urlPath}`).then(
         (res: ResponseType) => res.text(),
       ),
-    ).toBe(`<div data-reactroot="">${urlPath}</div>`);
+    ).toBe(
+      `<div data-reactroot="">${urlPath}</div><script async="" src="/assets/client.js" data-reactroot=""></script>`,
+    );
   });
 
   test('can not find folder', async () => {

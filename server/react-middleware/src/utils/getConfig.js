@@ -4,12 +4,10 @@ import path from 'path';
 
 import TerserPlugin from 'terser-webpack-plugin';
 
-export default (dev: boolean) => ({
+export default (dev: boolean, entry: { string: [string] }) => ({
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval-source-map' : false,
-  entry: {
-    client: [path.resolve(__dirname, './client.js')],
-  },
+  entry,
   output: {
     path: dev ? undefined : path.resolve('./public/js'),
     publicPath: '/assets/',

@@ -50,8 +50,15 @@ export default async ({
             config: getConfig(dev, {
               client: getClient(routesData),
             }),
-            devMiddleware: { logLevel: 'warn' },
-            hotClient: { logLevel: 'warn' },
+            devMiddleware: {
+              stats: {
+                maxModules: 0,
+                colors: true,
+              },
+            },
+            hotClient: {
+              logLevel: 'warn',
+            },
           }),
         )
       : async (ctx: koaContextType, next: () => Promise<void>) => {

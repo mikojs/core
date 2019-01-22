@@ -14,11 +14,11 @@ import React from 'react';
 import { renderToNodeStream } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 
-import getConfig from './utils/getConfig';
 import getRoutesData, {
   type redirectType,
   type routeDataType,
 } from './utils/getRoutesData';
+import getConfig from './utils/getConfig';
 import getClient from './utils/getClient';
 import { getRoutes } from './templates/Root';
 

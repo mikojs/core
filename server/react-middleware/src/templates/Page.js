@@ -6,5 +6,11 @@ import loadable from 'react-loadable';
 // TODO: add default not found and loading
 export default loadable({
   loader: () => /** replace page */ <div>page not found</div>,
+  webpack: () => [
+    /** replace webpack */
+  ],
+  modules: [
+    /** replace modules */
+  ],
   loading: () => <div>loading</div>,
 });

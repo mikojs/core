@@ -54,6 +54,11 @@ export default (
           )}" */ '${filePath}') ||`,
         )
         .replace(
+          /\/\*\* replace webpack \*\//,
+          `require.resolveWeak('${filePath}')`,
+        )
+        .replace(/\/\*\* replace modules \*\//, `'${filePath}'`)
+        .replace(
           new RegExp(`${cacheDir()}/Page.js`, 'g'),
           `${cacheDir()}/${relativePath}`,
         ),

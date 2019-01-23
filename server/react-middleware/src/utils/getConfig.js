@@ -4,7 +4,11 @@ import path from 'path';
 
 import TerserPlugin from 'terser-webpack-plugin';
 
-export default (dev: boolean, entry: { string: [string] }) => ({
+export default (
+  dev: boolean,
+  entry: { string: [string] },
+  totalPages: number,
+) => ({
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval-source-map' : false,
   entry,
@@ -28,6 +32,11 @@ export default (dev: boolean, entry: { string: [string] }) => ({
       cacheGroups: {
         default: false,
         vendors: false,
+        commons: {
+          name: 'commons',
+          chunks: 'all',
+          minChunks: totalPages > 2 ? totalPages * 0.5 : 2,
+        },
       },
     },
   },

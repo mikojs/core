@@ -46,25 +46,16 @@ export default (
       /\/\*\* replace routesData \*\//,
       `[${routesData
         .map(
-          ({ routePath, filePath }: routeDataType): string => {
-            const relativePath = path.relative(folderPath, filePath);
-            // TODO: add default loading
-            const component = [
-              `loader: () => import(/* webpackChunkName: "pages/${relativePath.replace(
-                /\.jsx?$/,
-                '',
-              )}" */ '${filePath}')`,
+          // TODO: add default loading
+          ({ routePath, chunkName, filePath }: routeDataType): string =>
+            `{ routePath: ${JSON.stringify(
+              routePath,
+            )}, chunkName: '${chunkName}', component: require('react-loadable')({ ${[
+              `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
               `webpack: () => [ require.resolveWeak('${filePath}') ]`,
               `modules: [ '${filePath}' ]`,
               "loading: () => 'loading'",
-            ];
-
-            return `{ routePath: ${JSON.stringify(
-              routePath,
-            )}, component: require('react-loadable')({ ${component.join(
-              ', ',
-            )} }) }`;
-          },
+            ].join(', ')} }) }`,
         )
         .join(', ')}] ||`,
     ),

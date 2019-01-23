@@ -11,6 +11,7 @@ export type redirectType = (
 
 export type routeDataType = {
   routePath: $ReadOnlyArray<string>,
+  chunkName: string,
   filePath: string,
 };
 
@@ -31,6 +32,7 @@ export default (folderPath: string, redirect: redirectType) =>
           routePath: redirect([
             relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
           ]),
+          chunkName: `pages/${relativePath}`,
           filePath,
         };
       },

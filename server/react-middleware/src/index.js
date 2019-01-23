@@ -12,7 +12,7 @@ import webpack from 'koa-webpack';
 import { emptyFunction } from 'fbjs';
 import React from 'react';
 import { renderToNodeStream } from 'react-dom/server';
-import { StaticRouter as Router } from 'react-router-dom';
+import { StaticRouter as Router, Route } from 'react-router-dom';
 
 import getRoutesData, {
   type redirectType,
@@ -47,7 +47,11 @@ export default async ({
     dev
       ? await webpack(
           configFunc({
-            config: getConfig(dev, getEntry(folderPath, routesData)),
+            config: getConfig(
+              dev,
+              getEntry(folderPath, routesData),
+              routesData.length,
+            ),
             devMiddleware: {
               stats: {
                 maxModules: 0,
@@ -70,13 +74,29 @@ export default async ({
           <main id="__cat__">
             <Router location={ctx.req.url} context={{}}>
               {getRoutes(
-                routesData.map(({ routePath, filePath }: routeDataType) => ({
-                  routePath,
-                  component: require(filePath),
-                })),
+                routesData.map(
+                  ({ routePath, chunkName, filePath }: routeDataType) => ({
+                    routePath,
+                    chunkName,
+                    component: require(filePath),
+                  }),
+                ),
               )}
             </Router>
           </main>
+          <script async src="/assets/commons.js" />
+          <Router location={ctx.req.url} context={{}}>
+            {routesData.map(({ routePath, chunkName }: routeDataType) => (
+              <Route
+                key={chunkName}
+                path={routePath}
+                component={() => (
+                  <script async src={`/assets/${chunkName}.js`} />
+                )}
+                exact
+              />
+            ))}
+          </Router>
           <script async src="/assets/client.js" />
         </>,
       );

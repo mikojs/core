@@ -6,6 +6,8 @@ import { hot } from 'react-hot-loader/root';
 
 import { type routeDataType } from 'utils/getRoutesData';
 
+const clientRoutesData = /** replace routesData */ [];
+
 /**
  * @example
  * getRoutes([])
@@ -16,8 +18,8 @@ import { type routeDataType } from 'utils/getRoutesData';
  */
 export const getRoutes = (routesData: $ReadOnlyArray<routeDataType>) => (
   <Switch>
-    {routesData.map(({ routePath, component }: routeDataType) => (
-      <Route key={routePath} path={routePath} component={component} exact />
+    {routesData.map(({ routePath, chunkName, component }: routeDataType) => (
+      <Route key={chunkName} path={routePath} component={component} exact />
     ))}
   </Switch>
 );
@@ -26,7 +28,7 @@ export const getRoutes = (routesData: $ReadOnlyArray<routeDataType>) => (
 // TODO component should be ignored
 class Root extends React.PureComponent {
   render() {
-    return <Router>{getRoutes(/** replace routesData */ [])}</Router>;
+    return <Router>{getRoutes(clientRoutesData)}</Router>;
   }
 }
 /* eslint-enable require-jsdoc, flowtype/require-return-type */

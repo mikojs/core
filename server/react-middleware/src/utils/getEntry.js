@@ -45,13 +45,18 @@ export default (
 
     outputFileSync(
       cacheDir(relativePath),
-      getTemplate('Page.js').replace(
-        /\/\*\* replace page \*\//,
-        `import(/* webpackChunkName: "${relativePath.replace(
-          /\.jsx?$/,
-          '',
-        )}" */ '${filePath}') ||`,
-      ),
+      getTemplate('Page.js')
+        .replace(
+          /\/\*\* replace page \*\//,
+          `import(/* webpackChunkName: "${relativePath.replace(
+            /\.jsx?$/,
+            '',
+          )}" */ '${filePath}') ||`,
+        )
+        .replace(
+          new RegExp(`${cacheDir()}/Page.js`, 'g'),
+          `${cacheDir()}/${relativePath}`,
+        ),
     );
   });
 

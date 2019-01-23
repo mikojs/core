@@ -29,7 +29,7 @@ export default (folderPath: string, redirect: redirectType) =>
 
         return {
           routePath: redirect([
-            relativePath.replace(/(index)?$/, '').replace(/^/, '/'),
+            relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
           ]),
           filePath,
         };

@@ -40,44 +40,31 @@ export default (
 
   outputFileSync(client, getTemplate('client.js'));
 
-  routesData.forEach(({ filePath }: routeDataType) => {
-    const relativePath = path.relative(folderPath, filePath);
-
-    outputFileSync(
-      cacheDir(relativePath),
-      getTemplate('Page.js')
-        .replace(
-          /\/\*\* replace page \*\//,
-          `import(/* webpackChunkName: "${relativePath.replace(
-            /\.jsx?$/,
-            '',
-          )}" */ '${filePath}') ||`,
-        )
-        .replace(
-          /\/\*\* replace webpack \*\//,
-          `require.resolveWeak('${filePath}')`,
-        )
-        .replace(/\/\*\* replace modules \*\//, `'${filePath}'`)
-        .replace(
-          new RegExp(`${cacheDir()}/Page.js`, 'g'),
-          `${cacheDir()}/${relativePath}`,
-        ),
-    );
-  });
-
   outputFileSync(
     root,
     getTemplate('Root.js').replace(
       /\/\*\* replace routesData \*\//,
       `[${routesData
         .map(
-          ({ routePath, filePath }: routeDataType) =>
-            `{ routePath: ${JSON.stringify(
+          ({ routePath, filePath }: routeDataType): string => {
+            const relativePath = path.relative(folderPath, filePath);
+            // TODO: add default loading
+            const component = [
+              `loader: () => import(/* webpackChunkName: "pages/${relativePath.replace(
+                /\.jsx?$/,
+                '',
+              )}" */ '${filePath}')`,
+              `webpack: () => [ require.resolveWeak('${filePath}') ]`,
+              `modules: [ '${filePath}' ]`,
+              "loading: () => 'loading'",
+            ];
+
+            return `{ routePath: ${JSON.stringify(
               routePath,
-            )}, component: require('./${path.relative(
-              folderPath,
-              filePath,
-            )}') }`,
+            )}, component: require('react-loadable')({ ${component.join(
+              ', ',
+            )} }) }`;
+          },
         )
         .join(', ')}] ||`,
     ),

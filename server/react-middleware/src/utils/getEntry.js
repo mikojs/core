@@ -10,6 +10,25 @@ import { type routeDataType } from './getRoutesData';
 
 const cacheDir = findCacheDir({ name: 'react-middleware', thunk: true });
 
+/**
+ * @example
+ * getTemplate('template name')
+ *
+ * @param {string} templateName - template name
+ *
+ * @return {string} - template
+ */
+const getTemplate = (templateName: string) =>
+  fs
+    .readFileSync(
+      path.resolve(__dirname, '../templates', templateName),
+      'utf-8',
+    )
+    .replace(
+      new RegExp(path.resolve(__dirname, '../../src/templates'), 'g'),
+      cacheDir(),
+    );
+
 export default (
   routesData: $ReadOnlyArray<routeDataType>,
 ): {
@@ -18,24 +37,19 @@ export default (
   const client = cacheDir('client.js');
   const root = cacheDir('Root.js');
 
-  outputFileSync(
-    client,
-    fs.readFileSync(path.resolve(__dirname, '../templates/client.js'), 'utf-8'),
-  );
+  outputFileSync(client, getTemplate('client.js'));
 
   outputFileSync(
     root,
-    fs
-      .readFileSync(path.resolve(__dirname, '../templates/Root.js'), 'utf-8')
-      .replace(
-        /\/\*\* replace routesData \*\//,
-        `[${routesData
-          .map(
-            ({ routePath, filePath }: routeDataType) =>
-              `{ routePath: '${routePath}', component: require('${filePath}') }`,
-          )
-          .join(', ')}] ||`,
-      ),
+    getTemplate('Root.js').replace(
+      /\/\*\* replace routesData \*\//,
+      `[${routesData
+        .map(
+          ({ routePath, filePath }: routeDataType) =>
+            `{ routePath: '${routePath}', component: require('${filePath}') }`,
+        )
+        .join(', ')}] ||`,
+    ),
   );
 
   return {

@@ -12,7 +12,9 @@ const cacheDir = findCacheDir({ name: 'react-middleware', thunk: true });
 
 export default (
   routesData: $ReadOnlyArray<routeDataType>,
-): [string, string] => {
+): {
+  string: $ReadOnlyArray<string>,
+} => {
   const client = cacheDir('client.js');
   const root = cacheDir('Root.js');
 
@@ -36,5 +38,7 @@ export default (
       ),
   );
 
-  return [client, root];
+  return {
+    client: [client, root],
+  };
 };

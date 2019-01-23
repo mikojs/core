@@ -19,7 +19,7 @@ import getRoutesData, {
   type routeDataType,
 } from './utils/getRoutesData';
 import getConfig from './utils/getConfig';
-import getClient from './utils/getClient';
+import getEntry from './utils/getEntry';
 import { getRoutes } from './templates/Root';
 
 export default async ({
@@ -47,9 +47,7 @@ export default async ({
     dev
       ? await webpack(
           configFunc({
-            config: getConfig(dev, {
-              client: getClient(routesData),
-            }),
+            config: getConfig(dev, getEntry(routesData)),
             devMiddleware: {
               stats: {
                 maxModules: 0,

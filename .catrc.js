@@ -82,7 +82,7 @@ const babel = config => {
     {
       test: './server/react-middleware',
       presets: ['@babel/preset-react'],
-      plugins: ['react-hot-loader/babel'],
+      plugins: ['react-hot-loader/babel', '@babel/syntax-dynamic-import'],
     },
     {
       test: './server/server',

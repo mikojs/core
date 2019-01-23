@@ -30,6 +30,7 @@ const getTemplate = (templateName: string) =>
     );
 
 export default (
+  folderPath: string,
   routesData: $ReadOnlyArray<routeDataType>,
 ): {
   string: $ReadOnlyArray<string>,
@@ -39,6 +40,21 @@ export default (
 
   outputFileSync(client, getTemplate('client.js'));
 
+  routesData.forEach(({ filePath }: routeDataType) => {
+    const relativePath = path.relative(folderPath, filePath);
+
+    outputFileSync(
+      cacheDir(relativePath),
+      getTemplate('Page.js').replace(
+        /\/\*\* replace page \*\//,
+        `import(/* webpackChunkName: "${relativePath.replace(
+          /\.jsx?$/,
+          '',
+        )}" */ '${filePath}') ||`,
+      ),
+    );
+  });
+
   outputFileSync(
     root,
     getTemplate('Root.js').replace(
@@ -46,7 +62,10 @@ export default (
       `[${routesData
         .map(
           ({ routePath, filePath }: routeDataType) =>
-            `{ routePath: '${routePath}', component: require('${filePath}') }`,
+            `{ routePath: '${routePath}', component: require('./${path.relative(
+              folderPath,
+              filePath,
+            )}') }`,
         )
         .join(', ')}] ||`,
     ),

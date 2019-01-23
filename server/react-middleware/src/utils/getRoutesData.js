@@ -10,7 +10,7 @@ export type redirectType = (
 ) => $ReadOnlyArray<string>;
 
 export type routeDataType = {
-  routePath: string,
+  routePath: $ReadOnlyArray<string>,
   filePath: string,
 };
 
@@ -19,21 +19,19 @@ export default (folderPath: string, redirect: redirectType) =>
     extensions: /.jsx?$/,
   })
     .leaves()
-    .reduce((
-      result: $ReadOnlyArray<routeDataType>,
-      { data: { name, path: filePath } }: d3DirTreeNodeType,
-    ): $ReadOnlyArray<routeDataType> => {
-      const relativePath = path
-        .relative(folderPath, filePath)
-        .replace(/\.jsx?$/, '');
+    .map(
+      ({
+        data: { name, path: filePath },
+      }: d3DirTreeNodeType): routeDataType => {
+        const relativePath = path
+          .relative(folderPath, filePath)
+          .replace(/\.jsx?$/, '');
 
-      return [
-        ...result,
-        ...redirect([
-          relativePath.replace(/(index)?$/, '').replace(/^/, '/'),
-        ]).map((routePath: string) => ({
-          routePath,
+        return {
+          routePath: redirect([
+            relativePath.replace(/(index)?$/, '').replace(/^/, '/'),
+          ]),
           filePath,
-        })),
-      ];
-    }, []);
+        };
+      },
+    );

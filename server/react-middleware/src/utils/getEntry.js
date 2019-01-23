@@ -62,7 +62,9 @@ export default (
       `[${routesData
         .map(
           ({ routePath, filePath }: routeDataType) =>
-            `{ routePath: '${routePath}', component: require('./${path.relative(
+            `{ routePath: ${JSON.stringify(
+              routePath,
+            )}, component: require('./${path.relative(
               folderPath,
               filePath,
             )}') }`,

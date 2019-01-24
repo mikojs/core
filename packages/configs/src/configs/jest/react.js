@@ -7,6 +7,6 @@ export default {
   alias: 'jest',
   config: () => ({
     ...config,
-    setupFiles: [config.setupFiles, '@cat-org/jest-react'],
+    setupFiles: [...config.setupFiles, '@cat-org/jest/lib/react'],
   }),
 };

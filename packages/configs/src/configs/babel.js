@@ -5,7 +5,7 @@ import { emptyFunction } from 'fbjs';
 import { mockChoice } from '@cat-org/utils';
 
 export default {
-  install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+  install: (install: $ReadOnlyArray<string>) => [
     ...install,
     '@babel/cli',
     '@babel/core',
@@ -14,7 +14,7 @@ export default {
     '@babel/plugin-proposal-optional-chaining',
     '@cat-org/babel-plugin-transform-flow',
   ],
-  config: (): {} => ({
+  config: () => ({
     presets: [
       [
         '@babel/env',
@@ -63,7 +63,7 @@ export default {
     ),
     overrides: [],
   }),
-  run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+  run: (argv: $ReadOnlyArray<string>) => [
     ...argv,
     'src',
     '-d',

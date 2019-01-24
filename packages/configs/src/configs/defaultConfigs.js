@@ -24,7 +24,7 @@ export default ({
   'babel:lerna': {
     ...babel,
     alias: 'babel',
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+    run: (argv: $ReadOnlyArray<string>) => [
       ...babel.run(argv),
       '--config-file',
       '../../babel.config.js',
@@ -39,7 +39,7 @@ export default ({
   'lint:watch': {
     ...lint,
     alias: 'esw',
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+    run: (argv: $ReadOnlyArray<string>) => [
       ...lint.run(argv),
       '-w',
       '--rule',
@@ -56,18 +56,12 @@ export default ({
   test: {
     ...jest,
     alias: 'jest',
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...argv,
-      '--silent',
-    ],
+    run: (argv: $ReadOnlyArray<string>) => [...argv, '--silent'],
   },
   'jest:react': jestReact,
   'test:react': {
     ...jestReact,
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...argv,
-      '--silent',
-    ],
+    run: (argv: $ReadOnlyArray<string>) => [...argv, '--silent'],
   },
 }: {
   [string]: configType & {

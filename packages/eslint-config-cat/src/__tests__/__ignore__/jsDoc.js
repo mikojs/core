@@ -7,7 +7,7 @@
  * @param {number} argu - example argu
  * @return {10} - example return
  */
-const correctFunction = (argu: string): number => 10;
+const correctFunction = (argu: string) => 10;
 
 // $expectError jsdoc/newline-after-description
 // $expectError jsdoc/require-example
@@ -16,7 +16,7 @@ const correctFunction = (argu: string): number => 10;
  * @param {number} argu - example argu
  * @return {10} - example return
  */
-const noExample = (argu: string): number => 10;
+const noExample = (argu: string) => 10;
 
 // $expectError jsdoc/require-param
 // $expectError jsdoc/check-tag-names
@@ -27,7 +27,7 @@ const noExample = (argu: string): number => 10;
  * @Param {string} argu - example argu
  * @return {10} - example return
  */
-const noParams = (argu: string): number => 10;
+const noParams = (argu: string) => 10;
 
 // $expectError valid-jsdoc
 // $expectError jsdoc/require-hyphen-before-param-description
@@ -37,7 +37,7 @@ const noParams = (argu: string): number => 10;
  *
  * @param {number} argu example argu
  */
-const noReturns = (argu: string): number => 10;
+const noReturns = (argu: string) => 10;
 
 // $expectError jsdoc/check-param-names
 // $expectError valid-jsdoc
@@ -57,7 +57,7 @@ const checkParamNames = (argu: string) => {};
  * @param {Number} argu - example argu
  * @return {10} - example return
  */
-const checkTypes = (argu: string): number => 10;
+const checkTypes = (argu: string) => 10;
 
 // $expectError jsdoc/check-param-names
 // $expectError jsdoc/require-param
@@ -72,7 +72,7 @@ const checkTypes = (argu: string): number => 10;
  * @param
  * @return {10} - example return
  */
-const requireParam = (argu: string): number => 10;
+const requireParam = (argu: string) => 10;
 
 // $expectError valid-jsdoc
 // $expectError jsdoc/require-returns-description
@@ -84,10 +84,10 @@ const requireParam = (argu: string): number => 10;
  * @param {number} argu - example argu
  * @return
  */
-const requireReturn = (argu: string): number => 10;
+const requireReturn = (argu: string) => 10;
 
 // $expectError require-jsdoc
-const functionDeclarationRequiredJsDoc = (): number => 10;
+const functionDeclarationRequiredJsDoc = () => 10;
 
 // $expectError require-jsdoc
 class classDeclarationRequiredJsDoc {
@@ -107,7 +107,7 @@ class classDeclarationRequiredJsDoc {
    *
    * @return {string} test
    */
-  showInfo = (): string => this.test;
+  showInfo = () => this.test;
 }
 
 const testObj = {

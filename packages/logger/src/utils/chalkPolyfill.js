@@ -21,9 +21,9 @@ import { mockChoice } from '@cat-org/utils';
 const browserChalk = (
   strings: $ReadOnlyArray<string>,
   ...keys: $ReadOnlyArray<string>
-): string =>
+) =>
   strings.reduce(
-    (result: string, text: string, index: number): string =>
+    (result: string, text: string, index: number) =>
       `${result}${text}${keys[index] || ''}`,
     '',
   );

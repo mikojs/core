@@ -2,16 +2,16 @@
 
 export default {
   alias: 'esw',
-  install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+  install: (install: $ReadOnlyArray<string>) => [
     ...install,
     '@cat-org/eslint-config-cat',
     'eslint',
     'eslint-watch',
   ],
-  config: (): {} => ({
+  config: () => ({
     extends: ['@cat-org/eslint-config-cat'],
   }),
-  ignore: (): $ReadOnlyArray<string> => [
+  ignore: () => [
     // node
     'node_modules',
 
@@ -27,10 +27,7 @@ export default {
     // add checking other configs
     '!.*.js',
   ],
-  run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-    ...argv,
-    '--cache',
-  ],
+  run: (argv: $ReadOnlyArray<string>) => [...argv, '--cache'],
   env: {
     NODE_ENV: 'test',
   },

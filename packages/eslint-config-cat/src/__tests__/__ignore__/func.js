@@ -7,7 +7,7 @@
  * @param {string} argu - any
  * @return {'value'} - value
  */
-export const correct = (argu: string): string => 'value';
+export const correct = (argu: string) => 'value';
 
 /**
  * @example

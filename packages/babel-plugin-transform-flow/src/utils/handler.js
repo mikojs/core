@@ -98,7 +98,7 @@ class Handler {
     plugins,
   }: $PropertyType<manipulateOptionsPluginsType, 'manipulateOptions'>) => {
     const [{ options }] = plugins.filter(
-      ({ manipulateOptions }: manipulateOptionsPluginsType): boolean =>
+      ({ manipulateOptions }: manipulateOptionsPluginsType) =>
         manipulateOptions === this.manipulateOptions,
     );
     const {
@@ -137,7 +137,7 @@ class Handler {
     const { src, outDir } = this.options;
     const srcPath = filePath.replace(`${cwd}/`, '');
     const relativePath = src.reduce(
-      (result: string, srcDir: string): string => result.replace(srcDir, ''),
+      (result: string, srcDir: string) => result.replace(srcDir, ''),
       srcPath,
     );
     const destPath = path

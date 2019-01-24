@@ -14,11 +14,11 @@ type oraType = {
 };
 
 const GET_NAME = {
-  log: (name: string): string => chalk`{gray {bold ${name}}}`,
-  succeed: (name: string): string => chalk`{green {bold ${name}}}`,
-  fail: (name: string): string => chalk`{red {bold ${name}}}`,
-  warn: (name: string): string => chalk`{yellow {bold ${name}}}`,
-  info: (name: string): string => chalk`{blue {bold ${name}}}`,
+  log: (name: string) => chalk`{gray {bold ${name}}}`,
+  succeed: (name: string) => chalk`{green {bold ${name}}}`,
+  fail: (name: string) => chalk`{red {bold ${name}}}`,
+  warn: (name: string) => chalk`{yellow {bold ${name}}}`,
+  info: (name: string) => chalk`{blue {bold ${name}}}`,
 };
 const { error } = console;
 

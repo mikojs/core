@@ -6,9 +6,13 @@ import TerserPlugin from 'terser-webpack-plugin';
 
 import { type routeDataType } from './getRoutesData';
 
-export default (dev: boolean, routesData: $ReadOnlyArray<routeDataType>) => ({
+export default (
+  dev: boolean,
+  folderPath: string,
+  routesData: $ReadOnlyArray<routeDataType>,
+) => ({
   mode: dev ? 'development' : 'production',
-  devtool: dev ? 'eval-source-map' : false,
+  devtool: dev ? 'eval' : false,
   entry: {
     client: [path.resolve(__dirname, '../templates/client.js')],
   },
@@ -57,11 +61,25 @@ export default (dev: boolean, routesData: $ReadOnlyArray<routeDataType>) => ({
                   `webpack: () => [ require.resolveWeak('${filePath}') ]`,
                   `modules: [ '${filePath}' ]`,
                   // TODO: add default loading
-                  "loading: () => 'loading'",
+                  "loading: ({ error }) => error.message || 'loading'",
                 ].join(', ')} }) }`,
             )
             .join(', ')}] ||`,
         },
+      },
+      {
+        include: [folderPath],
+        loader: 'string-replace-loader',
+        options: {
+          search: 'module.exports = ((.|\n)*);',
+          replace: `module.exports = require('react-hot-loader/root').hot($1)`,
+          flags: 'g',
+        },
+      },
+      {
+        test: /\.jsx?$/,
+        include: /node_modules/,
+        use: ['react-hot-loader/webpack'],
       },
     ],
   },

@@ -46,7 +46,7 @@ export default async ({
     dev
       ? await webpack(
           configFunc({
-            config: getConfig(dev, routesData),
+            config: getConfig(dev, folderPath, routesData),
             devMiddleware: {
               stats: {
                 maxModules: 0,

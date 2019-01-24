@@ -14,12 +14,16 @@ import React from 'react';
 import { renderToNodeStream } from 'react-dom/server';
 import { StaticRouter as Router, Route } from 'react-router-dom';
 
+import { handleUnhandledRejection } from '@cat-org/utils';
+
 import getRoutesData, {
   type redirectType,
   type routeDataType,
 } from './utils/getRoutesData';
 import getConfig from './utils/getConfig';
 import { getRoutes } from './utils/Root';
+
+handleUnhandledRejection();
 
 export default async ({
   folderPath = path.resolve('./src/pages'),

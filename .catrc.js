@@ -150,7 +150,7 @@ module.exports = (() => {
     'lint:watch': lint,
 
     // jest
-    jest,
-    test: jest,
+    'jest:react': jest,
+    'test:react': jest,
   };
 })();

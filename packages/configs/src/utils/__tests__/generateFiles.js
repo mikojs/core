@@ -23,7 +23,7 @@ describe('generate files', () => {
   });
 
   test('generate', () => {
-    generateFiles('jest');
+    generateFiles('jest:react');
 
     expect(worker.server).toBeNull();
     expect(outputFileSync.destPaths).toEqual(
@@ -33,7 +33,7 @@ describe('generate files', () => {
         '.eslintrc.js',
         '.eslintignore',
         'jest.config.js',
-      ].map((fileName: string): string => path.resolve(fileName)),
+      ].map((fileName: string) => path.resolve(fileName)),
     );
   });
 });

@@ -8,12 +8,14 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 
 import Root from './Root';
 
+const routesData = /** replace routesData */ [];
+
 handleUnhandledRejection();
 
 export default (async () => {
   await Loadable.preloadReady();
   ReactDOM.hydrate(
-    <Root />,
+    <Root routesData={routesData} />,
     document.getElementById('__cat__') ||
       (() => {
         throw new Error('Can not find main HTMLElement');

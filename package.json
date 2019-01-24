@@ -8,7 +8,7 @@
     "install:all": "make install",
     "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
-    "test": "make babel-changed && configs test"
+    "test": "make babel-changed && configs test:react"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

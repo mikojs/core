@@ -14,7 +14,7 @@ export default (
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval' : false,
   entry: {
-    client: [path.resolve(__dirname, '../templates/client.js')],
+    client: [path.resolve(__dirname, './client.js')],
   },
   output: {
     path: dev ? undefined : path.resolve('./public/js'),
@@ -47,7 +47,7 @@ export default (
   module: {
     rules: [
       {
-        include: [path.resolve(__dirname, '../templates/Root.js')],
+        include: [path.resolve(__dirname, './Root.js')],
         loader: 'string-replace-loader',
         options: {
           search: '/** replace routesData */',

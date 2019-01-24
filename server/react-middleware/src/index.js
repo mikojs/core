@@ -19,7 +19,7 @@ import getRoutesData, {
   type routeDataType,
 } from './utils/getRoutesData';
 import getConfig from './utils/getConfig';
-import { getRoutes } from './templates/Root';
+import { getRoutes } from './utils/Root';
 
 export default async ({
   folderPath = path.resolve('./src/pages'),

@@ -13,8 +13,8 @@ import react from '@cat-org/react-middleware';
 import server from '../index';
 
 // TODO: add checking should use middleware
-// eslint-disable-next-line flowtype/no-unused-expressions
-server.init()
+(async () =>
+  server.init()
   |> server.use(defaultMiddleware)
-  |> server.use(react())
-  |> server.run(process.env.PORT);
+  |> server.use(await react())
+  |> server.run(process.env.PORT))();

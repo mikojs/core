@@ -7,22 +7,35 @@ import {
   type Middleware as koaMiddlewareType,
   type Context as koaContextType,
 } from 'koa';
-import Router from 'koa-router';
 import compose from 'koa-compose';
+import webpack from 'koa-webpack';
 import { emptyFunction } from 'fbjs';
 import React from 'react';
 import { renderToNodeStream } from 'react-dom/server';
+import { StaticRouter as Router, Route } from 'react-router-dom';
 
-import { d3DirTree } from '@cat-org/utils';
-import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
+import { handleUnhandledRejection } from '@cat-org/utils';
 
-export default ({
+import getRoutesData, {
+  type redirectType,
+  type routeDataType,
+} from './utils/getRoutesData';
+import getConfig from './utils/getConfig';
+import { getRoutes } from './utils/Root';
+
+handleUnhandledRejection();
+
+export default async ({
   folderPath = path.resolve('./src/pages'),
-  redirect = emptyFunction.thatReturnsNull,
+  redirect = emptyFunction.thatReturnsArgument,
+  dev = true,
+  config: configFunc = emptyFunction.thatReturnsArgument,
 }: {
   folderPath?: string,
-  redirect?: (urlPattern: string) => ?string,
-} = {}): koaMiddlewareType => {
+  redirect?: redirectType,
+  dev?: boolean,
+  config?: (cnofig: {}) => {},
+} = {}): Promise<koaMiddlewareType> => {
   if (!fs.existsSync(folderPath))
     throw new Error(
       `\`${path.relative(
@@ -31,30 +44,63 @@ export default ({
       )}\` folder can not be found.`,
     );
 
-  const router = new Router();
+  const routesData = getRoutesData(folderPath, redirect);
 
-  d3DirTree(folderPath)
-    .leaves()
-    .forEach(({ data: { name, path: filePath } }: d3DirTreeNodeType) => {
-      const urlPattern = path
-        .relative(folderPath, filePath)
-        .replace(/(index)?\.jsx?$/, '');
-
-      switch (urlPattern) {
-        default:
-          router.get(
-            redirect(urlPattern) || `/${urlPattern}`,
-            async (ctx: koaContextType, next: () => Promise<void>) => {
-              const Component = require(filePath);
-
-              renderToNodeStream(<Component />).pipe(ctx.res);
-              ctx.status = 200;
-              await next();
+  return compose([
+    dev
+      ? await webpack(
+          configFunc({
+            config: getConfig(dev, folderPath, routesData),
+            devMiddleware: {
+              stats: {
+                maxModules: 0,
+                colors: true,
+              },
             },
-          );
-          break;
-      }
-    });
+            hotClient: {
+              logLevel: 'warn',
+            },
+          }),
+        )
+      : async (ctx: koaContextType, next: () => Promise<void>) => {
+          await next();
+        },
+    async (ctx: koaContextType, next: () => Promise<void>) => {
+      ctx.type = 'text/html; charset=utf-8';
+      // TODO: render not found
+      ctx.body = renderToNodeStream(
+        <>
+          <main id="__cat__">
+            <Router location={ctx.req.url} context={{}}>
+              {getRoutes(
+                routesData.map(
+                  ({ routePath, chunkName, filePath }: routeDataType) => ({
+                    routePath,
+                    chunkName,
+                    component: require(filePath),
+                  }),
+                ),
+              )}
+            </Router>
+          </main>
+          <script async src="/assets/commons.js" />
+          <Router location={ctx.req.url} context={{}}>
+            {routesData.map(({ routePath, chunkName }: routeDataType) => (
+              <Route
+                key={chunkName}
+                path={routePath}
+                component={() => (
+                  <script async src={`/assets/${chunkName}.js`} />
+                )}
+                exact
+              />
+            ))}
+          </Router>
+          <script async src="/assets/client.js" />
+        </>,
+      );
 
-  return compose([router.routes(), router.allowedMethods()]);
+      await next();
+    },
+  ]);
 };

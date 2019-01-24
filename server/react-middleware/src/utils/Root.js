@@ -12,29 +12,21 @@ type routeDataType = {
   component: ComponentType<*>,
 };
 
-/**
- * @example
- * getRoutes([])
- *
- * @param {Array} routesData - routes data
- *
- * @return {Component} - routes Component
- */
-export const getRoutes = (routesData: $ReadOnlyArray<routeDataType>) => (
-  <Switch>
-    {routesData.map(({ routePath, chunkName, component }: routeDataType) => (
-      <Route key={chunkName} path={routePath} component={component} exact />
-    ))}
-  </Switch>
-);
-
 /* eslint-disable require-jsdoc, flowtype/require-return-type */
 // TODO component should be ignored
 const Root = ({
   routesData,
 }: {
   routesData: $ReadOnlyArray<routeDataType>,
-}) => <Router>{getRoutes(routesData)}</Router>;
+}) => (
+  <Router>
+    <Switch>
+      {routesData.map(({ routePath, chunkName, component }: routeDataType) => (
+        <Route key={chunkName} path={routePath} component={component} exact />
+      ))}
+    </Switch>
+  </Router>
+);
 /* eslint-enable require-jsdoc, flowtype/require-return-type */
 
 export default hot(Root);

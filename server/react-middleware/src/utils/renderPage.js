@@ -2,47 +2,57 @@
 
 import { type Context as koaContextType } from 'koa';
 import React from 'react';
-import { renderToNodeStream } from 'react-dom/server';
-import { StaticRouter as Router, Route } from 'react-router-dom';
+import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
+import { matchRoutes } from 'react-router-config';
+import { Helmet } from 'react-helmet';
+import multistream from 'multistream';
 
 import { type routeDataType } from './getRoutesData';
-import { getRoutes } from './Root';
+import renderDocument from './renderDocument';
 
 export default (routesData: $ReadOnlyArray<routeDataType>) => async (
   ctx: koaContextType,
   next: () => Promise<void>,
 ) => {
-  ctx.type = 'text/html; charset=utf-8';
-  // TODO: render not found
-  ctx.body = renderToNodeStream(
-    <>
-      <main id="__cat__">
-        <Router location={ctx.req.url} context={{}}>
-          {getRoutes(
-            routesData.map(
-              ({ routePath, chunkName, filePath }: routeDataType) => ({
-                routePath,
-                chunkName,
-                component: require(filePath),
-              }),
-            ),
-          )}
-        </Router>
-      </main>
-      <script async src="/assets/commons.js" />
-      <Router location={ctx.req.url} context={{}}>
-        {routesData.map(({ routePath, chunkName }: routeDataType) => (
-          <Route
-            key={chunkName}
-            path={routePath}
-            component={() => <script async src={`/assets/${chunkName}.js`} />}
-            exact
-          />
-        ))}
-      </Router>
-      <script async src="/assets/client.js" />
-    </>,
+  const [page] = matchRoutes(
+    routesData.map(({ routePath, filePath, chunkName }: routeDataType) => ({
+      path: routePath,
+      component: {
+        filePath,
+        chunkName,
+      },
+      exact: true,
+    })),
+    ctx.req.url,
   );
+
+  if (!page) {
+    await next();
+    return;
+  }
+
+  const {
+    route: {
+      component: { filePath, chunkName },
+    },
+  } = page;
+
+  renderToStaticMarkup(
+    <Helmet>
+      <script async src="/assets/commons.js" />
+      <script async src={`/assets/${chunkName}.js`} />
+      <script async src="/assets/client.js" />
+    </Helmet>,
+  );
+
+  const [upperDocument, lowerDocument] = renderDocument();
+
+  ctx.type = 'text/html; charset=utf-8';
+  ctx.body = multistream([
+    upperDocument,
+    renderToNodeStream(React.createElement(require(filePath))),
+    lowerDocument,
+  ]);
 
   await next();
 };

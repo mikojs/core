@@ -53,7 +53,6 @@ export default ({
 
   // jest
   jest,
-  'jest:react': jestReact,
   test: {
     ...jest,
     alias: 'jest',
@@ -62,6 +61,7 @@ export default ({
       '--silent',
     ],
   },
+  'jest:react': jestReact,
   'test:react': {
     ...jestReact,
     run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [

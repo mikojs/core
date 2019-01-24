@@ -15,7 +15,10 @@ export type routeDataType = {
   filePath: string,
 };
 
-export default (folderPath: string, redirect: redirectType) =>
+export default (
+  folderPath: string,
+  redirect: redirectType,
+): $ReadOnlyArray<routeDataType> =>
   d3DirTree(folderPath, {
     extensions: /.jsx?$/,
   })

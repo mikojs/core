@@ -1,10 +1,16 @@
 // @flow
 
-import React from 'react';
+import React, { type ComponentType } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { hot } from 'react-hot-loader/root';
 
-import { type routeDataType } from 'utils/getRoutesData';
+import { type routeDataType as serverRouteDataType } from 'utils/getRoutesData';
+
+type routeDataType = {
+  routePath: $PropertyType<serverRouteDataType, 'routePath'>,
+  chunkName: $PropertyType<serverRouteDataType, 'chunkName'>,
+  component: ComponentType<*>,
+};
 
 const clientRoutesData = /** replace routesData */ [];
 
@@ -26,11 +32,7 @@ export const getRoutes = (routesData: $ReadOnlyArray<routeDataType>) => (
 
 /* eslint-disable require-jsdoc, flowtype/require-return-type */
 // TODO component should be ignored
-class Root extends React.PureComponent {
-  render() {
-    return <Router>{getRoutes(clientRoutesData)}</Router>;
-  }
-}
+const Root = () => <Router>{getRoutes(clientRoutesData)}</Router>;
 /* eslint-enable require-jsdoc, flowtype/require-return-type */
 
 export default hot(Root);

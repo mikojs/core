@@ -1,14 +1,14 @@
 // @flow
 
 export default {
-  install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+  install: (install: $ReadOnlyArray<string>) => [
     ...install,
     'husky',
     'lint-staged',
     'prettier-package-json',
     '@cat-org/badges',
   ],
-  config: (): {} => ({
+  config: () => ({
     '*.js': ['yarn configs prettier', 'yarn configs lint', 'git add'],
     '*.js.flow': ['yarn configs prettier --parser flow', 'git add'],
     '**/!(README).md': ['yarn configs prettier --parser markdown', 'git add'],

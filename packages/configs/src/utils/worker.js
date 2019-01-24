@@ -81,7 +81,7 @@ export class Worker {
         Object.keys(this.cache).forEach((cacheFilePath: string) => {
           this.cache[cacheFilePath].pids = this.cache[
             cacheFilePath
-          ].pids.filter((cachePid: number): boolean => pid !== cachePid);
+          ].pids.filter((cachePid: number) => pid !== cachePid);
 
           if (
             this.cache[cacheFilePath].pids.length === 0 &&

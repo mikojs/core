@@ -47,7 +47,7 @@ export default (
   module: {
     rules: [
       {
-        include: [path.resolve(__dirname, './Root.js')],
+        include: [path.resolve(__dirname, './client.js')],
         loader: 'string-replace-loader',
         options: {
           search: '/** replace routesData */',
@@ -61,7 +61,7 @@ export default (
                   `webpack: () => [ require.resolveWeak('${filePath}') ]`,
                   `modules: [ '${filePath}' ]`,
                   // TODO: add default loading
-                  "loading: ({ error }) => error.message || 'loading'",
+                  "loading: ({ error }) => error ? error.message : 'loading'",
                 ].join(', ')} }) }`,
             )
             .join(', ')}] ||`,

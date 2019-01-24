@@ -15,6 +15,7 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 
 import getRoutesData, { type redirectType } from './utils/getRoutesData';
 import getConfig from './utils/getConfig';
+import deleteRequiredCache from './utils/deleteRequiredCache';
 import renderPage from './utils/renderPage';
 
 handleUnhandledRejection();
@@ -39,6 +40,8 @@ export default async ({
     );
 
   const routesData = getRoutesData(folderPath, redirect);
+
+  if (dev) deleteRequiredCache(folderPath);
 
   return compose([
     dev

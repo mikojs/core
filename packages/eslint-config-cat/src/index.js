@@ -47,7 +47,7 @@ const configs = [
   jsdocConfig,
   extendsConfig,
 ].reduce(
-  (newConfig: configType, otherConfig: configType): configType =>
+  (newConfig: configType, otherConfig: configType) =>
     Object.keys({ ...newConfig, ...otherConfig }).reduce(
       (config: configType, key: string): configType => {
         switch (key) {

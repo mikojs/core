@@ -78,8 +78,7 @@ test('watch error when not finding babel config', () => {
 
     delete (
       flowFiles.store.find(
-        ({ filePath }: flowFileType): boolean =>
-          filePath === justDefinitionPath,
+        ({ filePath }: flowFileType) => filePath === justDefinitionPath,
       ) || {}
     ).babelConfig;
 

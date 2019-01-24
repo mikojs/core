@@ -65,7 +65,7 @@ describe('write file before previous file is done', () => {
     expect(
       Boolean(
         writeFiles.store.find(
-          ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+          ({ srcPath }: writeFileType) => srcPath === flowFile.srcPath,
         ),
       ),
     ).toBeTruthy();
@@ -78,7 +78,7 @@ describe('write file before previous file is done', () => {
     expect(
       Boolean(
         writeFiles.store.find(
-          ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+          ({ srcPath }: writeFileType) => srcPath === flowFile.srcPath,
         ),
       ),
     ).toBeTruthy();
@@ -93,7 +93,7 @@ describe('write file before previous file is done', () => {
     expect(
       Boolean(
         writeFiles.store.find(
-          ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+          ({ srcPath }: writeFileType) => srcPath === flowFile.srcPath,
         ),
       ),
     ).toBeFalsy();
@@ -115,7 +115,7 @@ test('Store is not clean after writting file', () => {
   expect(
     Boolean(
       writeFiles.store.find(
-        ({ srcPath }: writeFileType): boolean => srcPath === flowFile.srcPath,
+        ({ srcPath }: writeFileType) => srcPath === flowFile.srcPath,
       ),
     ),
   ).toBeTruthy();

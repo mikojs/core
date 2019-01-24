@@ -52,7 +52,7 @@ class WriteFiles {
       );
 
       this.store = this.store.filter(
-        (writeFile: writeFileType): boolean => writeFile.srcPath !== srcPath,
+        (writeFile: writeFileType) => writeFile.srcPath !== srcPath,
       );
 
       outputFileSync(

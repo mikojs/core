@@ -152,5 +152,7 @@ module.exports = (() => {
     // jest
     jest,
     test: jest,
+    'jest:react': jest,
+    'test:react': jest,
   };
 })();

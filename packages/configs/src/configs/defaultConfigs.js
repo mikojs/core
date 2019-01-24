@@ -4,7 +4,9 @@ import babel from './babel';
 import prettier from './prettier';
 import lint from './lint';
 import lintsteged from './lintsteged';
+
 import jest from './jest';
+import jestReact from './jest/react';
 
 type configType = {
   alias?: string,
@@ -51,9 +53,17 @@ export default ({
 
   // jest
   jest,
+  'jest:react': jestReact,
   test: {
     ...jest,
     alias: 'jest',
+    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
+      ...argv,
+      '--silent',
+    ],
+  },
+  'test:react': {
+    ...jestReact,
     run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
       ...argv,
       '--silent',

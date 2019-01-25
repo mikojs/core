@@ -3,6 +3,7 @@
 import { type Context as koaContextType } from 'koa';
 import React from 'react';
 import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
+import { StaticRouter as Router } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
@@ -60,7 +61,11 @@ export default (
   ctx.type = 'text/html; charset=utf-8';
   ctx.body = multistream([
     upperDocument,
-    renderToNodeStream(React.createElement(require(filePath))),
+    renderToNodeStream(
+      <Router location={ctx.url} context={{}}>
+        {React.createElement(require(filePath))}
+      </Router>,
+    ),
     lowerDocument,
   ]);
 

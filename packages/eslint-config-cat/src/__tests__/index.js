@@ -39,7 +39,7 @@ const eslintResult = new CLIEngine({
 })
   .executeOnFiles(['.'])
   .results.filter(
-    ({ messages }: { messages: $ReadOnlyArray<string> }): boolean =>
+    ({ messages }: { messages: $ReadOnlyArray<string> }) =>
       messages.length !== 0,
   );
 
@@ -53,20 +53,15 @@ const testData = d3DirTree(root, {
     ({ data: { path: filePath, name } }: d3DirTreeNodeType): testDataType => {
       const { messages = [] } =
         eslintResult.find(
-          ({ filePath: eslintFilePath }: { filePath: string }): boolean =>
+          ({ filePath: eslintFilePath }: { filePath: string }) =>
             filePath === eslintFilePath,
         ) || {};
 
       const expectErrors = fs
         .readFileSync(filePath, 'utf-8')
         .split(/\n/g)
-        .filter(
-          (text: string): boolean => /^[ ]*\/\/ \$expectError /.test(text),
-        )
-        .map(
-          (text: string): string =>
-            text.replace(/^[ ]*\/\/ \$expectError /, ''),
-        );
+        .filter((text: string) => /^[ ]*\/\/ \$expectError /.test(text))
+        .map((text: string) => text.replace(/^[ ]*\/\/ \$expectError /, ''));
 
       const testTasks = messages
         .sort((a: eslintInfoType, b: eslintInfoType) =>

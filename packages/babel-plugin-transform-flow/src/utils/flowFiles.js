@@ -44,10 +44,8 @@ class FlowFiles {
    * @param {string} srcPath - check src path exist
    * @return {boolean} - if path exist, return true
    */
-  fileExist = (srcPath: string): boolean =>
-    this.store.some(
-      (flowFile: flowFileType): boolean => flowFile.srcPath === srcPath,
-    );
+  fileExist = (srcPath: string) =>
+    this.store.some((flowFile: flowFileType) => flowFile.srcPath === srcPath);
 
   openWatcher = () => {
     /* eslint-disable flowtype/no-unused-expressions */
@@ -56,7 +54,7 @@ class FlowFiles {
     /* eslint-enable flowtype/no-unused-expressions */
 
     this.watcher = chokidar.watch(
-      this.store.map(({ filePath }: flowFileType): string => filePath),
+      this.store.map(({ filePath }: flowFileType) => filePath),
       {
         ignoreInitial: true,
       },
@@ -68,7 +66,7 @@ class FlowFiles {
       this.watcher?.on(type, (modifyFilePath: string) => {
         /* eslint-enable flowtype/no-unused-expressions */
         const newFile = this.store.find(
-          ({ filePath }: flowFileType): boolean => modifyFilePath === filePath,
+          ({ filePath }: flowFileType) => modifyFilePath === filePath,
         );
 
         if (!newFile) return;

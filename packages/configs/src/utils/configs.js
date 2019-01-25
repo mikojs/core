@@ -55,7 +55,7 @@ export class Configs {
       if (!this.store[key].config && !customConfigs[key].config) {
         const configs = this.store[key];
 
-        this.store[key] = (): {} => ({} |> configs |> customConfigs[key]);
+        this.store[key] = () => ({} |> configs |> customConfigs[key]);
         return;
       }
 
@@ -67,11 +67,11 @@ export class Configs {
       // handle default or custom configs is object
       this.store[key] = {
         alias: customConfigs[key].alias || configs.alias || key,
-        install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
+        install: (install: $ReadOnlyArray<string>) =>
           install
           |> configs.install || emptyFunction.thatReturnsArgument
           |> customConfigs[key].install || emptyFunction.thatReturnsArgument,
-        config: (): {} =>
+        config: () =>
           ({}
           |> configs.config ||
             (typeof configs === 'function'
@@ -81,12 +81,12 @@ export class Configs {
             (typeof customConfigs[key] === 'function'
               ? customConfigs[key]
               : emptyFunction.thatReturnsArgument)),
-        ignore: (): $ReadOnlyArray<string> =>
+        ignore: () =>
           []
           |> configs.ignore || emptyFunction.thatReturnsArgument
           |> customConfigs[key].ignore || emptyFunction.thatReturnsArgument,
         ignoreName: customConfigs[key].ignoreName,
-        run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
+        run: (argv: $ReadOnlyArray<string>) =>
           argv
           |> configs.run || emptyFunction.thatReturnsArgument
           |> customConfigs[key].run || emptyFunction.thatReturnsArgument,

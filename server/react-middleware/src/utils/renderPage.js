@@ -45,7 +45,7 @@ export default (routesData: $ReadOnlyArray<routeDataType>) => async (
     </Helmet>,
   );
 
-  const [upperDocument, lowerDocument] = renderDocument();
+  const [upperDocument, lowerDocument] = renderDocument(ctx);
 
   ctx.type = 'text/html; charset=utf-8';
   ctx.body = multistream([

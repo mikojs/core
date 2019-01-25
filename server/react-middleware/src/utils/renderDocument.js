@@ -38,9 +38,7 @@ export default (ctx: koaContextType): $ReadOnlyArray<ReadableType> => {
     .split(hash)
     .map(
       (docmentText: string): ReadableType => {
-        const docmentStream = new stream.Readable({
-          read: () => {},
-        });
+        const docmentStream = new stream.Readable();
 
         docmentStream.push(docmentText);
         docmentStream.push(null);

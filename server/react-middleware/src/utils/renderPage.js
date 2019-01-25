@@ -27,6 +27,7 @@ export default (routesData: $ReadOnlyArray<routeDataType>) => async (
   );
 
   if (!page) {
+    // TODO: add templates
     await next();
     return;
   }

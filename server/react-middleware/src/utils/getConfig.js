@@ -12,13 +12,18 @@ const ROOT_PATH = path.resolve(__dirname, './Root.js');
 export default (
   dev: boolean,
   folderPath: string,
+  basename: ?string,
   routesData: $ReadOnlyArray<routeDataType>,
 ) => ({
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval' : false,
-  entry: {
-    client: [CLIENT_PATH],
-  },
+  entry: !basename
+    ? {
+        client: [CLIENT_PATH],
+      }
+    : {
+        [`${basename.replace(/^\//, '')}/client`]: [CLIENT_PATH],
+      },
   output: {
     path: dev ? undefined : path.resolve('./public/js'),
     publicPath: '/assets/',
@@ -40,7 +45,9 @@ export default (
         default: false,
         vendors: false,
         commons: {
-          name: 'commons',
+          name: !basename
+            ? 'commons'
+            : `${basename.replace(/^\//, '')}/commons`,
           chunks: 'all',
           minChunks: routesData.length > 2 ? routesData.length * 0.5 : 2,
         },

@@ -20,6 +20,7 @@ export type routeDataType = {
 export default (
   folderPath: string,
   redirect: redirectType,
+  basename: ?string,
 ): $ReadOnlyArray<routeDataType> =>
   d3DirTree(folderPath, {
     extensions: /.jsx?$/,
@@ -44,13 +45,17 @@ export default (
               return result;
           }
 
+        const routePath = redirect([
+          relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
+        ]);
+
         return [
           ...result,
           {
-            routePath: redirect([
-              relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
-            ]),
-            chunkName: `pages/${relativePath}`,
+            routePath: !basename
+              ? routePath
+              : routePath.map((prevPath: string) => `${basename}${prevPath}`),
+            chunkName: `pages${basename || ''}/${relativePath}`,
             filePath,
           },
         ];

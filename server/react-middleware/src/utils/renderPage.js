@@ -10,10 +10,10 @@ import multistream from 'multistream';
 import { type routeDataType } from './getRoutesData';
 import renderDocument from './renderDocument';
 
-export default (routesData: $ReadOnlyArray<routeDataType>) => async (
-  ctx: koaContextType,
-  next: () => Promise<void>,
-) => {
+export default (
+  basename: ?string,
+  routesData: $ReadOnlyArray<routeDataType>,
+) => async (ctx: koaContextType, next: () => Promise<void>) => {
   const [page] = matchRoutes(
     routesData.map(({ routePath, filePath, chunkName }: routeDataType) => ({
       path: routePath,
@@ -40,9 +40,9 @@ export default (routesData: $ReadOnlyArray<routeDataType>) => async (
 
   renderToStaticMarkup(
     <Helmet>
-      <script async src="/assets/commons.js" />
+      <script async src={`/assets${basename || ''}/commons.js`} />
       <script async src={`/assets/${chunkName}.js`} />
-      <script async src="/assets/client.js" />
+      <script async src={`/assets${basename || ''}/client.js`} />
     </Helmet>,
   );
 

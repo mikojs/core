@@ -18,7 +18,7 @@ describe('react middleware', () => {
 
     app.use(
       await react({
-        folderPath: path.resolve(__dirname, './__ignore__'),
+        folderPath: path.resolve(__dirname, './__ignore__/default'),
       }),
     );
 

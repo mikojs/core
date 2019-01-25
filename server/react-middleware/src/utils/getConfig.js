@@ -6,6 +6,9 @@ import TerserPlugin from 'terser-webpack-plugin';
 
 import { type routeDataType } from './getRoutesData';
 
+const CLIENT_PATH = path.resolve(__dirname, './client.js');
+const ROOT_PATH = path.resolve(__dirname, './Root.js');
+
 export default (
   dev: boolean,
   folderPath: string,
@@ -14,7 +17,7 @@ export default (
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval' : false,
   entry: {
-    client: [path.resolve(__dirname, './client.js')],
+    client: [CLIENT_PATH],
   },
   output: {
     path: dev ? undefined : path.resolve('./public/js'),
@@ -47,7 +50,7 @@ export default (
   module: {
     rules: [
       {
-        include: [path.resolve(__dirname, './client.js')],
+        include: [CLIENT_PATH],
         loader: 'string-replace-loader',
         options: {
           search: '/** replace routesData */',
@@ -68,7 +71,7 @@ export default (
         },
       },
       {
-        include: [folderPath],
+        include: [folderPath, ROOT_PATH],
         loader: 'string-replace-loader',
         options: {
           search: 'module.exports = ((.|\n)*);',

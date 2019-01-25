@@ -2,7 +2,6 @@
 
 import React, { type ComponentType } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { hot } from 'react-hot-loader/root';
 
 import { type routeDataType as serverRouteDataType } from './getRoutesData';
 
@@ -29,4 +28,4 @@ const Root = ({
 );
 /* eslint-enable require-jsdoc, flowtype/require-return-type */
 
-export default hot(Root);
+export default Root;

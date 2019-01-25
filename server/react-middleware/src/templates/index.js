@@ -1,10 +1,12 @@
 // @flow
 
+import { emptyFunction } from 'fbjs';
+
 import Document from './Document';
 
 /** Use to store templates */
 class Templates {
-  Document = Document;
+  getDocument = emptyFunction.thatReturns(Document);
 }
 
 export default new Templates();

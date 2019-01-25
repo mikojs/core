@@ -10,7 +10,7 @@ import { Helmet } from 'react-helmet';
 import templates from 'templates';
 
 export default (): $ReadOnlyArray<ReadableType> => {
-  const { Document } = templates;
+  const Document = templates.getDocument();
   const helmet = Helmet.renderStatic();
   const hash = crypto
     .createHmac('sha256', '@cat-org/react-middleware')

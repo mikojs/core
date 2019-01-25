@@ -34,10 +34,10 @@ export default (
           .relative(folderPath, filePath)
           .replace(/\.jsx?$/, '');
 
-        if (/^\.templates\//.test(relativePath))
+        if (/^\.templates/.test(relativePath))
           switch (relativePath.replace(/^\.templates\//, '')) {
             case 'Document':
-              templates.Document = require(filePath);
+              templates.getDocument = () => require(filePath);
               return result;
 
             default:

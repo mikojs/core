@@ -8,9 +8,12 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 
-import templates from 'templates';
+import { type templatesType } from './getRoutesData';
 
-export default (ctx: koaContextType): $ReadOnlyArray<ReadableType> => {
+export default (
+  ctx: koaContextType,
+  templates: templatesType,
+): $ReadOnlyArray<ReadableType> => {
   const Document = templates.getDocument();
   const helmet = Helmet.renderStatic();
   const hash = crypto

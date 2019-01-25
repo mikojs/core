@@ -41,7 +41,11 @@ export default async ({
       )}\` folder can not be found.`,
     );
 
-  const routesData = getRoutesData(folderPath, redirect, basename);
+  const { templates, routesData } = getRoutesData(
+    folderPath,
+    redirect,
+    basename,
+  );
 
   if (dev) deleteRequiredCache(folderPath);
 
@@ -64,6 +68,6 @@ export default async ({
       : async (ctx: koaContextType, next: () => Promise<void>) => {
           await next();
         },
-    renderPage(basename, routesData),
+    renderPage(basename, routesData, templates),
   ]);
 };

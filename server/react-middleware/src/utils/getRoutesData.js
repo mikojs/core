@@ -2,10 +2,13 @@
 
 import path from 'path';
 
+import { type ComponentType } from 'react';
+import { emptyFunction } from 'fbjs';
+
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-import templates from 'templates';
+import Document from 'templates/Document';
 
 export type redirectType = (
   urlPattern: $ReadOnlyArray<string>,
@@ -17,20 +20,29 @@ export type routeDataType = {
   filePath: string,
 };
 
+export type templatesType = {
+  getDocument: () => ComponentType<*>,
+};
+
+type dataType = {
+  templates: templatesType,
+  routesData: $ReadOnlyArray<routeDataType>,
+};
+
 export default (
   folderPath: string,
   redirect: redirectType,
   basename: ?string,
-): $ReadOnlyArray<routeDataType> =>
+): dataType =>
   d3DirTree(folderPath, {
     extensions: /.jsx?$/,
   })
     .leaves()
     .reduce(
       (
-        result: $ReadOnlyArray<routeDataType>,
+        result: dataType,
         { data: { name, path: filePath } }: d3DirTreeNodeType,
-      ): $ReadOnlyArray<routeDataType> => {
+      ): dataType => {
         const relativePath = path
           .relative(folderPath, filePath)
           .replace(/\.jsx?$/, '');
@@ -38,7 +50,7 @@ export default (
         if (/^\.templates/.test(relativePath))
           switch (relativePath.replace(/^\.templates\//, '')) {
             case 'Document':
-              templates.getDocument = () => require(filePath);
+              result.templates.getDocument = () => require(filePath);
               return result;
 
             default:
@@ -49,16 +61,24 @@ export default (
           relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
         ]);
 
-        return [
+        return {
           ...result,
-          {
-            routePath: !basename
-              ? routePath
-              : routePath.map((prevPath: string) => `${basename}${prevPath}`),
-            chunkName: `pages${basename || ''}/${relativePath}`,
-            filePath,
-          },
-        ];
+          routesData: [
+            ...result.routesData,
+            {
+              routePath: !basename
+                ? routePath
+                : routePath.map((prevPath: string) => `${basename}${prevPath}`),
+              chunkName: `pages${basename || ''}/${relativePath}`,
+              filePath,
+            },
+          ],
+        };
       },
-      [],
+      {
+        templates: {
+          getDocument: emptyFunction.thatReturns(Document),
+        },
+        routesData: [],
+      },
     );

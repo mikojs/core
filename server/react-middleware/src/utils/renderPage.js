@@ -7,12 +7,13 @@ import { matchRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 
-import { type routeDataType } from './getRoutesData';
+import { type routeDataType, type templatesType } from './getRoutesData';
 import renderDocument from './renderDocument';
 
 export default (
   basename: ?string,
   routesData: $ReadOnlyArray<routeDataType>,
+  templates: templatesType,
 ) => async (ctx: koaContextType, next: () => Promise<void>) => {
   const commonsUrl = `/assets${basename || ''}/commons.js`;
 
@@ -55,7 +56,7 @@ export default (
     </Helmet>,
   );
 
-  const [upperDocument, lowerDocument] = renderDocument(ctx);
+  const [upperDocument, lowerDocument] = renderDocument(ctx, templates);
 
   ctx.type = 'text/html; charset=utf-8';
   ctx.body = multistream([

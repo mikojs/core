@@ -10,9 +10,10 @@ test('Root', () => {
     <Root
       routesData={[
         {
-          routePath: ['*'],
-          chunkName: '/',
+          key: 'key',
+          path: ['*'],
           component: () => <div>render</div>,
+          exact: true,
         },
       ]}
     />,

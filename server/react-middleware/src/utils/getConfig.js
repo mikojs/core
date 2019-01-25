@@ -64,9 +64,9 @@ export default (
           replace: `[${routesData
             .map(
               ({ routePath, chunkName, filePath }: routeDataType): string =>
-                `{ routePath: ${JSON.stringify(
+                `{ exact: true, path: ${JSON.stringify(
                   routePath,
-                )}, chunkName: '${chunkName}', component: require('react-loadable')({ ${[
+                )}, key: '${chunkName}', component: require('react-loadable')({ ${[
                   `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
                   `webpack: () => [ require.resolveWeak('${filePath}') ]`,
                   `modules: [ '${filePath}' ]`,

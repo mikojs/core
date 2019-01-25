@@ -4,23 +4,23 @@
 
 import React, { type Node as NodeType } from 'react';
 
-export default class Document extends React.PureComponent<{
+const Document = ({
+  head,
+  scripts,
+  children,
+}: {
   head: NodeType,
   scripts: NodeType,
   children: NodeType,
-}> {
-  render() {
-    const { head, scripts, children } = this.props;
+}) => (
+  <html>
+    <head>{head}</head>
 
-    return (
-      <html>
-        <head>{head}</head>
+    <body>
+      {children}
+      {scripts}
+    </body>
+  </html>
+);
 
-        <body>
-          {children}
-          {scripts}
-        </body>
-      </html>
-    );
-  }
-}
+export default Document;

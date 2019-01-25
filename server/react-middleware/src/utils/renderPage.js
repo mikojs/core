@@ -14,6 +14,15 @@ export default (
   basename: ?string,
   routesData: $ReadOnlyArray<routeDataType>,
 ) => async (ctx: koaContextType, next: () => Promise<void>) => {
+  const commonsUrl = `/assets${basename || ''}/commons.js`;
+
+  if (commonsUrl === ctx.url) {
+    ctx.status = 200;
+    ctx.type = 'application/javascript; charset=UTF-8';
+    ctx.body = '';
+    return;
+  }
+
   const [page] = matchRoutes(
     routesData.map(({ routePath, filePath, chunkName }: routeDataType) => ({
       path: routePath,
@@ -23,7 +32,7 @@ export default (
       },
       exact: true,
     })),
-    ctx.req.url,
+    ctx.url,
   );
 
   if (!page) {
@@ -40,7 +49,7 @@ export default (
 
   renderToStaticMarkup(
     <Helmet>
-      <script async src={`/assets${basename || ''}/commons.js`} />
+      <script async src={commonsUrl} />
       <script async src={`/assets/${chunkName}.js`} />
       <script async src={`/assets${basename || ''}/client.js`} />
     </Helmet>,

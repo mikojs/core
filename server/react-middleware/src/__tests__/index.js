@@ -48,7 +48,7 @@ describe('react middleware', () => {
       ).toBe(
         [
           '<html><head></head><body>',
-          `<main id="__cat__"><div data-reactroot="">${urlPath}</div></main>`,
+          `<main id="__cat__"><div>${urlPath}</div></main>`,
           '<script async="" src="/assets/commons.js"></script>',
           `<script async="" src="/assets/pages/${chunkName}.js"></script>`,
           '<script async="" src="/assets/client.js"></script>',
@@ -65,7 +65,7 @@ describe('react middleware', () => {
       ),
     ).toBe(
       [
-        '<main id="__cat__"><div data-reactroot="">/</div></main>',
+        '<main id="__cat__"><div>/</div></main>',
         '<script async="" src="/assets/custom/commons.js"></script>',
         `<script async="" src="/assets/pages/custom/index.js"></script>`,
         '<script async="" src="/assets/custom/client.js"></script>',

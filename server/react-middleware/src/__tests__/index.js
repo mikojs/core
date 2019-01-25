@@ -22,6 +22,13 @@ describe('react middleware', () => {
       }),
     );
 
+    app.use(
+      await react({
+        folderPath: path.resolve(__dirname, './__ignore__/custom'),
+        basename: '/custom',
+      }),
+    );
+
     port = await getPort();
     server = app.listen(port);
   });
@@ -50,6 +57,28 @@ describe('react middleware', () => {
       );
     },
   );
+
+  test('get custom page', async () => {
+    expect(
+      await fetch(`http://localhost:${port}/custom`).then((res: ResponseType) =>
+        res.text(),
+      ),
+    ).toBe(
+      [
+        '<main id="__cat__"><div data-reactroot="">/</div></main>',
+        '<script async="" src="/assets/custom/commons.js"></script>',
+        `<script async="" src="/assets/pages/custom/index.js"></script>`,
+        '<script async="" src="/assets/custom/client.js"></script>',
+      ].join(''),
+    );
+  });
+
+  test('handle commons not found', async () => {
+    const result = await fetch(`http://localhost:${port}/assets/commons.js`);
+
+    expect(result.status).toBe(200);
+    expect(await result.text()).toBe('');
+  });
 
   test('page not found', async () => {
     expect(

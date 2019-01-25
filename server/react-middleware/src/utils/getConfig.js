@@ -4,7 +4,7 @@ import path from 'path';
 
 import TerserPlugin from 'terser-webpack-plugin';
 
-import { type routeDataType } from './getRoutesData';
+import { type dataType, type routeDataType } from './getData';
 
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
 const ROOT_PATH = path.resolve(__dirname, './Root.js');
@@ -12,13 +12,18 @@ const ROOT_PATH = path.resolve(__dirname, './Root.js');
 export default (
   dev: boolean,
   folderPath: string,
-  routesData: $ReadOnlyArray<routeDataType>,
+  basename: ?string,
+  { routesData }: dataType,
 ) => ({
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval' : false,
-  entry: {
-    client: [CLIENT_PATH],
-  },
+  entry: !basename
+    ? {
+        client: [CLIENT_PATH],
+      }
+    : {
+        [`${basename.replace(/^\//, '')}/client`]: [CLIENT_PATH],
+      },
   output: {
     path: dev ? undefined : path.resolve('./public/js'),
     publicPath: '/assets/',
@@ -40,7 +45,9 @@ export default (
         default: false,
         vendors: false,
         commons: {
-          name: 'commons',
+          name: !basename
+            ? 'commons'
+            : `${basename.replace(/^\//, '')}/commons`,
           chunks: 'all',
           minChunks: routesData.length > 2 ? routesData.length * 0.5 : 2,
         },

@@ -13,7 +13,7 @@ import { emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
-import getRoutesData, { type redirectType } from './utils/getRoutesData';
+import getData, { type redirectType } from './utils/getData';
 import getConfig from './utils/getConfig';
 import deleteRequiredCache from './utils/deleteRequiredCache';
 import renderPage from './utils/renderPage';
@@ -21,15 +21,17 @@ import renderPage from './utils/renderPage';
 handleUnhandledRejection();
 
 export default async ({
-  folderPath = path.resolve('./src/pages'),
-  redirect = emptyFunction.thatReturnsArgument,
   dev = true,
   config: configFunc = emptyFunction.thatReturnsArgument,
+  folderPath = path.resolve('./src/pages'),
+  redirect = emptyFunction.thatReturnsArgument,
+  basename,
 }: {
-  folderPath?: string,
-  redirect?: redirectType,
   dev?: boolean,
   config?: (cnofig: {}) => {},
+  folderPath?: string,
+  redirect?: redirectType,
+  basename?: string,
 } = {}): Promise<koaMiddlewareType> => {
   if (!fs.existsSync(folderPath))
     throw new Error(
@@ -39,7 +41,7 @@ export default async ({
       )}\` folder can not be found.`,
     );
 
-  const routesData = getRoutesData(folderPath, redirect);
+  const data = getData(folderPath, redirect, basename);
 
   if (dev) deleteRequiredCache(folderPath);
 
@@ -47,7 +49,7 @@ export default async ({
     dev
       ? await webpack(
           configFunc({
-            config: getConfig(dev, folderPath, routesData),
+            config: getConfig(dev, folderPath, basename, data),
             devMiddleware: {
               stats: {
                 maxModules: 0,
@@ -62,6 +64,6 @@ export default async ({
       : async (ctx: koaContextType, next: () => Promise<void>) => {
           await next();
         },
-    renderPage(routesData),
+    renderPage(basename, data),
   ]);
 };

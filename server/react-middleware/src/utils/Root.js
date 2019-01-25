@@ -3,7 +3,7 @@
 import React, { type ComponentType } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import { type routeDataType as serverRouteDataType } from './getRoutesData';
+import { type routeDataType as serverRouteDataType } from './getData';
 
 type routeDataType = {
   routePath: $PropertyType<serverRouteDataType, 'routePath'>,

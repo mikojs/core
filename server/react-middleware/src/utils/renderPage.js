@@ -7,13 +7,22 @@ import { matchRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 
-import { type routeDataType } from './getRoutesData';
+import { type dataType, type routeDataType } from './getData';
 import renderDocument from './renderDocument';
 
-export default (routesData: $ReadOnlyArray<routeDataType>) => async (
-  ctx: koaContextType,
-  next: () => Promise<void>,
-) => {
+export default (
+  basename: ?string,
+  { routesData, templates }: dataType,
+) => async (ctx: koaContextType, next: () => Promise<void>) => {
+  const commonsUrl = `/assets${basename || ''}/commons.js`;
+
+  if (commonsUrl === ctx.url) {
+    ctx.status = 200;
+    ctx.type = 'application/javascript; charset=UTF-8';
+    ctx.body = '';
+    return;
+  }
+
   const [page] = matchRoutes(
     routesData.map(({ routePath, filePath, chunkName }: routeDataType) => ({
       path: routePath,
@@ -23,7 +32,7 @@ export default (routesData: $ReadOnlyArray<routeDataType>) => async (
       },
       exact: true,
     })),
-    ctx.req.url,
+    ctx.url,
   );
 
   if (!page) {
@@ -40,13 +49,13 @@ export default (routesData: $ReadOnlyArray<routeDataType>) => async (
 
   renderToStaticMarkup(
     <Helmet>
-      <script async src="/assets/commons.js" />
+      <script async src={commonsUrl} />
       <script async src={`/assets/${chunkName}.js`} />
-      <script async src="/assets/client.js" />
+      <script async src={`/assets${basename || ''}/client.js`} />
     </Helmet>,
   );
 
-  const [upperDocument, lowerDocument] = renderDocument(ctx);
+  const [upperDocument, lowerDocument] = renderDocument(ctx, templates);
 
   ctx.type = 'text/html; charset=utf-8';
   ctx.body = multistream([

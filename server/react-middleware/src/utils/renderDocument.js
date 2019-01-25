@@ -8,7 +8,7 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 
-import { type templatesType } from './getRoutesData';
+import { type templatesType } from './getData';
 
 export default (
   ctx: koaContextType,

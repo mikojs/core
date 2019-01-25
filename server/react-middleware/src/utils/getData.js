@@ -24,7 +24,7 @@ export type templatesType = {
   getDocument: () => ComponentType<*>,
 };
 
-type dataType = {
+export type dataType = {
   templates: templatesType,
   routesData: $ReadOnlyArray<routeDataType>,
 };

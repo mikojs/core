@@ -7,13 +7,12 @@ import { matchRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 
-import { type routeDataType, type templatesType } from './getRoutesData';
+import { type dataType, type routeDataType } from './getData';
 import renderDocument from './renderDocument';
 
 export default (
   basename: ?string,
-  routesData: $ReadOnlyArray<routeDataType>,
-  templates: templatesType,
+  { routesData, templates }: dataType,
 ) => async (ctx: koaContextType, next: () => Promise<void>) => {
   const commonsUrl = `/assets${basename || ''}/commons.js`;
 

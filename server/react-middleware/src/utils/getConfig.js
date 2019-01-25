@@ -4,7 +4,7 @@ import path from 'path';
 
 import TerserPlugin from 'terser-webpack-plugin';
 
-import { type routeDataType } from './getRoutesData';
+import { type dataType, type routeDataType } from './getData';
 
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
 const ROOT_PATH = path.resolve(__dirname, './Root.js');
@@ -13,7 +13,7 @@ export default (
   dev: boolean,
   folderPath: string,
   basename: ?string,
-  routesData: $ReadOnlyArray<routeDataType>,
+  { routesData }: dataType,
 ) => ({
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval' : false,

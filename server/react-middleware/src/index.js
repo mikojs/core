@@ -13,7 +13,7 @@ import { emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
-import getRoutesData, { type redirectType } from './utils/getRoutesData';
+import getData, { type redirectType } from './utils/getData';
 import getConfig from './utils/getConfig';
 import deleteRequiredCache from './utils/deleteRequiredCache';
 import renderPage from './utils/renderPage';
@@ -41,11 +41,7 @@ export default async ({
       )}\` folder can not be found.`,
     );
 
-  const { templates, routesData } = getRoutesData(
-    folderPath,
-    redirect,
-    basename,
-  );
+  const data = getData(folderPath, redirect, basename);
 
   if (dev) deleteRequiredCache(folderPath);
 
@@ -53,7 +49,7 @@ export default async ({
     dev
       ? await webpack(
           configFunc({
-            config: getConfig(dev, folderPath, basename, routesData),
+            config: getConfig(dev, folderPath, basename, data),
             devMiddleware: {
               stats: {
                 maxModules: 0,
@@ -68,6 +64,6 @@ export default async ({
       : async (ctx: koaContextType, next: () => Promise<void>) => {
           await next();
         },
-    renderPage(basename, routesData, templates),
+    renderPage(basename, data),
   ]);
 };

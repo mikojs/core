@@ -39,12 +39,12 @@ describe('react middleware', () => {
         ),
       ).toBe(
         [
-          '<main id="__cat__" data-reactroot="">',
-          `<div>${urlPath}</div>`,
-          '</main>',
-          '<script async="" src="/assets/commons.js" data-reactroot=""></script>',
+          '<html><head></head><body>',
+          `<main id="__cat__"><div data-reactroot="">${urlPath}</div></main>`,
+          '<script async="" src="/assets/commons.js"></script>',
           `<script async="" src="/assets/pages/${chunkName}.js"></script>`,
-          '<script async="" src="/assets/client.js" data-reactroot=""></script>',
+          '<script async="" src="/assets/client.js"></script>',
+          '</body></html>',
         ].join(''),
       );
     },

@@ -5,6 +5,7 @@ import path from 'path';
 import Koa, { type ServerType as koaServerType } from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
+import { watchCallback } from 'chokidar';
 
 import react from '../index';
 
@@ -17,7 +18,7 @@ describe('react middleware', () => {
 
     app.use(
       await react({
-        folderPath: path.resolve(__dirname, './__ignore__'),
+        folderPath: path.resolve(__dirname, './__ignore__/default'),
       }),
     );
 
@@ -39,19 +40,37 @@ describe('react middleware', () => {
         ),
       ).toBe(
         [
-          '<main id="__cat__" data-reactroot="">',
-          `<div>${urlPath}</div>`,
-          '</main>',
-          '<script async="" src="/assets/commons.js" data-reactroot=""></script>',
+          '<html><head></head><body>',
+          `<main id="__cat__"><div data-reactroot="">${urlPath}</div></main>`,
+          '<script async="" src="/assets/commons.js"></script>',
           `<script async="" src="/assets/pages/${chunkName}.js"></script>`,
-          '<script async="" src="/assets/client.js" data-reactroot=""></script>',
+          '<script async="" src="/assets/client.js"></script>',
+          '</body></html>',
         ].join(''),
       );
     },
   );
 
+  test('page not found', async () => {
+    expect(
+      await fetch(`http://localhost:${port}/not_found`).then(
+        (res: ResponseType) => res.text(),
+      ),
+    ).toBe('Not Found');
+  });
+
   test('can not find folder', async () => {
     await expect(react()).rejects.toThrow('folder can not be found.');
+  });
+
+  describe.each`
+    filePath
+    ${'index'}
+    ${'index.js'}
+  `('trigger chokidar file change', ({ filePath }: { filePath: string }) => {
+    test(`work with filePath = ${filePath}`, () => {
+      watchCallback(filePath);
+    });
   });
 
   afterAll(() => {

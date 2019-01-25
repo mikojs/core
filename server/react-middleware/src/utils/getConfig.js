@@ -6,8 +6,8 @@ import TerserPlugin from 'terser-webpack-plugin';
 
 import { type dataType, type routeDataType } from './getData';
 
-const CLIENT_PATH = path.resolve(__dirname, './client.js');
-const ROOT_PATH = path.resolve(__dirname, './Root.js');
+const CLIENT_PATH = path.resolve(__dirname, '../client/index.js');
+const ROOT_PATH = path.resolve(__dirname, '../client/Root.js');
 
 export default (
   dev: boolean,

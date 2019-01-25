@@ -1,5 +1,16 @@
 // @flow
 
-import { type Node as NodeType } from 'react';
+import React, { type Node as NodeType } from 'react';
 
-export default ({ children }: { children: NodeType }) => children;
+export default ({
+  children,
+  scripts,
+}: {
+  children: NodeType,
+  scripts: NodeType,
+}) => (
+  <>
+    {children}
+    {scripts}
+  </>
+);

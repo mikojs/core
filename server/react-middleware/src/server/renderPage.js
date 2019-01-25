@@ -8,8 +8,9 @@ import { matchRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 
-import { type dataType, type routeDataType } from './getData';
 import renderDocument from './renderDocument';
+
+import { type dataType, type routeDataType } from 'utils/getData';
 
 export default (
   basename: ?string,

@@ -16,7 +16,7 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 import getData, { type redirectType } from './utils/getData';
 import getConfig from './utils/getConfig';
 import deleteRequiredCache from './utils/deleteRequiredCache';
-import renderPage from './utils/renderPage';
+import renderPage from './server/renderPage';
 
 handleUnhandledRejection();
 

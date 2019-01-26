@@ -9,6 +9,7 @@ import { type dataType, type routeDataType } from './getData';
 const CLIENT_PATH = path.resolve(__dirname, '../client/index.js');
 const ROOT_PATH = path.resolve(__dirname, '../client/Root.js');
 
+// TODO: add testing to check config
 export default (
   dev: boolean,
   folderPath: string,
@@ -63,16 +64,20 @@ export default (
           search: '/** replace routesData */',
           replace: `[${routesData
             .map(
+              // TODO: add testing to check data
               ({ routePath, chunkName, filePath }: routeDataType): string =>
-                `{ exact: true, path: ${JSON.stringify(
-                  routePath,
-                )}, key: '${chunkName}', component: require('react-loadable')({ ${[
-                  `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
-                  `webpack: () => [ require.resolveWeak('${filePath}') ]`,
-                  `modules: [ '${filePath}' ]`,
-                  // TODO: add default loading
-                  "loading: ({ error }) => error ? error.message : 'loading'",
-                ].join(', ')} }) }`,
+                `{ ${[
+                  'exact: true',
+                  `path: ${JSON.stringify(routePath)}`,
+                  `key: '${chunkName}'`,
+                  `component: require('react-loadable')({ ${[
+                    `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
+                    `webpack: () => [ require.resolveWeak('${filePath}') ]`,
+                    `modules: [ '${filePath}' ]`,
+                    // TODO: add default loading
+                    `loading: ({ error }) => error ? error.message : 'loading'`,
+                  ].join(', ')} })`,
+                ].join(', ')} }`,
             )
             .join(', ')}] ||`,
         },

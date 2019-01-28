@@ -8,6 +8,8 @@ import { matchRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 
+import { type serverCtxType as ctxType } from '../types';
+
 import renderDocument from './renderDocument';
 
 import { type dataType, type routeDataType } from 'utils/getData';
@@ -49,10 +51,11 @@ export default (
     },
   } = page;
   const Component: ComponentType<*> & {
-    getInitialProps: ({}) => Promise<{}>,
+    getInitialProps: ctxType => Promise<ctxType>,
   } = require(filePath);
-  // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-  const initialProps = (await Component.getInitialProps?.({})) || {};
+  const initialProps =
+    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    (await Component.getInitialProps?.({ ctx, isServer: true })) || {};
 
   renderToStaticMarkup(
     <Helmet>

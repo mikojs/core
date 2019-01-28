@@ -5,8 +5,10 @@ import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
 
+import { type clientCtxType as ctxType } from '../types';
+
 type propsType = {
-  getInitialProps: ({}) => Promise<{}>,
+  getInitialProps: ctxType => Promise<ctxType>,
   children: ({}) => NodeType,
 };
 
@@ -33,7 +35,8 @@ class LoadInitialProps extends React.PureComponent<propsType, stateType> {
 
     setTimeout(async () => {
       this.setState({
-        initialProps: (await getInitialProps?.({})) || {},
+        initialProps:
+          (await getInitialProps?.({ ctx: {}, isServer: false })) || {},
       });
     }, mockChoice(process.env.NODE_ENV === 'production', emptyFunction.thatReturns(0), emptyFunction.thatReturns(1000)));
   }
@@ -55,7 +58,7 @@ export default ({
   getInitialProps,
 }: {
   default: ComponentType<*>,
-  getInitialProps: ({}) => Promise<{}>,
+  getInitialProps: $ElementType<propsType, 'getInitialProps'>,
 }) => (
   <LoadInitialProps getInitialProps={getInitialProps}>
     {(initialProps: {}) => <Component {...initialProps} />}

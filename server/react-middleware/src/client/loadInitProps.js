@@ -1,19 +1,26 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
-import { areEqual, emptyFunction } from 'fbjs';
+import React, { type ComponentType, type Node as NodeType } from 'react';
+import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
+
+type propsType = {
+  getInitialProps: ({}) => Promise<{}>,
+  children: ({}) => NodeType,
+};
+
+type stateType = {
+  initialProps: ?{},
+};
 
 let initialized: boolean = false;
 
 /* eslint-disable require-jsdoc, flowtype/require-return-type, flowtype/require-parameter-type */
 // TODO component should be ignored
-class LoadInitialProps extends React.Component<{
-  getInitialProps: Promise<{}>,
-}> {
+class LoadInitialProps extends React.PureComponent<propsType, stateType> {
   state = {
-    initialProps: !initialized ? __CAT_DATA__ : null,
+    initialProps: !initialized ? window.__CAT_DATA__ : null,
   };
 
   componentDidMount() {
@@ -29,13 +36,6 @@ class LoadInitialProps extends React.Component<{
         initialProps: (await getInitialProps?.({})) || {},
       });
     }, mockChoice(process.env.NODE_ENV === 'production', emptyFunction.thatReturns(0), emptyFunction.thatReturns(1000)));
-  }
-
-  // TODO: testing routeDatas redirect will work, /test/1 -> test/2
-  shouldComponentUpdate(nextProps, nextState) {
-    const { initialProps } = this.state;
-
-    return !areEqual(initialProps, nextState.initialProps);
   }
 
   render() {
@@ -54,8 +54,8 @@ export default ({
   default: Component,
   getInitialProps,
 }: {
-  default: NodeType,
-  getInitialProps: Promise<{}>,
+  default: ComponentType<*>,
+  getInitialProps: ({}) => Promise<{}>,
 }) => (
   <LoadInitialProps getInitialProps={getInitialProps}>
     {(initialProps: {}) => <Component {...initialProps} />}

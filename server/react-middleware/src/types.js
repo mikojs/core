@@ -11,3 +11,8 @@ export type serverCtxType = {
   isServer: true,
   ctx: koaContextType,
 };
+
+export type componentCtxType<ctxType> = {
+  isServer: boolean,
+  ctx: ctxType,
+};

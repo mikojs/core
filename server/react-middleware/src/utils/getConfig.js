@@ -76,6 +76,7 @@ export default (
                     `modules: [ '${filePath}' ]`,
                     // TODO: add default loading
                     `loading: ({ error }) => error ? error.message : 'loading'`,
+                    `render: require('./loadInitProps')`,
                   ].join(', ')} })`,
                 ].join(', ')} }`,
             )

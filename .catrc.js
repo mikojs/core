@@ -103,6 +103,9 @@ const babel = config => {
 const lint = {
   config: config => ({
     ...config,
+    globals: {
+      '__CAT_DATA__': true,
+    },
     overrides: [
       {
         files: ['checkFilesInPackages.js'],

@@ -20,7 +20,7 @@ export default (
 
   if (commonsUrl === ctx.url) {
     ctx.status = 200;
-    ctx.type = 'application/javascript; charset=UTF-8';
+    ctx.type = 'application/javascript';
     ctx.body = '';
     return;
   }
@@ -48,9 +48,12 @@ export default (
       component: { filePath, chunkName },
     },
   } = page;
+  const Component = require(filePath);
+  const initialProps = (await Component.getInitialProps?.({})) || {};
 
   renderToStaticMarkup(
     <Helmet>
+      <script>{`var __CAT_DATA__ = ${JSON.stringify(initialProps)};`}</script>
       <script async src={commonsUrl} />
       <script async src={`/assets/${chunkName}.js`} />
       <script async src={`/assets${basename || ''}/client.js`} />
@@ -59,12 +62,12 @@ export default (
 
   const [upperDocument, lowerDocument] = renderDocument(ctx, templates);
 
-  ctx.type = 'text/html; charset=utf-8';
+  ctx.type = 'text/html';
   ctx.body = multistream([
     upperDocument,
     renderToNodeStream(
       <Router location={ctx.url} context={{}}>
-        {React.createElement(require(filePath))}
+        <Component {...initialProps} />
       </Router>,
     ),
     lowerDocument,

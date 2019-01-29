@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type ComponentType, type Node as NodeType } from 'react';
+import React, { type ElementType, type Node as NodeType } from 'react';
 import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
@@ -67,7 +67,7 @@ export default ({
   default: Component,
   getInitialProps,
 }: {
-  default: ComponentType<*>,
+  default: ElementType,
   getInitialProps?: $ElementType<propsType, 'getInitialProps'>,
 }) => (
   <LoadInitialProps getInitialProps={getInitialProps}>

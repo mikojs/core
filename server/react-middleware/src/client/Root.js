@@ -1,13 +1,13 @@
 // @flow
 
-import React, { type ComponentType } from 'react';
+import React, { type ElementType } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 type routePropsType = {
   exact: true,
   key: string,
   path: $ReadOnlyArray<string>,
-  component: ComponentType<*>,
+  component: ElementType,
 };
 
 /* eslint-disable require-jsdoc, flowtype/require-return-type */

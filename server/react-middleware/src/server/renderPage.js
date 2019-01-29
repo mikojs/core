@@ -1,7 +1,7 @@
 // @flow
 
 import { type Context as koaContextType } from 'koa';
-import React, { type ComponentType } from 'react';
+import React, { type ElementType } from 'react';
 import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
@@ -50,7 +50,7 @@ export default (
       component: { filePath, chunkName },
     },
   } = page;
-  const Component: ComponentType<*> & {
+  const Component: ElementType & {
     getInitialProps?: ctxType => Promise<{}>,
   } = require(filePath);
   const initialProps =

@@ -51,7 +51,7 @@ export default (
     },
   } = page;
   const Component: ComponentType<*> & {
-    getInitialProps: ctxType => Promise<{}>,
+    getInitialProps?: ctxType => Promise<{}>,
   } = require(filePath);
   const initialProps =
     // $FlowFixMe Flow does not yet support method or property calls in optional chains.

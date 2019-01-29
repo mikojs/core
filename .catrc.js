@@ -104,7 +104,7 @@ const lint = {
   config: config => ({
     ...config,
     globals: {
-      '__CAT_DATA__': true,
+      __CAT_DATA__: true,
     },
     overrides: [
       {

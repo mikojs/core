@@ -8,7 +8,7 @@ import { mockChoice } from '@cat-org/utils';
 import { type clientCtxType as ctxType } from '../types';
 
 type propsType = {
-  getInitialProps: ctxType => Promise<ctxType>,
+  getInitialProps?: ctxType => Promise<{}>,
   children: ({}) => NodeType,
 };
 
@@ -26,20 +26,30 @@ class LoadInitialProps extends React.PureComponent<propsType, stateType> {
   };
 
   componentDidMount() {
-    const { getInitialProps } = this.props;
-
     if (!initialized) {
       initialized = true;
       return;
     }
 
-    setTimeout(async () => {
-      this.setState({
-        initialProps:
-          (await getInitialProps?.({ ctx: {}, isServer: false })) || {},
-      });
-    }, mockChoice(process.env.NODE_ENV === 'production', emptyFunction.thatReturns(0), emptyFunction.thatReturns(1000)));
+    setTimeout(
+      this.load,
+      // Delay update time for dev mode
+      mockChoice(
+        process.env.NODE_ENV === 'production',
+        emptyFunction.thatReturns(0),
+        emptyFunction.thatReturns(100),
+      ),
+    );
   }
+
+  load = async () => {
+    const { getInitialProps } = this.props;
+
+    this.setState({
+      initialProps:
+        (await getInitialProps?.({ ctx: {}, isServer: false })) || {},
+    });
+  };
 
   render() {
     const { children } = this.props;
@@ -58,9 +68,9 @@ export default ({
   getInitialProps,
 }: {
   default: ComponentType<*>,
-  getInitialProps: $ElementType<propsType, 'getInitialProps'>,
+  getInitialProps?: $ElementType<propsType, 'getInitialProps'>,
 }) => (
   <LoadInitialProps getInitialProps={getInitialProps}>
-    {(initialProps: {}) => <Component {...initialProps} />}
+    {(initialProps: mixed) => <Component {...initialProps} />}
   </LoadInitialProps>
 );

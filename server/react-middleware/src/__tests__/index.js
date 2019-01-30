@@ -59,6 +59,24 @@ describe('react middleware', () => {
     },
   );
 
+  test('no getInitialProps', async () => {
+    expect(
+      await fetch(`http://localhost:${port}/noGetInitialProps`).then(
+        (res: ResponseType) => res.text(),
+      ),
+    ).toBe(
+      [
+        '<html><head></head><body>',
+        `<main id="__cat__"><div>noGetInitialProps</div></main>`,
+        `<script>var __CAT_DATA__ = {};</script>`,
+        '<script async="" src="/assets/commons.js"></script>',
+        `<script async="" src="/assets/pages/noGetInitialProps.js"></script>`,
+        '<script async="" src="/assets/client.js"></script>',
+        '</body></html>',
+      ].join(''),
+    );
+  });
+
   test('get custom page', async () => {
     expect(
       await fetch(`http://localhost:${port}/custom`).then((res: ResponseType) =>

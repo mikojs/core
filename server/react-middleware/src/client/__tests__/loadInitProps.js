@@ -33,7 +33,6 @@ describe('load init props', () => {
       );
 
       if (!initialized) initialized = true;
-      // $FlowFixMe https://github.com/flow-typed/flow-typed/pull/3107
       else await wrapper.instance().load();
 
       expect(wrapper.text()).toBe(result);

@@ -5,16 +5,19 @@ import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
 
-import { type clientCtxType as ctxType } from '../types';
+type ctxType = {|
+  isServer: false,
+  ctx: {},
+|};
 
-type propsType = {
+type propsType = {|
   getInitialProps?: ctxType => Promise<{}>,
   children: ({}) => NodeType,
-};
+|};
 
-type stateType = {
+type stateType = {|
   initialProps: ?{},
-};
+|};
 
 let initialized: boolean = false;
 

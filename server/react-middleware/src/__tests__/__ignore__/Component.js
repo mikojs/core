@@ -4,11 +4,11 @@
 
 import React from 'react';
 
-import { type componentCtxType as ctxType } from '../../types';
+import { type ctxType } from '../../types';
 
-type propsType = {
+type propsType = {|
   url: string,
-};
+|};
 
 export default class Component extends React.PureComponent<propsType> {
   static getInitialProps = ({

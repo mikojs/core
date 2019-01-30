@@ -1,18 +1,6 @@
 // @flow
 
-import { type Context as koaContextType } from 'koa';
-
-export type clientCtxType = {
-  isServer: false,
-  ctx: {},
-};
-
-export type serverCtxType = {
-  isServer: true,
-  ctx: koaContextType,
-};
-
-export type componentCtxType<ctxType> = {
+export type ctxType<T> = {
   isServer: boolean,
-  ctx: ctxType,
+  ctx: T,
 };

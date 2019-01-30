@@ -8,11 +8,14 @@ import { matchRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 
-import { type serverCtxType as ctxType } from '../types';
-
 import renderDocument from './renderDocument';
 
 import { type dataType, type routeDataType } from 'utils/getData';
+
+type ctxType = {|
+  isServer: true,
+  ctx: koaContextType,
+|};
 
 export default (
   basename: ?string,

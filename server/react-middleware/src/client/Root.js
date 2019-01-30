@@ -3,12 +3,12 @@
 import React, { type ElementType } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-type routePropsType = {
+type routePropsType = {|
   exact: true,
   key: string,
   path: $ReadOnlyArray<string>,
   component: ElementType,
-};
+|};
 
 /* eslint-disable require-jsdoc, flowtype/require-return-type */
 // TODO component should be ignored

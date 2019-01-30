@@ -10,13 +10,19 @@ type ctxType = {|
   ctx: {},
 |};
 
-type propsType = {|
-  getInitialProps?: ctxType => Promise<{}>,
-  children: ({}) => NodeType,
+type stateType = {|
+  initialProps: ?{
+    head?: NodeType,
+  },
 |};
 
-type stateType = {|
-  initialProps: ?{},
+type propsType = {|
+  getInitialProps?: ctxType => Promise<
+    $NonMaybeType<$PropertyType<stateType, 'initialProps'>>,
+  >,
+  children: (
+    initialProps: $NonMaybeType<$PropertyType<stateType, 'initialProps'>>,
+  ) => NodeType,
 |};
 
 let initialized: boolean = false;
@@ -71,9 +77,17 @@ export default ({
   getInitialProps,
 }: {
   default: ElementType,
-  getInitialProps?: $ElementType<propsType, 'getInitialProps'>,
+  getInitialProps?: $PropertyType<propsType, 'getInitialProps'>,
 }) => (
   <LoadInitialProps getInitialProps={getInitialProps}>
-    {(initialProps: mixed) => <Component {...initialProps} />}
+    {({
+      head,
+      ...initialProps
+    }: $NonMaybeType<$PropertyType<stateType, 'initialProps'>>) => (
+      <>
+        {head}
+        <Component {...initialProps} />
+      </>
+    )}
   </LoadInitialProps>
 );

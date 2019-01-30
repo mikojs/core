@@ -13,7 +13,7 @@ export type initialOptionsType = {|
   watch: boolean,
 |};
 
-export type manipulateOptionsPluginsType = {
+export type manipulateOptionsPluginsType = {|
   options: {|
     src: $ReadOnlyArray<string>,
     outDir: string,
@@ -24,7 +24,7 @@ export type manipulateOptionsPluginsType = {
   manipulateOptions: ({
     plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
   }) => void,
-};
+|};
 
 /**
  * @example

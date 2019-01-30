@@ -1,6 +1,6 @@
 // @flow
 
-type nodeType = { type: string };
+type nodeType = {| type: string |};
 
 type helmetType = {
   [string]: {

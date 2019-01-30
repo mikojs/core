@@ -5,11 +5,11 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import { type routeDataType as serverRouteDataType } from './getData';
 
-type routeDataType = {
+type routeDataType = {|
   routePath: $PropertyType<serverRouteDataType, 'routePath'>,
   chunkName: $PropertyType<serverRouteDataType, 'chunkName'>,
   component: ComponentType<*>,
-};
+|};
 
 /* eslint-disable require-jsdoc, flowtype/require-return-type */
 // TODO component should be ignored

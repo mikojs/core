@@ -7,14 +7,14 @@ import { name as pkgName } from '../../package.json';
 import handler from './handler';
 import writeFiles from './writeFiles';
 
-export type flowFileType = {
+export type flowFileType = {|
   srcPath: string,
   destPath: string,
   filePath: string,
   babelConfig: {
     notInitialized?: boolean,
   },
-};
+|};
 
 /**
  * @example

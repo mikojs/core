@@ -6,7 +6,7 @@ import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
 import readme from './readme';
-import Store, { type ctxType } from './index';
+import Store from './index';
 
 import normalizedQuestions from 'utils/normalizedQuestions';
 
@@ -68,7 +68,7 @@ class Npmignore extends Store {
    *
    * @param {Object} ctx - store context
    */
-  start = async (ctx: ctxType) => {
+  start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     await this.checkNpm();
 
     ctx.useNpm = this.storeUseNpm;

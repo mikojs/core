@@ -2,15 +2,17 @@
 
 import React, { type Node as NodeType } from 'react';
 
+import { type helmetType } from '../../../../types';
+
 export default ({
+  helmet,
   children,
-  scripts,
 }: {
+  helmet: helmetType,
   children: NodeType,
-  scripts: NodeType,
 }) => (
   <>
     {children}
-    {scripts}
+    {helmet.script.toComponent()}
   </>
 );

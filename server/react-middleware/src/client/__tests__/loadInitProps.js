@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
+import { Helmet } from 'react-helmet';
 
 import loadInitProps from '../loadInitProps';
 
@@ -38,4 +39,26 @@ describe('load init props', () => {
       expect(wrapper.text()).toBe(result);
     },
   );
+
+  test('custom head', async () => {
+    const head = <title>title</title>;
+    const wrapper = mount(
+      loadInitProps({
+        default: ({ text }: { text: string }) => <div>{text}</div>,
+        getInitialProps: async () =>
+          await {
+            text: 'get initiail props',
+            head: <Helmet>{head}</Helmet>,
+          },
+      }),
+    );
+
+    await wrapper.instance().load();
+
+    const title = Helmet.renderStatic().title.toComponent();
+
+    expect(wrapper.text()).toBe('get initiail props');
+    expect(title).toHaveLength(1);
+    expect(title[0]).toBe(head);
+  });
 });

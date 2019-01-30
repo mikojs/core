@@ -2,7 +2,7 @@
 
 import { type Context as koaContextType } from 'koa';
 import React, { type ElementType } from 'react';
-import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
+import { renderToNodeStream } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
@@ -56,20 +56,24 @@ export default (
   const Component: ElementType & {
     getInitialProps?: ctxType => Promise<{}>,
   } = require(filePath);
-  const initialProps =
+  const { head, ...initialProps } =
     // $FlowFixMe Flow does not yet support method or property calls in optional chains.
     (await Component.getInitialProps?.({ ctx, isServer: true })) || {};
 
-  renderToStaticMarkup(
-    <Helmet>
-      <script>{`var __CAT_DATA__ = ${JSON.stringify(initialProps)};`}</script>
-      <script async src={commonsUrl} />
-      <script async src={`/assets/${chunkName}.js`} />
-      <script async src={`/assets${basename || ''}/client.js`} />
-    </Helmet>,
-  );
+  const [upperDocument, lowerDocument] = await renderDocument(
+    ctx,
+    templates,
+    <>
+      {head}
 
-  const [upperDocument, lowerDocument] = renderDocument(ctx, templates);
+      <Helmet>
+        <script>{`var __CAT_DATA__ = ${JSON.stringify(initialProps)};`}</script>
+        <script async src={commonsUrl} />
+        <script async src={`/assets/${chunkName}.js`} />
+        <script async src={`/assets${basename || ''}/client.js`} />
+      </Helmet>
+    </>,
+  );
 
   ctx.type = 'text/html';
   ctx.body = multistream([

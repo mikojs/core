@@ -55,11 +55,13 @@ class Helmet {
    * @return {null} - null
    */
   Helmet = ({ children }: { children: $ReadOnlyArray<nodeType> }): null => {
-    children.map((child: nodeType) => {
-      const { type } = child;
+    (children instanceof Array ? children : [children]).forEach(
+      (child: nodeType) => {
+        const { type } = child;
 
-      this.caches[type].push(child);
-    });
+        this.caches[type].push(child);
+      },
+    );
 
     return null;
   };

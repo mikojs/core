@@ -12,7 +12,7 @@ import { mockChoice } from '@cat-org/utils';
 
 import license from './license';
 import readme from './readme';
-import Store, { type ctxType, type pkgType } from './index';
+import Store from './index';
 
 import getEngines from 'utils/getEngines';
 import getUser from 'utils/getUser';
@@ -57,7 +57,7 @@ export const PKG_QUESTIONS = [
 class Pkg extends Store {
   subStores = [license, readme];
 
-  storePkg: pkgType = {
+  storePkg: $NonMaybeType<$PropertyType<$PropertyType<Store, 'ctx'>, 'pkg'>> = {
     license: 'MIT',
     version: '1.0.0',
     main: './lib/index.js',
@@ -117,7 +117,7 @@ class Pkg extends Store {
    *
    * @param {Object} ctx - store context
    */
-  start = async (ctx: ctxType) => {
+  start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     const { projectDir } = ctx;
 
     await this.defaultInfo(projectDir);

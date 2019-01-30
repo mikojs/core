@@ -7,7 +7,7 @@ import configs from './configs';
 import flow from './flow';
 import license from './license';
 import readme from './readme';
-import Store, { type ctxType } from './index';
+import Store from './index';
 
 /** base store */
 class Base extends Store {
@@ -19,7 +19,7 @@ class Base extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = async ({ pkg: { repository } = {} }: ctxType) => {
+  end = async ({ pkg: { repository } = {} }: $PropertyType<Store, 'ctx'>) => {
     await this.execa(
       'yarn flow-typed install',
       'git add .',

@@ -1,6 +1,6 @@
 // @flow
 
-import Store, { type ctxType } from './index';
+import Store from './index';
 
 /**
  * @example
@@ -108,7 +108,7 @@ class Circleci extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = ({ useNpm }: ctxType) => {
+  end = ({ useNpm }: $PropertyType<Store, 'ctx'>) => {
     this.writeFiles({
       '.circleci/config.yml': template(useNpm),
     });

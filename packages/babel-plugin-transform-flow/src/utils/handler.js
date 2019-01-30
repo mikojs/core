@@ -13,16 +13,14 @@ export type initialOptionsType = {|
   watch: boolean,
 |};
 
-export type optionsType = {|
-  src: $ReadOnlyArray<string>,
-  outDir: string,
-  plugins?: [],
-  verbose: boolean,
-  watch: boolean,
-|};
-
 export type manipulateOptionsPluginsType = {
-  options: optionsType,
+  options: {|
+    src: $ReadOnlyArray<string>,
+    outDir: string,
+    plugins?: [],
+    verbose: boolean,
+    watch: boolean,
+  |},
   manipulateOptions: ({
     plugins: $ReadOnlyArray<manipulateOptionsPluginsType>,
   }) => void,
@@ -40,7 +38,7 @@ class Handler {
     watch: false,
   };
 
-  options: optionsType = {
+  options: $PropertyType<manipulateOptionsPluginsType, 'options'> = {
     ...this.initialOptions,
     src: ['src'],
     outDir: 'lib',

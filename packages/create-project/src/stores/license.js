@@ -1,6 +1,6 @@
 // @flow
 
-import Store, { type ctxType } from './index';
+import Store from './index';
 
 /**
  * @example
@@ -40,7 +40,7 @@ class License extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = ({ pkg: { author } = {} }: ctxType) => {
+  end = ({ pkg: { author } = {} }: $PropertyType<Store, 'ctx'>) => {
     this.writeFiles({
       LICENSE: template(author),
     });

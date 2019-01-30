@@ -1,12 +1,5 @@
 // @flow
-/* eslint-disable */
-// TODO component should be ignored
 
-import React from 'react';
+import Component from '../../../Component';
 
-// TODO: should get url
-export default class Home extends React.PureComponent<void> {
-  render() {
-    return <div>/test/temp</div>;
-  }
-}
+export default Component;

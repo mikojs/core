@@ -48,7 +48,8 @@ describe('react middleware', () => {
       ).toBe(
         [
           '<html><head></head><body>',
-          `<main id="__cat__"><div data-reactroot="">${urlPath}</div></main>`,
+          `<main id="__cat__"><div>${urlPath}</div></main>`,
+          `<script>var __CAT_DATA__ = {&quot;url&quot;:&quot;${urlPath}&quot;};</script>`,
           '<script async="" src="/assets/commons.js"></script>',
           `<script async="" src="/assets/pages/${chunkName}.js"></script>`,
           '<script async="" src="/assets/client.js"></script>',
@@ -58,6 +59,24 @@ describe('react middleware', () => {
     },
   );
 
+  test('no getInitialProps', async () => {
+    expect(
+      await fetch(`http://localhost:${port}/noGetInitialProps`).then(
+        (res: ResponseType) => res.text(),
+      ),
+    ).toBe(
+      [
+        '<html><head></head><body>',
+        `<main id="__cat__"><div>noGetInitialProps</div></main>`,
+        `<script>var __CAT_DATA__ = {};</script>`,
+        '<script async="" src="/assets/commons.js"></script>',
+        `<script async="" src="/assets/pages/noGetInitialProps.js"></script>`,
+        '<script async="" src="/assets/client.js"></script>',
+        '</body></html>',
+      ].join(''),
+    );
+  });
+
   test('get custom page', async () => {
     expect(
       await fetch(`http://localhost:${port}/custom`).then((res: ResponseType) =>
@@ -65,7 +84,8 @@ describe('react middleware', () => {
       ),
     ).toBe(
       [
-        '<main id="__cat__"><div data-reactroot="">/</div></main>',
+        '<main id="__cat__"><div>/custom</div></main>',
+        `<script>var __CAT_DATA__ = {&quot;url&quot;:&quot;/custom&quot;};</script>`,
         '<script async="" src="/assets/custom/commons.js"></script>',
         `<script async="" src="/assets/pages/custom/index.js"></script>`,
         '<script async="" src="/assets/custom/client.js"></script>',

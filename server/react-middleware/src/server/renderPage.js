@@ -1,14 +1,21 @@
 // @flow
 
 import { type Context as koaContextType } from 'koa';
-import React from 'react';
+import React, { type ElementType } from 'react';
 import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
+import { StaticRouter as Router } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 
-import { type dataType, type routeDataType } from './getData';
 import renderDocument from './renderDocument';
+
+import { type dataType, type routeDataType } from 'utils/getData';
+
+type ctxType = {|
+  isServer: true,
+  ctx: koaContextType,
+|};
 
 export default (
   basename: ?string,
@@ -18,7 +25,7 @@ export default (
 
   if (commonsUrl === ctx.url) {
     ctx.status = 200;
-    ctx.type = 'application/javascript; charset=UTF-8';
+    ctx.type = 'application/javascript';
     ctx.body = '';
     return;
   }
@@ -46,9 +53,16 @@ export default (
       component: { filePath, chunkName },
     },
   } = page;
+  const Component: ElementType & {
+    getInitialProps?: ctxType => Promise<{}>,
+  } = require(filePath);
+  const initialProps =
+    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    (await Component.getInitialProps?.({ ctx, isServer: true })) || {};
 
   renderToStaticMarkup(
     <Helmet>
+      <script>{`var __CAT_DATA__ = ${JSON.stringify(initialProps)};`}</script>
       <script async src={commonsUrl} />
       <script async src={`/assets/${chunkName}.js`} />
       <script async src={`/assets${basename || ''}/client.js`} />
@@ -57,10 +71,14 @@ export default (
 
   const [upperDocument, lowerDocument] = renderDocument(ctx, templates);
 
-  ctx.type = 'text/html; charset=utf-8';
+  ctx.type = 'text/html';
   ctx.body = multistream([
     upperDocument,
-    renderToNodeStream(React.createElement(require(filePath))),
+    renderToNodeStream(
+      <Router location={ctx.url} context={{}}>
+        <Component {...initialProps} />
+      </Router>,
+    ),
     lowerDocument,
   ]);
 

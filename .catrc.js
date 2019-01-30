@@ -82,7 +82,6 @@ const babel = config => {
     {
       test: './server/react-middleware',
       presets: ['@babel/preset-react'],
-      plugins: ['react-hot-loader/babel'],
     },
     {
       test: './server/server',
@@ -104,6 +103,9 @@ const babel = config => {
 const lint = {
   config: config => ({
     ...config,
+    globals: {
+      __CAT_DATA__: true,
+    },
     overrides: [
       {
         files: ['checkFilesInPackages.js'],

@@ -2,7 +2,7 @@
 
 import path from 'path';
 
-import { type ComponentType } from 'react';
+import { type ElementType } from 'react';
 import { emptyFunction } from 'fbjs';
 
 import { d3DirTree } from '@cat-org/utils';
@@ -21,7 +21,7 @@ export type routeDataType = {|
 |};
 
 export type templatesType = {|
-  getDocument: () => ComponentType<*>,
+  getDocument: () => ElementType,
 |};
 
 export type dataType = {|

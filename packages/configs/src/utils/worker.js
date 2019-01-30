@@ -11,11 +11,11 @@ import logger from './logger';
 
 const debugLog = debug('configs:worker');
 
-export type cacheType = {
+export type cacheType = {|
   filePath?: string,
   pid?: number,
   using: string | false,
-};
+|};
 
 /** Use to control file */
 export class Worker {

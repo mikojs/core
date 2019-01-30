@@ -16,11 +16,11 @@ import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
  */
 import configs from '../index';
 
-type eslintInfoType = {
+type eslintInfoType = {|
   line: number,
   ruleId: string,
   message: string,
-};
+|};
 
 type testTaskType = [number, string, string, ?string];
 

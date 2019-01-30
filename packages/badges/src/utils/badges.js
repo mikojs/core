@@ -9,7 +9,7 @@ import { emptyFunction } from 'fbjs';
 
 import logger from './logger';
 
-type ctxType = {
+type ctxType = {|
   rootPath: string,
   pkg: {
     [string]: string,
@@ -17,17 +17,17 @@ type ctxType = {
       [string]: string,
     },
   },
-};
+|};
 
 type badgeType = {
   [string]: string,
   filterFunc?: boolean => boolean,
 };
 
-type repoType = {
+type repoType = {|
   username: string,
   projectName: string,
-};
+|};
 
 const debugLog = debug('badges:badges');
 const START_COMMENT = '<!-- badges.start -->';

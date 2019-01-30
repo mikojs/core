@@ -4,21 +4,25 @@
 
 import React, { type Node as NodeType } from 'react';
 
+import { type helmetType } from '../types';
+
 const Document = ({
-  head,
-  scripts,
+  helmet,
   children,
 }: {
-  head: NodeType,
-  scripts: NodeType,
+  helmet: helmetType,
   children: NodeType,
 }) => (
   <html>
-    <head>{head}</head>
+    <head>
+      {helmet.title.toComponent()}
+      {helmet.meta.toComponent()}
+      {helmet.link.toComponent()}
+    </head>
 
     <body>
       {children}
-      {scripts}
+      {helmet.script.toComponent()}
     </body>
   </html>
 );

@@ -27,24 +27,12 @@ export default async (
     </>,
   );
 
-  const helmet = Helmet.renderStatic();
   const hash = crypto
     .createHmac('sha256', '@cat-org/react-middleware')
     .digest('hex');
 
   return renderToStaticMarkup(
-    <Document
-      {...initialProps}
-      helmet={helmet}
-      head={
-        <>
-          {helmet.title.toComponent()}
-          {helmet.meta.toComponent()}
-          {helmet.link.toComponent()}
-        </>
-      }
-      scripts={helmet.script.toComponent()}
-    >
+    <Document {...initialProps} helmet={Helmet.renderStatic()}>
       <main id="__cat__">{hash}</main>
     </Document>,
   )

@@ -1,6 +1,6 @@
 // @flow
 
-import Store, { type ctxType, type pkgType } from './index';
+import Store from './index';
 
 /**
  * @example
@@ -47,7 +47,11 @@ yarn install
  * @return {string} - content
  */
 const template = (
-  { name, homepage, description }: pkgType,
+  {
+    name,
+    homepage,
+    description,
+  }: $NonMaybeType<$PropertyType<$PropertyType<Store, 'ctx'>, 'pkg'>>,
   useNpm: ?boolean,
 ) => `# [${name}][website] · <!-- badges.start --><!-- badges.end -->
 
@@ -65,7 +69,7 @@ class Readme extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = ({ pkg, useNpm }: ctxType) => {
+  end = ({ pkg, useNpm }: $PropertyType<Store, 'ctx'>) => {
     if (!pkg) return;
 
     this.writeFiles({

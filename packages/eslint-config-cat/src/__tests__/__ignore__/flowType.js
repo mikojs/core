@@ -1,15 +1,15 @@
 // @flow
 
-type correctType = {
+type correctType = {|
   a: string,
   b: string,
-};
+|};
 
 // $expectError flowtype/no-dupe-keys
-type dupeKeysType = {
+type dupeKeysType = {|
   a: string,
   a: string,
-};
+|};
 
 // $expectError flowtype/no-mutable-array
 type simpleArrayType = Array<string>;

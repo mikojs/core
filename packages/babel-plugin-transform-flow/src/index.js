@@ -5,14 +5,14 @@ import path from 'path';
 
 import { declare } from '@babel/helper-plugin-utils';
 
-import handler, { type optionsType } from './utils/handler';
+import handler, { type manipulateOptionsPluginsType } from './utils/handler';
 import flowFiles, { type flowFileType } from './utils/flowFiles';
 import writeFiles from './utils/writeFiles';
 
 export default declare(
   (
     api: { assertVersion: (version: number) => void },
-    options: optionsType,
+    options: $PropertyType<manipulateOptionsPluginsType, 'options'>,
   ): {} => {
     api.assertVersion(7);
     handler.initializeOptions(options);

@@ -14,20 +14,20 @@ export type redirectType = (
   urlPattern: $ReadOnlyArray<string>,
 ) => $ReadOnlyArray<string>;
 
-export type routeDataType = {
+export type routeDataType = {|
   routePath: $ReadOnlyArray<string>,
   chunkName: string,
   filePath: string,
-};
+|};
 
-export type templatesType = {
+export type templatesType = {|
   getDocument: () => ElementType,
-};
+|};
 
-export type dataType = {
+export type dataType = {|
   templates: templatesType,
   routesData: $ReadOnlyArray<routeDataType>,
-};
+|};
 
 export default (
   folderPath: string,

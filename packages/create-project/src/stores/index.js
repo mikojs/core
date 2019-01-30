@@ -10,7 +10,7 @@ import debug from 'debug';
 
 import logger from 'utils/logger';
 
-export type pkgType = {
+type pkgType = {
   [string]: string,
   husky: {
     hooks: {
@@ -27,7 +27,7 @@ export type pkgType = {
   },
 };
 
-export type ctxType = {
+type ctxType = {
   projectDir: string,
   pkg?: pkgType,
   useNpm?: boolean,

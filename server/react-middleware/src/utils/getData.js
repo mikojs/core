@@ -20,13 +20,12 @@ export type routeDataType = {|
   filePath: string,
 |};
 
-export type templatesType = {|
-  getDocument: () => ElementType,
-  getMain: () => ElementType,
-|};
-
 export type dataType = {|
-  templates: templatesType,
+  templates: {|
+    getDocument: () => ElementType,
+    getMain: () => ElementType,
+    mainFilePath: string,
+  |},
   routesData: $ReadOnlyArray<routeDataType>,
 |};
 
@@ -56,6 +55,7 @@ export default (
 
             case 'Main':
               result.templates.getMain = () => require(filePath);
+              result.templates.mainFilePath = filePath;
               return result;
 
             default:
@@ -84,6 +84,7 @@ export default (
         templates: {
           getDocument: () => Document,
           getMain: () => Main,
+          mainFilePath: path.resolve(__dirname, '../templates/Main.js'),
         },
         routesData: [],
       },

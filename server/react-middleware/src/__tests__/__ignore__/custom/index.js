@@ -1,5 +1,9 @@
 // @flow
 
-import Component from '../Component';
+import React from 'react';
 
-export default Component;
+import Context from '../Context';
+
+export default () => (
+  <Context.Consumer>{(data: string) => <div>{data}</div>}</Context.Consumer>
+);

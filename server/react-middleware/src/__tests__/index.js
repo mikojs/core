@@ -84,8 +84,8 @@ describe('react middleware', () => {
       ),
     ).toBe(
       [
-        '<main id="__cat__"><div>/custom</div></main>',
-        `<script>var __CAT_DATA__ = {&quot;url&quot;:&quot;/custom&quot;};</script>`,
+        '<main id="__cat__"><div>test data</div></main>',
+        `<script>var __CAT_DATA__ = {};</script>`,
         '<script async="" src="/assets/custom/commons.js"></script>',
         `<script async="" src="/assets/pages/custom/index.js"></script>`,
         '<script async="" src="/assets/custom/client.js"></script>',

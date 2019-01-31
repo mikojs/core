@@ -3,6 +3,8 @@
 import React, { type ElementType } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import Main from 'templates/Main';
+
 type routePropsType = {|
   exact: true,
   key: string,
@@ -18,11 +20,13 @@ const Root = ({
   routesData: $ReadOnlyArray<routePropsType>,
 }) => (
   <Router>
-    <Switch>
-      {routesData.map((props: routePropsType) => (
-        <Route {...props} />
-      ))}
-    </Switch>
+    <Main>
+      <Switch>
+        {routesData.map((props: routePropsType) => (
+          <Route {...props} />
+        ))}
+      </Switch>
+    </Main>
   </Router>
 );
 /* eslint-enable require-jsdoc, flowtype/require-return-type */

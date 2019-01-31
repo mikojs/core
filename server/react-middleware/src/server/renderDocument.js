@@ -8,11 +8,11 @@ import React, { type Node as NodeType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 
-import { type templatesType } from 'utils/getData';
+import { type dataType } from 'utils/getData';
 
 export default async (
   ctx: koaContextType,
-  templates: templatesType,
+  templates: $PropertyType<dataType, 'templates'>,
   pageHead: NodeType,
 ): Promise<$ReadOnlyArray<ReadableType>> => {
   const Document = templates.getDocument();

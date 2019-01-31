@@ -3,12 +3,12 @@
 import path from 'path';
 
 import { type ElementType } from 'react';
-import { emptyFunction } from 'fbjs';
 
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import Document from 'templates/Document';
+import Main from 'templates/Main';
 
 export type redirectType = (
   urlPattern: $ReadOnlyArray<string>,
@@ -20,12 +20,12 @@ export type routeDataType = {|
   filePath: string,
 |};
 
-export type templatesType = {|
-  getDocument: () => ElementType,
-|};
-
 export type dataType = {|
-  templates: templatesType,
+  templates: {|
+    getDocument: () => ElementType,
+    getMain: () => ElementType,
+    mainFilePath: string,
+  |},
   routesData: $ReadOnlyArray<routeDataType>,
 |};
 
@@ -53,6 +53,11 @@ export default (
               result.templates.getDocument = () => require(filePath);
               return result;
 
+            case 'Main':
+              result.templates.getMain = () => require(filePath);
+              result.templates.mainFilePath = filePath;
+              return result;
+
             default:
               return result;
           }
@@ -77,7 +82,9 @@ export default (
       },
       {
         templates: {
-          getDocument: emptyFunction.thatReturns(Document),
+          getDocument: () => Document,
+          getMain: () => Main,
+          mainFilePath: path.resolve(__dirname, '../templates/Main.js'),
         },
         routesData: [],
       },

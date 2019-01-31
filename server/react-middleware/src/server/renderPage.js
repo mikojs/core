@@ -1,7 +1,7 @@
 // @flow
 
 import { type Context as koaContextType } from 'koa';
-import React, { type ElementType } from 'react';
+import React, { type ComponentType } from 'react';
 import { renderToNodeStream } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
@@ -53,9 +53,10 @@ export default (
       component: { filePath, chunkName },
     },
   } = page;
-  const Component: ElementType & {
+  const Component: ComponentType<*> & {
     getInitialProps?: ctxType => Promise<{}>,
   } = require(filePath);
+  const Main = templates.getMain();
   const { head, ...initialProps } =
     // $FlowFixMe Flow does not yet support method or property calls in optional chains.
     (await Component.getInitialProps?.({ ctx, isServer: true })) || {};
@@ -80,7 +81,9 @@ export default (
     upperDocument,
     renderToNodeStream(
       <Router location={ctx.url} context={{}}>
-        <Component {...initialProps} />
+        <Main>
+          <Component {...initialProps} />
+        </Main>
       </Router>,
     ),
     lowerDocument,

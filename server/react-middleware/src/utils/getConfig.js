@@ -14,7 +14,7 @@ export default (
   dev: boolean,
   folderPath: string,
   basename: ?string,
-  { routesData }: dataType,
+  { routesData, templates }: dataType,
 ) => ({
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval' : false,
@@ -81,6 +81,15 @@ export default (
                 ].join(', ')} }`,
             )
             .join(', ')}] ||`,
+        },
+      },
+      {
+        include: [ROOT_PATH],
+        loader: 'string-replace-loader',
+        options: {
+          search: '[\'|"](.|/)*templates/Main[\'|"]',
+          replace: `"${templates.mainFilePath}"`,
+          flags: 'g',
         },
       },
       {

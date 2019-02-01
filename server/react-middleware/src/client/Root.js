@@ -5,6 +5,8 @@
 import React, { type ElementType } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import { type errorPropsType } from '../types';
+
 import Main from 'templates/Main';
 import ErrorComponent from 'templates/Error';
 
@@ -20,10 +22,8 @@ type propsType = {|
 |};
 
 type stateType = {|
-  error: ?Error,
-  errorInfo: ?{
-    componentStack: string,
-  },
+  error: ?$PropertyType<errorPropsType, 'error'>,
+  errorInfo: ?$PropertyType<errorPropsType, 'errorInfo'>,
 |};
 
 export default class Root extends React.PureComponent<propsType, stateType> {
@@ -44,7 +44,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     const { error, errorInfo } = this.state;
 
     // TODO: testing in production
-    if (error || errorInfo)
+    if (error && errorInfo)
       return <ErrorComponent error={error} errorInfo={errorInfo} />;
 
     return (

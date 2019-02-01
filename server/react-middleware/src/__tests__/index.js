@@ -59,6 +59,32 @@ describe('react middleware', () => {
     },
   );
 
+  test.each`
+    urlPath
+    ${'/error'}
+    ${'/custom/error'}
+  `('get Error', async ({ urlPath }: { urlPath: string }) => {
+    expect(
+      await fetch(`http://localhost:${port}${urlPath}`).then(
+        (res: ResponseType) => res.text(),
+      ),
+    ).toBe(
+      [
+        /custom/.test(urlPath) ? '' : '<html><head></head><body>',
+        `<main id="__cat__">custom error</main>`,
+        `<script>var __CAT_DATA__ = {};</script>`,
+        `<script async="" src="/assets${
+          !/custom/.test(urlPath) ? '' : '/custom'
+        }/commons.js"></script>`,
+        `<script async="" src="/assets/pages${urlPath}.js"></script>`,
+        `<script async="" src="/assets${
+          !/custom/.test(urlPath) ? '' : '/custom'
+        }/client.js"></script>`,
+        /custom/.test(urlPath) ? '' : '</body></html>',
+      ].join(''),
+    );
+  });
+
   test('no getInitialProps', async () => {
     expect(
       await fetch(`http://localhost:${port}/noGetInitialProps`).then(

@@ -9,6 +9,7 @@ import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import Document from 'templates/Document';
 import Main from 'templates/Main';
+import Error from 'templates/Error';
 
 export type redirectType = (
   urlPattern: $ReadOnlyArray<string>,
@@ -25,6 +26,8 @@ export type dataType = {|
     getDocument: () => ElementType,
     getMain: () => ElementType,
     mainFilePath: string,
+    getError: () => ElementType,
+    errorFilePath: string,
   |},
   routesData: $ReadOnlyArray<routeDataType>,
 |};
@@ -58,6 +61,11 @@ export default (
               result.templates.mainFilePath = filePath;
               return result;
 
+            case 'Error':
+              result.templates.getError = () => require(filePath);
+              result.templates.errorFilePath = filePath;
+              return result;
+
             default:
               return result;
           }
@@ -85,6 +93,8 @@ export default (
           getDocument: () => Document,
           getMain: () => Main,
           mainFilePath: path.resolve(__dirname, '../templates/Main.js'),
+          getError: () => Error,
+          errorFilePath: path.resolve(__dirname, '../templates/Error.js'),
         },
         routesData: [],
       },

@@ -2,11 +2,12 @@
 
 import { type Context as koaContextType } from 'koa';
 import React, { type ComponentType } from 'react';
-import { renderToNodeStream } from 'react-dom/server';
+import { renderToString, renderToNodeStream } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
+import getStream from 'get-stream';
 
 import renderDocument from './renderDocument';
 
@@ -77,7 +78,10 @@ export default (
   );
 
   ctx.type = 'text/html';
-  ctx.body = multistream([
+  ctx.status = 200;
+  ctx.respond = false;
+
+  multistream([
     upperDocument,
     renderToNodeStream(
       <Router location={ctx.url} context={{}}>
@@ -87,7 +91,17 @@ export default (
       </Router>,
     ),
     lowerDocument,
-  ]);
+  ])
+    .on('error', async (error: Error) => {
+      const ErrorComponent = templates.getError();
+
+      ctx.res.end(
+        `${renderToString(
+          <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
+        )}${await getStream(lowerDocument)}`,
+      );
+    })
+    .pipe(ctx.res);
 
   await next();
 };

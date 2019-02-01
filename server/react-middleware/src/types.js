@@ -28,3 +28,10 @@ export type helmetType = {|
   style: tagType,
   title: tagType,
 |};
+
+export type errorPropsType = {|
+  error: Error,
+  errorInfo: {
+    componentStack: string,
+  },
+|};

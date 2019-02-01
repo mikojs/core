@@ -46,8 +46,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "make babel-changed && configs lint-staged && yarn flow",
-      "post-merge": "make babel-changed"
+      "pre-commit": "make babel-changed && configs lint-staged && yarn flow"
     }
   }
 }

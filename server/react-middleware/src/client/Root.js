@@ -43,7 +43,6 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     const { routesData } = this.props;
     const { error, errorInfo } = this.state;
 
-    // TODO: testing in production
     if (error && errorInfo)
       return <ErrorComponent error={error} errorInfo={errorInfo} />;
 

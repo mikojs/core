@@ -11,17 +11,17 @@ class Execa {
   main = {
     shell: (
       cmd: string,
-    ): {
+    ): Promise<{
       stdout: string,
-    } => {
+    }> => {
       const stdout = this.mainFunction(cmd);
 
       this.mainFunction = emptyFunction.thatReturnsArgument;
       this.cmds.push(cmd);
 
-      return {
+      return Promise.resolve({
         stdout,
-      };
+      });
     },
   };
 }

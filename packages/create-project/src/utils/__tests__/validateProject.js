@@ -2,6 +2,7 @@
 
 // $FlowFixMe jest mock
 import { fs } from 'fs';
+// $FlowFixMe jest mock
 import { execa } from 'execa';
 import { emptyFunction } from 'fbjs';
 

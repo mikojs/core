@@ -84,12 +84,21 @@ export default (
         },
       },
       {
-        include: [ROOT_PATH],
+        include: [CLIENT_PATH, ROOT_PATH],
         loader: 'string-replace-loader',
         options: {
-          search: '[\'|"](.|/)*templates/Main[\'|"]',
-          replace: `"${templates.mainFilePath}"`,
-          flags: 'g',
+          multiple: [
+            {
+              search: '[\'|"](.|/)*templates/Main[\'|"]',
+              replace: `"${templates.mainFilePath}"`,
+              flags: 'g',
+            },
+            {
+              search: '[\'|"](.|/)*templates/Error[\'|"]',
+              replace: `"${templates.errorFilePath}"`,
+              flags: 'g',
+            },
+          ],
         },
       },
       {

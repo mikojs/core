@@ -27,6 +27,7 @@ export type dataType = {|
     getMain: () => ElementType,
     mainFilePath: string,
     getError: () => ElementType,
+    errorFilePath: string,
   |},
   routesData: $ReadOnlyArray<routeDataType>,
 |};
@@ -62,6 +63,7 @@ export default (
 
             case 'Error':
               result.templates.getError = () => require(filePath);
+              result.templates.errorFilePath = filePath;
               return result;
 
             default:
@@ -92,6 +94,7 @@ export default (
           getMain: () => Main,
           mainFilePath: path.resolve(__dirname, '../templates/Main.js'),
           getError: () => Error,
+          errorFilePath: path.resolve(__dirname, '../templates/Error.js'),
         },
         routesData: [],
       },

@@ -17,4 +17,4 @@ import server from '../index';
   server.init()
   |> server.use(defaultMiddleware)
   |> server.use(await react())
-  |> server.run(process.env.PORT))();
+  |> server.run(parseInt(process.env.PORT || 8000, 10)))();

@@ -5,10 +5,10 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/react-middleware",
   "repository": "https://github.com/cat-org/core/tree/master/server/react-middleware",
-  "version": "1.0.0-beta.12",
+  "version": "1.0.0-beta.13",
   "main": "./lib/index.js",
   "dependencies": {
-    "@cat-org/utils": "^1.0.0-beta.12",
+    "@cat-org/utils": "^1.0.0-beta.13",
     "chokidar": "^2.0.4",
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.1",

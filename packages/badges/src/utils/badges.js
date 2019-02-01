@@ -41,8 +41,9 @@ const END_COMMENT = '<!-- badges.end -->';
  */
 const getRepo = async (): Promise<?repoType> => {
   try {
-    const { stdout } = await execa.shell('git remote -v');
-    const [username, projectName] = stdout
+    const [username, projectName] = (await execa
+      .shell('git remote -v')
+      .then(({ stdout }: { stdout: string }) => stdout))
       .replace(/origin\t.*@.*:(.*).git \(fetch\)(.|\n)*/, '$1')
       .split('/');
 

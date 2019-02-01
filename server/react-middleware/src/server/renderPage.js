@@ -96,9 +96,9 @@ export default (
       const ErrorComponent = templates.getError();
 
       ctx.res.end(
-        `${renderToString(<ErrorComponent error={error} />)}${await getStream(
-          lowerDocument,
-        )}`,
+        `${renderToString(
+          <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
+        )}${await getStream(lowerDocument)}`,
       );
     })
     .pipe(ctx.res);

@@ -1,5 +1,62 @@
 # CHANGELOG
 
+## 1.0.0-beta.13 (2019-02-01)
+
+#### :boom: Breaking Change
+
+- `badges`, `configs`, `create-project`, `lerna-create`, `lerna-flow-typed-install`, `logger`
+  - [#113](https://github.com/cat-org/core/pull/113) Modify @cat-org/logger ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- Other
+  - [#137](https://github.com/cat-org/core/pull/137) Add Error template in @cat-org/react-middleware ([@HsuTing](https://github.com/HsuTing))
+  - [#136](https://github.com/cat-org/core/pull/136) Add Main template in @cat-org/react-middleware ([@HsuTing](https://github.com/HsuTing))
+  - [#135](https://github.com/cat-org/core/pull/135) Add custom head in @cat-org/react-middleware ([@HsuTing](https://github.com/HsuTing))
+  - [#132](https://github.com/cat-org/core/pull/132) Add getInitialProps to Pages in @cat-org/react-middleware ([@HsuTing](https://github.com/HsuTing))
+  - [#131](https://github.com/cat-org/core/pull/131) Add basename to @cat-org/react-middleware ([@HsuTing](https://github.com/HsuTing))
+  - [#130](https://github.com/cat-org/core/pull/130) Add templates ([@HsuTing](https://github.com/HsuTing))
+  - [#126](https://github.com/cat-org/core/pull/126) Feat react-middleware ([@HsuTing](https://github.com/HsuTing))
+  - [#125](https://github.com/cat-org/core/pull/125) Fix server ([@HsuTing](https://github.com/HsuTing))
+  - [#123](https://github.com/cat-org/core/pull/123) Add koa compose ([@HsuTing](https://github.com/HsuTing))
+  - [#117](https://github.com/cat-org/core/pull/117) Add @cat-org/react-middleware ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `jest`
+  - [#128](https://github.com/cat-org/core/pull/128) Add jest/react in @cat-org/configs ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `create-project`, `eslint-config-cat`
+  - [#127](https://github.com/cat-org/core/pull/127) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`
+  - [#121](https://github.com/cat-org/core/pull/121) Remove npm ([@HsuTing](https://github.com/HsuTing))
+- `server`
+  - [#112](https://github.com/cat-org/core/pull/112) Add @cat-org/server ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`
+  - [#138](https://github.com/cat-org/core/pull/138) Fix flow error ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#125](https://github.com/cat-org/core/pull/125) Fix server ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`
+  - [#138](https://github.com/cat-org/core/pull/138) Fix flow error ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `badges`, `configs`, `eslint-config-cat`
+  - [#134](https://github.com/cat-org/core/pull/134) Add Exact to Object in flow ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `create-project`
+  - [#133](https://github.com/cat-org/core/pull/133) Modify flow style ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `configs`, `eslint-config-cat`, `logger`, `utils`
+  - [#129](https://github.com/cat-org/core/pull/129) Modify code style with flow ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-create`, `lerna-flow-typed-install`, `logger`
+  - [#119](https://github.com/cat-org/core/pull/119) Move @cat-org/server to server folder ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-create`, `lerna-flow-typed-install`, `logger`, `server`, `utils`
+  - [#118](https://github.com/cat-org/core/pull/118) Upgrade pacakges ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `eslint-config-cat`, `logger`, `utils`
+  - [#115](https://github.com/cat-org/core/pull/115) Modify @cat-org/logger ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.12 (2019-01-02)
 
 #### :rocket: New Feature

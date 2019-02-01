@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "get-port": "^4.1.0",
-    "koa": "^2.6.2",
+    "koa": "^2.7.0",
     "node-fetch": "^2.3.0"
   },
   "keywords": ["cat-org", "default", "middleware"],

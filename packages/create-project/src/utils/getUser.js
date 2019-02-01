@@ -28,7 +28,9 @@ export const getUser = () =>
     ].map(
       async ({ name, cmd }: { name: string, cmd: string }): Promise<string> => {
         try {
-          return (await execa.shell(cmd)).stdout;
+          return await execa
+            .shell(cmd)
+            .then(({ stdout }: { stdout: string }) => stdout);
         } catch (e) {
           debug('create-project:getUser')(e);
           throw logger.fail(

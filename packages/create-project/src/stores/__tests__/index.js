@@ -1,5 +1,6 @@
 // @flow
 
+// $FlowFixMe jest mock
 import { execa } from 'execa';
 
 import Store from '../index';

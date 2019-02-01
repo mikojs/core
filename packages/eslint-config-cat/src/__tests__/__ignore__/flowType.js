@@ -76,7 +76,7 @@ const requireParameterType = (argu): string => {
 const promiseIngore = async (argu: string) => {
   await new Promise((resolve, reject) => {
     if (argu) resolve();
-    else reject();
+    else reject(new Error('test'));
   });
 };
 

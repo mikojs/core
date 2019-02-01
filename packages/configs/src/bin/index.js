@@ -102,14 +102,14 @@ debugLog({
       );
 
       try {
-        const { code } = await execa(argv[0], [cli, ...argv.slice(2)], {
+        const successCode = await execa(argv[0], [cli, ...argv.slice(2)], {
           stdio: 'inherit',
           env,
-        });
+        }).then(({ code }: { code: number }) => code);
 
         debugLog('Run command success, remove files');
 
-        removeFiles(code);
+        removeFiles(successCode);
       } catch (e) {
         debugLog('Run command fail, remove files');
         debugLog(e);

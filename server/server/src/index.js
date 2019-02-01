@@ -114,15 +114,15 @@ export default {
     };
   },
 
-  run: (port: ?(number | string) = 8000) => (
-    app: routerType,
-  ): koaServerType => {
+  run: (port?: number = 8000) => (app: routerType): koaServerType => {
     if (!(app instanceof Koa)) throw logger.fail('server is not koa server');
 
     debugLog(port);
 
     return app.listen(parseInt(port, 10), () => {
-      logger.succeed(chalk`Running server at port: {gray {bold ${port}}}`);
+      logger.succeed(
+        chalk`Running server at port: {gray {bold ${port.toString()}}}`,
+      );
     });
   },
 };

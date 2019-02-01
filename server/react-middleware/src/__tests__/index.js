@@ -68,20 +68,22 @@ describe('react middleware', () => {
       await fetch(`http://localhost:${port}${urlPath}`).then(
         (res: ResponseType) => res.text(),
       ),
-    ).toBe(
-      [
-        /custom/.test(urlPath) ? '' : '<html><head></head><body>',
-        `<main id="__cat__">custom error</main>`,
-        `<script>var __CAT_DATA__ = {};</script>`,
-        `<script async="" src="/assets${
-          !/custom/.test(urlPath) ? '' : '/custom'
-        }/commons.js"></script>`,
-        `<script async="" src="/assets/pages${urlPath}.js"></script>`,
-        `<script async="" src="/assets${
-          !/custom/.test(urlPath) ? '' : '/custom'
-        }/client.js"></script>`,
-        /custom/.test(urlPath) ? '' : '</body></html>',
-      ].join(''),
+    ).toMatch(
+      new RegExp(
+        [
+          /custom/.test(urlPath) ? '' : '<html><head></head><body>',
+          '<main id="__cat__">.*custom error.*</main>',
+          '<script>var __CAT_DATA__ = {};</script>',
+          `<script async="" src="/assets${
+            !/custom/.test(urlPath) ? '' : '/custom'
+          }/commons.js"></script>`,
+          `<script async="" src="/assets/pages${urlPath}.js"></script>`,
+          `<script async="" src="/assets${
+            !/custom/.test(urlPath) ? '' : '/custom'
+          }/client.js"></script>`,
+          /custom/.test(urlPath) ? '' : '</body></html>',
+        ].join(''),
+      ),
     );
   });
 
@@ -93,10 +95,10 @@ describe('react middleware', () => {
     ).toBe(
       [
         '<html><head></head><body>',
-        `<main id="__cat__"><div>noGetInitialProps</div></main>`,
-        `<script>var __CAT_DATA__ = {};</script>`,
+        '<main id="__cat__"><div>noGetInitialProps</div></main>',
+        '<script>var __CAT_DATA__ = {};</script>',
         '<script async="" src="/assets/commons.js"></script>',
-        `<script async="" src="/assets/pages/noGetInitialProps.js"></script>`,
+        '<script async="" src="/assets/pages/noGetInitialProps.js"></script>',
         '<script async="" src="/assets/client.js"></script>',
         '</body></html>',
       ].join(''),
@@ -111,9 +113,9 @@ describe('react middleware', () => {
     ).toBe(
       [
         '<main id="__cat__"><div>test data</div></main>',
-        `<script>var __CAT_DATA__ = {};</script>`,
+        '<script>var __CAT_DATA__ = {};</script>',
         '<script async="" src="/assets/custom/commons.js"></script>',
-        `<script async="" src="/assets/pages/custom/index.js"></script>`,
+        '<script async="" src="/assets/pages/custom/index.js"></script>',
         '<script async="" src="/assets/custom/client.js"></script>',
       ].join(''),
     );

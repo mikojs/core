@@ -13,7 +13,11 @@ babel-all:
 	@$(call babel-build)
 
 babel-changed:
+ifeq ($(shell printenv CI), true)
+	@echo "Skip babel build"
+else
 	@$(call babel-build, --since $(shell git branch | grep \* | cut -d ' ' -f2))
+endif
 
 release:
 	@yarn lerna-changelog && \

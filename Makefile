@@ -12,8 +12,13 @@ install:
 babel-all:
 	@$(call babel-build)
 
+BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
 babel-changed:
-	@$(call babel-build, --since $(shell git branch | grep \* | cut -d ' ' -f2))
+ifeq ($(shell printenv CI), true)
+	@echo "Skip babel build"
+else
+	@$(call babel-build, --since $(BRANCH))
+endif
 
 release:
 	@yarn lerna-changelog && \

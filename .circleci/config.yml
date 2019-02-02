@@ -62,7 +62,7 @@ jobs:
           command: |
             yarn prod
             yarn flow
-            TEST_PRODUCTION=true yarn configs jest \
+            TEST_PRODUCTION=true yarn test \
               ./__tests__/checkFilesInPackages.js \
               --coverage=false
 

@@ -44,10 +44,14 @@ export default (
   );
 
   if (!page) {
-    // TODO: add templates
+    // TODO: just for html
     await next();
     return;
   }
+
+  ctx.status = 200;
+  ctx.type = 'text/html';
+  ctx.respond = false;
 
   const {
     route: {
@@ -76,10 +80,6 @@ export default (
       </Helmet>
     </>,
   );
-
-  ctx.type = 'text/html';
-  ctx.status = 200;
-  ctx.respond = false;
 
   multistream([
     upperDocument,

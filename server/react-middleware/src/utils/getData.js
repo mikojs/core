@@ -61,6 +61,15 @@ export default (
               result.templates.mainFilePath = filePath;
               return result;
 
+            case 'NotFound':
+              const notFound = result.routesData.find(
+                ({ chunkName }: routeDataType) => /notFound/.test(chunkName),
+              );
+
+              if (notFound) notFound.filePath = filePath;
+
+              return result;
+
             case 'Error':
               result.templates.getError = () => require(filePath);
               result.templates.errorFilePath = filePath;
@@ -77,7 +86,6 @@ export default (
         return {
           ...result,
           routesData: [
-            ...result.routesData,
             {
               routePath: !basename
                 ? routePath
@@ -85,6 +93,7 @@ export default (
               chunkName: `pages${basename || ''}/${relativePath}`,
               filePath,
             },
+            ...result.routesData,
           ],
         };
       },
@@ -96,6 +105,12 @@ export default (
           getError: () => Error,
           errorFilePath: path.resolve(__dirname, '../templates/Error.js'),
         },
-        routesData: [],
+        routesData: [
+          {
+            routePath: ['*'],
+            chunkName: `pages${basename || ''}/notFound`,
+            filePath: path.resolve(__dirname, '../templates/NotFound.js'),
+          },
+        ],
       },
     );

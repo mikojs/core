@@ -44,10 +44,14 @@ export default (
   );
 
   if (!page) {
-    // TODO: add templates
+    // TODO: just for html
     await next();
     return;
   }
+
+  ctx.status = 200;
+  ctx.type = 'text/html';
+  ctx.respond = false;
 
   const {
     route: {
@@ -77,10 +81,6 @@ export default (
     </>,
   );
 
-  ctx.type = 'text/html';
-  ctx.status = 200;
-  ctx.respond = false;
-
   multistream([
     upperDocument,
     renderToNodeStream(
@@ -102,6 +102,4 @@ export default (
       );
     })
     .pipe(ctx.res);
-
-  await next();
 };

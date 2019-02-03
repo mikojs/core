@@ -36,8 +36,14 @@ export default (
   folderPath: string,
   redirect: redirectType,
   basename: ?string,
-): dataType =>
-  d3DirTree(folderPath, {
+): dataType => {
+  const notFound = {
+    routePath: [`${basename || ''}/*`],
+    chunkName: `pages${basename || ''}/notFound`,
+    filePath: path.resolve(__dirname, '../templates/NotFound.js'),
+  };
+
+  return d3DirTree(folderPath, {
     extensions: /.jsx?$/,
   })
     .leaves()
@@ -61,6 +67,21 @@ export default (
               result.templates.mainFilePath = filePath;
               return result;
 
+            case 'NotFound':
+              return {
+                ...result,
+                routesData: [
+                  ...result.routesData.filter(
+                    ({ chunkName }: routeDataType) =>
+                      chunkName !== notFound.chunkName,
+                  ),
+                  {
+                    ...notFound,
+                    filePath,
+                  },
+                ],
+              };
+
             case 'Error':
               result.templates.getError = () => require(filePath);
               result.templates.errorFilePath = filePath;
@@ -77,7 +98,6 @@ export default (
         return {
           ...result,
           routesData: [
-            ...result.routesData,
             {
               routePath: !basename
                 ? routePath
@@ -85,6 +105,7 @@ export default (
               chunkName: `pages${basename || ''}/${relativePath}`,
               filePath,
             },
+            ...result.routesData,
           ],
         };
       },
@@ -96,6 +117,7 @@ export default (
           getError: () => Error,
           errorFilePath: path.resolve(__dirname, '../templates/Error.js'),
         },
-        routesData: [],
+        routesData: [notFound],
       },
     );
+};

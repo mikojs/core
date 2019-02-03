@@ -18,14 +18,14 @@ describe('react middleware', () => {
 
     app.use(
       await react({
-        folderPath: path.resolve(__dirname, './__ignore__/default'),
+        folderPath: path.resolve(__dirname, './__ignore__/custom'),
+        basename: '/custom',
       }),
     );
 
     app.use(
       await react({
-        folderPath: path.resolve(__dirname, './__ignore__/custom'),
-        basename: '/custom',
+        folderPath: path.resolve(__dirname, './__ignore__/default'),
       }),
     );
 
@@ -87,6 +87,33 @@ describe('react middleware', () => {
     );
   });
 
+  test.each`
+    urlPath
+    ${'/notFound'}
+    ${'/custom/notFound'}
+  `('page not found', async ({ urlPath }: { urlPath: string }) => {
+    const result = await fetch(`http://localhost:${port}${urlPath}`);
+
+    expect(result.status).toBe(/custom/.test(urlPath) ? 200 : 404);
+    expect(await result.text()).toBe(
+      [
+        /custom/.test(urlPath)
+          ? ''
+          : '<html><head><title>404 | Page not found</title></head><body>',
+        '<main id="__cat__"><div>Page not found</div></main>',
+        '<script>var __CAT_DATA__ = {};</script>',
+        `<script async="" src="/assets${
+          !/custom/.test(urlPath) ? '' : '/custom'
+        }/commons.js"></script>`,
+        `<script async="" src="/assets/pages${urlPath}.js"></script>`,
+        `<script async="" src="/assets${
+          !/custom/.test(urlPath) ? '' : '/custom'
+        }/client.js"></script>`,
+        /custom/.test(urlPath) ? '' : '</body></html>',
+      ].join(''),
+    );
+  });
+
   test('no getInitialProps', async () => {
     expect(
       await fetch(`http://localhost:${port}/noGetInitialProps`).then(
@@ -126,14 +153,6 @@ describe('react middleware', () => {
 
     expect(result.status).toBe(200);
     expect(await result.text()).toBe('');
-  });
-
-  test('page not found', async () => {
-    expect(
-      await fetch(`http://localhost:${port}/not_found`).then(
-        (res: ResponseType) => res.text(),
-      ),
-    ).toBe('Not Found');
   });
 
   test('can not find folder', async () => {

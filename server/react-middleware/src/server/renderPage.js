@@ -102,6 +102,4 @@ export default (
       );
     })
     .pipe(ctx.res);
-
-  await next();
 };

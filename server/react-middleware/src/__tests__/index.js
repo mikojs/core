@@ -18,14 +18,14 @@ describe('react middleware', () => {
 
     app.use(
       await react({
-        folderPath: path.resolve(__dirname, './__ignore__/default'),
+        folderPath: path.resolve(__dirname, './__ignore__/custom'),
+        basename: '/custom',
       }),
     );
 
     app.use(
       await react({
-        folderPath: path.resolve(__dirname, './__ignore__/custom'),
-        basename: '/custom',
+        folderPath: path.resolve(__dirname, './__ignore__/default'),
       }),
     );
 
@@ -129,11 +129,20 @@ describe('react middleware', () => {
   });
 
   test('page not found', async () => {
-    expect(
-      await fetch(`http://localhost:${port}/not_found`).then(
-        (res: ResponseType) => res.text(),
-      ),
-    ).toBe('Not Found');
+    const result = await fetch(`http://localhost:${port}/not_found`);
+
+    expect(result.status).toBe(404);
+    expect(await result.text()).toBe(
+      [
+        '<html><head><title>404 | Page not found</title></head><body>',
+        '<main id="__cat__"><div>page not found</div></main>',
+        '<script>var __CAT_DATA__ = {};</script>',
+        '<script async="" src="/assets/commons.js"></script>',
+        '<script async="" src="/assets/pages/notFound.js"></script>',
+        '<script async="" src="/assets/client.js"></script>',
+        '</body></html>',
+      ].join(''),
+    );
   });
 
   test('can not find folder', async () => {

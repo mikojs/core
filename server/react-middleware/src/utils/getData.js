@@ -36,8 +36,14 @@ export default (
   folderPath: string,
   redirect: redirectType,
   basename: ?string,
-): dataType =>
-  d3DirTree(folderPath, {
+): dataType => {
+  const notFound = {
+    routePath: [`${basename || ''}/*`],
+    chunkName: `pages${basename || ''}/notFound`,
+    filePath: path.resolve(__dirname, '../templates/NotFound.js'),
+  };
+
+  return d3DirTree(folderPath, {
     extensions: /.jsx?$/,
   })
     .leaves()
@@ -62,13 +68,19 @@ export default (
               return result;
 
             case 'NotFound':
-              const notFound = result.routesData.find(
-                ({ chunkName }: routeDataType) => /notFound/.test(chunkName),
-              );
-
-              if (notFound) notFound.filePath = filePath;
-
-              return result;
+              return {
+                ...result,
+                routesData: [
+                  ...result.routesData.filter(
+                    ({ chunkName }: routeDataType) =>
+                      chunkName !== notFound.chunkName,
+                  ),
+                  {
+                    ...notFound,
+                    filePath,
+                  },
+                ],
+              };
 
             case 'Error':
               result.templates.getError = () => require(filePath);
@@ -105,12 +117,7 @@ export default (
           getError: () => Error,
           errorFilePath: path.resolve(__dirname, '../templates/Error.js'),
         },
-        routesData: [
-          {
-            routePath: [`${basename || ''}/*`],
-            chunkName: `pages${basename || ''}/notFound`,
-            filePath: path.resolve(__dirname, '../templates/NotFound.js'),
-          },
-        ],
+        routesData: [notFound],
       },
     );
+};

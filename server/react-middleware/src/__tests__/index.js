@@ -87,6 +87,33 @@ describe('react middleware', () => {
     );
   });
 
+  test.each`
+    urlPath
+    ${'/notFound'}
+    ${'/custom/notFound'}
+  `('page not found', async ({ urlPath }: { urlPath: string }) => {
+    const result = await fetch(`http://localhost:${port}${urlPath}`);
+
+    expect(result.status).toBe(/custom/.test(urlPath) ? 200 : 404);
+    expect(await result.text()).toBe(
+      [
+        /custom/.test(urlPath)
+          ? ''
+          : '<html><head><title>404 | Page not found</title></head><body>',
+        '<main id="__cat__"><div>Page not found</div></main>',
+        '<script>var __CAT_DATA__ = {};</script>',
+        `<script async="" src="/assets${
+          !/custom/.test(urlPath) ? '' : '/custom'
+        }/commons.js"></script>`,
+        `<script async="" src="/assets/pages${urlPath}.js"></script>`,
+        `<script async="" src="/assets${
+          !/custom/.test(urlPath) ? '' : '/custom'
+        }/client.js"></script>`,
+        /custom/.test(urlPath) ? '' : '</body></html>',
+      ].join(''),
+    );
+  });
+
   test('no getInitialProps', async () => {
     expect(
       await fetch(`http://localhost:${port}/noGetInitialProps`).then(
@@ -126,23 +153,6 @@ describe('react middleware', () => {
 
     expect(result.status).toBe(200);
     expect(await result.text()).toBe('');
-  });
-
-  test('page not found', async () => {
-    const result = await fetch(`http://localhost:${port}/not_found`);
-
-    expect(result.status).toBe(404);
-    expect(await result.text()).toBe(
-      [
-        '<html><head><title>404 | Page not found</title></head><body>',
-        '<main id="__cat__"><div>page not found</div></main>',
-        '<script>var __CAT_DATA__ = {};</script>',
-        '<script async="" src="/assets/commons.js"></script>',
-        '<script async="" src="/assets/pages/notFound.js"></script>',
-        '<script async="" src="/assets/client.js"></script>',
-        '</body></html>',
-      ].join(''),
-    );
   });
 
   test('can not find folder', async () => {

@@ -107,7 +107,7 @@ export default (
         },
         routesData: [
           {
-            routePath: [`/${basename ? `${basename}/` : ''}*`],
+            routePath: [`${basename || ''}/*`],
             chunkName: `pages${basename || ''}/notFound`,
             filePath: path.resolve(__dirname, '../templates/NotFound.js'),
           },

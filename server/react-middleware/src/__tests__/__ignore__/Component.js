@@ -7,25 +7,25 @@ import React from 'react';
 import { type ctxType } from '../../types';
 
 type propsType = {|
-  url: string,
+  path: string,
 |};
 
 export default class Component extends React.PureComponent<propsType> {
   static getInitialProps = ({
     ctx,
   }: ctxType<{
-    url?: string,
+    path?: string,
   }>) => ({
-    url:
-      ctx?.url ||
+    path:
+      ctx?.path ||
       (() => {
         throw new Error('not test client side');
       })(),
   });
 
   render() {
-    const { url } = this.props;
+    const { path } = this.props;
 
-    return <div>{url}</div>;
+    return <div>{path}</div>;
   }
 }

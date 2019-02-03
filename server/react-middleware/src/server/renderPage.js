@@ -24,7 +24,7 @@ export default (
 ) => async (ctx: koaContextType, next: () => Promise<void>) => {
   const commonsUrl = `/assets${basename || ''}/commons.js`;
 
-  if (commonsUrl === ctx.url) {
+  if (commonsUrl === ctx.path) {
     ctx.status = 200;
     ctx.type = 'application/javascript';
     ctx.body = '';
@@ -40,7 +40,7 @@ export default (
       },
       exact: true,
     })),
-    ctx.url,
+    ctx.path,
   );
 
   if (!page) {

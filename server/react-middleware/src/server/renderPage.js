@@ -9,14 +9,11 @@ import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 import getStream from 'get-stream';
 
+import { type ctxType } from '../types';
+
 import renderDocument from './renderDocument';
 
 import { type dataType, type routeDataType } from 'utils/getData';
-
-type ctxType = {|
-  isServer: true,
-  ctx: koaContextType,
-|};
 
 export default (
   basename: ?string,
@@ -59,7 +56,7 @@ export default (
     },
   } = page;
   const Component: ComponentType<*> & {
-    getInitialProps?: ctxType => Promise<{}>,
+    getInitialProps?: (ctxType<>) => Promise<{}>,
   } = require(filePath);
   const Main = templates.getMain();
   const { head, ...initialProps } =

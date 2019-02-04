@@ -6,10 +6,7 @@ import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
 
-type ctxType = {|
-  isServer: false,
-  ctx: {},
-|};
+import { type ctxType } from '../types';
 
 type stateType = {|
   initialProps: ?{
@@ -18,9 +15,9 @@ type stateType = {|
 |};
 
 type propsType = {|
-  getInitialProps?: ctxType => Promise<
-    $NonMaybeType<$PropertyType<stateType, 'initialProps'>>,
-  >,
+  getInitialProps?: (
+    ctxType<>,
+  ) => Promise<$NonMaybeType<$PropertyType<stateType, 'initialProps'>>>,
   children: (
     initialProps: $NonMaybeType<$PropertyType<stateType, 'initialProps'>>,
   ) => NodeType,
@@ -55,6 +52,7 @@ class LoadInitialProps extends React.PureComponent<propsType, stateType> {
 
   load = async () => {
     const {
+      // $FlowFixMe remove after flow support decorators
       location: { pathname, search },
       getInitialProps,
     } = this.props;

@@ -11,16 +11,8 @@ type propsType = {|
 |};
 
 export default class Component extends React.PureComponent<propsType> {
-  static getInitialProps = ({
-    ctx,
-  }: ctxType<{
-    path?: string,
-  }>) => ({
-    path:
-      ctx?.path ||
-      (() => {
-        throw new Error('not test client side');
-      })(),
+  static getInitialProps = ({ ctx }: ctxType<>) => ({
+    path: ctx.path,
   });
 
   render() {

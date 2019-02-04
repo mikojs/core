@@ -1,6 +1,7 @@
 // @flow
 
 import React, { type ElementType, type Node as NodeType } from 'react';
+import { withRouter } from 'react-router';
 import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
@@ -29,6 +30,7 @@ let initialized: boolean = false;
 
 /* eslint-disable require-jsdoc, flowtype/require-return-type, flowtype/require-parameter-type */
 // TODO component should be ignored
+@withRouter
 class LoadInitialProps extends React.PureComponent<propsType, stateType> {
   state = {
     initialProps: !initialized ? window.__CAT_DATA__ : null,
@@ -52,11 +54,27 @@ class LoadInitialProps extends React.PureComponent<propsType, stateType> {
   }
 
   load = async () => {
-    const { getInitialProps } = this.props;
+    const {
+      location: { pathname, search },
+      getInitialProps,
+    } = this.props;
 
     this.setState({
       initialProps:
-        (await getInitialProps?.({ ctx: {}, isServer: false })) || {},
+        (await getInitialProps?.({
+          ctx: {
+            path: pathname,
+            querystring: search.replace(/\?/, ''),
+            url: `${pathname}${search}`,
+            originalUrl: `${pathname}${search}`,
+            origin: window.location.origin,
+            href: window.location.href,
+            host: window.location.host,
+            hostname: window.location.hostname,
+            protocol: window.location.protocol,
+          },
+          isServer: false,
+        })) || {},
     });
   };
 

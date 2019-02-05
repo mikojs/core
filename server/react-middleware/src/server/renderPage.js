@@ -9,14 +9,11 @@ import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 import getStream from 'get-stream';
 
+import { type ctxType } from '../types';
+
 import renderDocument from './renderDocument';
 
 import { type dataType, type routeDataType } from 'utils/getData';
-
-type ctxType = {|
-  isServer: true,
-  ctx: koaContextType,
-|};
 
 export default (
   basename: ?string,
@@ -24,7 +21,7 @@ export default (
 ) => async (ctx: koaContextType, next: () => Promise<void>) => {
   const commonsUrl = `/assets${basename || ''}/commons.js`;
 
-  if (commonsUrl === ctx.url) {
+  if (commonsUrl === ctx.path) {
     ctx.status = 200;
     ctx.type = 'application/javascript';
     ctx.body = '';
@@ -40,7 +37,7 @@ export default (
       },
       exact: true,
     })),
-    ctx.url,
+    ctx.path,
   );
 
   if (!page) {
@@ -59,7 +56,7 @@ export default (
     },
   } = page;
   const Component: ComponentType<*> & {
-    getInitialProps?: ctxType => Promise<{}>,
+    getInitialProps?: (ctxType<>) => Promise<{}>,
   } = require(filePath);
   const Main = templates.getMain();
   const { head, ...initialProps } =

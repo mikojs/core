@@ -34,10 +34,11 @@ describe('react middleware', () => {
   });
 
   test.each`
-    urlPath         | chunkName
-    ${'/'}          | ${'index'}
-    ${'/temp'}      | ${'temp'}
-    ${'/test/temp'} | ${'test/temp/index'}
+    urlPath          | chunkName
+    ${'/'}           | ${'index'}
+    ${'/?key=value'} | ${'index'}
+    ${'/temp'}       | ${'temp'}
+    ${'/test/temp'}  | ${'test/temp/index'}
   `(
     'get $urlPath',
     async ({ urlPath, chunkName }: { urlPath: string, chunkName: string }) => {
@@ -48,8 +49,14 @@ describe('react middleware', () => {
       ).toBe(
         [
           '<html><head></head><body>',
-          `<main id="__cat__"><div>${urlPath}</div></main>`,
-          `<script>var __CAT_DATA__ = {&quot;url&quot;:&quot;${urlPath}&quot;};</script>`,
+          `<main id="__cat__"><div>${urlPath.replace(
+            /\?.*$/,
+            '',
+          )}</div></main>`,
+          `<script>var __CAT_DATA__ = {&quot;path&quot;:&quot;${urlPath.replace(
+            /\?.*$/,
+            '',
+          )}&quot;};</script>`,
           '<script async="" src="/assets/commons.js"></script>',
           `<script async="" src="/assets/pages/${chunkName}.js"></script>`,
           '<script async="" src="/assets/client.js"></script>',

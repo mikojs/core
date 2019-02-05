@@ -12,9 +12,19 @@ type attributetagType = {|
   toComponent(): { [string]: * },
 |};
 
-export type ctxType<T> = {
+export type ctxType<T = {}> = {
   isServer: boolean,
-  ctx: T,
+  ctx: {
+    path: string,
+    querystring: string,
+    url: string,
+    originalUrl: string,
+    origin: string,
+    href: string,
+    host: string,
+    hostname: string,
+    protocol: string,
+  } & T,
 };
 
 export type helmetType = {|

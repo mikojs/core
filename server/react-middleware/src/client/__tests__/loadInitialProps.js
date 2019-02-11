@@ -6,6 +6,10 @@ import { Helmet } from 'react-helmet';
 
 import loadInitialProps from '../loadInitialProps';
 
+const location = {
+  pathname: '/',
+  search: '?key=value',
+};
 let initialized: boolean = false;
 
 window.__CAT_DATA__ = { text: 'init value' };
@@ -32,6 +36,7 @@ describe('load init props', () => {
                 },
         }),
       );
+      wrapper.setProps({ location });
 
       if (!initialized) initialized = true;
       else await wrapper.instance().load();
@@ -52,6 +57,7 @@ describe('load init props', () => {
           },
       }),
     );
+    wrapper.setProps({ location });
 
     await wrapper.instance().load();
 

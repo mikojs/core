@@ -8,6 +8,9 @@ import { mockChoice } from '@cat-org/utils';
 
 import { type ctxType } from '../types';
 
+import ErrorComponent from 'templates/Error';
+import Loading from 'templates/Loading';
+
 type stateType = {|
   initialProps: ?{
     head?: NodeType,
@@ -34,11 +37,7 @@ class LoadInitialProps extends React.PureComponent<propsType, stateType> {
   };
 
   componentDidMount() {
-    if (!initialized) {
-      initialized = true;
-      return;
-    }
-
+    initialized = true;
     setTimeout(
       this.load,
       // Delay update time for dev mode
@@ -80,15 +79,37 @@ class LoadInitialProps extends React.PureComponent<propsType, stateType> {
     const { children } = this.props;
     const { initialProps } = this.state;
 
-    // TODO: add default loading
-    if (!initialProps) return 'loading';
+    if (!initialProps) return <Loading />;
 
     return children(initialProps);
   }
 }
 /* eslint-enable require-jsdoc, flowtype/require-return-type, flowtype/require-parameter-type */
 
-export default ({
+/**
+ * @example
+ * loading({})
+ *
+ * @param {Object} argument - react-loadable loading
+ *
+ * @return {Component} - Loading Component
+ */
+export const loading = ({ error }: { error: ?Error }) =>
+  error ? (
+    <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />
+  ) : (
+    <Loading />
+  );
+
+/**
+ * @example
+ * render({ default: <div /> })
+ *
+ * @param {Object} argument - react-loadable render
+ *
+ * @return {Component} - LoadInitialProps Component
+ */
+export const render = ({
   default: Component,
   getInitialProps,
 }: {

@@ -75,8 +75,8 @@ export default (
                     `webpack: () => [ require.resolveWeak('${filePath}') ]`,
                     `modules: [ '${filePath}' ]`,
                     // TODO: add default loading
-                    `loading: ({ error }) => error ? error.message : 'loading'`,
-                    `render: require('./loadInitialProps')`,
+                    `loading: require('./loadInitial').loading`,
+                    `render: require('./loadInitial').render`,
                   ].join(', ')} })`,
                 ].join(', ')} }`,
             )

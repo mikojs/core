@@ -70,14 +70,10 @@ export default (
                   'exact: true',
                   `path: ${JSON.stringify(routePath)}`,
                   `key: '${chunkName}'`,
-                  `component: require('react-loadable')({ ${[
-                    `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
-                    `webpack: () => [ require.resolveWeak('${filePath}') ]`,
-                    `modules: [ '${filePath}' ]`,
-                    // TODO: add default loading
-                    `loading: ({ error }) => error ? error.message : 'loading'`,
-                    `render: require('./loadInitialProps')`,
-                  ].join(', ')} })`,
+                  `component: require('./loadPage')(${[
+                    `() => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
+                    `require.resolveWeak('${filePath}')`,
+                  ].join(', ')})`,
                 ].join(', ')} }`,
             )
             .join(', ')}] ||`,

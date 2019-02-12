@@ -69,11 +69,7 @@ export default (
                 `{ ${[
                   'exact: true',
                   `path: ${JSON.stringify(routePath)}`,
-                  `key: '${chunkName}'`,
-                  `component: require('./loadPage')(${[
-                    `() => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
-                    `require.resolveWeak('${filePath}')`,
-                  ].join(', ')})`,
+                  `component: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
                 ].join(', ')} }`,
             )
             .join(', ')}] ||`,

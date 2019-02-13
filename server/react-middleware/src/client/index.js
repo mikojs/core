@@ -2,7 +2,6 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Loadable from 'react-loadable';
 import { setConfig } from 'react-hot-loader';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
@@ -19,7 +18,6 @@ setConfig({
 });
 
 export default (async () => {
-  await Loadable.preloadReady();
   ReactDOM.hydrate(
     <Root routesData={routesData} />,
     document.getElementById('__cat__') ||

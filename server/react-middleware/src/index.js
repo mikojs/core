@@ -3,20 +3,15 @@
 import fs from 'fs';
 import path from 'path';
 
-import {
-  type Middleware as koaMiddlewareType,
-  type Context as koaContextType,
-} from 'koa';
+import { type Middleware as koaMiddlewareType } from 'koa';
 import compose from 'koa-compose';
-import webpack from 'koa-webpack';
 import { emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import getData, { type redirectType } from './utils/getData';
-import getConfig from './utils/getConfig';
 import deleteRequiredCache from './utils/deleteRequiredCache';
-import renderPage from './server/renderPage';
+import server from './utils/server';
 
 handleUnhandledRejection();
 
@@ -46,6 +41,7 @@ export default async ({
   if (dev) deleteRequiredCache(folderPath);
 
   return compose([
+    /* TODO
     dev
       ? await webpack(
           configFunc({
@@ -64,6 +60,7 @@ export default async ({
       : async (ctx: koaContextType, next: () => Promise<void>) => {
           await next();
         },
-    renderPage(basename, data),
+        */
+    server(basename, data),
   ]);
 };

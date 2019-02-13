@@ -6,8 +6,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 
 import { type dataType, type routeDataType } from './getData';
 
-const CLIENT_PATH = path.resolve(__dirname, '../client/index.js');
-const ROOT_PATH = path.resolve(__dirname, '../client/Root.js');
+const CLIENT_PATH = path.resolve(__dirname, './client.js');
 
 // TODO: add testing to check config
 export default (
@@ -61,40 +60,39 @@ export default (
         include: [CLIENT_PATH],
         loader: 'string-replace-loader',
         options: {
-          search: '/** replace routesData */',
-          replace: `[${routesData
-            .map(
-              // TODO: add testing to check data
-              ({ routePath, chunkName, filePath }: routeDataType): string =>
-                `{ ${[
-                  'exact: true',
-                  `path: ${JSON.stringify(routePath)}`,
-                  `component: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
-                ].join(', ')} }`,
-            )
-            .join(', ')}] ||`,
-        },
-      },
-      {
-        include: [CLIENT_PATH, ROOT_PATH],
-        loader: 'string-replace-loader',
-        options: {
           multiple: [
             {
+              search: '/** replace routesData */',
+              replace: `[${routesData
+                .map(
+                  // TODO: add testing to check data
+                  ({ routePath, chunkName, filePath }: routeDataType): string =>
+                    `{ ${[
+                      'exact: true',
+                      `path: ${JSON.stringify(routePath)}`,
+                      `component: {${[
+                        `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
+                        `moduleId: require.resolveWeak('${filePath}')`,
+                      ].join(', ')}}`,
+                    ].join(', ')} }`,
+                )
+                .join(', ')}] ||`,
+            },
+            {
               search: '[\'|"](.|/)*templates/Main[\'|"]',
-              replace: `"${templates.mainFilePath}"`,
+              replace: `"${templates.main}"`,
               flags: 'g',
             },
             {
               search: '[\'|"](.|/)*templates/Error[\'|"]',
-              replace: `"${templates.errorFilePath}"`,
+              replace: `"${templates.error}"`,
               flags: 'g',
             },
           ],
         },
       },
       {
-        include: [folderPath, ROOT_PATH],
+        include: [folderPath, path.resolve(__dirname, '../Core.js')],
         loader: 'string-replace-loader',
         options: {
           search: 'module.exports = ((.|\n)*);',

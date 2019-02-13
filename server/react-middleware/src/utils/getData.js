@@ -2,14 +2,8 @@
 
 import path from 'path';
 
-import { type ElementType } from 'react';
-
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
-
-import Document from 'templates/Document';
-import Main from 'templates/Main';
-import Error from 'templates/Error';
 
 export type redirectType = (
   urlPattern: $ReadOnlyArray<string>,
@@ -23,11 +17,9 @@ export type routeDataType = {|
 
 export type dataType = {|
   templates: {|
-    getDocument: () => ElementType,
-    getMain: () => ElementType,
-    mainFilePath: string,
-    getError: () => ElementType,
-    errorFilePath: string,
+    document: string,
+    main: string,
+    error: string,
   |},
   routesData: $ReadOnlyArray<routeDataType>,
 |};
@@ -59,12 +51,15 @@ export default (
         if (/^\.templates/.test(relativePath))
           switch (relativePath.replace(/^\.templates\//, '')) {
             case 'Document':
-              result.templates.getDocument = () => require(filePath);
+              result.templates.document = filePath;
               return result;
 
             case 'Main':
-              result.templates.getMain = () => require(filePath);
-              result.templates.mainFilePath = filePath;
+              result.templates.main = filePath;
+              return result;
+
+            case 'Error':
+              result.templates.error = filePath;
               return result;
 
             case 'NotFound':
@@ -81,11 +76,6 @@ export default (
                   },
                 ],
               };
-
-            case 'Error':
-              result.templates.getError = () => require(filePath);
-              result.templates.errorFilePath = filePath;
-              return result;
 
             default:
               return result;
@@ -111,11 +101,9 @@ export default (
       },
       {
         templates: {
-          getDocument: () => Document,
-          getMain: () => Main,
-          mainFilePath: path.resolve(__dirname, '../templates/Main.js'),
-          getError: () => Error,
-          errorFilePath: path.resolve(__dirname, '../templates/Error.js'),
+          document: path.resolve(__dirname, '../templates/Document.js'),
+          main: path.resolve(__dirname, '../templates/Main.js'),
+          error: path.resolve(__dirname, '../templates/Error.js'),
         },
         routesData: [notFound],
       },

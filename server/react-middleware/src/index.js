@@ -16,7 +16,7 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 import getData, { type redirectType } from './utils/getData';
 import getConfig from './utils/getConfig';
 import deleteRequiredCache from './utils/deleteRequiredCache';
-import renderPage from './server/renderPage';
+import server from './utils/server';
 
 handleUnhandledRejection();
 
@@ -46,6 +46,7 @@ export default async ({
   if (dev) deleteRequiredCache(folderPath);
 
   return compose([
+    /*
     dev
       ? await webpack(
           configFunc({
@@ -64,6 +65,7 @@ export default async ({
       : async (ctx: koaContextType, next: () => Promise<void>) => {
           await next();
         },
-    renderPage(basename, data),
+        */
+    server(basename, data),
   ]);
 };

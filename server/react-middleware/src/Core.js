@@ -1,6 +1,8 @@
 // @flow
 
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
+// TODO: remove after react.lazy support server side rendering
+import lazy from '@loadable/component';
 import { matchRoutes } from 'react-router-config';
 import { Route } from 'react-router-dom';
 import { emptyFunction } from 'fbjs';
@@ -37,11 +39,13 @@ export default class Core extends React.PureComponent<propsType, stateType> {
     const { routesData } = this.props;
     const [
       {
-        route: { component }
+        route: {
+          component: { loader, moduleId }
+        }
       },
     ] = matchRoutes(routesData, pathname);
     const Page = lazy(async () => {
-      const { default: Component, getInitialProps = emptyFunction.thatReturns({}) } = await component();
+      const { default: Component, getInitialProps = emptyFunction.thatReturns({}) } = await loader();
       const initialProps = await getInitialProps({
         ctx: {
           path: pathname,
@@ -77,9 +81,7 @@ export default class Core extends React.PureComponent<propsType, stateType> {
 
     return (
       <Main>
-        <Suspense fallback={<div>TODO: add default loading...</div>}>
-          <Route children={this.getPage} />
-        </Suspense>
+        <Route children={this.getPage} />
       </Main>
     );
   }

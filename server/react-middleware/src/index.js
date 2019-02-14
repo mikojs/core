@@ -3,7 +3,10 @@
 import fs from 'fs';
 import path from 'path';
 
-import { type Middleware as koaMiddlewareType, type Context as koaContextType } from 'koa';
+import {
+  type Middleware as koaMiddlewareType,
+  type Context as koaContextType,
+} from 'koa';
 import compose from 'koa-compose';
 import webpack from 'koa-webpack';
 import { emptyFunction } from 'fbjs';

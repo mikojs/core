@@ -8,10 +8,15 @@ import {
   type Middleware as koaMiddlewareType,
 } from 'koa';
 import React from 'react';
-import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
+import {
+  renderToStaticMarkup,
+  renderToString,
+  renderToNodeStream,
+} from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
-import multistream from 'multistream';
 import { Helmet } from 'react-helmet';
+import multistream from 'multistream';
+import getStream from 'get-stream';
 
 import Root from './Root';
 import { preloadAll } from './ReactIsomorphic';
@@ -109,6 +114,16 @@ export default (
         </Router>,
       ),
       lowerDocument,
-    ]).pipe(ctx.res);
+    ])
+      .on('error', async (error: Error) => {
+        const ErrorComponent = templates.error;
+
+        ctx.res.end(
+          `${renderToString(
+            <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
+          )}${await getStream(lowerDocument)}`,
+        );
+      })
+      .pipe(ctx.res);
   };
 };

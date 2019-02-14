@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
 import { Route } from 'react-router-dom';
 import { type Context as koaContextType } from 'koa';
-import { emptyFunction, ExecutionEnvironment } from 'fbjs';
+import { ExecutionEnvironment } from 'fbjs';
 
 import { type errorPropsType } from '../types';
 
@@ -87,25 +87,26 @@ const getPage = (
   ] = matchRoutes(routesData, ctx.ctx.path);
 
   return lazy(async (): $Call<lazyComponentType> => {
-    const {
-      default: Component,
-      getInitialProps = emptyFunction.thatReturns({}),
-    } = await loader();
-    const { head, ...initialProps } =
-      store.url !== ctx.ctx.url || !ExecutionEnvironment.canUseEventListeners
-        ? await getInitialProps(ctx)
-        : store.initialProps;
+    const { default: Component } = await loader();
+    const isNotSamePage =
+      store.url !== ctx.ctx.url || !ExecutionEnvironment.canUseEventListeners;
+    const { head, ...initialProps } = isNotSamePage
+      ? // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+        (await Component.getInitialProps?.(ctx)) || {}
+      : store.initialProps;
     // TODO component should be ignored
     // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
     const Page = () => <Component {...initialProps} />;
 
-    renderToStaticMarkup(head || null);
-    store.url = ctx.ctx.url;
-    store.moduleId = moduleId;
-    store.initialProps = {
-      ...initialProps,
-      head,
-    };
+    if (isNotSamePage) {
+      renderToStaticMarkup(head || null);
+      store.url = ctx.ctx.url;
+      store.moduleId = moduleId;
+      store.initialProps = {
+        ...initialProps,
+        head: ctx.isServer ? null : head,
+      };
+    }
 
     return { default: Page };
   }, moduleId);

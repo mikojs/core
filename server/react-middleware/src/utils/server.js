@@ -77,6 +77,7 @@ export default (
 
     // add scripts
     const initialProps = Root.preload();
+
     renderToStaticMarkup(
       <Helmet>
         <script>{`var __CAT_DATA__ = ${JSON.stringify(initialProps)};`}</script>
@@ -105,13 +106,15 @@ export default (
       );
 
     // render page
+    const ErrorComponent = require(templates.error);
+
     multistream([
       upperDocument,
       renderToNodeStream(
         <Router location={ctx.url} context={ctx}>
           <Root
             Main={require(templates.main)}
-            Error={require(templates.error)}
+            Error={ErrorComponent}
             routesData={serverRoutesData}
           />
         </Router>,
@@ -119,8 +122,6 @@ export default (
       lowerDocument,
     ])
       .on('error', async (error: Error) => {
-        const ErrorComponent = templates.error;
-
         ctx.res.end(
           `${renderToString(
             <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,

@@ -31,11 +31,7 @@ export const lazy = (
 
   lazyComponents[moduleId] = lazyComponent;
 
-  return (props: mixed): NodeType => {
-    const Component = components[moduleId];
-
-    return <Component {...props} />;
-  };
+  return (props: {}) => React.createElement(components[moduleId], props);
 };
 
 /**

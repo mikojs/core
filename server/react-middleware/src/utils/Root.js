@@ -1,6 +1,7 @@
 // @flow
 
-import React, { type ComponentType } from 'react';
+import React, { type ComponentType, type Node as NodeType } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
 import { Route } from 'react-router-dom';
 import { type Context as koaContextType } from 'koa';
@@ -39,7 +40,9 @@ type contextRouterType = {|
 
 type storeType = {
   url: string,
-  initialProps: mixed,
+  initialProps: {
+    head: ?NodeType,
+  },
 };
 
 const store: storeType = {};
@@ -87,16 +90,20 @@ const getPage = (
       default: Component,
       getInitialProps = emptyFunction.thatReturns({}),
     } = await loader();
-    const initialProps =
-      store.url === ctx.ctx.url || !ExecutionEnvironment.canUseEventListeners
-        ? store.initialProps
-        : await getInitialProps(ctx);
+    const { head, ...initialProps } =
+      store.url !== ctx.ctx.url || !ExecutionEnvironment.canUseEventListeners
+        ? await getInitialProps(ctx)
+        : store.initialProps;
     // TODO component should be ignored
     // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
     const Page = () => <Component {...initialProps} />;
 
+    renderToStaticMarkup(head || null);
     store.url = ctx.ctx.url;
-    store.initialProps = initialProps;
+    store.initialProps = {
+      ...initialProps,
+      head,
+    };
 
     return { default: Page };
   }, moduleId);

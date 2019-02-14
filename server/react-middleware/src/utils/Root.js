@@ -40,6 +40,7 @@ type contextRouterType = {|
 
 type storeType = {
   url: string,
+  moduleId: string,
   initialProps: {
     head: ?NodeType,
   },
@@ -100,6 +101,7 @@ const getPage = (
 
     renderToStaticMarkup(head || null);
     store.url = ctx.ctx.url;
+    store.moduleId = moduleId;
     store.initialProps = {
       ...initialProps,
       head,
@@ -112,8 +114,13 @@ const getPage = (
 // TODO component should be ignored
 /* eslint-disable require-jsdoc, flowtype/require-return-type */
 export default class Root extends React.PureComponent<propsType, stateType> {
-  static preload = ({ url, initialProps }: storeType = store): storeType => {
+  static preload = ({
+    url,
+    moduleId,
+    initialProps,
+  }: storeType = store): storeType => {
     store.url = url;
+    store.moduleId = moduleId;
     store.initialProps = initialProps;
 
     return store;

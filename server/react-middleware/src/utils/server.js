@@ -59,7 +59,7 @@ export default (
     ctx.respond = false;
 
     const Document = require(templates.document);
-    const { head, ...initialProps } =
+    const { head, ...documentInitialProps } =
       // $FlowFixMe Flow does not yet support method or property calls in optional chains.
       (await Document.getInitialProps?.({ ctx, isServer: true })) || {};
     const hash = crypto
@@ -74,18 +74,21 @@ export default (
       staticContext: ctx,
     });
     await preloadAll();
+
     // add scripts
+    const initialProps = Root.preload();
     renderToStaticMarkup(
       <Helmet>
-        <script>{`var __CAT_DATA__ = ${JSON.stringify(
-          Root.preload(),
-        )};`}</script>
+        <script>{`var __CAT_DATA__ = ${JSON.stringify(initialProps)};`}</script>
+        <script async src={commonsUrl} />
+        <script async src={`/assets/${initialProps.moduleId}.js`} />
+        <script async src={`/assets${basename || ''}/client.js`} />
       </Helmet>,
     );
 
     // make document scream
     const [upperDocument, lowerDocument] = renderToStaticMarkup(
-      <Document {...initialProps} helmet={Helmet.renderStatic()}>
+      <Document {...documentInitialProps} helmet={Helmet.renderStatic()}>
         <main id="__cat__">{hash}</main>
       </Document>,
     )

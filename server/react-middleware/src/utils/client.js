@@ -17,7 +17,7 @@ setConfig({
   errorReporter: ErrorComponent,
 });
 
-export default (async () => {
+(() => {
   Root.preload(window.__CAT_DATA__);
   ReactDOM.hydrate(
     <Router>

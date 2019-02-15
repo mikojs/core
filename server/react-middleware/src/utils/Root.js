@@ -11,17 +11,19 @@ import { type errorPropsType } from '../types';
 
 import { lazy, Suspense, type lazyComponentType } from './ReactIsomorphic';
 
+export type routeDataType = {|
+  exact: true,
+  path: $ReadOnlyArray<string>,
+  component: {|
+    loader: lazyComponentType,
+    chunkName: string,
+  |},
+|};
+
 type propsType = {|
   Main: ComponentType<*>,
   Error: ComponentType<errorPropsType>,
-  routesData: $ReadOnlyArray<{|
-    exact: true,
-    path: $ReadOnlyArray<string>,
-    component: {
-      loader: lazyComponentType,
-      chunkName: string,
-    },
-  |}>,
+  routesData: $ReadOnlyArray<routeDataType>,
 |};
 
 type stateType = {|
@@ -44,6 +46,7 @@ type storeType = {
   initialProps: {
     head: ?NodeType,
   },
+  Page: () => ComponentType<void>,
 };
 
 const store: storeType = {};
@@ -86,27 +89,25 @@ const getPage = (
     },
   ] = matchRoutes(routesData, ctx.ctx.path);
 
+  if (!ctx.isServer && store.url === ctx.ctx.url) return store.Page;
+
   return lazy(async (): $Call<lazyComponentType> => {
     const { default: Component } = await loader();
-    const isNotSamePage =
-      store.url !== ctx.ctx.url || !ExecutionEnvironment.canUseEventListeners;
-    const { head, ...initialProps } = isNotSamePage
-      ? // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-        (await Component.getInitialProps?.(ctx)) || {}
-      : store.initialProps;
+    const { head, ...initialProps } =
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      (await Component.getInitialProps?.(ctx)) || {};
     // TODO component should be ignored
     // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
     const Page = () => <Component {...initialProps} />;
 
-    if (isNotSamePage) {
-      renderToStaticMarkup(head || null);
-      store.url = ctx.ctx.url;
-      store.chunkName = chunkName;
-      store.initialProps = {
-        ...initialProps,
-        head: ctx.isServer ? null : head,
-      };
-    }
+    renderToStaticMarkup(head || null);
+    store.url = ctx.ctx.url;
+    store.chunkName = chunkName;
+    store.initialProps = {
+      ...initialProps,
+      head: ctx.isServer ? null : head,
+    };
+    store.Page = Page;
 
     return { default: Page };
   }, chunkName);
@@ -115,14 +116,10 @@ const getPage = (
 // TODO component should be ignored
 /* eslint-disable require-jsdoc, flowtype/require-return-type */
 export default class Root extends React.PureComponent<propsType, stateType> {
-  static preload = ({
-    url,
-    chunkName,
-    initialProps,
-  }: storeType = store): storeType => {
-    store.url = url;
-    store.chunkName = chunkName;
-    store.initialProps = initialProps;
+  static preload = (prevStore: storeType = store): storeType => {
+    Object.keys(prevStore).forEach((key: string) => {
+      store[key] = prevStore[key];
+    });
 
     return store;
   };

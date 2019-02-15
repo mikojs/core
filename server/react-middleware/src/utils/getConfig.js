@@ -63,8 +63,8 @@ export default (
         options: {
           multiple: [
             {
-              search: 'routesData: ',
-              replace: `routesData: [${routesData
+              search: 'routesData = ',
+              replace: `routesData = [${routesData
                 .map(
                   ({ routePath, chunkName, filePath }: routeDataType): string =>
                     `{ ${[

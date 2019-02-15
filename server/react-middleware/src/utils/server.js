@@ -59,9 +59,14 @@ export default (
     ctx.respond = false;
 
     const Document = require(templates.document);
+    const Main = require(templates.main);
+    const ErrorComponent = require(templates.error);
     const { head, ...documentInitialProps } =
       // $FlowFixMe Flow does not yet support method or property calls in optional chains.
       (await Document.getInitialProps?.({ ctx, isServer: true })) || {};
+    const mainInitialProps =
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      (await Main.getInitialProps?.({ ctx, isServer: true })) || {};
     const hash = crypto
       .createHmac('sha256', '@cat-org/react-middleware')
       .digest('hex');
@@ -80,7 +85,10 @@ export default (
 
     renderToStaticMarkup(
       <Helmet>
-        <script>{`var __CAT_DATA__ = ${JSON.stringify(initialProps)};`}</script>
+        <script>{`var __CAT_DATA__ = ${JSON.stringify({
+          ...initialProps,
+          mainInitialProps,
+        })};`}</script>
         <script async src={commonsUrl} />
         <script async src={`/assets/${initialProps.chunkName}.js`} />
         <script async src={`/assets${basename || ''}/client.js`} />
@@ -106,16 +114,15 @@ export default (
       );
 
     // render page
-    const ErrorComponent = require(templates.error);
-
     multistream([
       upperDocument,
       renderToNodeStream(
         <Router location={ctx.url} context={ctx}>
           <Root
-            Main={require(templates.main)}
+            Main={Main}
             Error={ErrorComponent}
             routesData={serverRoutesData}
+            mainInitialProps={mainInitialProps}
           />
         </Router>,
       ),

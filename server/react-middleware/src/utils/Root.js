@@ -24,6 +24,7 @@ type propsType = {|
   Main: ComponentType<*>,
   Error: ComponentType<errorPropsType>,
   routesData: $ReadOnlyArray<routeDataType>,
+  mainInitialProps: {},
 |};
 
 type stateType = {|
@@ -139,14 +140,14 @@ export default class Root extends React.PureComponent<propsType, stateType> {
   }
 
   render() {
-    const { Main, Error, routesData } = this.props;
+    const { Main, Error, routesData, mainInitialProps } = this.props;
     const { error, errorInfo } = this.state;
 
     if (error && errorInfo)
       return <Error error={error} errorInfo={errorInfo} />;
 
     return (
-      <Main>
+      <Main {...mainInitialProps}>
         <Suspense fallback={<div>TODO Loading...</div>}>
           <Route
             children={(context: contextRouterType) =>

@@ -19,14 +19,19 @@ setConfig({
 
 (async () => {
   /** #__PURE__ */ const routesData = [];
+  const {
+    mainInitialProps,
+    chunkName,
+    initialProps,
+    ...data
+  } = window.__CAT_DATA__;
 
   // preload page
   const {
     component: { loader },
   } =
     routesData.find(
-      ({ component: { chunkName } }: routeDataType) =>
-        chunkName === window.__CAT_DATA__.chunkName,
+      ({ component }: routeDataType) => chunkName === component.chunkName,
     ) ||
     (() => {
       throw new Error('Can not find page component');
@@ -34,15 +39,24 @@ setConfig({
   const { default: Component } = await loader();
   // TODO component should be ignored
   // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-  const Page = () => <Component {...window.__CAT_DATA__.initialProps} />;
+  const Page = () => <Component {...initialProps} />;
 
-  window.__CAT_DATA__.Page = Page;
-  Root.preload(window.__CAT_DATA__);
+  Root.preload({
+    ...data,
+    Page,
+    chunkName,
+    initialProps,
+  });
 
   // render
   ReactDOM.hydrate(
     <Router>
-      <Root Main={Main} Error={ErrorComponent} routesData={routesData} />
+      <Root
+        Main={Main}
+        Error={ErrorComponent}
+        routesData={routesData}
+        mainInitialProps={mainInitialProps}
+      />
     </Router>,
     document.getElementById('__cat__') ||
       (() => {

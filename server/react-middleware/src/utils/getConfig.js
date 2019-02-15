@@ -72,7 +72,7 @@ export default (
                       `path: ${JSON.stringify(routePath)}`,
                       `component: { ${[
                         `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
-                        `moduleId: require.resolveWeak('${filePath}')`,
+                        `chunkName: '${chunkName}'`,
                       ].join(', ')} }`,
                     ].join(', ')} }`,
                 )

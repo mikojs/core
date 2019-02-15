@@ -18,20 +18,20 @@ export const Suspense = ExecutionEnvironment.canUseEventListeners
  * lazy(import('component'), 'component')
  *
  * @param {Promise} lazyComponent - dynamic import component
- * @param {string} moduleId - module id
+ * @param {string} chunkName - chunk name
  *
  * @return {Component} - lazy component
  */
 export const lazy = (
   lazyComponent: lazyComponentType,
-  moduleId: string,
+  chunkName: string,
 ): ComponentType<*> => {
   if (ExecutionEnvironment.canUseEventListeners)
     return React.lazy(lazyComponent);
 
-  lazyComponents[moduleId] = lazyComponent;
+  lazyComponents[chunkName] = lazyComponent;
 
-  return (props: {}) => React.createElement(components[moduleId], props);
+  return (props: {}) => React.createElement(components[chunkName], props);
 };
 
 /**
@@ -42,11 +42,11 @@ export const lazy = (
  */
 export const preloadAll = () =>
   Promise.all(
-    Object.keys(lazyComponents).map(async (moduleId: string) => {
-      const { default: Component } = await lazyComponents[moduleId]();
+    Object.keys(lazyComponents).map(async (chunkName: string) => {
+      const { default: Component } = await lazyComponents[chunkName]();
 
-      delete lazyComponents[moduleId];
+      delete lazyComponents[chunkName];
 
-      components[moduleId] = Component;
+      components[chunkName] = Component;
     }),
   );

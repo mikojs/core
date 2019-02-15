@@ -19,7 +19,7 @@ type propsType = {|
     path: $ReadOnlyArray<string>,
     component: {
       loader: lazyComponentType,
-      moduleId: string,
+      chunkName: string,
     },
   |}>,
 |};
@@ -40,7 +40,7 @@ type contextRouterType = {|
 
 type storeType = {
   url: string,
-  moduleId: string,
+  chunkName: string,
   initialProps: {
     head: ?NodeType,
   },
@@ -49,7 +49,7 @@ type storeType = {
 const store: storeType = {};
 
 /**
- * TODO: after react.lazy support server side, remove moduleId and use `children={this.getPage}`
+ * TODO: after react.lazy support server side, remove chunkName and use `children={this.getPage}`
  *
  * @example
  * getPage(routsData, ctx)
@@ -81,7 +81,7 @@ const getPage = (
   const [
     {
       route: {
-        component: { loader, moduleId },
+        component: { loader, chunkName },
       },
     },
   ] = matchRoutes(routesData, ctx.ctx.path);
@@ -101,7 +101,7 @@ const getPage = (
     if (isNotSamePage) {
       renderToStaticMarkup(head || null);
       store.url = ctx.ctx.url;
-      store.moduleId = moduleId;
+      store.chunkName = chunkName;
       store.initialProps = {
         ...initialProps,
         head: ctx.isServer ? null : head,
@@ -109,7 +109,7 @@ const getPage = (
     }
 
     return { default: Page };
-  }, moduleId);
+  }, chunkName);
 };
 
 // TODO component should be ignored
@@ -117,11 +117,11 @@ const getPage = (
 export default class Root extends React.PureComponent<propsType, stateType> {
   static preload = ({
     url,
-    moduleId,
+    chunkName,
     initialProps,
   }: storeType = store): storeType => {
     store.url = url;
-    store.moduleId = moduleId;
+    store.chunkName = chunkName;
     store.initialProps = initialProps;
 
     return store;

@@ -33,7 +33,7 @@ export default (
       path: routePath,
       component: {
         loader: async () => ({ default: require(filePath) }),
-        moduleId: chunkName,
+        chunkName,
       },
     }),
   );
@@ -82,7 +82,7 @@ export default (
       <Helmet>
         <script>{`var __CAT_DATA__ = ${JSON.stringify(initialProps)};`}</script>
         <script async src={commonsUrl} />
-        <script async src={`/assets/${initialProps.moduleId}.js`} />
+        <script async src={`/assets/${initialProps.chunkName}.js`} />
         <script async src={`/assets${basename || ''}/client.js`} />
       </Helmet>,
     );

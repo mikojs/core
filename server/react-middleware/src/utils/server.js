@@ -7,7 +7,7 @@ import {
   type Context as koaContextType,
   type Middleware as koaMiddlewareType,
 } from 'koa';
-import React from 'react';
+import React, { type Node as NodeType } from 'react';
 import {
   renderToStaticMarkup,
   renderToString,
@@ -118,14 +118,17 @@ export default (
     multistream([
       upperDocument,
       renderToNodeStream(
-        <Router location={ctx.url} context={ctx}>
-          <Root
-            Main={Main}
-            Error={ErrorComponent}
-            routesData={serverRoutesData}
-            mainInitialProps={mainInitialProps}
-          />
-        </Router>,
+        <Root
+          Router={({ children }: { children: NodeType }) => (
+            <Router location={ctx.url} context={ctx}>
+              {children}
+            </Router>
+          )}
+          Main={Main}
+          Error={ErrorComponent}
+          routesData={serverRoutesData}
+          mainInitialProps={mainInitialProps}
+        />,
       ),
       lowerDocument,
     ])

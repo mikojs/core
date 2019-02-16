@@ -21,6 +21,7 @@ export type routeDataType = {|
 |};
 
 type propsType = {|
+  Router: ComponentType<{ children: NodeType }>,
   Main: ComponentType<*>,
   Error: ComponentType<errorPropsType>,
   routesData: $ReadOnlyArray<routeDataType>,
@@ -140,7 +141,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
   }
 
   render() {
-    const { Main, Error, routesData, mainInitialProps } = this.props;
+    const { Router, Main, Error, routesData, mainInitialProps } = this.props;
     const { error, errorInfo } = this.state;
 
     if (error && errorInfo)
@@ -148,13 +149,15 @@ export default class Root extends React.PureComponent<propsType, stateType> {
 
     return (
       <Main {...mainInitialProps}>
-        <Suspense fallback={<div>TODO Loading...</div>}>
-          <Route
-            children={(context: contextRouterType) =>
-              React.createElement(getPage(routesData, context))
-            }
-          />
-        </Suspense>
+        <Router>
+          <Suspense fallback={<div>TODO Loading...</div>}>
+            <Route
+              children={(context: contextRouterType) =>
+                React.createElement(getPage(routesData, context))
+              }
+            />
+          </Suspense>
+        </Router>
       </Main>
     );
   }

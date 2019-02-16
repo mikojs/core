@@ -6,13 +6,6 @@ import parseArgv from '@babel/cli/lib/babel/options';
 
 import { name as pkgName } from '../../package.json';
 
-export type initialOptionsType = {|
-  src?: $ReadOnlyArray<string>,
-  outDir?: string,
-  verbose: boolean,
-  watch: boolean,
-|};
-
 export type manipulateOptionsPluginsType = {|
   options: {|
     src: $ReadOnlyArray<string>,
@@ -33,7 +26,12 @@ export type manipulateOptionsPluginsType = {|
 class Handler {
   initialized: boolean = false;
 
-  initialOptions: initialOptionsType = {
+  initialOptions: {|
+    src?: $ReadOnlyArray<string>,
+    outDir?: string,
+    verbose: boolean,
+    watch: boolean,
+  |} = {
     verbose: false,
     watch: false,
   };

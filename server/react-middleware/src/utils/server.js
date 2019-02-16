@@ -21,14 +21,18 @@ import getStream from 'get-stream';
 import Root from './Root';
 import { preloadAll } from './ReactIsomorphic';
 
-import { type dataType, type routeDataType } from 'utils/getData';
+import { type dataType } from 'utils/getData';
 
 export default (
   basename: ?string,
   { routesData, templates }: dataType,
 ): koaMiddlewareType => {
   const serverRoutesData = routesData.map(
-    ({ routePath, chunkName, filePath }: routeDataType) => ({
+    ({
+      routePath,
+      chunkName,
+      filePath,
+    }: $ElementType<$PropertyType<dataType, 'routesData'>, number>) => ({
       exact: true,
       path: routePath,
       component: {

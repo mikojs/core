@@ -9,19 +9,17 @@ export type redirectType = (
   urlPattern: $ReadOnlyArray<string>,
 ) => $ReadOnlyArray<string>;
 
-export type routeDataType = {|
-  routePath: $ReadOnlyArray<string>,
-  chunkName: string,
-  filePath: string,
-|};
-
 export type dataType = {|
   templates: {|
     document: string,
     main: string,
     error: string,
   |},
-  routesData: $ReadOnlyArray<routeDataType>,
+  routesData: $ReadOnlyArray<{|
+    routePath: $ReadOnlyArray<string>,
+    chunkName: string,
+    filePath: string,
+  |}>,
 |};
 
 export default (
@@ -63,8 +61,12 @@ export default (
                 ...result,
                 routesData: [
                   ...result.routesData.filter(
-                    ({ chunkName }: routeDataType) =>
-                      chunkName !== notFound.chunkName,
+                    ({
+                      chunkName,
+                    }: $ElementType<
+                      $PropertyType<dataType, 'routesData'>,
+                      number,
+                    >) => chunkName !== notFound.chunkName,
                   ),
                   {
                     ...notFound,

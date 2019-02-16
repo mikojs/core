@@ -7,7 +7,7 @@ import { setConfig } from 'react-hot-loader';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
-import Root, { type routeDataType } from './Root';
+import Root, { type propsType as rootPropsType } from './Root';
 
 import Main from 'templates/Main';
 import ErrorComponent from 'templates/Error';
@@ -31,7 +31,10 @@ setConfig({
     component: { loader },
   } =
     routesData.find(
-      ({ component }: routeDataType) => chunkName === component.chunkName,
+      ({
+        component,
+      }: $ElementType<$PropertyType<rootPropsType, 'routesData'>, number>) =>
+        chunkName === component.chunkName,
     ) ||
     (() => {
       throw new Error('Can not find page component');

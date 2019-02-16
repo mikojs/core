@@ -4,7 +4,7 @@ import path from 'path';
 
 import TerserPlugin from 'terser-webpack-plugin';
 
-import { type dataType, type routeDataType } from './getData';
+import { type dataType } from './getData';
 
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
 const ROOT_PATH = path.resolve(__dirname, './Root.js');
@@ -66,7 +66,14 @@ export default (
               search: 'routesData = ',
               replace: `routesData = [${routesData
                 .map(
-                  ({ routePath, chunkName, filePath }: routeDataType): string =>
+                  ({
+                    routePath,
+                    chunkName,
+                    filePath,
+                  }: $ElementType<
+                    $PropertyType<dataType, 'routesData'>,
+                    number,
+                  >): string =>
                     `{ ${[
                       'exact: true',
                       `path: ${JSON.stringify(routePath)}`,

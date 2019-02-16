@@ -11,20 +11,18 @@ import { type errorPropsType } from '../types';
 
 import { lazy, Suspense, type lazyComponentType } from './ReactIsomorphic';
 
-export type routeDataType = {|
-  exact: true,
-  path: $ReadOnlyArray<string>,
-  component: {|
-    loader: lazyComponentType,
-    chunkName: string,
-  |},
-|};
-
-type propsType = {|
+export type propsType = {|
   Router: ComponentType<{ children: NodeType }>,
   Main: ComponentType<*>,
   Error: ComponentType<errorPropsType>,
-  routesData: $ReadOnlyArray<routeDataType>,
+  routesData: $ReadOnlyArray<{|
+    exact: true,
+    path: $ReadOnlyArray<string>,
+    component: {|
+      loader: lazyComponentType,
+      chunkName: string,
+    |},
+  |}>,
   mainInitialProps: {},
 |};
 

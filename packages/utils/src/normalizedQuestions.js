@@ -2,11 +2,10 @@
 
 import chalk from 'chalk';
 
-type validateType<ValueType> = (val: ValueType & string) => true | string;
-type questionType<ValueType> = {
+type questionType<T> = {
   name: string,
   message?: string,
-  validate?: validateType<ValueType>,
+  validate?: (val: T & string) => true | string,
 };
 
 /**
@@ -20,8 +19,8 @@ type questionType<ValueType> = {
 export const defaultValidate = (val: string) =>
   val !== '' || 'can not be empty';
 
-export default (projectName: string) => <ValueType>(
-  ...questions: $ReadOnlyArray<questionType<ValueType>>
+export default (projectName: string) => <T>(
+  ...questions: $ReadOnlyArray<questionType<T>>
 ) =>
   (questions.map(
     ({
@@ -29,7 +28,7 @@ export default (projectName: string) => <ValueType>(
       message = name,
       validate = defaultValidate,
       ...question
-    }: questionType<ValueType>) => ({
+    }: questionType<T>) => ({
       ...question,
       name,
       message,
@@ -40,7 +39,7 @@ export default (projectName: string) => <ValueType>(
   ): $ReadOnlyArray<{
     name: string,
     message: string,
-    validate: validateType<ValueType>,
+    validate: $PropertyType<questionType<T>, 'validate'>,
     prefix: string,
     suffix: string,
   }>);

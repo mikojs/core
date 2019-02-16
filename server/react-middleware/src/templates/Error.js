@@ -9,7 +9,6 @@ import { type errorPropsType } from '../types';
 
 import * as styles from './styles/error';
 
-// TODO: write default component
 const Error = ({
   error: { message },
   errorInfo: { componentStack },

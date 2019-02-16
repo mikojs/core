@@ -6,6 +6,7 @@ import React, { type Node as NodeType } from 'react';
 
 import { type helmetType } from '../types';
 
+// TODO: add default head
 const Document = ({
   helmet,
   children,

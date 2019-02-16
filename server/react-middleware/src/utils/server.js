@@ -61,10 +61,10 @@ export default (
     const Document = require(templates.document);
     const Main = require(templates.main);
     const ErrorComponent = require(templates.error);
-    const { head, ...documentInitialProps } =
+    const { head: documentHead, ...documentInitialProps } =
       // $FlowFixMe Flow does not yet support method or property calls in optional chains.
       (await Document.getInitialProps?.({ ctx, isServer: true })) || {};
-    const mainInitialProps =
+    const { head: mainHead, ...mainInitialProps } =
       // $FlowFixMe Flow does not yet support method or property calls in optional chains.
       (await Main.getInitialProps?.({ ctx, isServer: true })) || {};
     const hash = crypto
@@ -72,7 +72,8 @@ export default (
       .digest('hex');
 
     // preload document
-    renderToStaticMarkup(head || null);
+    renderToStaticMarkup(documentHead || null);
+    renderToStaticMarkup(mainHead || null);
     // preload page
     await Root.getPage(serverRoutesData, {
       location: { pathname: ctx.path, search: `?${ctx.querystring}` },

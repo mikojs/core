@@ -12,7 +12,6 @@ import { type errorPropsType } from '../types';
 import { lazy, Suspense, type lazyComponentType } from './ReactIsomorphic';
 
 export type propsType = {|
-  Router: ComponentType<{ children: NodeType }>,
   Main: ComponentType<*>,
   Error: ComponentType<errorPropsType>,
   routesData: $ReadOnlyArray<{|
@@ -139,7 +138,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
   }
 
   render() {
-    const { Router, Main, Error, routesData, mainInitialProps } = this.props;
+    const { Main, Error, routesData, mainInitialProps } = this.props;
     const { error, errorInfo } = this.state;
 
     if (error && errorInfo)
@@ -147,15 +146,13 @@ export default class Root extends React.PureComponent<propsType, stateType> {
 
     return (
       <Main {...mainInitialProps}>
-        <Router>
-          <Suspense fallback={<div>TODO Loading...</div>}>
-            <Route
-              children={(context: contextRouterType) =>
-                React.createElement(getPage(routesData, context))
-              }
-            />
-          </Suspense>
-        </Router>
+        <Suspense fallback={<div>TODO Loading...</div>}>
+          <Route
+            children={(context: contextRouterType) =>
+              React.createElement(getPage(routesData, context))
+            }
+          />
+        </Suspense>
       </Main>
     );
   }

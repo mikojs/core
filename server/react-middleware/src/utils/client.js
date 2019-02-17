@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { setConfig } from 'react-hot-loader';
@@ -53,15 +53,14 @@ setConfig({
 
   // render
   ReactDOM.hydrate(
-    <Root
-      Router={({ children }: { children: NodeType }) => (
-        <Router>{children}</Router>
-      )}
-      Main={Main}
-      Error={ErrorComponent}
-      routesData={routesData}
-      mainInitialProps={mainInitialProps}
-    />,
+    <Router>
+      <Root
+        Main={Main}
+        Error={ErrorComponent}
+        routesData={routesData}
+        mainInitialProps={mainInitialProps}
+      />
+    </Router>,
     document.getElementById('__cat__') ||
       (() => {
         throw new Error('Can not find main HTMLElement');

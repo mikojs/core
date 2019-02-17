@@ -10,6 +10,7 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 import Root, { type propsType as rootPropsType } from './Root';
 
 import Main from 'templates/Main';
+import Loading from 'templates/Loading';
 import ErrorComponent from 'templates/Error';
 
 handleUnhandledRejection();
@@ -56,6 +57,7 @@ setConfig({
     <Router>
       <Root
         Main={Main}
+        Loading={Loading}
         Error={ErrorComponent}
         routesData={routesData}
         mainInitialProps={mainInitialProps}

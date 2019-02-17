@@ -5,14 +5,15 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
 import { Route } from 'react-router-dom';
 import { type Context as koaContextType } from 'koa';
-import { ExecutionEnvironment } from 'fbjs';
+import { emptyFunction, ExecutionEnvironment } from 'fbjs';
 
-import { type errorPropsType } from '../types';
+import { type loadingPropsType, type errorPropsType } from '../types';
 
 import { lazy, Suspense, type lazyComponentType } from './ReactIsomorphic';
 
 export type propsType = {|
   Main: ComponentType<*>,
+  Loading: ComponentType<loadingPropsType>,
   Error: ComponentType<errorPropsType>,
   routesData: $ReadOnlyArray<{|
     exact: true,
@@ -49,6 +50,14 @@ type storeType = {
 };
 
 const store: storeType = {};
+const loading = {
+  trigger: emptyFunction,
+  on: (
+    trigger: $PropertyType<$PropertyType<loadingPropsType, 'event'>, 'trigger'>,
+  ) => {
+    loading.trigger = trigger;
+  },
+};
 
 /**
  * TODO: after react.lazy support server side, remove chunkName and use `children={this.getPage}`
@@ -138,7 +147,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
   }
 
   render() {
-    const { Main, Error, routesData, mainInitialProps } = this.props;
+    const { Main, Loading, Error, routesData, mainInitialProps } = this.props;
     const { error, errorInfo } = this.state;
 
     if (error && errorInfo)
@@ -153,6 +162,8 @@ export default class Root extends React.PureComponent<propsType, stateType> {
             }
           />
         </Suspense>
+
+        <Loading event={loading} />
       </Main>
     );
   }

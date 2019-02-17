@@ -1,5 +1,19 @@
 // @flow
 
+type loadingTriggerType = (type: 'start' | 'complete') => void;
+
+export type loadingPropsType = {|
+  event: {|
+    trigger: loadingTriggerType,
+    on: (
+      trigger: $PropertyType<
+        $PropertyType<loadingPropsType, 'event'>,
+        'trigger',
+      >,
+    ) => void,
+  |},
+|};
+
 export type errorPropsType = {|
   error: Error,
   errorInfo: {

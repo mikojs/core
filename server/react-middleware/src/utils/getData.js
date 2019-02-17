@@ -13,6 +13,7 @@ export type dataType = {|
   templates: {|
     document: string,
     main: string,
+    loading: string,
     error: string,
   |},
   routesData: $ReadOnlyArray<{|
@@ -50,6 +51,7 @@ export default (
           switch (relativePath.replace(/^\.templates\//, '')) {
             case 'Document':
             case 'Main':
+            case 'Loading':
             case 'Error':
               result.templates[
                 relativePath.replace(/^\.templates\//, '').toLowerCase()
@@ -101,6 +103,7 @@ export default (
         templates: {
           document: path.resolve(__dirname, '../templates/Document.js'),
           main: path.resolve(__dirname, '../templates/Main.js'),
+          loading: path.resolve(__dirname, '../templates/Loading.js'),
           error: path.resolve(__dirname, '../templates/Error.js'),
         },
         routesData: [notFound],

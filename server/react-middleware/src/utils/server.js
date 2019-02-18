@@ -104,7 +104,7 @@ export default (
     // make document scream
     const [upperDocument, lowerDocument] = renderToStaticMarkup(
       <Document {...documentInitialProps} helmet={Helmet.renderStatic()}>
-        <main id="__cat__">{hash}</main>
+        <main id="__CAT__">{hash}</main>
       </Document>,
     )
       .split(hash)

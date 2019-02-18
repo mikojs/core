@@ -63,7 +63,7 @@ setConfig({
         mainInitialProps={mainInitialProps}
       />
     </Router>,
-    document.getElementById('__cat__') ||
+    document.getElementById('__CAT__') ||
       (() => {
         throw new Error('Can not find main HTMLElement');
       })(),

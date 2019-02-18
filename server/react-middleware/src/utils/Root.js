@@ -5,15 +5,15 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
 import { Route } from 'react-router-dom';
 import { type Context as koaContextType } from 'koa';
-import { emptyFunction, ExecutionEnvironment } from 'fbjs';
+import { ExecutionEnvironment } from 'fbjs';
 
-import { type loadingPropsType, type errorPropsType } from '../types';
+import { type errorPropsType } from '../types';
 
 import { lazy, Suspense, type lazyComponentType } from './ReactIsomorphic';
 
 export type propsType = {|
   Main: ComponentType<*>,
-  Loading: ComponentType<loadingPropsType>,
+  Loading: ComponentType<*>,
   Error: ComponentType<errorPropsType>,
   routesData: $ReadOnlyArray<{|
     exact: true,
@@ -46,18 +46,10 @@ type storeType = {
   initialProps: {
     head: ?NodeType,
   },
-  Page: () => ComponentType<void>,
+  Page: () => NodeType,
 };
 
 const store: storeType = {};
-const loading = {
-  trigger: emptyFunction,
-  on: (
-    trigger: $PropertyType<$PropertyType<loadingPropsType, 'event'>, 'trigger'>,
-  ) => {
-    loading.trigger = trigger;
-  },
-};
 
 /**
  * TODO: after react.lazy support server side, remove chunkName and use `children={this.getPage}`
@@ -155,7 +147,9 @@ export default class Root extends React.PureComponent<propsType, stateType> {
 
     return (
       <Main {...mainInitialProps}>
-        <Suspense fallback={<div>TODO Loading...</div>}>
+        <Suspense
+          fallback={React.createElement(() => React.createElement(store.Page))}
+        >
           <Route
             children={(context: contextRouterType) =>
               React.createElement(getPage(routesData, context))
@@ -163,7 +157,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
           />
         </Suspense>
 
-        <Loading event={loading} />
+        <Loading />
       </Main>
     );
   }

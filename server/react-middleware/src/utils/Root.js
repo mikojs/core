@@ -8,8 +8,7 @@ import { type Context as koaContextType } from 'koa';
 import { ExecutionEnvironment } from 'fbjs';
 
 import { type errorPropsType } from '../types';
-
-import { lazy, Suspense, type lazyComponentType } from './ReactIsomorphic';
+import { lazy, Suspense, type lazyComponentType } from '../ReactIsomorphic';
 
 export type propsType = {|
   Main: ComponentType<*>,

@@ -18,8 +18,9 @@ import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 import getStream from 'get-stream';
 
+import { preloadAll } from '../ReactIsomorphic';
+
 import Root from './Root';
-import { preloadAll } from './ReactIsomorphic';
 
 import { type dataType } from 'utils/getData';
 

@@ -3,14 +3,14 @@
 // TODO component should be ignored
 
 import React, { type Node as NodeType } from 'react';
+import { type Helmet as HelmetType } from 'react-helmet';
 
-import { type helmetType } from '../types';
-
+// TODO: add default head
 const Document = ({
   helmet,
   children,
 }: {
-  helmet: helmetType,
+  helmet: $Call<$PropertyType<Class<HelmetType>, 'renderStatic'>>,
   children: NodeType,
 }) => (
   <html>

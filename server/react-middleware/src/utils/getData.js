@@ -2,34 +2,25 @@
 
 import path from 'path';
 
-import { type ElementType } from 'react';
-
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
-
-import Document from 'templates/Document';
-import Main from 'templates/Main';
-import Error from 'templates/Error';
 
 export type redirectType = (
   urlPattern: $ReadOnlyArray<string>,
 ) => $ReadOnlyArray<string>;
 
-export type routeDataType = {|
-  routePath: $ReadOnlyArray<string>,
-  chunkName: string,
-  filePath: string,
-|};
-
 export type dataType = {|
   templates: {|
-    getDocument: () => ElementType,
-    getMain: () => ElementType,
-    mainFilePath: string,
-    getError: () => ElementType,
-    errorFilePath: string,
+    document: string,
+    main: string,
+    loading: string,
+    error: string,
   |},
-  routesData: $ReadOnlyArray<routeDataType>,
+  routesData: $ReadOnlyArray<{|
+    routePath: $ReadOnlyArray<string>,
+    chunkName: string,
+    filePath: string,
+  |}>,
 |};
 
 export default (
@@ -59,12 +50,12 @@ export default (
         if (/^\.templates/.test(relativePath))
           switch (relativePath.replace(/^\.templates\//, '')) {
             case 'Document':
-              result.templates.getDocument = () => require(filePath);
-              return result;
-
             case 'Main':
-              result.templates.getMain = () => require(filePath);
-              result.templates.mainFilePath = filePath;
+            case 'Loading':
+            case 'Error':
+              result.templates[
+                relativePath.replace(/^\.templates\//, '').toLowerCase()
+              ] = filePath;
               return result;
 
             case 'NotFound':
@@ -72,8 +63,12 @@ export default (
                 ...result,
                 routesData: [
                   ...result.routesData.filter(
-                    ({ chunkName }: routeDataType) =>
-                      chunkName !== notFound.chunkName,
+                    ({
+                      chunkName,
+                    }: $ElementType<
+                      $PropertyType<dataType, 'routesData'>,
+                      number,
+                    >) => chunkName !== notFound.chunkName,
                   ),
                   {
                     ...notFound,
@@ -81,11 +76,6 @@ export default (
                   },
                 ],
               };
-
-            case 'Error':
-              result.templates.getError = () => require(filePath);
-              result.templates.errorFilePath = filePath;
-              return result;
 
             default:
               return result;
@@ -111,11 +101,10 @@ export default (
       },
       {
         templates: {
-          getDocument: () => Document,
-          getMain: () => Main,
-          mainFilePath: path.resolve(__dirname, '../templates/Main.js'),
-          getError: () => Error,
-          errorFilePath: path.resolve(__dirname, '../templates/Error.js'),
+          document: path.resolve(__dirname, '../templates/Document.js'),
+          main: path.resolve(__dirname, '../templates/Main.js'),
+          loading: path.resolve(__dirname, '../templates/Loading.js'),
+          error: path.resolve(__dirname, '../templates/Error.js'),
         },
         routesData: [notFound],
       },

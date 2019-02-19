@@ -4,10 +4,10 @@ import path from 'path';
 
 import TerserPlugin from 'terser-webpack-plugin';
 
-import { type dataType, type routeDataType } from './getData';
+import { type dataType } from './getData';
 
-const CLIENT_PATH = path.resolve(__dirname, '../client/index.js');
-const ROOT_PATH = path.resolve(__dirname, '../client/Root.js');
+const CLIENT_PATH = path.resolve(__dirname, './client.js');
+const ROOT_PATH = path.resolve(__dirname, './Root.js');
 
 // TODO: add testing to check config
 export default (
@@ -61,42 +61,49 @@ export default (
         include: [CLIENT_PATH],
         loader: 'string-replace-loader',
         options: {
-          search: '/** replace routesData */',
-          replace: `[${routesData
-            .map(
-              // TODO: add testing to check data
-              ({ routePath, chunkName, filePath }: routeDataType): string =>
-                `{ ${[
-                  'exact: true',
-                  `path: ${JSON.stringify(routePath)}`,
-                  `key: '${chunkName}'`,
-                  `component: require('react-loadable')({ ${[
-                    `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
-                    `webpack: () => [ require.resolveWeak('${filePath}') ]`,
-                    `modules: [ '${filePath}' ]`,
-                    // TODO: add default loading
-                    `loading: ({ error }) => error ? error.message : 'loading'`,
-                    `render: require('./loadInitialProps')`,
-                  ].join(', ')} })`,
-                ].join(', ')} }`,
-            )
-            .join(', ')}] ||`,
-        },
-      },
-      {
-        include: [CLIENT_PATH, ROOT_PATH],
-        loader: 'string-replace-loader',
-        options: {
           multiple: [
             {
+              search: 'routesData = ',
+              replace: `routesData = [${routesData
+                .map(
+                  ({
+                    routePath,
+                    chunkName,
+                    filePath,
+                  }: $ElementType<
+                    $PropertyType<dataType, 'routesData'>,
+                    number,
+                  >): string =>
+                    `{ ${[
+                      'exact: true',
+                      `path: ${JSON.stringify(routePath)}`,
+                      `component: { ${[
+                        `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
+                        `chunkName: '${chunkName}'`,
+                      ].join(', ')} }`,
+                    ].join(', ')} }`,
+                )
+                .join(', ')}] ||`,
+              flags: 'm',
+              strict: true,
+            },
+            {
               search: '[\'|"](.|/)*templates/Main[\'|"]',
-              replace: `"${templates.mainFilePath}"`,
-              flags: 'g',
+              replace: `"${templates.main}"`,
+              flags: 'm',
+              strict: true,
+            },
+            {
+              search: '[\'|"](.|/)*templates/Loading[\'|"]',
+              replace: `"${templates.loading}"`,
+              flags: 'm',
+              strict: true,
             },
             {
               search: '[\'|"](.|/)*templates/Error[\'|"]',
-              replace: `"${templates.errorFilePath}"`,
-              flags: 'g',
+              replace: `"${templates.error}"`,
+              flags: 'm',
+              strict: true,
             },
           ],
         },

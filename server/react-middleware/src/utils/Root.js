@@ -13,7 +13,7 @@ import { lazy, Suspense, type lazyComponentType } from './ReactIsomorphic';
 
 export type propsType = {|
   Main: ComponentType<*>,
-  Loading: ComponentType<*>,
+  Loading: ComponentType<{}>,
   Error: ComponentType<errorPropsType>,
   routesData: $ReadOnlyArray<{|
     exact: true,
@@ -147,17 +147,13 @@ export default class Root extends React.PureComponent<propsType, stateType> {
 
     return (
       <Main {...mainInitialProps}>
-        <Suspense
-          fallback={React.createElement(() => React.createElement(store.Page))}
-        >
+        <Suspense fallback={<Loading />}>
           <Route
             children={(context: contextRouterType) =>
               React.createElement(getPage(routesData, context))
             }
           />
         </Suspense>
-
-        <Loading />
       </Main>
     );
   }

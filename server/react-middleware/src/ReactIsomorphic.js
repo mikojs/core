@@ -2,18 +2,27 @@
 // TODO: remove after react.lazy support server side
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
-import { ExecutionEnvironment } from 'fbjs';
+import { invariant, ExecutionEnvironment } from 'fbjs';
 
-const lazyComponents = {};
-const components = {};
+const preloadLazyComponents = {};
 
 export type lazyComponentType = () => Promise<{ default: ComponentType<*> }>;
 
 export const Suspense = ExecutionEnvironment.canUseEventListeners
   ? React.Suspense
-  : ({ children }: { children: NodeType }) => children;
+  : ((): ComponentType<{ children: NodeType }> => {
+      // TODO component should be ignored
+      // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+      const ServerSuspense = ({ children }: { children: NodeType }) => children;
+
+      return ServerSuspense;
+    })();
 
 /**
+ * Use special way to make React.lazy preload
+ * https://github.com/facebook/react/blob/dfabb77a97141baf07cfdad620949874e36516d7/packages/react-reconciler/src/ReactFiberLazyComponent.js
+ * https://github.com/facebook/react/blob/dfabb77a97141baf07cfdad620949874e36516d7/packages/shared/ReactLazyComponent.js
+ *
  * @example
  * lazy(import('component'), 'component')
  *
@@ -26,12 +35,22 @@ export const lazy = (
   lazyComponent: lazyComponentType,
   chunkName: string,
 ): ComponentType<*> => {
+  invariant(
+    chunkName,
+    '`chunk name` can not be null or undefined with ReactIsomorphic.lazy',
+  );
+
   if (ExecutionEnvironment.canUseEventListeners)
     return React.lazy(lazyComponent);
 
-  lazyComponents[chunkName] = lazyComponent;
+  if (!lazyComponent._result) preloadLazyComponents[chunkName] = lazyComponent;
 
-  return (props: {}) => React.createElement(components[chunkName], props);
+  // TODO component should be ignored
+  // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+  const ServerLazy = (props: {}) =>
+    React.createElement(lazyComponent._result, props);
+
+  return ServerLazy;
 };
 
 /**
@@ -42,11 +61,13 @@ export const lazy = (
  */
 export const preloadAll = () =>
   Promise.all(
-    Object.keys(lazyComponents).map(async (chunkName: string) => {
-      const { default: Component } = await lazyComponents[chunkName]();
+    Object.keys(preloadLazyComponents).map(async (chunkName: string) => {
+      const { default: Component } = await preloadLazyComponents[chunkName]();
 
-      delete lazyComponents[chunkName];
+      preloadLazyComponents[chunkName]._result = Component;
 
-      components[chunkName] = Component;
+      delete preloadLazyComponents[chunkName];
     }),
+  ).then(() =>
+    Object.keys(preloadLazyComponents).length === 0 ? null : preloadAll(),
   );

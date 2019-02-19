@@ -81,6 +81,7 @@ export default (
     renderToStaticMarkup(documentHead || null);
     renderToStaticMarkup(mainHead || null);
     // preload page
+    Root.preload({ ...Root.preload(), url: null });
     await Root.getPage(serverRoutesData, {
       location: { pathname: ctx.path, search: `?${ctx.querystring}` },
       staticContext: ctx,
@@ -96,9 +97,10 @@ export default (
           ...initialProps,
           mainInitialProps,
         })};`}</script>
+        {/*
         <script async src={commonsUrl} />
-        <script async src={`/assets/${initialProps.chunkName}.js`} />
         <script async src={`/assets${basename || ''}/client.js`} />
+        */}
       </Helmet>,
     );
 

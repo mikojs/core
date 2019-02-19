@@ -40,12 +40,12 @@ type contextRouterType = {|
 |};
 
 type storeType = {
-  url: string,
+  url: ?string,
   chunkName: string,
   initialProps: {
     head: ?NodeType,
   },
-  Page: () => NodeType,
+  Page: lazyComponentType,
 };
 
 const store: storeType = {};
@@ -88,28 +88,28 @@ const getPage = (
     },
   ] = matchRoutes(routesData, ctx.ctx.path);
 
-  if (!ctx.isServer && store.url === ctx.ctx.url) return store.Page;
+  if (store.url !== ctx.ctx.url)
+    store.Page = async (): $Call<lazyComponentType> => {
+      const { default: Component } = await loader();
+      const { head, ...initialProps } =
+        // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+        (await Component.getInitialProps?.(ctx)) || {};
+      // TODO component should be ignored
+      // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+      const Page = () => <Component {...initialProps} />;
 
-  return lazy(async (): $Call<lazyComponentType> => {
-    const { default: Component } = await loader();
-    const { head, ...initialProps } =
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-      (await Component.getInitialProps?.(ctx)) || {};
-    // TODO component should be ignored
-    // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-    const Page = () => <Component {...initialProps} />;
+      renderToStaticMarkup(head || null);
+      store.url = ctx.ctx.url;
+      store.chunkName = chunkName;
+      store.initialProps = {
+        ...initialProps,
+        head: ctx.isServer ? null : head,
+      };
 
-    renderToStaticMarkup(head || null);
-    store.url = ctx.ctx.url;
-    store.chunkName = chunkName;
-    store.initialProps = {
-      ...initialProps,
-      head: ctx.isServer ? null : head,
+      return { default: Page };
     };
-    store.Page = Page;
 
-    return { default: Page };
-  }, chunkName);
+  return lazy(store.Page, chunkName);
 };
 
 // TODO component should be ignored

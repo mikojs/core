@@ -94,6 +94,12 @@ export default (
               strict: true,
             },
             {
+              search: '[\'|"](.|/)*templates/Loading[\'|"]',
+              replace: `"${templates.loading}"`,
+              flags: 'm',
+              strict: true,
+            },
+            {
               search: '[\'|"](.|/)*templates/Error[\'|"]',
               replace: `"${templates.error}"`,
               flags: 'm',

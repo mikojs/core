@@ -48,12 +48,6 @@ const babel = config => {
 
   config.plugins.push(
     [
-      '@babel/proposal-decorators',
-      {
-        legacy: true,
-      },
-    ],
-    [
       '@babel/proposal-class-properties',
       {
         loose: true,

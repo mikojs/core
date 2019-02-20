@@ -8,21 +8,16 @@ import {
   type Middleware as koaMiddlewareType,
 } from 'koa';
 import React from 'react';
-import {
-  renderToStaticMarkup,
-  renderToString,
-  renderToNodeStream,
-} from 'react-dom/server';
+import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 import getStream from 'get-stream';
 
-import { preloadAll } from '../ReactIsomorphic';
+import { renderToNodeStream } from '../ReactIsomorphic';
 
 import Root from './Root';
-
-import { type dataType } from 'utils/getData';
+import { type dataType } from './getData';
 
 export default (
   basename: ?string,
@@ -77,11 +72,11 @@ export default (
       .createHmac('sha256', '@cat-org/react-middleware')
       .digest('hex');
 
-    // preload document
+    // preload document and main
     renderToStaticMarkup(documentHead || null);
     renderToStaticMarkup(mainHead || null);
 
-    // preload page
+    // preload Page
     Root.preload({
       url: '',
       chunkName: '',
@@ -90,11 +85,14 @@ export default (
         throw new Error('Can not use init Page');
       },
     });
-    await Root.getPage(serverRoutesData, {
+
+    const Page = Root.getPage(serverRoutesData, {
       location: { pathname: ctx.path, search: `?${ctx.querystring}` },
       staticContext: ctx,
     });
-    await preloadAll();
+
+    Page._result = (await Page._ctor()).default;
+    Page._status = 1;
 
     // render scripts
     renderToStaticMarkup(
@@ -130,7 +128,7 @@ export default (
     // render page
     multistream([
       upperDocument,
-      renderToNodeStream(
+      await renderToNodeStream(
         <Router location={ctx.url} context={ctx}>
           <Root
             Main={Main}

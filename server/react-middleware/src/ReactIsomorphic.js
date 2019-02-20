@@ -6,7 +6,10 @@ import { invariant, ExecutionEnvironment } from 'fbjs';
 
 const preloadLazyComponents = {};
 
-export type lazyComponentType = () => Promise<{ default: ComponentType<*> }>;
+type lazyDoneComponentType = ComponentType<*>;
+export type lazyComponentType = () => Promise<{
+  default: lazyDoneComponentType,
+}>;
 
 export const Suspense = ExecutionEnvironment.canUseEventListeners
   ? React.Suspense
@@ -34,23 +37,29 @@ export const Suspense = ExecutionEnvironment.canUseEventListeners
 export const lazy = (
   lazyComponent: lazyComponentType,
   chunkName: string,
-): ComponentType<*> => {
+): lazyDoneComponentType => {
   invariant(
     chunkName,
     '`chunk name` can not be null or undefined with ReactIsomorphic.lazy',
   );
 
-  if (ExecutionEnvironment.canUseEventListeners)
-    return React.lazy(lazyComponent);
+  const Component = ExecutionEnvironment.canUseEventListeners
+    ? React.lazy(lazyComponent)
+    : ((): lazyDoneComponentType => {
+        // TODO component should be ignored
+        // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+        const ServerLazy = (props: {}) =>
+          React.createElement(ServerLazy._result, props);
 
-  if (!lazyComponent._result) preloadLazyComponents[chunkName] = lazyComponent;
+        return ServerLazy;
+      })();
 
-  // TODO component should be ignored
-  // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-  const ServerLazy = (props: {}) =>
-    React.createElement(lazyComponent._result, props);
+  if (Component._status !== 1) {
+    Component._ctor = lazyComponent;
+    preloadLazyComponents[chunkName] = Component;
+  }
 
-  return ServerLazy;
+  return Component;
 };
 
 /**
@@ -62,12 +71,15 @@ export const lazy = (
 export const preloadAll = () =>
   Promise.all(
     Object.keys(preloadLazyComponents).map(async (chunkName: string) => {
-      const { default: Component } = await preloadLazyComponents[chunkName]();
+      const { default: Component } = await preloadLazyComponents[
+        chunkName
+      ]._ctor();
 
       preloadLazyComponents[chunkName]._result = Component;
+      preloadLazyComponents[chunkName]._status = 1;
 
       delete preloadLazyComponents[chunkName];
     }),
   ).then(() =>
-    Object.keys(preloadLazyComponents).length === 0 ? null : preloadAll(),
+    Object.keys(preloadLazyComponents).length === 0 ? [] : preloadAll(),
   );

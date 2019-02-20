@@ -80,27 +80,32 @@ export default (
     // preload document
     renderToStaticMarkup(documentHead || null);
     renderToStaticMarkup(mainHead || null);
+
     // preload page
-    Root.preload({ ...Root.preload(), url: null });
+    Root.preload({
+      url: '',
+      chunkName: '',
+      initialProps: {},
+      Page: async () => {
+        throw new Error('Can not use init Page');
+      },
+    });
     await Root.getPage(serverRoutesData, {
       location: { pathname: ctx.path, search: `?${ctx.querystring}` },
       staticContext: ctx,
     });
     await preloadAll();
 
-    // add scripts
-    const initialProps = Root.preload();
-
+    // render scripts
     renderToStaticMarkup(
       <Helmet>
         <script>{`var __CAT_DATA__ = ${JSON.stringify({
-          ...initialProps,
+          ...Root.preload(),
+          Page: null,
           mainInitialProps,
         })};`}</script>
-        {/*
-        <script async src={commonsUrl} />
-        <script async src={`/assets${basename || ''}/client.js`} />
-        */}
+        <script src={commonsUrl} async />
+        <script src={`/assets${basename || ''}/client.js`} async />
       </Helmet>,
     );
 

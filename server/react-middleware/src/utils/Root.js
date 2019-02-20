@@ -40,12 +40,12 @@ type contextRouterType = {|
 |};
 
 type storeType = {
-  url: ?string,
+  url: string,
   chunkName: string,
   initialProps: {
-    head: ?NodeType,
+    head?: NodeType,
   },
-  Page: lazyComponentType,
+  Page: $Call<typeof lazy, lazyComponentType, string>,
 };
 
 const store: storeType = {};
@@ -64,7 +64,7 @@ const store: storeType = {};
 const getPage = (
   routesData: $PropertyType<propsType, 'routesData'>,
   { location: { pathname, search }, staticContext }: contextRouterType,
-): ComponentType<*> => {
+): $PropertyType<storeType, 'Page'> => {
   const ctx = {
     ctx: staticContext || {
       path: pathname,
@@ -89,7 +89,7 @@ const getPage = (
   ] = matchRoutes(routesData, ctx.ctx.path);
 
   if (store.url !== ctx.ctx.url)
-    store.Page = async (): $Call<lazyComponentType> => {
+    store.Page = lazy(async (): $Call<lazyComponentType> => {
       const { default: Component } = await loader();
       const { head, ...initialProps } =
         // $FlowFixMe Flow does not yet support method or property calls in optional chains.
@@ -107,9 +107,9 @@ const getPage = (
       };
 
       return { default: Page };
-    };
+    }, chunkName);
 
-  return lazy(store.Page, chunkName);
+  return store.Page;
 };
 
 // TODO component should be ignored

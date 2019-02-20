@@ -2,7 +2,8 @@
 // TODO: remove after react.lazy support server side
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
-import { renderToNodeStream as reactRender } from 'react-dom/server';
+import { hydrate as reactClientRender } from 'react-dom';
+import { renderToNodeStream as reactServerRender } from 'react-dom/server';
 import { invariant, ExecutionEnvironment } from 'fbjs';
 
 const preloadLazyComponents = {};
@@ -112,18 +113,48 @@ const preload = (chunkNames: $ReadOnlyArray<string>, level?: number = 0) =>
 
 /**
  * @example
+ * hydrate(<div>test</div>, document.getElement('__CAT__'))
+ *
+ * @param {ReactNode} dom - react node to render
+ * @param {HTMLELement} main - main dom to mount
+ */
+export const hydrate = async (dom: NodeType, main: HTMLElement) => {
+  const chunkNames = window.__CHUNKS_NAMES__;
+
+  await preload(chunkNames);
+  reactClientRender(
+    <>
+      {dom}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `var __CHUNKS_NAMES__ = ${JSON.stringify(chunkNames)};`,
+        }}
+      />
+    </>,
+    main,
+  );
+};
+
+// TODO: fix update
+/**
+ * @example
  * renderToNodeStream(<div>test</div>);
  *
  * @param {ReactNode} dom - react node to render
  * @param {number} level - render level
+ * @param {Array} chunkNames - chunk names to hydrate
  *
  * @return {Stream} - render stream
  */
-export const renderToNodeStream = (dom: NodeType, level?: number = 0) =>
+export const renderToNodeStream = (
+  dom: NodeType,
+  level?: number = 0,
+  chunkNames?: $ReadOnlyArray<string> = [],
+) =>
   new Promise(resolve => {
     const stream = require('stream');
     const exportStream = new stream.Readable({ read: () => {} });
-    const renderStream = reactRender(dom);
+    const renderStream = reactServerRender(dom);
 
     renderStream.on('readable', () => {
       renderStream.read();
@@ -138,6 +169,11 @@ export const renderToNodeStream = (dom: NodeType, level?: number = 0) =>
       'end',
       async (): void => {
         if (Object.keys(preloadLazyComponents).length === 0) {
+          exportStream.push(
+            `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
+              chunkNames,
+            )};</script>`,
+          );
           exportStream.push(null);
 
           return resolve(exportStream);
@@ -154,9 +190,16 @@ export const renderToNodeStream = (dom: NodeType, level?: number = 0) =>
           return resolve(exportStream);
         }
 
-        await preload(Object.keys(preloadLazyComponents));
+        const preloadChunkNames = Object.keys(preloadLazyComponents);
 
-        return resolve(await renderToNodeStream(dom, level + 1));
+        await preload(preloadChunkNames);
+
+        return resolve(
+          await renderToNodeStream(dom, level + 1, [
+            ...chunkNames,
+            ...preloadChunkNames,
+          ]),
+        );
       },
     );
   });

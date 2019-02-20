@@ -1,13 +1,12 @@
 // @flow
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { setConfig } from 'react-hot-loader';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
-import { lazy, preloadAll } from '../ReactIsomorphic';
+import { lazy, hydrate } from '../ReactIsomorphic';
 
 import Root, { type propsType as rootPropsType } from './Root';
 
@@ -46,10 +45,9 @@ setConfig({
     ...store,
     Page: lazy(async () => ({ default: Page }), store.chunkName),
   });
-  await preloadAll();
 
   // render
-  ReactDOM.hydrate(
+  await hydrate(
     <Router>
       <Root
         Main={Main}

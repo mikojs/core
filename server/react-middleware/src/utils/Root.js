@@ -88,8 +88,14 @@ const getPage = (
     },
   ] = matchRoutes(routesData, ctx.ctx.path);
 
-  if (store.url !== ctx.ctx.url)
-    store.Page = lazy(async (): $Call<lazyComponentType> => {
+  if (store.url !== ctx.ctx.url) {
+    /**
+     * @example
+     * lazyPage()
+     *
+     * @return {Object} - return Page
+     */
+    const lazyPage = async (): $Call<lazyComponentType> => {
       const { default: Component } = await loader();
       const { head, ...initialProps } =
         // $FlowFixMe Flow does not yet support method or property calls in optional chains.
@@ -107,7 +113,11 @@ const getPage = (
       };
 
       return { default: Page };
-    }, chunkName);
+    };
+
+    store.Page = lazy(lazyPage, chunkName);
+    store.Page.lazyPage = lazyPage;
+  }
 
   return store.Page;
 };

@@ -165,41 +165,35 @@ export const renderToNodeStream = (
     renderStream.on('error', (error: Error) => {
       exportStream.destroy(error);
     });
-    renderStream.on(
-      'end',
-      async (): void => {
-        if (Object.keys(preloadLazyComponents).length === 0) {
-          exportStream.push(
-            `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
-              chunkNames,
-            )};</script>`,
-          );
-          exportStream.push(null);
+    renderStream.on('end', () => {
+      const preloadChunkNames = Object.keys(preloadLazyComponents);
 
-          return resolve(exportStream);
-        }
+      if (preloadChunkNames.length === 0) {
+        exportStream.push(
+          `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
+            chunkNames,
+          )};</script>`,
+        );
+        exportStream.push(null);
 
+        resolve(exportStream);
+      } else {
         // TODO: don not close server
-        if (level > 10) {
+        if (level > 10)
           exportStream.destroy(
             new Error(
               'Don not use too many `dynamic import` under other `dynamic import`. This is just an alternative plan before `react.lazy` support sever side rendering.',
             ),
           );
-
-          return resolve(exportStream);
-        }
-
-        const preloadChunkNames = Object.keys(preloadLazyComponents);
-
-        await preload(preloadChunkNames);
-
-        return resolve(
-          await renderToNodeStream(dom, level + 1, [
-            ...chunkNames,
-            ...preloadChunkNames,
-          ]),
-        );
-      },
-    );
+        else
+          resolve(
+            preload(preloadChunkNames).then(() =>
+              renderToNodeStream(dom, level + 1, [
+                ...chunkNames,
+                ...preloadChunkNames,
+              ]),
+            ),
+          );
+      }
+    });
   });

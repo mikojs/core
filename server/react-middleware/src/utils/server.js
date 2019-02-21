@@ -14,7 +14,7 @@ import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 import getStream from 'get-stream';
 
-import { renderToNodeStream } from '../ReactIsomorphic';
+import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 
 import Root from './Root';
 import { type dataType } from './getData';
@@ -77,7 +77,7 @@ export default (
     renderToStaticMarkup(mainHead || null);
 
     // preload Page
-    Root.preload({
+    const store = Root.preload({
       url: '',
       chunkName: '',
       initialProps: {},
@@ -85,20 +85,19 @@ export default (
         throw new Error('Can not use init Page');
       },
     });
-
-    const Page = Root.getPage(serverRoutesData, {
+    const { lazyPage } = Root.getPage(serverRoutesData, {
       location: { pathname: ctx.path, search: `?${ctx.querystring}` },
       staticContext: ctx,
     });
+    const Page = await lazyPage();
 
-    Page._result = (await Page._ctor()).default;
-    Page._status = 1;
+    store.Page = lazy(async () => Page, store.chunkName);
 
-    // render scripts
+    // preload scripts
     renderToStaticMarkup(
       <Helmet>
         <script>{`var __CAT_DATA__ = ${JSON.stringify({
-          ...Root.preload(),
+          ...store,
           Page: null,
           mainInitialProps,
         })};`}</script>

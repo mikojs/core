@@ -1,11 +1,12 @@
 // @flow
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { setConfig } from 'react-hot-loader';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
+
+import { lazy, hydrate } from '../ReactIsomorphic';
 
 import Root, { type propsType as rootPropsType } from './Root';
 
@@ -20,12 +21,7 @@ setConfig({
 
 (async () => {
   /** #__PURE__ */ const routesData = [];
-  const {
-    mainInitialProps,
-    chunkName,
-    initialProps,
-    ...data
-  } = window.__CAT_DATA__;
+  const { mainInitialProps, ...store } = window.__CAT_DATA__;
 
   // preload page
   const {
@@ -33,9 +29,9 @@ setConfig({
   } =
     routesData.find(
       ({
-        component,
+        component: { chunkName },
       }: $ElementType<$PropertyType<rootPropsType, 'routesData'>, number>) =>
-        chunkName === component.chunkName,
+        store.chunkName === chunkName,
     ) ||
     (() => {
       throw new Error('Can not find page component');
@@ -43,17 +39,15 @@ setConfig({
   const { default: Component } = await loader();
   // TODO component should be ignored
   // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-  const Page = () => <Component {...initialProps} />;
+  const Page = () => <Component {...store.initialProps} />;
 
   Root.preload({
-    ...data,
-    Page,
-    chunkName,
-    initialProps,
+    ...store,
+    Page: lazy(async () => ({ default: Page }), store.chunkName),
   });
 
   // render
-  ReactDOM.hydrate(
+  await hydrate(
     <Router>
       <Root
         Main={Main}

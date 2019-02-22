@@ -11,17 +11,17 @@ import React from 'react';
 import {
   renderToStaticMarkup,
   renderToString,
-  renderToNodeStream,
+  renderToNodeStream as reactServerRender,
 } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 import getStream from 'get-stream';
 
-import Root from './Root';
-import { preloadAll } from './ReactIsomorphic';
+import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 
-import { type dataType } from 'utils/getData';
+import Root from './Root';
+import { type dataType } from './getData';
 
 export default (
   basename: ?string,
@@ -76,28 +76,41 @@ export default (
       .createHmac('sha256', '@cat-org/react-middleware')
       .digest('hex');
 
-    // preload document
+    // preload document and main
     renderToStaticMarkup(documentHead || null);
     renderToStaticMarkup(mainHead || null);
-    // preload page
-    await Root.getPage(serverRoutesData, {
+
+    // preload Page
+    const store = Root.preload({
+      url: '',
+      chunkName: '',
+      initialProps: {},
+      Page: async () => {
+        throw new Error('Can not use init Page');
+      },
+      lazyPage: async () => {
+        throw new Error('Can not use init lazy Page');
+      },
+    });
+    Root.getPage(serverRoutesData, {
       location: { pathname: ctx.path, search: `?${ctx.querystring}` },
       staticContext: ctx,
     });
-    await preloadAll();
+    const Page = await store.lazyPage();
 
-    // add scripts
-    const initialProps = Root.preload();
+    store.Page = lazy(async () => Page, store.chunkName);
 
+    // preload scripts
     renderToStaticMarkup(
       <Helmet>
         <script>{`var __CAT_DATA__ = ${JSON.stringify({
-          ...initialProps,
+          ...store,
+          Page: null,
+          lazyPage: null,
           mainInitialProps,
         })};`}</script>
-        <script async src={commonsUrl} />
-        <script async src={`/assets/${initialProps.chunkName}.js`} />
-        <script async src={`/assets${basename || ''}/client.js`} />
+        <script src={commonsUrl} async />
+        <script src={`/assets${basename || ''}/client.js`} async />
       </Helmet>,
     );
 
@@ -122,7 +135,7 @@ export default (
     // render page
     multistream([
       upperDocument,
-      renderToNodeStream(
+      await renderToNodeStream(
         <Router location={ctx.url} context={ctx}>
           <Root
             Main={Main}
@@ -132,6 +145,7 @@ export default (
             mainInitialProps={mainInitialProps}
           />
         </Router>,
+        { stream, reactServerRender },
       ),
       lowerDocument,
     ])

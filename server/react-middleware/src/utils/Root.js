@@ -8,8 +8,7 @@ import { type Context as koaContextType } from 'koa';
 import { ExecutionEnvironment } from 'fbjs';
 
 import { type errorPropsType } from '../types';
-
-import { lazy, Suspense, type lazyComponentType } from './ReactIsomorphic';
+import { lazy, Suspense, type lazyComponentType } from '../ReactIsomorphic';
 
 export type propsType = {|
   Main: ComponentType<*>,
@@ -44,9 +43,10 @@ type storeType = {
   url: string,
   chunkName: string,
   initialProps: {
-    head: ?NodeType,
+    head?: NodeType,
   },
-  Page: () => NodeType,
+  Page: $Call<typeof lazy, lazyComponentType, string>,
+  lazyPage: lazyComponentType,
 };
 
 const store: storeType = {};
@@ -65,7 +65,7 @@ const store: storeType = {};
 const getPage = (
   routesData: $PropertyType<propsType, 'routesData'>,
   { location: { pathname, search }, staticContext }: contextRouterType,
-): ComponentType<*> => {
+): $PropertyType<storeType, 'Page'> => {
   const ctx = {
     ctx: staticContext || {
       path: pathname,
@@ -89,28 +89,38 @@ const getPage = (
     },
   ] = matchRoutes(routesData, ctx.ctx.path);
 
-  if (!ctx.isServer && store.url === ctx.ctx.url) return store.Page;
+  if (store.url !== ctx.ctx.url) {
+    /**
+     * @example
+     * lazyPage()
+     *
+     * @return {Object} - return Page
+     */
+    const lazyPage = async (): $Call<lazyComponentType> => {
+      const { default: Component } = await loader();
+      const { head, ...initialProps } =
+        // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+        (await Component.getInitialProps?.(ctx)) || {};
+      // TODO component should be ignored
+      // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+      const Page = () => <Component {...initialProps} />;
 
-  return lazy(async (): $Call<lazyComponentType> => {
-    const { default: Component } = await loader();
-    const { head, ...initialProps } =
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-      (await Component.getInitialProps?.(ctx)) || {};
-    // TODO component should be ignored
-    // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-    const Page = () => <Component {...initialProps} />;
+      renderToStaticMarkup(head || null);
+      store.url = ctx.ctx.url;
+      store.chunkName = chunkName;
+      store.initialProps = {
+        ...initialProps,
+        head: ctx.isServer ? null : head,
+      };
 
-    renderToStaticMarkup(head || null);
-    store.url = ctx.ctx.url;
-    store.chunkName = chunkName;
-    store.initialProps = {
-      ...initialProps,
-      head: ctx.isServer ? null : head,
+      return { default: Page };
     };
-    store.Page = Page;
 
-    return { default: Page };
-  }, chunkName);
+    store.Page = lazy(lazyPage, chunkName);
+    store.lazyPage = lazyPage;
+  }
+
+  return store.Page;
 };
 
 // TODO component should be ignored

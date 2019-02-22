@@ -9,6 +9,7 @@ import { renderToNodeStream as reactServerRender } from 'react-dom/server';
 import { invariant, ExecutionEnvironment } from 'fbjs';
 
 const preloadLazyComponents = {};
+const storeChunkNames = [];
 
 type lazyDoneComponentType = ComponentType<*>;
 export type lazyComponentType = () => Promise<{
@@ -52,10 +53,14 @@ export const lazy = (
     : ((): lazyDoneComponentType => {
         // TODO component should be ignored
         // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-        const ServerLazy = (props: {}) =>
-          !ServerLazy._result
+        const ServerLazy = (props: {}) => {
+          if (!storeChunkNames.includes(chunkName))
+            storeChunkNames.push(chunkName);
+
+          return !ServerLazy._result
             ? null
             : React.createElement(ServerLazy._result, props);
+        };
 
         return ServerLazy;
       })();
@@ -142,7 +147,6 @@ export const hydrate = async (dom: NodeType, main: HTMLElement) => {
  * @param {ReactNode} dom - react node to render
  * @param {Stream} stream - node stream
  * @param {number} level - render level
- * @param {Array} chunkNames - chunk names to hydrate
  *
  * @return {Stream} - render stream
  */
@@ -150,7 +154,6 @@ export const renderToNodeStream = (
   dom: NodeType,
   stream: streamType,
   level?: number = 0,
-  chunkNames?: $ReadOnlyArray<string> = [],
 ) =>
   new Promise<$Call<ReadableType>>(resolve => {
     const exportStream = new stream.Readable();
@@ -170,19 +173,17 @@ export const renderToNodeStream = (
       if (preloadChunkNames.length === 0) {
         exportStream.push(
           `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
-            chunkNames,
+            storeChunkNames,
           )};</script>`,
         );
         exportStream.push(null);
+        storeChunkNames.splice(0, storeChunkNames.length);
 
         resolve(exportStream);
       } else
         resolve(
           preload(preloadChunkNames).then(() =>
-            renderToNodeStream(dom, stream, level + 1, [
-              ...chunkNames,
-              ...preloadChunkNames,
-            ]),
+            renderToNodeStream(dom, stream, level + 1),
           ),
         );
     });

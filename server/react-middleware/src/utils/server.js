@@ -8,7 +8,11 @@ import {
   type Middleware as koaMiddlewareType,
 } from 'koa';
 import React from 'react';
-import { renderToStaticMarkup, renderToString } from 'react-dom/server';
+import {
+  renderToStaticMarkup,
+  renderToString,
+  renderToNodeStream as reactServerRender,
+} from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
@@ -141,7 +145,7 @@ export default (
             mainInitialProps={mainInitialProps}
           />
         </Router>,
-        stream,
+        { stream, reactServerRender },
       ),
       lowerDocument,
     ])

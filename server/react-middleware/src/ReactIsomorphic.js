@@ -5,7 +5,7 @@ import typeof streamType, { Readable as ReadableType } from 'stream';
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
 import { hydrate as reactClientRender } from 'react-dom';
-import { renderToNodeStream as reactServerRender } from 'react-dom/server';
+import { type renderToNodeStream as renderToNodeStreamType } from 'react-dom/server';
 import { invariant, ExecutionEnvironment } from 'fbjs';
 
 const preloadLazyComponents = {};
@@ -139,7 +139,6 @@ export const hydrate = async (dom: NodeType, main: HTMLElement) => {
   );
 };
 
-// TODO: fix update
 /**
  * @example
  * renderToNodeStream(<div>test</div>, stream);
@@ -152,7 +151,10 @@ export const hydrate = async (dom: NodeType, main: HTMLElement) => {
  */
 export const renderToNodeStream = (
   dom: NodeType,
-  stream: streamType,
+  {
+    stream,
+    reactServerRender,
+  }: { stream: streamType, reactServerRender: renderToNodeStreamType },
   level?: number = 0,
 ) =>
   new Promise<$Call<ReadableType>>(resolve => {
@@ -183,7 +185,7 @@ export const renderToNodeStream = (
       } else
         resolve(
           preload(preloadChunkNames).then(() =>
-            renderToNodeStream(dom, stream, level + 1),
+            renderToNodeStream(dom, { stream, reactServerRender }, level + 1),
           ),
         );
     });

@@ -15,7 +15,7 @@
     "debug": "^4.1.1",
     "koa": "^2.7.0",
     "koa-router": "^7.4.0",
-    "ora": "^3.0.0"
+    "ora": "^3.1.0"
   },
   "devDependencies": {
     "@cat-org/default-middleware": "^1.0.0-beta.13",

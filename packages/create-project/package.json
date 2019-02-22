@@ -15,7 +15,7 @@
     "chalk": "^2.4.2",
     "commander": "^2.19.0",
     "debug": "^4.1.1",
-    "envinfo": "^6.0.1",
+    "envinfo": "^7.0.0",
     "execa": "^1.0.0",
     "fbjs": "^1.0.0",
     "inquirer": "^6.2.2",

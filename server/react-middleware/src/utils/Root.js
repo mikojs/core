@@ -46,6 +46,7 @@ type storeType = {
     head?: NodeType,
   },
   Page: $Call<typeof lazy, lazyComponentType, string>,
+  lazyPage: lazyComponentType,
 };
 
 const store: storeType = {};
@@ -116,7 +117,7 @@ const getPage = (
     };
 
     store.Page = lazy(lazyPage, chunkName);
-    store.Page.lazyPage = lazyPage;
+    store.lazyPage = lazyPage;
   }
 
   return store.Page;

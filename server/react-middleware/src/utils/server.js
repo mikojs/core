@@ -84,12 +84,15 @@ export default (
       Page: async () => {
         throw new Error('Can not use init Page');
       },
+      lazyPage: async () => {
+        throw new Error('Can not use init lazy Page');
+      },
     });
-    const { lazyPage } = Root.getPage(serverRoutesData, {
+    Root.getPage(serverRoutesData, {
       location: { pathname: ctx.path, search: `?${ctx.querystring}` },
       staticContext: ctx,
     });
-    const Page = await lazyPage();
+    const Page = await store.lazyPage();
 
     store.Page = lazy(async () => Page, store.chunkName);
 
@@ -99,6 +102,7 @@ export default (
         <script>{`var __CAT_DATA__ = ${JSON.stringify({
           ...store,
           Page: null,
+          lazyPage: null,
           mainInitialProps,
         })};`}</script>
         <script src={commonsUrl} async />
@@ -137,6 +141,7 @@ export default (
             mainInitialProps={mainInitialProps}
           />
         </Router>,
+        stream,
       ),
       lowerDocument,
     ])

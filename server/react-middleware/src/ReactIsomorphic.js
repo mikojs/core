@@ -1,6 +1,8 @@
 // @flow
 // TODO: remove after react.lazy support server side
 
+import typeof streamType, { Readable as ReadableType } from 'stream';
+
 import React, { type Node as NodeType, type ComponentType } from 'react';
 import { hydrate as reactClientRender } from 'react-dom';
 import { renderToNodeStream as reactServerRender } from 'react-dom/server';
@@ -75,41 +77,38 @@ export const lazy = (
  *
  * @return {Promise} - null;
  */
-const preload = (chunkNames: $ReadOnlyArray<string>, level?: number = 0) =>
-  Promise.all(
-    chunkNames.map(
-      async (chunkName: string): ?string => {
-        if (!preloadLazyComponents[chunkName]) return chunkName;
-        if (preloadLazyComponents[chunkName]._status !== 1) {
-          preloadLazyComponents[
-            chunkName
-          ]._result = (await preloadLazyComponents[chunkName]._ctor()).default;
-          preloadLazyComponents[chunkName]._status = 1;
-        }
+const preload = async (
+  chunkNames: $ReadOnlyArray<string>,
+  level?: number = 0,
+) => {
+  if (chunkNames.length === 0) return;
 
-        delete preloadLazyComponents[chunkName];
+  if (level > 10)
+    throw new Error(`Can not find those chunks: ${JSON.stringify(chunkNames)}`);
 
-        return null;
-      },
-    ),
-  ).then(
-    (
-      resultChunkNames: $ReadOnlyArray<?string>,
-    ): $Call<preload, $ReadOnlyArray<string>> => {
-      if (level > 10)
-        throw new Error(
-          `Can not find those chunks: ${JSON.stringify(chunkNames)}`,
-        );
+  const newChunkNames = [];
 
-      const newChunkNames = resultChunkNames.filter(
-        (chunkName: ?string) => chunkName,
-      );
+  await Promise.all(
+    chunkNames.map(async (chunkName: string) => {
+      if (!preloadLazyComponents[chunkName]) {
+        newChunkNames.push(chunkName);
+        return;
+      }
 
-      return newChunkNames.length === 0
-        ? null
-        : preload(newChunkNames, level + 1);
-    },
+      if (preloadLazyComponents[chunkName]._status !== 1) {
+        preloadLazyComponents[chunkName]._result = (await preloadLazyComponents[
+          chunkName
+        ]._ctor()).default;
+        preloadLazyComponents[chunkName]._status = 1;
+      }
+
+      delete preloadLazyComponents[chunkName];
+    }),
   );
+
+  await preload(newChunkNames, level + 1);
+  return;
+};
 
 /**
  * @example
@@ -138,9 +137,10 @@ export const hydrate = async (dom: NodeType, main: HTMLElement) => {
 // TODO: fix update
 /**
  * @example
- * renderToNodeStream(<div>test</div>);
+ * renderToNodeStream(<div>test</div>, stream);
  *
  * @param {ReactNode} dom - react node to render
+ * @param {Stream} stream - node stream
  * @param {number} level - render level
  * @param {Array} chunkNames - chunk names to hydrate
  *
@@ -148,22 +148,21 @@ export const hydrate = async (dom: NodeType, main: HTMLElement) => {
  */
 export const renderToNodeStream = (
   dom: NodeType,
+  stream: streamType,
   level?: number = 0,
   chunkNames?: $ReadOnlyArray<string> = [],
 ) =>
-  new Promise(resolve => {
-    const stream = require('stream');
-    const exportStream = new stream.Readable({ read: () => {} });
+  new Promise<$Call<ReadableType>>(resolve => {
+    const exportStream = new stream.Readable();
     const renderStream = reactServerRender(dom);
 
-    renderStream.on('readable', () => {
-      renderStream.read();
-    });
+    if (level > 10)
+      throw new Error(
+        'Don not use too many `dynamic import` under other `dynamic import`. This is just an alternative plan before `react.lazy` support sever side rendering.',
+      );
+
     renderStream.on('data', (chunk: Buffer | string) => {
       exportStream.push(chunk);
-    });
-    renderStream.on('error', (error: Error) => {
-      exportStream.destroy(error);
     });
     renderStream.on('end', () => {
       const preloadChunkNames = Object.keys(preloadLazyComponents);
@@ -177,23 +176,14 @@ export const renderToNodeStream = (
         exportStream.push(null);
 
         resolve(exportStream);
-      } else {
-        // TODO: don not close server
-        if (level > 10)
-          exportStream.destroy(
-            new Error(
-              'Don not use too many `dynamic import` under other `dynamic import`. This is just an alternative plan before `react.lazy` support sever side rendering.',
-            ),
-          );
-        else
-          resolve(
-            preload(preloadChunkNames).then(() =>
-              renderToNodeStream(dom, level + 1, [
-                ...chunkNames,
-                ...preloadChunkNames,
-              ]),
-            ),
-          );
-      }
+      } else
+        resolve(
+          preload(preloadChunkNames).then(() =>
+            renderToNodeStream(dom, stream, level + 1, [
+              ...chunkNames,
+              ...preloadChunkNames,
+            ]),
+          ),
+        );
     });
   });

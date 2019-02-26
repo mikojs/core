@@ -26,6 +26,7 @@ describe('react middleware', () => {
     ${'/?key=value'}              | ${['pages/index']}
     ${'/otherPath'}               | ${['pages/otherPath']}
     ${'/otherFolder/otherFolder'} | ${['pages/otherFolder/otherFolder/index']}
+    ${'/custom'}                  | ${['pages/custom/index']}
   `(
     'get $urlPath',
     async ({
@@ -35,15 +36,17 @@ describe('react middleware', () => {
       urlPath: string,
       chunkNames: $ReadOnlyArray<string>,
     }) => {
+      const isCustom = /custom/.test(urlPath);
+
       expect(
         await fetch(`${domain}${urlPath}`).then((res: ResponseType) =>
           res.text(),
         ),
       ).toBe(
         [
-          '<html><head></head><body>',
+          isCustom ? '' : '<html><head></head><body>',
           '<main id="__CAT__">',
-          `<div>${urlPath.replace(/\?.*$/, '')}</div>`,
+          `<div>${isCustom ? 'test data' : urlPath.replace(/\?.*$/, '')}</div>`,
           `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
             chunkNames,
           )};</script>`,
@@ -51,17 +54,29 @@ describe('react middleware', () => {
           `<script>var __CAT_DATA__ = ${JSON.stringify({
             url: urlPath,
             chunkName: chunkNames[0],
-            initialProps: {
-              path: urlPath.replace(/\?.*$/, ''),
-              head: null,
-            },
+            initialProps: isCustom
+              ? {
+                  head: null,
+                }
+              : {
+                  path: urlPath.replace(/\?.*$/, ''),
+                  head: null,
+                },
             Page: null,
             lazyPage: null,
-            mainInitialProps: {},
+            mainInitialProps: isCustom
+              ? {
+                  value: 'test data',
+                }
+              : {},
           }).replace(/"/g, '&quot;')};</script>`,
-          '<script src="/assets/commons.js" async=""></script>',
-          '<script src="/assets/client.js" async=""></script>',
-          '</body></html>',
+          `<script src="/assets${
+            isCustom ? '/custom' : ''
+          }/commons.js" async=""></script>`,
+          `<script src="/assets${
+            isCustom ? '/custom' : ''
+          }/client.js" async=""></script>`,
+          isCustom ? '' : '</body></html>',
         ].join(''),
       );
     },

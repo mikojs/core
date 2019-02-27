@@ -82,6 +82,18 @@ describe('react middleware', () => {
     },
   );
 
+  test.each`
+    urlPath
+    ${'/error'}
+    ${'/custom/error'}
+  `('get Error', async ({ urlPath }: { urlPath: string }) => {
+    expect(
+      await fetch(`${domain}${urlPath}`).then((res: ResponseType) =>
+        res.text(),
+      ),
+    ).toMatch(/<main id="__CAT__">.*custom error.*<\/main>/);
+  });
+
   afterAll(() => {
     server.close();
   });

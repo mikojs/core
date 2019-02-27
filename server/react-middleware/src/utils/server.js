@@ -64,7 +64,6 @@ export default (
 
     const Document = require(templates.document);
     const Main = require(templates.main);
-    const Loading = require(templates.loading);
     const ErrorComponent = require(templates.error);
     const { head: documentHead, ...documentInitialProps } =
       // $FlowFixMe Flow does not yet support method or property calls in optional chains.
@@ -139,7 +138,7 @@ export default (
         <Router location={ctx.url} context={ctx}>
           <Root
             Main={Main}
-            Loading={Loading}
+            Loading={() => null}
             Error={ErrorComponent}
             routesData={serverRoutesData}
             mainInitialProps={mainInitialProps}

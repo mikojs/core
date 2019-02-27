@@ -5,13 +5,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactLoading from 'react-loading';
-import { ExecutionEnvironment } from 'fbjs';
 
 import styles from './styles/loading';
 
 type propsType = {};
 
-class Loading extends React.PureComponent<propsType> {
+export default class Loading extends React.PureComponent<propsType> {
   rootDOM: HTMLElement;
   loadingDOM: HTMLElement;
 
@@ -43,7 +42,3 @@ class Loading extends React.PureComponent<propsType> {
     );
   }
 }
-
-export default (ExecutionEnvironment.canUseEventListeners
-  ? Loading
-  : () => null);

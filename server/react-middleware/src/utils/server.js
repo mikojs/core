@@ -53,7 +53,7 @@ export default (
     }
 
     // TODO: just for html
-    if (/\.ico/.test(ctx.path)) {
+    if (!new RegExp(basename || '').test(ctx.path) || /\.ico/.test(ctx.path)) {
       await next();
       return;
     }

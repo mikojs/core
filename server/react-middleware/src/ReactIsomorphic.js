@@ -158,7 +158,7 @@ export const renderToNodeStream = (
   level?: number = 0,
 ) =>
   new Promise<$Call<ReadableType>>(resolve => {
-    const exportStream = new stream.Readable();
+    const exportStream = new stream.Readable({ read: () => {} });
     const renderStream = reactServerRender(dom);
 
     if (level > 10)
@@ -166,6 +166,12 @@ export const renderToNodeStream = (
         'Don not use too many `dynamic import` under other `dynamic import`. This is just an alternative plan before `react.lazy` support sever side rendering.',
       );
 
+    renderStream.on('error', (e: Error) => {
+      resolve(exportStream);
+      setTimeout(() => {
+        exportStream.destroy(e);
+      }, 100);
+    });
     renderStream.on('data', (chunk: Buffer | string) => {
       exportStream.push(chunk);
     });

@@ -18,7 +18,7 @@ describe('default middleware', () => {
 
     app.use(defaultMiddle);
     app.use(async (ctx: koaContextType, next: () => Promise<void>) => {
-      ctx.body = ctx.request.body;
+      if (ctx.request.body instanceof Object) ctx.body = ctx.request.body;
       await next();
     });
 

@@ -5,9 +5,10 @@
  */
 
 import { type ServerType as koaServerType } from 'koa';
-import fetch, { type Response as ResponseType } from 'node-fetch';
+import fetch from 'node-fetch';
 
 import runServer from './__ignore__/server';
+import * as constants from './__ignore__/constants';
 
 let server: koaServerType;
 let domain: string;
@@ -21,47 +22,54 @@ describe('react middleware', () => {
   });
 
   test.each`
-    urlPath                       | chunkNames
-    ${'/'}                        | ${['pages/index']}
-    ${'/?key=value'}              | ${['pages/index']}
-    ${'/otherPath'}               | ${['pages/otherPath']}
-    ${'/otherFolder/otherFolder'} | ${['pages/otherFolder/otherFolder/index']}
-    ${'/custom'}                  | ${['pages/custom/index']}
+    urlPath                       | chunkNames                                 | head                      | main                          | initialProps
+    ${'/'}                        | ${['pages/index']}                         | ${constants.head}         | ${'/'}                        | ${{ path: '/', head: null }}
+    ${'/?key=value'}              | ${['pages/index']}                         | ${constants.head}         | ${'/'}                        | ${{ path: '/', head: null }}
+    ${'/otherPath'}               | ${['pages/otherPath']}                     | ${constants.head}         | ${'/otherPath'}               | ${{ path: '/otherPath', head: null }}
+    ${'/otherFolder/otherFolder'} | ${['pages/otherFolder/otherFolder/index']} | ${constants.head}         | ${'/otherFolder/otherFolder'} | ${{ path: '/otherFolder/otherFolder', head: null }}
+    ${'/custom'}                  | ${['pages/custom/index']}                  | ${''}                     | ${'test data'}                | ${constants.initialProps}
+    ${'/notFound'}                | ${['pages/notFound']}                      | ${constants.notFoundHead} | ${constants.notFoundMain}     | ${constants.initialProps}
+    ${'/custom/notFound'}         | ${['pages/custom/notFound']}               | ${''}                     | ${'Page not found'}           | ${constants.initialProps}
+    ${'/error'}                   | ${['pages/error']}                         | ${constants.head}         | ${constants.errorMain}        | ${constants.initialProps}
+    ${'/custom/error'}            | ${['pages/custom/error']}                  | ${''}                     | ${'custom error'}             | ${constants.initialProps}
   `(
     'get $urlPath',
     async ({
       urlPath,
       chunkNames,
+      head,
+      main,
+      initialProps,
     }: {
       urlPath: string,
       chunkNames: $ReadOnlyArray<string>,
+      head: string,
+      main: string,
+      initialProps: { path?: string, head: null },
     }) => {
       const isCustom = /custom/.test(urlPath);
+      const result = await fetch(`${domain}${urlPath}`);
 
+      expect(result.status).toBe(urlPath === '/notFound' ? 404 : 200);
       expect(
-        await fetch(`${domain}${urlPath}`).then((res: ResponseType) =>
-          res.text(),
-        ),
+        (await result.text())
+          .replace(/ style="[\w;:,()\-.%# ]*"/g, '')
+          .replace(/ data-reactroot=""/g, ''),
       ).toBe(
         [
-          isCustom ? '' : '<html><head></head><body>',
+          head,
           '<main id="__CAT__">',
-          `<div>${isCustom ? 'test data' : urlPath.replace(/\?.*$/, '')}</div>`,
-          `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
-            chunkNames,
-          )};</script>`,
+          `<div>${main}</div>`,
+          /error/.test(urlPath)
+            ? ''
+            : `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
+                chunkNames,
+              )};</script>`,
           '</main>',
           `<script>var __CAT_DATA__ = ${JSON.stringify({
             url: urlPath,
             chunkName: chunkNames[0],
-            initialProps: isCustom
-              ? {
-                  head: null,
-                }
-              : {
-                  path: urlPath.replace(/\?.*$/, ''),
-                  head: null,
-                },
+            initialProps,
             Page: null,
             lazyPage: null,
             mainInitialProps: isCustom
@@ -81,18 +89,6 @@ describe('react middleware', () => {
       );
     },
   );
-
-  test.each`
-    urlPath
-    ${'/error'}
-    ${'/custom/error'}
-  `('get Error', async ({ urlPath }: { urlPath: string }) => {
-    expect(
-      await fetch(`${domain}${urlPath}`).then((res: ResponseType) =>
-        res.text(),
-      ),
-    ).toMatch(/<main id="__CAT__">.*custom error.*<\/main>/);
-  });
 
   afterAll(() => {
     server.close();

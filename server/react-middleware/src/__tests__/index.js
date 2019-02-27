@@ -66,22 +66,24 @@ describe('react middleware', () => {
                 chunkNames,
               )};</script>`,
           '</main>',
-          `<script>var __CAT_DATA__ = ${JSON.stringify({
-            url: urlPath,
-            chunkName: chunkNames[0],
-            initialProps,
-            Page: null,
-            lazyPage: null,
-            mainInitialProps: isCustom
-              ? {
-                  value: 'test data',
-                }
-              : {},
-          }).replace(/"/g, '&quot;')};</script>`,
-          `<script src="/assets${
+          `<script data-react-helmet="true">var __CAT_DATA__ = ${JSON.stringify(
+            {
+              url: urlPath,
+              chunkName: chunkNames[0],
+              initialProps,
+              Page: null,
+              lazyPage: null,
+              mainInitialProps: isCustom
+                ? {
+                    value: 'test data',
+                  }
+                : {},
+            },
+          )};</script>`,
+          `<script data-react-helmet="true" src="/assets${
             isCustom ? '/custom' : ''
           }/commons.js" async=""></script>`,
-          `<script src="/assets${
+          `<script data-react-helmet="true" src="/assets${
             isCustom ? '/custom' : ''
           }/client.js" async=""></script>`,
           isCustom ? '' : '</body></html>',

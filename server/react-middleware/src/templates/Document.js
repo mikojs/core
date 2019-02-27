@@ -3,28 +3,42 @@
 // TODO component should be ignored
 
 import React, { type Node as NodeType } from 'react';
-import { type Helmet as HelmetType } from 'react-helmet';
+import { Helmet } from 'react-helmet';
 
-// TODO: add default head
-const Document = ({
-  helmet,
-  children,
-}: {
-  helmet: $Call<$PropertyType<Class<HelmetType>, 'renderStatic'>>,
+type propsType = {
+  helmet: $Call<$PropertyType<Class<Helmet>, 'renderStatic'>>,
   children: NodeType,
-}) => (
-  <html>
-    <head>
-      {helmet.title.toComponent()}
-      {helmet.meta.toComponent()}
-      {helmet.link.toComponent()}
-    </head>
+};
 
-    <body>
-      {children}
-      {helmet.script.toComponent()}
-    </body>
-  </html>
-);
+export default class Document extends React.PureComponent<propsType> {
+  static getInitialProps = () => ({
+    // Reference: https://github.com/joshbuchea/HEAD
+    head: (
+      <Helmet>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-export default Document;
+        <title>cat-org</title>
+      </Helmet>
+    ),
+  });
+
+  render() {
+    const { helmet, children } = this.props;
+
+    return (
+      <html>
+        <head>
+          {helmet.meta.toComponent()}
+          {helmet.title.toComponent()}
+          {helmet.link.toComponent()}
+        </head>
+
+        <body>
+          {children}
+          {helmet.script.toComponent()}
+        </body>
+      </html>
+    );
+  }
+}

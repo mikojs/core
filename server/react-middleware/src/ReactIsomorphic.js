@@ -110,8 +110,8 @@ const preload = async (
       delete preloadLazyComponents[chunkName];
     }),
   );
-
   await preload(newChunkNames, level + 1);
+
   return;
 };
 

@@ -92,6 +92,13 @@ describe('react middleware', () => {
     },
   );
 
+  test('handle commons not found', async () => {
+    const result = await fetch(`${domain}/assets/commons.js`);
+
+    expect(result.status).toBe(200);
+    expect(await result.text()).toBe('');
+  });
+
   afterAll(() => {
     server.close();
   });

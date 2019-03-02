@@ -1,10 +1,11 @@
 // @flow
 
-import React from 'react';
+import React, { type ComponentType } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { setConfig } from 'react-hot-loader';
+import { emptyFunction } from 'fbjs';
 
-import { handleUnhandledRejection } from '@cat-org/utils';
+import { mockChoice, handleUnhandledRejection } from '@cat-org/utils';
 
 import { lazy, hydrate } from '../ReactIsomorphic';
 
@@ -19,10 +20,18 @@ setConfig({
   errorReporter: ErrorComponent,
 });
 
-(async () => {
-  /** #__PURE__ */ const routesData = [];
+/**
+ * @example
+ * render([])
+ *
+ * @param {Array} routesData - routes data
+ *
+ * @return {Component} - page component
+ */
+const render = async (
+  routesData: $PropertyType<rootPropsType, 'routesData'>,
+): Promise<ComponentType<{}>> => {
   const { mainInitialProps, ...store } = window.__CAT_DATA__;
-
   // preload page
   const {
     component: { loader },
@@ -62,4 +71,15 @@ setConfig({
         throw new Error('Can not find main HTMLElement');
       })(),
   );
-})();
+
+  return Page;
+};
+
+mockChoice(
+  process.env.NODE_ENV === 'test',
+  emptyFunction,
+  render,
+  /** routesData */ [],
+);
+
+export default render;

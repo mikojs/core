@@ -24,6 +24,25 @@ import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 import Root from './Root';
 import { type dataType } from './getData';
 
+/**
+ * @example
+ * initStore()
+ *
+ * @return {Store} - init store
+ */
+export const initStore = () =>
+  Root.preload({
+    url: '',
+    chunkName: '',
+    initialProps: {},
+    Page: () => {
+      throw new Error('Can not use init Page');
+    },
+    lazyPage: async () => {
+      throw new Error('Can not use init lazy Page');
+    },
+  });
+
 export default (
   basename: ?string,
   { routesData, templates }: dataType,
@@ -81,21 +100,13 @@ export default (
     renderToStaticMarkup(mainHead || null);
 
     // preload Page
-    const store = Root.preload({
-      url: '',
-      chunkName: '',
-      initialProps: {},
-      Page: async () => {
-        throw new Error('Can not use init Page');
-      },
-      lazyPage: async () => {
-        throw new Error('Can not use init lazy Page');
-      },
-    });
+    const store = initStore();
+
     Root.getPage(serverRoutesData, {
       location: { pathname: ctx.path, search: `?${ctx.querystring}` },
       staticContext: ctx,
     });
+
     const Page = await store.lazyPage();
 
     store.Page = lazy(async () => Page, store.chunkName);

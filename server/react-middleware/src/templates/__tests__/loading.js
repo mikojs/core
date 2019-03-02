@@ -14,11 +14,10 @@ describe('Loading', () => {
   });
 
   test('work', () => {
-    const mainDOM = global.document.createElement('main');
-    const body = global.document.querySelector('body');
+    const main = global.document.createElement('main');
 
-    mainDOM.setAttribute('id', '__CAT__');
-    body.appendChild(mainDOM);
+    main.setAttribute('id', '__CAT__');
+    global.document.querySelector('body').appendChild(main);
 
     const wrapper = mount(<Loading />);
 

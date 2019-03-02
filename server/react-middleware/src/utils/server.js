@@ -17,6 +17,7 @@ import { StaticRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 import getStream from 'get-stream';
+import { emptyFunction } from 'fbjs';
 
 import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 
@@ -138,7 +139,7 @@ export default (
         <Router location={ctx.url} context={ctx}>
           <Root
             Main={Main}
-            Loading={() => null}
+            Loading={emptyFunction.thatReturnsNull}
             Error={ErrorComponent}
             routesData={serverRoutesData}
             mainInitialProps={mainInitialProps}

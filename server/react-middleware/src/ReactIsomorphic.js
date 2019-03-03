@@ -8,13 +8,13 @@ import { hydrate as reactClientRender } from 'react-dom';
 import { type renderToNodeStream as renderToNodeStreamType } from 'react-dom/server';
 import { invariant, ExecutionEnvironment } from 'fbjs';
 
-const preloadLazyComponents = {};
-const storeChunkNames = [];
-
 type lazyDoneComponentType = ComponentType<*>;
 export type lazyComponentType = () => Promise<{
   default: lazyDoneComponentType,
 }>;
+
+const preloadLazyComponents = {};
+const storeChunkNames = [];
 
 export const Suspense = ExecutionEnvironment.canUseEventListeners
   ? React.Suspense
@@ -42,7 +42,10 @@ export const Suspense = ExecutionEnvironment.canUseEventListeners
 export const lazy = (
   lazyComponent: lazyComponentType,
   chunkName: string,
-): lazyDoneComponentType => {
+): lazyDoneComponentType & {
+  _status?: 0 | 1 | 2,
+  _result?: ComponentType<*>,
+} => {
   invariant(
     chunkName,
     '`chunk name` can not be null or undefined with ReactIsomorphic.lazy',
@@ -82,7 +85,7 @@ export const lazy = (
  *
  * @return {Promise} - null;
  */
-const preload = async (
+export const preload = async (
   chunkNames: $ReadOnlyArray<string>,
   level?: number = 0,
 ) => {

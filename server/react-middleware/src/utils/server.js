@@ -17,11 +17,31 @@ import { StaticRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import multistream from 'multistream';
 import getStream from 'get-stream';
+import { emptyFunction } from 'fbjs';
 
 import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 
 import Root from './Root';
 import { type dataType } from './getData';
+
+/**
+ * @example
+ * initStore()
+ *
+ * @return {Store} - init store
+ */
+export const initStore = () =>
+  Root.preload({
+    url: '',
+    chunkName: '',
+    initialProps: {},
+    Page: () => {
+      throw new Error('Can not use init Page');
+    },
+    lazyPage: async () => {
+      throw new Error('Can not use init lazy Page');
+    },
+  });
 
 export default (
   basename: ?string,
@@ -64,7 +84,6 @@ export default (
 
     const Document = require(templates.document);
     const Main = require(templates.main);
-    const Loading = require(templates.loading);
     const ErrorComponent = require(templates.error);
     const { head: documentHead, ...documentInitialProps } =
       // $FlowFixMe Flow does not yet support method or property calls in optional chains.
@@ -81,21 +100,13 @@ export default (
     renderToStaticMarkup(mainHead || null);
 
     // preload Page
-    const store = Root.preload({
-      url: '',
-      chunkName: '',
-      initialProps: {},
-      Page: async () => {
-        throw new Error('Can not use init Page');
-      },
-      lazyPage: async () => {
-        throw new Error('Can not use init lazy Page');
-      },
-    });
+    const store = initStore();
+
     Root.getPage(serverRoutesData, {
       location: { pathname: ctx.path, search: `?${ctx.querystring}` },
       staticContext: ctx,
     });
+
     const Page = await store.lazyPage();
 
     store.Page = lazy(async () => Page, store.chunkName);
@@ -139,7 +150,7 @@ export default (
         <Router location={ctx.url} context={ctx}>
           <Root
             Main={Main}
-            Loading={Loading}
+            Loading={emptyFunction.thatReturnsNull}
             Error={ErrorComponent}
             routesData={serverRoutesData}
             mainInitialProps={mainInitialProps}

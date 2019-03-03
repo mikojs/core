@@ -36,7 +36,7 @@ type contextRouterType = {|
     pathname: string,
     search: string,
   },
-  staticContext: ?koaContextType,
+  staticContext?: koaContextType,
 |};
 
 type storeType = {
@@ -81,15 +81,15 @@ const getPage = (
     isServer: !ExecutionEnvironment.canUseEventListeners,
   };
 
-  const [
-    {
-      route: {
-        component: { loader, chunkName },
-      },
-    },
-  ] = matchRoutes(routesData, ctx.ctx.path);
-
   if (store.url !== ctx.ctx.url) {
+    const [
+      {
+        route: {
+          component: { loader, chunkName },
+        },
+      },
+    ] = matchRoutes(routesData, ctx.ctx.path);
+
     /**
      * @example
      * lazyPage()
@@ -126,7 +126,7 @@ const getPage = (
 // TODO component should be ignored
 /* eslint-disable require-jsdoc, flowtype/require-return-type */
 export default class Root extends React.PureComponent<propsType, stateType> {
-  static preload = (prevStore: storeType = store): storeType => {
+  static preload = (prevStore?: storeType = store): storeType => {
     Object.keys(prevStore).forEach((key: string) => {
       store[key] = prevStore[key];
     });

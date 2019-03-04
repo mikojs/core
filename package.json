@@ -49,5 +49,10 @@
       "post-merge": "make babel-all",
       "post-checkout": "make babel-changed BRANCH=master"
     }
+  },
+  "resolutions": {
+    "react-router": "4.4.0-beta.6",
+    "react-router-config": "4.4.0-beta.6",
+    "react-router-dom": "4.4.0-beta.6"
   }
 }

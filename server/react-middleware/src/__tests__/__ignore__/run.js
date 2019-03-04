@@ -3,6 +3,4 @@
 
 import server from './server';
 
-(async () => {
-  await server();
-})();
+server(process.env.NODE_ENV !== 'production');

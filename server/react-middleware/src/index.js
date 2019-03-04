@@ -15,6 +15,7 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 
 import getData, { type redirectType } from './utils/getData';
 import deleteRequiredCache from './utils/deleteRequiredCache';
+import buildJs, { type configType } from './utils/buildJs';
 import getConfig from './utils/getConfig';
 import server from './utils/server';
 
@@ -28,7 +29,7 @@ export default async ({
   basename,
 }: {
   dev?: boolean,
-  config?: (cnofig: {}) => {},
+  config?: (cnofig: {}, dev: boolean) => configType,
   folderPath?: string,
   redirect?: redirectType,
   basename?: string,
@@ -42,25 +43,28 @@ export default async ({
     );
 
   const data = getData(folderPath, redirect, basename);
+  const config = configFunc(
+    {
+      config: getConfig(dev, folderPath, basename, data),
+      devMiddleware: {
+        stats: {
+          maxModules: 0,
+          colors: true,
+        },
+      },
+      hotClient: {
+        logLevel: 'warn',
+      },
+    },
+    dev,
+  );
 
   if (dev) deleteRequiredCache(folderPath);
+  else buildJs(config);
 
   return compose([
     dev
-      ? await webpack(
-          configFunc({
-            config: getConfig(dev, folderPath, basename, data),
-            devMiddleware: {
-              stats: {
-                maxModules: 0,
-                colors: true,
-              },
-            },
-            hotClient: {
-              logLevel: 'warn',
-            },
-          }),
-        )
+      ? await webpack(config)
       : async (ctx: koaContextType, next: () => Promise<void>) => {
           await next();
         },

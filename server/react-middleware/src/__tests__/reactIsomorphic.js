@@ -12,6 +12,10 @@ import { renderToNodeStream as reactServerRender } from 'react-dom/server';
 import { lazy, preload, renderToNodeStream } from '../ReactIsomorphic';
 
 describe('react isomorphic', () => {
+  test('render empty array', async () => {
+    expect(await preload()).toBeUndefined();
+  });
+
   test('not render again', async () => {
     const lazyComponent = jest.fn(async () => ({
       default: () => null,

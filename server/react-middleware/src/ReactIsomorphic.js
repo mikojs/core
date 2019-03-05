@@ -86,7 +86,7 @@ export const lazy = (
  * @return {Promise} - null;
  */
 export const preload = async (
-  chunkNames: $ReadOnlyArray<string>,
+  chunkNames?: $ReadOnlyArray<string> = [],
   level?: number = 0,
 ) => {
   if (chunkNames.length === 0) return;
@@ -126,7 +126,7 @@ export const preload = async (
  * @param {HTMLELement} main - main dom to mount
  */
 export const hydrate = async (dom: NodeType, main: HTMLElement) => {
-  const chunkNames = window.__CHUNKS_NAMES__ || [];
+  const chunkNames = window.__CHUNKS_NAMES__;
 
   await preload(chunkNames);
   reactClientRender(

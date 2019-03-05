@@ -57,7 +57,7 @@ export default async ({
 
   invariant(
     config.config.output &&
-      config.config.output.path &&
+      (dev || config.config.output.path) &&
       config.config.output.publicPath,
     '`{ path, publicPath }` in `config.config.output` can not be null',
   );

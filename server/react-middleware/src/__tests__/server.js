@@ -6,6 +6,8 @@
 
 import { type ServerType as koaServerType } from 'koa';
 import fetch from 'node-fetch';
+// $FlowFixMe jest mock
+import { webpack } from 'webpack';
 
 import runServer from './__ignore__/server';
 import * as constants from './__ignore__/constants';
@@ -13,9 +15,24 @@ import * as constants from './__ignore__/constants';
 let server: koaServerType;
 let domain: string;
 
-describe('react middleware', () => {
+describe.each`
+  dev
+  ${false}
+  ${true}
+`('react middleware with dev = $dev', ({ dev }: { dev: boolean }) => {
+  const publicPath = dev ? '/assets' : '/public/js';
+
   beforeAll(async () => {
-    const { server: newServer, domain: newDomain } = await runServer();
+    webpack.stats = {
+      hasErrors: () => false,
+      toJson: () => ({
+        assetsByChunkName: {
+          client: 'client.js',
+        },
+      }),
+    };
+
+    const { server: newServer, domain: newDomain } = await runServer(dev);
 
     server = newServer;
     domain = newDomain;
@@ -28,10 +45,10 @@ describe('react middleware', () => {
     ${'/otherPath'}               | ${['pages/otherPath']}                     | ${constants.head}         | ${'/otherPath'}               | ${{ path: '/otherPath', head: null }}
     ${'/otherFolder/otherFolder'} | ${['pages/otherFolder/otherFolder/index']} | ${constants.head}         | ${'/otherFolder/otherFolder'} | ${{ path: '/otherFolder/otherFolder', head: null }}
     ${'/custom'}                  | ${['pages/custom/index']}                  | ${''}                     | ${'test data'}                | ${constants.initialProps}
-    ${'/notFound'}                | ${['pages/notFound']}                      | ${constants.notFoundHead} | ${constants.notFoundMain}     | ${constants.initialProps}
-    ${'/custom/notFound'}         | ${['pages/custom/notFound']}               | ${''}                     | ${'Page not found'}           | ${constants.initialProps}
     ${'/error'}                   | ${['pages/error']}                         | ${constants.head}         | ${constants.errorMain}        | ${constants.initialProps}
     ${'/custom/error'}            | ${['pages/custom/error']}                  | ${''}                     | ${'custom error'}             | ${constants.initialProps}
+    ${'/notFound'}                | ${['pages/notFound']}                      | ${constants.notFoundHead} | ${constants.notFoundMain}     | ${constants.initialProps}
+    ${'/custom/notFound'}         | ${['pages/custom/notFound']}               | ${''}                     | ${'Page not found'}           | ${constants.initialProps}
   `(
     'get $urlPath',
     async ({
@@ -80,10 +97,10 @@ describe('react middleware', () => {
                 : {},
             },
           )};</script>`,
-          `<script data-react-helmet="true" src="/assets${
+          `<script data-react-helmet="true" src="${publicPath}${
             isCustom ? '/custom' : ''
           }/commons.js" async=""></script>`,
-          `<script data-react-helmet="true" src="/assets${
+          `<script data-react-helmet="true" src="${publicPath}${
             isCustom ? '/custom' : ''
           }/client.js" async=""></script>`,
           isCustom ? '' : '</body></html>',
@@ -93,7 +110,7 @@ describe('react middleware', () => {
   );
 
   test('handle commons not found', async () => {
-    const result = await fetch(`${domain}/assets/commons.js`);
+    const result = await fetch(`${domain}${publicPath}/commons.js`);
 
     expect(result.status).toBe(200);
     expect(await result.text()).toBe('');

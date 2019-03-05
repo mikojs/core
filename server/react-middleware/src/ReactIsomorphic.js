@@ -126,9 +126,9 @@ export const preload = async (
  * @param {HTMLELement} main - main dom to mount
  */
 export const hydrate = async (dom: NodeType, main: HTMLElement) => {
-  const chunkNames = window.__CHUNKS_NAMES__;
+  const chunkNames = window.__CHUNKS_NAMES__ || [];
 
-  await preload(chunkNames || []);
+  await preload(chunkNames);
   reactClientRender(
     <>
       {dom}
@@ -170,6 +170,7 @@ export const renderToNodeStream = (
       );
 
     renderStream.on('error', (e: Error) => {
+      storeChunkNames.splice(0, storeChunkNames.length);
       resolve(exportStream);
       setTimeout(() => {
         exportStream.destroy(e);

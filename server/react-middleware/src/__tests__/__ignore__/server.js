@@ -8,7 +8,7 @@ import getPort from 'get-port';
 import react from '../../index';
 
 export default async (
-  dev?: boolean = true,
+  dev: boolean,
 ): Promise<{
   domain: string,
   server: koaServerType,

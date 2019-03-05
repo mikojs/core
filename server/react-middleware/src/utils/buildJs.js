@@ -39,7 +39,7 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
       ) => {
         if (err) {
           if (err.details) reject(err.details);
-          else reject(err.stack || err);
+          else reject(err);
 
           return;
         }

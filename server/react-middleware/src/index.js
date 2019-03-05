@@ -8,7 +8,6 @@ import {
   type Context as koaContextType,
 } from 'koa';
 import compose from 'koa-compose';
-import webpack from 'koa-webpack';
 import { emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
@@ -60,11 +59,11 @@ export default async ({
   );
 
   if (dev) deleteRequiredCache(folderPath);
-  else buildJs(config);
+  else await buildJs(config);
 
   return compose([
     dev
-      ? await webpack(config)
+      ? await require('koa-webpack')(config)
       : async (ctx: koaContextType, next: () => Promise<void>) => {
           await next();
         },

@@ -128,7 +128,7 @@ export const preload = async (
 export const hydrate = async (dom: NodeType, main: HTMLElement) => {
   const chunkNames = window.__CHUNKS_NAMES__;
 
-  await preload(chunkNames);
+  await preload(chunkNames || []);
   reactClientRender(
     <>
       {dom}

@@ -108,20 +108,35 @@ export default (
           ],
         },
       },
-      {
-        include: [folderPath, ROOT_PATH],
-        loader: 'string-replace-loader',
-        options: {
-          search: 'module.exports = ((.|\n)*);',
-          replace: `module.exports = require('react-hot-loader/root').hot($1)`,
-          flags: 'g',
-        },
-      },
-      {
-        test: /\.jsx?$/,
-        include: /node_modules/,
-        use: ['react-hot-loader/webpack'],
-      },
+      ...(!dev
+        ? []
+        : [
+            {
+              include: [CLIENT_PATH],
+              loader: 'string-replace-loader',
+              options: {
+                search: '/\\*\\* setConfig \\*/',
+                replace: `require('react-hot-loader').setConfig ||`,
+                flags: 'g',
+                strict: true,
+              },
+            },
+            {
+              include: [folderPath, ROOT_PATH],
+              loader: 'string-replace-loader',
+              options: {
+                search: 'module.exports = ((.|\n)*);',
+                replace: `module.exports = require('react-hot-loader/root').hot($1)`,
+                flags: 'g',
+                strict: true,
+              },
+            },
+            {
+              test: /\.jsx?$/,
+              include: /node_modules/,
+              use: ['react-hot-loader/webpack'],
+            },
+          ]),
     ],
   },
 });

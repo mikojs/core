@@ -13,7 +13,9 @@ export type configType = {
 };
 
 export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
-  new Promise<void>((resolve, reject) => {
+  new Promise<{
+    [string]: string,
+  }>((resolve, reject) => {
     webpack(
       config,
       // $FlowFixMe: after flow-typed add webpack type
@@ -31,6 +33,7 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
           ) => string,
           toJson: () => {
             errors: $ReadOnlyArray<string>,
+            assetsByChunkName: { [string]: string },
           },
         },
       ) => {
@@ -49,7 +52,7 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
         const { log } = console;
 
         log(stats.toString(logStats));
-        resolve();
+        resolve(stats.toJson().assetsByChunkName);
       },
     );
   });

@@ -3,12 +3,9 @@
 import fs from 'fs';
 import path from 'path';
 
-import {
-  type Middleware as koaMiddlewareType,
-  type Context as koaContextType,
-} from 'koa';
+import { type Middleware as koaMiddlewareType } from 'koa';
 import compose from 'koa-compose';
-import { emptyFunction } from 'fbjs';
+import { invariant, emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -58,15 +55,36 @@ export default async ({
     dev,
   );
 
+  invariant(
+    config.config.output &&
+      config.config.output.path &&
+      config.config.output.publicPath,
+    '`{ path, publicPath }` in `config.config.output` can not be null',
+  );
+
+  const { path: urlsPath, publicPath } = config.config.output;
+  const basenamePath = basename ? `${basename.replace(/^\//, '')}/` : '';
+  const urls = {
+    clientUrl: `${publicPath}${basenamePath}client.js`,
+    commonsUrl: `${publicPath}${basenamePath}commons.js`,
+  };
+
   if (dev) deleteRequiredCache(folderPath);
-  else await buildJs(config);
+  else {
+    const chunkNames = await buildJs(config);
+
+    ['client', 'commons'].forEach((key: string) => {
+      const name = `${basenamePath}${key}`;
+
+      if (chunkNames[name])
+        urls[`${key}Url`] = `${publicPath}${chunkNames[name]}`;
+    });
+  }
 
   return compose([
     dev
       ? await require('koa-webpack')(config)
-      : async (ctx: koaContextType, next: () => Promise<void>) => {
-          await next();
-        },
-    server(basename, data),
+      : require('koa-mount')(publicPath, require('koa-static')(urlsPath)),
+    server(basename, data, urls),
   ]);
 };

@@ -19,6 +19,8 @@
     "fbjs": "^1.0.0",
     "get-stream": "^4.1.0",
     "koa-compose": "^4.1.0",
+    "koa-mount": "^4.0.0",
+    "koa-static": "^5.0.0",
     "koa-webpack": "^5.2.1",
     "multistream": "^2.1.1",
     "react": "^16.8.3",

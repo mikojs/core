@@ -27,7 +27,7 @@ export default (
       },
   output: {
     path: dev ? undefined : path.resolve('./public/js'),
-    publicPath: '/assets/',
+    publicPath: dev ? '/assets/' : '/public/js/',
     filename: dev ? '[name].js' : '[name].[chunkhash:8].min.js',
     chunkFilename: dev ? '[name].js' : '[name].[chunkhash:8].min.js',
   },

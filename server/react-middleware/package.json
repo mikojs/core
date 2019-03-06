@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@cat-org/utils": "^1.0.0-beta.13",
-    "chokidar": "^2.1.2",
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.1",
     "fbjs": "^1.0.0",

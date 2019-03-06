@@ -10,7 +10,6 @@ import { invariant, emptyFunction } from 'fbjs';
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import getData, { type redirectType } from './utils/getData';
-import deleteRequiredCache from './utils/deleteRequiredCache';
 import buildJs, { type configType } from './utils/buildJs';
 import getConfig from './utils/getConfig';
 import server from './utils/server';
@@ -69,8 +68,7 @@ export default async ({
     commonsUrl: `${publicPath}${basenamePath}commons.js`,
   };
 
-  if (dev) deleteRequiredCache(folderPath);
-  else {
+  if (!dev) {
     const chunkNames = await buildJs(config);
 
     ['client', 'commons'].forEach((key: string) => {

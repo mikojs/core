@@ -71,8 +71,10 @@ export default (
       return;
     }
 
-    // TODO: just for html
-    if (!new RegExp(basename || '').test(ctx.path) || /\.ico/.test(ctx.path)) {
+    if (
+      !new RegExp(basename || '').test(ctx.path) ||
+      ctx.accepts('html') !== 'html'
+    ) {
       await next();
       return;
     }

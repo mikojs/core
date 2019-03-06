@@ -9,7 +9,6 @@ import { type dataType } from './getData';
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
 const ROOT_PATH = path.resolve(__dirname, './Root.js');
 
-// TODO: add testing to check config
 export default (
   dev: boolean,
   folderPath: string,

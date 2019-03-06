@@ -52,8 +52,6 @@ type storeType = {
 const store: storeType = {};
 
 /**
- * TODO: after react.lazy support server side, remove chunkName and use `children={this.getPage}`
- *
  * @example
  * getPage(routsData, ctx)
  *

@@ -7,7 +7,9 @@ import getPort from 'get-port';
 
 import react from '../../index';
 
-export default async (): Promise<{
+export default async (
+  dev: boolean,
+): Promise<{
   domain: string,
   server: koaServerType,
 }> => {
@@ -16,6 +18,7 @@ export default async (): Promise<{
 
   app.use(
     await react({
+      dev,
       folderPath: path.resolve(__dirname, './custom'),
       basename: '/custom',
     }),
@@ -23,6 +26,7 @@ export default async (): Promise<{
 
   app.use(
     await react({
+      dev,
       folderPath: path.resolve(__dirname, './page'),
     }),
   );

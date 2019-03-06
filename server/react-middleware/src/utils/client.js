@@ -2,7 +2,6 @@
 
 import React, { type ComponentType } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { setConfig } from 'react-hot-loader';
 import { emptyFunction } from 'fbjs';
 
 import { mockChoice, handleUnhandledRejection } from '@cat-org/utils';
@@ -14,6 +13,8 @@ import Root, { type propsType as rootPropsType } from './Root';
 import Main from 'templates/Main';
 import Loading from 'templates/Loading';
 import ErrorComponent from 'templates/Error';
+
+const setConfig = /** setConfig */ emptyFunction;
 
 handleUnhandledRejection();
 setConfig({

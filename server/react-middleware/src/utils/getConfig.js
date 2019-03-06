@@ -9,7 +9,6 @@ import { type dataType } from './getData';
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
 const ROOT_PATH = path.resolve(__dirname, './Root.js');
 
-// TODO: add testing to check config
 export default (
   dev: boolean,
   folderPath: string,
@@ -27,7 +26,7 @@ export default (
       },
   output: {
     path: dev ? undefined : path.resolve('./public/js'),
-    publicPath: '/assets/',
+    publicPath: dev ? '/assets/' : '/public/js/',
     filename: dev ? '[name].js' : '[name].[chunkhash:8].min.js',
     chunkFilename: dev ? '[name].js' : '[name].[chunkhash:8].min.js',
   },
@@ -108,20 +107,35 @@ export default (
           ],
         },
       },
-      {
-        include: [folderPath, ROOT_PATH],
-        loader: 'string-replace-loader',
-        options: {
-          search: 'module.exports = ((.|\n)*);',
-          replace: `module.exports = require('react-hot-loader/root').hot($1)`,
-          flags: 'g',
-        },
-      },
-      {
-        test: /\.jsx?$/,
-        include: /node_modules/,
-        use: ['react-hot-loader/webpack'],
-      },
+      ...(!dev
+        ? []
+        : [
+            {
+              include: [CLIENT_PATH],
+              loader: 'string-replace-loader',
+              options: {
+                search: '/\\*\\* setConfig \\*/',
+                replace: `require('react-hot-loader').setConfig ||`,
+                flags: 'g',
+                strict: true,
+              },
+            },
+            {
+              include: [folderPath, ROOT_PATH],
+              loader: 'string-replace-loader',
+              options: {
+                search: 'module.exports = ((.|\n)*);',
+                replace: `module.exports = require('react-hot-loader/root').hot($1)`,
+                flags: 'g',
+                strict: true,
+              },
+            },
+            {
+              test: /\.jsx?$/,
+              include: /node_modules/,
+              use: ['react-hot-loader/webpack'],
+            },
+          ]),
     ],
   },
 });

@@ -86,7 +86,7 @@ export const lazy = (
  * @return {Promise} - null;
  */
 export const preload = async (
-  chunkNames: $ReadOnlyArray<string>,
+  chunkNames?: $ReadOnlyArray<string> = [],
   level?: number = 0,
 ) => {
   if (chunkNames.length === 0) return;
@@ -170,6 +170,7 @@ export const renderToNodeStream = (
       );
 
     renderStream.on('error', (e: Error) => {
+      storeChunkNames.splice(0, storeChunkNames.length);
       resolve(exportStream);
       setTimeout(() => {
         exportStream.destroy(e);

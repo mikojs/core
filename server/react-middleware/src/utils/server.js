@@ -46,6 +46,7 @@ export const initStore = () =>
 export default (
   basename: ?string,
   { routesData, templates }: dataType,
+  { clientUrl, commonsUrl }: { [string]: string },
 ): koaMiddlewareType => {
   const serverRoutesData = routesData.map(
     ({
@@ -63,8 +64,6 @@ export default (
   );
 
   return async (ctx: koaContextType, next: () => Promise<void>) => {
-    const commonsUrl = `/assets${basename || ''}/commons.js`;
-
     if (commonsUrl === ctx.path) {
       ctx.status = 200;
       ctx.type = 'application/javascript';
@@ -72,8 +71,10 @@ export default (
       return;
     }
 
-    // TODO: just for html
-    if (!new RegExp(basename || '').test(ctx.path) || /\.ico/.test(ctx.path)) {
+    if (
+      !new RegExp(basename || '').test(ctx.path) ||
+      ctx.accepts('html') !== 'html'
+    ) {
       await next();
       return;
     }
@@ -121,7 +122,7 @@ export default (
           mainInitialProps,
         })};`}</script>
         <script src={commonsUrl} async />
-        <script src={`/assets${basename || ''}/client.js`} async />
+        <script src={clientUrl} async />
       </Helmet>,
     );
 

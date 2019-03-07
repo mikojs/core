@@ -1,5 +1,39 @@
 # CHANGELOG
 
+## 1.0.0-beta.14 (2019-03-07)
+
+#### :boom: Breaking Change
+
+- Other
+  - [#154](https://github.com/cat-org/core/pull/154) (@cat-org/react-middleware, @cat-org/server) Move deleteRequiredCache to server ([@HsuTing](https://github.com/HsuTing))
+  - [#145](https://github.com/cat-org/core/pull/145) (@cat-org/react-middleware) Refactor code with React.lazy ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `logger`
+  - [#147](https://github.com/cat-org/core/pull/147)(@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- [#153](https://github.com/cat-org/core/pull/153) (@cat-org/react-middleware) add prod mode ([@HsuTing](https://github.com/HsuTing))
+- [#146](https://github.com/cat-org/core/pull/146) (@cat-org/react-middleware) Support multiple react lazy ([@HsuTing](https://github.com/HsuTing))
+- [#140](https://github.com/cat-org/core/pull/140) Add NotFound template in @cat-org/react-middleware ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- [#146](https://github.com/cat-org/core/pull/146) (@cat-org/react-middleware) Support multiple react lazy ([@HsuTing](https://github.com/HsuTing))
+- [#142](https://github.com/cat-org/core/pull/142) (@cat-org/react-middleware) Fix load initial props testing ([@HsuTing](https://github.com/HsuTing))
+- [#141](https://github.com/cat-org/core/pull/141) Fix @cat-org/middleware detail ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- [#152](https://github.com/cat-org/core/pull/152) (@cat-org/core) Add resolutions ([@HsuTing](https://github.com/HsuTing))
+- [#150](https://github.com/cat-org/core/pull/150) (@cat-org/react-middleware) Add multiple lazy testing ([@HsuTing](https://github.com/HsuTing))
+- [#149](https://github.com/cat-org/core/pull/149) (@cat-org/react-middleware) add testing ([@HsuTing](https://github.com/HsuTing))
+- [#148](https://github.com/cat-org/core/pull/148) (@cat-org/react-middleware) Test react middleware ([@HsuTing](https://github.com/HsuTing))
+- [#139](https://github.com/cat-org/core/pull/139) Fix build ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.13 (2019-02-01)
 
 #### :boom: Breaking Change

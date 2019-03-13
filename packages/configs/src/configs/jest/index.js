@@ -23,7 +23,6 @@ export default {
     ...install,
     'jest',
     'babel-jest',
-    'babel-core@^7.0.0-0',
     '@cat-org/jest',
   ],
   config: () => config,

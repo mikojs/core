@@ -11,8 +11,11 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 
 import getData, { type redirectType } from './utils/getData';
 import buildJs, { type configType } from './utils/buildJs';
+import prevBuildStatic from './utils/buildStatic';
 import getConfig from './utils/getConfig';
 import server from './utils/server';
+
+export { buildStatic } from './utils/buildStatic';
 
 handleUnhandledRejection();
 
@@ -22,12 +25,14 @@ export default async ({
   folderPath = path.resolve('./src/pages'),
   redirect = emptyFunction.thatReturnsArgument,
   basename,
+  useStatic = false,
 }: {
   dev?: boolean,
   config?: (cnofig: {}, dev: boolean) => configType,
   folderPath?: string,
   redirect?: redirectType,
   basename?: string,
+  useStatic?: boolean,
 } = {}): Promise<koaMiddlewareType> => {
   if (!fs.existsSync(folderPath))
     throw new Error(
@@ -77,6 +82,8 @@ export default async ({
       if (chunkNames[name])
         urls[`${key}Url`] = `${publicPath}${chunkNames[name]}`;
     });
+
+    if (useStatic) prevBuildStatic(data);
   }
 
   return compose([

@@ -32,7 +32,10 @@ describe.each`
       }),
     };
 
-    const { server: newServer, domain: newDomain } = await runServer(dev);
+    const { server: newServer, domain: newDomain } = await runServer(
+      dev,
+      false,
+    );
 
     server = newServer;
     domain = newDomain;

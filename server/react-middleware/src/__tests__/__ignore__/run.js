@@ -3,4 +3,7 @@
 
 import server from './server';
 
-server(process.env.NODE_ENV !== 'production');
+server(
+  !process.env.STATIC && process.env.NODE_ENV !== 'production',
+  Boolean(process.env.STATIC),
+);

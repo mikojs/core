@@ -5,10 +5,11 @@ import path from 'path';
 import Koa, { type ServerType as koaServerType } from 'koa';
 import getPort from 'get-port';
 
-import react from '../../index';
+import react, { buildStatic } from '../../index';
 
 export default async (
   dev: boolean,
+  useStatic: boolean,
 ): Promise<{
   domain: string,
   server: koaServerType,
@@ -21,6 +22,7 @@ export default async (
       dev,
       folderPath: path.resolve(__dirname, './custom'),
       basename: '/custom',
+      useStatic,
     }),
   );
 
@@ -28,11 +30,19 @@ export default async (
     await react({
       dev,
       folderPath: path.resolve(__dirname, './page'),
+      useStatic,
     }),
   );
 
+  const server = app.listen(port, async () => {
+    const { log } = console;
+
+    await buildStatic(server);
+    log(`Run server at port: ${port}`);
+  });
+
   return {
     domain: `http://localhost:${port}`,
-    server: app.listen(port),
+    server,
   };
 };

@@ -31,9 +31,7 @@ release:
 
 clean:
 	@yarn lerna clean && rm -rf ./node_modules
-	rm -rf ./lib \
-		./packages/**/lib \
-		./server/**/lib
+	rm -rf ./packages/**/lib ./server/**/lib
 	rm -rf ./flow-typed
 	rm -rf ./coverage
 	rm -rf ./.eslintcache
@@ -42,7 +40,7 @@ clean:
 
 define babel-build
 	yarn lerna exec \
-		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
+		"rm -rf lib && USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
 		--parallel \
 		--stream \
 		--include-filtered-dependencies \
@@ -53,7 +51,7 @@ define babel-build
 	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
 	ln -snf $(ROOT)/packages/lerna-flow-typed-install/lib/bin/index.js ./node_modules/.bin/lerna-flow-typed-install
 	yarn lerna exec \
-		"configs babel:lerna" \
+		"rm -rf lib && configs babel:lerna" \
 		--parallel \
 		--stream \
 		$(1)

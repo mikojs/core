@@ -20,10 +20,10 @@ const routePaths = [];
 export const buildStatic = async (
   server: koaServerType,
   {
-    domain = 'http://localhost:8000',
+    port = 8000,
     folderPath = path.resolve('./docs'),
   }: {
-    domain?: string,
+    port?: number,
     folderPath?: string,
   } = {},
 ) => {
@@ -37,7 +37,7 @@ export const buildStatic = async (
           `.${routePath.replace(/\*$/, 'notFound')}`,
           './index.html',
         ),
-        await fetch(`${domain}${routePath}`).then(
+        await fetch(`http://localhost:${port}${routePath}`).then(
           (res: { text: () => string }) => res.text(),
         ),
       );

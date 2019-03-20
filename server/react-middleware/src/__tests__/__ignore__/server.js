@@ -7,6 +7,8 @@ import getPort from 'get-port';
 
 import react, { buildStatic } from '../../index';
 
+import { type configType } from 'utils/buildJs';
+
 export default async (
   dev: boolean,
   useStatic: boolean,
@@ -16,10 +18,36 @@ export default async (
 }> => {
   const app = new Koa();
   const port = parseInt(process.env.NODE_PORT || (await getPort()), 10);
+  const folderPath = path.resolve(
+    __dirname,
+    '../../../node_modules/test-static',
+  );
+
+  /**
+   * @example
+   * configFunc()
+   *
+   * @param {Object} config - react middleware config
+   *
+   * @return {Object} - react middleware config
+   */
+  const configFunc = ({ config, ...otherConfigs }: configType): configType => {
+    if (!dev || useStatic)
+      config.output = {
+        ...config.output,
+        path: path.resolve(folderPath, './public/js'),
+      };
+
+    return {
+      ...otherConfigs,
+      config,
+    };
+  };
 
   app.use(
     await react({
       dev,
+      config: configFunc,
       folderPath: path.resolve(__dirname, './custom'),
       basename: '/custom',
       useStatic,
@@ -29,6 +57,7 @@ export default async (
   app.use(
     await react({
       dev,
+      config: configFunc,
       folderPath: path.resolve(__dirname, './page'),
       useStatic,
     }),
@@ -43,10 +72,7 @@ export default async (
 
         await buildStatic(server, {
           port,
-          folderPath: path.resolve(
-            __dirname,
-            '../../../node_modules/test-static',
-          ),
+          folderPath,
         });
         log(`Run server at port: ${port}`);
         resolve(server);

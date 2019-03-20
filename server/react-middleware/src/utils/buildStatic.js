@@ -35,7 +35,7 @@ export const buildStatic = async (
         path.resolve(
           folderPath,
           `.${routePath.replace(/\*$/, 'notFound')}`,
-          './index.html',
+          /\.js$/.test(routePath) ? '' : './index.html',
         ),
         await fetch(`http://localhost:${port}${routePath}`).then(
           (res: { text: () => string }) => res.text(),
@@ -46,7 +46,7 @@ export const buildStatic = async (
   server.close();
 };
 
-export default ({ routesData }: dataType) => {
+export default ({ routesData }: dataType, commonsUrl: string) => {
   routesData.forEach(
     ({
       routePath,
@@ -54,4 +54,6 @@ export default ({ routesData }: dataType) => {
       routePaths.push(...routePath);
     },
   );
+
+  routePaths.push(commonsUrl);
 };

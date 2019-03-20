@@ -28,7 +28,7 @@ export default async ({
   useStatic = false,
 }: {
   dev?: boolean,
-  config?: (cnofig: {}, dev: boolean) => configType,
+  config?: (cnofig: configType, dev: boolean) => configType,
   folderPath?: string,
   redirect?: redirectType,
   basename?: string,
@@ -83,7 +83,7 @@ export default async ({
         urls[`${key}Url`] = `${publicPath}${chunkNames[name]}`;
     });
 
-    if (useStatic) prevBuildStatic(data);
+    if (useStatic) prevBuildStatic(data, urls.commonsUrl);
   }
 
   return compose([

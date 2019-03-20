@@ -147,13 +147,12 @@ describe.each`
       },
     );
 
-    if (!isStatic)
-      test('handle commons not found', async () => {
-        const result = await request(`${domain}${publicPath}/commons.js`);
+    test('handle commons not found', async () => {
+      const result = await request(`${domain}${publicPath}/commons.js`);
 
-        expect(result.status).toBe(200);
-        expect(await result.text()).toBe('');
-      });
+      expect(result.status).toBe(200);
+      expect(await result.text()).toBe('');
+    });
 
     afterAll(() => {
       server.close();

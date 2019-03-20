@@ -9,7 +9,7 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.3.1",
+    "@babel/runtime": "^7.4.0",
     "@cat-org/logger": "^1.0.0-beta.14",
     "@cat-org/utils": "^1.0.0-beta.14",
     "chalk": "^2.4.2",
@@ -26,7 +26,7 @@
     "rimraf": "^2.6.3"
   },
   "devDependencies": {
-    "get-port": "^4.1.0"
+    "get-port": "^4.2.0"
   },
   "keywords": ["cat-org", "configs"],
   "publishConfig": {

@@ -48,9 +48,7 @@ export default async (
             '../../../node_modules/test-static',
           ),
         });
-
-        if (process.env.NODE_ENV !== 'test') log(`Run server at port: ${port}`);
-
+        log(`Run server at port: ${port}`);
         resolve(server);
       });
     }),

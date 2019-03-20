@@ -5,7 +5,7 @@ import getPort from 'get-port';
 
 import { buildStatic } from '../buildStatic';
 
-test('buildStatic', async () => {
+test('build static', async () => {
   const server = new Koa().listen(await getPort());
 
   expect(await buildStatic(server)).toBeUndefined();

@@ -1,9 +1,6 @@
 // @flow
 
 import webpack, { type WebpackOptions as WebpackOptionsType } from 'webpack';
-import { emptyFunction } from 'fbjs';
-
-import { mockChoice } from '@cat-org/utils';
 
 export type configType = {
   config: WebpackOptionsType,
@@ -54,12 +51,7 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
 
         const { log } = console;
 
-        mockChoice(
-          process.env.NODE_ENV === 'test',
-          emptyFunction,
-          log,
-          stats.toString(logStats),
-        );
+        log(stats.toString(logStats));
         resolve(stats.toJson().assetsByChunkName);
       },
     );

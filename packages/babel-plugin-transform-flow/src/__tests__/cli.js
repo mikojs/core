@@ -19,8 +19,6 @@ test('verbose: true', () => {
   });
   babel();
 
-  expect(mockLog).toHaveBeenCalled();
-  expect(mockLog).toHaveBeenCalledTimes(2);
   expect(mockLog).toHaveBeenCalledWith(
     `${root.replace(/^\.\//, '')}/index.js -> lib/index.js.flow`,
   );

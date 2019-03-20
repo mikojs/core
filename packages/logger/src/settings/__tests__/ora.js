@@ -24,8 +24,7 @@ describe.each`
         }).toThrow('process exit');
       else logs[name]('message');
 
-      expect(mockLog).toHaveBeenCalledTimes(1);
-      expect(mockLog).toHaveBeenLastCalledWith(expected);
+      expect(mockLog).toHaveBeenCalledWith(expected);
     });
 
     test(`run log after ${name}`, () => {
@@ -37,14 +36,12 @@ describe.each`
         expect(() => {
           throw logs[name]('message');
         }).toThrow('process exit');
-        expect(mockLog).toHaveBeenCalledTimes(1);
-        expect(mockLog).toHaveBeenNthCalledWith(1, expected);
+        expect(mockLog).toHaveBeenCalledWith(expected);
       } else {
         logs[name]('message').log('log');
 
-        expect(mockLog).toHaveBeenCalledTimes(2);
-        expect(mockLog).toHaveBeenNthCalledWith(1, expected);
-        expect(mockLog).toHaveBeenNthCalledWith(2, '  {gray {bold ora}} log');
+        expect(mockLog).toHaveBeenCalledWith(expected);
+        expect(mockLog).toHaveBeenCalledWith('  {gray {bold ora}} log');
       }
     });
   });

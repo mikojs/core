@@ -58,8 +58,6 @@ test('write error with watch mode', () => {
     path.resolve(__dirname, './__ignore__/files/justDefinition.js.flow'),
   );
 
-  expect(mockLog).toHaveBeenCalled();
-  expect(mockLog).toHaveBeenCalledTimes(1);
   expect(mockLog).toHaveBeenCalledWith(`${pkgName} Error: error`);
 });
 

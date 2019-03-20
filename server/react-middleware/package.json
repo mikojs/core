@@ -22,6 +22,8 @@
     "koa-static": "^5.0.0",
     "koa-webpack": "^5.2.1",
     "multistream": "^2.1.1",
+    "node-fetch": "^2.3.0",
+    "output-file-sync": "^2.0.1",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-helmet": "^5.2.0",
@@ -37,8 +39,7 @@
   "devDependencies": {
     "enzyme": "^3.9.0",
     "get-port": "^4.1.0",
-    "koa": "^2.7.0",
-    "node-fetch": "^2.3.0"
+    "koa": "^2.7.0"
   },
   "keywords": ["cat-org", "middleware", "react"],
   "publishConfig": {

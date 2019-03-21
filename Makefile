@@ -13,11 +13,12 @@ babel-all:
 	@$(call babel-build)
 
 BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
+WATCH=""
 babel-changed:
 ifeq ($(shell printenv CI), true)
 	@echo "Skip babel build"
 else
-	@$(call babel-build, --since $(BRANCH))
+	@$(call babel-build, $(WATCH), --since $(BRANCH))
 endif
 
 release:
@@ -46,13 +47,13 @@ define babel-build
 		--include-filtered-dependencies \
 		--scope @cat-org/configs \
 		--scope @cat-org/babel-* \
-		$(1)
+		$(2)
 	ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
 	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
 	ln -snf $(ROOT)/packages/lerna-flow-typed-install/lib/bin/index.js ./node_modules/.bin/lerna-flow-typed-install
 	yarn lerna exec \
-		"configs babel:lerna" \
+		"configs babel:lerna $(1)" \
 		--parallel \
 		--stream \
-		$(1)
+		$(2)
 endef

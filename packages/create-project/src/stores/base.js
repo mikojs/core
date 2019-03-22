@@ -9,13 +9,23 @@ import configs from './configs';
 import flow from './flow';
 import license from './license';
 import readme from './readme';
+import circleci from './circleci';
 import Store from './index';
 
 const debugLog = debug('create-project:store:base');
 
 /** base store */
 class Base extends Store {
-  subStores = [pkg, gitignore, npmignore, configs, flow, license, readme];
+  subStores = [
+    pkg,
+    gitignore,
+    npmignore,
+    configs,
+    flow,
+    license,
+    readme,
+    circleci,
+  ];
 
   /**
    * @example

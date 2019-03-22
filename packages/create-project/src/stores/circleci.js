@@ -73,8 +73,7 @@ ${
 
       - run:
           name: Publish
-          command: yarn publish --tag beta
-`
+          command: yarn publish --tag beta`
     : ''
 }
 workflows:

@@ -10,8 +10,7 @@ import Store from './index';
  *
  * @return {string} - npm content
  */
-const npmContent = (name: string) => `
-## Install
+const npmContent = (name: string) => `## Install
 
 \`\`\`sh
 yarn add ${name}
@@ -23,8 +22,7 @@ yarn add ${name}
  *
  * @return {string} - no npm content
  */
-const noNpmContent = () => `
-## Getting Started
+const noNpmContent = () => `## Getting Started
 
 \`\`\`sh
 yarn install
@@ -34,8 +32,7 @@ yarn install
 
 - \`dev\`: Run development.
 - \`prod\`: Run production.
-- \`test\`: Run testing.
-`;
+- \`test\`: Run testing.`;
 
 /**
  * @example

@@ -7,9 +7,13 @@ import prettier from 'prettier';
 import { format } from 'prettier-package-json';
 import { outputFileSync } from 'output-file-sync';
 import { inquirer } from 'inquirer';
+// $FlowFixMe jest mock
+import { execa } from 'execa';
 
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
+
+import cmds from './__ignore__/cmds.js';
 
 import base from 'stores/base';
 
@@ -18,6 +22,7 @@ test('create project', async () => {
 
   outputFileSync.destPaths = [];
   outputFileSync.contents = [];
+  execa.cmds = [];
   inquirer.result = {
     private: false,
     description: 'package description',
@@ -80,4 +85,5 @@ test('create project', async () => {
         outputFileSync.contents.length,
       ),
   ).toBe(0);
+  expect(execa.cmds).toEqual(cmds);
 });

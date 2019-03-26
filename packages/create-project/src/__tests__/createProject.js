@@ -44,20 +44,36 @@ test('create project', async () => {
             .replace(/git config --get user.name/g, 'username')
             .replace(/git config --get user.email/g, 'email')
             .replace(path.basename(projectDir), 'package-name');
+          const expected = fs
+            .readFileSync(filePath, { encoding: 'utf-8' })
+            .replace(/\n$/, '');
 
-          expect(
-            extension === '.json'
-              ? prettier
+          switch (extension) {
+            case '.json':
+              expect(
+                prettier
                   .format(format(JSON.parse(content)), {
                     singleQuote: true,
                     trailingComma: 'all',
                     parser: 'json',
                   })
-                  .replace(/\n$/, '')
-              : content,
-          ).toBe(
-            fs.readFileSync(filePath, { encoding: 'utf-8' }).replace(/\n$/, ''),
-          );
+                  .replace(/\n$/, ''),
+              ).toBe(expected);
+              break;
+
+            case '.md':
+              expect(content).toBe(
+                expected.replace(
+                  /<!-- badges.start -->(.|\n)*<!-- badges.end -->/,
+                  '<!-- badges.start --><!-- badges.end -->',
+                ),
+              );
+              break;
+
+            default:
+              expect(content).toBe(expected);
+              break;
+          }
 
           return result - 1;
         },

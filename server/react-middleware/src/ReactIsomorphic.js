@@ -9,19 +9,24 @@ import { type renderToNodeStream as renderToNodeStreamType } from 'react-dom/ser
 import { invariant, ExecutionEnvironment } from 'fbjs';
 
 type lazyDoneComponentType = ComponentType<*>;
-export type lazyComponentType = () => Promise<{
+export type lazyComponentType = () => Promise<{|
   default: lazyDoneComponentType,
-}>;
+|}>;
 
 const preloadLazyComponents = {};
 const storeChunkNames = [];
 
 export const Suspense = ExecutionEnvironment.canUseEventListeners
   ? React.Suspense
-  : ((): ComponentType<{ children: NodeType }> => {
+  : ((): ComponentType<{| children: NodeType, fallback: NodeType |}> => {
       // TODO component should be ignored
       // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-      const ServerSuspense = ({ children }: { children: NodeType }) => children;
+      const ServerSuspense = ({
+        children,
+      }: {|
+        children: NodeType,
+        fallback: NodeType,
+      |}) => children;
 
       return ServerSuspense;
     })();
@@ -157,7 +162,7 @@ export const renderToNodeStream = (
   {
     stream,
     reactServerRender,
-  }: { stream: streamType, reactServerRender: renderToNodeStreamType },
+  }: {| stream: streamType, reactServerRender: renderToNodeStreamType |},
   level?: number = 0,
 ) =>
   new Promise<$Call<ReadableType>>(resolve => {

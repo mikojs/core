@@ -36,10 +36,10 @@ describe('client', () => {
     async ({
       message,
       routesData,
-    }: {
+    }: {|
       message: string,
       routesData: $PropertyType<rootPropsType, 'routesData'>,
-    }) => {
+    |}) => {
       await expect(client(routesData)).rejects.toThrow(message);
     },
   );

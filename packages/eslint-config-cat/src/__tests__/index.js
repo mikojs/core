@@ -39,7 +39,7 @@ const eslintResult = new CLIEngine({
 })
   .executeOnFiles(['.'])
   .results.filter(
-    ({ messages }: { messages: $ReadOnlyArray<string> }) =>
+    ({ messages }: {| messages: $ReadOnlyArray<string> |}) =>
       messages.length !== 0,
   );
 
@@ -53,7 +53,7 @@ const testData = d3DirTree(root, {
     ({ data: { path: filePath, name } }: d3DirTreeNodeType): testDataType => {
       const { messages = [] } =
         eslintResult.find(
-          ({ filePath: eslintFilePath }: { filePath: string }) =>
+          ({ filePath: eslintFilePath }: {| filePath: string |}) =>
             filePath === eslintFilePath,
         ) || {};
 

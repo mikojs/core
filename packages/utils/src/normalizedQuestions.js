@@ -36,10 +36,10 @@ export default (projectName: string) => <T>(
       prefix: chalk`{bold {gray • ${projectName}}}`,
       suffix: chalk`{green  ➜}`,
     }),
-  ): $ReadOnlyArray<{
+  ): $ReadOnlyArray<{|
     name: string,
     message: string,
     validate: $PropertyType<questionType<T>, 'validate'>,
     prefix: string,
     suffix: string,
-  }>);
+  |}>);

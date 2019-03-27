@@ -26,14 +26,14 @@ export default async ({
   redirect = emptyFunction.thatReturnsArgument,
   basename,
   useStatic = false,
-}: {
+}: {|
   dev?: boolean,
   config?: (cnofig: configType, dev: boolean) => configType,
   folderPath?: string,
   redirect?: redirectType,
   basename?: string,
   useStatic?: boolean,
-} = {}): Promise<koaMiddlewareType> => {
+|} = {}): Promise<koaMiddlewareType> => {
   if (!fs.existsSync(folderPath))
     throw new Error(
       `\`${path.relative(

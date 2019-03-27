@@ -19,7 +19,7 @@ describe('server', () => {
     ${'del'}
   `(
     '`server.$method` is not under `server.all`',
-    ({ method }: { method: string }) => {
+    ({ method }: {| method: string |}) => {
       expect(
         () => server.init() |> ('/test' |> server[method] |> server.end),
       ).toThrow('process exit');

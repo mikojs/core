@@ -74,7 +74,7 @@ describe('configs', () => {
       ${'object merge func'} | ${'objectMergeFunc'}
       ${'custom no config'}  | ${'customNoConfig'}
       ${'default no config'} | ${'defaultNoConfig'}
-    `('$testName', ({ configName }: { configName: string }) => {
+    `('$testName', ({ configName }: {| configName: string |}) => {
       expect(configs.store[configName].config()).toEqual({});
     });
   });

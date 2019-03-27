@@ -25,11 +25,11 @@ test.each`
     pkg,
     useNpm,
     expected,
-  }: {
-    pkg?: { [string]: string },
+  }: {|
+    pkg?: {| [string]: string |},
     useNpm: boolean,
     expected: ?string,
-  }) => {
+  |}) => {
     outputFileSync.contents = [];
 
     expect(

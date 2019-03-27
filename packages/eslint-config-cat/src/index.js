@@ -8,11 +8,11 @@ import extendsConfig from './configs/extendsConfigs';
 type configType = {
   extends?: $ReadOnlyArray<string>,
   parser?: 'babel-eslint',
-  env?: {
+  env?: {|
     jest: true,
     node: true,
     browser: true,
-  },
+  |},
   plugins?: $ReadOnlyArray<string>,
   settings?: {
     [string]: {},

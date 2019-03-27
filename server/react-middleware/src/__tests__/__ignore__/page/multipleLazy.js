@@ -22,7 +22,7 @@ const TestOne = lazy(
   'test-lazy-1',
 );
 
-export default class MultipleLazy extends React.PureComponent<{}> {
+export default class MultipleLazy extends React.PureComponent<{||}> {
   render() {
     return <TestOne />;
   }

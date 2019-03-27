@@ -15,7 +15,7 @@ test.each`
   ${{ repository: 'https://github.com/cat-org/core.git' }} | ${4}
 `(
   'base with pkg = $pkg',
-  async ({ pkg, expected }: { pkg?: {}, expected: number }) => {
+  async ({ pkg, expected }: {| pkg?: {}, expected: number |}) => {
     execa.cmds = [];
 
     expect(

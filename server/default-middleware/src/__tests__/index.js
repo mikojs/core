@@ -1,16 +1,13 @@
 // @flow
 
-import Koa, {
-  type ServerType as koaServerType,
-  type Context as koaContextType,
-} from 'koa';
+import Koa, { type Context as koaContextType } from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
 import defaultMiddle from '../index';
 
 describe('default middleware', () => {
-  let server: koaServerType;
+  let server: http$Server;
   let port: number;
 
   beforeAll(async () => {

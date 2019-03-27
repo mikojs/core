@@ -47,12 +47,12 @@ describe('pkg questions', () => {
         success,
         fail,
         errorMessage,
-      }: {
+      }: {|
         questionName: string,
         success: string & $ReadOnlyArray<string>,
         fail: string & $ReadOnlyArray<string>,
         errorMessage: string,
-      }) => {
+      |}) => {
         const {
           validate = notFind,
         }: {

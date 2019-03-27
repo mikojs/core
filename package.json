@@ -5,6 +5,7 @@
   "workspaces": ["packages/*", "server/*"],
   "scripts": {
     "clean": "make clean",
+    "dev": "make babel-changed WATCH=-w",
     "install:all": "make install",
     "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
@@ -49,5 +50,8 @@
       "post-merge": "make babel-all",
       "post-checkout": "make babel-changed BRANCH=master"
     }
+  },
+  "resolutions": {
+    "memoize-one": "5.0.0"
   }
 }

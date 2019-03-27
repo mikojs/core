@@ -2,7 +2,7 @@
 
 import path from 'path';
 
-import Koa, { type ServerType as koaServerType } from 'koa';
+import Koa from 'koa';
 import getPort from 'get-port';
 
 import react, { buildStatic } from '../../index';
@@ -14,7 +14,7 @@ export default async (
   useStatic: boolean,
 ): Promise<{|
   domain: string,
-  server: koaServerType,
+  server: http$Server,
 |}> => {
   const app = new Koa();
   const port = parseInt(process.env.NODE_PORT || (await getPort()), 10);

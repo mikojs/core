@@ -6,7 +6,6 @@
 
 import path from 'path';
 
-import { type ServerType as koaServerType } from 'koa';
 import fetch from 'node-fetch';
 // $FlowFixMe jest mock
 import { webpack } from 'webpack';
@@ -15,7 +14,7 @@ import { outputFileSync } from 'output-file-sync';
 import runServer from './__ignore__/server';
 import * as constants from './__ignore__/constants';
 
-let server: koaServerType;
+let server: http$Server;
 let domain: string;
 
 describe.each`

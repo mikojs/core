@@ -2,7 +2,6 @@
 
 import path from 'path';
 
-import { type ServerType as koaServerType } from 'koa';
 import fetch from 'node-fetch';
 import outputFileSync from 'output-file-sync';
 
@@ -18,7 +17,7 @@ const routePaths = [];
  * @param {Object} options - build static options
  */
 export const buildStatic = async (
-  server: koaServerType,
+  server: http$Server,
   {
     port = 8000,
     folderPath = path.resolve('./docs'),

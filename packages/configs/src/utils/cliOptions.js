@@ -17,12 +17,12 @@ const debugLog = debug('configs:cliOptions');
 
 export default (
   argv: $ReadOnlyArray<string>,
-): {
+): {|
   cli: string,
   argv: $ReadOnlyArray<string>,
   env: {},
   cliName: string,
-} => {
+|} => {
   const program = new commander.Command('configs')
     .version(version, '-v, --version')
     .arguments('[command type, arguments...]')

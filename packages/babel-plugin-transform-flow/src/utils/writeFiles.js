@@ -46,7 +46,7 @@ class WriteFiles {
     const { log } = console;
 
     try {
-      const { code }: { code: string } = transformFileSync(
+      const { code }: {| code: string |} = transformFileSync(
         srcPath,
         babelConfig,
       );

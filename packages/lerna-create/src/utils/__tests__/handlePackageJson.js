@@ -42,11 +42,11 @@ describe('keyword question', () => {
       name,
       value,
       expected,
-    }: {
+    }: {|
       name: string,
       value: string | $ReadOnlyArray<string>,
       expected: string | $ReadOnlyArray<string>,
-    }) => {
+    |}) => {
       expect(keywordQuestion[name](value)).toEqual(expected);
     },
   );

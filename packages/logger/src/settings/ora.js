@@ -8,10 +8,10 @@ import { mockChoice } from '@cat-org/utils';
 
 import { type settingsType } from '../index';
 
-type oraType = {
+type oraType = {|
   notInit: boolean,
   isSpinning: boolean,
-};
+|};
 
 const GET_NAME = {
   log: (name: string) => chalk`{gray {bold ${name}}}`,

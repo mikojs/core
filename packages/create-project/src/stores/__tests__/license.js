@@ -19,10 +19,10 @@ test.each`
   async ({
     pkg,
     expected,
-  }: {
-    pkg?: { author: string },
+  }: {|
+    pkg?: {| author: string |},
     expected: boolean,
-  }) => {
+  |}) => {
     outputFileSync.contents = [];
 
     expect(

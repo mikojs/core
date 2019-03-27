@@ -11,9 +11,9 @@ class Execa {
   main = {
     shell: (
       cmd: string,
-    ): Promise<{
+    ): Promise<{|
       stdout: string,
-    }> => {
+    |}> => {
       const stdout = this.mainFunction(cmd);
 
       this.mainFunction = emptyFunction.thatReturnsArgument;

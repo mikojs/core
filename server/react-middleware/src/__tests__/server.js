@@ -26,12 +26,12 @@ describe.each`
   ${false} | ${true}
 `(
   'react middleware with dev = $dev, useStatic = $useStatic',
-  ({ dev, useStatic }: { dev: boolean, useStatic: boolean }) => {
+  ({ dev, useStatic }: {| dev: boolean, useStatic: boolean |}) => {
     const publicPath = dev ? '/assets' : '/public/js';
     const isStatic = !dev && useStatic;
     const request = !isStatic
       ? fetch
-      : (url: string): { status: 200, text: () => string } => {
+      : (url: string): {| status: 200, text: () => string |} => {
           const filePath = url
             .replace(
               domain,
@@ -91,13 +91,13 @@ describe.each`
         head,
         main,
         initialProps,
-      }: {
+      }: {|
         urlPath: string,
         chunkNames: $ReadOnlyArray<string>,
         head: string,
         main: string,
-        initialProps: { path?: string, head: null },
-      }) => {
+        initialProps: {| path?: string, head: null |},
+      |}) => {
         const isCustom = /custom/.test(urlPath);
         const result = await request(`${domain}${urlPath}`);
 

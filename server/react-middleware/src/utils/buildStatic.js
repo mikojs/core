@@ -22,10 +22,10 @@ export const buildStatic = async (
   {
     port = 8000,
     folderPath = path.resolve('./docs'),
-  }: {
+  }: {|
     port?: number,
     folderPath?: string,
-  } = {},
+  |} = {},
 ) => {
   if (routePaths.length === 0) return;
 
@@ -38,7 +38,7 @@ export const buildStatic = async (
           /\.js$/.test(routePath) ? '' : './index.html',
         ),
         await fetch(`http://localhost:${port}${routePath}`).then(
-          (res: { text: () => string }) => res.text(),
+          (res: {| text: () => string |}) => res.text(),
         ),
       );
     }),

@@ -10,7 +10,7 @@ import { type ctxType } from '../types';
 import * as styles from './styles/notFound';
 
 export default class NotFound extends React.PureComponent<*> {
-  static getInitialProps = ({ ctx }: ctxType<{ status: number }>) => {
+  static getInitialProps = ({ ctx }: ctxType<{| status: number |}>) => {
     ctx.status = 404;
 
     return {

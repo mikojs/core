@@ -47,13 +47,13 @@ describe('badges', () => {
       engines,
       fsExist,
       expected,
-    }: {
-      engines?: {
+    }: {|
+      engines?: {|
         [string]: string,
-      },
+      |},
       fsExist: boolean,
       expected: $ReadOnlyArray<string>,
-    }) => {
+    |}) => {
       execa.mainFunction = () =>
         'origin\tgit@github.com:cat-org/core.git (fetch)';
       fs.exist = fsExist;

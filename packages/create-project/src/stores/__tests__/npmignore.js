@@ -18,10 +18,10 @@ test.each`
   async ({
     useNpm,
     expected,
-  }: {
+  }: {|
     useNpm: boolean,
     expected: $ReadOnlyArray<string>,
-  }) => {
+  |}) => {
     outputFileSync.destPaths = [];
     npmignore.storeUseNpm = useNpm;
     inquirer.result = {

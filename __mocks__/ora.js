@@ -11,9 +11,9 @@ const ora = () =>
     (
       result: {},
       key: string,
-    ): {
+    ): {|
       isSpinning?: boolean,
-    } => ({
+    |} => ({
       ...result,
       [key]: (message: string): {} => {
         const { log } = console;

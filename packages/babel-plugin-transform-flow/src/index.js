@@ -11,7 +11,7 @@ import writeFiles from './utils/writeFiles';
 
 export default declare(
   (
-    api: { assertVersion: (version: number) => void },
+    api: {| assertVersion: (version: number) => void |},
     options: $PropertyType<manipulateOptionsPluginsType, 'options'>,
   ): {} => {
     api.assertVersion(7);
@@ -25,18 +25,18 @@ export default declare(
             node: {
               source: { value },
             },
-          }: {
-            node: {
-              source: { value: string },
-            },
-          },
+          }: {|
+            node: {|
+              source: {| value: string |},
+            |},
+          |},
           {
             cwd,
             filename,
-          }: {
+          }: {|
             cwd: string,
             filename: string,
-          },
+          |},
         ) => {
           if (!/\.js\.flow$/.test(value)) return;
 
@@ -55,13 +55,13 @@ export default declare(
       },
       post: ({
         opts: { cwd, filename, parserOpts },
-      }: {
-        opts: {
+      }: {|
+        opts: {|
           cwd: string,
           filename: string,
           parserOpts: {},
-        },
-      }) => {
+        |},
+      |}) => {
         const { plugins } = handler.options;
         const { srcPath, destPath } = handler.getFilePaths(filename, cwd);
         const babelConfig = {

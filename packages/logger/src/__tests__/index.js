@@ -21,11 +21,11 @@ describe.each`
     name,
     prefix,
     color,
-  }: {
+  }: {|
     name: string,
     prefix: string,
     color: string,
-  }) => {
+  |}) => {
     test(name, () => {
       const mockLog = jest.fn();
 

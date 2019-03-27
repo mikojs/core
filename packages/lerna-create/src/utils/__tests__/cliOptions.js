@@ -21,7 +21,7 @@ describe('cli options', () => {
     info                     | argv
     ${'no new project name'} | ${[]}
     ${'project exist'}       | ${['../../..']}
-  `('$info', ({ argv }: { argv: $ReadOnlyArray<string> }) => {
+  `('$info', ({ argv }: {| argv: $ReadOnlyArray<string> |}) => {
     expect(() => {
       cliOptions([...defaultArgv, ...argv]);
     }).toThrow('process exit');

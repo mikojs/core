@@ -26,7 +26,13 @@ export const getUser = () =>
         cmd: 'git config --get user.email',
       },
     ].map(
-      async ({ name, cmd }: { name: string, cmd: string }): Promise<string> => {
+      async ({
+        name,
+        cmd,
+      }: {|
+        name: string,
+        cmd: string,
+      |}): Promise<string> => {
         try {
           return await execa
             .shell(cmd)

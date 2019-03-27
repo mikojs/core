@@ -12,10 +12,10 @@ import { type configType } from 'utils/buildJs';
 export default async (
   dev: boolean,
   useStatic: boolean,
-): Promise<{
+): Promise<{|
   domain: string,
   server: koaServerType,
-}> => {
+|}> => {
   const app = new Koa();
   const port = parseInt(process.env.NODE_PORT || (await getPort()), 10);
   const folderPath = path.resolve(

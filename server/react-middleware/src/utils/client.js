@@ -31,7 +31,7 @@ setConfig({
  */
 const render = async (
   routesData: $PropertyType<rootPropsType, 'routesData'>,
-): Promise<ComponentType<{}>> => {
+): Promise<ComponentType<{||}>> => {
   const { mainInitialProps, ...store } = window.__CAT_DATA__;
   // preload page
   const {

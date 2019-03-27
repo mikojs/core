@@ -5,10 +5,10 @@
 import React, { type Node as NodeType } from 'react';
 import { Helmet } from 'react-helmet';
 
-type propsType = {
+type propsType = {|
   helmet: $Call<$PropertyType<Class<Helmet>, 'renderStatic'>>,
   children: NodeType,
-};
+|};
 
 export default class Document extends React.PureComponent<propsType> {
   static getInitialProps = () => ({

@@ -13,12 +13,12 @@ export const keywordQuestion = {
 };
 
 export default async (
-  pkg: {
+  pkg: {|
     bin?: string,
     dependencies?: string,
     devDependencies?: string,
     keywords?: $ReadOnlyArray<string>,
-  },
+  |},
   replaceFunc: string => string,
 ): Promise<string> => {
   const newPkg = { ...pkg };

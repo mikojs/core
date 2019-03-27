@@ -50,5 +50,8 @@
       "post-merge": "make babel-all",
       "post-checkout": "make babel-changed BRANCH=master"
     }
+  },
+  "resolutions": {
+    "memoize-one": "5.0.0"
   }
 }

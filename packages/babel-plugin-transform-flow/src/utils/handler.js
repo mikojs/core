@@ -126,10 +126,10 @@ class Handler {
   getFilePaths = (
     filePath: string,
     cwd: string,
-  ): {
+  ): {|
     srcPath: string,
     destPath: string,
-  } => {
+  |} => {
     const { src, outDir } = this.options;
     const srcPath = filePath.replace(`${cwd}/`, '');
     const relativePath = src.reduce(

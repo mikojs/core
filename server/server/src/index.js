@@ -1,9 +1,6 @@
 // @flow
 
-import Koa, {
-  type Middleware as koaMiddlewareType,
-  type ServerType as koaServerType,
-} from 'koa';
+import Koa, { type Middleware as koaMiddlewareType } from 'koa';
 import Router from 'koa-router';
 import chalk from 'chalk';
 import debug from 'debug';
@@ -114,7 +111,7 @@ export default {
     };
   },
 
-  run: (port?: number = 8000) => (app: routerType): koaServerType => {
+  run: (port?: number = 8000) => (app: routerType): http$Server => {
     if (!(app instanceof Koa)) throw logger.fail('server is not koa server');
 
     debugLog(port);

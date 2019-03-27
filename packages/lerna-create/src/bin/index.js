@@ -35,10 +35,10 @@ handleUnhandledRejection();
       message: 'the path of the other lerna managed project',
       choices: workspaces.reduce(
         (
-          result: $ReadOnlyArray<{
+          result: $ReadOnlyArray<{|
             name: string,
             value: string,
-          }>,
+          |}>,
           workspace: string,
         ) => [
           ...result,

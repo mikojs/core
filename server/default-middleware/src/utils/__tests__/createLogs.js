@@ -12,7 +12,7 @@ describe('create logs', () => {
     exist
     ${true}
     ${false}
-  `('with logs folder exist($exist)', ({ exist }: { exist: boolean }) => {
+  `('with logs folder exist($exist)', ({ exist }: {| exist: boolean |}) => {
     fs.exist = exist;
 
     const result = createLogs();

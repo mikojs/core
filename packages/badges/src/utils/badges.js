@@ -13,9 +13,9 @@ type ctxType = {|
   rootPath: string,
   pkg: {
     [string]: string,
-    engines?: {
+    engines?: {|
       [string]: string,
-    },
+    |},
   },
 |};
 

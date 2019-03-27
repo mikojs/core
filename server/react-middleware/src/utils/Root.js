@@ -12,7 +12,7 @@ import { lazy, Suspense, type lazyComponentType } from '../ReactIsomorphic';
 
 export type propsType = {|
   Main: ComponentType<*>,
-  Loading: ComponentType<{}>,
+  Loading: ComponentType<{||}>,
   Error: ComponentType<errorPropsType>,
   routesData: $ReadOnlyArray<{|
     exact: true,
@@ -42,9 +42,9 @@ type contextRouterType = {|
 type storeType = {
   url: string,
   chunkName: string,
-  initialProps: {
+  initialProps: {|
     head?: NodeType,
-  },
+  |},
   Page: $Call<typeof lazy, lazyComponentType, string>,
   lazyPage: lazyComponentType,
 };

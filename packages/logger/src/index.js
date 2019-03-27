@@ -14,11 +14,11 @@ export type logsType = {
 
 export type settingsType = {
   init?: (...args: $ReadOnlyArray<mixed>) => void,
-  [string]: {
+  [string]: {|
     getName?: (name: string) => string,
     print: (message: string) => void,
     after?: (name: string) => mixed,
-  },
+  |},
 };
 
 const GET_NAME = {

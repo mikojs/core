@@ -37,7 +37,7 @@ describe('cli options', () => {
     ${['babel:lerna', '--info']}
     ${[]}
     ${['notFindCliName']}
-  `('Run $argv', ({ argv }: { argv: $ReadOnlyArray<string> }) => {
+  `('Run $argv', ({ argv }: {| argv: $ReadOnlyArray<string> |}) => {
     expect(() => {
       cliOptions([...defaultArgv, ...argv]);
     }).toThrow('process exit');
@@ -54,12 +54,12 @@ describe('cli options', () => {
       options,
       cli,
       argv,
-    }: {
+    }: {|
       cliName: string,
       options: $ReadOnlyArray<string>,
       cli: string,
       argv: $ReadOnlyArray<string>,
-    }) => {
+    |}) => {
       expect(cliOptions([...defaultArgv, cliName, ...options])).toEqual({
         cli,
         argv,
@@ -75,7 +75,7 @@ describe('cli options', () => {
     ${'run-error'}         | ${'run error'}
   `(
     'Run fail with $cliName',
-    ({ cliName, expected }: { cliName: string, expected: string }) => {
+    ({ cliName, expected }: {| cliName: string, expected: string |}) => {
       npmWhich.throwError = true;
 
       expect(() => {

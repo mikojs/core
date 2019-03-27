@@ -15,10 +15,10 @@ describe('default server', () => {
     async ({
       method,
       expected,
-    }: {
+    }: {|
       method: string,
       expected: $ReadOnlyArray<string> | string,
-    }) => {
+    |}) => {
       expect(await fetchServer(`/test/${method}`, method)).toEqual(expected);
     },
   );

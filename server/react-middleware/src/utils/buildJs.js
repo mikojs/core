@@ -4,12 +4,12 @@ import webpack, { type WebpackOptions as WebpackOptionsType } from 'webpack';
 
 export type configType = {
   config: WebpackOptionsType,
-  devMiddleware: {
+  devMiddleware: {|
     stats?: $PropertyType<
       $NonMaybeType<$PropertyType<WebpackOptionsType, 'devServer'>>,
       'stats',
     >,
-  },
+  |},
 };
 
 export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
@@ -31,10 +31,10 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
               'stats',
             >,
           ) => string,
-          toJson: () => {
+          toJson: () => {|
             errors: $ReadOnlyArray<string>,
-            assetsByChunkName: { [string]: string },
-          },
+            assetsByChunkName: {| [string]: string |},
+          |},
         },
       ) => {
         if (err) {

@@ -12,11 +12,11 @@ import logger from 'utils/logger';
 
 type pkgType = {
   [string]: string,
-  husky: {
+  husky: {|
     hooks: {
       [string]: string,
     },
-  },
+  |},
   author?: string,
   engines?: {
     [string]: string,
@@ -27,11 +27,11 @@ type pkgType = {
   },
 };
 
-type ctxType = {
+type ctxType = {|
   projectDir: string,
   pkg?: pkgType,
   useNpm?: boolean,
-};
+|};
 
 const debugLog = debug('create-project:store');
 

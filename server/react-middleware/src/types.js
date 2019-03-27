@@ -2,9 +2,9 @@
 
 export type errorPropsType = {|
   error: Error,
-  errorInfo: {
+  errorInfo: {|
     componentStack: string,
-  },
+  |},
 |};
 
 export type ctxType<T = {}> = {|

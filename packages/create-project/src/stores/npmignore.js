@@ -6,6 +6,7 @@ import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
 import readme from './readme';
+import circleci from './circleci';
 import Store from './index';
 
 import normalizedQuestions from 'utils/normalizedQuestions';
@@ -47,7 +48,7 @@ const NPMIGNORE_QUESTIONS = [
 
 /** npmignore store */
 class Npmignore extends Store {
-  subStores = [readme];
+  subStores = [readme, circleci];
 
   storeUseNpm = false;
 

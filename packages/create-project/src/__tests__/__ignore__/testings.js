@@ -49,7 +49,16 @@ const useNpm = {
   cmds: basicUsage.cmds,
 };
 
-export default [basicUsage, useNpm].reduce(
+const privatePkg = {
+  name: 'private-pkg',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    private: true,
+  },
+  cmds: basicUsage.cmds,
+};
+
+export default [basicUsage, useNpm, privatePkg].reduce(
   (
     result: $ReadOnlyArray<
       [string, string, inquirerResultType, $ReadOnlyArray<string>],

@@ -47,9 +47,16 @@ class Base extends Store {
     debugLog(stores);
 
     for (const store of stores) await store.end(ctx);
+    await this.end(ctx);
+  };
 
-    const { pkg: { repository } = {} } = ctx;
-
+  /**
+   * @example
+   * bese.end(ctx)
+   *
+   * @param {Object} ctx - store context
+   */
+  end = async ({ pkg: { repository } = {} }: $PropertyType<Store, 'ctx'>) => {
     await this.execa(
       'yarn flow-typed install',
       'git add .',

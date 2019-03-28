@@ -1,5 +1,7 @@
 // @flow
 
+import { invariant } from 'fbjs';
+
 import Store from './index';
 
 /**
@@ -69,7 +71,7 @@ class Readme extends Store {
    * @param {Object} ctx - store context
    */
   end = ({ pkg, useNpm }: $PropertyType<Store, 'ctx'>) => {
-    if (!pkg) return;
+    invariant(pkg, 'Can not run readme store without pkg in `ctx`');
 
     this.writeFiles({
       'README.md': template(pkg, useNpm),

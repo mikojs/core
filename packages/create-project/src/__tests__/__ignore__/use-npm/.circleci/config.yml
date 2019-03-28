@@ -1,16 +1,4 @@
-// @flow
-
-import Store from './index';
-
-/**
- * @example
- * template(true)
- *
- * @param {boolean} useNpm - use npm or not
- *
- * @return {string} - circleci config
- */
-const template = (useNpm?: boolean) => `version: 2
+version: 2
 defaults: &defaults
   docker:
     - image: node:latest
@@ -53,9 +41,7 @@ jobs:
           command: yarn test -i
       - store_artifacts:
           path: coverage
-${
-  useNpm
-    ? `
+
   deploy-beta:
     <<: *defaults
     steps:
@@ -74,16 +60,12 @@ ${
       - run:
           name: Publish
           command: yarn publish --tag beta
-`
-    : ''
-}
+
 workflows:
   version: 2
   test-and-deploy:
     jobs:
-      ${
-        useNpm
-          ? `- test:
+      - test:
           filters:
             tags:
               only: /.*/
@@ -96,23 +78,4 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /v\\d+(.\\d+){2}(-beta.\\d+)?/`
-          : `- test`
-      }`;
-
-/** circleci store */
-class Circleci extends Store {
-  /**
-   * @example
-   * circleci.end(ctx)
-   *
-   * @param {Object} ctx - store context
-   */
-  end = ({ useNpm }: $PropertyType<Store, 'ctx'>) => {
-    this.writeFiles({
-      '.circleci/config.yml': template(useNpm),
-    });
-  };
-}
-
-export default new Circleci();
+              only: /v\d+(.\d+){2}(-beta.\d+)?/

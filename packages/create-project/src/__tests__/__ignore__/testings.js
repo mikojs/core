@@ -5,6 +5,7 @@ import path from 'path';
 export type inquirerResultType = {
   [string]: string,
   private: boolean,
+  useNpm: boolean,
   keywords: [string],
 };
 
@@ -16,6 +17,7 @@ const basicUsage = {
     homepage: 'http://cat-org/package-homepage',
     repository: 'https://github.com/cat-org/core.git',
     keywords: ['keyword'],
+    useNpm: false,
   },
   cmds: [
     // For getting user information
@@ -38,7 +40,16 @@ const basicUsage = {
   ],
 };
 
-export default [basicUsage].reduce(
+const useNpm = {
+  name: 'use-npm',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    useNpm: true,
+  },
+  cmds: basicUsage.cmds,
+};
+
+export default [basicUsage, useNpm].reduce(
   (
     result: $ReadOnlyArray<
       [string, string, inquirerResultType, $ReadOnlyArray<string>],

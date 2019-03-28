@@ -17,6 +17,8 @@ import testings, { type inquirerResultType } from './__ignore__/testings';
 
 import base from 'stores/base';
 
+jest.mock('memoize-one', () => jest.fn((func: mixed) => func));
+
 test.each(testings)(
   '%s',
   async (
@@ -40,11 +42,15 @@ test.each(testings)(
             result: number,
             { data: { path: filePath, extension } }: d3DirTreeNodeType,
           ): number => {
-            const content = outputFileSync.contents
-              .find(
+            const content = (
+              outputFileSync.contents.find(
                 (_: string, contentIndex: number) =>
                   filePath === outputFileSync.destPaths[contentIndex],
-              )
+              ) ||
+              (() => {
+                throw new Error(`Can not find ${filePath}`);
+              })()
+            )
               .replace(/git config --get user.name/g, 'username')
               .replace(/git config --get user.email/g, 'email')
               .replace(path.basename(projectDir), 'package-name');
@@ -54,9 +60,13 @@ test.each(testings)(
 
             switch (extension) {
               case '.json':
+                const jsonContent = JSON.parse(content);
+
+                delete jsonContent.useNpm;
+
                 expect(
                   prettier
-                    .format(format(JSON.parse(content)), {
+                    .format(format(jsonContent), {
                       singleQuote: true,
                       trailingComma: 'all',
                       parser: 'json',

@@ -5,32 +5,16 @@ import { execa } from 'execa';
 
 import Store from '../index';
 
-import ctx from './__ignore__/ctx';
+test('store with execa error', async () => {
+  /** example store */
+  class Example extends Store {}
 
-/** child store */
-class ChildStore extends Store {}
+  const example = new Example();
 
-const childStore = new ChildStore();
+  example.run({ projectDir: 'project dir' });
+  execa.mainFunction = () => {
+    throw new Error('command error');
+  };
 
-/** parent store */
-class ParentStore extends Store {
-  subStores = [childStore];
-}
-
-const parentStore = new ParentStore();
-
-describe('store', () => {
-  test('run', async () => {
-    expect(await parentStore.run(ctx)).toEqual([childStore]);
-  });
-
-  test('execa error', async () => {
-    execa.mainFunction = () => {
-      throw new Error('command error');
-    };
-
-    await expect(childStore.execa('command error')).rejects.toThrow(
-      'process exit',
-    );
-  });
+  await expect(example.execa('command error')).rejects.toThrow('process exit');
 });

@@ -1,10 +1,6 @@
 // @flow
 
-import { inquirer } from 'inquirer';
-
 import pkg, { PKG_QUESTIONS } from '../pkg';
-
-import ctx from './__ignore__/ctx';
 
 /**
  * @example
@@ -16,24 +12,9 @@ const notFind = (argu: string) => {
   throw new Error('not find');
 };
 
-pkg.ctx = ctx;
+pkg.ctx = { projectDir: 'project dir' };
 
-test('pkg', async () => {
-  inquirer.result = {
-    private: true,
-    description: 'desc',
-    homepage: 'https://github.com/cat-org/core',
-    repository: 'https://github.com/cat-org/core.git',
-    keywords: ['keyword'],
-  };
-
-  expect(await pkg.start(ctx)).toBeUndefined();
-  expect(await pkg.end(ctx)).toBeUndefined();
-  expect(pkg.storePkg.name).toBe('projectDir');
-  expect(pkg.storePkg.private).toBeTruthy();
-});
-
-describe('pkg questions', () => {
+describe('pkg store', () => {
   describe('validate', () => {
     describe.each`
       questionName    | success                                  | fail  | errorMessage

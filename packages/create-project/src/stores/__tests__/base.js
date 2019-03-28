@@ -5,25 +5,14 @@ import { execa } from 'execa';
 
 import base from '../base';
 
-import ctx from './__ignore__/ctx';
+test('base store without pkg in `ctx`', async () => {
+  execa.cmds = [];
+  base.ctx = { projectDir: 'project dir' };
 
-base.ctx = ctx;
-
-test.each`
-  pkg                                                      | expected
-  ${undefined}                                             | ${3}
-  ${{ repository: 'https://github.com/cat-org/core.git' }} | ${4}
-`(
-  'base with pkg = $pkg',
-  async ({ pkg, expected }: {| pkg?: {}, expected: number |}) => {
-    execa.cmds = [];
-
-    expect(
-      await base.end({
-        ...ctx,
-        pkg,
-      }),
-    ).toBeUndefined();
-    expect(execa.cmds.length).toEqual(expected);
-  },
-);
+  expect(
+    await base.end({
+      projectDir: 'project dir',
+    }),
+  ).toBeUndefined();
+  expect(execa.cmds).toHaveLength(3);
+});

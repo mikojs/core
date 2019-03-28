@@ -1,5 +1,7 @@
 // @flow
 
+import { invariant } from 'fbjs';
+
 import Store from './index';
 
 /**
@@ -10,12 +12,13 @@ import Store from './index';
  *
  * @return {string} - npm content
  */
-const npmContent = (name: string) => `
-## Install
+const npmContent = (name: string) => `## Install
 
 \`\`\`sh
 yarn add ${name}
-\`\`\``;
+\`\`\`
+
+## Develop`;
 
 /**
  * @example
@@ -23,19 +26,13 @@ yarn add ${name}
  *
  * @return {string} - no npm content
  */
-const noNpmContent = () => `
-## Getting Started
+const noNpmContent = () => `## Getting Started
 
 \`\`\`sh
 yarn install
 \`\`\`
 
-## Usage
-
-- \`dev\`: Run development.
-- \`prod\`: Run production.
-- \`test\`: Run testing.
-`;
+## Usage`;
 
 /**
  * @example
@@ -59,7 +56,11 @@ const template = (
 
 ${description}
 
-${useNpm ? npmContent(name) : noNpmContent()}`;
+${useNpm ? npmContent(name) : noNpmContent()}
+
+- \`dev\`: Run development.
+- \`prod\`: Run production.
+- \`test\`: Run testing.`;
 
 /** readme store */
 class Readme extends Store {
@@ -70,7 +71,7 @@ class Readme extends Store {
    * @param {Object} ctx - store context
    */
   end = ({ pkg, useNpm }: $PropertyType<Store, 'ctx'>) => {
-    if (!pkg) return;
+    invariant(pkg, 'Can not run readme store without pkg in `ctx`');
 
     this.writeFiles({
       'README.md': template(pkg, useNpm),

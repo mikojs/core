@@ -63,7 +63,7 @@ export default class Store {
       subStores: this.subStores,
     });
 
-    for (const store of this.subStores) stores.concat(await store.run(ctx));
+    for (const store of this.subStores) stores.push(...(await store.run(ctx)));
 
     return [...this.subStores, ...stores];
   };

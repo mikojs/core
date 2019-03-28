@@ -23,6 +23,12 @@
     "output-file-sync": "^2.0.1",
     "validator": "^10.11.0"
   },
+  "devDependencies": {
+    "d3-hierarchy": "^1.1.8",
+    "directory-tree": "^2.2.1",
+    "prettier": "^1.16.4",
+    "prettier-package-json": "^2.1.0"
+  },
   "keywords": ["cat-org", "createt project"],
   "publishConfig": {
     "access": "public"

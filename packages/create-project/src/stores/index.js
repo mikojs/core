@@ -1,9 +1,11 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
+import inquirer from 'inquirer';
 import outputFileSync from 'output-file-sync';
 import execa from 'execa';
 import debug from 'debug';
@@ -39,6 +41,8 @@ const debugLog = debug('create-project:store');
 export default class Store {
   ctx: ctxType;
 
+  cachePath: string;
+
   subStores = [];
 
   start = emptyFunction;
@@ -46,8 +50,6 @@ export default class Store {
   end = emptyFunction;
 
   /**
-   * not overwrite
-   *
    * @example
    * store.run(ctx)
    *
@@ -55,8 +57,10 @@ export default class Store {
    */
   run = async (ctx: ctxType): Promise<$ReadOnlyArray<Store>> => {
     const stores = [];
+    const { projectDir } = ctx;
 
     this.ctx = ctx;
+    this.cachePath = path.resolve(projectDir, '.cat-lock');
     await this.start(ctx);
     debugLog({
       name: this.constructor.name,
@@ -70,18 +74,81 @@ export default class Store {
 
   /**
    * @example
+   * store.getCache()
+   *
+   * @return {Object} - cache
+   */
+  getCache = () =>
+    !fs.existsSync(this.cachePath)
+      ? {}
+      : JSON.parse(fs.readFileSync(this.cachePath, 'utf-8'));
+
+  /**
+   * @example
+   * store.writeCach({})
+   *
+   * @param {Object} data - cache data
+   */
+  writeCache = (data: {}) => {
+    outputFileSync(
+      this.cachePath,
+      JSON.stringify(
+        {
+          ...this.getCache(),
+          ...data,
+        },
+        null,
+        2,
+      ),
+    );
+  };
+
+  /**
+   * @example
+   * store.prompt([])
+   *
+   * @param {Array} argus - prompt array
+   */
+  prompt = async <T>(
+    ...argus: $ReadOnlyArray<T>
+  ): Promise<{
+    [string]: *,
+  }> => {
+    const result = await inquirer.prompt(...argus);
+    const promptName = `${this.constructor.name}-prompt`;
+
+    this.writeCache({
+      [promptName]: {
+        ...(this.getCache()[promptName] || {}),
+        ...result,
+      },
+    });
+
+    return result;
+  };
+
+  /**
+   * @example
    * store.writeFiles({ 'path': 'test' })
    *
    * @param {Object} files - files object
    */
   writeFiles = (files: { [string]: string }) => {
     const { projectDir } = this.ctx;
+    const filesName = `${this.constructor.name}-files`;
 
     Object.keys(files).forEach((key: string) => {
       const writeFile = [path.resolve(projectDir, key), files[key]];
 
       outputFileSync(...writeFile);
       debugLog(writeFile);
+    });
+
+    this.writeCache({
+      [filesName]: [
+        ...(this.getCache()[filesName] || []),
+        ...Object.keys(files),
+      ],
     });
   };
 
@@ -93,6 +160,7 @@ export default class Store {
    */
   execa = async (...commands: $ReadOnlyArray<string>) => {
     const { projectDir } = this.ctx;
+    const execaName = `${this.constructor.name}-commands`;
 
     for (const command of commands) {
       try {
@@ -106,5 +174,9 @@ export default class Store {
         throw logger.fail(chalk`Run command: {red ${command}} fail`);
       }
     }
+
+    this.writeCache({
+      [execaName]: [...(this.getCache()[execaName] || []), ...commands],
+    });
   };
 }

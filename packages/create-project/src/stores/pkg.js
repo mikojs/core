@@ -3,7 +3,6 @@
 import path from 'path';
 
 import memoizeOne from 'memoize-one';
-import inquirer from 'inquirer';
 import { isURL } from 'validator';
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
@@ -77,13 +76,18 @@ class Pkg extends Store {
    */
   defaultInfo = memoizeOne(async (projectDir: string) => {
     const [username, email] = await getUser();
-    const questionResult = await inquirer.prompt(
+    const questionResult = await this.prompt(
       normalizedQuestions<$ReadOnlyArray<string>>(...PKG_QUESTIONS),
     );
 
     this.storePkg.name = path.basename(projectDir);
     this.storePkg.engines = await getEngines();
     this.storePkg.author = `${username} <${email}>`;
+    this.storePkg.scripts = {
+      dev: 'configs babel -w',
+      prod: 'NODE_ENV=production configs babel',
+      test: 'configs test',
+    };
 
     Object.keys(questionResult).forEach((key: string) => {
       if (key === 'private') {
@@ -103,14 +107,6 @@ class Pkg extends Store {
     debugLog(this.storePkg);
   }, emptyFunction.thatReturnsTrue);
 
-  addScripts = memoizeOne(() => {
-    this.storePkg.scripts = {
-      dev: 'configs babel -w',
-      prod: 'NODE_ENV=production configs babel',
-      test: 'configs test',
-    };
-  }, emptyFunction.thatReturnsTrue);
-
   /**
    * @example
    * pkg.start(ctx)
@@ -121,7 +117,6 @@ class Pkg extends Store {
     const { projectDir } = ctx;
 
     await this.defaultInfo(projectDir);
-    this.addScripts();
 
     ctx.pkg = this.storePkg;
   };

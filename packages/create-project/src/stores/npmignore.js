@@ -1,6 +1,5 @@
 // @flow
 
-import inquirer from 'inquirer';
 import memoizeOne from 'memoize-one';
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
@@ -57,7 +56,7 @@ class Npmignore extends Store {
    * npmignore.checkNpm()
    */
   checkNpm = memoizeOne(async () => {
-    this.storeUseNpm = (await inquirer.prompt(
+    this.storeUseNpm = (await this.prompt(
       normalizedQuestions<boolean>(...NPMIGNORE_QUESTIONS),
     )).useNpm;
     debugLog(this.storeUseNpm);

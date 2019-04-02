@@ -1,0 +1,50 @@
+{
+  "Pkg-prompt": {
+    "private": false,
+    "description": "package description",
+    "homepage": "http://cat-org/package-homepage",
+    "repository": "https://github.com/cat-org/core.git",
+    "keywords": [
+      "keyword"
+    ]
+  },
+  "Npmignore-prompt": {
+    "useNpm": false
+  },
+  "Pkg-files": [
+    "package.json"
+  ],
+  "Gitignore-files": [
+    ".gitignore"
+  ],
+  "Configs-commands": [
+    "git init",
+    "yarn add --dev @cat-org/configs",
+    "configs --install babel",
+    "configs --install prettier",
+    "configs --install lint",
+    "configs --install lint-staged",
+    "configs --install jest"
+  ],
+  "Flow-files": [
+    ".flowconfig"
+  ],
+  "Flow-commands": [
+    "yarn add --dev flow-bin flow-typed"
+  ],
+  "License-files": [
+    "LICENSE"
+  ],
+  "Readme-files": [
+    "README.md"
+  ],
+  "Circleci-files": [
+    ".circleci/config.yml"
+  ],
+  "Base-commands": [
+    "yarn flow-typed install",
+    "git add .",
+    "git commit -m \"chore(root): project init\"",
+    "git remote add origin https://github.com/cat-org/core.git"
+  ]
+}

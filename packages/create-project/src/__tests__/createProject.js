@@ -1,6 +1,5 @@
 // @flow
 
-import fs from 'fs';
 import path from 'path';
 
 import prettier from 'prettier';
@@ -18,6 +17,7 @@ import testings, { type inquirerResultType } from './__ignore__/testings';
 import base from 'stores/base';
 
 jest.mock('memoize-one', () => jest.fn((func: mixed) => func));
+jest.mock('fs');
 
 test.each(testings)(
   '%s',
@@ -33,6 +33,9 @@ test.each(testings)(
     inquirer.result = inquirerResult;
 
     await base.init({ projectDir });
+
+    outputFileSync.destPaths.reverse();
+    outputFileSync.contents.reverse();
 
     expect(
       d3DirTree(projectDir, { exclude: /.*\.swp/ })
@@ -54,12 +57,13 @@ test.each(testings)(
               .replace(/git config --get user.name/g, 'username')
               .replace(/git config --get user.email/g, 'email')
               .replace(path.basename(projectDir), 'package-name');
-            const expected = fs
+            const expected = jest
+              .requireActual('fs')
               .readFileSync(filePath, { encoding: 'utf-8' })
               .replace(/\n$/, '');
 
             switch (extension) {
-              case '.json':
+              case '.json': {
                 const jsonContent = JSON.parse(content);
 
                 delete jsonContent.useNpm;
@@ -74,6 +78,7 @@ test.each(testings)(
                     .replace(/\n$/, ''),
                 ).toBe(expected);
                 break;
+              }
 
               case '.md':
                 expect(content).toBe(
@@ -84,9 +89,35 @@ test.each(testings)(
                 );
                 break;
 
-              default:
-                expect(content).toBe(expected);
+              default: {
+                if (/\.cat-lock/.test(filePath)) {
+                  const jsonContent = JSON.parse(content);
+                  const jsonExpected = JSON.parse(expected);
+                  const promptNames = ['Npmignore-prompt', 'Pkg-prompt'];
+
+                  promptNames.forEach((promptName: string) => {
+                    Object.keys(jsonExpected[promptName]).forEach(
+                      (key: string) => {
+                        promptNames
+                          .filter((fileName: string) => promptName !== fileName)
+                          .forEach((otherKey: string) => {
+                            delete jsonContent[otherKey][key];
+                          });
+                      },
+                    );
+                  });
+
+                  expect(jsonContent).toEqual(jsonExpected);
+
+                  return (
+                    result -
+                    outputFileSync.destPaths.filter(
+                      (destPath: string) => destPath === filePath,
+                    ).length
+                  );
+                } else expect(content).toBe(expected);
                 break;
+              }
             }
 
             return result - 1;

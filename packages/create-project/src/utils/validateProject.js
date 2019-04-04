@@ -8,12 +8,17 @@ import debug from 'debug';
 
 import logger from './logger';
 
+import type StoreType from 'stores';
+
 const debugLog = debug('create-project:validateProject');
 
-export default async (projectDir: string) => {
+export default async ({
+  projectDir,
+  check,
+}: $PropertyType<StoreType, 'ctx'>) => {
   // check project dir not existing
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
-  else
+  else if (!check)
     throw logger.fail(
       chalk`The directory {green ${projectDir}} exists`,
       `Remove this directory or use a new name`,
@@ -25,8 +30,10 @@ export default async (projectDir: string) => {
       cwd: projectDir,
     });
 
-    fs.rmdirSync(projectDir);
-    throw logger.fail('Can not create a new project in git managed project');
+    if (!check) {
+      fs.rmdirSync(projectDir);
+      throw logger.fail('Can not create a new project in git managed project');
+    }
   } catch (e) {
     debugLog(e);
 

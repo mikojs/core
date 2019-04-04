@@ -11,6 +11,8 @@ import execa from 'execa';
 import debug from 'debug';
 
 import logger from 'utils/logger';
+import checkFiles from 'utils/checkFiles';
+import checkCommands from 'utils/checkCommands';
 
 type pkgType = {
   [string]: string,
@@ -31,6 +33,7 @@ type pkgType = {
 
 type ctxType = {|
   projectDir: string,
+  check: boolean,
   pkg?: pkgType,
   useNpm?: boolean,
 |};
@@ -61,6 +64,7 @@ export default class Store {
 
     this.ctx = ctx;
     this.cachePath = path.resolve(projectDir, '.cat-lock');
+
     await this.start(ctx);
     debugLog({
       name: this.constructor.name,
@@ -114,8 +118,13 @@ export default class Store {
   ): Promise<{
     [string]: *,
   }> => {
-    const result = await inquirer.prompt(...argus);
+    const { check } = this.ctx;
     const promptName = `${this.constructor.name}-prompt`;
+    const cache = this.getCache()[promptName];
+
+    if (check && cache) return cache;
+
+    const result = await inquirer.prompt(...argus);
 
     this.writeCache({
       [promptName]: {
@@ -134,8 +143,13 @@ export default class Store {
    * @param {Object} files - files object
    */
   writeFiles = (files: { [string]: string }) => {
-    const { projectDir } = this.ctx;
+    const { projectDir, check } = this.ctx;
     const filesName = `${this.constructor.name}-files`;
+
+    if (check) {
+      checkFiles();
+      return;
+    }
 
     Object.keys(files).forEach((key: string) => {
       const writeFile = [path.resolve(projectDir, key), files[key]];
@@ -159,8 +173,19 @@ export default class Store {
    * @param {Array} commands - commands array
    */
   execa = async (...commands: $ReadOnlyArray<string>) => {
-    const { projectDir } = this.ctx;
+    const { projectDir, check } = this.ctx;
     const execaName = `${this.constructor.name}-commands`;
+
+    if (check) {
+      this.writeCache({
+        [execaName]: await checkCommands(
+          this.getCache()[execaName],
+          commands,
+          projectDir,
+        ),
+      });
+      return;
+    }
 
     for (const command of commands) {
       try {

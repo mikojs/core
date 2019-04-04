@@ -1,8 +1,6 @@
 #! /usr/bin/env node
 // @flow
 
-import path from 'path';
-
 import chalk from 'chalk';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
@@ -16,16 +14,14 @@ handleUnhandledRejection();
 
 (async () => {
   const ctx = cliOptions(process.argv);
-  const { projectDir } = ctx;
 
-  await validateProject(projectDir);
+  await validateProject(ctx);
 
-  logger.info(
-    chalk`Creating a new project in {green ${path.relative(
-      process.cwd(),
-      projectDir,
-    )}}`,
-  );
+  if (ctx.check)
+    logger.info(
+      chalk`Checking a existing project in {green ${ctx.projectDir}}`,
+    );
+  else logger.info(chalk`Creating a new project in {green ${ctx.projectDir}}`);
 
   await base.init(ctx);
 

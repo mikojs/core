@@ -10,6 +10,11 @@ import validateProject from '../validateProject';
 
 jest.mock('fs');
 
+const ctx = {
+  projectDir: 'project dir',
+  check: false,
+};
+
 describe('validate project', () => {
   test('project dir pass', async () => {
     fs.exist = false;
@@ -22,24 +27,20 @@ describe('validate project', () => {
       throw error;
     };
 
-    expect(await validateProject('project dir')).toBeUndefined();
+    expect(await validateProject(ctx)).toBeUndefined();
   });
 
   test('project dir exist', async () => {
     fs.exist = true;
 
-    await expect(validateProject('project dir')).rejects.toThrow(
-      'process exit',
-    );
+    await expect(validateProject(ctx)).rejects.toThrow('process exit');
   });
 
   test('in git managed project', async () => {
     fs.exist = false;
     execa.mainFunction = emptyFunction;
 
-    await expect(validateProject('project dir')).rejects.toThrow(
-      'process exit',
-    );
+    await expect(validateProject(ctx)).rejects.toThrow('process exit');
   });
 
   test('unexpected error', async () => {
@@ -52,8 +53,6 @@ describe('validate project', () => {
       throw error;
     };
 
-    await expect(validateProject('project dir')).rejects.toThrow(
-      'process exit',
-    );
+    await expect(validateProject(ctx)).rejects.toThrow('process exit');
   });
 });

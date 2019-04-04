@@ -9,6 +9,7 @@ const defaultArgv = ['node', 'create-project'];
 describe('cli options', () => {
   test('work', () => {
     expect(cliOptions([...defaultArgv, 'projectDir'])).toEqual({
+      check: false,
       projectDir: path.resolve('projectDir'),
     });
   });

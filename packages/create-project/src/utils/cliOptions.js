@@ -19,10 +19,12 @@ export default (
   const program = new commander.Command('create-project')
     .version(version, '-v, --version')
     .arguments('<project directory>')
+    .option('-c, --check', 'check project')
     .usage(chalk`{green <project directory>}`);
 
   const {
     args: [projectDir],
+    check = false,
   } = program.parse([...argv]);
 
   if (!projectDir)
@@ -30,6 +32,7 @@ export default (
 
   const cliOptions = {
     projectDir: path.resolve(projectDir),
+    check,
   };
 
   debugLog(cliOptions);

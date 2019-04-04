@@ -11,7 +11,7 @@ test('store with execa error', async () => {
 
   const example = new Example();
 
-  example.run({ projectDir: 'project dir' });
+  example.run({ projectDir: 'project dir', check: false });
   execa.mainFunction = () => {
     throw new Error('command error');
   };

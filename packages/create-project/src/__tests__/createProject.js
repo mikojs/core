@@ -32,7 +32,7 @@ test.each(testings)(
     execa.cmds = [];
     inquirer.result = inquirerResult;
 
-    await base.init({ projectDir });
+    await base.init({ projectDir, check: false });
 
     outputFileSync.destPaths.reverse();
     outputFileSync.contents.reverse();

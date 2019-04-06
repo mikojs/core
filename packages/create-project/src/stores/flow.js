@@ -26,10 +26,9 @@ class Flow extends Store {
    * flow.end()
    */
   end = async () => {
-    this.writeFiles({
+    await this.writeFiles({
       '.flowconfig': template,
     });
-
     await this.execa('yarn add --dev flow-bin flow-typed');
   };
 }

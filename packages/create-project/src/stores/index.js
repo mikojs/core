@@ -142,12 +142,18 @@ export default class Store {
    *
    * @param {Object} files - files object
    */
-  writeFiles = (files: { [string]: string }) => {
+  writeFiles = async (files: { [string]: string }) => {
     const { projectDir, check } = this.ctx;
     const filesName = `${this.constructor.name}-files`;
 
     if (check) {
-      checkFiles();
+      this.writeCache({
+        [filesName]: await checkFiles(
+          this.getCache()[filesName],
+          files,
+          projectDir,
+        ),
+      });
       return;
     }
 

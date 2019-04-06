@@ -125,8 +125,8 @@ class Pkg extends Store {
    * @example
    * pkg.end(ctx)
    */
-  end = () => {
-    this.writeFiles({
+  end = async () => {
+    await this.writeFiles({
       'package.json': JSON.stringify(this.storePkg, null, 2),
     });
   };

@@ -78,9 +78,9 @@ class Npmignore extends Store {
    * @example
    * npmignore.end()
    */
-  end = () => {
+  end = async () => {
     if (this.storeUseNpm)
-      this.writeFiles({
+      await this.writeFiles({
         '.npmignore': template,
       });
   };

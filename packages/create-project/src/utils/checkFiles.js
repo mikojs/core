@@ -6,6 +6,7 @@ import path from 'path';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import outputFileSync from 'output-file-sync';
+import { diffTrimmedLines } from 'diff';
 
 import normalizedQuestions from './normalizedQuestions';
 
@@ -24,6 +25,8 @@ export default async (
   const addFiles = [];
 
   for (const file of Object.keys(newFiles)) {
+    const filePath = path.resolve(projectDir, file);
+
     if (!Object.keys(prevFiles).includes(file)) {
       const { shouldAddFile } = await inquirer.prompt(
         normalizedQuestions({
@@ -33,10 +36,85 @@ export default async (
         }),
       );
 
-      if (shouldAddFile)
-        outputFileSync(path.resolve(projectDir, file), newFiles[file]);
+      if (shouldAddFile) outputFileSync(filePath, newFiles[file]);
 
       addFiles.push(file);
+    } else {
+      const diff = diffTrimmedLines(
+        fs.readFileSync(filePath, 'utf-8'),
+        newFiles[file],
+      );
+
+      if (diff.length !== 1) {
+        const { checking } = await inquirer.prompt(
+          normalizedQuestions({
+            type: 'expand',
+            name: 'checking',
+            message: chalk`find conflict with {bgCyan  ${file} }`,
+            choices: [
+              {
+                key: 'y',
+                name: 'Overwrite',
+                value: 'overwrite',
+              },
+              {
+                key: 'd',
+                name: 'Show diff',
+                value: 'diff',
+              },
+              new inquirer.Separator(),
+              {
+                key: 'x',
+                name: 'Abort',
+                value: 'abort',
+              },
+            ],
+          }),
+        );
+
+        switch (checking) {
+          case 'overwrite':
+            outputFileSync(filePath, newFiles[file]);
+            break;
+
+          case 'diff': {
+            const { log } = console;
+
+            diff.forEach(
+              ({
+                value,
+                added,
+                removed,
+              }: {
+                value: $ReadOnlyArray<string>,
+                added: ?boolean,
+                removed: ?boolean,
+              }) => {
+                value.forEach((str: string) => {
+                  if (added) log(chalk`{green +${str}}`);
+                  else if (removed) log(chalk`{red -${str}}`);
+                  else log(` ${str}`);
+                });
+              },
+            );
+
+            const { shouldOverwrite } = await inquirer.prompt(
+              normalizedQuestions({
+                type: 'confirm',
+                name: 'shouldOverwrite',
+                message: 'overwrite the old file or not',
+              }),
+            );
+
+            if (shouldOverwrite) outputFileSync(filePath, newFiles[file]);
+
+            break;
+          }
+
+          default:
+            break;
+        }
+      }
     }
   }
 

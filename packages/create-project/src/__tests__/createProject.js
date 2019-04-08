@@ -17,8 +17,6 @@ import testings, { type inquirerResultType } from './__ignore__/testings';
 
 import base from 'stores/base';
 
-jest.mock('memoize-one', () => jest.fn((func: mixed) => func));
-
 describe('create project', () => {
   test.each(testings)(
     '%s',

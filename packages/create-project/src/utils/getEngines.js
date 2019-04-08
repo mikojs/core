@@ -4,13 +4,7 @@ import memoizeOne from 'memoize-one';
 import envinfo from 'envinfo';
 import { emptyFunction } from 'fbjs';
 
-/**
- * @example
- * getEngines()
- *
- * @return {Promise} - engines info
- */
-export const getEngines = async (): Promise<{
+export default memoizeOne(async (): Promise<{
   [string]: string,
 }> => {
   const { Binaries } = JSON.parse(
@@ -31,6 +25,4 @@ export const getEngines = async (): Promise<{
       }),
       {},
     );
-};
-
-export default memoizeOne(getEngines, emptyFunction.thatReturnsTrue);
+}, emptyFunction.thatReturnsTrue);

@@ -18,7 +18,7 @@ const deprecatedFiles = [
 ];
 
 export default async (
-  prevFiles: { [string]: string },
+  prevFiles: $ReadOnlyArray<string>,
   newFiles: { [string]: string },
   projectDir: string,
 ): Promise<$ReadOnlyArray<string>> => {
@@ -27,7 +27,7 @@ export default async (
   for (const file of Object.keys(newFiles)) {
     const filePath = path.resolve(projectDir, file);
 
-    if (!Object.keys(prevFiles).includes(file)) {
+    if (!prevFiles.includes(file)) {
       const { shouldAddFile } = await inquirer.prompt(
         normalizedQuestions({
           type: 'confirm',
@@ -121,7 +121,7 @@ export default async (
   const removeFiles = [];
 
   for (const { pattern, message } of deprecatedFiles) {
-    const removeFile = Object.keys(prevFiles).find((prevFile: string) =>
+    const removeFile = prevFiles.find((prevFile: string) =>
       pattern.test(prevFile),
     );
 
@@ -141,9 +141,7 @@ export default async (
   }
 
   return [
-    ...Object.keys(prevFiles).filter(
-      (prevFile: string) => !removeFiles.includes(prevFile),
-    ),
+    ...prevFiles.filter((prevFile: string) => !removeFiles.includes(prevFile)),
     ...addFiles,
   ];
 };

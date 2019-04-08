@@ -20,7 +20,7 @@ import normalizedQuestions from 'utils/normalizedQuestions';
 
 const debugLog = debug('create-project:store:pkg');
 
-export const PKG_QUESTIONS = [
+export const pkgQuestions = [
   {
     name: 'private',
     message: 'is private or not',
@@ -78,7 +78,7 @@ class Pkg extends Store {
   defaultInfo = memoizeOne(async (projectDir: string) => {
     const [username, email] = await getUser();
     const questionResult = await inquirer.prompt(
-      normalizedQuestions<$ReadOnlyArray<string>>(...PKG_QUESTIONS),
+      normalizedQuestions<$ReadOnlyArray<string>>(...pkgQuestions),
     );
 
     this.storePkg.name = path.basename(projectDir);

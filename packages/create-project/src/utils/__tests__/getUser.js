@@ -3,7 +3,7 @@
 // $FlowFixMe jest mock
 import { execa } from 'execa';
 
-import { getUser } from '../getUser';
+import getUser from '../getUser';
 
 test('not set git user', async () => {
   execa.mainFunction = () => {

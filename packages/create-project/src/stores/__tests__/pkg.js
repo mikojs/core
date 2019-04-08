@@ -1,6 +1,6 @@
 // @flow
 
-import pkg, { PKG_QUESTIONS } from '../pkg';
+import pkg, { pkgQuestions } from '../pkg';
 
 /**
  * @example
@@ -39,7 +39,7 @@ describe('pkg store', () => {
         }: {
           validate?: (string & $ReadOnlyArray<string>) => true | string,
         } =
-          PKG_QUESTIONS.find(
+          pkgQuestions.find(
             ({ name }: { name: string }) => name === questionName,
           ) || {};
 
@@ -61,7 +61,7 @@ describe('pkg store', () => {
       }: {
         filter?: string => $ReadOnlyArray<string>,
       } =
-        PKG_QUESTIONS.find(
+        pkgQuestions.find(
           ({ name }: { name: string }) => name === 'keywords',
         ) || {};
 

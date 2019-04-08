@@ -46,8 +46,6 @@ export default class Store {
   end = emptyFunction;
 
   /**
-   * not overwrite
-   *
    * @example
    * store.run(ctx)
    *

@@ -26,7 +26,7 @@ const basicUsage = {
 
     // Run commands
     'git init',
-    'yarn add --dev @cat-org/configs@beta',
+    'yarn add --dev @cat-org/configs',
     'configs --install babel',
     'configs --install prettier',
     'configs --install lint',

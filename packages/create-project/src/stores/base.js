@@ -62,7 +62,6 @@ class Base extends Store {
       'git add .',
       'git commit -m "chore(root): project init"',
       ...(repository ? [`git remote add origin ${repository}`] : []),
-      // TODO: add checker
     );
   };
 }

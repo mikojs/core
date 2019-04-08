@@ -6,7 +6,13 @@ import execa from 'execa';
 
 import normalizedQuestions from './normalizedQuestions';
 
-const deprecatedCommands = [];
+const deprecatedCommands = [
+  {
+    pattern: /TODO: just for testing/,
+    message: 'Just for testing',
+    command: 'echo "test"',
+  },
+];
 
 export default async (
   prevCommands: $ReadOnlyArray<string>,
@@ -17,15 +23,15 @@ export default async (
 
   for (const command of newCommands) {
     if (!prevCommands.includes(command)) {
-      const { shouldRunCommand } = await inquirer.prompt(
+      const { shouldRunAddCommand } = await inquirer.prompt(
         normalizedQuestions({
           type: 'confirm',
-          name: 'shouldRunCommand',
+          name: 'shouldRunAddCommand',
           message: chalk`run the new command {bgCyan  ${command} } or not`,
         }),
       );
 
-      if (shouldRunCommand) {
+      if (shouldRunAddCommand) {
         try {
           await execa.shell(command, {
             cwd: projectDir,
@@ -48,15 +54,15 @@ export default async (
     );
 
     if (removeCommand) {
-      const { shouldRunCommand } = await inquirer.prompt(
+      const { shouldRunRemoveCommand } = await inquirer.prompt(
         normalizedQuestions({
           type: 'confirm',
-          name: 'shouldRunCommand',
+          name: 'shouldRunRemoveCommand',
           message: chalk`${message}, run {bgCyan  ${command} } to fix this or not`,
         }),
       );
 
-      if (shouldRunCommand) {
+      if (shouldRunRemoveCommand) {
         try {
           await execa.shell(command, {
             cwd: projectDir,

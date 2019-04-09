@@ -10,6 +10,8 @@ import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
 
+import { version } from '../../package.json';
+
 import license from './license';
 import readme from './readme';
 import Store from './index';
@@ -89,6 +91,7 @@ class Pkg extends Store {
       prod: 'NODE_ENV=production configs babel',
       test: 'configs test',
     };
+    this.storePkg['create-project'] = version;
 
     Object.keys(questionResult).forEach((key: string) => {
       if (key === 'private') {

@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
@@ -9,7 +10,6 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 
 import logger from 'utils/logger';
 import cliOptions from 'utils/cliOptions';
-import validateProject from 'utils/validateProject';
 import base from 'stores/base';
 
 handleUnhandledRejection();
@@ -18,7 +18,7 @@ handleUnhandledRejection();
   const ctx = cliOptions(process.argv);
   const { projectDir } = ctx;
 
-  await validateProject(projectDir);
+  if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);
 
   logger.info(
     chalk`Creating a new project in {green ${path.relative(

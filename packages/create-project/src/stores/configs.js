@@ -10,7 +10,6 @@ class Configs extends Store {
    */
   end = async () => {
     await this.execa(
-      'git init',
       'yarn add --dev @cat-org/configs',
       ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
         (configName: string) => `configs --install ${configName}`,

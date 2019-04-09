@@ -1,6 +1,7 @@
 // @flow
 
 import debug from 'debug';
+import execa from 'execa';
 
 import pkg from './pkg';
 import gitignore from './gitignore';
@@ -56,13 +57,31 @@ class Base extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = async ({ pkg: { repository } = {} }: $PropertyType<Store, 'ctx'>) => {
-    await this.execa(
-      'yarn flow-typed install',
-      'git add .',
-      'git commit -m "chore(root): project init"',
-      ...(repository ? [`git remote add origin ${repository}`] : []),
-    );
+  end = async ({
+    projectDir,
+    pkg: { repository } = {},
+  }: $PropertyType<Store, 'ctx'>) => {
+    await this.execa('yarn flow-typed install');
+
+    try {
+      await execa.shell('git status', {
+        cwd: projectDir,
+      });
+    } catch (e) {
+      if (
+        !/fatal: not a git repository \(or any of the parent directories\): \.git/.test(
+          e.stderr,
+        )
+      )
+        return;
+
+      await this.execa(
+        'git init',
+        'git add .',
+        'git commit -m "chore(root): project init"',
+        ...(repository ? [`git remote add origin ${repository}`] : []),
+      );
+    }
   };
 }
 

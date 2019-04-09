@@ -16,9 +16,7 @@ class Execa {
     |}> => {
       const stdout = this.mainFunction(cmd);
 
-      this.mainFunction = emptyFunction.thatReturnsArgument;
       this.cmds.push(cmd);
-
       return Promise.resolve({
         stdout,
       });

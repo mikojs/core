@@ -6,16 +6,12 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
-import fs from 'fs';
 import path from 'path';
 
 import cosmiconfig from 'cosmiconfig';
 import readPkgUp from 'read-pkg-up';
-import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
 import debug from 'debug';
-
-import logger from './logger';
 
 import defaultConfigs from 'configs/defaultConfigs';
 
@@ -103,38 +99,11 @@ export class Configs {
 
     debugLog(this.store);
   };
-
-  /**
-   * @example
-   * configs.findRootDir()
-   *
-   * @param {string} cwd - cwd to find the root dir
-   */
-  findRootDir = (cwd?: string = process.cwd()) => {
-    if (this.rootDir) return;
-
-    this.rootDir = cwd;
-
-    while (
-      this.rootDir !== '/' &&
-      !fs.existsSync(path.resolve(this.rootDir, './.git'))
-    )
-      this.rootDir = path.resolve(this.rootDir, '..');
-
-    debugLog(`Find rood dir: ${this.rootDir}`);
-
-    if (this.rootDir === '/')
-      throw logger.fail(
-        'Can not find the root directory',
-        chalk`Run {cyan \`git init\`} in the root directory`,
-      );
-  };
 }
 
 const configs = new Configs();
 
 configs.handleCustomConfigs(readPkgUp.sync().pkg?.configs);
 configs.handleCustomConfigs(cosmiconfig('cat').searchSync()?.filepath);
-configs.findRootDir();
 
 export default configs;

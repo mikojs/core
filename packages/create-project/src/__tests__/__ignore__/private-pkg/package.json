@@ -19,6 +19,7 @@
     "npm": ">= npm version",
     "yarn": ">= yarn version"
   },
+  "create-project": "create-project version",
   "husky": {
     "hooks": {
       "pre-commit": "configs lint-staged && yarn flow"

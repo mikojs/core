@@ -26,6 +26,7 @@ defaultConfigs.defaultNoConfig = {};
 describe('configs', () => {
   const configs = new Configs();
 
+  configs.handleCustomConfigs();
   configs.handleCustomConfigs(
     path.resolve(__dirname, './__ignore__/configs.js'),
   );

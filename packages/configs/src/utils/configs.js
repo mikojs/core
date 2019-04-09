@@ -9,7 +9,6 @@
 import path from 'path';
 
 import cosmiconfig from 'cosmiconfig';
-import readPkgUp from 'read-pkg-up';
 import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
@@ -103,7 +102,6 @@ export class Configs {
 
 const configs = new Configs();
 
-configs.handleCustomConfigs(readPkgUp.sync().pkg?.configs);
 configs.handleCustomConfigs(cosmiconfig('cat').searchSync()?.filepath);
 
 export default configs;

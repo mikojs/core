@@ -20,7 +20,7 @@ const debugLog = debug('configs:configs');
 export class Configs {
   store = { ...defaultConfigs };
 
-  rootDir = null;
+  rootDir = process.cwd();
 
   customConfigsPath = null;
 

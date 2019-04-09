@@ -22,7 +22,7 @@ export class Configs {
 
   rootDir = null;
 
-  customConfigsPath = false;
+  customConfigsPath = null;
 
   /**
    * @example

@@ -25,7 +25,7 @@ export class Worker {
    *
    * @param {number} port - port of server
    */
-  constructor(port?: number = 8888) {
+  constructor(port?: number = 8050) {
     this.port = port;
   }
 
@@ -33,7 +33,7 @@ export class Worker {
 
   server = null;
 
-  port = 8888;
+  port = 8050;
 
   /**
    * @example

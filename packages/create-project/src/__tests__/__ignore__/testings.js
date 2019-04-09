@@ -25,7 +25,6 @@ const basicUsage = {
     'git config --get user.email',
 
     // Run commands
-    'git init',
     'yarn add --dev @cat-org/configs',
     'configs --install babel',
     'configs --install prettier',
@@ -34,9 +33,9 @@ const basicUsage = {
     'configs --install jest',
     'yarn add --dev flow-bin flow-typed',
     'yarn flow-typed install',
-    'git add .',
-    'git commit -m "chore(root): project init"',
-    'git remote add origin https://github.com/cat-org/core.git',
+
+    // check git status
+    'git status',
   ],
 };
 

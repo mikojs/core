@@ -90,7 +90,7 @@ export default class Store {
           {
             key: 'y',
             name: 'overwrite',
-            value: 'write',
+            value: 'overwrite',
           },
           {
             key: 'n',

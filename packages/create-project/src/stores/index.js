@@ -120,18 +120,25 @@ export default class Store {
             added,
             removed,
           }: {
-            value: $ReadOnlyArray<string>,
+            value: string,
             added: ?boolean,
             removed: ?boolean,
           }) => {
-            value.forEach((str: string) => {
-              if (added) log(chalk`{green +${str}}`);
-              else if (removed) log(chalk`{red -${str}}`);
-              else log(` ${str}`);
-            });
+            if (added) log(chalk`{green +${value}}`);
+            else if (removed) log(chalk`{red -${value}}`);
+            else log(` ${value}`);
           },
         );
-        await this.conflictFile(filePath, content);
+
+        const { overwrite } = await inquirer.prompt(
+          normalizedQuestions({
+            name: 'overwrite',
+            type: 'confirm',
+            message: 'overwrite or not',
+          }),
+        );
+
+        if (overwrite) outputFileSync(filePath, content);
         break;
 
       default:

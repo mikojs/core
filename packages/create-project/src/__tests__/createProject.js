@@ -65,6 +65,7 @@ describe('create project', () => {
                   const jsonContent = JSON.parse(content);
 
                   delete jsonContent.useNpm;
+                  delete jsonContent.action;
 
                   expect(
                     prettier

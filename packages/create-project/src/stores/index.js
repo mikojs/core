@@ -1,14 +1,18 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
 import outputFileSync from 'output-file-sync';
+import inquirer from 'inquirer';
+import { diffLines } from 'diff';
 import execa from 'execa';
 import debug from 'debug';
 
 import logger from 'utils/logger';
+import normalizedQuestions from 'utils/normalizedQuestions';
 
 type pkgType = {
   [string]: string,
@@ -68,19 +72,94 @@ export default class Store {
 
   /**
    * @example
+   * store.conflictFile(filePath, content)
+   *
+   * @param {string} filePath - file path
+   * @param {string} content - file content
+   */
+  conflictFile = async (filePath: string, content: string) => {
+    const { action } = await inquirer.prompt(
+      normalizedQuestions({
+        name: 'action',
+        type: 'expand',
+        message: chalk`find the existing file, overwrite {green ${path.resolve(
+          process.cwd(),
+          filePath,
+        )}} or not`,
+        choices: [
+          {
+            key: 'y',
+            name: 'overwrite',
+            value: 'write',
+          },
+          {
+            key: 'n',
+            name: 'do not overwrite',
+            value: 'skip',
+          },
+          {
+            key: 'd',
+            name: 'show the differences between the old and the new',
+            value: 'diff',
+          },
+        ],
+      }),
+    );
+
+    switch (action) {
+      case 'overwrite':
+        outputFileSync(filePath, content);
+        break;
+
+      case 'diff':
+        const { log } = console;
+
+        diffLines(fs.readFileSync(filePath, 'utf-8'), content).forEach(
+          ({
+            value,
+            added,
+            removed,
+          }: {
+            value: $ReadOnlyArray<string>,
+            added: ?boolean,
+            removed: ?boolean,
+          }) => {
+            value.forEach((str: string) => {
+              if (added) log(chalk`{green +${str}}`);
+              else if (removed) log(chalk`{red -${str}}`);
+              else log(` ${str}`);
+            });
+          },
+        );
+        await this.conflictFile(filePath, content);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  /**
+   * @example
    * store.writeFiles({ 'path': 'test' })
    *
    * @param {Object} files - files object
    */
-  writeFiles = (files: { [string]: string }) => {
+  writeFiles = async (files: { [string]: string }) => {
     const { projectDir } = this.ctx;
 
-    Object.keys(files).forEach((key: string) => {
-      const writeFile = [path.resolve(projectDir, key), files[key]];
+    for (const key of Object.keys(files)) {
+      const filePath = path.resolve(projectDir, key);
 
-      outputFileSync(...writeFile);
-      debugLog(writeFile);
-    });
+      if (fs.existsSync(filePath))
+        await this.conflictFile(filePath, files[key]);
+      else outputFileSync(filePath, files[key]);
+
+      debugLog({
+        filePath,
+        file: files[key],
+      });
+    }
   };
 
   /**

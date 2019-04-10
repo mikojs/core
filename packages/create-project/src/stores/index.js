@@ -119,11 +119,11 @@ export default class Store {
             value,
             added,
             removed,
-          }: {
+          }: {|
             value: string,
             added: ?boolean,
             removed: ?boolean,
-          }) => {
+          |}) => {
             if (added) log(chalk`{green +${value}}`);
             else if (removed) log(chalk`{red -${value}}`);
             else log(` ${value}`);

@@ -26,11 +26,11 @@ describe('base', () => {
       ctx,
       stderr,
       expected,
-    }: {
-      ctx: { [string]: string },
+    }: {|
+      ctx: {| [string]: string |},
       stderr: string,
       expected: $ReadOnlyArray<string>,
-    }) => {
+    |}) => {
       base.ctx = { ...ctx, projectDir: 'project dir' };
       execa.cmds = [];
       execa.mainFunction = (cmd: string) => {

@@ -7,6 +7,7 @@ export type inquirerResultType = {
   private: boolean,
   useNpm: boolean,
   keywords: [string],
+  action: 'overwrite',
 };
 
 const basicUsage = {
@@ -18,6 +19,7 @@ const basicUsage = {
     repository: 'https://github.com/cat-org/core.git',
     keywords: ['keyword'],
     useNpm: false,
+    action: 'overwrite',
   },
   cmds: [
     // For getting user information

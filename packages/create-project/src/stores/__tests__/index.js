@@ -14,9 +14,8 @@ class Example extends Store {}
 
 const example = new Example();
 const filePath = path.resolve(__dirname, './__ignore__/file.txt');
-const content = `test
-added
-`;
+const content = `test;
+added;`;
 
 describe('store', () => {
   test.each`
@@ -43,9 +42,9 @@ describe('store', () => {
       await example.conflictFile(filePath, content);
 
       if (inquirerResult.action === 'diff') {
-        expect(mockLog).toHaveBeenCalledWith(' test\n');
-        expect(mockLog).toHaveBeenCalledWith('{red -removed\n}');
-        expect(mockLog).toHaveBeenCalledWith('{green +added\n}');
+        expect(mockLog).toHaveBeenCalledWith(' test;\n');
+        expect(mockLog).toHaveBeenCalledWith('{red -removed;\n}');
+        expect(mockLog).toHaveBeenCalledWith('{green +added;}');
       } else expect(mockLog).not.toHaveBeenCalled();
 
       expect(outputFileSync.destPaths).toHaveLength(length);

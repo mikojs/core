@@ -3,7 +3,6 @@
 import path from 'path';
 
 import memoizeOne from 'memoize-one';
-import inquirer from 'inquirer';
 import { isURL } from 'validator';
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
@@ -18,11 +17,10 @@ import Store from './index';
 
 import getEngines from 'utils/getEngines';
 import getUser from 'utils/getUser';
-import normalizedQuestions from 'utils/normalizedQuestions';
 
 const debugLog = debug('create-project:store:pkg');
 
-export const pkgQuestions = [
+export const PKG_QUESTIONS = [
   {
     name: 'private',
     message: 'is private or not',
@@ -79,8 +77,8 @@ class Pkg extends Store {
    */
   defaultInfo = memoizeOne(async (projectDir: string) => {
     const [username, email] = await getUser();
-    const questionResult = await inquirer.prompt(
-      normalizedQuestions<$ReadOnlyArray<string>>(...pkgQuestions),
+    const questionResult = await this.prompt<$ReadOnlyArray<string>>(
+      ...PKG_QUESTIONS,
     );
 
     this.storePkg.name = path.basename(projectDir);

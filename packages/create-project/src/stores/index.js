@@ -11,8 +11,10 @@ import { diffLines } from 'diff';
 import execa from 'execa';
 import debug from 'debug';
 
+import { normalizedQuestions } from '@cat-org/utils';
+import { type questionType } from '@cat-org/utils/lib/normalizedQuestions';
+
 import logger from 'utils/logger';
-import normalizedQuestions from 'utils/normalizedQuestions';
 
 type pkgType = {
   [string]: string,
@@ -73,39 +75,50 @@ export default class Store {
 
   /**
    * @example
+   * store.prompt({ name: 'question' })
+   *
+   * @param {Array} questions - question array
+   *
+   * @return {Array} - normalized question array
+   */
+  prompt = <T>(...questions: $ReadOnlyArray<questionType<T>>) =>
+    inquirer.prompt(
+      normalizedQuestions('@cat-org/create-project')(...questions),
+    );
+
+  /**
+   * @example
    * store.conflictFile(filePath, content)
    *
    * @param {string} filePath - file path
    * @param {string} content - file content
    */
   conflictFile = async (filePath: string, content: string) => {
-    const { action } = await inquirer.prompt(
-      normalizedQuestions({
-        name: 'action',
-        type: 'expand',
-        message: chalk`find the existing file, overwrite {green ${path.resolve(
-          process.cwd(),
-          filePath,
-        )}} or not`,
-        choices: [
-          {
-            key: 'y',
-            name: 'overwrite',
-            value: 'overwrite',
-          },
-          {
-            key: 'n',
-            name: 'do not overwrite',
-            value: 'skip',
-          },
-          {
-            key: 'd',
-            name: 'show the differences between the old and the new',
-            value: 'diff',
-          },
-        ],
-      }),
-    );
+    const { action } = await this.prompt({
+      name: 'action',
+      type: 'expand',
+      message: chalk`find the existing file, overwrite {green ${path.resolve(
+        process.cwd(),
+        filePath,
+      )}} or not`,
+      choices: [
+        {
+          key: 'y',
+          name: 'overwrite',
+          value: 'overwrite',
+        },
+        {
+          key: 'n',
+          name: 'do not overwrite',
+          value: 'skip',
+        },
+        {
+          key: 'd',
+          name: 'show the differences between the old and the new',
+          value: 'diff',
+        },
+      ],
+    });
 
     switch (action) {
       case 'overwrite':
@@ -131,13 +144,11 @@ export default class Store {
           },
         );
 
-        const { overwrite } = await inquirer.prompt(
-          normalizedQuestions({
-            name: 'overwrite',
-            type: 'confirm',
-            message: 'overwrite or not',
-          }),
-        );
+        const { overwrite } = await this.prompt({
+          name: 'overwrite',
+          type: 'confirm',
+          message: 'overwrite or not',
+        });
 
         if (overwrite) outputFileSync(filePath, content);
         break;

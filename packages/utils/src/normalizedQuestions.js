@@ -2,7 +2,7 @@
 
 import chalk from 'chalk';
 
-type questionType<T> = {
+export type questionType<T> = {
   name: string,
   message?: string,
   validate?: (val: T & string) => true | string,

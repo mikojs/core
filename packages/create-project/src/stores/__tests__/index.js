@@ -52,8 +52,17 @@ describe('store', () => {
     },
   );
 
+  test('store with --skip-command', async () => {
+    execa.cmds = [];
+    example.ctx = { projectDir: 'project dir', skipCommand: true };
+
+    await example.execa('command skip');
+
+    expect(execa.cmds).toHaveLength(0);
+  });
+
   test('store with execa error', async () => {
-    example.run({ projectDir: 'project dir', skipCommand: false });
+    example.ctx = { projectDir: 'project dir', skipCommand: false };
     execa.mainFunction = () => {
       throw new Error('command error');
     };

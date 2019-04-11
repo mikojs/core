@@ -10,6 +10,7 @@ describe('cli options', () => {
   test('work', () => {
     expect(cliOptions([...defaultArgv, 'projectDir'])).toEqual({
       projectDir: path.resolve('projectDir'),
+      skipCommand: false,
     });
   });
 

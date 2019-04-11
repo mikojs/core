@@ -123,8 +123,10 @@ const lint = {
   }),
   ignore: ignore => [
     ...ignore,
-    // ignore for @cat-org/eslint-config-cat
+    // ignore for @cat-org/eslint-config-cat testing
     'packages/eslint-config-cat/src/__tests__/__ignore__',
+    // ignore for @cat-org/create-project testing
+    'packages/create-project/src/__tests__/__ignore__/**/src/pages/**',
   ],
   configFiles: {
     babel: false,

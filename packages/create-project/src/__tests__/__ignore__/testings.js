@@ -3,26 +3,44 @@
 import path from 'path';
 
 export type inquirerResultType = {
-  [string]: string,
-  private: boolean,
-  useNpm: boolean,
-  keywords: [string],
+  // base
   action: 'overwrite',
+
+  // pkg
+  keywords: [string],
+  private: boolean,
+  [string]: string,
+
+  // npm
+  useNpm: boolean,
+
+  // server
+  useServer: boolean,
 };
 
 const basicUsage = {
   name: 'basic-usage',
   inquirerResult: {
+    // base
+    action: 'overwrite',
+
+    // pkg
     private: false,
     description: 'package description',
     homepage: 'http://cat-org/package-homepage',
     repository: 'https://github.com/cat-org/core.git',
     keywords: ['keyword'],
+
+    // npm
     useNpm: false,
-    action: 'overwrite',
+
+    // server
+    useServer: false,
   },
   cmds: [
     // For getting user information
+    'git config --get user.name',
+    'git config --get user.email',
     'git config --get user.name',
     'git config --get user.email',
 
@@ -59,7 +77,20 @@ const privatePkg = {
   cmds: basicUsage.cmds,
 };
 
-export default [basicUsage, useNpm, privatePkg].reduce(
+const useServer = {
+  name: 'use-server',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    useServer: true,
+  },
+  cmds: [
+    ...basicUsage.cmds.slice(0, 4),
+    'yarn add --dev @cat-org/server @cat-org/default-middleware @cat-org/react-middleware',
+    ...basicUsage.cmds.slice(4),
+  ],
+};
+
+export default [basicUsage, useNpm, privatePkg, useServer].reduce(
   (
     result: $ReadOnlyArray<
       [string, string, inquirerResultType, $ReadOnlyArray<string>],

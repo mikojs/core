@@ -6,8 +6,6 @@ import memoizeOne from 'memoize-one';
 import { isURL } from 'validator';
 import { emptyFunction } from 'fbjs';
 
-import { mockChoice } from '@cat-org/utils';
-
 import { version } from '../../package.json';
 
 import license from './license';
@@ -81,30 +79,39 @@ class Pkg extends Store {
     this.storePkg.name = path.basename(projectDir);
     this.storePkg.engines = await getEngines();
     this.storePkg.author = `${username} <${email}>`;
-    this.storePkg.scripts = {
-      dev: 'configs babel -w',
-      prod: 'NODE_ENV=production configs babel',
-      test: 'configs test',
-    };
     this.storePkg['create-project'] = version;
 
     Object.keys(questionResult).forEach((key: string) => {
-      if (key === 'private') {
-        mockChoice(
-          questionResult[key],
-          () => {
-            this.storePkg.private = true;
-          },
-          emptyFunction,
-        );
-        return;
-      }
-
-      this.storePkg[key] = questionResult[key];
+      if (key === 'private' && this.storePkg.private)
+        this.storePkg.private = true;
+      else this.storePkg[key] = questionResult[key];
     });
 
     this.debug(this.storePkg);
   }, emptyFunction.thatReturnsTrue);
+
+  /**
+   * @example
+   * pkg.addScripts(true)
+   *
+   * @param {boolean} useServer - use server or not
+   */
+  addScripts = (
+    useServer: $PropertyType<$PropertyType<Store, 'ctx'>, 'useServer'>,
+  ) => {
+    if (useServer)
+      this.storePkg.scripts = {
+        dev: 'server --dev',
+        prod: 'NODE_ENV=production server',
+        test: 'configs test:react',
+      };
+    else
+      this.storePkg.scripts = {
+        dev: 'configs babel -w',
+        prod: 'NODE_ENV=production configs babel',
+        test: 'configs test',
+      };
+  };
 
   /**
    * @example
@@ -113,9 +120,10 @@ class Pkg extends Store {
    * @param {Object} ctx - store context
    */
   start = async (ctx: $PropertyType<Store, 'ctx'>) => {
-    const { projectDir } = ctx;
+    const { projectDir, useServer } = ctx;
 
     await this.defaultInfo(projectDir);
+    this.addScripts(useServer);
 
     ctx.pkg = this.storePkg;
   };

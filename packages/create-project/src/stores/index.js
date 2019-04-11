@@ -38,6 +38,7 @@ type ctxType = {|
   skipCommand: boolean,
   pkg?: pkgType,
   useNpm?: boolean,
+  useServer?: boolean,
 |};
 
 const debugLog = debug('create-project:store');

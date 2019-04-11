@@ -31,15 +31,6 @@ __mocks__
 # circleci
 .circleci`;
 
-const NPMIGNORE_QUESTIONS = [
-  {
-    name: 'useNpm',
-    message: 'use npm or not',
-    type: 'confirm',
-    default: false,
-  },
-];
-
 /** npmignore store */
 class Npmignore extends Store {
   subStores = [readme, circleci];
@@ -51,7 +42,12 @@ class Npmignore extends Store {
    * npmignore.checkNpm()
    */
   checkNpm = memoizeOne(async () => {
-    this.storeUseNpm = (await this.prompt(...NPMIGNORE_QUESTIONS)).useNpm;
+    this.storeUseNpm = (await this.prompt({
+      name: 'useNpm',
+      message: 'use npm or not',
+      type: 'confirm',
+      default: false,
+    })).useNpm;
     this.debug(this.storeUseNpm);
   }, emptyFunction.thatReturnsTrue);
 

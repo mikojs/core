@@ -81,11 +81,6 @@ class Pkg extends Store {
     this.storePkg.name = path.basename(projectDir);
     this.storePkg.engines = await getEngines();
     this.storePkg.author = `${username} <${email}>`;
-    this.storePkg.scripts = {
-      dev: 'configs babel -w',
-      prod: 'NODE_ENV=production configs babel',
-      test: 'configs test',
-    };
     this.storePkg['create-project'] = version;
 
     Object.keys(questionResult).forEach((key: string) => {
@@ -108,14 +103,38 @@ class Pkg extends Store {
 
   /**
    * @example
+   * pkg.addScripts(true)
+   *
+   * @param {boolean} useServer - use server or not
+   */
+  addScripts = (
+    useServer: $PropertyType<$PropertyType<Store, 'ctx'>, 'useServer'>,
+  ) => {
+    if (useServer)
+      this.storePkg.scripts = {
+        dev: 'server --dev',
+        prod: 'NODE_ENV=production server',
+        test: 'configs test:react',
+      };
+    else
+      this.storePkg.scripts = {
+        dev: 'configs babel -w',
+        prod: 'NODE_ENV=production configs babel',
+        test: 'configs test',
+      };
+  };
+
+  /**
+   * @example
    * pkg.start(ctx)
    *
    * @param {Object} ctx - store context
    */
   start = async (ctx: $PropertyType<Store, 'ctx'>) => {
-    const { projectDir } = ctx;
+    const { projectDir, useServer } = ctx;
 
     await this.defaultInfo(projectDir);
+    this.addScripts(useServer);
 
     ctx.pkg = this.storePkg;
   };

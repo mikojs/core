@@ -2,6 +2,7 @@
 
 import execa from 'execa';
 
+import server from './server';
 import pkg from './pkg';
 import gitignore from './gitignore';
 import npmignore from './npmignore';
@@ -15,6 +16,7 @@ import Store from './index';
 /** base store */
 class Base extends Store {
   subStores = [
+    server,
     pkg,
     gitignore,
     npmignore,

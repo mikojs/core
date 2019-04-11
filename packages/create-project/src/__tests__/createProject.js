@@ -18,8 +18,13 @@ import { version } from '../../package.json';
 import testings, { type inquirerResultType } from './__ignore__/testings';
 
 import base from 'stores/base';
+import pkg from 'stores/pkg';
 
 describe('create project', () => {
+  beforeEach(() => {
+    delete pkg.storePkg.private;
+  });
+
   test.each(testings)(
     '%s',
     async (
@@ -64,8 +69,11 @@ describe('create project', () => {
                 case '.json':
                   const jsonContent = JSON.parse(content);
 
-                  delete jsonContent.useNpm;
+                  if (!jsonContent.private) delete jsonContent.private;
+
                   delete jsonContent.action;
+                  delete jsonContent.useNpm;
+                  delete jsonContent.useServer;
 
                   expect(
                     prettier

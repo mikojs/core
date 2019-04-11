@@ -6,8 +6,6 @@ import memoizeOne from 'memoize-one';
 import { isURL } from 'validator';
 import { emptyFunction } from 'fbjs';
 
-import { mockChoice } from '@cat-org/utils';
-
 import { version } from '../../package.json';
 
 import license from './license';
@@ -84,18 +82,9 @@ class Pkg extends Store {
     this.storePkg['create-project'] = version;
 
     Object.keys(questionResult).forEach((key: string) => {
-      if (key === 'private') {
-        mockChoice(
-          questionResult[key],
-          () => {
-            this.storePkg.private = true;
-          },
-          emptyFunction,
-        );
-        return;
-      }
-
-      this.storePkg[key] = questionResult[key];
+      if (key === 'private' && this.storePkg.private)
+        this.storePkg.private = true;
+      else this.storePkg[key] = questionResult[key];
     });
 
     this.debug(this.storePkg);

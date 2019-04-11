@@ -33,7 +33,7 @@ describe('create project', () => {
       execa.cmds = [];
       inquirer.result = inquirerResult;
 
-      await base.init({ projectDir });
+      await base.init({ projectDir, skipCommand: false });
 
       expect(
         d3DirTree(projectDir, { exclude: /.*\.swp/ })

@@ -53,7 +53,7 @@ describe('store', () => {
   );
 
   test('store with execa error', async () => {
-    example.run({ projectDir: 'project dir' });
+    example.run({ projectDir: 'project dir', skipCommand: false });
     execa.mainFunction = () => {
       throw new Error('command error');
     };

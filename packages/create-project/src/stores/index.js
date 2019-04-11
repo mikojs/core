@@ -46,6 +46,8 @@ const debugLog = debug('create-project:store');
 export default class Store {
   ctx: ctxType;
 
+  debug = debug(`create-project:store:${this.constructor.name}`);
+
   subStores = [];
 
   start = emptyFunction;

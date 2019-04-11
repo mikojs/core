@@ -19,10 +19,16 @@ export default (
   const program = new commander.Command('create-project')
     .version(version, '-v, --version')
     .arguments('<project directory>')
-    .usage(chalk`{green <project directory>}`);
+    .usage(chalk`{green <project directory>}`)
+    .description(
+      chalk`Example:
+  create-project {green <project directory>}`,
+    )
+    .option('--skip-command', 'skip running commands');
 
   const {
     args: [projectDir],
+    skipCommand = false,
   } = program.parse([...argv]);
 
   if (!projectDir)
@@ -30,6 +36,7 @@ export default (
 
   const cliOptions = {
     projectDir: path.resolve(projectDir),
+    skipCommand,
   };
 
   debugLog(cliOptions);

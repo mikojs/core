@@ -33,6 +33,7 @@ type pkgType = {
 
 type ctxType = {|
   projectDir: string,
+  skipCommand: boolean,
   pkg?: pkgType,
   useNpm?: boolean,
 |};
@@ -176,7 +177,9 @@ export default class Store {
    * @param {Array} commands - commands array
    */
   execa = async (...commands: $ReadOnlyArray<string>) => {
-    const { projectDir } = this.ctx;
+    const { projectDir, skipCommand } = this.ctx;
+
+    if (skipCommand) return;
 
     for (const command of commands) {
       try {

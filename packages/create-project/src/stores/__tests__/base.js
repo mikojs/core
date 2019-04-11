@@ -31,7 +31,7 @@ describe('base', () => {
       stderr: string,
       expected: $ReadOnlyArray<string>,
     |}) => {
-      base.ctx = { ...ctx, projectDir: 'project dir' };
+      base.ctx = { ...ctx, projectDir: 'project dir', skipCommand: false };
       execa.cmds = [];
       execa.mainFunction = (cmd: string) => {
         if (cmd !== 'git status') return;

@@ -24,7 +24,7 @@ handleUnhandledRejection();
     chalk`Creating a new project in {green ${path.relative(
       process.cwd(),
       projectDir,
-    )}}`,
+    ) || './'}}`,
   );
 
   await base.init(ctx);

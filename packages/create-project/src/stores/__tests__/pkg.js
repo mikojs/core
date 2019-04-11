@@ -12,7 +12,7 @@ const notFind = (argu: string) => {
   throw new Error('not find');
 };
 
-pkg.ctx = { projectDir: 'project dir' };
+pkg.ctx = { projectDir: 'project dir', skipCommand: false };
 
 describe('pkg store', () => {
   describe('validate', () => {

@@ -1,14 +1,11 @@
 // @flow
 
 import memoizeOne from 'memoize-one';
-import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
 import readme from './readme';
 import circleci from './circleci';
 import Store from './index';
-
-const debugLog = debug('create-project:store:npmignore');
 
 const template = `# default
 *.log
@@ -55,7 +52,7 @@ class Npmignore extends Store {
    */
   checkNpm = memoizeOne(async () => {
     this.storeUseNpm = (await this.prompt(...NPMIGNORE_QUESTIONS)).useNpm;
-    debugLog(this.storeUseNpm);
+    this.debug(this.storeUseNpm);
   }, emptyFunction.thatReturnsTrue);
 
   /**

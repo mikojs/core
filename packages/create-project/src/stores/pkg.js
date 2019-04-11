@@ -4,7 +4,6 @@ import path from 'path';
 
 import memoizeOne from 'memoize-one';
 import { isURL } from 'validator';
-import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@cat-org/utils';
@@ -17,8 +16,6 @@ import Store from './index';
 
 import getEngines from 'utils/getEngines';
 import getUser from 'utils/getUser';
-
-const debugLog = debug('create-project:store:pkg');
 
 export const PKG_QUESTIONS = [
   {
@@ -106,7 +103,7 @@ class Pkg extends Store {
       this.storePkg[key] = questionResult[key];
     });
 
-    debugLog(this.storePkg);
+    this.debug(this.storePkg);
   }, emptyFunction.thatReturnsTrue);
 
   /**

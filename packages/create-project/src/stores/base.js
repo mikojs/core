@@ -1,6 +1,5 @@
 // @flow
 
-import debug from 'debug';
 import execa from 'execa';
 
 import pkg from './pkg';
@@ -12,8 +11,6 @@ import license from './license';
 import readme from './readme';
 import circleci from './circleci';
 import Store from './index';
-
-const debugLog = debug('create-project:store:base');
 
 /** base store */
 class Base extends Store {
@@ -45,7 +42,7 @@ class Base extends Store {
       },
     );
 
-    debugLog(stores);
+    this.debug(stores);
 
     for (const store of stores) await store.end(ctx);
     await this.end(ctx);

@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "server --dev",
     "prod": "NODE_ENV=production server",
-    "test": "configs test"
+    "test": "configs test:react"
   },
   "keywords": ["keyword"],
   "engines": {

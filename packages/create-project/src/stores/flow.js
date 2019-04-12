@@ -25,7 +25,7 @@ class Flow extends Store {
    * @example
    * flow.end()
    */
-  end = async () => {
+  +end = async () => {
     await this.writeFiles({
       '.flowconfig': template,
     });

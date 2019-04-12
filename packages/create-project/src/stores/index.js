@@ -48,13 +48,13 @@ const debugLog = debug('create-project:store');
 export default class Store {
   ctx: ctxType;
 
-  debug = debug(`create-project:store:${this.constructor.name}`);
+  +debug = debug(`create-project:store:${this.constructor.name}`);
 
-  subStores = [];
+  +subStores = [];
 
-  start = emptyFunction;
+  +start = emptyFunction;
 
-  end = emptyFunction;
+  +end = emptyFunction;
 
   /**
    * @example
@@ -62,7 +62,7 @@ export default class Store {
    *
    * @param {Object} ctx - store context
    */
-  run = async (ctx: ctxType): Promise<$ReadOnlyArray<Store>> => {
+  +run = async (ctx: ctxType): Promise<$ReadOnlyArray<Store>> => {
     const stores = [];
 
     this.ctx = ctx;
@@ -85,7 +85,7 @@ export default class Store {
    *
    * @return {Array} - normalized question array
    */
-  prompt = <T>(...questions: $ReadOnlyArray<questionType<T>>) =>
+  +prompt = <T>(...questions: $ReadOnlyArray<questionType<T>>) =>
     inquirer.prompt(
       normalizedQuestions('@cat-org/create-project')(...questions),
     );
@@ -97,7 +97,7 @@ export default class Store {
    * @param {string} filePath - file path
    * @param {string} content - file content
    */
-  conflictFile = async (filePath: string, content: string) => {
+  +conflictFile = async (filePath: string, content: string) => {
     const { action } = await this.prompt({
       name: 'action',
       type: 'expand',
@@ -168,7 +168,7 @@ export default class Store {
    *
    * @param {Object} files - files object
    */
-  writeFiles = async (files: { [string]: string }) => {
+  +writeFiles = async (files: { [string]: string }) => {
     const { projectDir } = this.ctx;
 
     for (const key of Object.keys(files)) {
@@ -191,7 +191,7 @@ export default class Store {
    *
    * @param {Array} commands - commands array
    */
-  execa = async (...commands: $ReadOnlyArray<string>) => {
+  +execa = async (...commands: $ReadOnlyArray<string>) => {
     const { projectDir, skipCommand } = this.ctx;
 
     if (skipCommand) return;

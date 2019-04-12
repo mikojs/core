@@ -8,7 +8,7 @@ class Configs extends Store {
    * @example
    * configs.end()
    */
-  end = async () => {
+  +end = async () => {
     await this.execa(
       'yarn add --dev @cat-org/configs',
       ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(

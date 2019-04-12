@@ -108,7 +108,7 @@ class Circleci extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = async ({ useNpm }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({ useNpm }: $PropertyType<Store, 'ctx'>) => {
     await this.writeFiles({
       '.circleci/config.yml': template(useNpm),
     });

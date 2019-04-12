@@ -48,7 +48,7 @@ class Handler {
    *
    * @param {Object} options - options of babel-plugin-transform-flow
    */
-  initializeOptions = (options: {}) => {
+  +initializeOptions = (options: {}) => {
     if (this.initialized) return;
 
     Object.keys(options).forEach((key: string) => {
@@ -90,7 +90,7 @@ class Handler {
    *
    * @param {Object} opts - opts of manipulateOptions
    */
-  manipulateOptions = ({
+  +manipulateOptions = ({
     plugins,
   }: $PropertyType<manipulateOptionsPluginsType, 'manipulateOptions'>) => {
     const [{ options }] = plugins.filter(
@@ -123,7 +123,7 @@ class Handler {
    * @param {string} cwd - the path of cwd
    * @return {Object} - an object of { srcPath, destPath }
    */
-  getFilePaths = (
+  +getFilePaths = (
     filePath: string,
     cwd: string,
   ): {|

@@ -23,7 +23,7 @@ export type flowFileType = {|
 class FlowFiles {
   store = [];
 
-  watcher = null;
+  -watcher = null;
 
   /**
    * @example
@@ -31,7 +31,7 @@ class FlowFiles {
    *
    * @param {Object} file - flow file
    */
-  add = (file: flowFileType) => {
+  +add = (file: flowFileType) => {
     this.store.push(file);
 
     if (handler.options.watch) this.openWatcher();
@@ -44,10 +44,10 @@ class FlowFiles {
    * @param {string} srcPath - check src path exist
    * @return {boolean} - if path exist, return true
    */
-  fileExist = (srcPath: string) =>
+  +fileExist = (srcPath: string) =>
     this.store.some((flowFile: flowFileType) => flowFile.srcPath === srcPath);
 
-  openWatcher = () => {
+  +openWatcher = () => {
     /* eslint-disable flowtype/no-unused-expressions */
     // $FlowFixMe flow not yet supporte
     this.watcher?.close();

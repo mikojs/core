@@ -1,7 +1,6 @@
 // @flow
 
 import memoizeOne from 'memoize-one';
-import { emptyFunction } from 'fbjs';
 
 import pkg from './pkg';
 import Store from './index';
@@ -39,7 +38,6 @@ class React extends Store {
 
       this.debug(this.storeUseReact);
     },
-    emptyFunction.thatReturnsTrue,
   );
 
   /**

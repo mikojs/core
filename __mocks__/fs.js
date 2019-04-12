@@ -6,7 +6,7 @@ import { emptyFunction } from 'fbjs';
 class Fs {
   exist = false;
 
-  main = {
+  +main = {
     existsSync: () => this.exist,
     mkdirSync: emptyFunction,
     rmdirSync: emptyFunction,

@@ -4,7 +4,7 @@ import { emptyFunction } from 'fbjs';
 
 /** mock chokidar */
 class Chokidar {
-  watchCallback = emptyFunction;
+  -watchCallback = emptyFunction;
 
   /**
    * @example
@@ -13,7 +13,7 @@ class Chokidar {
    * @param {string} type - type to mock
    * @param {Function} callback - callback to mock
    */
-  on = (type: string, callback: emptyFunction) => {
+  +on = (type: string, callback: emptyFunction) => {
     this.watchCallback = callback;
   };
 
@@ -23,7 +23,7 @@ class Chokidar {
    *
    * @return {Chokidar} - Chokidar class
    */
-  watch = (): Chokidar => this;
+  +watch = (): Chokidar => this;
 }
 
 export default new Chokidar();

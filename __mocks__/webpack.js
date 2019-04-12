@@ -13,7 +13,7 @@ class Webpack {
    * @param {Object} config - webpack config
    * @param {Function} callback - trigger callback after rendering
    */
-  main = (config: {||}, callback: (err: ?Error, stats: {}) => {}) => {
+  +main = (config: {||}, callback: (err: ?Error, stats: {}) => {}) => {
     callback(this.err, this.stats);
   };
 }

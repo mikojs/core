@@ -17,7 +17,7 @@ class OutPutFileSync {
    * @param {string} destPath - dest path to add
    * @param {string} content - content to add
    */
-  main = (destPath: string, content: string) => {
+  +main = (destPath: string, content: string) => {
     this.mainFunction();
     this.mainFunction = emptyFunction;
     this.destPaths.push(destPath);

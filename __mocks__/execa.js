@@ -8,7 +8,7 @@ class Execa {
 
   cmds = [];
 
-  main = {
+  +main = {
     shell: (
       cmd: string,
     ): Promise<{|

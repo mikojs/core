@@ -18,7 +18,7 @@ class NpmWhich {
    *
    * @return {Function} - mock npm-which function
    */
-  main = (): findFuncType => {
+  +main = (): findFuncType => {
     /**
      * @example
      * findFunc('cliName', (err, value) => {

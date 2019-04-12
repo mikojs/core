@@ -37,7 +37,7 @@ class OraStore {
    *
    * @return {Object} - settings
    */
-  getFunc = (): settingsType => {
+  +getFunc = (): settingsType => {
     this.func = {
       log: {
         getName: GET_NAME.log,
@@ -95,7 +95,7 @@ class OraStore {
    *
    * @return {Object} - ora object with the function of logger
    */
-  after = (name: string): oraType => {
+  +after = (name: string): oraType => {
     const store = { ...this.store };
 
     Object.keys(this.func).forEach((key: string) => {

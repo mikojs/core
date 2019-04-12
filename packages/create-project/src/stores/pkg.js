@@ -96,16 +96,21 @@ class Pkg extends Store {
    *
    * @param {boolean} useServer - use server or not
    */
-  addScripts = (
-    useServer: $PropertyType<$PropertyType<Store, 'ctx'>, 'useServer'>,
-  ) => {
-    if (useServer)
-      this.storePkg.scripts = {
-        dev: 'server --dev',
-        prod: 'NODE_ENV=production server',
-        test: 'configs test:react',
-      };
-    else
+  addScripts = ({ useServer, useReact }: $PropertyType<Store, 'ctx'>) => {
+    if (useServer) {
+      if (useReact)
+        this.storePkg.scripts = {
+          dev: 'server --dev',
+          prod: 'NODE_ENV=production server',
+          test: 'configs test:react',
+        };
+      else
+        this.storePkg.scripts = {
+          dev: 'server --dev',
+          prod: 'NODE_ENV=production server',
+          test: 'configs test',
+        };
+    } else
       this.storePkg.scripts = {
         dev: 'configs babel -w',
         prod: 'NODE_ENV=production configs babel',
@@ -120,10 +125,10 @@ class Pkg extends Store {
    * @param {Object} ctx - store context
    */
   start = async (ctx: $PropertyType<Store, 'ctx'>) => {
-    const { projectDir, useServer } = ctx;
+    const { projectDir } = ctx;
 
     await this.defaultInfo(projectDir);
-    this.addScripts(useServer);
+    this.addScripts(ctx);
 
     ctx.pkg = this.storePkg;
   };

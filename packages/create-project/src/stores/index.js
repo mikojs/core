@@ -36,9 +36,10 @@ type pkgType = {
 type ctxType = {|
   projectDir: string,
   skipCommand: boolean,
+  useServer?: boolean,
+  useReact?: boolean,
   pkg?: pkgType,
   useNpm?: boolean,
-  useServer?: boolean,
 |};
 
 const debugLog = debug('create-project:store');

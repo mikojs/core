@@ -29,11 +29,11 @@ export class Worker {
     this.port = port;
   }
 
-  cache = {};
+  +cache = {};
 
   server = null;
 
-  port = 8050;
+  +port = 8050;
 
   /**
    * @example
@@ -41,7 +41,7 @@ export class Worker {
    *
    * @return {Promise} - a server or null
    */
-  init = async (): Promise<net.Server | null> => {
+  +init = async (): Promise<net.Server | null> => {
     this.server = await new Promise(resolve => {
       const server = net.createServer((socket: net.Socket) => {
         socket.setEncoding('utf8');
@@ -71,7 +71,7 @@ export class Worker {
    *
    * @return {client | null} - a client socket or null
    */
-  writeCache = (data: cacheType): ?net.Socket => {
+  +writeCache = (data: cacheType): ?net.Socket => {
     const { filePath, pid, using } = data;
 
     if (this.server) {

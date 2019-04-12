@@ -18,11 +18,11 @@ const debugLog = debug('configs:configs');
 
 /** Store configs */
 export class Configs {
-  store = { ...defaultConfigs };
+  +store = { ...defaultConfigs };
 
-  rootDir = process.cwd();
+  +rootDir = process.cwd();
 
-  customConfigsPath = null;
+  +customConfigsPath = null;
 
   /**
    * @example
@@ -30,7 +30,7 @@ export class Configs {
    *
    * @param {string} customConfigsPath - set custom configsPath
    */
-  handleCustomConfigs = (customConfigsPath?: string) => {
+  +handleCustomConfigs = (customConfigsPath?: string) => {
     if (!customConfigsPath) return;
 
     const customConfigs = require(customConfigsPath);

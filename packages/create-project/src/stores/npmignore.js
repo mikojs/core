@@ -33,7 +33,7 @@ __mocks__
 
 /** npmignore store */
 class Npmignore extends Store {
-  subStores = [readme, circleci];
+  +subStores = [readme, circleci];
 
   storeUseNpm = false;
 
@@ -41,7 +41,7 @@ class Npmignore extends Store {
    * @example
    * npmignore.checkNpm()
    */
-  checkNpm = memoizeOne(async () => {
+  +checkNpm = memoizeOne(async () => {
     this.storeUseNpm = (await this.prompt({
       name: 'useNpm',
       message: 'use npm or not',
@@ -57,7 +57,7 @@ class Npmignore extends Store {
    *
    * @param {Object} ctx - store context
    */
-  start = async (ctx: $PropertyType<Store, 'ctx'>) => {
+  +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     await this.checkNpm();
 
     ctx.useNpm = this.storeUseNpm;
@@ -67,7 +67,7 @@ class Npmignore extends Store {
    * @example
    * npmignore.end()
    */
-  end = async () => {
+  +end = async () => {
     if (this.storeUseNpm)
       await this.writeFiles({
         '.npmignore': template,

@@ -9,7 +9,7 @@ import Store from './index';
 
 /** server store */
 class Server extends Store {
-  subStores = [react, pkg];
+  +subStores = [react, pkg];
 
   storeUseServer = false;
 
@@ -17,7 +17,7 @@ class Server extends Store {
    * @example
    * server.checkServer()
    */
-  checkServer = memoizeOne(async () => {
+  +checkServer = memoizeOne(async () => {
     this.storeUseServer = (await this.prompt({
       name: 'useServer',
       message: 'use server or not',
@@ -33,7 +33,7 @@ class Server extends Store {
    *
    * @param {Object} ctx - store context
    */
-  start = async (ctx: $PropertyType<Store, 'ctx'>) => {
+  +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     await this.checkServer();
 
     ctx.useServer = this.storeUseServer;
@@ -43,7 +43,7 @@ class Server extends Store {
    * @example
    * pkg.end(ctx)
    */
-  end = async () => {
+  +end = async () => {
     if (!this.storeUseServer) return;
 
     await this.execa(

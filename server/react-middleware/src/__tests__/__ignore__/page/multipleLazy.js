@@ -1,8 +1,8 @@
 // @flow
-/* eslint-disable require-jsdoc, flowtype/require-return-type */
+/* eslint-disable require-jsdoc */
 // TODO component should be ignored
 
-import React from 'react';
+import React, { type Node as NodeType } from 'react';
 
 import { lazy } from '../../../ReactIsomorphic';
 
@@ -22,8 +22,8 @@ const TestOne = lazy(
   'test-lazy-1',
 );
 
-export default class MultipleLazy extends React.PureComponent<{||}> {
-  render() {
+export default class MultipleLazy extends React.PureComponent<*> {
+  render(): NodeType {
     return <TestOne />;
   }
 }

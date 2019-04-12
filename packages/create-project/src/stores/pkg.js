@@ -50,9 +50,11 @@ export const PKG_QUESTIONS = [
 
 /** store pkg */
 class Pkg extends Store {
-  subStores = [license, readme];
+  +subStores = [license, readme];
 
-  storePkg: $NonMaybeType<$PropertyType<$PropertyType<Store, 'ctx'>, 'pkg'>> = {
+  +storePkg: $NonMaybeType<
+    $PropertyType<$PropertyType<Store, 'ctx'>, 'pkg'>,
+  > = {
     license: 'MIT',
     version: '1.0.0',
     main: './lib/index.js',
@@ -70,7 +72,7 @@ class Pkg extends Store {
    *
    * @param {string} projectDir - project dir
    */
-  defaultInfo = memoizeOne(async (projectDir: string) => {
+  +defaultInfo = memoizeOne(async (projectDir: string) => {
     const [username, email] = await getUser();
     const questionResult = await this.prompt<$ReadOnlyArray<string>>(
       ...PKG_QUESTIONS,
@@ -96,7 +98,7 @@ class Pkg extends Store {
    *
    * @param {boolean} useServer - use server or not
    */
-  addScripts = ({ useServer, useReact }: $PropertyType<Store, 'ctx'>) => {
+  +addScripts = ({ useServer, useReact }: $PropertyType<Store, 'ctx'>) => {
     if (useServer) {
       if (useReact)
         this.storePkg.scripts = {
@@ -124,7 +126,7 @@ class Pkg extends Store {
    *
    * @param {Object} ctx - store context
    */
-  start = async (ctx: $PropertyType<Store, 'ctx'>) => {
+  +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     const { projectDir } = ctx;
 
     await this.defaultInfo(projectDir);
@@ -137,7 +139,7 @@ class Pkg extends Store {
    * @example
    * pkg.end(ctx)
    */
-  end = async () => {
+  +end = async () => {
     await this.writeFiles({
       'package.json': JSON.stringify(this.storePkg, null, 2),
     });

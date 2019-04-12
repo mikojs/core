@@ -32,13 +32,13 @@ class WriteFiles {
    *
    * @param {Object} file - file information
    */
-  add = (file: writeFileType) => {
+  +add = (file: writeFileType) => {
     this.store.push(file);
 
     if (!this.isWritting) this.writeFiles();
   };
 
-  writeFiles = () => {
+  +writeFiles = () => {
     this.isWritting = true;
 
     const { verbose, watch } = handler.options;

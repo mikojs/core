@@ -28,7 +28,7 @@ class Gitignore extends Store {
    * @example
    * gitignore.end()
    */
-  end = async () => {
+  +end = async () => {
     await this.writeFiles({
       '.gitignore': template,
     });

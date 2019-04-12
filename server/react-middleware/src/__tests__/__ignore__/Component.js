@@ -1,8 +1,8 @@
 // @flow
-/* eslint-disable require-jsdoc, flowtype/require-return-type */
+/* eslint-disable require-jsdoc */
 // TODO component should be ignored
 
-import React from 'react';
+import React, { type Node as NodeType } from 'react';
 
 import { type ctxType } from '../../types';
 
@@ -15,7 +15,7 @@ export default class Component extends React.PureComponent<propsType> {
     path: ctx.path,
   });
 
-  render() {
+  render(): NodeType {
     const { path } = this.props;
 
     return <div>{path}</div>;

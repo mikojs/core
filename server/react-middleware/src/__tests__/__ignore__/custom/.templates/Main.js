@@ -14,7 +14,7 @@ export default class Main extends React.PureComponent<propsType> {
     value: 'test data',
   });
 
-  render() {
+  render(): NodeType {
     const { value, children } = this.props;
 
     return <Context.Provider value={value}>{children}</Context.Provider>;

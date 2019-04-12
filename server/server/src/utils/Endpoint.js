@@ -7,13 +7,13 @@ const debugLog = debug('server:endpoint');
 
 /** router endpoint */
 export default class Endpoint {
-  urlPattern: string;
+  -urlPattern: string;
 
-  method: string;
+  -method: string;
 
   // middlewares can be modified in Endpoint
   // eslint-disable-next-line flowtype/no-mutable-array
-  middlewares: Array<koaMiddlewareType>;
+  +middlewares: Array<koaMiddlewareType>;
 
   /**
    * @example
@@ -35,7 +35,7 @@ export default class Endpoint {
    *
    * @param {Object} middleware - koa middleware
    */
-  use = (middleware: koaMiddlewareType) => {
+  +use = (middleware: koaMiddlewareType) => {
     this.middlewares.push(middleware);
   };
 }

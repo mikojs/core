@@ -4,7 +4,7 @@
 class Inquirer {
   result = {};
 
-  main = {
+  +main = {
     prompt: async (): Promise<{}> => await this.result,
   };
 }

@@ -16,7 +16,7 @@ describe('build js', () => {
   test('error with detail', async () => {
     /** test error detail */
     class ErrorDetail extends Error {
-      details: string;
+      +details: string;
 
       /**
        * @example

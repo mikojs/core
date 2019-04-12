@@ -1,8 +1,8 @@
 // @flow
-/* eslint-disable require-jsdoc, flowtype/require-return-type */
+/* eslint-disable require-jsdoc */
 // TODO component should be ignored
 
-import React from 'react';
+import React, { type Node as NodeType } from 'react';
 import ReactDOM from 'react-dom';
 import ReactLoading from 'react-loading';
 
@@ -33,7 +33,7 @@ export default class Loading extends React.PureComponent<propsType> {
     this.rootDOM.removeChild(this.loadingDOM);
   }
 
-  render() {
+  render(): NodeType {
     return ReactDOM.createPortal(
       <div style={styles}>
         <ReactLoading type="cylon" color="#80D8FF" />

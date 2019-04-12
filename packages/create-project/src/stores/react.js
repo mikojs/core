@@ -15,7 +15,7 @@ export default Home;`;
 
 /** react store */
 class React extends Store {
-  subStores = [pkg];
+  +subStores = [pkg];
 
   storeUseReact = false;
 
@@ -23,7 +23,7 @@ class React extends Store {
    * @example
    * react.checkReact()
    */
-  checkReact = memoizeOne(
+  +checkReact = memoizeOne(
     async (
       useServer: $PropertyType<$PropertyType<Store, 'ctx'>, 'useServer'>,
     ) => {
@@ -46,7 +46,7 @@ class React extends Store {
    *
    * @param {Object} ctx - store context
    */
-  start = async (ctx: $PropertyType<Store, 'ctx'>) => {
+  +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     const { useServer } = ctx;
 
     await this.checkReact(useServer);
@@ -58,7 +58,7 @@ class React extends Store {
    * @example
    * pkg.end(ctx)
    */
-  end = async () => {
+  +end = async () => {
     if (!this.storeUseReact) return;
 
     await this.writeFiles({

@@ -122,7 +122,7 @@ const getPage = (
 };
 
 // TODO component should be ignored
-/* eslint-disable require-jsdoc, flowtype/require-return-type */
+/* eslint-disable require-jsdoc */
 export default class Root extends React.PureComponent<propsType, stateType> {
   static preload = (prevStore?: storeType = store): storeType => {
     Object.keys(prevStore).forEach((key: string) => {
@@ -146,7 +146,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     this.setState({ error, errorInfo });
   }
 
-  render() {
+  render(): NodeType {
     const { Main, Loading, Error, routesData, mainInitialProps } = this.props;
     const { error, errorInfo } = this.state;
 

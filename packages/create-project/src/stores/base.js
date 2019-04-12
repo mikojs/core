@@ -15,7 +15,7 @@ import Store from './index';
 
 /** base store */
 class Base extends Store {
-  subStores = [
+  +subStores = [
     server,
     pkg,
     gitignore,
@@ -33,7 +33,7 @@ class Base extends Store {
    *
    * @param {Object} ctx - store context
    */
-  init = async (ctx: $PropertyType<Store, 'ctx'>) => {
+  +init = async (ctx: $PropertyType<Store, 'ctx'>) => {
     const storeNames = [];
     const stores = (await this.run(ctx)).filter(
       ({ constructor: { name } }: Store): boolean => {
@@ -56,7 +56,7 @@ class Base extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = async ({
+  +end = async ({
     projectDir,
     pkg: { repository } = {},
   }: $PropertyType<Store, 'ctx'>) => {

@@ -70,7 +70,7 @@ class Readme extends Store {
    *
    * @param {Object} ctx - store context
    */
-  end = async ({ pkg, useNpm }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({ pkg, useNpm }: $PropertyType<Store, 'ctx'>) => {
     invariant(pkg, 'Can not run readme store without pkg in `ctx`');
 
     await this.writeFiles({

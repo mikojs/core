@@ -16,6 +16,9 @@ export type inquirerResultType = {
 
   // server
   useServer: boolean,
+
+  // react
+  useReact: boolean,
 };
 
 const basicUsage = {
@@ -36,9 +39,14 @@ const basicUsage = {
 
     // server
     useServer: false,
+
+    // react
+    useReact: false,
   },
   cmds: [
     // For getting user information
+    'git config --get user.name',
+    'git config --get user.email',
     'git config --get user.name',
     'git config --get user.email',
     'git config --get user.name',
@@ -84,13 +92,35 @@ const useServer = {
     useServer: true,
   },
   cmds: [
-    ...basicUsage.cmds.slice(0, 4),
-    'yarn add --dev @cat-org/server @cat-org/default-middleware @cat-org/react-middleware',
-    ...basicUsage.cmds.slice(4),
+    ...basicUsage.cmds.slice(0, 6),
+    'yarn add --dev @cat-org/server @cat-org/default-middleware',
+    ...basicUsage.cmds.slice(6),
   ],
 };
 
-export default [basicUsage, useNpm, privatePkg, useServer].reduce(
+const useReactServer = {
+  name: 'use-react-server',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+  },
+  cmds: [
+    ...basicUsage.cmds.slice(0, 6),
+    'yarn add --dev @cat-org/server @cat-org/default-middleware',
+    ...basicUsage.cmds.slice(6, 13),
+    '@cat-org/react-middleware',
+    ...basicUsage.cmds.slice(13),
+  ],
+};
+
+export default [
+  basicUsage,
+  useNpm,
+  privatePkg,
+  useServer,
+  useReactServer,
+].reduce(
   (
     result: $ReadOnlyArray<
       [string, string, inquirerResultType, $ReadOnlyArray<string>],

@@ -3,20 +3,13 @@
 import memoizeOne from 'memoize-one';
 import { emptyFunction } from 'fbjs';
 
+import react from './react';
 import pkg from './pkg';
 import Store from './index';
 
-const template = `// @flow
-
-import React from 'react';
-
-const Home = () => <div>@cat-org/create-project</div>;
-
-export default Home;`;
-
 /** server store */
 class Server extends Store {
-  subStores = [pkg];
+  subStores = [react, pkg];
 
   storeUseServer = false;
 
@@ -53,11 +46,8 @@ class Server extends Store {
   end = async () => {
     if (!this.storeUseServer) return;
 
-    await this.writeFiles({
-      'src/pages/index.js': template,
-    });
     await this.execa(
-      'yarn add --dev @cat-org/server @cat-org/default-middleware @cat-org/react-middleware',
+      'yarn add --dev @cat-org/server @cat-org/default-middleware',
     );
   };
 }

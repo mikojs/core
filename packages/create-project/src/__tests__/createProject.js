@@ -74,6 +74,7 @@ describe('create project', () => {
                   delete jsonContent.action;
                   delete jsonContent.useNpm;
                   delete jsonContent.useServer;
+                  delete jsonContent.useReact;
 
                   expect(
                     prettier

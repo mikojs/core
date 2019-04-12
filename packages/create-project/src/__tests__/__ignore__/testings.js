@@ -108,8 +108,9 @@ const useReactServer = {
   cmds: [
     ...basicUsage.cmds.slice(0, 6),
     'yarn add --dev @cat-org/server @cat-org/default-middleware',
+    ...basicUsage.cmds.slice(6, 13),
     '@cat-org/react-middleware',
-    ...basicUsage.cmds.slice(6),
+    ...basicUsage.cmds.slice(13),
   ],
 };
 

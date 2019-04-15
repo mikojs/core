@@ -3,8 +3,10 @@
 import React, { type ComponentType, type Node as NodeType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
-import { Route } from 'react-router-dom';
-import { type Context as koaContextType } from 'koa';
+import {
+  Route,
+  type ContextRouter as contextRouterType,
+} from 'react-router-dom';
 import { ExecutionEnvironment } from 'fbjs';
 
 import { type errorPropsType } from '../types';
@@ -28,15 +30,6 @@ export type propsType = {|
 type stateType = {|
   error: ?$PropertyType<errorPropsType, 'error'>,
   errorInfo: ?$PropertyType<errorPropsType, 'errorInfo'>,
-|};
-
-// TODO: should use flow-typed
-type contextRouterType = {|
-  location: {
-    pathname: string,
-    search: string,
-  },
-  staticContext?: koaContextType,
 |};
 
 type storeType = {

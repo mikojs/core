@@ -3,7 +3,10 @@
 import React, { type ComponentType, type Node as NodeType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
-import { Route } from 'react-router-dom';
+import {
+  Route,
+  type ContextRouter as contextRouterType,
+} from 'react-router-dom';
 import { type Context as koaContextType } from 'koa';
 import { ExecutionEnvironment } from 'fbjs';
 
@@ -30,15 +33,6 @@ type stateType = {|
   errorInfo: ?$PropertyType<errorPropsType, 'errorInfo'>,
 |};
 
-// TODO: should use flow-typed
-type contextRouterType = {|
-  location: {
-    pathname: string,
-    search: string,
-  },
-  staticContext?: koaContextType,
-|};
-
 type storeType = {
   url: string,
   chunkName: string,
@@ -62,7 +56,13 @@ const store: storeType = {};
  */
 const getPage = (
   routesData: $PropertyType<propsType, 'routesData'>,
-  { location: { pathname, search }, staticContext }: contextRouterType,
+  {
+    location: { pathname, search },
+    staticContext,
+  }: {
+    location: { pathname: string, search: string },
+    staticContext?: koaContextType,
+  },
 ): $PropertyType<storeType, 'Page'> => {
   const ctx = {
     ctx: staticContext || {
@@ -157,8 +157,17 @@ export default class Root extends React.PureComponent<propsType, stateType> {
       <Main {...mainInitialProps}>
         <Suspense fallback={<Loading />}>
           <Route
-            children={(context: contextRouterType) =>
-              React.createElement(getPage(routesData, context))
+            children={({
+              location: { pathname, search },
+              staticContext,
+            }: contextRouterType) =>
+              React.createElement(
+                // $FlowFixMe can not overwrite context type
+                getPage(routesData, {
+                  location: { pathname, search },
+                  staticContext,
+                }),
+              )
             }
           />
         </Suspense>

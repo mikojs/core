@@ -57,17 +57,7 @@ jobs:
       - run: *install-all
       - run: *set-debug-env
 
-      - run:
-          name: Pre publish
-          command: |
-            yarn prod
-            yarn flow
-            TEST_PRODUCTION=true yarn test \
-              ./__tests__/checkFilesInPackages.js \
-              --coverage=false
-
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-
       - run:
           name: Publish
           command: |

@@ -111,15 +111,6 @@ const lint = {
     globals: {
       __CAT_DATA__: true,
     },
-    overrides: [
-      {
-        files: ['checkFilesInPackages.js'],
-        settings: {
-          /** In packages/** modules */
-          'import/core-modules': ['@cat-org/utils'],
-        },
-      },
-    ],
   }),
   ignore: ignore => [
     ...ignore,

@@ -49,7 +49,7 @@ const findConfigFiles = (cliName: string): {} => {
     configFiles[cliName] = path.resolve(configs.rootDir, CONFIG_FILES[cli]);
   }
 
-  return Object.keys(configFiles).reduce(
+  return (Object.keys(configFiles): $ReadOnlyArray<string>).reduce(
     (result: {}, configCliName: string): {} => {
       const configPath = configFiles[configCliName];
 

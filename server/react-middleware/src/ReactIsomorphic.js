@@ -5,7 +5,7 @@ import typeof streamType, { Readable as ReadableType } from 'stream';
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
 import { hydrate as reactClientRender } from 'react-dom';
-import { type renderToNodeStream as renderToNodeStreamType } from 'react-dom/server';
+import { typeof renderToNodeStream as renderToNodeStreamType } from 'react-dom/server';
 import { invariant, ExecutionEnvironment } from 'fbjs';
 
 type lazyDoneComponentType = ComponentType<*>;

@@ -5,10 +5,10 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/jest",
   "repository": "https://github.com/cat-org/core/tree/master/packages/jest",
-  "version": "1.0.0-beta.14",
+  "version": "1.0.0-beta.15",
   "main": "./lib/index.js",
   "dependencies": {
-    "@cat-org/utils": "^1.0.0-beta.14",
+    "@cat-org/utils": "^1.0.0-beta.15",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.11.2",
     "fbjs": "^1.0.0"

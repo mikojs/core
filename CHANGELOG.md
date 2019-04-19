@@ -1,5 +1,60 @@
 # CHANGELOG
 
+## 1.0.0-beta.15 (2019-04-19)
+
+#### :boom: Breaking Change
+
+- `configs`, `create-project`
+  - [#170](https://github.com/cat-org/core/pull/170) (@cat-org/configs): Remove git commands ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `babel-plugin-transform-flow`, `configs`, `create-project`, `logger`
+  - [#179](https://github.com/cat-org/core/pull/179) (@cat-org/core) Add write only read only ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#178](https://github.com/cat-org/core/pull/178) (@cat-org/create-project) Add react Store ([@HsuTing](https://github.com/HsuTing))
+  - [#176](https://github.com/cat-org/core/pull/176) (@cat-org/create-project) Add server ([@HsuTing](https://github.com/HsuTing))
+  - [#175](https://github.com/cat-org/core/pull/175) (@cat-org/create-project) Move debug to Store ([@HsuTing](https://github.com/HsuTing))
+  - [#173](https://github.com/cat-org/core/pull/173) (@create-project) Add `--skip-command` option ([@HsuTing](https://github.com/HsuTing))
+  - [#172](https://github.com/cat-org/core/pull/172) (@cat-org/create-project) Modify flow type ([@HsuTing](https://github.com/HsuTing))
+  - [#171](https://github.com/cat-org/core/pull/171) (@cat-org/create-project) Add conflict file ([@HsuTing](https://github.com/HsuTing))
+  - [#168](https://github.com/cat-org/core/pull/168) (@cat-org/create-project) Add version to package.json ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `utils`
+  - [#174](https://github.com/cat-org/core/pull/174) (@cat-org/create-project) Move prompt in Store ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`
+  - [#170](https://github.com/cat-org/core/pull/170) (@cat-org/configs): Remove git commands ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#156](https://github.com/cat-org/core/pull/156) (@cat-org/react-middleware) Add static mode ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- Other
+  - [#181](https://github.com/cat-org/core/pull/181) (@cat-org/react-middleware) Fix flow-typed ([@HsuTing](https://github.com/HsuTing))
+  - [#163](https://github.com/cat-org/core/pull/163) (@cat-org/core) Fix locking memoize-one version ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#155](https://github.com/cat-org/core/pull/155) (@cat-org/configs) Remove not needing ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- Other
+  - [#181](https://github.com/cat-org/core/pull/181) (@cat-org/react-middleware) Fix flow-typed ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `configs`, `create-project`, `logger`
+  - [#179](https://github.com/cat-org/core/pull/179) (@cat-org/core) Add write only read only ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#167](https://github.com/cat-org/core/pull/167) (@cat-org/create-project) Modify code style ([@HsuTing](https://github.com/HsuTing))
+  - [#166](https://github.com/cat-org/core/pull/166) (@cat-org/create-project) Modify detail ([@HsuTing](https://github.com/HsuTing))
+  - [#159](https://github.com/cat-org/core/pull/159) (@cat-org/create-project) Use new testing ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-create`, `logger`, `utils`
+  - [#161](https://github.com/cat-org/core/pull/161) (@cat-org/core): Fix detail ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `logger`
+  - [#158](https://github.com/cat-org/core/pull/158) (@cat-org/core) Upgrade package ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `logger`
+  - [#157](https://github.com/cat-org/core/pull/157) (@cat-org/babel-plugin-transform-flow, @cat-org/logger) Fix testing error ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.14 (2019-03-07)
 
 #### :boom: Breaking Change

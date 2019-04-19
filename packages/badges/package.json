@@ -9,16 +9,16 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.4.0",
+    "@babel/runtime": "^7.4.3",
     "@cat-org/logger": "^1.0.0-beta.15",
     "@cat-org/utils": "^1.0.0-beta.15",
     "chalk": "^2.4.2",
-    "commander": "^2.19.0",
+    "commander": "^2.20.0",
     "debug": "^4.1.1",
     "execa": "^1.0.0",
     "fbjs": "^1.0.0",
     "output-file-sync": "^2.0.1",
-    "read-pkg-up": "^4.0.0"
+    "read-pkg-up": "^5.0.0"
   },
   "keywords": ["badges", "cat-org"],
   "publishConfig": {

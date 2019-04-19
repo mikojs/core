@@ -12,10 +12,10 @@
     "@babel/core": ">=7.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.4.0",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
     "@babel/helper-plugin-utils": "^7.0.0",
-    "chokidar": "^2.1.2",
+    "chokidar": "^2.1.5",
     "output-file-sync": "^2.0.1"
   },
   "keywords": ["babel plugin", "cat-org", "transform flow files"],

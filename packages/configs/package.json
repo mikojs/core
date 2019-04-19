@@ -9,12 +9,12 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.4.0",
+    "@babel/runtime": "^7.4.3",
     "@cat-org/logger": "^1.0.0-beta.15",
     "@cat-org/utils": "^1.0.0-beta.15",
     "chalk": "^2.4.2",
-    "commander": "^2.19.0",
-    "cosmiconfig": "^5.1.0",
+    "commander": "^2.20.0",
+    "cosmiconfig": "^5.2.0",
     "debug": "^4.1.1",
     "execa": "^1.0.0",
     "fbjs": "^1.0.0",
@@ -25,7 +25,7 @@
     "rimraf": "^2.6.3"
   },
   "devDependencies": {
-    "get-port": "^4.2.0"
+    "get-port": "^5.0.0"
   },
   "keywords": ["cat-org", "configs"],
   "publishConfig": {

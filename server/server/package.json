@@ -12,11 +12,11 @@
     "@cat-org/logger": "^1.0.0-beta.15",
     "@cat-org/utils": "^1.0.0-beta.15",
     "chalk": "^2.4.2",
-    "chokidar": "^2.1.2",
+    "chokidar": "^2.1.5",
     "debug": "^4.1.1",
     "koa": "^2.7.0",
     "koa-router": "^7.4.0",
-    "ora": "^3.2.0"
+    "ora": "^3.4.0"
   },
   "devDependencies": {
     "@cat-org/default-middleware": "^1.0.0-beta.15",

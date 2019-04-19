@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 1.0.0-beta.16 (2019-04-19)
+
+#### :boom: Breaking Change
+
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `logger`
+  - [#183](https://github.com/cat-org/core/pull/183) (@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `logger`
+  - [#183](https://github.com/cat-org/core/pull/183) (@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- [#182](https://github.com/cat-org/core/pull/182) (@cat-org/core) Fix circleci publish error ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.15 (2019-04-19)
 
 #### :boom: Breaking Change

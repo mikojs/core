@@ -10,7 +10,10 @@ export default {
   settings: {
     'import/resolver': {
       node: {},
-      'babel-module': {},
+      'babel-module': {
+        root: ['./src'],
+        cwd: 'packagejson',
+      },
     },
   },
   rules: {

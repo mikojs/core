@@ -4554,11 +4554,6 @@ exec-sh@^0.3.2:
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.3.2.tgz#6738de2eb7c8e671d0366aea0b0db8c6f7d7391b"
   integrity sha512-9sLAvzhI5nc8TpuQUh4ahMdCrWT00wPWz7j47/emR5+2qEfoZP5zzUXvx+vdx+H6ohhnsYC31iX04QLYJK8zTg==
 
-exec@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/exec/-/exec-0.2.1.tgz#2661f0bfc5532918629117cb9f80c7564af2c51f"
-  integrity sha1-JmHwv8VTKRhikRfLn4DHVkryxR8=
-
 execa@^0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/execa/-/execa-0.10.0.tgz#ff456a8f53f90f8eccc71a96d11bdfc7f082cb50"

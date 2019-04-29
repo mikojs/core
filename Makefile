@@ -4,7 +4,6 @@ install:
 	@yarn install
 	@yarn lerna bootstrap
 	@make babel-all
-	@yarn lerna link
 	@yarn flow-typed install --verbose
 	@yarn lerna exec "lerna-flow-typed-install --verbose" \
 		--stream \
@@ -12,6 +11,7 @@ install:
 
 babel-all:
 	@$(call babel-build)
+	@yarn lerna link
 
 BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
 WATCH=""

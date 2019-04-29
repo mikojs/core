@@ -34,7 +34,7 @@ type stateType = {|
 |};
 
 type storeType = {
-  url: string,
+  originalUrl: string,
   chunkName: string,
   initialProps: {|
     head?: NodeType,
@@ -68,7 +68,6 @@ const getPage = (
     ctx: staticContext || {
       path: pathname,
       querystring: search.replace(/\?/, ''),
-      url: `${pathname}${search}`,
       originalUrl: `${pathname}${search}`,
       origin: window.location.origin,
       href: window.location.href,
@@ -79,7 +78,7 @@ const getPage = (
     isServer: !ExecutionEnvironment.canUseEventListeners,
   };
 
-  if (store.url !== ctx.ctx.url) {
+  if (store.originalUrl !== ctx.ctx.originalUrl) {
     const [
       {
         route: {
@@ -104,7 +103,7 @@ const getPage = (
       const Page = () => <Component {...initialProps} />;
 
       renderToStaticMarkup(head || null);
-      store.url = ctx.ctx.url;
+      store.originalUrl = ctx.ctx.originalUrl;
       store.chunkName = chunkName;
       store.initialProps = {
         ...initialProps,

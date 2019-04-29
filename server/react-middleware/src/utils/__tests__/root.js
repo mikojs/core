@@ -19,7 +19,7 @@ describe('root', () => {
     /* eslint-enable require-jsdoc, flowtype/require-return-type */
 
     Root.preload({
-      url: '/',
+      originalUrl: '/',
       chunkName: 'test',
       initialProps: {},
       Page: component,
@@ -29,7 +29,7 @@ describe('root', () => {
     });
 
     const wrapper = mount(
-      <Router location="/" context={{ url: '/' }}>
+      <Router location="/" context={{ originalUrl: '/' }}>
         <Root
           Main={Main}
           Loading={Loading}

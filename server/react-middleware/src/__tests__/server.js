@@ -120,7 +120,7 @@ describe.each`
             '</main>',
             `<script data-react-helmet="true">var __CAT_DATA__ = ${JSON.stringify(
               {
-                url: isStatic
+                originalUrl: isStatic
                   ? urlPath.replace(/notFound/, '*').replace(/\?.*$/, '')
                   : urlPath,
                 chunkName: chunkNames[0],

@@ -1,9 +1,12 @@
 #! /usr/bin/env node
 // @flow
 
+import path from 'path';
+
 import execa from 'execa';
 import debug from 'debug';
 import isRunning from 'is-running';
+import chalk from 'chalk';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -92,16 +95,15 @@ debugLog({
       // handle config and ignore files
       generateFiles(cliName);
 
-      // run command
-      debugLog(
-        `Run command: ${JSON.stringify(
-          [argv[0], cli, ...argv.slice(2)],
-          null,
-          2,
-        )}`,
-      );
-
       try {
+        // run command
+        logger.log(
+          chalk`Run command: {gray ${[
+            path.basename(cli),
+            ...argv.slice(2),
+          ].join(' ')}}`,
+        );
+
         const successCode = await execa(argv[0], [cli, ...argv.slice(2)], {
           stdio: 'inherit',
           env,

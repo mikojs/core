@@ -32,7 +32,7 @@ import { type dataType } from './getData';
  */
 export const initStore = () =>
   Root.preload({
-    url: '',
+    originalUrl: '',
     chunkName: '',
     initialProps: {},
     Page: () => {
@@ -148,7 +148,7 @@ export default (
     multistream([
       upperDocument,
       await renderToNodeStream(
-        <Router location={ctx.url} context={ctx}>
+        <Router location={ctx.url} context={{ ...ctx, url: undefined }}>
           <Root
             Main={Main}
             Loading={emptyFunction.thatReturnsNull}

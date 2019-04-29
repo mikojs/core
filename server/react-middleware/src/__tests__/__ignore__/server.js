@@ -66,7 +66,6 @@ export default async (
   return {
     domain: `http://localhost:${port}`,
     server: await new Promise(resolve => {
-      // $FlowFixMe https://github.com/flow-typed/flow-typed/pull/3221
       const server = app.listen(port, async () => {
         const { log } = console;
 

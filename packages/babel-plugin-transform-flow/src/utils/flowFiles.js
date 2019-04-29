@@ -49,7 +49,7 @@ class FlowFiles {
 
   +openWatcher = () => {
     /* eslint-disable flowtype/no-unused-expressions */
-    // $FlowFixMe flow not yet supporte
+    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
     this.watcher?.close();
     /* eslint-enable flowtype/no-unused-expressions */
 
@@ -62,7 +62,7 @@ class FlowFiles {
 
     ['add', 'change'].forEach((type: string) => {
       /* eslint-disable flowtype/no-unused-expressions */
-      // $FlowFixMe flow not yet support
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
       this.watcher?.on(type, (modifyFilePath: string) => {
         /* eslint-enable flowtype/no-unused-expressions */
         const newFile = this.store.find(

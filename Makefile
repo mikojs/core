@@ -11,7 +11,6 @@ install:
 
 babel-all:
 	@$(call babel-build)
-	@yarn lerna link
 
 BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
 WATCH=""
@@ -49,7 +48,9 @@ define babel-build
 		--scope @cat-org/configs \
 		--scope @cat-org/babel-* \
 		$(2)
-	yarn lerna link
+	ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
+	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
+	ln -snf $(ROOT)/packages/lerna-flow-typed-install/lib/bin/index.js ./node_modules/.bin/lerna-flow-typed-install
 	yarn lerna exec \
 		"configs babel:lerna $(1)" \
 		--parallel \

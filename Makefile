@@ -4,6 +4,7 @@ install:
 	@yarn install
 	@yarn lerna bootstrap
 	@make babel-all
+	@yarn lerna link
 	@yarn flow-typed install --verbose
 	@yarn lerna exec "lerna-flow-typed-install --verbose" \
 		--stream \
@@ -48,6 +49,7 @@ define babel-build
 		--scope @cat-org/configs \
 		--scope @cat-org/babel-* \
 		$(2)
+	yarn lerna link
 	yarn lerna exec \
 		"configs babel:lerna $(1)" \
 		--parallel \

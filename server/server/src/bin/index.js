@@ -22,21 +22,19 @@ import server from '../index';
 (async () => {
   try {
     const {
-      cliOptions: { filenames, outFile },
+      cliOptions: {
+        filenames: [src],
+        outDir,
+      },
     } = parseArgv(process.argv);
+
+    if (!outDir)
+      throw new Error('Must use `--out-dir` or `-d` to build the server');
+
     const babelOptions = process.argv
       .slice(2)
       .filter((argv: string) => !['-w', '--watch'].includes(argv))
       .join(' ');
-    // $FlowFixMe flow not yet support
-    const dir = filenames?.map((filename: string) =>
-      outFile
-        ? path.dirname(filename).replace(/^\.\//, '')
-        : filename.replace(/^\.\//, ''),
-    );
-
-    if (!dir)
-      throw new Error('Must use to build the folder like: `server src -d lib`');
 
     await execa.shell(`babel ${babelOptions}`, {
       stdio: 'inherit',
@@ -45,11 +43,15 @@ import server from '../index';
     // eslint-disable-next-line flowtype/no-unused-expressions
     server.init()
       |> server.use(defaultMiddleware)
-      |> server.use(await react())
+      |> server.use(
+        await react({
+          folderPath: path.resolve(src),
+        }),
+      )
       |> server.run(parseInt(process.env.PORT || 8000, 10));
 
     chokidar
-      .watch(dir, {
+      .watch(outDir, {
         ignoreInitial: true,
       })
       .on('change', (filePath: string) => {

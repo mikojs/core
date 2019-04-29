@@ -26,7 +26,6 @@ const customMiddleware = (newBody: string) => async (
   await next();
 };
 
-// $FlowFixMe
 export default server.init()
   |> server.use(customMiddleware('entry router'))
   |> ('/test'

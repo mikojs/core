@@ -28,7 +28,7 @@ release:
 	@vim CHANGELOG.md && \
 		git add CHANGELOG.md && \
 		git commit -m "chore(root): add CHANGELOG.md"
-	@yarn lerna version --include-merged-tags
+	@yarn lerna version
 
 clean:
 	@yarn lerna clean && rm -rf ./node_modules

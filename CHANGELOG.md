@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 1.0.0-beta.17 (2019-04-29)
+
+#### :bug: Bug Fix
+
+- `eslint-config-cat`
+  - [#184](https://github.com/cat-org/core/pull/184) (@cat-org/eslint-config-cat) Fix eslint-import-resolver-babel-module ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-create`, `lerna-flow-typed-install`
+  - [#186](https://github.com/cat-org/core/pull/186) (@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.16 (2019-04-19)
 
 #### :boom: Breaking Change

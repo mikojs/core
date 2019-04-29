@@ -21,7 +21,7 @@
   "devDependencies": {
     "@cat-org/default-middleware": "^1.0.0-beta.16",
     "@cat-org/react-middleware": "^1.0.0-beta.16",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^2.4.1"
   },
   "keywords": ["cat-org", "server"],
   "publishConfig": {

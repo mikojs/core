@@ -11,7 +11,6 @@ export type ctxType<T = {}> = {|
   ctx: {|
     path: string,
     querystring: string,
-    url: string,
     originalUrl: string,
     origin: string,
     href: string,

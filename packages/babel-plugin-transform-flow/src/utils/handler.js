@@ -60,7 +60,7 @@ class Handler {
         cliOptions: { verbose, filenames, outFile, outDir, watch },
       } = parseArgv(process.argv);
 
-      // $FlowFixMe flow not yet support
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
       this.initialOptions.src = filenames?.map((filename: string) =>
         outFile
           ? path.dirname(filename).replace(/^\.\//, '')

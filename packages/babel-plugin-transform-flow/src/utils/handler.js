@@ -62,10 +62,10 @@ class Handler {
 
       // $FlowFixMe flow not yet support
       this.initialOptions.src = filenames?.map(
-        (filename: string): string => {
-          if (outFile) return path.dirname(filename).replace(/^\.\//, '');
-          return filename.replace(/^\.\//, '');
-        },
+        (filename: string): string =>
+          outFile
+            ? path.dirname(filename).replace(/^\.\//, '')
+            : filename.replace(/^\.\//, ''),
       );
 
       this.initialOptions.outDir = outFile ? path.dirname(outFile) : outDir;

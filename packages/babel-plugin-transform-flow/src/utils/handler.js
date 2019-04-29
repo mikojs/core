@@ -61,11 +61,10 @@ class Handler {
       } = parseArgv(process.argv);
 
       // $FlowFixMe flow not yet support
-      this.initialOptions.src = filenames?.map(
-        (filename: string): string =>
-          outFile
-            ? path.dirname(filename).replace(/^\.\//, '')
-            : filename.replace(/^\.\//, ''),
+      this.initialOptions.src = filenames?.map((filename: string) =>
+        outFile
+          ? path.dirname(filename).replace(/^\.\//, '')
+          : filename.replace(/^\.\//, ''),
       );
 
       this.initialOptions.outDir = outFile ? path.dirname(outFile) : outDir;

@@ -22,10 +22,7 @@ import server from '../index';
 (async () => {
   try {
     const {
-      cliOptions: {
-        filenames: [src],
-        outDir,
-      },
+      cliOptions: { outDir },
     } = parseArgv(process.argv);
 
     if (!outDir)
@@ -45,7 +42,7 @@ import server from '../index';
       |> server.use(defaultMiddleware)
       |> server.use(
         await react({
-          folderPath: path.resolve(src),
+          folderPath: path.resolve(outDir),
         }),
       )
       |> server.run(parseInt(process.env.PORT || 8000, 10));

@@ -42,13 +42,13 @@ import server from '../index';
       |> server.use(defaultMiddleware)
       |> server.use(
         await react({
-          folderPath: path.resolve(outDir),
+          folderPath: path.resolve(outDir, './pages'),
         }),
       )
       |> server.run(parseInt(process.env.PORT || 8000, 10));
 
     chokidar
-      .watch(outDir, {
+      .watch(path.resolve(outDir), {
         ignoreInitial: true,
       })
       .on('change', (filePath: string) => {

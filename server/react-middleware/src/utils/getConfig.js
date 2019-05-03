@@ -124,8 +124,8 @@ export default (
               include: [folderPath, ROOT_PATH],
               loader: 'string-replace-loader',
               options: {
-                search: 'module.exports = ((.|\n)*);',
-                replace: `module.exports = require('react-hot-loader/root').hot($1)`,
+                search: 'exports\\["default"\\] = ((?!void 0).|\n)*?;',
+                replace: `exports["default"] = require('react-hot-loader/root').hot($1);`,
                 flags: 'g',
                 strict: true,
               },

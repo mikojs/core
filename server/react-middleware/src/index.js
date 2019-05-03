@@ -20,16 +20,16 @@ export { buildStatic } from './utils/buildStatic';
 handleUnhandledRejection();
 
 export default async ({
+  folderPath,
   dev = true,
   config: configFunc = emptyFunction.thatReturnsArgument,
-  folderPath = path.resolve('./src/pages'),
   redirect = emptyFunction.thatReturnsArgument,
   basename,
   useStatic = false,
 }: {|
+  folderPath: string,
   dev?: boolean,
   config?: (cnofig: configType, dev: boolean) => configType,
-  folderPath?: string,
   redirect?: redirectType,
   basename?: string,
   useStatic?: boolean,

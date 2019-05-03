@@ -29,6 +29,6 @@ import server from '../index';
   // eslint-disable-next-line flowtype/no-unused-expressions
   server.init()
     |> server.use(defaultMiddleware)
-    |> server.use(await react())
+    |> server.use(await react(path.resolve('./lib/pages')))
     |> server.run(parseInt(process.env.PORT || 8000, 10));
 })();

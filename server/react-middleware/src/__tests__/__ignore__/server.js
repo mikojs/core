@@ -45,20 +45,18 @@ export default async (
   };
 
   app.use(
-    await react({
+    await react(path.resolve(__dirname, './custom'), {
       dev,
       config: configFunc,
-      folderPath: path.resolve(__dirname, './custom'),
       basename: '/custom',
       useStatic,
     }),
   );
 
   app.use(
-    await react({
+    await react(path.resolve(__dirname, './page'), {
       dev,
       config: configFunc,
-      folderPath: path.resolve(__dirname, './page'),
       useStatic,
     }),
   );

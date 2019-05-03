@@ -19,21 +19,22 @@ export { buildStatic } from './utils/buildStatic';
 
 handleUnhandledRejection();
 
-export default async ({
-  folderPath,
-  dev = true,
-  config: configFunc = emptyFunction.thatReturnsArgument,
-  redirect = emptyFunction.thatReturnsArgument,
-  basename,
-  useStatic = false,
-}: {|
+export default async (
   folderPath: string,
-  dev?: boolean,
-  config?: (cnofig: configType, dev: boolean) => configType,
-  redirect?: redirectType,
-  basename?: string,
-  useStatic?: boolean,
-|} = {}): Promise<koaMiddlewareType> => {
+  {
+    dev = true,
+    config: configFunc = emptyFunction.thatReturnsArgument,
+    redirect = emptyFunction.thatReturnsArgument,
+    basename,
+    useStatic = false,
+  }: {|
+    dev?: boolean,
+    config?: (cnofig: configType, dev: boolean) => configType,
+    redirect?: redirectType,
+    basename?: string,
+    useStatic?: boolean,
+  |} = {},
+): Promise<koaMiddlewareType> => {
   if (!fs.existsSync(folderPath))
     throw new Error(
       `\`${path.relative(

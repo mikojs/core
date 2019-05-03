@@ -57,7 +57,9 @@ export default (
       exact: true,
       path: routePath,
       component: {
-        loader: async () => ({ default: require(filePath) }),
+        loader: async () => ({
+          default: require(filePath).default || require(filePath),
+        }),
         chunkName,
       },
     }),

@@ -58,53 +58,34 @@ export default (
     rules: [
       {
         include: [CLIENT_PATH],
-        loader: 'string-replace-loader',
+        loader: path.resolve(__dirname, './replaceLoader.js'),
         options: {
-          multiple: [
-            {
-              search: '/\\*\\* routesData \\*/',
-              replace: `[${routesData
-                .map(
-                  ({
-                    routePath,
-                    chunkName,
-                    filePath,
-                  }: $ElementType<
-                    $PropertyType<dataType, 'routesData'>,
-                    number,
-                  >): string =>
-                    `{ ${[
-                      'exact: true',
-                      `path: ${JSON.stringify(routePath)}`,
-                      `component: { ${[
-                        `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
-                        `chunkName: '${chunkName}'`,
-                      ].join(', ')} }`,
+          type: 'routers',
+          routers: {
+            routesData: `[${routesData
+              .map(
+                ({
+                  routePath,
+                  chunkName,
+                  filePath,
+                }: $ElementType<
+                  $PropertyType<dataType, 'routesData'>,
+                  number,
+                >): string =>
+                  `{ ${[
+                    'exact: true',
+                    `path: ${JSON.stringify(routePath)}`,
+                    `component: { ${[
+                      `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
+                      `chunkName: '${chunkName}'`,
                     ].join(', ')} }`,
-                )
-                .join(', ')}] ||`,
-              flags: 'm',
-              strict: true,
-            },
-            {
-              search: '[\'|"](.|/)*templates/Main[\'|"]',
-              replace: `"${templates.main}"`,
-              flags: 'm',
-              strict: true,
-            },
-            {
-              search: '[\'|"](.|/)*templates/Loading[\'|"]',
-              replace: `"${templates.loading}"`,
-              flags: 'm',
-              strict: true,
-            },
-            {
-              search: '[\'|"](.|/)*templates/Error[\'|"]',
-              replace: `"${templates.error}"`,
-              flags: 'm',
-              strict: true,
-            },
-          ],
+                  ].join(', ')} }`,
+              )
+              .join(', ')}] ||`,
+            main: templates.main,
+            loading: templates.loading,
+            error: templates.error,
+          },
         },
       },
       ...(!dev
@@ -112,22 +93,16 @@ export default (
         : [
             {
               include: [CLIENT_PATH],
-              loader: 'string-replace-loader',
+              loader: path.resolve(__dirname, './replaceLoader.js'),
               options: {
-                search: '/\\*\\* setConfig \\*/',
-                replace: `require('react-hot-loader').setConfig ||`,
-                flags: 'g',
-                strict: true,
+                type: 'set-config',
               },
             },
             {
               include: [folderPath, ROOT_PATH],
-              loader: 'string-replace-loader',
+              loader: path.resolve(__dirname, './replaceLoader.js'),
               options: {
-                search: 'module.exports = ((.|\n)*);',
-                replace: `module.exports = require('react-hot-loader/root').hot($1)`,
-                flags: 'g',
-                strict: true,
+                type: 'react-hot-loader',
               },
             },
             {

@@ -19,9 +19,15 @@ export default function(source: string): string {
     case 'routers':
       newSource = source
         .replace(/\/\*\* routesData \*\//, routers.routesData)
-        .replace(/['|"](.|\/)*templates\/Main['|"]/, `"${routers.main}"`)
-        .replace(/['|"](.|\/)*templates\/Loading['|"]/, `"${routers.loading}"`)
-        .replace(/['|"](.|\/)*templates\/Error['|"]/, `"${routers.error}"`);
+        .replace(/['"]((?!['"]).|\/)*templates\/Main['"]/, `"${routers.main}"`)
+        .replace(
+          /['"]((?!['"]).|\/)*templates\/Loading['"]/,
+          `"${routers.loading}"`,
+        )
+        .replace(
+          /['"]((?!['"]).|\/)*templates\/Error['"]/,
+          `"${routers.error}"`,
+        );
       break;
 
     case 'set-config':

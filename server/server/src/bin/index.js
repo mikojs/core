@@ -40,11 +40,7 @@ import server from '../index';
     // eslint-disable-next-line flowtype/no-unused-expressions
     server.init()
       |> server.use(defaultMiddleware)
-      |> server.use(
-        await react({
-          folderPath: path.resolve(outDir, './pages'),
-        }),
-      )
+      |> server.use(await react(path.resolve(outDir, './pages')))
       |> server.run(parseInt(process.env.PORT || 8000, 10));
 
     chokidar

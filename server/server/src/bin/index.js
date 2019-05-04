@@ -37,6 +37,9 @@ import server from '../index';
       stdio: 'inherit',
     });
 
+    // TODO: avoid to trigger webpack again
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     // eslint-disable-next-line flowtype/no-unused-expressions
     server.init()
       |> server.use(defaultMiddleware)

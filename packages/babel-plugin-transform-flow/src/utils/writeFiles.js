@@ -46,10 +46,11 @@ class WriteFiles {
     const { log } = console;
 
     try {
-      const { code }: {| code: string |} = transformFileSync(
-        srcPath,
-        babelConfig,
-      );
+      const { code }: {| code: string |} = transformFileSync(srcPath, {
+        ...babelConfig,
+        babelrc: false,
+        configFile: false,
+      });
 
       this.store = this.store.filter(
         (writeFile: writeFileType) => writeFile.srcPath !== srcPath,

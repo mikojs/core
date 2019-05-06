@@ -27,6 +27,7 @@ import loadMiddleware from 'utils/loadMiddleware';
     if (!outDir)
       throw new Error('Must use `--out-dir` or `-d` to build the server');
 
+    const isProduction = process.env.NODE_ENV === 'production';
     const babelOptions = process.argv
       .slice(2)
       .filter((argv: string) => !['-w', '--watch'].includes(argv))
@@ -46,9 +47,14 @@ import loadMiddleware from 'utils/loadMiddleware';
         await loadMiddleware(
           '@cat-org/react-middleware',
           path.resolve(outDir, './pages'),
+          {
+            dev: !isProduction,
+          },
         ),
       )
       |> server.run(parseInt(process.env.PORT || 8000, 10));
+
+    if (!isProduction) return;
 
     chokidar
       .watch(path.resolve(outDir), {

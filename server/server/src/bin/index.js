@@ -13,10 +13,9 @@ import chokidar from 'chokidar';
 import execa from 'execa';
 import parseArgv from '@babel/cli/lib/babel/options';
 
-import defaultMiddleware from '@cat-org/default-middleware';
-import react from '@cat-org/react-middleware';
-
 import server from '../index';
+
+import loadMiddleware from 'utils/loadMiddleware';
 
 // TODO: add checking should use middleware
 (async () => {
@@ -42,8 +41,13 @@ import server from '../index';
 
     // eslint-disable-next-line flowtype/no-unused-expressions
     server.init()
-      |> server.use(defaultMiddleware)
-      |> server.use(await react(path.resolve(outDir, './pages')))
+      |> server.use(loadMiddleware('@cat-org/default-middleware'))
+      |> server.use(
+        await loadMiddleware(
+          '@cat-org/react-middleware',
+          path.resolve(outDir, './pages'),
+        ),
+      )
       |> server.run(parseInt(process.env.PORT || 8000, 10));
 
     chokidar

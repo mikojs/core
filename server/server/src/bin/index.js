@@ -54,7 +54,7 @@ import loadMiddleware from 'utils/loadMiddleware';
       )
       |> server.run(parseInt(process.env.PORT || 8000, 10));
 
-    if (!isProduction) return;
+    if (isProduction) return;
 
     chokidar
       .watch(path.resolve(outDir), {

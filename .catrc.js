@@ -85,12 +85,12 @@ const babel = config => {
       plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
     },
     {
-      test: './server/react-middleware',
-      presets: ['@babel/preset-react'],
-    },
-    {
       test: './server/server',
       plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
+    },
+    {
+      test: './server/react-middleware',
+      presets: ['@babel/preset-react'],
     },
   );
 

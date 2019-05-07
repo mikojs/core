@@ -91,11 +91,11 @@ debugLog({
         removeFiles(0);
       });
 
-      // [start]
-      // handle config and ignore files
-      generateFiles(cliName);
-
       try {
+        // [start]
+        // handle config and ignore files
+        generateFiles(cliName);
+
         // run command
         logger.log(
           chalk`Run command: {gray ${[

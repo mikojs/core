@@ -6,24 +6,13 @@ import { emptyFunction } from 'fbjs';
 class Chokidar {
   -watchCallback = emptyFunction;
 
-  /**
-   * @example
-   * chokidar.on();
-   *
-   * @param {string} type - type to mock
-   * @param {Function} callback - callback to mock
-   */
-  +on = (type: string, callback: emptyFunction) => {
-    this.watchCallback = callback;
+  +main = {
+    on: (type: string, callback: emptyFunction) => {
+      this.watchCallback = callback;
+    },
+    watch: (): $PropertyType<Chokidar, 'main'> => this.main,
   };
-
-  /**
-   * @example
-   * chokidar.watch()
-   *
-   * @return {Chokidar} - Chokidar class
-   */
-  +watch = (): Chokidar => this;
 }
 
-export default new Chokidar();
+export const chokidar = new Chokidar();
+export default chokidar.main;

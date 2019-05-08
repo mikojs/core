@@ -38,7 +38,7 @@ const context = {
     |> server.use(
       await loadMiddleware(
         '@cat-org/react-middleware',
-        path.resolve(outDir, './pages'),
+        path.resolve(context.dir, './pages'),
         {
           dev: context.dev,
         },

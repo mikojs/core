@@ -3,7 +3,7 @@
 import path from 'path';
 
 import { outputFileSync } from 'output-file-sync';
-import chokidar from 'chokidar';
+import { chokidar } from 'chokidar';
 
 import { name as pkgName } from '../../package.json';
 

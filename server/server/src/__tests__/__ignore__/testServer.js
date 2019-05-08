@@ -10,6 +10,12 @@ import { type Context as koaContextType } from 'koa';
 
 import server from '../../index';
 
+const context = {
+  dev: false,
+  dir: 'lib',
+  babelOptions: 'src -d lib --verbose',
+};
+
 /**
  * @example
  * customMiddleware('test')
@@ -26,7 +32,8 @@ const customMiddleware = (newBody: string) => async (
   await next();
 };
 
-export default server.init()
+export default async () =>
+  (await server.init(context))
   |> server.use(customMiddleware('entry router'))
   |> ('/test'
     |> server.all
@@ -48,4 +55,4 @@ export default server.init()
       |> server.use(customMiddleware('del'))
       |> server.end)
     |> server.end)
-  |> server.run();
+  |> server.run(context);

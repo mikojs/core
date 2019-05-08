@@ -36,6 +36,7 @@ type pkgType = {
 type ctxType = {|
   projectDir: string,
   skipCommand: boolean,
+  lerna: boolean,
   useServer?: boolean,
   useReact?: boolean,
   pkg?: pkgType,

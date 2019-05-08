@@ -40,7 +40,12 @@ class License extends Store {
    *
    * @param {Object} ctx - store context
    */
-  +end = async ({ pkg: { author } = {} }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({
+    lerna,
+    pkg: { author } = {},
+  }: $PropertyType<Store, 'ctx'>) => {
+    if (lerna) return;
+
     await this.writeFiles({
       LICENSE: template(author),
     });

@@ -58,8 +58,11 @@ class Base extends Store {
    */
   +end = async ({
     projectDir,
+    lerna,
     pkg: { repository } = {},
   }: $PropertyType<Store, 'ctx'>) => {
+    if (lerna) return;
+
     await this.execa('yarn flow-typed install');
 
     try {

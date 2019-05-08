@@ -6,6 +6,8 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
+import { chokidar } from 'chokidar';
+
 import server from '../index';
 
 import Endpoint from 'utils/Endpoint';
@@ -49,5 +51,18 @@ describe('server', () => {
     expect(() => {
       server.run(context)();
     }).toThrow('process exit');
+  });
+
+  test('use dev mode', async () => {
+    const runningServer =
+      (await server.init({ ...context, dev: true }))
+      |> server.run({ ...context, dev: true });
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    require.cache['test.js'] = true;
+    chokidar.watchCallback('test.js');
+    chokidar.watchCallback('test');
+    runningServer.close();
   });
 });

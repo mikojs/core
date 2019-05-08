@@ -6,9 +6,17 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
+import { chokidar } from 'chokidar';
+
 import server from '../index';
 
 import Endpoint from 'utils/Endpoint';
+
+const context = {
+  dev: false,
+  dir: 'lib',
+  babelOptions: 'src -d lib --verbose',
+};
 
 describe('server', () => {
   test.each`
@@ -19,27 +27,42 @@ describe('server', () => {
     ${'del'}
   `(
     '`server.$method` is not under `server.all`',
-    ({ method }: {| method: string |}) => {
-      expect(
-        () => server.init() |> ('/test' |> server[method] |> server.end),
-      ).toThrow('process exit');
+    async ({ method }: {| method: string |}) => {
+      await expect(
+        (async () =>
+          (await server.init(context))
+          |> ('/test' |> server[method] |> server.end))(),
+      ).rejects.toThrow('process exit');
     },
   );
 
-  test('can not find `test` method in `koa-router`', () => {
-    expect(
-      () =>
-        server.init()
+  test('can not find `test` method in `koa-router`', async () => {
+    await expect(
+      (async () =>
+        (await server.init(context))
         |> (undefined
           |> server.all
           |> (new Endpoint('/test', 'test') |> server.end)
-          |> server.end),
-    ).toThrow('process exit');
+          |> server.end))(),
+    ).rejects.toThrow('process exit');
   });
 
   test('not use koa to run server', () => {
     expect(() => {
-      server.run()();
+      server.run(context)();
     }).toThrow('process exit');
+  });
+
+  test('use dev mode', async () => {
+    const runningServer =
+      (await server.init({ ...context, dev: true }))
+      |> server.run({ ...context, dev: true });
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    require.cache['test.js'] = true;
+    chokidar.watchCallback('test.js');
+    chokidar.watchCallback('test');
+    runningServer.close();
   });
 });

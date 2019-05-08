@@ -3,7 +3,7 @@
 import path from 'path';
 
 import { outputFileSync } from 'output-file-sync';
-import chokidar from 'chokidar';
+import { chokidar } from 'chokidar';
 
 import reset from './__ignore__/reset';
 import babel from './__ignore__/babel';

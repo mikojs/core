@@ -3,7 +3,13 @@
 import testServer from './__ignore__/testServer';
 import fetchServer from './__ignore__/fetchServer';
 
+let server: http$Server;
+
 describe('default server', () => {
+  beforeAll(async () => {
+    server = await testServer();
+  });
+
   test.each`
     method    | expected
     ${'get'}  | ${['entry router', 'test', 'get']}
@@ -28,6 +34,6 @@ describe('default server', () => {
   });
 
   afterAll(() => {
-    testServer.close();
+    server.close();
   });
 });

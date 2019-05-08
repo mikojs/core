@@ -15,7 +15,10 @@ import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import { version } from '../../package.json';
 
-import testings, { type inquirerResultType } from './__ignore__/testings';
+import testings, {
+  type inquirerResultType,
+  type contextType,
+} from './__ignore__/testings';
 
 import base from 'stores/base';
 import pkg from 'stores/pkg';
@@ -32,13 +35,14 @@ describe('create project', () => {
       projectDir: string,
       inquirerResult: inquirerResultType,
       cmds: $ReadOnlyArray<string>,
+      context?: contextType,
     ) => {
       outputFileSync.destPaths = [];
       outputFileSync.contents = [];
       execa.cmds = [];
       inquirer.result = inquirerResult;
 
-      await base.init({ projectDir, skipCommand: false });
+      await base.init({ ...context, projectDir, skipCommand: false });
 
       expect(
         d3DirTree(projectDir, { exclude: /.*\.swp/ })

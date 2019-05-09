@@ -13,9 +13,3 @@ package description
 ```sh
 yarn install
 ```
-
-## Usage
-
-- `dev`: Run development.
-- `prod`: Run production.
-- `test`: Run testing.

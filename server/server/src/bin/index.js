@@ -44,5 +44,5 @@ const context = {
         },
       ),
     )
-    |> server.run(context, parseInt(process.env.PORT || 8000, 10));
+    |> server.run(parseInt(process.env.PORT || 8000, 10));
 })();

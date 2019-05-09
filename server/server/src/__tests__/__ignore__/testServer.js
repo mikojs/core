@@ -55,4 +55,4 @@ export default async () =>
       |> server.use(customMiddleware('del'))
       |> server.end)
     |> server.end)
-  |> server.run(context);
+  |> server.run();

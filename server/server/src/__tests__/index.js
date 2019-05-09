@@ -49,14 +49,13 @@ describe('server', () => {
 
   test('not use koa to run server', () => {
     expect(() => {
-      server.run(context)();
+      server.run()();
     }).toThrow('process exit');
   });
 
   test('use dev mode', async () => {
     const runningServer =
-      (await server.init({ ...context, dev: true }))
-      |> server.run({ ...context, dev: true });
+      (await server.init({ ...context, dev: true })) |> server.run();
 
     await new Promise(resolve => setTimeout(resolve, 100));
 

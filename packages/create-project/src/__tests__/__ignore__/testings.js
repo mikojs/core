@@ -71,13 +71,13 @@ const basicUsage = {
   ],
 };
 
-const lernaBasicUsage = {
-  name: 'lerna-basic-usage',
-  inquirerResult: basicUsage.inquirerResult,
-  cmds: basicUsage.cmds.slice(0, 6),
-  context: {
-    lerna: true,
+const privatePkg = {
+  name: 'private-pkg',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    private: true,
   },
+  cmds: basicUsage.cmds,
 };
 
 const useNpm = {
@@ -85,15 +85,6 @@ const useNpm = {
   inquirerResult: {
     ...basicUsage.inquirerResult,
     useNpm: true,
-  },
-  cmds: basicUsage.cmds,
-};
-
-const privatePkg = {
-  name: 'private-pkg',
-  inquirerResult: {
-    ...basicUsage.inquirerResult,
-    private: true,
   },
   cmds: basicUsage.cmds,
 };
@@ -127,13 +118,35 @@ const useReactServer = {
   ],
 };
 
+const lernaBasicUsage = {
+  name: 'lerna/basic-usage',
+  inquirerResult: basicUsage.inquirerResult,
+  cmds: basicUsage.cmds.slice(0, 6),
+  context: {
+    lerna: true,
+  },
+};
+
+const lernaUseNpm = {
+  name: 'lerna/private-pkg',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    private: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
 export default [
   basicUsage,
-  lernaBasicUsage,
-  useNpm,
   privatePkg,
+  useNpm,
   useServer,
   useReactServer,
+  lernaBasicUsage,
+  lernaUseNpm,
 ].reduce(
   (
     result: $ReadOnlyArray<

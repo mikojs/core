@@ -23,9 +23,21 @@ import testings, {
 import base from 'stores/base';
 import pkg from 'stores/pkg';
 
+const storePkg = {
+  license: 'MIT',
+  version: '1.0.0',
+  main: './lib/index.js',
+};
+
 describe('create project', () => {
   beforeEach(() => {
-    delete pkg.storePkg.private;
+    Object.keys(pkg.storePkg).forEach((key: string) => {
+      delete pkg.storePkg[key];
+    });
+
+    Object.keys(storePkg).forEach((key: string) => {
+      pkg.storePkg[key] = storePkg[key];
+    });
   });
 
   test.each(testings)(
@@ -42,7 +54,12 @@ describe('create project', () => {
       execa.cmds = [];
       inquirer.result = inquirerResult;
 
-      await base.init({ ...context, projectDir, skipCommand: false });
+      await base.init({
+        projectDir,
+        skipCommand: false,
+        lerna: false,
+        ...context,
+      });
 
       expect(
         d3DirTree(projectDir, { exclude: /.*\.swp/ })
@@ -72,13 +89,6 @@ describe('create project', () => {
               switch (extension) {
                 case '.json':
                   const jsonContent = JSON.parse(content);
-
-                  if (!jsonContent.private) delete jsonContent.private;
-
-                  delete jsonContent.action;
-                  delete jsonContent.useNpm;
-                  delete jsonContent.useServer;
-                  delete jsonContent.useReact;
 
                   expect(
                     prettier

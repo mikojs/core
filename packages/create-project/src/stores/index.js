@@ -18,7 +18,7 @@ import logger from 'utils/logger';
 
 type pkgType = {
   [string]: string,
-  husky: {|
+  husky?: {|
     hooks: {
       [string]: string,
     },
@@ -27,9 +27,12 @@ type pkgType = {
   engines?: {
     [string]: string,
   },
-  private?: boolean,
-  scripts: {
+  scripts?: {
     [string]: string,
+  },
+  private?: boolean,
+  publishConfig?: {
+    access: 'public',
   },
 };
 

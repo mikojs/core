@@ -127,11 +127,48 @@ const lernaBasicUsage = {
   },
 };
 
-const lernaUseNpm = {
+const lernaPrivatePkg = {
   name: 'lerna/private-pkg',
   inquirerResult: {
     ...lernaBasicUsage.inquirerResult,
     private: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
+const lernaUseNpm = {
+  name: 'lerna/use-npm',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useNpm: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
+const lernaUseServer = {
+  name: 'lerna/use-server',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
+const lernaUseReactServer = {
+  name: 'lerna/use-react-server',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
   },
   cmds: lernaBasicUsage.cmds,
   context: {
@@ -145,8 +182,12 @@ export default [
   useNpm,
   useServer,
   useReactServer,
+
   lernaBasicUsage,
+  lernaPrivatePkg,
   lernaUseNpm,
+  lernaUseServer,
+  lernaUseReactServer,
 ].reduce(
   (
     result: $ReadOnlyArray<

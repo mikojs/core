@@ -40,6 +40,16 @@ describe('create project', () => {
     });
   });
 
+  test('check testing cases', () => {
+    expect(
+      testings
+        .slice(0, testings.length / 2)
+        .map(([name]: [string]) => `lerna/${name}`),
+    ).toEqual(
+      testings.slice(testings.length / 2).map(([name]: [string]) => name),
+    );
+  });
+
   test.each(testings)(
     '%s',
     async (

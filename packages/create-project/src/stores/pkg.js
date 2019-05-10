@@ -58,12 +58,6 @@ class Pkg extends Store {
     license: 'MIT',
     version: '1.0.0',
     main: './lib/index.js',
-    husky: {
-      hooks: {
-        'pre-commit': 'configs lint-staged && yarn flow',
-      },
-    },
-    scripts: {},
   };
 
   /**
@@ -72,25 +66,54 @@ class Pkg extends Store {
    *
    * @param {string} projectDir - project dir
    */
-  +defaultInfo = memoizeOne(async (projectDir: string) => {
-    const [username, email] = await getUser();
-    const questionResult = await this.prompt<$ReadOnlyArray<string>>(
-      ...PKG_QUESTIONS,
-    );
+  +defaultInfo = memoizeOne(
+    async ({ projectDir, lerna }: $PropertyType<Store, 'ctx'>) => {
+      const [username, email] = await getUser();
+      const questionResult = await this.prompt<$ReadOnlyArray<string>>(
+        ...PKG_QUESTIONS,
+      );
 
-    this.storePkg.name = path.basename(projectDir);
-    this.storePkg.engines = await getEngines();
-    this.storePkg.author = `${username} <${email}>`;
-    this.storePkg['create-project'] = version;
+      this.storePkg.name = path.basename(projectDir);
+      this.storePkg.author = `${username} <${email}>`;
+      this.storePkg['create-project'] = version;
 
-    Object.keys(questionResult).forEach((key: string) => {
-      if (key === 'private' && this.storePkg.private)
-        this.storePkg.private = true;
-      else this.storePkg[key] = questionResult[key];
-    });
+      if (!lerna) {
+        this.storePkg.engines = await getEngines();
+        this.storePkg.husky = {
+          hooks: {
+            'pre-commit': 'configs lint-staged && yarn flow',
+          },
+        };
+      }
 
-    this.debug(this.storePkg);
-  }, emptyFunction.thatReturnsTrue);
+      ([
+        'private',
+        'description',
+        'homepage',
+        'repository',
+        'keywords',
+      ]: $ReadOnlyArray<$Keys<typeof questionResult>>).forEach(
+        (key: string) => {
+          switch (key) {
+            case 'private':
+              if (questionResult.private) this.storePkg.private = true;
+              else if (lerna)
+                this.storePkg.publishConfig = {
+                  access: 'public',
+                };
+              break;
+
+            default:
+              this.storePkg[key] = questionResult[key];
+              break;
+          }
+        },
+      );
+
+      this.debug(this.storePkg);
+    },
+    emptyFunction.thatReturnsTrue,
+  );
 
   /**
    * @example
@@ -99,6 +122,8 @@ class Pkg extends Store {
    * @param {boolean} useServer - use server or not
    */
   +addScripts = ({ useServer, useReact }: $PropertyType<Store, 'ctx'>) => {
+    if (!this.storePkg.scripts) this.storePkg.scripts = {};
+
     if (useServer) {
       if (useReact)
         this.storePkg.scripts = {
@@ -127,10 +152,11 @@ class Pkg extends Store {
    * @param {Object} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
-    const { projectDir } = ctx;
+    const { lerna } = ctx;
 
-    await this.defaultInfo(projectDir);
-    this.addScripts(ctx);
+    await this.defaultInfo(ctx);
+
+    if (!lerna) this.addScripts(ctx);
 
     ctx.pkg = this.storePkg;
   };

@@ -15,14 +15,39 @@ import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import { version } from '../../package.json';
 
-import testings, { type inquirerResultType } from './__ignore__/testings';
+import testings, {
+  type inquirerResultType,
+  type contextType,
+} from './__ignore__/testings';
 
 import base from 'stores/base';
 import pkg from 'stores/pkg';
 
+const storePkg = {
+  license: 'MIT',
+  version: '1.0.0',
+  main: './lib/index.js',
+};
+
 describe('create project', () => {
   beforeEach(() => {
-    delete pkg.storePkg.private;
+    Object.keys(pkg.storePkg).forEach((key: string) => {
+      delete pkg.storePkg[key];
+    });
+
+    Object.keys(storePkg).forEach((key: string) => {
+      pkg.storePkg[key] = storePkg[key];
+    });
+  });
+
+  test('check testing cases', () => {
+    expect(
+      testings
+        .slice(0, testings.length / 2)
+        .map(([name]: [string]) => `lerna/${name}`),
+    ).toEqual(
+      testings.slice(testings.length / 2).map(([name]: [string]) => name),
+    );
   });
 
   test.each(testings)(
@@ -32,13 +57,19 @@ describe('create project', () => {
       projectDir: string,
       inquirerResult: inquirerResultType,
       cmds: $ReadOnlyArray<string>,
+      context?: contextType,
     ) => {
       outputFileSync.destPaths = [];
       outputFileSync.contents = [];
       execa.cmds = [];
       inquirer.result = inquirerResult;
 
-      await base.init({ projectDir, skipCommand: false });
+      await base.init({
+        projectDir,
+        skipCommand: false,
+        lerna: false,
+        ...context,
+      });
 
       expect(
         d3DirTree(projectDir, { exclude: /.*\.swp/ })
@@ -68,13 +99,6 @@ describe('create project', () => {
               switch (extension) {
                 case '.json':
                   const jsonContent = JSON.parse(content);
-
-                  if (!jsonContent.private) delete jsonContent.private;
-
-                  delete jsonContent.action;
-                  delete jsonContent.useNpm;
-                  delete jsonContent.useServer;
-                  delete jsonContent.useReact;
 
                   expect(
                     prettier

@@ -21,6 +21,10 @@ export type inquirerResultType = {
   useReact: boolean,
 };
 
+export type contextType = {
+  lerna?: boolean,
+};
+
 const basicUsage = {
   name: 'basic-usage',
   inquirerResult: {
@@ -67,20 +71,20 @@ const basicUsage = {
   ],
 };
 
-const useNpm = {
-  name: 'use-npm',
-  inquirerResult: {
-    ...basicUsage.inquirerResult,
-    useNpm: true,
-  },
-  cmds: basicUsage.cmds,
-};
-
 const privatePkg = {
   name: 'private-pkg',
   inquirerResult: {
     ...basicUsage.inquirerResult,
     private: true,
+  },
+  cmds: basicUsage.cmds,
+};
+
+const useNpm = {
+  name: 'use-npm',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    useNpm: true,
   },
   cmds: basicUsage.cmds,
 };
@@ -114,26 +118,95 @@ const useReactServer = {
   ],
 };
 
+const lernaBasicUsage = {
+  name: 'lerna/basic-usage',
+  inquirerResult: basicUsage.inquirerResult,
+  cmds: basicUsage.cmds.slice(0, 6),
+  context: {
+    lerna: true,
+  },
+};
+
+const lernaPrivatePkg = {
+  name: 'lerna/private-pkg',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    private: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
+const lernaUseNpm = {
+  name: 'lerna/use-npm',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useNpm: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
+const lernaUseServer = {
+  name: 'lerna/use-server',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
+const lernaUseReactServer = {
+  name: 'lerna/use-react-server',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
 export default [
   basicUsage,
-  useNpm,
   privatePkg,
+  useNpm,
   useServer,
   useReactServer,
+
+  lernaBasicUsage,
+  lernaPrivatePkg,
+  lernaUseNpm,
+  lernaUseServer,
+  lernaUseReactServer,
 ].reduce(
   (
     result: $ReadOnlyArray<
-      [string, string, inquirerResultType, $ReadOnlyArray<string>],
+      [string, string, inquirerResultType, $ReadOnlyArray<string>, contextType],
     >,
     {
       name,
       inquirerResult,
       cmds,
+      context = {},
     }: {|
       name: string,
       inquirerResult: inquirerResultType,
       cmds: $ReadOnlyArray<string>,
+      context?: contextType,
     |},
-  ) => [...result, [name, path.resolve(__dirname, name), inquirerResult, cmds]],
+  ) => [
+    ...result,
+    [name, path.resolve(__dirname, name), inquirerResult, cmds, context],
+  ],
   [],
 );

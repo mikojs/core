@@ -11,6 +11,7 @@ describe('cli options', () => {
     expect(cliOptions([...defaultArgv, 'projectDir'])).toEqual({
       projectDir: path.resolve('projectDir'),
       skipCommand: false,
+      lerna: false,
     });
   });
 

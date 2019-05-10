@@ -6,44 +6,57 @@ import Store from './index';
 
 /**
  * @example
- * npmContent('name')
+ * npmContent(false, 'name')
  *
+ * @param {boolean} lerna - lerna option
  * @param {string} name - pkg name
  *
  * @return {string} - npm content
  */
-const npmContent = (name: string) => `## Install
+const npmContent = (lerna: boolean, name: string) => `## Install
 
 \`\`\`sh
 yarn add ${name}
-\`\`\`
+\`\`\`${
+  lerna
+    ? ''
+    : `
 
-## Develop`;
+## Develop`
+}`;
 
 /**
  * @example
- * noNpmContent('name')
+ * noNpmContent(false)
+ *
+ * @param {boolean} lerna - lerna option
  *
  * @return {string} - no npm content
  */
-const noNpmContent = () => `## Getting Started
+const noNpmContent = (lerna: boolean) => `## Getting Started
 
 \`\`\`sh
 yarn install
-\`\`\`
+\`\`\`${
+  lerna
+    ? ''
+    : `
 
-## Usage`;
+## Usage`
+}`;
 
 /**
  * @example
  * template(pkg, useNpm)
  *
+ * @param {boolean} lerna - lerna option
  * @param {Object} pkg - pkg in store context
  * @param {boolean} useNpm - useNpm in store context
  *
  * @return {string} - content
  */
 const template = (
+  lerna: boolean,
   {
     name,
     homepage,
@@ -56,11 +69,15 @@ const template = (
 
 ${description}
 
-${useNpm ? npmContent(name) : noNpmContent()}
+${useNpm ? npmContent(lerna, name) : noNpmContent(lerna)}${
+  lerna
+    ? ''
+    : `
 
 - \`dev\`: Run development.
 - \`prod\`: Run production.
-- \`test\`: Run testing.`;
+- \`test\`: Run testing.`
+}`;
 
 /** readme store */
 class Readme extends Store {
@@ -70,11 +87,11 @@ class Readme extends Store {
    *
    * @param {Object} ctx - store context
    */
-  +end = async ({ pkg, useNpm }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({ lerna, pkg, useNpm }: $PropertyType<Store, 'ctx'>) => {
     invariant(pkg, 'Can not run readme store without pkg in `ctx`');
 
     await this.writeFiles({
-      'README.md': template(pkg, useNpm),
+      'README.md': template(lerna, pkg, useNpm),
     });
   };
 }

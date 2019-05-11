@@ -58,6 +58,9 @@ class Pkg extends Store {
     license: 'MIT',
     version: '1.0.0',
     main: './lib/index.js',
+    devDependencies: {
+      '@cat-org/create-project': version,
+    },
   };
 
   /**
@@ -75,7 +78,6 @@ class Pkg extends Store {
 
       this.storePkg.name = path.basename(projectDir);
       this.storePkg.author = `${username} <${email}>`;
-      this.storePkg['create-project'] = version;
 
       if (!lerna) {
         this.storePkg.engines = await getEngines();

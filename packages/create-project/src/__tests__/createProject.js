@@ -27,6 +27,9 @@ const storePkg = {
   license: 'MIT',
   version: '1.0.0',
   main: './lib/index.js',
+  devDependencies: {
+    '@cat-org/create-project': version,
+  },
 };
 
 describe('create project', () => {

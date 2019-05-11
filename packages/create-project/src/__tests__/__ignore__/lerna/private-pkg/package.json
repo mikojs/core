@@ -8,6 +8,8 @@
   "repository": "https://github.com/cat-org/core.git",
   "version": "1.0.0",
   "main": "./lib/index.js",
-  "keywords": ["keyword"],
-  "create-project": "create-project version"
+  "devDependencies": {
+    "@cat-org/create-project": "create-project version"
+  },
+  "keywords": ["keyword"]
 }

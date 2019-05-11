@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.0.0-beta.19 (2019-05-11)
+
+Release.
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.18 (2019-05-11)
 
 #### :boom: Breaking Change

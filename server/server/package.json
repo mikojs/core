@@ -5,15 +5,15 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/server",
   "repository": "https://github.com/cat-org/core/tree/master/server/server",
-  "version": "1.0.0-beta.18",
+  "version": "1.0.0-beta.19",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
     "@babel/runtime": "^7.4.4",
-    "@cat-org/logger": "^1.0.0-beta.18",
-    "@cat-org/utils": "^1.0.0-beta.18",
+    "@cat-org/logger": "^1.0.0-beta.19",
+    "@cat-org/utils": "^1.0.0-beta.19",
     "chalk": "^2.4.2",
     "chokidar": "^2.1.5",
     "debug": "^4.1.1",
@@ -23,8 +23,8 @@
     "ora": "^3.4.0"
   },
   "devDependencies": {
-    "@cat-org/default-middleware": "^1.0.0-beta.18",
-    "@cat-org/react-middleware": "^1.0.0-beta.18",
+    "@cat-org/default-middleware": "^1.0.0-beta.19",
+    "@cat-org/react-middleware": "^1.0.0-beta.19",
     "node-fetch": "^2.4.1"
   },
   "keywords": ["cat-org", "server"],

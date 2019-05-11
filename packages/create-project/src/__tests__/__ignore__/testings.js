@@ -58,11 +58,11 @@ const basicUsage = {
 
     // Run commands
     'yarn add --dev @cat-org/configs',
-    'configs --install babel',
-    'configs --install prettier',
-    'configs --install lint',
-    'configs --install lint-staged',
-    'configs --install jest',
+    'yarn configs --install babel',
+    'yarn configs --install prettier',
+    'yarn configs --install lint',
+    'yarn configs --install lint-staged',
+    'yarn configs --install jest',
     'yarn add --dev flow-bin flow-typed',
     'yarn flow-typed install',
 

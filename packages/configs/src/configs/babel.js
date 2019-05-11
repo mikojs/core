@@ -13,6 +13,7 @@ export default {
     '@babel/preset-flow',
     '@babel/plugin-proposal-optional-chaining',
     '@cat-org/babel-plugin-transform-flow',
+    'babel-plugin-module-resolver',
   ],
   config: () => ({
     presets: [

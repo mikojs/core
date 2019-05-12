@@ -42,9 +42,11 @@ class Server extends Store {
   /**
    * @example
    * pkg.end(ctx)
+   *
+   * @param {Object} ctx - store context
    */
-  +end = async () => {
-    if (!this.storeUseServer) return;
+  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
+    if (!this.storeUseServer || lerna) return;
 
     await this.execa(
       'yarn add --dev @cat-org/server @cat-org/default-middleware',

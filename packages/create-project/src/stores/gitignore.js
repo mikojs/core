@@ -26,9 +26,13 @@ coverage`;
 class Gitignore extends Store {
   /**
    * @example
-   * gitignore.end()
+   * gitignore.end(ctx)
+   *
+   * @param {Object} ctx - store context
    */
-  +end = async () => {
+  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
+    if (lerna) return;
+
     await this.writeFiles({
       '.gitignore': template,
     });

@@ -1,5 +1,52 @@
 # CHANGELOG
 
+## 1.0.0-beta.19 (2019-05-11)
+
+Release.
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.0.0-beta.18 (2019-05-11)
+
+#### :boom: Breaking Change
+
+- `create-project`
+  - [#197](https://github.com/cat-org/core/pull/197) (@cat-org/create-project): add @cat-org/create-project to devDependencies ([@HsuTing](https://github.com/HsuTing))
+  - [#195](https://github.com/cat-org/core/pull/195) (@cat-org/create-project) Add --lerna option ([@HsuTing](https://github.com/HsuTing))
+- `lerna-create`
+  - [#196](https://github.com/cat-org/core/pull/196) (@cat-org/lerna-create) Remove, use `@cat-org/create-project` ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `create-project`
+  - [#197](https://github.com/cat-org/core/pull/197) (@cat-org/create-project): add @cat-org/create-project to devDependencies ([@HsuTing](https://github.com/HsuTing))
+  - [#195](https://github.com/cat-org/core/pull/195) (@cat-org/create-project) Add --lerna option ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#194](https://github.com/cat-org/core/pull/194) (@cat-org/server) remove context in server.run ([@HsuTing](https://github.com/HsuTing))
+  - [#185](https://github.com/cat-org/core/pull/185) (@cat-org/server) Run babel building with running server ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `babel-plugin-transform-flow`
+  - [#192](https://github.com/cat-org/core/pull/192) (@cat-org/server) Move babel commands to server ([@HsuTing](https://github.com/HsuTing))
+  - [#189](https://github.com/cat-org/core/pull/189) (@cat-org/babel-plugin-transform-flow) Ignore babel config ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#191](https://github.com/cat-org/core/pull/191) (@cat-org/server) Fix watch mode error ([@HsuTing](https://github.com/HsuTing))
+  - [#188](https://github.com/cat-org/core/pull/188) (@cat-org/react-middleware) Fix configs error ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#190](https://github.com/cat-org/core/pull/190) (@cat-org/configs) Catch error when generate files error ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `babel-plugin-transform-flow`
+  - [#187](https://github.com/cat-org/core/pull/187) (@cat-org/core) Fix flow fix me comment ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.17 (2019-04-29)
 
 #### :bug: Bug Fix

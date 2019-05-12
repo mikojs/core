@@ -54,7 +54,11 @@ describe('store', () => {
 
   test('store with --skip-command', async () => {
     execa.cmds = [];
-    example.ctx = { projectDir: 'project dir', skipCommand: true };
+    example.ctx = {
+      projectDir: 'project dir',
+      skipCommand: true,
+      lerna: false,
+    };
 
     await example.execa('command skip');
 
@@ -62,7 +66,11 @@ describe('store', () => {
   });
 
   test('store with execa error', async () => {
-    example.ctx = { projectDir: 'project dir', skipCommand: false };
+    example.ctx = {
+      projectDir: 'project dir',
+      skipCommand: false,
+      lerna: false,
+    };
     execa.mainFunction = () => {
       throw new Error('command error');
     };

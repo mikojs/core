@@ -57,13 +57,18 @@ class React extends Store {
   /**
    * @example
    * pkg.end(ctx)
+   *
+   * @param {Object} ctx - store context
    */
-  +end = async () => {
+  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
     if (!this.storeUseReact) return;
 
     await this.writeFiles({
       'src/pages/index.js': template,
     });
+
+    if (lerna) return;
+
     await this.execa('@cat-org/react-middleware');
   };
 }

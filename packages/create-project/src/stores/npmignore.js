@@ -7,7 +7,19 @@ import readme from './readme';
 import circleci from './circleci';
 import Store from './index';
 
-const template = `# default
+/**
+ * @example
+ * template(false)
+ *
+ * @param {boolean} lerna - lerna option
+ *
+ * @return {string} - content
+ */
+const template = (lerna: boolean) =>
+  lerna
+    ? `# babel
+src`
+    : `# default
 *.log
 
 # node
@@ -65,12 +77,14 @@ class Npmignore extends Store {
 
   /**
    * @example
-   * npmignore.end()
+   * npmignore.end(ctx)
+   *
+   * @param {Object} ctx - store context
    */
-  +end = async () => {
+  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
     if (this.storeUseNpm)
       await this.writeFiles({
-        '.npmignore': template,
+        '.npmignore': template(lerna),
       });
   };
 }

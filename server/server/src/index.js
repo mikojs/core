@@ -22,16 +22,26 @@ type contextType = {|
 |};
 
 const debugLog = debug('server');
+const context: contextType = {
+  dev: true,
+  dir: '',
+  babelOptions: '',
+};
 
 handleUnhandledRejection();
 
 export default {
-  init: async ({ babelOptions }: contextType): Promise<Koa> => {
-    logger.start('Server start');
+  init: async ({ dev, dir, babelOptions }: contextType): Promise<Koa> => {
+    context.dev = dev;
+    context.dir = dir;
+    context.babelOptions = babelOptions;
 
     await execa.shell(`babel ${babelOptions}`, {
       stdio: 'inherit',
     });
+
+    logger.start('Server start');
+
     // TODO: avoid to trigger webpack again
     await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -127,14 +137,14 @@ export default {
     };
   },
 
-  run: ({ dev, dir, babelOptions }: contextType, port?: number = 8000) => (
-    app: routerType,
-  ): http$Server => {
+  run: (port?: number = 8000) => (app: routerType): http$Server => {
     if (!(app instanceof Koa)) throw logger.fail('server is not koa server');
 
     debugLog(port);
 
-    return app.listen(parseInt(port, 10), async () => {
+    return app.listen(parseInt(port, 10), () => {
+      const { dev, dir, babelOptions } = context;
+
       logger.succeed(
         chalk`Running server at port: {gray {bold ${port.toString()}}}`,
       );
@@ -148,7 +158,7 @@ export default {
             if (/\.jsx?/.test(filePath)) delete require.cache[filePath];
           });
 
-        await execa.shell(`babel --skip-initial-build -w ${babelOptions}`, {
+        execa.shell(`babel --skip-initial-build -w ${babelOptions}`, {
           stdio: 'inherit',
         });
       }

@@ -2,10 +2,6 @@
 
 import React from 'react';
 
-import List from '../components/List';
+import List from '../components/list';
 
-export default () => (
-  <div>
-    <List />
-  </div>
-);
+export default () => <List />;

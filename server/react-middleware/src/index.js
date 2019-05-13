@@ -17,6 +17,14 @@ import server from './utils/server';
 
 export { buildStatic } from './utils/buildStatic';
 
+export type optionsType = {|
+  dev?: boolean,
+  config?: (cnofig: configType, dev: boolean) => configType,
+  redirect?: redirectType,
+  basename?: string,
+  useStatic?: boolean,
+|};
+
 handleUnhandledRejection();
 
 export default async (
@@ -27,13 +35,7 @@ export default async (
     redirect = emptyFunction.thatReturnsArgument,
     basename,
     useStatic = false,
-  }: {|
-    dev?: boolean,
-    config?: (cnofig: configType, dev: boolean) => configType,
-    redirect?: redirectType,
-    basename?: string,
-    useStatic?: boolean,
-  |} = {},
+  }: optionsType = {},
 ): Promise<koaMiddlewareType> => {
   if (!fs.existsSync(folderPath))
     throw new Error(

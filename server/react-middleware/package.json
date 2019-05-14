@@ -39,7 +39,8 @@
   "devDependencies": {
     "enzyme": "^3.9.0",
     "get-port": "^5.0.0",
-    "koa": "^2.7.0"
+    "koa": "^2.7.0",
+    "prop-types": "^15.7.2"
   },
   "keywords": ["cat-org", "middleware", "react"],
   "publishConfig": {

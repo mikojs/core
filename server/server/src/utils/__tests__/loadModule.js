@@ -2,11 +2,11 @@
 
 import path from 'path';
 
-import ctx from 'koa/lib/context';
+import { emptyFunction } from 'fbjs';
 
-import loadMiddleware from '../loadMiddleware';
+import loadModule from '../loadModule';
 
-describe('load middleware', () => {
+describe('load module', () => {
   test.each`
     moduleName         | options
     ${'module.js'}     | ${[]}
@@ -21,26 +21,26 @@ describe('load middleware', () => {
       options: $ReadOnlyArray<string>,
     |}) => {
       expect(
-        loadMiddleware(
+        loadModule(
           path.resolve(__dirname, './__ignore__', moduleName),
+          emptyFunction,
           ...options,
         ),
       ).toBe('test');
     },
   );
 
-  test('can not find module', async () => {
-    const middleware = loadMiddleware('test.js');
+  test('can not find module', () => {
     const mockNext = jest.fn();
 
-    await middleware(ctx, mockNext);
+    loadModule('test.js', mockNext)('test');
 
     expect(mockNext).toHaveBeenCalled();
   });
 
   test('unknown error', () => {
     expect(() =>
-      loadMiddleware(path.resolve(__dirname, './__ignore__/errorModule.js')),
+      loadModule(path.resolve(__dirname, './__ignore__/errorModule.js')),
     ).toThrow('error');
   });
 });

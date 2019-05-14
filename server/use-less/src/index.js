@@ -4,7 +4,9 @@ import { emptyFunction } from 'fbjs';
 
 import { type optionsType, type configType } from '@cat-org/react-middleware';
 
-if (typeof require !== 'undefined') require.extensions['.less'] = emptyFunction;
+if (typeof require !== 'undefined')
+  // $FlowFixMe TODO: use babel-less to transform
+  require.extensions['.less'] = emptyFunction;
 
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,

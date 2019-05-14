@@ -10,16 +10,18 @@ import { invariant, emptyFunction } from 'fbjs';
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import getData, { type redirectType } from './utils/getData';
-import buildJs, { type configType } from './utils/buildJs';
+import buildJs, { type configType as buildConfigType } from './utils/buildJs';
 import prevBuildStatic from './utils/buildStatic';
 import getConfig from './utils/getConfig';
 import server from './utils/server';
 
 export { buildStatic } from './utils/buildStatic';
 
+export type configType = buildConfigType;
+
 export type optionsType = {|
   dev?: boolean,
-  config?: (cnofig: configType, dev: boolean) => configType,
+  config?: (cnofig: buildConfigType, dev: boolean) => buildConfigType,
   redirect?: redirectType,
   basename?: string,
   useStatic?: boolean,

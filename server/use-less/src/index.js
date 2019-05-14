@@ -2,13 +2,14 @@
 
 import { emptyFunction } from 'fbjs';
 
-import { type optionsType } from '@cat-org/react-middleware';
-import { type configType } from '@cat-org/react-middleware/lib/utils/buildJs';
+import { type optionsType, type configType } from '@cat-org/react-middleware';
 
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,
   ...options
-}: optionsType): optionsType => ({
+}: optionsType = {}): optionsType & {
+  config: $NonMaybeType<$PropertyType<optionsType, 'config'>>,
+} => ({
   ...options,
   config: (config: configType, dev: boolean): configType => {
     const prevConfig = configFunc(config, dev);

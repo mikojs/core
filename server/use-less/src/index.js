@@ -4,6 +4,8 @@ import { emptyFunction } from 'fbjs';
 
 import { type optionsType, type configType } from '@cat-org/react-middleware';
 
+if (typeof require !== 'undefined') require.extensions['.less'] = emptyFunction;
+
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,
   ...options

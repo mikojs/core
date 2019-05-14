@@ -53,11 +53,11 @@ const defaultMiddleware = async (
   (await server.init(context))
     |> server.use(loadModule('@cat-org/default-middleware', defaultMiddleware))
     |> server.use(
-      (await loadModule)(
+      await loadModule(
         '@cat-org/react-middleware',
         defaultMiddleware,
         path.resolve(context.dir, './pages'),
-        loadModule('@cat-org/ues-less', emptyFunction.thatReturnsArgument, {
+        loadModule('@cat-org/use-less', emptyFunction.thatReturnsArgument, {
           dev: context.dev,
         }),
       ),

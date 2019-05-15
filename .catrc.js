@@ -92,10 +92,6 @@ const babel = config => {
       test: './server/react-middleware',
       presets: ['@babel/preset-react'],
     },
-    {
-      test: './website',
-      presets: ['@babel/preset-react'],
-    },
   );
 
   if (process.env.NODE_ENV !== 'test' && !process.env.USE_DEFAULT_BABEL)
@@ -115,14 +111,6 @@ const lint = {
     globals: {
       __CAT_DATA__: true,
     },
-    overrides: [
-      {
-        files: ['website/**'],
-        rules: {
-          'import/no-extraneous-dependencies': 'off',
-        },
-      },
-    ],
   }),
   ignore: ignore => [
     ...ignore,
@@ -164,14 +152,5 @@ module.exports = (() => {
     // jest
     'jest:react': jest,
     'test:react': jest,
-
-    // server
-    server: {
-      run: argv => [...argv, 'website/src', '-d', 'website/lib', '--verbose'],
-      configFiles: {
-        server: './server.js',
-        'babel:lerna': true,
-      },
-    },
   };
 })();

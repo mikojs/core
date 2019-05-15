@@ -12,7 +12,7 @@ export default {
     '@cat-org/babel-plugin-base',
   ],
   config: () => ({
-    presets: ['@cat-org/babel-plugin-base'],
+    presets: ['@cat-org/base'],
     ignore: mockChoice(
       process.env.NODE_ENV === 'test',
       emptyFunction.thatReturns([]),

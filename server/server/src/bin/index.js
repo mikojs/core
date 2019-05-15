@@ -9,11 +9,14 @@
 
 import path from 'path';
 
+import { type Context as koaContextType } from 'koa';
+import { emptyFunction } from 'fbjs';
+
 import parseArgv from '@babel/cli/lib/babel/options';
 
 import server from '../index';
 
-import loadMiddleware from 'utils/loadMiddleware';
+import loadModule from 'utils/loadModule';
 
 const {
   cliOptions: { outDir },
@@ -31,17 +34,32 @@ const context = {
     .join(' '),
 };
 
+/**
+ * @example
+ * defaultMiddleware(ctx, next)
+ *
+ * @param {Object} ctx - koa context
+ * @param {Function} next - koa next function
+ */
+const defaultMiddleware = async (
+  ctx: koaContextType,
+  next: () => Promise<void>,
+) => {
+  await next();
+};
+
 (async () => {
   // eslint-disable-next-line flowtype/no-unused-expressions
   (await server.init(context))
-    |> server.use(loadMiddleware('@cat-org/default-middleware'))
+    |> server.use(loadModule('@cat-org/default-middleware', defaultMiddleware))
     |> server.use(
-      await loadMiddleware(
+      await loadModule(
         '@cat-org/react-middleware',
+        defaultMiddleware,
         path.resolve(context.dir, './pages'),
-        {
+        loadModule('@cat-org/use-less', emptyFunction.thatReturnsArgument, {
           dev: context.dev,
-        },
+        }),
       ),
     )
     |> server.run(parseInt(process.env.PORT || 8000, 10));

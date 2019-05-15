@@ -57,6 +57,7 @@ export default (
   module: {
     rules: [
       {
+        test: /\.jsx?$/,
         include: [CLIENT_PATH],
         loader: path.resolve(__dirname, './replaceLoader.js'),
         options: {
@@ -92,6 +93,7 @@ export default (
         ? []
         : [
             {
+              test: /\.jsx?$/,
               include: [CLIENT_PATH],
               loader: path.resolve(__dirname, './replaceLoader.js'),
               options: {
@@ -99,6 +101,7 @@ export default (
               },
             },
             {
+              test: /\.jsx?$/,
               include: [folderPath, ROOT_PATH],
               loader: path.resolve(__dirname, './replaceLoader.js'),
               options: {

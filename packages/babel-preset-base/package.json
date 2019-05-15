@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/babel-plugin-base",
+  "name": "@cat-org/babel-preset-base",
   "description": "The base of babel plugin with cat-org",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/babel-plugin-base",
-  "repository": "https://github.com/cat-org/core/tree/master/packages/babel-plugin-base",
+  "homepage": "https://cat-org.github.io/core/babel-preset-base",
+  "repository": "https://github.com/cat-org/core/tree/master/packages/babel-preset-base",
   "version": "1.0.0-beta.19",
   "main": "./lib/index.js",
   "dependencies": {

@@ -1,50 +1,13 @@
 // @flow
 
-const areEqual = require('fbjs/lib/areEqual');
-const invariant = require('fbjs/lib/invariant');
-
 /* eslint-disable flowtype/require-return-type */
 /* eslint-disable flowtype/require-parameter-type */
 /* eslint-disable require-jsdoc */
 
-const defaultBabelConfig = {
-  presets: [
-    [
-      '@babel/env',
-      {
-        useBuiltIns: 'usage',
-      },
-    ],
-    '@babel/flow',
-  ],
-  plugins: [
-    '@babel/proposal-optional-chaining',
-    [
-      'module-resolver',
-      {
-        root: ['./src'],
-        cwd: 'packagejson',
-      },
-    ],
-  ],
-  ignore:
-    process.env.NODE_ENV === 'test'
-      ? []
-      : ['**/__tests__/**', '**/__mocks__/**'],
-  overrides: [],
-};
-
 const babel = config => {
-  invariant(
-    areEqual(
-      {
-        ...config,
-        plugins: config.plugins.filter(plugin => !/^@cat-org/.test(plugin)),
-      },
-      defaultBabelConfig,
-    ),
-    'babel config should be equal to default config',
-  );
+  if (!config.plugins) config.plugins = [];
+
+  if (!config.overrides) config.overrides = [];
 
   config.plugins.push(
     [
@@ -79,13 +42,30 @@ const babel = config => {
     ],
   );
 
+  const isNotUsedDefaultBabel =
+    process.env.NODE_ENV !== 'test' && !process.env.USE_DEFAULT_BABEL;
+
   config.overrides.push(
     {
-      test: './packages/configs',
-      plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
-    },
-    {
-      test: './server/server',
+      test: ['./packages/configs', './server/server'],
+      presets: !isNotUsedDefaultBabel
+        ? []
+        : [
+            [
+              '@cat-org/base',
+              {
+                '@cat-org/transform-flow': {
+                  plugins: [
+                    // FIXME: remove after flow support
+                    [
+                      '@babel/proposal-pipeline-operator',
+                      { proposal: 'minimal' },
+                    ],
+                  ],
+                },
+              },
+            ],
+          ],
       plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
     },
     {
@@ -93,14 +73,6 @@ const babel = config => {
       presets: ['@babel/preset-react'],
     },
   );
-
-  if (process.env.NODE_ENV !== 'test' && !process.env.USE_DEFAULT_BABEL)
-    config.plugins
-      .find(plugin => plugin[0] === '@cat-org/transform-flow')[1]
-      .plugins.push(
-        // FIXME: remove after flow support
-        ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
-      );
 
   return config;
 };
@@ -139,7 +111,31 @@ const jest = {
 
 module.exports = (() => {
   if (/babel$/.test(process.argv[1]) && process.env.USE_DEFAULT_BABEL)
-    return babel(defaultBabelConfig);
+    return babel({
+      presets: [
+        [
+          '@babel/env',
+          {
+            useBuiltIns: 'usage',
+          },
+        ],
+        '@babel/flow',
+      ],
+      plugins: [
+        '@babel/proposal-optional-chaining',
+        [
+          'module-resolver',
+          {
+            root: ['./src'],
+            cwd: 'packagejson',
+          },
+        ],
+      ],
+      ignore:
+        process.env.NODE_ENV === 'test'
+          ? []
+          : ['**/__tests__/**', '**/__mocks__/**'],
+    });
 
   return {
     // babel

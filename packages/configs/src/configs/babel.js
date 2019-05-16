@@ -18,7 +18,6 @@ export default {
       emptyFunction.thatReturns([]),
       emptyFunction.thatReturns(['**/__tests__/**', '**/__mocks__/**']),
     ),
-    overrides: [],
   }),
   run: (argv: $ReadOnlyArray<string>) => [
     ...argv,

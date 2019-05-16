@@ -1,5 +1,7 @@
 // @flow
 
+import { type configType } from '../types';
+
 import babel from './babel';
 import prettier from './prettier';
 import lint from './lint';
@@ -7,16 +9,6 @@ import lintsteged from './lintsteged';
 
 import jest from './jest';
 import jestReact from './jest/react';
-
-type configType = {
-  alias?: string,
-  install?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-  config?: (argv: $ReadOnlyArray<mixed>) => mixed,
-  ignore?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-  ignoreName?: string,
-  env?: {},
-  configFiles?: {},
-};
 
 export default ({
   // babel
@@ -64,13 +56,5 @@ export default ({
     run: (argv: $ReadOnlyArray<string>) => [...argv, '--silent'],
   },
 }: {
-  [string]: configType & {
-    run?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-  },
-  babel: configType & {
-    run: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-  },
-  lint: configType & {
-    run: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-  },
+  [string]: configType,
 });

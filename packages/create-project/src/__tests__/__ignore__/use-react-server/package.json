@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "server --dev",
     "prod": "NODE_ENV=production server",
-    "test": "configs test:react"
+    "test": "configs test --configs-env react"
   },
   "devDependencies": {
     "@cat-org/create-project": "create-project version"

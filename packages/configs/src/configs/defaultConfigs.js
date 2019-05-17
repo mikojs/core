@@ -46,7 +46,11 @@ export default ({
   test: {
     ...jest,
     alias: 'jest',
-    run: (argv: $ReadOnlyArray<string>) => [...argv, '--silent'],
+    run: (argv: $ReadOnlyArray<string>) => [
+      ...argv,
+      '--silent',
+      '--coverage=true',
+    ],
   },
 }: {
   [string]: configType,

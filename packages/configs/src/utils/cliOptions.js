@@ -32,12 +32,16 @@ export default (
   configs {green babel -w}
   configs {green babel:lerna -w}
   configs {gray --info}
-  configs {green babel:lerna} {gray --info}`,
+  configs {green babel:lerna} {gray --info}
+  configs {green babel} {gray --configs-env env}`,
     )
     .option('--install', 'install packages by config')
     .option('--info', 'print more info about configs')
-    .option('--env', 'configs environment variables', (value: string) =>
-      value.split(','),
+    .option(
+      '--configs-env [env]',
+      'configs environment variables',
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      (value: string) => value?.split(','),
     )
     .allowUnknownOption();
 
@@ -46,7 +50,7 @@ export default (
     rawArgs,
     install: shouldInstall = false,
     info = false,
-    env: configsEnv,
+    configsEnv,
   } = program.parse([...argv]);
 
   debugLog({

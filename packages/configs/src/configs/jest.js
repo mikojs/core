@@ -7,6 +7,7 @@ export default {
     'babel-jest',
     '@cat-org/jest',
   ],
+  run: (argv: $ReadOnlyArray<string>) => [...argv, '--coverage=false'],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
     setupFiles: [
       '@cat-org/jest',

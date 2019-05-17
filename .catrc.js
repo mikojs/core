@@ -138,6 +138,8 @@ module.exports = (() => {
     });
 
   return {
+    configsEnv: ['react'],
+
     // babel
     'babel:lerna': babel,
 
@@ -146,7 +148,7 @@ module.exports = (() => {
     'lint:watch': lint,
 
     // jest
-    'jest:react': jest,
-    'test:react': jest,
+    jest,
+    test: jest,
   };
 })();

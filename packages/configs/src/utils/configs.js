@@ -18,11 +18,27 @@ const debugLog = debug('configs:configs');
 
 /** Store configs */
 export class Configs {
-  +store = { ...defaultConfigs };
+  +store = {};
 
   +rootDir = process.cwd();
 
   +customConfigsPath = null;
+
+  +configsEnv = [];
+
+  /**
+   * @example
+   * configs.init()
+   */
+  -init = () => {
+    Object.keys(defaultConfigs).forEach((key: string) => {
+      const { config, ...otherSettings } = defaultConfigs[key];
+
+      this.store[key] = { ...otherSettings };
+      this.store[key].config = () =>
+        ({ configsEnv: this.configsEnv } |> config);
+    });
+  };
 
   /**
    * @example
@@ -40,6 +56,11 @@ export class Configs {
     this.rootDir = path.dirname(customConfigsPath);
 
     Object.keys(customConfigs).forEach((key: string) => {
+      if (key === 'configsEnv') {
+        this.configsEnv = customConfigs[key];
+        return;
+      }
+
       // handle custom configs is not in default customConfigs
       if (!this.store[key]) {
         this.store[key] = customConfigs[key];
@@ -67,15 +88,17 @@ export class Configs {
           |> configs.install || emptyFunction.thatReturnsArgument
           |> customConfigs[key].install || emptyFunction.thatReturnsArgument,
         config: () =>
-          ({}
+          ({ configsEnv: this.configsEnv }
           |> configs.config ||
             (typeof configs === 'function'
               ? configs
               : emptyFunction.thatReturnsArgument)
+          |> ((config: {}) => ({ ...config, configsEnv: this.configsEnv }))
           |> customConfigs[key].config ||
             (typeof customConfigs[key] === 'function'
               ? customConfigs[key]
-              : emptyFunction.thatReturnsArgument)),
+              : emptyFunction.thatReturnsArgument)
+          |> (({ configsEnv, ...config }: {}) => config)),
         ignore: () =>
           []
           |> configs.ignore || emptyFunction.thatReturnsArgument
@@ -102,6 +125,7 @@ export class Configs {
 
 const configs = new Configs();
 
+configs.init();
 configs.handleCustomConfigs(cosmiconfig('cat').searchSync()?.filepath);
 
 export default configs;

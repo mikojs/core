@@ -36,6 +36,9 @@ export default (
     )
     .option('--install', 'install packages by config')
     .option('--info', 'print more info about configs')
+    .option('--env', 'configs environment variables', (value: string) =>
+      value.split(','),
+    )
     .allowUnknownOption();
 
   const {
@@ -43,6 +46,7 @@ export default (
     rawArgs,
     install: shouldInstall = false,
     info = false,
+    env: configsEnv,
   } = program.parse([...argv]);
 
   debugLog({
@@ -50,7 +54,10 @@ export default (
     rawArgs,
     shouldInstall,
     info,
+    configsEnv,
   });
+
+  if (configsEnv) configs.configsEnv = configsEnv;
 
   if (info) {
     if (cliName) {

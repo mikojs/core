@@ -11,8 +11,11 @@ export default {
     '@babel/core',
     '@cat-org/babel-plugin-base',
   ],
-  config: () => ({
-    presets: ['@cat-org/base'],
+  config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
+    presets: [
+      '@cat-org/base',
+      ...(!configsEnv.includes('react') ? [] : ['@babel/react']),
+    ],
     ignore: mockChoice(
       process.env.NODE_ENV === 'test',
       emptyFunction.thatReturns([]),

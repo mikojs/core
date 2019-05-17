@@ -18,7 +18,7 @@
     "execa": "^1.0.0",
     "fbjs": "^1.0.0",
     "output-file-sync": "^2.0.1",
-    "read-pkg-up": "^5.0.0"
+    "read-pkg-up": "^6.0.0"
   },
   "keywords": ["badges", "cat-org"],
   "publishConfig": {

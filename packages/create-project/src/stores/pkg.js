@@ -131,7 +131,7 @@ class Pkg extends Store {
         this.storePkg.scripts = {
           dev: 'server --dev',
           prod: 'NODE_ENV=production server',
-          test: 'configs test:react',
+          test: 'configs test --configs-env react',
         };
       else
         this.storePkg.scripts = {

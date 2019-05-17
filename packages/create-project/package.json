@@ -16,7 +16,7 @@
     "commander": "^2.20.0",
     "debug": "^4.1.1",
     "diff": "^4.0.1",
-    "envinfo": "^7.2.0",
+    "envinfo": "^7.3.1",
     "execa": "^1.0.0",
     "fbjs": "^1.0.0",
     "inquirer": "^6.3.1",
@@ -26,8 +26,8 @@
   },
   "devDependencies": {
     "d3-hierarchy": "^1.1.8",
-    "directory-tree": "^2.2.1",
-    "prettier": "^1.17.0",
+    "directory-tree": "^2.2.3",
+    "prettier": "^1.17.1",
     "prettier-package-json": "^2.1.0"
   },
   "keywords": ["cat-org", "createt project"],

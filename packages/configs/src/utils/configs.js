@@ -34,11 +34,46 @@ export class Configs {
     Object.keys(defaultConfigs).forEach((key: string) => {
       const { config, ...otherSettings } = defaultConfigs[key];
 
+      if (!config && typeof defaultConfigs[key] === 'function') {
+        this.store[key] = () =>
+          ({}
+          |> this.addConfigsEnv
+          |> defaultConfigs[key] || emptyFunction.thatReturnsArgument
+          |> this.removeConfigsEnv);
+        return;
+      }
+
       this.store[key] = { ...otherSettings };
       this.store[key].config = () =>
-        ({ configsEnv: this.configsEnv } |> config);
+        ({}
+        |> this.addConfigsEnv
+        |> config || emptyFunction.thatReturnsArgument
+        |> this.removeConfigsEnv);
     });
   };
+
+  /**
+   * @example
+   * configs.addConfigsEnv({})
+   *
+   * @param {Object} config - config from parent
+   *
+   * @return {Object} - config with configsEnv
+   */
+  -addConfigsEnv = (config: {}) => ({
+    ...config,
+    configsEnv: this.configsEnv,
+  });
+
+  /**
+   * @example
+   * configs.removeConfigsEnv({})
+   *
+   * @param {Object} config - config with configsEnv
+   *
+   * @return {Object} - configs without configsEnv
+   */
+  -removeConfigsEnv = ({ configsEnv, ...config }: {}) => config;
 
   /**
    * @example
@@ -63,7 +98,25 @@ export class Configs {
 
       // handle custom configs is not in default customConfigs
       if (!this.store[key]) {
-        this.store[key] = customConfigs[key];
+        // handle custom configs is a function
+        if (!customConfigs[key].config)
+          this.store[key] = () =>
+            ({}
+            |> this.addConfigsEnv
+            |> customConfigs[key]
+            |> this.removeConfigsEnv);
+        // handle custom configs is not a function
+        else {
+          const { config, ...otherSettings } = customConfigs[key];
+
+          this.store[key] = { ...otherSettings };
+          this.store[key].config = () =>
+            ({}
+            |> this.addConfigsEnv
+            |> config || emptyFunction.thatReturnsArgument
+            |> this.removeConfigsEnv);
+        }
+
         return;
       }
 
@@ -71,7 +124,13 @@ export class Configs {
       if (!this.store[key].config && !customConfigs[key].config) {
         const configs = this.store[key];
 
-        this.store[key] = () => ({} |> configs |> customConfigs[key]);
+        this.store[key] = () =>
+          ({}
+          |> this.addConfigsEnv
+          |> configs
+          |> this.addConfigsEnv
+          |> customConfigs[key]
+          |> this.removeConfigsEnv);
         return;
       }
 
@@ -88,17 +147,18 @@ export class Configs {
           |> configs.install || emptyFunction.thatReturnsArgument
           |> customConfigs[key].install || emptyFunction.thatReturnsArgument,
         config: () =>
-          ({ configsEnv: this.configsEnv }
+          ({}
+          |> this.addConfigsEnv
           |> configs.config ||
             (typeof configs === 'function'
               ? configs
               : emptyFunction.thatReturnsArgument)
-          |> ((config: {}) => ({ ...config, configsEnv: this.configsEnv }))
+          |> this.addConfigsEnv
           |> customConfigs[key].config ||
             (typeof customConfigs[key] === 'function'
               ? customConfigs[key]
               : emptyFunction.thatReturnsArgument)
-          |> (({ configsEnv, ...config }: {}) => config)),
+          |> this.removeConfigsEnv),
         ignore: () =>
           []
           |> configs.ignore || emptyFunction.thatReturnsArgument

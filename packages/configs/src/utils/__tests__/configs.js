@@ -27,6 +27,7 @@ describe('configs', () => {
   const configs = new Configs();
 
   configs.handleCustomConfigs();
+  configs.init();
   configs.handleCustomConfigs(
     path.resolve(__dirname, './__ignore__/configs.js'),
   );

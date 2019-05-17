@@ -23,7 +23,7 @@ describe('generate files', () => {
   });
 
   test('generate', () => {
-    generateFiles('jest:react');
+    generateFiles('jest');
 
     expect(worker.server).toBeNull();
     expect(outputFileSync.destPaths).toEqual(

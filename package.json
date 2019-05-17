@@ -21,6 +21,7 @@
     "@babel/runtime": "^7.4.4",
     "babel-jest": "^24.8.0",
     "babel-plugin-add-module-exports": "^1.0.2",
+    "babel-plugin-css-modules-transform": "^1.6.2",
     "babel-plugin-transform-imports": "^1.5.1",
     "eslint": "^5.16.0",
     "eslint-watch": "^5.1.2",

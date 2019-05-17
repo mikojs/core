@@ -117,6 +117,7 @@ module.exports = (() => {
           '@babel/env',
           {
             useBuiltIns: 'usage',
+            corejs: '2.6.5',
           },
         ],
         '@babel/flow',

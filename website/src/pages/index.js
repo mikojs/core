@@ -2,4 +2,6 @@
 
 import React from 'react';
 
-export default () => <div>Home</div>;
+import styles from './styles.less';
+
+export default () => <div className={styles.root}>Home</div>;

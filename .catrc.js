@@ -9,6 +9,19 @@ const babel = config => {
 
   if (!config.overrides) config.overrides = [];
 
+  const cssModuleTransform = config.plugins.find(
+    plugin => plugin && plugin[0] === 'css-modules-transform',
+  );
+
+  cssModuleTransform[1] = {
+    ...cssModuleTransform[1],
+    extractCss: {
+      ...cssModuleTransform[1].extractCss,
+      dir: './website/lib',
+      relativeRoot: './website/src',
+    },
+  };
+
   config.plugins.push(
     [
       '@babel/proposal-class-properties',

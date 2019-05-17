@@ -45,34 +45,28 @@ const babel = config => {
   const isNotUsedDefaultBabel =
     process.env.NODE_ENV !== 'test' && !process.env.USE_DEFAULT_BABEL;
 
-  config.overrides.push(
-    {
-      test: ['./packages/configs', './server/server'],
-      presets: !isNotUsedDefaultBabel
-        ? []
-        : [
-            [
-              '@cat-org/base',
-              {
-                '@cat-org/transform-flow': {
-                  plugins: [
-                    // FIXME: remove after flow support
-                    [
-                      '@babel/proposal-pipeline-operator',
-                      { proposal: 'minimal' },
-                    ],
+  config.overrides.push({
+    test: ['./packages/configs', './server/server'],
+    presets: !isNotUsedDefaultBabel
+      ? []
+      : [
+          [
+            '@cat-org/base',
+            {
+              '@cat-org/transform-flow': {
+                plugins: [
+                  // FIXME: remove after flow support
+                  [
+                    '@babel/proposal-pipeline-operator',
+                    { proposal: 'minimal' },
                   ],
-                },
+                ],
               },
-            ],
+            },
           ],
-      plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
-    },
-    {
-      test: './server/react-middleware',
-      presets: ['@babel/preset-react'],
-    },
-  );
+        ],
+    plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
+  });
 
   return config;
 };

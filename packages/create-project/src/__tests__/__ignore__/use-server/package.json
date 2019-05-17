@@ -12,13 +12,15 @@
     "prod": "NODE_ENV=production server",
     "test": "configs test"
   },
+  "devDependencies": {
+    "@cat-org/create-project": "create-project version"
+  },
   "keywords": ["keyword"],
   "engines": {
     "node": ">= node version",
     "npm": ">= npm version",
     "yarn": ">= yarn version"
   },
-  "create-project": "create-project version",
   "husky": {
     "hooks": {
       "pre-commit": "configs lint-staged && yarn flow"

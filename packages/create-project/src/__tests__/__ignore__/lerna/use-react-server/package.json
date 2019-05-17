@@ -1,0 +1,17 @@
+{
+  "name": "package-name",
+  "description": "package description",
+  "license": "MIT",
+  "author": "username <email>",
+  "homepage": "http://cat-org/package-homepage",
+  "repository": "https://github.com/cat-org/core.git",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "devDependencies": {
+    "@cat-org/create-project": "create-project version"
+  },
+  "keywords": ["keyword"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

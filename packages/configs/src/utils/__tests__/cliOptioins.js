@@ -30,6 +30,18 @@ describe('cli options', () => {
     };
   });
 
+  test('run command with configsEnv', () => {
+    expect(
+      cliOptions([...defaultArgv, 'run-cmd', '--configs-env', 'react']),
+    ).toEqual({
+      cli: babelCli,
+      argv: [...defaultArgv, '--configs-env', 'react'],
+      env: {},
+      cliName: 'run-cmd',
+    });
+    expect(configs.configsEnv).toEqual(['react']);
+  });
+
   test.each`
     argv
     ${['--info']}

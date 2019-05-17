@@ -9,6 +9,11 @@ import handler, { type manipulateOptionsPluginsType } from './utils/handler';
 import flowFiles, { type flowFileType } from './utils/flowFiles';
 import writeFiles from './utils/writeFiles';
 
+export type optionsType = $PropertyType<
+  manipulateOptionsPluginsType,
+  'options',
+>;
+
 export default declare(
   (
     api: {| assertVersion: (version: number) => void |},

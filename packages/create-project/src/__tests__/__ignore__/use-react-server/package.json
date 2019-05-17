@@ -10,7 +10,10 @@
   "scripts": {
     "dev": "server --dev",
     "prod": "NODE_ENV=production server",
-    "test": "configs test:react"
+    "test": "configs test --configs-env react"
+  },
+  "devDependencies": {
+    "@cat-org/create-project": "create-project version"
   },
   "keywords": ["keyword"],
   "engines": {
@@ -18,7 +21,6 @@
     "npm": ">= npm version",
     "yarn": ">= yarn version"
   },
-  "create-project": "create-project version",
   "husky": {
     "hooks": {
       "pre-commit": "configs lint-staged && yarn flow"

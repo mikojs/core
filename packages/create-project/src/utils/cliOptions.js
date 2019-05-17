@@ -24,11 +24,13 @@ export default (
       chalk`Example:
   create-project {green <project directory>}`,
     )
+    .option('--lerna', 'create package in the lerna-managed repo')
     .option('--skip-command', 'skip running commands');
 
   const {
     args: [projectDir],
     skipCommand = false,
+    lerna = false,
   } = program.parse([...argv]);
 
   if (!projectDir)
@@ -37,6 +39,7 @@ export default (
   const cliOptions = {
     projectDir: path.resolve(projectDir),
     skipCommand,
+    lerna,
   };
 
   debugLog(cliOptions);

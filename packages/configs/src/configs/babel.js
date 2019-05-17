@@ -9,59 +9,37 @@ export default {
     ...install,
     '@babel/cli',
     '@babel/core',
-    '@babel/preset-env',
-    '@babel/preset-flow',
-    '@babel/plugin-proposal-optional-chaining',
-    '@cat-org/babel-plugin-transform-flow',
+    '@cat-org/babel-plugin-base',
   ],
-  config: () => ({
+  config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
     presets: [
-      [
-        '@babel/env',
-        {
-          useBuiltIns: 'usage',
-        },
-      ],
-      '@babel/flow',
+      '@cat-org/base',
+      ...(!configsEnv.includes('react') ? [] : ['@babel/react']),
     ],
     plugins: [
-      '@babel/proposal-optional-chaining',
-      [
-        'module-resolver',
-        {
-          root: ['./src'],
-          cwd: 'packagejson',
-        },
-      ],
-      ...mockChoice(
-        process.env.NODE_ENV === 'test',
-        emptyFunction.thatReturns([]),
-        emptyFunction.thatReturns([
-          [
-            '@cat-org/transform-flow',
-            {
-              plugins: [
-                [
-                  'module-resolver',
-                  {
-                    root: ['./src'],
-                    cwd: 'packagejson',
-                  },
-                ],
-                // FIXME: remove when flow support optional-chaining
-                '@babel/proposal-optional-chaining',
-              ],
-            },
-          ],
-        ]),
-      ),
+      ...(!configsEnv.includes('less')
+        ? []
+        : [
+            [
+              'css-modules-transform',
+              {
+                extensions: ['.less'],
+                devMode: process.env.NODE_ENV !== 'production',
+                keepImport: process.env.NODE_ENV !== 'test',
+                extractCss: {
+                  dir: './lib',
+                  relativeRoot: './src',
+                  filename: '[path]/[name].less',
+                },
+              },
+            ],
+          ]),
     ],
     ignore: mockChoice(
       process.env.NODE_ENV === 'test',
       emptyFunction.thatReturns([]),
       emptyFunction.thatReturns(['**/__tests__/**', '**/__mocks__/**']),
     ),
-    overrides: [],
   }),
   run: (argv: $ReadOnlyArray<string>) => [
     ...argv,

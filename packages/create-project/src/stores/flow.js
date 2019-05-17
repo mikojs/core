@@ -23,9 +23,13 @@ module.system.node.resolve_dirname=./src
 class Flow extends Store {
   /**
    * @example
-   * flow.end()
+   * flow.end(ctx)
+   *
+   * @param {Object} ctx - store context
    */
-  +end = async () => {
+  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
+    if (lerna) return;
+
     await this.writeFiles({
       '.flowconfig': template,
     });

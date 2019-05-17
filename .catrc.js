@@ -91,10 +91,6 @@ const lint = {
     // ignore for @cat-org/create-project testing
     'packages/create-project/src/__tests__/__ignore__/**/src/pages/**',
   ],
-  configFiles: {
-    babel: false,
-    'babel:lerna': true,
-  },
 };
 
 const jest = {
@@ -103,8 +99,6 @@ const jest = {
     collectCoverageFrom: [...collectCoverageFrom, '!**/packages/jest/**'],
   }),
   configFiles: {
-    babel: false,
-    'babel:lerna': true,
     lint: true,
   },
 };
@@ -139,7 +133,10 @@ module.exports = (() => {
     });
 
   return {
+    configsEnv: ['react'],
+
     // babel
+    babel,
     'babel:lerna': babel,
 
     // eslint
@@ -147,7 +144,7 @@ module.exports = (() => {
     'lint:watch': lint,
 
     // jest
-    'jest:react': jest,
-    'test:react': jest,
+    jest,
+    test: jest,
   };
 })();

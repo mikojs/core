@@ -13,6 +13,8 @@ module.exports = {
   notInDefault: {
     config: emptyFunction.thatReturns({}),
   },
+  notInDefaultFunc: emptyFunction.thatReturnsArgument,
+  notInDefaultWithoutConfig: {},
   funcMergeObject: {
     config: emptyFunction.thatReturnsArgument,
   },

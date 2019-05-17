@@ -23,6 +23,11 @@ describe('generate files', () => {
   });
 
   test('generate', () => {
+    configs.store.jest.configFiles = {
+      ...configs.store.jest.configFiles,
+      'babel:lerna': false,
+    };
+
     generateFiles('jest');
 
     expect(worker.server).toBeNull();

@@ -32,16 +32,16 @@ export class Configs {
    */
   -init = () => {
     Object.keys(defaultConfigs).forEach((key: string) => {
-      const { config, ...otherSettings } = defaultConfigs[key];
-
-      if (!config && typeof defaultConfigs[key] === 'function') {
+      if (typeof defaultConfigs[key] === 'function') {
         this.store[key] = () =>
           ({}
           |> this.addConfigsEnv
-          |> defaultConfigs[key] || emptyFunction.thatReturnsArgument
+          |> defaultConfigs[key]
           |> this.removeConfigsEnv);
         return;
       }
+
+      const { config, ...otherSettings } = defaultConfigs[key];
 
       this.store[key] = { ...otherSettings };
       this.store[key].config = () =>
@@ -99,7 +99,7 @@ export class Configs {
       // handle custom configs is not in default customConfigs
       if (!this.store[key]) {
         // handle custom configs is a function
-        if (!customConfigs[key].config)
+        if (typeof customConfigs[key] === 'function')
           this.store[key] = () =>
             ({}
             |> this.addConfigsEnv
@@ -149,10 +149,7 @@ export class Configs {
         config: () =>
           ({}
           |> this.addConfigsEnv
-          |> configs.config ||
-            (typeof configs === 'function'
-              ? configs
-              : emptyFunction.thatReturnsArgument)
+          |> configs.config || configs
           |> this.addConfigsEnv
           |> customConfigs[key].config ||
             (typeof customConfigs[key] === 'function'

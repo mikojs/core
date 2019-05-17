@@ -49,13 +49,18 @@ describe('configs', () => {
   });
 
   test.each`
-    testName               | configName
-    ${'not in default'}    | ${'notInDefault'}
-    ${'func merge object'} | ${'funcMergeObject'}
-    ${'object merge func'} | ${'objectMergeFunc'}
-    ${'custom no config'}  | ${'customNoConfig'}
-    ${'default no config'} | ${'defaultNoConfig'}
+    testName                                | configName
+    ${'not in default'}                     | ${'notInDefault'}
+    ${'not in default func'}                | ${'notInDefaultFunc'}
+    ${'not in default func without config'} | ${'notInDefaultWithoutConfig'}
+    ${'func merge object'}                  | ${'funcMergeObject'}
+    ${'object merge func'}                  | ${'objectMergeFunc'}
+    ${'custom no config'}                   | ${'customNoConfig'}
+    ${'default no config'}                  | ${'defaultNoConfig'}
   `('$testName', ({ configName }: {| configName: string |}) => {
-    expect(configs.store[configName].config()).toEqual({});
+    expect(
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      configs.store[configName].config?.() || configs.store[configName](),
+    ).toEqual({});
   });
 });

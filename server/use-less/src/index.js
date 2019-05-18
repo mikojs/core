@@ -37,6 +37,22 @@ export default ({
       ],
     });
 
+    prevConfig.config.optimization = {
+      ...prevConfig.config.optimization,
+      splitChunks: {
+        ...(prevConfig.config.optimization?.splitChunks || {}),
+        cacheGroups: {
+          ...(prevConfig.config.optimization?.splitChunks || {}).cacheGroups,
+          styles: {
+            name: 'styles',
+            test: /\.less$/,
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      },
+    };
+
     return prevConfig;
   },
 });

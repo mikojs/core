@@ -40,6 +40,18 @@ describe('use-less', () => {
             },
           ],
         },
+        optimization: {
+          splitChunks: {
+            cacheGroups: {
+              styles: {
+                name: 'styles',
+                test: /\.less$/,
+                chunks: 'all',
+                enforce: true,
+              },
+            },
+          },
+        },
       });
     },
   );

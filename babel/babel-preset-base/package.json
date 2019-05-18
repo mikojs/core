@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/babel-preset-base",
-  "repository": "https://github.com/cat-org/core/tree/master/packages/babel-preset-base",
+  "repository": "https://github.com/cat-org/core/tree/master/babel/babel-preset-base",
   "version": "1.0.0-beta.19",
   "main": "./lib/index.js",
   "dependencies": {

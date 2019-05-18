@@ -32,7 +32,7 @@ release:
 
 clean:
 	@yarn lerna clean && rm -rf ./node_modules
-	rm -rf ./packages/**/lib ./server/**/lib
+	rm -rf ./packages/**/lib ./babel/**/lib ./server/**/lib
 	rm -rf ./flow-typed
 	rm -rf ./coverage
 	rm -rf ./.eslintcache

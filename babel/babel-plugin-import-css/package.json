@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/babel-plugin-import-css",
-  "repository": "https://github.com/cat-org/core/tree/master/packages/babel-plugin-import-css",
+  "repository": "https://github.com/cat-org/core/tree/master/babel/babel-plugin-import-css",
   "version": "1.0.0",
   "main": "./lib/index.js",
   "keywords": ["babel plugin", "cat-org", "import css"],

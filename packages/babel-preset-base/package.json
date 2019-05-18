@@ -16,7 +16,7 @@
     "babel-plugin-module-resolver": "^3.2.0",
     "fbjs": "^1.0.0"
   },
-  "keywords": ["babel plugin", "base", "cat-org"],
+  "keywords": ["babel preset", "base", "cat-org"],
   "publishConfig": {
     "access": "public"
   }

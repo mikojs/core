@@ -1,13 +1,12 @@
 // @flow
 
 import { emptyFunction } from 'fbjs';
-import { type RuleSetRule as RuleSetRuleType } from 'webpack';
 
 import { type optionsType, type configType } from '@cat-org/react-middleware';
 
 if (typeof require !== 'undefined')
   // $FlowFixMe TODO: use @cat-org/babel-plugin-import-css to transform
-  require.extensions['.less'] = emptyFunction;
+  require.extensions['.css'] = emptyFunction;
 
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,
@@ -18,20 +17,21 @@ export default ({
   ...options,
   config: (config: configType, dev: boolean): configType => {
     const prevConfig = configFunc(config, dev);
-    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-    const cssLoader = prevConfig.config.module?.rules?.find(
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-      ({ test }: RuleSetRuleType) => test?.toString() === /\.css$/.toString(),
-    );
 
-    if (!cssLoader || !(cssLoader.use instanceof Array))
-      throw new Error(
-        'You should use `@cat-org/use-css` before using `@cat-org/use-less`',
-      );
+    if (!prevConfig.config.module) prevConfig.config.module = {};
 
-    cssLoader.test = /\.(css|less)$/;
-    cssLoader.use.push({
-      loader: 'less-loader',
+    if (!prevConfig.config.module.rules) prevConfig.config.module.rules = [];
+
+    prevConfig.config.module.rules.push({
+      test: /\.css$/,
+      use: [
+        {
+          loader: 'style-loader',
+        },
+        {
+          loader: 'css-loader',
+        },
+      ],
     });
 
     prevConfig.config.optimization = {
@@ -42,7 +42,7 @@ export default ({
           ...(prevConfig.config.optimization?.splitChunks || {}).cacheGroups,
           styles: {
             name: 'styles',
-            test: /\.(css|less)$/,
+            test: /\.css$/,
             chunks: 'all',
             enforce: true,
           },

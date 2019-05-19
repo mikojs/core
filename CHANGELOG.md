@@ -1,5 +1,47 @@
 # CHANGELOG
 
+## 1.0.0-beta.20 (2019-05-19)
+
+#### :rocket: New Feature
+
+- `configs`
+  - [#216](https://github.com/cat-org/core/pull/216) (@cat-org/use-css) Add new package ([@HsuTing](https://github.com/HsuTing))
+  - [#210](https://github.com/cat-org/core/pull/210) (@cat-org/configs) Add babel-plugin-css-modules-transform ([@HsuTing](https://github.com/HsuTing))
+  - [#208](https://github.com/cat-org/core/pull/208) (@cat-org/configs) Add @babel/preset-react to configs ([@HsuTing](https://github.com/HsuTing))
+  - [#206](https://github.com/cat-org/core/pull/206) (@cat-org/configs) Add configs env ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#213](https://github.com/cat-org/core/pull/213) (@cat-org/babel-\*) Add babel workspace ([@HsuTing](https://github.com/HsuTing))
+  - [#211](https://github.com/cat-org/core/pull/211) (@cat-org/ues-less) Add css chunk ([@HsuTing](https://github.com/HsuTing))
+  - [#203](https://github.com/cat-org/core/pull/203) (@cat-org/use-less) Add new package ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#209](https://github.com/cat-org/core/pull/209) (@cat-org/create-project) Use new configs env ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `babel-preset-base`, `configs`
+  - [#205](https://github.com/cat-org/core/pull/205) (@cat-org/babel-preset-base) Add babel preset base ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `babel-preset-base`, `badges`
+  - [#212](https://github.com/cat-org/core/pull/212) (@cat-org/badges) Fix read-pkg-up upgrade error ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `babel-preset-base`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `utils`
+  - [#207](https://github.com/cat-org/core/pull/207) (@cat-org/core, @cat-org/babel-preset-base) Add core-js version ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#200](https://github.com/cat-org/core/pull/200) (@cat-org/core) Fix lock ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`, `jest`
+  - [#199](https://github.com/cat-org/core/pull/199) (@cat-org/configs, @cat-org/create-project, @cat-org/jest) Fix error ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- Other
+  - [#213](https://github.com/cat-org/core/pull/213) (@cat-org/babel-\*) Add babel workspace ([@HsuTing](https://github.com/HsuTing))
+  - [#200](https://github.com/cat-org/core/pull/200) (@cat-org/core) Fix lock ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `babel-preset-base`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `utils`
+  - [#207](https://github.com/cat-org/core/pull/207) (@cat-org/core, @cat-org/babel-preset-base) Add core-js version ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 2
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+- [@peterlu14](https://github.com/peterlu14)
+
 ## 1.0.0-beta.19 (2019-05-11)
 
 Release.

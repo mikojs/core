@@ -14,8 +14,8 @@ describe('use-less', () => {
     ({ config }: {| config: $PropertyType<configType, 'config'> |}) => {
       expect(
         {}
-          |> useLess
           |> useCss
+          |> useLess
           |> (({
             config: configFunc,
           }: {
@@ -24,7 +24,7 @@ describe('use-less', () => {
             configFunc({
               config,
               devMiddleware: {},
-            })),
+            }).config),
       ).toEqual({
         module: {
           rules: [

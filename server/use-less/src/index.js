@@ -18,21 +18,18 @@ export default ({
   config: (config: configType, dev: boolean): configType => {
     const prevConfig = configFunc(config, dev);
     const cssLoader = prevConfig.config.module?.rules.find(
-      ({ test }: { test: RegExp }) => test === /\.css$/,
+      ({ test }: { test: RegExp }) => test.toString() === /\.css$/.toString(),
     );
 
     if (!cssLoader)
-      throw new Error('You should use `use-css` before using `use-less`');
+      throw new Error(
+        'You should use `@cat-org/use-css` before using `@cat-org/use-less`',
+      );
 
     cssLoader.test = /\.(css|less)$/;
     cssLoader.use.push({
       loader: 'less-loader',
     });
-
-    if (
-      !(prevConfig.config.optimization?.splitChunks || {}).cacheGroups?.styles
-    )
-      throw new Error('You should use `use-css` before using `use-less`');
 
     prevConfig.config.optimization = {
       ...prevConfig.config.optimization,

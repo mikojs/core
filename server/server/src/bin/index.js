@@ -58,8 +58,18 @@ const defaultMiddleware = async (
         defaultMiddleware,
         path.resolve(context.dir, './pages'),
         { dev: context.dev }
-          |> loadModule('@cat-org/use-css', emptyFunction.thatReturnsArgument)
-          |> loadModule('@cat-org/use-less', emptyFunction.thatReturnsArgument),
+          |> ((options: {}) =>
+            loadModule(
+              '@cat-org/use-css',
+              emptyFunction.thatReturnsArgument,
+              options,
+            ))
+          |> ((options: {}) =>
+            loadModule(
+              '@cat-org/use-less',
+              emptyFunction.thatReturnsArgument,
+              options,
+            )),
       ),
     )
     |> server.run(parseInt(process.env.PORT || 8000, 10));

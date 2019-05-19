@@ -125,7 +125,7 @@ module.exports = (() => {
     });
 
   return {
-    configsEnv: ['react', 'less'],
+    configsEnv: ['react', 'css', 'less'],
 
     // babel
     babel,

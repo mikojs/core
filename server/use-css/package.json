@@ -1,0 +1,25 @@
+{
+  "name": "@cat-org/use-css",
+  "description": "Add css to cat-org react-middleware",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/core/use-css",
+  "repository": "https://github.com/cat-org/core/tree/master/server/use-css",
+  "version": "1.0.0-beta.20",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "css-loader": "^2.1.1",
+    "fbjs": "^1.0.0",
+    "style-loader": "^0.23.1"
+  },
+  "peerDependencies": {
+    "@cat-org/react-middleware": ">=1.0.0-beta.19"
+  },
+  "devDependencies": {
+    "webpack": "^4.31.0"
+  },
+  "keywords": ["cat-org", "react-middleware", "use-css"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

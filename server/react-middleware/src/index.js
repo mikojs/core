@@ -21,7 +21,7 @@ export type configType = buildConfigType;
 
 export type optionsType = {|
   dev?: boolean,
-  config?: (cnofig: buildConfigType, dev: boolean) => buildConfigType,
+  config?: (config: buildConfigType, dev: boolean) => buildConfigType,
   redirect?: redirectType,
   basename?: string,
   useStatic?: boolean,

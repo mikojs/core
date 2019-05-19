@@ -17,19 +17,21 @@ export default {
       ...(!configsEnv.includes('react') ? [] : ['@babel/react']),
     ],
     plugins: [
-      ...(!configsEnv.includes('less')
+      ...(!configsEnv.some((env: string) => ['css', 'less'].includes(env))
         ? []
         : [
             [
               'css-modules-transform',
               {
-                extensions: ['.less'],
+                extensions: configsEnv.includes('less') ? ['.less'] : ['.css'],
                 devMode: process.env.NODE_ENV !== 'production',
                 keepImport: process.env.NODE_ENV !== 'test',
                 extractCss: {
                   dir: './lib',
                   relativeRoot: './src',
-                  filename: '[path]/[name].less',
+                  filename: configsEnv.includes('less')
+                    ? '[path]/[name].less'
+                    : '[path]/[name].css',
                 },
               },
             ],

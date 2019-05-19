@@ -19,7 +19,7 @@ handleUnhandledRejection();
 (async () => {
   await Promise.all(
     cliOptions(process.argv).map(async (cwd: string) => {
-      const { path: pkgPath, pkg } = await readPkgUp({
+      const { path: pkgPath, package: pkg } = await readPkgUp({
         cwd: path.resolve(cwd),
       });
 

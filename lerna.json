@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-beta.19",
+  "version": "1.0.0-beta.20",
   "command": {
     "publish": {
       "message": "chore(release): publish %s [skip ci]",
@@ -30,6 +30,7 @@
   ],
   "packages": [
     "packages/*",
+    "babel/*",
     "server/*"
   ],
   "useWorkspaces": true

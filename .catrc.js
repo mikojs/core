@@ -56,7 +56,7 @@ const babel = config => {
   );
 
   config.overrides.push({
-    test: ['./packages/configs', './server/server'],
+    test: ['./packages/configs', './server/server', './server/use-less'],
     presets:
       process.env.NODE_ENV === 'test' || process.env.USE_DEFAULT_BABEL
         ? []

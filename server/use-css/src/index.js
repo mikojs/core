@@ -6,7 +6,7 @@ import { type optionsType, type configType } from '@cat-org/react-middleware';
 
 if (typeof require !== 'undefined')
   // $FlowFixMe TODO: use @cat-org/babel-plugin-import-css to transform
-  require.extensions['.less'] = emptyFunction;
+  require.extensions['.css'] = emptyFunction;
 
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,
@@ -17,22 +17,22 @@ export default ({
   ...options,
   config: (config: configType, dev: boolean): configType => {
     const prevConfig = configFunc(config, dev);
-    const cssLoader = prevConfig.config.module?.rules.find(
-      ({ test }: { test: RegExp }) => test === /\.css$/,
-    );
 
-    if (!cssLoader)
-      throw new Error('You should use `use-css` before using `use-less`');
+    if (!prevConfig.config.module) prevConfig.config.module = {};
 
-    cssLoader.test = /\.(css|less)$/;
-    cssLoader.use.push({
-      loader: 'less-loader',
+    if (!prevConfig.config.module.rules) prevConfig.config.module.rules = [];
+
+    prevConfig.config.module.rules.push({
+      test: /\.css$/,
+      use: [
+        {
+          loader: 'style-loader',
+        },
+        {
+          loader: 'css-loader',
+        },
+      ],
     });
-
-    if (
-      !(prevConfig.config.optimization?.splitChunks || {}).cacheGroups?.styles
-    )
-      throw new Error('You should use `use-css` before using `use-less`');
 
     prevConfig.config.optimization = {
       ...prevConfig.config.optimization,
@@ -41,9 +41,10 @@ export default ({
         cacheGroups: {
           ...(prevConfig.config.optimization?.splitChunks || {}).cacheGroups,
           styles: {
-            ...(prevConfig.config.optimization?.splitChunks || {}).cacheGroups
-              ?.styles,
-            test: /\.(css|less)$/,
+            name: 'styles',
+            test: /\.css$/,
+            chunks: 'all',
+            enforce: true,
           },
         },
       },

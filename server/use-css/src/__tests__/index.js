@@ -1,44 +1,37 @@
 // @flow
 
 import { type configType } from '@cat-org/react-middleware';
-import useCss from '@cat-org/use-css';
 
-import useLess from '../index.js';
+import useCss from '../index.js';
 
-describe('use-less', () => {
+describe('use-css', () => {
   test.each`
     config
     ${{}}
+    ${{ module: {} }}
+    ${{ module: { rules: [] } }}
   `(
     'config = $config',
     ({ config }: {| config: $PropertyType<configType, 'config'> |}) => {
       expect(
-        {}
-          |> useLess
-          |> useCss
-          |> (({
-            config: configFunc,
-          }: {
-            config: $PropertyType<configType, 'config'>,
-          }) =>
-            configFunc({
-              config,
-              devMiddleware: {},
-            })),
+        useCss().config(
+          {
+            config,
+            devMiddleware: {},
+          },
+          false,
+        ).config,
       ).toEqual({
         module: {
           rules: [
             {
-              test: /\.(css|less)$/,
+              test: /\.css$/,
               use: [
                 {
                   loader: 'style-loader',
                 },
                 {
                   loader: 'css-loader',
-                },
-                {
-                  loader: 'less-loader',
                 },
               ],
             },
@@ -49,7 +42,7 @@ describe('use-less', () => {
             cacheGroups: {
               styles: {
                 name: 'styles',
-                test: /\.(css|less)$/,
+                test: /\.css$/,
                 chunks: 'all',
                 enforce: true,
               },

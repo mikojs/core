@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/use-less",
-  "description": "Use less with cat-org react-middleware",
+  "description": "Add less to cat-org react-middleware",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/use-less",
@@ -8,19 +8,18 @@
   "version": "1.0.0-beta.19",
   "main": "./lib/index.js",
   "dependencies": {
-    "css-loader": "^2.1.1",
     "fbjs": "^1.0.0",
     "less": "^3.9.0",
-    "less-loader": "^5.0.0",
-    "style-loader": "^0.23.1"
+    "less-loader": "^5.0.0"
   },
   "peerDependencies": {
-    "@cat-org/react-middleware": ">=1.0.0-beta.19"
+    "@cat-org/react-middleware": ">=1.0.0-beta.19",
+    "@cat-org/use-css": ">=1.0.0-beta.19"
   },
   "devDependencies": {
     "webpack": "^4.31.0"
   },
-  "keywords": ["cat-org", "less", "plugin"],
+  "keywords": ["cat-org", "react-middleware", "use-less"],
   "publishConfig": {
     "access": "public"
   }

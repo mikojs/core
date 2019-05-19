@@ -24,8 +24,6 @@
     "ora": "^3.4.0"
   },
   "devDependencies": {
-    "@cat-org/default-middleware": "^1.0.0-beta.19",
-    "@cat-org/react-middleware": "^1.0.0-beta.19",
     "node-fetch": "^2.6.0"
   },
   "keywords": ["cat-org", "server"],

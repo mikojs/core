@@ -13,14 +13,15 @@ const babel = config => {
     plugin => plugin && plugin[0] === 'css-modules-transform',
   );
 
-  cssModuleTransform[1] = {
-    ...cssModuleTransform[1],
-    extractCss: {
-      ...cssModuleTransform[1].extractCss,
-      dir: './website/lib',
-      relativeRoot: './website/src',
-    },
-  };
+  if (cssModuleTransform)
+    cssModuleTransform[1] = {
+      ...cssModuleTransform[1],
+      extractCss: {
+        ...cssModuleTransform[1].extractCss,
+        dir: './website/lib',
+        relativeRoot: './website/src',
+      },
+    };
 
   config.plugins.push(
     [

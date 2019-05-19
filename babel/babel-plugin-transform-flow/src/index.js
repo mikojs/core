@@ -7,6 +7,13 @@ import { declare } from '@babel/helper-plugin-utils';
 import { transformSync } from '@babel/core';
 import outputFileSync from 'output-file-sync';
 
+export type optionsType = {|
+  dir: string,
+  relativeRoot: string,
+  plugins: $ReadOnlyArray<string>,
+  verbose: boolean,
+|};
+
 export default declare(
   (
     api: {| assertVersion: (version: number) => void |},
@@ -15,12 +22,7 @@ export default declare(
       relativeRoot = './src',
       plugins = [],
       verbose = true,
-    }: {|
-      dir: string,
-      relativeRoot: string,
-      plugins: $ReadOnlyArray<string>,
-      verbose: boolean,
-    |},
+    }: optionsType,
   ): {} => {
     api.assertVersion(7);
 
@@ -45,6 +47,7 @@ export default declare(
         const output = fs.existsSync(`${filename}.flow`)
           ? fs.readFileSync(`${filename}.flow`, 'utf-8')
           : transformSync(content, {
+              filename,
               parserOpts,
               plugins,
               babelrc: false,

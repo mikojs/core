@@ -5,14 +5,14 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/babel-preset-base",
   "repository": "https://github.com/cat-org/core/tree/master/babel/babel-preset-base",
-  "version": "1.0.0-beta.19",
+  "version": "1.0.0-beta.20",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-flow": "^7.0.0",
-    "@cat-org/babel-plugin-transform-flow": "1.0.0-beta.19",
-    "@cat-org/utils": "^1.0.0-beta.19",
+    "@cat-org/babel-plugin-transform-flow": "^1.0.0-beta.20",
+    "@cat-org/utils": "^1.0.0-beta.20",
     "babel-plugin-module-resolver": "^3.2.0",
     "fbjs": "^1.0.0"
   },

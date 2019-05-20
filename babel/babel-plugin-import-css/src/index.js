@@ -20,7 +20,11 @@ export default declare(
             file: {
               opts: { filename },
             },
-          }: nodePathType,
+          }: {|
+            file: {|
+              opts: {| filename: string |},
+            |},
+          |},
         ) => {
           if (
             !t.isIdentifier(path.node, { name: 'require' }) ||

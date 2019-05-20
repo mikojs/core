@@ -14,7 +14,14 @@ export default declare(
 
     return {
       visitor: {
-        Identifier: (path: nodePathType) => {
+        Identifier: (
+          path: nodePathType,
+          {
+            file: {
+              opts: { filename },
+            },
+          }: nodePathType,
+        ) => {
           if (
             !t.isIdentifier(path.node, { name: 'require' }) ||
             !t.isCallExpression(path.parentPath.node) ||
@@ -35,7 +42,10 @@ export default declare(
                 t.StringLiteral(path.parentPath.node.arguments[0].value),
                 // eslint-disable-next-line new-cap
                 t.StringLiteral(
-                  nodePath.resolve(__dirname, './emptyCssFile.js'),
+                  nodePath.relative(
+                    nodePath.dirname(filename),
+                    nodePath.resolve(__dirname, './emptyCssFile.js'),
+                  ),
                 ),
               ),
             ]),

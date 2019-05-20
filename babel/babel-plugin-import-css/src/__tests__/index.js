@@ -14,7 +14,7 @@ import test from 'test';
 
 const a = 'test';`,
       {
-        filename: './src/filename',
+        filename: path.resolve(__dirname, './src/filename.js'),
         presets: ['@babel/env'],
         plugins: [
           [
@@ -30,11 +30,6 @@ const a = 'test';`,
       },
     ).code,
   ).toMatch(
-    new RegExp(
-      `globalThis.window \\? "./styles.css" : "${path.resolve(
-        __dirname,
-        '../emptyCssFile.js',
-      )}"`,
-    ),
+    /globalThis\.window \? "\.\/styles.css" : "\.\.\/\.\.\/emptyCssFile\.js"/,
   );
 });

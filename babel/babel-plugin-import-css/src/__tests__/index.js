@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import { transformSync } from '@babel/core';
 
 import babelPluginImportCss from '../index';
@@ -12,11 +14,27 @@ import test from 'test';
 
 const a = 'test';`,
       {
+        filename: './src/filename',
         presets: ['@babel/env'],
-        plugins: [babelPluginImportCss],
+        plugins: [
+          [
+            'css-modules-transform',
+            {
+              keepImport: true,
+            },
+          ],
+          babelPluginImportCss,
+        ],
         babelrc: false,
         configFile: false,
       },
     ).code,
-  ).toMatch(/globalThis\.window \? require\("\.\/styles\.css"\) : {}/);
+  ).toMatch(
+    new RegExp(
+      `globalThis.window \\? "./styles.css" : "${path.resolve(
+        __dirname,
+        '../emptyCssFile.js',
+      )}"`,
+    ),
+  );
 });

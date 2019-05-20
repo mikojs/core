@@ -42,6 +42,7 @@ export default declare(
             [
               '@cat-org/transform-flow',
               {
+                ...options['@cat-org/transform-flow'],
                 plugins: [
                   [
                     'module-resolver',

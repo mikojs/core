@@ -35,6 +35,12 @@ export default {
                 },
               },
             ],
+            [
+              '@cat-org/import-css',
+              {
+                test: configsEnv.includes('less') ? /\.less$/ : /\.css$/,
+              },
+            ],
           ]),
     ],
     ignore: mockChoice(

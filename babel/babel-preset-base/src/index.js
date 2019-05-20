@@ -8,12 +8,12 @@ import { type optionsType as transformFLowOptions } from '@cat-org/babel-plugin-
 
 export default declare(
   (
-    api: {| assertVersion: (version: number) => void |},
+    { assertVersion }: {| assertVersion: (version: number) => void |},
     options: {|
       '@cat-org/transform-flow'?: transformFLowOptions,
     |},
   ): {} => {
-    api.assertVersion(7);
+    assertVersion(7);
 
     return {
       presets: [

@@ -4,10 +4,6 @@ import { emptyFunction } from 'fbjs';
 
 import { type optionsType, type configType } from '@cat-org/react-middleware';
 
-if (typeof require !== 'undefined')
-  // $FlowFixMe TODO: use @cat-org/babel-plugin-import-css to transform
-  require.extensions['.css'] = emptyFunction;
-
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,
   ...options

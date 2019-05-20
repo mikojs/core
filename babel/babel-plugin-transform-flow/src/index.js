@@ -16,7 +16,7 @@ export type optionsType = {|
 
 export default declare(
   (
-    api: {| assertVersion: (version: number) => void |},
+    { assertVersion }: {| assertVersion: (version: number) => void |},
     {
       dir = './lib',
       relativeRoot = './src',
@@ -24,7 +24,7 @@ export default declare(
       verbose = true,
     }: optionsType,
   ): {} => {
-    api.assertVersion(7);
+    assertVersion(7);
 
     return {
       post: ({

@@ -7,6 +7,12 @@
   "repository": "https://github.com/cat-org/core/tree/master/babel/babel-plugin-import-css",
   "version": "1.0.0-beta.20",
   "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/helper-plugin-utils": "^7.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4"
+  },
   "keywords": ["babel plugin", "cat-org", "import css"],
   "publishConfig": {
     "access": "public"

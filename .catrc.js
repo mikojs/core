@@ -56,29 +56,48 @@ const babel = config => {
     ],
   );
 
-  config.overrides.push({
-    test: ['./packages/configs', './server/server', './server/use-less'],
-    presets:
-      process.env.NODE_ENV === 'test' || process.env.USE_DEFAULT_BABEL
-        ? []
-        : [
-            [
-              '@cat-org/base',
-              {
-                '@cat-org/transform-flow': {
-                  plugins: [
-                    // FIXME: remove after flow support
-                    [
-                      '@babel/proposal-pipeline-operator',
-                      { proposal: 'minimal' },
+  config.overrides.push(
+    {
+      test: ['./packages/configs', './server/server', './server/use-less'],
+      presets:
+        process.env.NODE_ENV === 'test' || process.env.USE_DEFAULT_BABEL
+          ? []
+          : [
+              [
+                '@cat-org/base',
+                {
+                  '@cat-org/transform-flow': {
+                    plugins: [
+                      // FIXME: remove after flow support
+                      [
+                        '@babel/proposal-pipeline-operator',
+                        { proposal: 'minimal' },
+                      ],
                     ],
-                  ],
+                  },
                 },
-              },
+              ],
             ],
-          ],
-    plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
-  });
+      plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
+    },
+    {
+      test: ['./website/src'],
+      presets:
+        process.env.NODE_ENV === 'test' || process.env.USE_DEFAULT_BABEL
+          ? []
+          : [
+              [
+                '@cat-org/base',
+                {
+                  '@cat-org/transform-flow': {
+                    dir: './website/lib',
+                    relativeRoot: './website/src',
+                  },
+                },
+              ],
+            ],
+    },
+  );
 
   return config;
 };

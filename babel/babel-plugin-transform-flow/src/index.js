@@ -4,109 +4,68 @@ import fs from 'fs';
 import path from 'path';
 
 import { declare } from '@babel/helper-plugin-utils';
+import { transformSync } from '@babel/core';
+import outputFileSync from 'output-file-sync';
 
-import handler, { type manipulateOptionsPluginsType } from './utils/handler';
-import flowFiles, { type flowFileType } from './utils/flowFiles';
-import writeFiles from './utils/writeFiles';
-
-export type optionsType = $PropertyType<
-  manipulateOptionsPluginsType,
-  'options',
->;
+export type optionsType = {|
+  dir: string,
+  relativeRoot: string,
+  plugins: $ReadOnlyArray<string>,
+  verbose: boolean,
+|};
 
 export default declare(
   (
-    api: {| assertVersion: (version: number) => void |},
-    options: $PropertyType<manipulateOptionsPluginsType, 'options'>,
+    { assertVersion }: {| assertVersion: (version: number) => void |},
+    {
+      dir = './lib',
+      relativeRoot = './src',
+      plugins = [],
+      verbose = true,
+    }: optionsType,
   ): {} => {
-    api.assertVersion(7);
-    handler.initializeOptions(options);
+    assertVersion(7);
 
     return {
-      manipulateOptions: handler.manipulateOptions,
-      visitor: {
-        ImportDeclaration: (
-          {
-            node: {
-              source: { value },
-            },
-          }: {|
-            node: {|
-              source: {| value: string |},
-            |},
-          |},
-          {
-            cwd,
-            filename,
-          }: {|
-            cwd: string,
-            filename: string,
-          |},
-        ) => {
-          if (!/\.js\.flow$/.test(value)) return;
-
-          const filePath = path.resolve(filename, '..', value);
-          const { srcPath, destPath } = handler.getFilePaths(filePath, cwd);
-
-          if (flowFiles.fileExist(srcPath)) return;
-
-          flowFiles.add({
-            srcPath,
-            destPath,
-            filePath,
-            babelConfig: { notInitialized: true },
-          });
-        },
-      },
       post: ({
         opts: { cwd, filename, parserOpts },
+        code: content,
       }: {|
         opts: {|
           cwd: string,
           filename: string,
           parserOpts: {},
         |},
+        code: string,
       |}) => {
-        const { plugins } = handler.options;
-        const { srcPath, destPath } = handler.getFilePaths(filename, cwd);
-        const babelConfig = {
-          plugins,
-          parserOpts,
-        };
+        const { log } = console;
+        const filePath = `${path.resolve(
+          cwd,
+          dir,
+          path.relative(path.resolve(cwd, relativeRoot), filename),
+        )}.flow`;
+        const output = fs.existsSync(`${filename}.flow`)
+          ? fs.readFileSync(`${filename}.flow`, 'utf-8')
+          : transformSync(content, {
+              filename,
+              parserOpts,
+              plugins,
+              babelrc: false,
+              configFile: false,
+            }).code;
 
-        flowFiles.store.forEach((flowFile: flowFileType) => {
-          if (flowFile.babelConfig.notInitialized) {
-            delete flowFile.babelConfig.notInitialized;
+        outputFileSync(
+          filePath,
+          output.replace(/fixme-flow-file-annotation/, '@flow'),
+        );
 
-            flowFile.babelConfig = babelConfig;
-            writeFiles.add(flowFile);
-          }
-        });
-
-        const flowFilePath = filename.replace(/\.js$/, '.js.flow');
-        const flowSrcPath = srcPath.replace(/\.js$/, '.js.flow');
-
-        if (fs.existsSync(flowFilePath)) {
-          if (!flowFiles.fileExist(flowSrcPath)) {
-            const flowFile = {
-              srcPath: flowSrcPath,
-              destPath,
-              filePath: flowFilePath,
-              babelConfig,
-            };
-
-            flowFiles.add(flowFile);
-            writeFiles.add(flowFile);
-          }
-
-          return;
-        }
-
-        writeFiles.add({
-          srcPath,
-          destPath,
-          babelConfig,
-        });
+        if (verbose)
+          log(
+            `${path.relative(cwd, filename)} -> ${path.relative(
+              cwd,
+              filePath,
+            )}`,
+          );
       },
     };
   },

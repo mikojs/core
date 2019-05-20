@@ -4,30 +4,41 @@ import babel from '../babel';
 
 /**
  * @example
- * cssModulesTransformOptions('.less')
+ * cssPlugins('.less')
  *
  * @param {string} extension - file extension
  *
- * @return {Object} options of babel-plugin-css-modules-transform
+ * @return {Object} css plugins
  */
-const cssModulesTransformOptions = (extension: string) => ({
-  extensions: [extension],
-  devMode: true,
-  keepImport: false,
-  extractCss: {
-    dir: './lib',
-    relativeRoot: './src',
-    filename: `[path]/[name]${extension}`,
-  },
-});
+const cssPlugins = (extension: string) => [
+  [
+    'css-modules-transform',
+    {
+      extensions: [extension],
+      devMode: true,
+      keepImport: false,
+      extractCss: {
+        dir: './lib',
+        relativeRoot: './src',
+        filename: `[path]/[name]${extension}`,
+      },
+    },
+  ],
+  [
+    '@cat-org/import-css',
+    {
+      test: extension === '.less' ? /\.less$/ : /\.css$/,
+    },
+  ],
+];
 
 describe('babel', () => {
   test.each`
     configsEnv   | presets                              | plugins
     ${[]}        | ${['@cat-org/base']}                 | ${[]}
     ${['react']} | ${['@cat-org/base', '@babel/react']} | ${[]}
-    ${['css']}   | ${['@cat-org/base']}                 | ${[['css-modules-transform', cssModulesTransformOptions('.css')]]}
-    ${['less']}  | ${['@cat-org/base']}                 | ${[['css-modules-transform', cssModulesTransformOptions('.less')]]}
+    ${['css']}   | ${['@cat-org/base']}                 | ${cssPlugins('.css')}
+    ${['less']}  | ${['@cat-org/base']}                 | ${cssPlugins('.less')}
   `(
     'run with configsEnv = $configsEnv',
     ({

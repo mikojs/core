@@ -8,9 +8,9 @@
   "version": "1.0.0",
   "main": "./lib/index.js",
   "scripts": {
-    "dev": "server --dev",
-    "prod": "NODE_ENV=production server",
-    "test": "configs test --configs-env react"
+    "dev": "configs server",
+    "prod": "NODE_ENV=production configs server",
+    "test": "configs test"
   },
   "devDependencies": {
     "@cat-org/create-project": "create-project version"

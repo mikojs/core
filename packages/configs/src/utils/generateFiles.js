@@ -20,6 +20,7 @@ const CONFIG_FILES = {
   prettier: '.prettierrc.js',
   'lint-staged': '.lintstagedrc.js',
   jest: 'jest.config.js',
+  server: '.serverrc.js',
 };
 
 const CONFIG_IGNORE = {

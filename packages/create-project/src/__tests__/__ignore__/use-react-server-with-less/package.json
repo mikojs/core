@@ -1,0 +1,29 @@
+{
+  "name": "package-name",
+  "description": "package description",
+  "license": "MIT",
+  "author": "username <email>",
+  "homepage": "http://cat-org/package-homepage",
+  "repository": "https://github.com/cat-org/core.git",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "scripts": {
+    "dev": "configs server",
+    "prod": "NODE_ENV=production configs server",
+    "test": "configs test"
+  },
+  "devDependencies": {
+    "@cat-org/create-project": "create-project version"
+  },
+  "keywords": ["keyword"],
+  "engines": {
+    "node": ">= node version",
+    "npm": ">= npm version",
+    "yarn": ">= yarn version"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "configs lint-staged && yarn flow"
+    }
+  }
+}

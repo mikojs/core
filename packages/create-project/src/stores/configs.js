@@ -37,7 +37,7 @@ class Configs extends Store {
         '.catrc.js': `// @flow
 
 module.exports = {
-  configsEnv: ${JSON.stringify(configsEnv).replace(/"/g, "'")},
+  configsEnv: [${configsEnv.map((env: string) => `'${env}'`).join(', ')}],
 };`,
       });
   };

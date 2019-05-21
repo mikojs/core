@@ -19,12 +19,16 @@ export type inquirerResultType = {
 
   // react
   useReact: boolean,
+
+  // styles
+  useStyles: boolean | 'css' | 'less',
 };
 
 export type contextType = {
   lerna?: boolean,
 };
 
+// basic
 const basicUsage = {
   name: 'basic-usage',
   inquirerResult: {
@@ -46,11 +50,12 @@ const basicUsage = {
 
     // react
     useReact: false,
+
+    // useStyles
+    useStyles: false,
   },
   cmds: [
     // For getting user information
-    'git config --get user.name',
-    'git config --get user.email',
     'git config --get user.name',
     'git config --get user.email',
     'git config --get user.name',
@@ -96,9 +101,9 @@ const useServer = {
     useServer: true,
   },
   cmds: [
-    ...basicUsage.cmds.slice(0, 6),
+    ...basicUsage.cmds.slice(0, 4),
     'yarn add @cat-org/server @cat-org/default-middleware',
-    ...basicUsage.cmds.slice(6),
+    ...basicUsage.cmds.slice(4),
   ],
 };
 
@@ -110,21 +115,66 @@ const useReactServer = {
     useReact: true,
   },
   cmds: [
-    ...basicUsage.cmds.slice(0, 6),
+    ...basicUsage.cmds.slice(0, 4),
     'yarn add @cat-org/server @cat-org/default-middleware',
-    ...basicUsage.cmds.slice(6, 12),
+    ...basicUsage.cmds.slice(4, 10),
     'yarn add --dev enzyme-adapter-react-16',
-    ...basicUsage.cmds.slice(12, 13),
+    ...basicUsage.cmds.slice(10, 11),
     'yarn add react react-dom @cat-org/react-middleware',
     'yarn add --dev @babel/preset-react',
-    ...basicUsage.cmds.slice(13),
+    ...basicUsage.cmds.slice(11),
   ],
 };
 
+const useReactServerWithCss = {
+  name: 'use-react-server-with-css',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useStyles: 'css',
+  },
+  cmds: [
+    ...basicUsage.cmds.slice(0, 4),
+    'yarn add @cat-org/server @cat-org/default-middleware',
+    ...basicUsage.cmds.slice(4, 10),
+    'yarn add --dev enzyme-adapter-react-16',
+    ...basicUsage.cmds.slice(10, 11),
+    'yarn add react react-dom @cat-org/react-middleware',
+    'yarn add --dev @babel/preset-react',
+    'yarn add @cat-org/use-css',
+    'yarn add --dev babel-plugin-css-modules-transform @cat-org/import-css',
+    ...basicUsage.cmds.slice(11),
+  ],
+};
+
+const useReactServerWithLess = {
+  name: 'use-react-server-with-less',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useStyles: 'less',
+  },
+  cmds: [
+    ...basicUsage.cmds.slice(0, 4),
+    'yarn add @cat-org/server @cat-org/default-middleware',
+    ...basicUsage.cmds.slice(4, 10),
+    'yarn add --dev enzyme-adapter-react-16',
+    ...basicUsage.cmds.slice(10, 11),
+    'yarn add react react-dom @cat-org/react-middleware',
+    'yarn add --dev @babel/preset-react',
+    'yarn add @cat-org/use-less',
+    'yarn add --dev babel-plugin-css-modules-transform @cat-org/import-css',
+    ...basicUsage.cmds.slice(11),
+  ],
+};
+
+// with --lerna
 const lernaBasicUsage = {
   name: 'lerna/basic-usage',
   inquirerResult: basicUsage.inquirerResult,
-  cmds: basicUsage.cmds.slice(0, 6),
+  cmds: basicUsage.cmds.slice(0, 4),
   context: {
     lerna: true,
   },
@@ -179,18 +229,50 @@ const lernaUseReactServer = {
   },
 };
 
+const lernaUseReactServerWithCss = {
+  name: 'lerna/use-react-server-with-css',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useStyles: 'css',
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
+const lernaUseReactServerWithLess = {
+  name: 'lerna/use-react-server-with-less',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useStyles: 'less',
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
 export default [
   basicUsage,
   privatePkg,
   useNpm,
   useServer,
   useReactServer,
+  useReactServerWithCss,
+  useReactServerWithLess,
 
   lernaBasicUsage,
   lernaPrivatePkg,
   lernaUseNpm,
   lernaUseServer,
   lernaUseReactServer,
+  lernaUseReactServerWithCss,
+  lernaUseReactServerWithLess,
 ].reduce(
   (
     result: $ReadOnlyArray<

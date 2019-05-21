@@ -45,7 +45,7 @@ type ctxType = {|
   lerna: boolean,
   useServer?: boolean,
   useReact?: boolean,
-  useStyles?: boolean | 'less' | 'css',
+  useStyles?: false | 'less' | 'css',
   useNpm?: boolean,
   pkg?: pkgType,
 |};

@@ -10,7 +10,11 @@ class Configs extends Store {
    *
    * @param {Object} ctx - store context
    */
-  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({
+    lerna,
+    useReact,
+    useStyles,
+  }: $PropertyType<Store, 'ctx'>) => {
     if (lerna) return;
 
     await this.execa(
@@ -18,7 +22,24 @@ class Configs extends Store {
       ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
         (configName: string) => `yarn configs --install ${configName}`,
       ),
+      // for @cat-org/jest/lib/react
+      ...(!useReact ? [] : ['yarn add --dev enzyme-adapter-react-16']),
     );
+
+    const configsEnv = [];
+
+    if (useReact) configsEnv.push('react');
+
+    if (useStyles) configsEnv.push(useStyles);
+
+    if (configsEnv.length !== 0)
+      await this.writeFiles({
+        '.catrc.js': `// @flow
+
+module.exports = {
+  configsEnv: [${configsEnv.map((env: string) => `'${env}'`).join(', ')}],
+};`,
+      });
   };
 }
 

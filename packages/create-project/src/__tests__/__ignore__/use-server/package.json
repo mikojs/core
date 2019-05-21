@@ -8,8 +8,8 @@
   "version": "1.0.0",
   "main": "./lib/index.js",
   "scripts": {
-    "dev": "server --dev",
-    "prod": "NODE_ENV=production server",
+    "dev": "configs server",
+    "prod": "NODE_ENV=production configs server",
     "test": "configs test"
   },
   "devDependencies": {

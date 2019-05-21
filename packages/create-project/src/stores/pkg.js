@@ -123,23 +123,16 @@ class Pkg extends Store {
    *
    * @param {boolean} useServer - use server or not
    */
-  +addScripts = ({ useServer, useReact }: $PropertyType<Store, 'ctx'>) => {
+  +addScripts = ({ useServer }: $PropertyType<Store, 'ctx'>) => {
     if (!this.storePkg.scripts) this.storePkg.scripts = {};
 
-    if (useServer) {
-      if (useReact)
-        this.storePkg.scripts = {
-          dev: 'server --dev',
-          prod: 'NODE_ENV=production server',
-          test: 'configs test --configs-env react',
-        };
-      else
-        this.storePkg.scripts = {
-          dev: 'server --dev',
-          prod: 'NODE_ENV=production server',
-          test: 'configs test',
-        };
-    } else
+    if (useServer)
+      this.storePkg.scripts = {
+        dev: 'configs server',
+        prod: 'NODE_ENV=production configs server',
+        test: 'configs test',
+      };
+    else
       this.storePkg.scripts = {
         dev: 'configs babel -w',
         prod: 'NODE_ENV=production configs babel',

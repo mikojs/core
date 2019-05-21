@@ -10,7 +10,7 @@ class Configs extends Store {
    *
    * @param {Object} ctx - store context
    */
-  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({ lerna, useReact }: $PropertyType<Store, 'ctx'>) => {
     if (lerna) return;
 
     await this.execa(
@@ -18,6 +18,8 @@ class Configs extends Store {
       ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
         (configName: string) => `yarn configs --install ${configName}`,
       ),
+      // for @cat-org/jest/lib/react
+      ...(!useReact ? [] : ['yarn add --dev enzyme-adapter-react-16']),
     );
   };
 }

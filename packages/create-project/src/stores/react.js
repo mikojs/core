@@ -69,7 +69,10 @@ class React extends Store {
 
     if (lerna) return;
 
-    await this.execa('@cat-org/react-middleware');
+    await this.execa(
+      'yarn add react react-dom @cat-org/react-middleware',
+      'yarn add --dev @babel/preset-react',
+    );
   };
 }
 

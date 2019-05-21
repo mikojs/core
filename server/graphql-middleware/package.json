@@ -1,0 +1,14 @@
+{
+  "name": "@cat-org/graphql-middleware",
+  "description": "Graphql middleware for cat-org server",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/core/graphql-middleware",
+  "repository": "https://github.com/cat-org/core/tree/master/server/graphql-middleware",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "keywords": ["cat-org", "graphql", "middleware"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

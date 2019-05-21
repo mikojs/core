@@ -6,8 +6,6 @@ import memoizeOne from 'memoize-one';
 import { isURL } from 'validator';
 import { emptyFunction } from 'fbjs';
 
-import { version } from '../../package.json';
-
 import license from './license';
 import readme from './readme';
 import Store from './index';
@@ -58,9 +56,6 @@ class Pkg extends Store {
     license: 'MIT',
     version: '1.0.0',
     main: './lib/index.js',
-    devDependencies: {
-      '@cat-org/create-project': version,
-    },
   };
 
   /**

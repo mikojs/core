@@ -10,7 +10,11 @@ class Configs extends Store {
    *
    * @param {Object} ctx - store context
    */
-  +end = async ({ lerna, useReact }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({
+    lerna,
+    useReact,
+    useStyles,
+  }: $PropertyType<Store, 'ctx'>) => {
     if (lerna) return;
 
     await this.execa(
@@ -25,6 +29,8 @@ class Configs extends Store {
     const configsEnv = [];
 
     if (useReact) configsEnv.push('react');
+
+    if (useStyles) configsEnv.push(useStyles);
 
     if (configsEnv.length !== 0)
       await this.writeFiles({

@@ -2,7 +2,17 @@
 
 import Store from './index';
 
-const template = `[ignore]
+/**
+ * @example
+ * template(false)
+ *
+ * @param {boolean} useStyles - use styles or not
+ *
+ * @return {string} - template string
+ */
+const template = (
+  useStyles: $PropertyType<$PropertyType<Store, 'ctx'>, 'useStyles'>,
+) => `[ignore]
 # just for findup
 .*/node_modules/findup/test/.*
 
@@ -13,7 +23,13 @@ const template = `[ignore]
 
 [lints]
 
-[options]
+[options]${
+  !useStyles
+    ? ''
+    : `
+module.file_ext=.js
+${useStyles === 'less' ? 'module.file_ext=.less' : 'module.file_ext=.css'}`
+}
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=./src
 
@@ -27,11 +43,11 @@ class Flow extends Store {
    *
    * @param {Object} ctx - store context
    */
-  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({ lerna, useStyles }: $PropertyType<Store, 'ctx'>) => {
     if (lerna) return;
 
     await this.writeFiles({
-      '.flowconfig': template,
+      '.flowconfig': template(useStyles),
     });
     await this.execa('yarn add --dev flow-bin flow-typed');
   };

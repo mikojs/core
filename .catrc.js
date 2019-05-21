@@ -183,10 +183,6 @@ module.exports = (() => {
     // server
     server: {
       run: argv => [...argv, 'website/src', '-d', 'website/lib', '--verbose'],
-      configFiles: {
-        server: './server.js',
-        babel: true,
-      },
     },
   };
 })();

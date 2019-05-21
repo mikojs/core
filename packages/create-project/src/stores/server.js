@@ -41,7 +41,7 @@ class Server extends Store {
 
   /**
    * @example
-   * pkg.end(ctx)
+   * server.end(ctx)
    *
    * @param {Object} ctx - store context
    */

@@ -45,8 +45,8 @@ type ctxType = {|
   lerna: boolean,
   useServer?: boolean,
   useReact?: boolean,
-  pkg?: pkgType,
   useNpm?: boolean,
+  pkg?: pkgType,
 |};
 
 const debugLog = debug('create-project:store');

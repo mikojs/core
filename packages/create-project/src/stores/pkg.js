@@ -123,7 +123,7 @@ class Pkg extends Store {
    *
    * @param {boolean} useServer - use server or not
    */
-  +addScripts = ({ useServer, useReact }: $PropertyType<Store, 'ctx'>) => {
+  +addScripts = ({ useServer }: $PropertyType<Store, 'ctx'>) => {
     if (!this.storePkg.scripts) this.storePkg.scripts = {};
 
     if (useServer)

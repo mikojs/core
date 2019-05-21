@@ -2,7 +2,8 @@
 
 import memoizeOne from 'memoize-one';
 
-import pkg from './pkg';
+import styles from './styles';
+import configs from './configs';
 import Store from './index';
 
 const template = `// @flow
@@ -15,7 +16,7 @@ export default Home;`;
 
 /** react store */
 class React extends Store {
-  +subStores = [pkg];
+  +subStores = [styles, configs];
 
   storeUseReact = false;
 
@@ -56,7 +57,7 @@ class React extends Store {
 
   /**
    * @example
-   * pkg.end(ctx)
+   * react.end(ctx)
    *
    * @param {Object} ctx - store context
    */

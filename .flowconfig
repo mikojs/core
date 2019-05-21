@@ -10,7 +10,6 @@
 [lints]
 
 [options]
-module.file_ext=.css
 module.file_ext=.less
 module.file_ext=.js
 module.ignore_non_literal_requires=true

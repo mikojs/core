@@ -112,8 +112,9 @@ const useReactServer = {
   cmds: [
     ...basicUsage.cmds.slice(0, 6),
     'yarn add @cat-org/server @cat-org/default-middleware',
-    ...basicUsage.cmds.slice(6, 13),
+    ...basicUsage.cmds.slice(6, 12),
     'yarn add --dev enzyme-adapter-react-16',
+    ...basicUsage.cmds.slice(12, 13),
     'yarn add react react-dom @cat-org/react-middleware',
     'yarn add --dev @babel/preset-react',
     ...basicUsage.cmds.slice(13),

@@ -34,9 +34,6 @@ type pkgType = {
   publishConfig?: {
     access: 'public',
   },
-  devDependencies: {
-    [string]: string,
-  },
 };
 
 type ctxType = {|

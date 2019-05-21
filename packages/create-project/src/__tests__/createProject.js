@@ -13,8 +13,6 @@ import { execa } from 'execa';
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-import { version } from '../../package.json';
-
 import testings, {
   type inquirerResultType,
   type contextType,
@@ -27,9 +25,6 @@ const storePkg = {
   license: 'MIT',
   version: '1.0.0',
   main: './lib/index.js',
-  devDependencies: {
-    '@cat-org/create-project': version,
-  },
 };
 
 describe('create project', () => {
@@ -96,7 +91,6 @@ describe('create project', () => {
                 .replace(path.basename(projectDir), 'package-name');
               const expected = fs
                 .readFileSync(filePath, { encoding: 'utf-8' })
-                .replace(/create-project version/g, version)
                 .replace(/\n$/, '');
 
               switch (extension) {

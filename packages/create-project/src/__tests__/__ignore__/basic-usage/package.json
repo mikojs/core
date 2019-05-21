@@ -12,9 +12,6 @@
     "prod": "NODE_ENV=production configs babel",
     "test": "configs test"
   },
-  "devDependencies": {
-    "@cat-org/create-project": "create-project version"
-  },
   "keywords": ["keyword"],
   "engines": {
     "node": ">= node version",

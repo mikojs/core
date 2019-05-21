@@ -21,6 +21,19 @@ class Configs extends Store {
       // for @cat-org/jest/lib/react
       ...(!useReact ? [] : ['yarn add --dev enzyme-adapter-react-16']),
     );
+
+    const configsEnv = [];
+
+    if (useReact) configsEnv.push('react');
+
+    if (configsEnv.length !== 0)
+      await this.writeFiles({
+        '.catrc.js': `// @flow
+
+module.exports = {
+  configsEnv: ${JSON.stringify(configsEnv).replace(/"/g, "'")},
+};`,
+      });
   };
 }
 

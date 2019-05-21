@@ -48,6 +48,13 @@ export default ({
     alias: 'jest',
     run: (argv: $ReadOnlyArray<string>) => [...argv, '--silent'],
   },
+
+  // @cat-org/server
+  server: {
+    configFiles: {
+      babel: true,
+    },
+  },
 }: {
   [string]: configType,
 });

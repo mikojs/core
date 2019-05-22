@@ -42,12 +42,10 @@ export default (
               resolverName: string,
             ) => ({
               ...prevResolvers,
-              [resolverName]: !prevResolvers[resolverName]
-                ? newResolvers[resolverName]
-                : {
-                    ...prevResolvers[resolverName],
-                    ...newResolvers[resolverName],
-                  },
+              [resolverName]: {
+                ...prevResolvers[resolverName],
+                ...newResolvers[resolverName],
+              },
             }),
             result.resolvers,
           ),

@@ -1,6 +1,6 @@
 // @flow
 
-import { type configType } from '@cat-org/react-middleware';
+import { type configType } from '@cat-org/koa-react';
 
 import useCss from '../index.js';
 

@@ -24,7 +24,7 @@ describe.each`
   ${true}  | ${true}
   ${false} | ${true}
 `(
-  'react middleware with dev = $dev, useStatic = $useStatic',
+  'koa react with dev = $dev, useStatic = $useStatic',
   ({ dev, useStatic }: {| dev: boolean, useStatic: boolean |}) => {
     const publicPath = dev ? '/assets' : '/public/js';
     const isStatic = !dev && useStatic;

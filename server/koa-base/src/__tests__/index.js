@@ -4,16 +4,16 @@ import Koa, { type Context as koaContextType } from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
-import defaultMiddle from '../index';
+import base from '../index';
 
-describe('default middleware', () => {
+describe('koa base', () => {
   let server: http$Server;
   let port: number;
 
   beforeAll(async () => {
     const app = new Koa();
 
-    app.use(defaultMiddle);
+    app.use(base);
     app.use(async (ctx: koaContextType, next: () => Promise<void>) => {
       if (ctx.request.body instanceof Object) ctx.body = ctx.request.body;
       await next();

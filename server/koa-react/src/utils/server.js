@@ -95,7 +95,7 @@ export default (
       // $FlowFixMe Flow does not yet support method or property calls in optional chains.
       (await Main.getInitialProps?.({ ctx, isServer: true })) || {};
     const hash = crypto
-      .createHmac('sha256', '@cat-org/react-middleware')
+      .createHmac('sha256', '@cat-org/koa-react')
       .digest('hex');
 
     // preload document and main

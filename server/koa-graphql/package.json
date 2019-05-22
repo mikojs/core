@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/graphql-middleware",
+  "name": "@cat-org/koa-graphql",
   "description": "Graphql middleware for cat-org server",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/graphql-middleware",
-  "repository": "https://github.com/cat-org/core/tree/master/server/graphql-middleware",
+  "homepage": "https://cat-org.github.io/core/koa-graphql",
+  "repository": "https://github.com/cat-org/core/tree/master/server/koa-graphql",
   "version": "1.0.0",
   "main": "./lib/index.js",
   "dependencies": {

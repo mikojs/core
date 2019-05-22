@@ -39,8 +39,13 @@ export default (
           ...rootValueObj,
         };
 
-        if (!/extend type/.test(schemaStr) && !/(type Query|type Mutation)/.test(schemaStr))
-          throw new Error(`Use schema with \`extend type\` or \`type Query / Mutation\`, but got:\n${schemaStr}`);
+        if (
+          !/extend type/.test(schemaStr) &&
+          !/(type Query|type Mutation)/.test(schemaStr)
+        )
+          throw new Error(
+            `Use schema with \`extend type\` or \`type Query / Mutation\`, but got:\n${schemaStr}`,
+          );
 
         if (result.schema instanceof Array) {
           if (/extend type/.test(schemaStr))

@@ -1,4 +1,9 @@
-// @flow
+/**
+ * https://github.com/chentsulin/koa-graphql/issues/120
+ * TODO: remove, fix koa-graphql type error
+ *
+ * @flow
+ */
 
 declare module 'koa-graphql' {
   import type { Middleware as koaMiddlewareType } from 'koa';

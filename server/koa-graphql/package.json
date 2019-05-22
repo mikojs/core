@@ -12,6 +12,7 @@
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.3",
     "graphql": "^14.3.0",
+    "graphql-tools": "^4.0.4",
     "koa-graphql": "^0.8.0"
   },
   "devDependencies": {

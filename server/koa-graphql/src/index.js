@@ -1,13 +1,9 @@
 // @flow
 
-import path from 'path';
-
 import {
-  parse,
-  buildSchema,
-  extendSchema,
-  type GraphQLSchema as graphqlSchemaType,
-} from 'graphql';
+  makeExecutableSchema,
+  type makeExecutableSchemaOptionsType,
+} from 'graphql-tools';
 import graphql, {
   type OptionsData as koaGraphqlOptionsType,
 } from 'koa-graphql';
@@ -17,18 +13,16 @@ import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 type buildSchemasType = {
-  rootValue: $PropertyType<koaGraphqlOptionsType, 'rootValue'>,
-  schema: graphqlSchemaType,
+  typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
+  resolvers: $PropertyType<makeExecutableSchema, 'resolvers'>,
 };
 
 export default (
   folderPath: string,
-  rootFile: string,
   options: koaGraphqlOptionsType,
+  makeExecutableSchemaOptions: makeExecutableSchemaOptionsType,
 ): koaMiddlewareType => {
-  const rootPath = path.resolve(folderPath, rootFile);
-  const { schema: rootSchemaStr, ...rootSchemaRootValue } = require(rootPath);
-  const { rootValue, schema } = d3DirTree(folderPath, {
+  const { typeDefs, resolvers } = d3DirTree(folderPath, {
     extensions: /.jsx?$/,
   })
     .leaves()
@@ -37,31 +31,40 @@ export default (
         result: buildSchemasType,
         { data: { path: filePath } }: d3DirTreeNodeType,
       ): buildSchemasType => {
-        if (filePath === rootPath) return result;
-
-        const { schema: schemaStr, ...rootValueObj } =
+        const { typeDefs: newTypeDefs, ...newResolvers } =
           require(filePath).default || require(filePath);
 
         return {
-          rootValue: {
-            ...result.rootValue,
-            ...rootValueObj,
-          },
-          schema: extendSchema(result.schema, parse(schemaStr)),
+          typeDefs: [...result.typeDefs, newTypeDefs],
+          resolvers: Object.keys(newResolvers).reduce(
+            (
+              prevResolvers: $PropertyType<buildSchemasType, 'resolvers'>,
+              resolverName: string,
+            ) => ({
+              ...prevResolvers,
+              [resolverName]: !prevResolvers[resolverName]
+                ? newResolvers[resolverName]
+                : {
+                    ...prevResolvers[resolverName],
+                    ...newResolvers[resolverName],
+                  },
+            }),
+            result.resolvers,
+          ),
         };
       },
       {
-        rootValue: rootSchemaRootValue,
-        schema: buildSchema(rootSchemaStr),
+        typeDefs: [],
+        resolvers: {},
       },
     );
 
-  if (schema instanceof Array)
-    throw new Error('There must have one root schema.');
-
   return graphql({
     ...options,
-    schema,
-    rootValue,
+    schema: makeExecutableSchema({
+      ...makeExecutableSchemaOptions,
+      typeDefs,
+      resolvers,
+    }),
   });
 };

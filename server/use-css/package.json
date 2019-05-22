@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/use-css",
-  "description": "Add css to cat-org react-middleware",
+  "description": "Add css to cat-org koa-react",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/use-css",
@@ -13,12 +13,12 @@
     "style-loader": "^0.23.1"
   },
   "peerDependencies": {
-    "@cat-org/react-middleware": ">=1.0.0-beta.19"
+    "@cat-org/koa-react": ">=1.0.0-beta.19"
   },
   "devDependencies": {
     "webpack": "^4.31.0"
   },
-  "keywords": ["cat-org", "react-middleware", "use-css"],
+  "keywords": ["cat-org", "koa-react", "use-css"],
   "publishConfig": {
     "access": "public"
   }

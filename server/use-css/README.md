@@ -8,7 +8,7 @@
 
 [website]: https://cat-org.github.io/core/use-css
 
-Add css to cat-org react-middleware.
+Add css to cat-org koa-react.
 
 ## Install
 

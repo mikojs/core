@@ -51,10 +51,10 @@ const defaultMiddleware = async (
 (async () => {
   // eslint-disable-next-line flowtype/no-unused-expressions
   (await server.init(context))
-    |> server.use(loadModule('@cat-org/default-middleware', defaultMiddleware))
+    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
     |> server.use(
       await loadModule(
-        '@cat-org/react-middleware',
+        '@cat-org/koa-react',
         defaultMiddleware,
         path.resolve(context.dir, './pages'),
         { dev: context.dev }

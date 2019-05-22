@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/default-middleware",
-  "description": "Default middleware for cat-org server",
+  "name": "@cat-org/koa-base",
+  "description": "Base middleware for cat-org server",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/default-middleware",
-  "repository": "https://github.com/cat-org/core/tree/master/server/default-middleware",
+  "homepage": "https://cat-org.github.io/core/koa-base",
+  "repository": "https://github.com/cat-org/core/tree/master/server/koa-base",
   "version": "1.0.0-beta.20",
   "main": "./lib/index.js",
   "dependencies": {
@@ -22,7 +22,7 @@
     "koa": "^2.7.0",
     "node-fetch": "^2.6.0"
   },
-  "keywords": ["cat-org", "default", "middleware"],
+  "keywords": ["base", "cat-org", "koa"],
   "publishConfig": {
     "access": "public"
   }

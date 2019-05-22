@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/use-less",
-  "description": "Add less to cat-org react-middleware",
+  "description": "Add less to cat-org koa-react",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/use-less",
@@ -13,13 +13,13 @@
     "less-loader": "^5.0.0"
   },
   "peerDependencies": {
-    "@cat-org/react-middleware": ">=1.0.0-beta.19",
+    "@cat-org/koa-react": ">=1.0.0-beta.19",
     "@cat-org/use-css": ">=1.0.0-beta.19"
   },
   "devDependencies": {
     "webpack": "^4.31.0"
   },
-  "keywords": ["cat-org", "react-middleware", "use-less"],
+  "keywords": ["cat-org", "koa-react", "use-less"],
   "publishConfig": {
     "access": "public"
   }

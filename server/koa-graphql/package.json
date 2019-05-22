@@ -15,16 +15,11 @@
     "koa-graphql": "^0.8.0"
   },
   "devDependencies": {
-    "express": "^4.17.0",
     "get-port": "^5.0.0",
     "koa": "^2.7.0",
     "node-fetch": "^2.6.0"
   },
-  "keywords": [
-    "cat-org",
-    "graphql",
-    "middleware"
-  ],
+  "keywords": ["cat-org", "graphql", "middleware"],
   "publishConfig": {
     "access": "public"
   }

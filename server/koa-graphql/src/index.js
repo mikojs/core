@@ -19,8 +19,8 @@ type buildSchemasType = {
 
 export default (
   folderPath: string,
-  options: koaGraphqlOptionsType,
-  makeExecutableSchemaOptions: makeExecutableSchemaOptionsType,
+  options?: koaGraphqlOptionsType,
+  makeExecutableSchemaOptions?: makeExecutableSchemaOptionsType,
 ): koaMiddlewareType => {
   const { typeDefs, resolvers } = d3DirTree(folderPath, {
     extensions: /.jsx?$/,

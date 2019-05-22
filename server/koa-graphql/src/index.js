@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import {
   parse,
   buildSchema,
@@ -16,13 +18,16 @@ import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 type buildSchemasType = {
   rootValue: $PropertyType<koaGraphqlOptionsType, 'rootValue'>,
-  schema: $ReadOnlyArray<string> | graphqlSchemaType,
+  schema: graphqlSchemaType,
 };
 
 export default (
   folderPath: string,
+  rootFile: string,
   options: koaGraphqlOptionsType,
 ): koaMiddlewareType => {
+  const rootPath = path.resolve(folderPath, rootFile);
+  const { schema: rootSchemaStr, ...rootSchemaRootValue } = require(rootPath);
   const { rootValue, schema } = d3DirTree(folderPath, {
     extensions: /.jsx?$/,
   })
@@ -32,67 +37,22 @@ export default (
         result: buildSchemasType,
         { data: { path: filePath } }: d3DirTreeNodeType,
       ): buildSchemasType => {
+        if (filePath === rootPath) return result;
+
         const { schema: schemaStr, ...rootValueObj } =
           require(filePath).default || require(filePath);
-        const newRootValue = {
-          ...result.rootValue,
-          ...rootValueObj,
-        };
-
-        if (
-          !/extend type/.test(schemaStr) &&
-          !/(type Query|type Mutation)/.test(schemaStr)
-        )
-          throw new Error(
-            `Use schema with \`extend type\` or \`type Query / Mutation\`, but got:\n${schemaStr}`,
-          );
-
-        if (result.schema instanceof Array) {
-          if (/extend type/.test(schemaStr))
-            return {
-              rootValue: newRootValue,
-              /**
-               * https://github.com/facebook/flow/issues/2282
-               * instanceof not work
-               *
-               * $FlowFixMe
-               */
-              schema: [...result.schema, schemaStr],
-            };
-
-          return {
-            rootValue: newRootValue,
-            /**
-             * https://github.com/facebook/flow/issues/2282
-             * instanceof not work
-             *
-             * $FlowFixMe
-             */
-            schema: result.schema.reduce(
-              (rootSchema: graphqlSchemaType, subSchema: string) =>
-                extendSchema(rootSchema, parse(subSchema)),
-              buildSchema(schemaStr),
-            ),
-          };
-        }
-
-        if (!/extend type/.test(schemaStr))
-          throw new Error('There can be only one root schema.');
 
         return {
-          rootValue: newRootValue,
-          /**
-           * https://github.com/facebook/flow/issues/2282
-           * instanceof not work
-           *
-           * $FlowFixMe
-           */
+          rootValue: {
+            ...result.rootValue,
+            ...rootValueObj,
+          },
           schema: extendSchema(result.schema, parse(schemaStr)),
         };
       },
       {
-        rootValue: {},
-        schema: [],
+        rootValue: rootSchemaRootValue,
+        schema: buildSchema(rootSchemaStr),
       },
     );
 

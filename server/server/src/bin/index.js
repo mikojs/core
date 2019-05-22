@@ -54,7 +54,7 @@ const defaultMiddleware = async (
     |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
     |> server.use(
       await loadModule(
-        '@cat-org/react-middleware',
+        '@cat-org/koa-react',
         defaultMiddleware,
         path.resolve(context.dir, './pages'),
         { dev: context.dev }

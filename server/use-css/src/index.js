@@ -2,7 +2,7 @@
 
 import { emptyFunction } from 'fbjs';
 
-import { type optionsType, type configType } from '@cat-org/react-middleware';
+import { type optionsType, type configType } from '@cat-org/koa-react';
 
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,

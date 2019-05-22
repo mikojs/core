@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/react-middleware",
+  "name": "@cat-org/koa-react",
   "description": "React middleware for cat-org server",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/react-middleware",
-  "repository": "https://github.com/cat-org/core/tree/master/server/react-middleware",
+  "homepage": "https://cat-org.github.io/core/koa-react",
+  "repository": "https://github.com/cat-org/core/tree/master/server/koa-react",
   "version": "1.0.0-beta.20",
   "main": "./lib/index.js",
   "scripts": {
@@ -46,7 +46,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
-  "keywords": ["cat-org", "middleware", "react"],
+  "keywords": ["cat-org", "koa", "react"],
   "publishConfig": {
     "access": "public"
   }

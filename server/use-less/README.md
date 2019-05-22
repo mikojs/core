@@ -8,7 +8,7 @@
 
 [website]: https://cat-org.github.io/core/use-less
 
-Add less to cat-org react-middleware.
+Add less to cat-org koa-react.
 
 ## Install
 

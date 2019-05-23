@@ -48,9 +48,9 @@ export default {
     return new Koa();
   },
 
-  all: (prefix: ?string): Router => {
+  start: (prefix: ?string): Router => {
     debugLog({
-      method: 'all',
+      method: 'start',
       prefix,
     });
 
@@ -61,8 +61,9 @@ export default {
   post: (prefix: string) => new Endpoint(prefix, 'post'),
   put: (prefix: string) => new Endpoint(prefix, 'put'),
   del: (prefix: string) => new Endpoint(prefix, 'del'),
+  all: (prefix: string) => new Endpoint(prefix, 'all'),
 
-  use: (middleware: koaMiddlewareType) => (router: routerType): routerType => {
+  use: (middleware: koaMiddlewareType) => <R: routerType>(router: R): R => {
     router.use(middleware);
 
     return router;
@@ -70,9 +71,9 @@ export default {
 
   end: (
     router: Router | Endpoint,
-  ): ((parentRouter: Router | Endpoint) => Router | Endpoint) => {
+  ): (<R: Router | Koa>(parentRouter: R) => R) => {
     if (router instanceof Endpoint)
-      return (parentRouter: Router | Endpoint): Router | Endpoint => {
+      return <R: Router | Koa>(parentRouter: R): R => {
         /**
          * https://github.com/facebook/flow/issues/2282
          * instanceof not work
@@ -91,7 +92,9 @@ export default {
           router;
 
         if (!(parentRouter instanceof Router))
-          throw logger.fail(`\`server.${method}\` is not under \`server.all\``);
+          throw logger.fail(
+            `\`server.${method}\` is not under \`server.start\``,
+          );
 
         switch (method) {
           case 'get':
@@ -110,6 +113,10 @@ export default {
             parentRouter.del(urlPattern, ...middlewares);
             break;
 
+          case 'all':
+            parentRouter.all(urlPattern, ...middlewares);
+            break;
+
           default:
             throw logger.fail(
               `can not find \`${method}\` method in \`koa-router\``,
@@ -119,7 +126,7 @@ export default {
         return parentRouter;
       };
 
-    return (parentRouter: Router | Endpoint): Router | Endpoint => {
+    return <R: Router | Koa>(parentRouter: R): R => {
       /**
        * https://github.com/facebook/flow/issues/2282
        * instanceof not work
@@ -137,9 +144,7 @@ export default {
     };
   },
 
-  run: (port?: number = 8000) => (app: routerType): http$Server => {
-    if (!(app instanceof Koa)) throw logger.fail('server is not koa server');
-
+  run: (port?: number = 8000) => (app: Koa): http$Server => {
     debugLog(port);
 
     return app.listen(parseInt(port, 10), () => {

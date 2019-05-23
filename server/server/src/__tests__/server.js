@@ -16,6 +16,7 @@ describe('default server', () => {
     ${'post'} | ${['entry router', 'test', 'post']}
     ${'put'}  | ${['entry router', 'test', 'put']}
     ${'del'}  | ${''}
+    ${'all'}  | ${['entry router', 'test', 'all']}
   `(
     '$method',
     async ({
@@ -25,7 +26,9 @@ describe('default server', () => {
       method: string,
       expected: $ReadOnlyArray<string> | string,
     |}) => {
-      expect(await fetchServer(`/test/${method}`, method)).toEqual(expected);
+      expect(
+        await fetchServer(`/test/${method}`, method === 'all' ? 'get' : method),
+      ).toEqual(expected);
     },
   );
 

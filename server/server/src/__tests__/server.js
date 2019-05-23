@@ -16,6 +16,7 @@ describe('default server', () => {
     ${'post'} | ${['entry router', 'test', 'post']}
     ${'put'}  | ${['entry router', 'test', 'put']}
     ${'del'}  | ${''}
+    ${'all'}  | ${['entry router', 'test', 'all']}
   `(
     '$method',
     async ({

@@ -26,7 +26,9 @@ describe('default server', () => {
       method: string,
       expected: $ReadOnlyArray<string> | string,
     |}) => {
-      expect(await fetchServer(`/test/${method}`, method)).toEqual(expected);
+      expect(
+        await fetchServer(`/test/${method}`, method === 'all' ? 'get' : method),
+      ).toEqual(expected);
     },
   );
 

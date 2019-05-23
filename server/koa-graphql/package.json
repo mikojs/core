@@ -1,0 +1,27 @@
+{
+  "name": "@cat-org/koa-graphql",
+  "description": "Graphql middleware for cat-org server",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/core/koa-graphql",
+  "repository": "https://github.com/cat-org/core/tree/master/server/koa-graphql",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@cat-org/utils": "^1.0.0-beta.20",
+    "d3-hierarchy": "^1.1.8",
+    "directory-tree": "^2.2.3",
+    "graphql": "^14.3.0",
+    "graphql-tools": "^4.0.4",
+    "koa-graphql": "^0.8.0"
+  },
+  "devDependencies": {
+    "get-port": "^5.0.0",
+    "koa": "^2.7.0",
+    "node-fetch": "^2.6.0"
+  },
+  "keywords": ["cat-org", "graphql", "middleware"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

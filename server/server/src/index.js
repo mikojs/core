@@ -48,9 +48,9 @@ export default {
     return new Koa();
   },
 
-  all: (prefix: ?string): Router => {
+  start: (prefix: ?string): Router => {
     debugLog({
-      method: 'all',
+      method: 'start',
       prefix,
     });
 
@@ -61,6 +61,7 @@ export default {
   post: (prefix: string) => new Endpoint(prefix, 'post'),
   put: (prefix: string) => new Endpoint(prefix, 'put'),
   del: (prefix: string) => new Endpoint(prefix, 'del'),
+  all: (prefix: string) => new Endpoint(prefix, 'all'),
 
   use: (middleware: koaMiddlewareType) => (router: routerType): routerType => {
     router.use(middleware);
@@ -108,6 +109,10 @@ export default {
 
           case 'del':
             parentRouter.del(urlPattern, ...middlewares);
+            break;
+
+          case 'all':
+            parentRouter.all(urlPattern, ...middlewares);
             break;
 
           default:

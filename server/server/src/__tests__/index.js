@@ -48,12 +48,6 @@ describe('server', () => {
     ).rejects.toThrow('process exit');
   });
 
-  test('not use koa to run server', () => {
-    expect(() => {
-      server.run()();
-    }).toThrow('process exit');
-  });
-
   test('use dev mode', async () => {
     const runningServer =
       (await server.init({ ...context, dev: true })) |> server.run();

@@ -63,7 +63,7 @@ export default {
   del: (prefix: string) => new Endpoint(prefix, 'del'),
   all: (prefix: string) => new Endpoint(prefix, 'all'),
 
-  use: (middleware: koaMiddlewareType) => (router: routerType): routerType => {
+  use: (middleware: koaMiddlewareType) => <R: routerType>(router: R): R => {
     router.use(middleware);
 
     return router;
@@ -71,9 +71,9 @@ export default {
 
   end: (
     router: Router | Endpoint,
-  ): ((parentRouter: Router | Endpoint) => Router | Endpoint) => {
+  ): (<R: Router | Koa>(parentRouter: R) => R) => {
     if (router instanceof Endpoint)
-      return (parentRouter: Router | Endpoint): Router | Endpoint => {
+      return <R: Router | Koa>(parentRouter: R): R => {
         /**
          * https://github.com/facebook/flow/issues/2282
          * instanceof not work
@@ -126,7 +126,7 @@ export default {
         return parentRouter;
       };
 
-    return (parentRouter: Router | Endpoint): Router | Endpoint => {
+    return <R: Router | Koa>(parentRouter: R): R => {
       /**
        * https://github.com/facebook/flow/issues/2282
        * instanceof not work
@@ -144,9 +144,7 @@ export default {
     };
   },
 
-  run: (port?: number = 8000) => (app: routerType): http$Server => {
-    if (!(app instanceof Koa)) throw logger.fail('server is not koa server');
-
+  run: (port?: number = 8000) => (app: Koa): http$Server => {
     debugLog(port);
 
     return app.listen(parseInt(port, 10), () => {

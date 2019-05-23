@@ -36,7 +36,7 @@ export default async () =>
   (await server.init(context))
   |> server.use(customMiddleware('entry router'))
   |> ('/test'
-    |> server.all
+    |> server.start
     |> server.use(customMiddleware('test'))
     |> ('/get'
       |> server.get
@@ -53,6 +53,10 @@ export default async () =>
     |> ('/del'
       |> server.del
       |> server.use(customMiddleware('del'))
+      |> server.end)
+    |> ('/all'
+      |> server.all
+      |> server.use(customMiddleware('all'))
       |> server.end)
     |> server.end)
   |> server.run();

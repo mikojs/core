@@ -92,7 +92,9 @@ export default {
           router;
 
         if (!(parentRouter instanceof Router))
-          throw logger.fail(`\`server.${method}\` is not under \`server.all\``);
+          throw logger.fail(
+            `\`server.${method}\` is not under \`server.start\``,
+          );
 
         switch (method) {
           case 'get':

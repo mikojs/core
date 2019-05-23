@@ -51,17 +51,27 @@ const defaultMiddleware = async (
 (async () => {
   // eslint-disable-next-line flowtype/no-unused-expressions
   (await server.init(context))
-    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
-    |> ('/graphql'
-      |> server.all
-      |> server.use(
-        loadmodule(
-          '@cat-org/koa-graphql',
-          path.resolve(context.dir, './graphql'),
-        ),
-      )
+    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware)) |>
+    /* TODO
+    |> (undefined
+      |> server.start
+      |> ('/graphql'
+        |> server.all
+        |> server.use(
+          loadModule(
+            '@cat-org/koa-graphql',
+            defaultMiddleware,
+            path.resolve(context.dir, './graphql'),
+            {
+              graphiql: context.dev,
+              pretty: context.dev,
+            },
+          ),
+        )
+        |> server.end)
       |> server.end)
-    |> server.use(
+      */
+    server.use(
       await loadModule(
         '@cat-org/koa-react',
         defaultMiddleware,

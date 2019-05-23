@@ -25,8 +25,9 @@ describe('server', () => {
     ${'post'}
     ${'put'}
     ${'del'}
+    ${'all'}
   `(
-    '`server.$method` is not under `server.all`',
+    '`server.$method` is not under `server.start',
     async ({ method }: {| method: string |}) => {
       await expect(
         (async () =>
@@ -41,7 +42,7 @@ describe('server', () => {
       (async () =>
         (await server.init(context))
         |> (undefined
-          |> server.all
+          |> server.start
           |> (new Endpoint('/test', 'test') |> server.end)
           |> server.end))(),
     ).rejects.toThrow('process exit');

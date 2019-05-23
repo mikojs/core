@@ -3,7 +3,6 @@
 
 import path from 'path';
 import readline from 'readline';
-import tty from 'tty';
 
 import execa, { type ThenableChildProcess as subprocessType } from 'execa';
 import chalk from 'chalk';
@@ -18,20 +17,6 @@ const { log } = console;
 
 /**
  * @example
- * printDivider()
- */
-const printDivider = () => {
-  if (process.stdout instanceof tty.WriteStream)
-    log(
-      chalk`{bold {gray ${[].constructor
-        .apply({}, new Array(process.stdout.columns))
-        .map(() => '-')
-        .join('')}}}`,
-    );
-};
-
-/**
- * @example
  * start('Restart')
  *
  * @param {string} type - `Restart` or `Start`
@@ -39,7 +24,7 @@ const printDivider = () => {
  * @return {Object} execa subprocess
  */
 const start = (type: string): subprocessType => {
-  if (type === 'Restart') printDivider();
+  if (type === 'Restart') log();
 
   logger.succeed(`${type} to run server`);
   logger.log(
@@ -63,7 +48,7 @@ const start = (type: string): subprocessType => {
 
   rl.on('SIGINT', () => {
     subprocess.kill();
-    printDivider();
+    log();
     logger.succeed('Stop server');
     rl.close();
   });
@@ -72,7 +57,7 @@ const start = (type: string): subprocessType => {
     switch (input) {
       case 'exit':
         subprocess.kill();
-        printDivider();
+        log();
         logger.succeed('Stop server');
         rl.close();
         break;

@@ -16,7 +16,7 @@ export type inquirerResultType = {
 
   // server
   useServer: boolean,
-  useGraphql: boolean,
+  useGraphql?: boolean,
 
   // react
   useReact: boolean,
@@ -48,7 +48,6 @@ const basicUsage = {
 
     // server
     useServer: false,
-    useGraphql: false,
 
     // react
     useReact: false,

@@ -87,8 +87,8 @@ const privatePkg = {
   cmds: basicUsage.cmds,
 };
 
-const useNpm = {
-  name: 'use-npm',
+const npmPkg = {
+  name: 'npm-pkg',
   inquirerResult: {
     ...basicUsage.inquirerResult,
     useNpm: true,
@@ -96,8 +96,8 @@ const useNpm = {
   cmds: basicUsage.cmds,
 };
 
-const useServer = {
-  name: 'use-server',
+const basicServer = {
+  name: 'basic-server',
   inquirerResult: {
     ...basicUsage.inquirerResult,
     useServer: true,
@@ -109,8 +109,8 @@ const useServer = {
   ],
 };
 
-const useReactServer = {
-  name: 'use-react-server',
+const reactServer = {
+  name: 'react-server',
   inquirerResult: {
     ...basicUsage.inquirerResult,
     useServer: true,
@@ -128,8 +128,8 @@ const useReactServer = {
   ],
 };
 
-const useReactServerWithCss = {
-  name: 'use-react-server-with-css',
+const reactServerWithCss = {
+  name: 'react-server-with-css',
   inquirerResult: {
     ...basicUsage.inquirerResult,
     useServer: true,
@@ -150,8 +150,8 @@ const useReactServerWithCss = {
   ],
 };
 
-const useReactServerWithLess = {
-  name: 'use-react-server-with-less',
+const reactServerWithLess = {
+  name: 'react-server-with-less',
   inquirerResult: {
     ...basicUsage.inquirerResult,
     useServer: true,
@@ -172,8 +172,8 @@ const useReactServerWithLess = {
   ],
 };
 
-const useGraphqlServer = {
-  name: 'use-graphql-server',
+const graphqlServer = {
+  name: 'graphql-server',
   inquirerResult: {
     ...basicUsage.inquirerResult,
     useServer: true,
@@ -208,8 +208,8 @@ const lernaPrivatePkg = {
   },
 };
 
-const lernaUseNpm = {
-  name: 'lerna/use-npm',
+const lernaNpmPkg = {
+  name: 'lerna/npm-pkg',
   inquirerResult: {
     ...lernaBasicUsage.inquirerResult,
     useNpm: true,
@@ -220,8 +220,8 @@ const lernaUseNpm = {
   },
 };
 
-const lernaUseServer = {
-  name: 'lerna/use-server',
+const lernaBasicServer = {
+  name: 'lerna/basic-server',
   inquirerResult: {
     ...lernaBasicUsage.inquirerResult,
     useServer: true,
@@ -232,8 +232,8 @@ const lernaUseServer = {
   },
 };
 
-const lernaUseReactServer = {
-  name: 'lerna/use-react-server',
+const lernaReactServer = {
+  name: 'lerna/react-server',
   inquirerResult: {
     ...lernaBasicUsage.inquirerResult,
     useServer: true,
@@ -245,8 +245,8 @@ const lernaUseReactServer = {
   },
 };
 
-const lernaUseReactServerWithCss = {
-  name: 'lerna/use-react-server-with-css',
+const lernaReactServerWithCss = {
+  name: 'lerna/react-server-with-css',
   inquirerResult: {
     ...lernaBasicUsage.inquirerResult,
     useServer: true,
@@ -259,8 +259,8 @@ const lernaUseReactServerWithCss = {
   },
 };
 
-const lernaUseReactServerWithLess = {
-  name: 'lerna/use-react-server-with-less',
+const lernaReactServerWithLess = {
+  name: 'lerna/react-server-with-less',
   inquirerResult: {
     ...lernaBasicUsage.inquirerResult,
     useServer: true,
@@ -273,8 +273,8 @@ const lernaUseReactServerWithLess = {
   },
 };
 
-const lernaUseGraphqlServer = {
-  name: 'lerna/use-graphql-server',
+const lernaGraphqlServer = {
+  name: 'lerna/graphql-server',
   inquirerResult: {
     ...lernaBasicUsage.inquirerResult,
     useServer: true,
@@ -289,21 +289,21 @@ const lernaUseGraphqlServer = {
 export default [
   basicUsage,
   privatePkg,
-  useNpm,
-  useServer,
-  useReactServer,
-  useReactServerWithCss,
-  useReactServerWithLess,
-  useGraphqlServer,
+  npmPkg,
+  basicServer,
+  reactServer,
+  reactServerWithCss,
+  reactServerWithLess,
+  graphqlServer,
 
   lernaBasicUsage,
   lernaPrivatePkg,
-  lernaUseNpm,
-  lernaUseServer,
-  lernaUseReactServer,
-  lernaUseReactServerWithCss,
-  lernaUseReactServerWithLess,
-  lernaUseGraphqlServer,
+  lernaNpmPkg,
+  lernaBasicServer,
+  lernaReactServer,
+  lernaReactServerWithCss,
+  lernaReactServerWithLess,
+  lernaGraphqlServer,
 ].reduce(
   (
     result: $ReadOnlyArray<

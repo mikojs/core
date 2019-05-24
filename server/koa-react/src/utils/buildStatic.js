@@ -21,27 +21,31 @@ export const buildStatic = async (
   {
     port = 8000,
     folderPath = path.resolve('./docs'),
+    buildHtml = false,
   }: {|
     port?: number,
     folderPath?: string,
+    buildHtml?: boolean,
   |} = {},
 ) => {
   if (routePaths.length === 0) return;
 
-  await Promise.all(
-    routePaths.map(async (routePath: string) => {
-      outputFileSync(
-        path.resolve(
-          folderPath,
-          `.${routePath.replace(/\*$/, 'notFound')}`,
-          /\.js$/.test(routePath) ? '' : './index.html',
-        ),
-        await fetch(`http://localhost:${port}${routePath}`).then(
-          (res: {| text: () => string |}) => res.text(),
-        ),
-      );
-    }),
-  );
+  if (buildHtml)
+    await Promise.all(
+      routePaths.map(async (routePath: string) => {
+        outputFileSync(
+          path.resolve(
+            folderPath,
+            `.${routePath.replace(/\*$/, 'notFound')}`,
+            /\.js$/.test(routePath) ? '' : './index.html',
+          ),
+          await fetch(`http://localhost:${port}${routePath}`).then(
+            (res: {| text: () => string |}) => res.text(),
+          ),
+        );
+      }),
+    );
+
   server.close();
 };
 

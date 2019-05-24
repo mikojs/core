@@ -7,9 +7,9 @@ import react from './react';
 import pkg from './pkg';
 import Store from './index';
 
-const template = ` // @flow
+const template = `// @flow
 
-import { version } from '../../../package.json';
+import { version } from '../../package.json';
 
 export default {
   typeDefs: \`
@@ -78,13 +78,14 @@ class Server extends Store {
    * @param {Object} ctx - store context
    */
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
-    if (!this.storeUse.server || lerna) return;
+    if (!this.storeUse.server) return;
 
-    await this.execa(
-      `yarn add @cat-org/server @cat-org/koa-base${
-        !this.storeUse.graphql ? '' : ' @cat-org/koa-graphql'
-      }`,
-    );
+    if (!lerna)
+      await this.execa(
+        `yarn add @cat-org/server @cat-org/koa-base${
+          !this.storeUse.graphql ? '' : ' @cat-org/koa-graphql'
+        }`,
+      );
 
     if (this.storeUse.graphql)
       await this.writeFiles({

@@ -16,6 +16,7 @@ export type inquirerResultType = {
 
   // server
   useServer: boolean,
+  useGraphql: boolean,
 
   // react
   useReact: boolean,
@@ -47,6 +48,7 @@ const basicUsage = {
 
     // server
     useServer: false,
+    useGraphql: false,
 
     // react
     useReact: false,
@@ -170,6 +172,20 @@ const useReactServerWithLess = {
   ],
 };
 
+const useGraphqlServer = {
+  name: 'use-graphql-server',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    useServer: true,
+    useGraphql: true,
+  },
+  cmds: [
+    ...basicUsage.cmds.slice(0, 4),
+    'yarn add @cat-org/server @cat-org/koa-base @cat-org/koa-graphql',
+    ...basicUsage.cmds.slice(4),
+  ],
+};
+
 // with --lerna
 const lernaBasicUsage = {
   name: 'lerna/basic-usage',
@@ -257,6 +273,19 @@ const lernaUseReactServerWithLess = {
   },
 };
 
+const lernaUseGraphqlServer = {
+  name: 'lerna/use-graphql-server',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+    useGraphql: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
 export default [
   basicUsage,
   privatePkg,
@@ -265,6 +294,7 @@ export default [
   useReactServer,
   useReactServerWithCss,
   useReactServerWithLess,
+  useGraphqlServer,
 
   lernaBasicUsage,
   lernaPrivatePkg,
@@ -273,6 +303,7 @@ export default [
   lernaUseReactServer,
   lernaUseReactServerWithCss,
   lernaUseReactServerWithLess,
+  lernaUseGraphqlServer,
 ].reduce(
   (
     result: $ReadOnlyArray<

@@ -11,6 +11,7 @@ import Store from './index';
  * @return {string} - content
  */
 const template = (configsEnv: $ReadOnlyArray<string>) => `// @flow
+
 module.exports = {
   configsEnv: [${configsEnv.map((env: string) => `'${env}'`).join(', ')}],
 };`;

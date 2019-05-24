@@ -1,75 +1,93 @@
 #! /usr/bin/env node
-// @flow
+/**
+ * fixme-flow-file-annotation
+ *
+ * Flow not support @babel/plugin-proposal-pipeline-operator
+ * https://github.com/facebook/flow/issues/5443
+ */
+/* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
 import path from 'path';
-import readline from 'readline';
 
-import execa, { type ThenableChildProcess as subprocessType } from 'execa';
-import chalk from 'chalk';
+import { type Context as koaContextType } from 'koa';
+import { emptyFunction } from 'fbjs';
 
-import { handleUnhandledRejection } from '@cat-org/utils';
+import parseArgv from '@babel/cli/lib/babel/options';
 
-import logger from 'utils/logger';
+import server from '../index';
 
-handleUnhandledRejection();
+import loadModule from 'utils/loadModule';
 
-const { log } = console;
+const {
+  cliOptions: { outDir },
+} = parseArgv(process.argv);
+
+if (!outDir)
+  throw new Error('Must use `--out-dir` or `-d` to build the server');
+
+const context = {
+  dev: process.env.NODE_ENV !== 'production',
+  dir: outDir,
+  babelOptions: process.argv
+    .slice(2)
+    .filter((argv: string) => !['-w', '--watch'].includes(argv))
+    .join(' '),
+};
 
 /**
  * @example
- * start('Restart')
+ * defaultMiddleware(ctx, next)
  *
- * @param {string} type - `Restart` or `Start`
- *
- * @return {Object} execa subprocess
+ * @param {Object} ctx - koa context
+ * @param {Function} next - koa next function
  */
-const start = (type: string): subprocessType => {
-  if (type === 'Restart') log();
-
-  logger.succeed(`${type} to run server`);
-  logger.log(
-    chalk`Enter {cyan \`exit\`} to stop server`,
-    chalk`Enter {cyan \`restart\`} or {cyan \`rs\`} to restart server`,
-  );
-  log();
-
-  return execa(path.resolve(__dirname, './run.js'), process.argv.slice(2), {
-    stdout: 'inherit',
-  });
+const defaultMiddleware = async (
+  ctx: koaContextType,
+  next: () => Promise<void>,
+) => {
+  await next();
 };
 
-(() => {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  let subprocess: subprocessType = start('Start');
-
-  rl.on('SIGINT', () => {
-    subprocess.kill();
-    log();
-    logger.succeed('Stop server');
-    rl.close();
-  });
-
-  rl.on('line', (input: string) => {
-    switch (input) {
-      case 'exit':
-        subprocess.kill();
-        log();
-        logger.succeed('Stop server');
-        rl.close();
-        break;
-
-      case 'restart':
-      case 'rs':
-        subprocess.kill();
-        subprocess = start('Restart');
-        break;
-
-      default:
-        break;
-    }
-  });
+(async () => {
+  // eslint-disable-next-line flowtype/no-unused-expressions
+  (await server.init(context))
+    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
+    |> (undefined
+      |> server.start
+      |> ('/graphql'
+        |> server.all
+        |> server.use(
+          loadModule(
+            '@cat-org/koa-graphql',
+            defaultMiddleware,
+            path.resolve(context.dir, './graphql'),
+            {
+              graphiql: context.dev,
+              pretty: context.dev,
+            },
+          ),
+        )
+        |> server.end)
+      |> server.end)
+    |> server.use(
+      await loadModule(
+        '@cat-org/koa-react',
+        defaultMiddleware,
+        path.resolve(context.dir, './pages'),
+        { dev: context.dev }
+          |> ((options: {}) =>
+            loadModule(
+              '@cat-org/use-css',
+              emptyFunction.thatReturnsArgument,
+              options,
+            ))
+          |> ((options: {}) =>
+            loadModule(
+              '@cat-org/use-less',
+              emptyFunction.thatReturnsArgument,
+              options,
+            )),
+      ),
+    )
+    |> server.run(parseInt(process.env.PORT || 8000, 10));
 })();

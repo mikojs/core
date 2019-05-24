@@ -26,9 +26,9 @@ export default {
 class Server extends Store {
   +subStores = [react, pkg];
 
-  storeUse = {
-    server: false,
-    graphql: false,
+  store = {
+    useServer: false,
+    useGraphql: false,
   };
 
   /**
@@ -52,23 +52,23 @@ class Server extends Store {
       },
     );
 
-    this.storeUse = {
-      server: useServer,
-      graphql: useGraphql,
+    this.store = {
+      useServer,
+      useGraphql,
     };
-    this.debug(this.storeUse);
+    this.debug(this.store);
   }, emptyFunction.thatReturnsTrue);
 
   /**
    * @example
-   * server.store(ctx)
+   * server.start(ctx)
    *
    * @param {Object} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     await this.checkServer();
 
-    ctx.useServer = this.storeUse.server;
+    ctx.useServer = this.store.useServer;
   };
 
   /**
@@ -78,16 +78,16 @@ class Server extends Store {
    * @param {Object} ctx - store context
    */
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
-    if (!this.storeUse.server) return;
+    if (!this.store.useServer) return;
 
     if (!lerna)
       await this.execa(
         `yarn add @cat-org/server @cat-org/koa-base${
-          !this.storeUse.graphql ? '' : ' @cat-org/koa-graphql'
+          !this.store.graphql ? '' : ' @cat-org/koa-graphql'
         }`,
       );
 
-    if (this.storeUse.graphql)
+    if (this.store.useGraphql)
       await this.writeFiles({
         'src/graphql/index.js': template,
       });

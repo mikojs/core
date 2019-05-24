@@ -43,7 +43,7 @@ class React extends Store {
 
   /**
    * @example
-   * react.store(ctx)
+   * react.start(ctx)
    *
    * @param {Object} ctx - store context
    */

@@ -13,5 +13,5 @@ package description
 ## Install
 
 ```sh
-yarn add use-npm
+yarn add npm-pkg
 ```

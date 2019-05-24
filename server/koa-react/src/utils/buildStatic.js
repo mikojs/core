@@ -28,9 +28,7 @@ export const buildStatic = async (
     buildHtml?: boolean,
   |} = {},
 ) => {
-  if (routePaths.length === 0) return;
-
-  if (buildHtml)
+  if (buildHtml && routePaths.length !== 0)
     await Promise.all(
       routePaths.map(async (routePath: string) => {
         outputFileSync(
@@ -46,6 +44,7 @@ export const buildStatic = async (
       }),
     );
 
+  routePaths.splice(0, routePaths.length);
   server.close();
 };
 

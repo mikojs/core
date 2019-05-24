@@ -83,7 +83,7 @@ class Server extends Store {
     if (!lerna)
       await this.execa(
         `yarn add @cat-org/server @cat-org/koa-base${
-          !this.store.graphql ? '' : ' @cat-org/koa-graphql'
+          !this.store.useGraphql ? '' : ' @cat-org/koa-graphql'
         }`,
       );
 

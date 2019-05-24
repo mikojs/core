@@ -22,6 +22,22 @@ export default {
   },
 };`;
 
+export const SERVER_QUESTIONS = [
+  {
+    name: 'useServer',
+    message: 'use server or not',
+    type: 'confirm',
+    default: false,
+  },
+  {
+    name: 'useGraphql',
+    message: 'use graphql or not',
+    type: 'confirm',
+    default: false,
+    when: (result: {| useServer: boolean |}) => result.useServer,
+  },
+];
+
 /** server store */
 class Server extends Store {
   +subStores = [react, pkg];
@@ -36,20 +52,8 @@ class Server extends Store {
    * server.checkServer()
    */
   +checkServer = memoizeOne(async () => {
-    const { useServer, useGraphql = false } = await this.prompt(
-      {
-        name: 'useServer',
-        message: 'use server or not',
-        type: 'confirm',
-        default: false,
-      },
-      {
-        name: 'useGraphql',
-        message: 'use graphql or not',
-        type: 'confirm',
-        default: false,
-        when: (result: {| useServer: boolean |}) => result.useServer,
-      },
+    const { useServer, useGraphql = false } = await this.prompt<boolean>(
+      ...SERVER_QUESTIONS,
     );
 
     this.store = {

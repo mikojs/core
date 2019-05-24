@@ -7,36 +7,68 @@ import react from './react';
 import pkg from './pkg';
 import Store from './index';
 
+const template = `// @flow
+
+import { version } from '../../package.json';
+
+export default {
+  typeDefs: \`
+  type Query {
+    version: String!
+  }
+\`,
+  Query: {
+    version: () => version,
+  },
+};`;
+
 /** server store */
 class Server extends Store {
   +subStores = [react, pkg];
 
-  storeUseServer = false;
+  store = {
+    useServer: false,
+    useGraphql: false,
+  };
 
   /**
    * @example
    * server.checkServer()
    */
   +checkServer = memoizeOne(async () => {
-    this.storeUseServer = (await this.prompt({
-      name: 'useServer',
-      message: 'use server or not',
-      type: 'confirm',
-      default: false,
-    })).useServer;
-    this.debug(this.storeUseServer);
+    const { useServer, useGraphql = false } = await this.prompt(
+      {
+        name: 'useServer',
+        message: 'use server or not',
+        type: 'confirm',
+        default: false,
+      },
+      {
+        name: 'useGraphql',
+        message: 'use graphql or not',
+        type: 'confirm',
+        default: false,
+        when: (result: {| useServer: boolean |}) => result.useServer,
+      },
+    );
+
+    this.store = {
+      useServer,
+      useGraphql,
+    };
+    this.debug(this.store);
   }, emptyFunction.thatReturnsTrue);
 
   /**
    * @example
-   * server.store(ctx)
+   * server.start(ctx)
    *
    * @param {Object} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     await this.checkServer();
 
-    ctx.useServer = this.storeUseServer;
+    ctx.useServer = this.store.useServer;
   };
 
   /**
@@ -46,9 +78,19 @@ class Server extends Store {
    * @param {Object} ctx - store context
    */
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
-    if (!this.storeUseServer || lerna) return;
+    if (!this.store.useServer) return;
 
-    await this.execa('yarn add @cat-org/server @cat-org/koa-base');
+    if (!lerna)
+      await this.execa(
+        `yarn add @cat-org/server @cat-org/koa-base${
+          !this.store.useGraphql ? '' : ' @cat-org/koa-graphql'
+        }`,
+      );
+
+    if (this.store.useGraphql)
+      await this.writeFiles({
+        'src/graphql/index.js': template,
+      });
   };
 }
 

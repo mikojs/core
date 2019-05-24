@@ -65,7 +65,7 @@ class Npmignore extends Store {
 
   /**
    * @example
-   * npmignore.store(ctx)
+   * npmignore.start(ctx)
    *
    * @param {Object} ctx - store context
    */

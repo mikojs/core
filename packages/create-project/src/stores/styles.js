@@ -47,7 +47,7 @@ class Styles extends Store {
 
   /**
    * @example
-   * styles.store(ctx)
+   * styles.start(ctx)
    *
    * @param {Object} ctx - store context
    */

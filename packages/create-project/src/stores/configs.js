@@ -2,6 +2,20 @@
 
 import Store from './index';
 
+/**
+ * @example
+ * template(['react'])
+ *
+ * @param {Array} configsEnv - configs env
+ *
+ * @return {string} - content
+ */
+const template = (configsEnv: $ReadOnlyArray<string>) => `// @flow
+
+module.exports = {
+  configsEnv: [${configsEnv.map((env: string) => `'${env}'`).join(', ')}],
+};`;
+
 /** configs store */
 class Configs extends Store {
   /**
@@ -34,11 +48,7 @@ class Configs extends Store {
 
     if (configsEnv.length !== 0)
       await this.writeFiles({
-        '.catrc.js': `// @flow
-
-module.exports = {
-  configsEnv: [${configsEnv.map((env: string) => `'${env}'`).join(', ')}],
-};`,
+        '.catrc.js': template(configsEnv),
       });
   };
 }

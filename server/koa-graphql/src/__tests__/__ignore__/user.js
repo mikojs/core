@@ -19,7 +19,7 @@ export default {
     ],
   },
   User: {
-    id: ({ id }: { id: string }) => `${id}-id`,
+    id: ({ id }: {| id: string |}) => `${id}-id`,
     event: () => ({
       id: 'event-id',
       name: 'event-name',

@@ -67,10 +67,13 @@ export default async (
       const server = app.listen(port, async () => {
         const { log } = console;
 
-        await buildStatic(server, {
-          port,
-          folderPath,
-        });
+        if (!dev && useStatic)
+          await buildStatic(server, {
+            port,
+            folderPath,
+            buildHtml: true,
+          });
+
         log(`Run server at port: ${port}`);
         resolve(server);
       });

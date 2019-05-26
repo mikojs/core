@@ -4,7 +4,7 @@
 
 <!-- badges.end -->
 
-[@cat-org/website]: https://cat-org.github.io/core
+[website]: https://cat-org.github.io/core
 
 The website of @cat-org/core documentation
 

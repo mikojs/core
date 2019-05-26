@@ -9,8 +9,8 @@
   "version": "1.0.0",
   "main": "./lib/index.js",
   "scripts": {
-    "dev": "configs server src -d lib --config-file ../../babel.config.js",
-    "pros": "NODE_ENV=production configs server src -d lib --config-file ../../babel.config.js"
+    "dev": "configs server --config-file ../../babel.config.js",
+    "pros": "NODE_ENV=production configs server --config-file ../../babel.config.js"
   },
   "dependencies": {
     "@cat-org/koa-base": "^1.0.0-beta.20",

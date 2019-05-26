@@ -51,6 +51,13 @@ export default ({
 
   // @cat-org/server
   server: {
+    run: (argv: $ReadOnlyArray<string>) => [
+      ...argv,
+      'src',
+      '-d',
+      'lib',
+      '--verbose',
+    ],
     configFiles: {
       babel: true,
     },

@@ -48,46 +48,44 @@ const defaultMiddleware = async (
   await next();
 };
 
-(async () => {
-  // eslint-disable-next-line flowtype/no-unused-expressions
+(async () =>
   (await server.init(context))
-    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
-    |> (undefined
-      |> server.start
-      |> ('/graphql'
-        |> server.all
-        |> server.use(
-          loadModule(
-            '@cat-org/koa-graphql',
-            defaultMiddleware,
-            path.resolve(context.dir, './graphql'),
-            {
-              graphiql: context.dev,
-              pretty: context.dev,
-            },
-          ),
-        )
-        |> server.end)
+  |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
+  |> (undefined
+    |> server.start
+    |> ('/graphql'
+      |> server.all
+      |> server.use(
+        loadModule(
+          '@cat-org/koa-graphql',
+          defaultMiddleware,
+          path.resolve(context.dir, './graphql'),
+          {
+            graphiql: context.dev,
+            pretty: context.dev,
+          },
+        ),
+      )
       |> server.end)
-    |> server.use(
-      await loadModule(
-        '@cat-org/koa-react',
-        defaultMiddleware,
-        path.resolve(context.dir, './pages'),
-        { dev: context.dev }
-          |> ((options: {}) =>
-            loadModule(
-              '@cat-org/use-css',
-              emptyFunction.thatReturnsArgument,
-              options,
-            ))
-          |> ((options: {}) =>
-            loadModule(
-              '@cat-org/use-less',
-              emptyFunction.thatReturnsArgument,
-              options,
-            )),
-      ),
-    )
-    |> server.run(parseInt(process.env.PORT || 8000, 10));
-})();
+    |> server.end)
+  |> server.use(
+    await loadModule(
+      '@cat-org/koa-react',
+      defaultMiddleware,
+      path.resolve(context.dir, './pages'),
+      { dev: context.dev }
+        |> ((options: {}) =>
+          loadModule(
+            '@cat-org/use-css',
+            emptyFunction.thatReturnsArgument,
+            options,
+          ))
+        |> ((options: {}) =>
+          loadModule(
+            '@cat-org/use-less',
+            emptyFunction.thatReturnsArgument,
+            options,
+          )),
+    ),
+  )
+  |> server.run(parseInt(process.env.PORT || 8000, 10)))();

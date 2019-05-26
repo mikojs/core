@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "name": "@cat-org/website",
+  "description": "The website of @cat-org/core documentation",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/core",
+  "repository": "https://github.com/cat-org/core/tree/master/website/website",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "scripts": {
+    "dev": "configs server --config-file ../../babel.config.js",
+    "prod": "NODE_ENV=production configs server --config-file ../../babel.config.js"
+  },
+  "dependencies": {
+    "@cat-org/koa-base": "^1.0.0-beta.20",
+    "@cat-org/koa-graphql": "^1.0.0-beta.20",
+    "@cat-org/koa-react": "^1.0.0-beta.20",
+    "@cat-org/server": "^1.0.0-beta.20",
+    "@cat-org/use-css": "^1.0.0-beta.20",
+    "@cat-org/use-less": "^1.0.0-beta.20",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "keywords": ["website"]
+}

@@ -13,3 +13,9 @@ The website of @cat-org/core documentation
 ```sh
 yarn install
 ```
+
+## Usage
+
+- `dev`: Run development.
+- `prod`: Run production.
+- `test`: Run testing.

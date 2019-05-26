@@ -2,7 +2,7 @@
   "private": true,
   "name": "@cat-org/core",
   "license": "MIT",
-  "workspaces": ["packages/*", "babel/*", "server/*", "website/*"],
+  "workspaces": ["packages/*", "babel/*", "server/*"],
   "scripts": {
     "clean": "make clean",
     "dev": "make babel-changed WATCH=-w",

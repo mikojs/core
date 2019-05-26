@@ -2,6 +2,8 @@
 
 import execa from 'execa';
 
+import { version } from '../../package.json';
+
 import server from './server';
 import pkg from './pkg';
 import gitignore from './gitignore';
@@ -80,7 +82,7 @@ class Base extends Store {
       await this.execa(
         'git init',
         'git add .',
-        'git commit -m "chore(root): project init"',
+        `git commit -m "chore(root): project init, create-project: v${version}"`,
         ...(repository ? [`git remote add origin ${repository}`] : []),
       );
     }

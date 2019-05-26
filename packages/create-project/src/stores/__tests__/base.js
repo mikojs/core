@@ -3,6 +3,8 @@
 // $FlowFixMe jest mock
 import { execa } from 'execa';
 
+import { version } from '../../../package.json';
+
 import base from '../base';
 
 const NOT_FOUND_GIT_ERROR =
@@ -11,7 +13,7 @@ const DEFAULT_GIT_COMMANDS = [
   'yarn flow-typed install',
   'git init',
   'git add .',
-  'git commit -m "chore(root): project init"',
+  `git commit -m "chore(root): project init, create-project: v${version}"`,
 ];
 
 describe('base', () => {

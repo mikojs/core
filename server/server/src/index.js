@@ -8,6 +8,7 @@ import execa from 'execa';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
 import debug from 'debug';
+import { emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -144,7 +145,10 @@ export default {
     };
   },
 
-  run: (port?: number = 8000) => (app: Koa): http$Server => {
+  run: (port?: number = 8000) => (
+    app: Koa,
+    callback?: () => void = emptyFunction,
+  ): http$Server => {
     debugLog(port);
 
     return app.listen(parseInt(port, 10), () => {
@@ -167,6 +171,8 @@ export default {
           stdio: 'inherit',
         });
       }
+
+      callback();
     });
   },
 };

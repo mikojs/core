@@ -22,18 +22,16 @@ export const buildStatic = async (
     port = 8000,
     folderPath = path.resolve('./docs'),
     buildHtml = false,
-    writeFileSync = outputFileSync,
   }: {|
     port?: number,
     folderPath?: string,
     buildHtml?: boolean,
-    writeFileSync?: (filePath: string, content: string) => void,
   |} = {},
 ) => {
   if (buildHtml && routePaths.length !== 0)
     await Promise.all(
       routePaths.map(async (routePath: string) => {
-        writeFileSync(
+        outputFileSync(
           path.resolve(
             folderPath,
             `.${routePath.replace(/\*$/, 'notFound')}`,

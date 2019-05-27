@@ -16,10 +16,12 @@ export type inquirerResultType = {
 
   // server
   useServer: boolean,
-  useGraphql?: boolean,
 
   // react
   useReact: boolean,
+
+  // graphql
+  useGraphql: boolean,
 
   // styles
   useStyles: boolean | 'css' | 'less',
@@ -51,6 +53,9 @@ const basicUsage = {
 
     // react
     useReact: false,
+
+    // graphql
+    useGraphql: false,
 
     // useStyles
     useStyles: false,
@@ -180,8 +185,10 @@ const graphqlServer = {
   },
   cmds: [
     ...basicUsage.cmds.slice(0, 4),
-    'yarn add @cat-org/server @cat-org/koa-base @cat-org/koa-graphql',
-    ...basicUsage.cmds.slice(4),
+    'yarn add @cat-org/server @cat-org/koa-base',
+    ...basicUsage.cmds.slice(4, 11),
+    'yarn add @cat-org/koa-graphql',
+    ...basicUsage.cmds.slice(11),
   ],
 };
 

@@ -16,17 +16,18 @@ import logger from './utils/logger';
 import Endpoint from './utils/Endpoint';
 
 type routerType = Router | Endpoint | Koa;
-type contextType = {|
+
+export type contextType = {|
   dev: boolean,
   dir: string,
-  babelOptions: string,
+  babelOptions: string | false,
 |};
 
 const debugLog = debug('server');
 const context: contextType = {
   dev: true,
   dir: '',
-  babelOptions: '',
+  babelOptions: false,
 };
 
 handleUnhandledRejection();
@@ -37,9 +38,10 @@ export default {
     context.dir = dir;
     context.babelOptions = babelOptions;
 
-    await execa.shell(`babel ${babelOptions}`, {
-      stdio: 'inherit',
-    });
+    if (babelOptions)
+      await execa.shell(`babel ${babelOptions}`, {
+        stdio: 'inherit',
+      });
 
     logger.start('Server start');
 
@@ -145,9 +147,8 @@ export default {
     };
   },
 
-  run: (port?: number = 8000) => (
+  run: (port?: number = 8000, callback?: () => void = emptyFunction) => (
     app: Koa,
-    callback?: () => void = emptyFunction,
   ): http$Server => {
     debugLog(port);
 
@@ -158,7 +159,7 @@ export default {
         chalk`Running server at port: {gray {bold ${port.toString()}}}`,
       );
 
-      if (dev) {
+      if (dev && babelOptions) {
         chokidar
           .watch(path.resolve(dir), {
             ignoreInitial: true,

@@ -8,6 +8,7 @@ import execa from 'execa';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
 import debug from 'debug';
+import { emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -15,17 +16,18 @@ import logger from './utils/logger';
 import Endpoint from './utils/Endpoint';
 
 type routerType = Router | Endpoint | Koa;
-type contextType = {|
+
+export type contextType = {|
   dev: boolean,
   dir: string,
-  babelOptions: string,
+  babelOptions: string | false,
 |};
 
 const debugLog = debug('server');
 const context: contextType = {
   dev: true,
   dir: '',
-  babelOptions: '',
+  babelOptions: false,
 };
 
 handleUnhandledRejection();
@@ -36,9 +38,10 @@ export default {
     context.dir = dir;
     context.babelOptions = babelOptions;
 
-    await execa.shell(`babel ${babelOptions}`, {
-      stdio: 'inherit',
-    });
+    if (babelOptions)
+      await execa.shell(`babel ${babelOptions}`, {
+        stdio: 'inherit',
+      });
 
     logger.start('Server start');
 
@@ -144,7 +147,9 @@ export default {
     };
   },
 
-  run: (port?: number = 8000) => (app: Koa): http$Server => {
+  run: (port?: number = 8000, callback?: () => void = emptyFunction) => (
+    app: Koa,
+  ): http$Server => {
     debugLog(port);
 
     return app.listen(parseInt(port, 10), () => {
@@ -154,7 +159,7 @@ export default {
         chalk`Running server at port: {gray {bold ${port.toString()}}}`,
       );
 
-      if (dev) {
+      if (dev && babelOptions) {
         chokidar
           .watch(path.resolve(dir), {
             ignoreInitial: true,
@@ -167,6 +172,8 @@ export default {
           stdio: 'inherit',
         });
       }
+
+      callback();
     });
   },
 };

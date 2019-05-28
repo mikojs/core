@@ -18,4 +18,3 @@ yarn install
 
 - `dev`: Run development.
 - `prod`: Run production.
-- `test`: Run testing.

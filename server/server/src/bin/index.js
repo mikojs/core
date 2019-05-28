@@ -14,25 +14,9 @@ import { emptyFunction } from 'fbjs';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 
-import server from '../index';
+import server, { type contextType as serverContextType } from '../index';
 
 import loadModule from 'utils/loadModule';
-
-const {
-  cliOptions: { outDir },
-} = parseArgv(process.argv);
-
-if (!outDir)
-  throw new Error('Must use `--out-dir` or `-d` to build the server');
-
-const context = {
-  dev: process.env.NODE_ENV !== 'production',
-  dir: outDir,
-  babelOptions: process.argv
-    .slice(2)
-    .filter((argv: string) => !['-w', '--watch'].includes(argv))
-    .join(' '),
-};
 
 /**
  * @example
@@ -48,46 +32,80 @@ const defaultMiddleware = async (
   await next();
 };
 
-(async () => {
-  // eslint-disable-next-line flowtype/no-unused-expressions
+/**
+ * @example
+ * run(context)
+ *
+ * @param {Object} context - server context
+ * @param {number} port - server port
+ * @param {Function} callback - server callback
+ *
+ * @return {Koa} - koa server
+ */
+const run = async (
+  context: serverContextType,
+  port?: number = parseInt(process.env.PORT || 8000, 10),
+  callback?: () => void,
+) =>
   (await server.init(context))
-    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
-    |> (undefined
-      |> server.start
-      |> ('/graphql'
-        |> server.all
-        |> server.use(
-          loadModule(
-            '@cat-org/koa-graphql',
-            defaultMiddleware,
-            path.resolve(context.dir, './graphql'),
-            {
-              graphiql: context.dev,
-              pretty: context.dev,
-            },
-          ),
-        )
-        |> server.end)
+  |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
+  |> (undefined
+    |> server.start
+    |> ('/graphql'
+      |> server.all
+      |> server.use(
+        loadModule(
+          '@cat-org/koa-graphql',
+          defaultMiddleware,
+          path.resolve(context.dir, './graphql'),
+          {
+            graphiql: context.dev,
+            pretty: context.dev,
+          },
+        ),
+      )
       |> server.end)
-    |> server.use(
-      await loadModule(
-        '@cat-org/koa-react',
-        defaultMiddleware,
-        path.resolve(context.dir, './pages'),
-        { dev: context.dev }
-          |> ((options: {}) =>
-            loadModule(
-              '@cat-org/use-css',
-              emptyFunction.thatReturnsArgument,
-              options,
-            ))
-          |> ((options: {}) =>
-            loadModule(
-              '@cat-org/use-less',
-              emptyFunction.thatReturnsArgument,
-              options,
-            )),
-      ),
-    )
-    |> server.run(parseInt(process.env.PORT || 8000, 10));
+    |> server.end)
+  |> server.use(
+    await loadModule(
+      '@cat-org/koa-react',
+      defaultMiddleware,
+      path.resolve(context.dir, './pages'),
+      { dev: context.dev }
+        |> ((options: {}) =>
+          loadModule(
+            '@cat-org/use-css',
+            emptyFunction.thatReturnsArgument,
+            options,
+          ))
+        |> ((options: {}) =>
+          loadModule(
+            '@cat-org/use-less',
+            emptyFunction.thatReturnsArgument,
+            options,
+          )),
+    ),
+  )
+  |> server.run(port, callback);
+
+(() => {
+  if (module.parent) return;
+
+  const {
+    cliOptions: { outDir },
+  } = parseArgv(process.argv);
+
+  if (!outDir)
+    throw new Error('Must use `--out-dir` or `-d` to build the server');
+
+  run({
+    dev: process.env.NODE_ENV !== 'production',
+    dir: outDir,
+    babelOptions: process.argv
+      .slice(2)
+      .filter((argv: string) => !['-w', '--watch'].includes(argv))
+      .join(' '),
+  });
 })();
+
+export default run;

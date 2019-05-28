@@ -11,7 +11,7 @@ import fetch from 'node-fetch';
 import { webpack } from 'webpack';
 import { outputFileSync } from 'output-file-sync';
 
-import runServer from './__ignore__/server';
+import runningServer from './__ignore__/server';
 import * as constants from './__ignore__/constants';
 
 let server: http$Server;
@@ -62,7 +62,7 @@ describe.each`
       outputFileSync.destPaths = [];
       outputFileSync.contents = [];
 
-      const { server: newServer, domain: newDomain } = await runServer(
+      const { server: newServer, domain: newDomain } = await runningServer(
         dev,
         useStatic,
       );

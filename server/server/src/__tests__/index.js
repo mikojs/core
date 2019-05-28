@@ -15,7 +15,7 @@ import Endpoint from 'utils/Endpoint';
 const context = {
   dev: false,
   dir: 'lib',
-  babelOptions: 'src -d lib --verbose',
+  babelOptions: false,
 };
 
 describe('server', () => {
@@ -50,7 +50,11 @@ describe('server', () => {
 
   test('use dev mode', async () => {
     const runningServer =
-      (await server.init({ ...context, dev: true })) |> server.run();
+      (await server.init({
+        ...context,
+        dev: true,
+        babelOptions: 'src -d lib --verbose',
+      })) |> server.run();
 
     await new Promise(resolve => setTimeout(resolve, 100));
 

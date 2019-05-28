@@ -82,10 +82,11 @@ class Npmignore extends Store {
    * @param {Object} ctx - store context
    */
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
-    if (this.storeUseNpm)
-      await this.writeFiles({
-        '.npmignore': template(lerna),
-      });
+    if (!this.storeUseNpm) return;
+
+    await this.writeFiles({
+      '.npmignore': template(lerna),
+    });
   };
 }
 

@@ -3,6 +3,7 @@
 import memoizeOne from 'memoize-one';
 
 import styles from './styles';
+import jest from './jest';
 import configs from './configs';
 import Store from './index';
 
@@ -16,7 +17,7 @@ export default Home;`;
 
 /** react store */
 class React extends Store {
-  +subStores = [styles, configs];
+  +subStores = [styles, jest, configs];
 
   storeUseReact = false;
 

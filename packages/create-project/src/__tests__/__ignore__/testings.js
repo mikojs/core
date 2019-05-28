@@ -128,6 +128,7 @@ const reactServer = {
     ...basicUsage.cmds.slice(10, 11),
     'yarn add react react-dom @cat-org/koa-react',
     'yarn add --dev @babel/preset-react',
+    'yarn add --dev node-fetch',
     ...basicUsage.cmds.slice(11),
   ],
 };
@@ -150,6 +151,7 @@ const reactServerWithCss = {
     'yarn add --dev @babel/preset-react',
     'yarn add @cat-org/use-css',
     'yarn add --dev babel-plugin-css-modules-transform @cat-org/import-css',
+    'yarn add --dev node-fetch',
     ...basicUsage.cmds.slice(11),
   ],
 };
@@ -172,6 +174,7 @@ const reactServerWithLess = {
     'yarn add --dev @babel/preset-react',
     'yarn add @cat-org/use-less',
     'yarn add --dev babel-plugin-css-modules-transform @cat-org/import-css',
+    'yarn add --dev node-fetch',
     ...basicUsage.cmds.slice(11),
   ],
 };
@@ -188,6 +191,7 @@ const graphqlServer = {
     'yarn add @cat-org/server @cat-org/koa-base',
     ...basicUsage.cmds.slice(4, 11),
     'yarn add @cat-org/koa-graphql',
+    'yarn add --dev node-fetch',
     ...basicUsage.cmds.slice(11),
   ],
 };

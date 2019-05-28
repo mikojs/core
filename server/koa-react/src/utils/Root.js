@@ -39,6 +39,7 @@ type storeType = {
   initialProps: {|
     head?: NodeType,
   |},
+  Component: ComponentType<*>,
   Page: $Call<typeof lazy, lazyComponentType, string>,
   lazyPage: lazyComponentType,
 };
@@ -106,6 +107,7 @@ const getPage = (
 
       store.originalUrl = ctx.ctx.originalUrl;
       store.chunkName = chunkName;
+      store.Component = Component;
       store.initialProps = {
         ...initialProps,
         head,

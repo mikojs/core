@@ -35,6 +35,9 @@ export const initStore = () =>
     originalUrl: '',
     chunkName: '',
     initialProps: {},
+    Component: () => {
+      throw new Error('Can not use init Component');
+    },
     Page: () => {
       throw new Error('Can not use init Page');
     },
@@ -108,7 +111,12 @@ export default (
       (await Document.getInitialProps?.({ ctx, isServer: true })) || {};
     const { head: mainHead, ...mainInitialProps } =
       // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-      (await Main.getInitialProps?.({ ctx, isServer: true })) || {};
+      (await Main.getInitialProps?.({
+        ctx,
+        isServer: true,
+        Component: store.Component,
+        pageProps: store.initialProps,
+      })) || {};
 
     // preload scripts
     renderToStaticMarkup(documentHead || null);
@@ -122,6 +130,7 @@ export default (
             ...store.initialProps,
             head: undefined,
           },
+          Component: undefined,
           Page: undefined,
           lazyPage: undefined,
           mainInitialProps,

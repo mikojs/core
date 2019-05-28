@@ -22,6 +22,7 @@ describe('root', () => {
       originalUrl: '/',
       chunkName: 'test',
       initialProps: {},
+      Component: component,
       Page: component,
       lazyPage: async () => {
         throw new Error('Can not use init lazy Page');

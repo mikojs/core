@@ -3,6 +3,7 @@
 import memoizeOne from 'memoize-one';
 import { emptyFunction } from 'fbjs';
 
+import jest from './jest';
 import Store from './index';
 
 const template = `// @flow
@@ -22,6 +23,8 @@ export default {
 
 /** graphql store */
 class Graphql extends Store {
+  +subStores = [jest];
+
   storeUseGraphql = false;
 
   /**
@@ -56,6 +59,8 @@ class Graphql extends Store {
     const { useServer } = ctx;
 
     await this.checkGraphql(useServer);
+
+    ctx.useGraphql = this.storeUseGraphql;
   };
 
   /**

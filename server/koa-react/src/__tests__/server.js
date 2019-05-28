@@ -73,15 +73,15 @@ describe.each`
 
     test.each`
       urlPath                       | chunkNames                                 | head                      | main                          | initialProps
-      ${'/'}                        | ${['pages/index']}                         | ${constants.head}         | ${'/'}                        | ${{ path: '/', head: null }}
-      ${'/?key=value'}              | ${['pages/index']}                         | ${constants.head}         | ${'/'}                        | ${{ path: '/', head: null }}
-      ${'/otherPath'}               | ${['pages/otherPath']}                     | ${constants.head}         | ${'/otherPath'}               | ${{ path: '/otherPath', head: null }}
-      ${'/otherFolder/otherFolder'} | ${['pages/otherFolder/otherFolder/index']} | ${constants.head}         | ${'/otherFolder/otherFolder'} | ${{ path: '/otherFolder/otherFolder', head: null }}
-      ${'/custom/'}                 | ${['pages/custom/index']}                  | ${''}                     | ${'test data'}                | ${constants.initialProps}
-      ${'/error'}                   | ${['pages/error']}                         | ${constants.head}         | ${constants.errorMain}        | ${constants.initialProps}
-      ${'/custom/error'}            | ${['pages/custom/error']}                  | ${''}                     | ${'custom error'}             | ${constants.initialProps}
-      ${'/notFound'}                | ${['pages/notFound']}                      | ${constants.notFoundHead} | ${constants.notFoundMain}     | ${constants.initialProps}
-      ${'/custom/notFound'}         | ${['pages/custom/notFound']}               | ${''}                     | ${'Page not found'}           | ${constants.initialProps}
+      ${'/'}                        | ${['pages/index']}                         | ${constants.head}         | ${'/'}                        | ${{ path: '/' }}
+      ${'/?key=value'}              | ${['pages/index']}                         | ${constants.head}         | ${'/'}                        | ${{ path: '/' }}
+      ${'/otherPath'}               | ${['pages/otherPath']}                     | ${constants.head}         | ${'/otherPath'}               | ${{ path: '/otherPath' }}
+      ${'/otherFolder/otherFolder'} | ${['pages/otherFolder/otherFolder/index']} | ${constants.head}         | ${'/otherFolder/otherFolder'} | ${{ path: '/otherFolder/otherFolder' }}
+      ${'/custom/'}                 | ${['pages/custom/index']}                  | ${''}                     | ${'test data'}                | ${{}}
+      ${'/error'}                   | ${['pages/error']}                         | ${constants.head}         | ${constants.errorMain}        | ${{}}
+      ${'/custom/error'}            | ${['pages/custom/error']}                  | ${''}                     | ${'custom error'}             | ${{}}
+      ${'/notFound'}                | ${['pages/notFound']}                      | ${constants.notFoundHead} | ${constants.notFoundMain}     | ${{}}
+      ${'/custom/notFound'}         | ${['pages/custom/notFound']}               | ${''}                     | ${'Page not found'}           | ${{}}
     `(
       'get $urlPath',
       async ({
@@ -95,7 +95,7 @@ describe.each`
         chunkNames: $ReadOnlyArray<string>,
         head: string,
         main: string,
-        initialProps: {| path?: string, head: null |},
+        initialProps: {| path?: string |},
       |}) => {
         const isCustom = /custom/.test(urlPath);
         const result = await request(`${domain}${urlPath}`);

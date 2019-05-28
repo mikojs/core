@@ -88,20 +88,8 @@ export default (
     const Document = require(templates.document);
     const Main = require(templates.main);
     const ErrorComponent = require(templates.error);
-    const { head: documentHead, ...documentInitialProps } =
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-      (await Document.getInitialProps?.({ ctx, isServer: true })) || {};
-    const { head: mainHead, ...mainInitialProps } =
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-      (await Main.getInitialProps?.({ ctx, isServer: true })) || {};
-    const hash = crypto
-      .createHmac('sha256', '@cat-org/koa-react')
-      .digest('hex');
 
-    // preload document and main
-    renderToStaticMarkup(documentHead || null);
-    renderToStaticMarkup(mainHead || null);
-
+    // [start] preload
     // preload Page
     const store = initStore();
 
@@ -114,11 +102,26 @@ export default (
 
     store.Page = lazy(async () => Page, store.chunkName);
 
+    // preload Document and Main
+    const { head: documentHead, ...documentInitialProps } =
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      (await Document.getInitialProps?.({ ctx, isServer: true })) || {};
+    const { head: mainHead, ...mainInitialProps } =
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      (await Main.getInitialProps?.({ ctx, isServer: true })) || {};
+
     // preload scripts
+    renderToStaticMarkup(documentHead || null);
+    renderToStaticMarkup(mainHead || null);
+    renderToStaticMarkup(store.initialProps.head || null);
     renderToStaticMarkup(
       <Helmet>
         <script>{`var __CAT_DATA__ = ${JSON.stringify({
           ...store,
+          initialProps: {
+            ...store.initialProps,
+            head: undefined,
+          },
           Page: null,
           lazyPage: null,
           mainInitialProps,
@@ -127,8 +130,12 @@ export default (
         <script src={clientUrl} async />
       </Helmet>,
     );
+    // [end] preload
 
     // make document scream
+    const hash = crypto
+      .createHmac('sha256', '@cat-org/koa-react')
+      .digest('hex');
     const [upperDocument, lowerDocument] = renderToStaticMarkup(
       <Document {...documentInitialProps} helmet={Helmet.renderStatic()}>
         <main id="__CAT__">{hash}</main>

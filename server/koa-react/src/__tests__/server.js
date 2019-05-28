@@ -78,7 +78,8 @@ describe.each`
         chunkName: string,
         head: string,
         main: string,
-        initialProps: {| path?: string |},
+        initialProps: {},
+        mainInitialProps: {},
       ) => {
         const isCustom = /custom/.test(urlPath);
         const result = await request(`${domain}${urlPath}`);
@@ -108,11 +109,7 @@ describe.each`
                   : urlPath,
                 chunkName,
                 initialProps,
-                mainInitialProps: isCustom
-                  ? {
-                      value: 'test data',
-                    }
-                  : {},
+                mainInitialProps,
               },
             )};</script>`,
             `<script data-react-helmet="true" src="${publicPath}${

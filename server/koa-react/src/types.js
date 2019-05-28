@@ -1,11 +1,6 @@
 // @flow
 
-export type errorPropsType = {|
-  error: Error,
-  errorInfo: {|
-    componentStack: string,
-  |},
-|};
+import { type ComponentType } from 'react';
 
 export type ctxType<T = {}> = {|
   ctx: {|
@@ -19,4 +14,16 @@ export type ctxType<T = {}> = {|
     protocol: string,
   |} & T,
   isServer: boolean,
+|};
+
+export type mainCtxType<P = {}, T = {}> = ctxType<T> & {|
+  Component: ComponentType<P>,
+  pageProps: P,
+|};
+
+export type errorPropsType = {|
+  error: Error,
+  errorInfo: {|
+    componentStack: string,
+  |},
 |};

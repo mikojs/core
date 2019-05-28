@@ -122,8 +122,8 @@ export default (
             ...store.initialProps,
             head: undefined,
           },
-          Page: null,
-          lazyPage: null,
+          Page: undefined,
+          lazyPage: undefined,
           mainInitialProps,
         })};`}</script>
         <script src={commonsUrl} async />

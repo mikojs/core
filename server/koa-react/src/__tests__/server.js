@@ -125,8 +125,6 @@ describe.each`
                   : urlPath,
                 chunkName: chunkNames[0],
                 initialProps,
-                Page: null,
-                lazyPage: null,
                 mainInitialProps: isCustom
                   ? {
                       value: 'test data',

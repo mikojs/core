@@ -75,13 +75,21 @@ const lint = {
     globals: {
       __CAT_DATA__: true,
     },
+    overrides: [
+      {
+        files: ['packages/create-project/src/__tests__/__ignore__/**'],
+        rules: {
+          'import/no-extraneous-dependencies': 'off',
+          // TODO: component should be ignore
+          'require-jsdoc': 'off',
+        },
+      },
+    ],
   }),
   ignore: ignore => [
     ...ignore,
     // ignore for @cat-org/eslint-config-cat testing
     'packages/eslint-config-cat/src/__tests__/__ignore__',
-    // ignore for @cat-org/create-project testing
-    'packages/create-project/src/__tests__/__ignore__/**/src/pages/**',
   ],
 };
 

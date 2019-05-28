@@ -106,6 +106,10 @@ export default (
     store.Page = lazy(async () => Page, store.chunkName);
 
     // preload Document and Main
+    const initialProps = {
+      ...store.initialProps,
+      head: undefined,
+    };
     const { head: documentHead, ...documentInitialProps } =
       // $FlowFixMe Flow does not yet support method or property calls in optional chains.
       (await Document.getInitialProps?.({ ctx, isServer: true })) || {};
@@ -115,7 +119,7 @@ export default (
         ctx,
         isServer: true,
         Component: store.Component,
-        pageProps: store.initialProps,
+        pageProps: initialProps,
       })) || {};
 
     // preload scripts
@@ -126,10 +130,7 @@ export default (
       <Helmet>
         <script>{`var __CAT_DATA__ = ${JSON.stringify({
           ...store,
-          initialProps: {
-            ...store.initialProps,
-            head: undefined,
-          },
+          initialProps,
           Component: undefined,
           Page: undefined,
           lazyPage: undefined,

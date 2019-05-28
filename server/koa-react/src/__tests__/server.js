@@ -12,7 +12,7 @@ import { webpack } from 'webpack';
 import { outputFileSync } from 'output-file-sync';
 
 import runningServer from './__ignore__/server';
-import * as constants from './__ignore__/constants';
+import testings from './__ignore__/testings';
 
 let server: http$Server;
 let domain: string;
@@ -71,32 +71,15 @@ describe.each`
       domain = newDomain;
     });
 
-    test.each`
-      urlPath                       | chunkNames                                 | head                      | main                          | initialProps
-      ${'/'}                        | ${['pages/index']}                         | ${constants.head}         | ${'/'}                        | ${{ path: '/' }}
-      ${'/?key=value'}              | ${['pages/index']}                         | ${constants.head}         | ${'/'}                        | ${{ path: '/' }}
-      ${'/otherPath'}               | ${['pages/otherPath']}                     | ${constants.head}         | ${'/otherPath'}               | ${{ path: '/otherPath' }}
-      ${'/otherFolder/otherFolder'} | ${['pages/otherFolder/otherFolder/index']} | ${constants.head}         | ${'/otherFolder/otherFolder'} | ${{ path: '/otherFolder/otherFolder' }}
-      ${'/custom/'}                 | ${['pages/custom/index']}                  | ${''}                     | ${'test data'}                | ${{}}
-      ${'/error'}                   | ${['pages/error']}                         | ${constants.head}         | ${constants.errorMain}        | ${{}}
-      ${'/custom/error'}            | ${['pages/custom/error']}                  | ${''}                     | ${'custom error'}             | ${{}}
-      ${'/notFound'}                | ${['pages/notFound']}                      | ${constants.notFoundHead} | ${constants.notFoundMain}     | ${{}}
-      ${'/custom/notFound'}         | ${['pages/custom/notFound']}               | ${''}                     | ${'Page not found'}           | ${{}}
-    `(
-      'get $urlPath',
-      async ({
-        urlPath,
-        chunkNames,
-        head,
-        main,
-        initialProps,
-      }: {|
+    test.each(testings)(
+      'get %s',
+      async (
         urlPath: string,
-        chunkNames: $ReadOnlyArray<string>,
+        chunkName: string,
         head: string,
         main: string,
         initialProps: {| path?: string |},
-      |}) => {
+      ) => {
         const isCustom = /custom/.test(urlPath);
         const result = await request(`${domain}${urlPath}`);
 
@@ -114,16 +97,16 @@ describe.each`
             `<div>${main}</div>`,
             /error/.test(urlPath)
               ? ''
-              : `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
-                  chunkNames,
-                )};</script>`,
+              : `<script>var __CHUNKS_NAMES__ = ${JSON.stringify([
+                  chunkName,
+                ])};</script>`,
             '</main>',
             `<script data-react-helmet="true">var __CAT_DATA__ = ${JSON.stringify(
               {
                 originalUrl: isStatic
                   ? urlPath.replace(/notFound/, '*').replace(/\?.*$/, '')
                   : urlPath,
-                chunkName: chunkNames[0],
+                chunkName,
                 initialProps,
                 mainInitialProps: isCustom
                   ? {

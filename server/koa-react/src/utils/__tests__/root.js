@@ -15,15 +15,15 @@ describe('root', () => {
   test('catch error', () => {
     /* eslint-disable require-jsdoc, flowtype/require-return-type */
     // TODO component should be ignored
-    const component = () => <div>render</div>;
+    const Component = () => <div>render</div>;
     /* eslint-enable require-jsdoc, flowtype/require-return-type */
 
     Root.preload({
       originalUrl: '/',
       chunkName: 'test',
       initialProps: {},
-      Component: component,
-      Page: component,
+      Component,
+      Page: Component,
       lazyPage: async () => {
         throw new Error('Can not use init lazy Page');
       },
@@ -41,7 +41,7 @@ describe('root', () => {
       </Router>,
     );
 
-    wrapper.find(component).simulateError(new Error('test error'));
+    wrapper.find(Component).simulateError(new Error('test error'));
     expect(
       wrapper.contains(<p style={{ color: 'red' }}>test error</p>),
     ).toBeTruthy();

@@ -98,16 +98,14 @@ const run = async (
   if (!outDir)
     throw new Error('Must use `--out-dir` or `-d` to build the server');
 
-  const context = {
+  run({
     dev: process.env.NODE_ENV !== 'production',
     dir: outDir,
     babelOptions: process.argv
       .slice(2)
       .filter((argv: string) => !['-w', '--watch'].includes(argv))
       .join(' '),
-  };
-
-  run(context);
+  });
 })();
 
 export default run;

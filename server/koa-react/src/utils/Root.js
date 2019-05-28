@@ -39,6 +39,7 @@ type storeType = {
   initialProps: {|
     head?: NodeType,
   |},
+  Component: ComponentType<*>,
   Page: $Call<typeof lazy, lazyComponentType, string>,
   lazyPage: lazyComponentType,
 };
@@ -102,12 +103,14 @@ const getPage = (
       // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
       const Page = () => <Component {...initialProps} />;
 
-      renderToStaticMarkup(head || null);
+      if (!ctx.isServer) renderToStaticMarkup(head || null);
+
       store.originalUrl = ctx.ctx.originalUrl;
       store.chunkName = chunkName;
+      store.Component = Component;
       store.initialProps = {
         ...initialProps,
-        head: ctx.isServer ? null : head,
+        head,
       };
 
       return { default: Page };

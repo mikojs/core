@@ -35,6 +35,9 @@ export const initStore = () =>
     originalUrl: '',
     chunkName: '',
     initialProps: {},
+    Component: () => {
+      throw new Error('Can not use init Component');
+    },
     Page: () => {
       throw new Error('Can not use init Page');
     },
@@ -88,20 +91,8 @@ export default (
     const Document = require(templates.document);
     const Main = require(templates.main);
     const ErrorComponent = require(templates.error);
-    const { head: documentHead, ...documentInitialProps } =
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-      (await Document.getInitialProps?.({ ctx, isServer: true })) || {};
-    const { head: mainHead, ...mainInitialProps } =
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-      (await Main.getInitialProps?.({ ctx, isServer: true })) || {};
-    const hash = crypto
-      .createHmac('sha256', '@cat-org/koa-react')
-      .digest('hex');
 
-    // preload document and main
-    renderToStaticMarkup(documentHead || null);
-    renderToStaticMarkup(mainHead || null);
-
+    // [start] preload
     // preload Page
     const store = initStore();
 
@@ -114,21 +105,47 @@ export default (
 
     store.Page = lazy(async () => Page, store.chunkName);
 
+    // preload Document and Main
+    const initialProps = {
+      ...store.initialProps,
+      head: undefined,
+    };
+    const { head: documentHead, ...documentInitialProps } =
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      (await Document.getInitialProps?.({ ctx, isServer: true })) || {};
+    const { head: mainHead, ...mainInitialProps } =
+      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      (await Main.getInitialProps?.({
+        ctx,
+        isServer: true,
+        Component: store.Component,
+        pageProps: initialProps,
+      })) || {};
+
     // preload scripts
+    renderToStaticMarkup(documentHead || null);
+    renderToStaticMarkup(mainHead || null);
+    renderToStaticMarkup(store.initialProps.head || null);
     renderToStaticMarkup(
       <Helmet>
         <script>{`var __CAT_DATA__ = ${JSON.stringify({
           ...store,
-          Page: null,
-          lazyPage: null,
+          initialProps,
+          Component: undefined,
+          Page: undefined,
+          lazyPage: undefined,
           mainInitialProps,
         })};`}</script>
         <script src={commonsUrl} async />
         <script src={clientUrl} async />
       </Helmet>,
     );
+    // [end] preload
 
     // make document scream
+    const hash = crypto
+      .createHmac('sha256', '@cat-org/koa-react')
+      .digest('hex');
     const [upperDocument, lowerDocument] = renderToStaticMarkup(
       <Document {...documentInitialProps} helmet={Helmet.renderStatic()}>
         <main id="__CAT__">{hash}</main>

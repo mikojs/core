@@ -12,7 +12,7 @@ import { webpack } from 'webpack';
 import { outputFileSync } from 'output-file-sync';
 
 import runningServer from './__ignore__/server';
-import * as constants from './__ignore__/constants';
+import testings from './__ignore__/testings';
 
 let server: http$Server;
 let domain: string;
@@ -71,32 +71,16 @@ describe.each`
       domain = newDomain;
     });
 
-    test.each`
-      urlPath                       | chunkNames                                 | head                      | main                          | initialProps
-      ${'/'}                        | ${['pages/index']}                         | ${constants.head}         | ${'/'}                        | ${{ path: '/', head: null }}
-      ${'/?key=value'}              | ${['pages/index']}                         | ${constants.head}         | ${'/'}                        | ${{ path: '/', head: null }}
-      ${'/otherPath'}               | ${['pages/otherPath']}                     | ${constants.head}         | ${'/otherPath'}               | ${{ path: '/otherPath', head: null }}
-      ${'/otherFolder/otherFolder'} | ${['pages/otherFolder/otherFolder/index']} | ${constants.head}         | ${'/otherFolder/otherFolder'} | ${{ path: '/otherFolder/otherFolder', head: null }}
-      ${'/custom/'}                 | ${['pages/custom/index']}                  | ${''}                     | ${'test data'}                | ${constants.initialProps}
-      ${'/error'}                   | ${['pages/error']}                         | ${constants.head}         | ${constants.errorMain}        | ${constants.initialProps}
-      ${'/custom/error'}            | ${['pages/custom/error']}                  | ${''}                     | ${'custom error'}             | ${constants.initialProps}
-      ${'/notFound'}                | ${['pages/notFound']}                      | ${constants.notFoundHead} | ${constants.notFoundMain}     | ${constants.initialProps}
-      ${'/custom/notFound'}         | ${['pages/custom/notFound']}               | ${''}                     | ${'Page not found'}           | ${constants.initialProps}
-    `(
-      'get $urlPath',
-      async ({
-        urlPath,
-        chunkNames,
-        head,
-        main,
-        initialProps,
-      }: {|
+    test.each(testings)(
+      'get %s',
+      async (
         urlPath: string,
-        chunkNames: $ReadOnlyArray<string>,
+        chunkName: string,
         head: string,
         main: string,
-        initialProps: {| path?: string, head: null |},
-      |}) => {
+        initialProps: {},
+        mainInitialProps: {},
+      ) => {
         const isCustom = /custom/.test(urlPath);
         const result = await request(`${domain}${urlPath}`);
 
@@ -114,24 +98,18 @@ describe.each`
             `<div>${main}</div>`,
             /error/.test(urlPath)
               ? ''
-              : `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
-                  chunkNames,
-                )};</script>`,
+              : `<script>var __CHUNKS_NAMES__ = ${JSON.stringify([
+                  chunkName,
+                ])};</script>`,
             '</main>',
             `<script data-react-helmet="true">var __CAT_DATA__ = ${JSON.stringify(
               {
                 originalUrl: isStatic
                   ? urlPath.replace(/notFound/, '*').replace(/\?.*$/, '')
                   : urlPath,
-                chunkName: chunkNames[0],
+                chunkName,
                 initialProps,
-                Page: null,
-                lazyPage: null,
-                mainInitialProps: isCustom
-                  ? {
-                      value: 'test data',
-                    }
-                  : {},
+                mainInitialProps,
               },
             )};</script>`,
             `<script data-react-helmet="true" src="${publicPath}${

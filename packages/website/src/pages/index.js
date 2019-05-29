@@ -2,8 +2,25 @@
 /* eslint-disable require-jsdoc */
 // TODO component should be ignored
 
-import React from 'react';
+import React, { type Node as NodeType } from 'react';
+import { graphql } from 'react-relay';
 
-const Home = () => <div>@cat-org/create-project</div>;
+import contexts from './.templates/contexts';
 
-export default Home;
+const { QueryPropsContext } = contexts;
+
+export default class Home extends React.PureComponent<*> {
+  static query = graphql`
+    query pages_homeQuery {
+      version
+    }
+  `;
+
+  render(): NodeType {
+    return (
+      <QueryPropsContext.Consumer>
+        {(props: mixed) => <div>{JSON.stringify(props)}</div>}
+      </QueryPropsContext.Consumer>
+    );
+  }
+}

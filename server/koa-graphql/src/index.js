@@ -1,13 +1,19 @@
 // @flow
 
+import path from 'path';
+
+import { type Middleware as koaMiddlewareType } from 'koa';
+import graphql, {
+  type OptionsData as koaGraphqlOptionsType,
+} from 'koa-graphql';
 import {
   makeExecutableSchema,
   type makeExecutableSchemaOptionsType,
 } from 'graphql-tools';
-import graphql, {
-  type OptionsData as koaGraphqlOptionsType,
-} from 'koa-graphql';
-import { type Middleware as koaMiddlewareType } from 'koa';
+import execa from 'execa';
+import { printSchema } from 'graphql/utilities';
+import findCacheDir from 'find-cache-dir';
+import outputFileSync from 'output-file-sync';
 
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
@@ -19,7 +25,12 @@ type buildSchemasType = {
 
 export default (
   folderPath: string,
-  options?: koaGraphqlOptionsType,
+  {
+    relay,
+  }: {|
+    relay?: string,
+  |} = {},
+  koaGraphqlOptions?: koaGraphqlOptionsType,
   makeExecutableSchemaOptions?: makeExecutableSchemaOptionsType,
 ): koaMiddlewareType => {
   const { typeDefs, resolvers } = d3DirTree(folderPath, {
@@ -57,12 +68,26 @@ export default (
       },
     );
 
+  const schema = makeExecutableSchema({
+    ...makeExecutableSchemaOptions,
+    typeDefs,
+    resolvers,
+  });
+
+  if (relay) {
+    const schemaPath = path.resolve(
+      findCacheDir({ name: 'koa-graphql' }),
+      './schema.graphql',
+    );
+
+    outputFileSync(schemaPath, printSchema(schema));
+    execa.shell(`relay-compiler ${relay} --schema ${schemaPath}`, {
+      stdio: 'inherit',
+    });
+  }
+
   return graphql({
-    ...options,
-    schema: makeExecutableSchema({
-      ...makeExecutableSchemaOptions,
-      typeDefs,
-      resolvers,
-    }),
+    ...koaGraphqlOptions,
+    schema,
   });
 };

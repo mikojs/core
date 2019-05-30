@@ -1,5 +1,56 @@
 # CHANGELOG
 
+## 1.0.0-beta.21 (2019-05-30)
+
+#### :boom: Breaking Change
+
+- `create-project`
+  - [#224](https://github.com/cat-org/core/pull/224) (@cat-org/koa-base, @cat-org/react) Rename @cat-org/default-middleware, @cat-org/react-middleware ([@HsuTing](https://github.com/HsuTing))
+  - [#223](https://github.com/cat-org/core/pull/223) (@cat-org/create-project) Remove create-project in devDependencies ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#218](https://github.com/cat-org/core/pull/218) (@cat-org/babel-plugin-transform-flow) Rewrite packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- Other
+  - [#239](https://github.com/cat-org/core/pull/239) (@cat-org/koa-react) Add BROWSER and ProgressBarPlugin ([@HsuTing](https://github.com/HsuTing))
+  - [#235](https://github.com/cat-org/core/pull/235) (@cat-org/koa-react) Add Component to the argument of the getInitialProps in Main Component ([@HsuTing](https://github.com/HsuTing))
+  - [#228](https://github.com/cat-org/core/pull/228) (@cat-org/koa-react) can determine building html or not ([@HsuTing](https://github.com/HsuTing))
+  - [#227](https://github.com/cat-org/core/pull/227) (@cat-org/server) Support command with server ([@HsuTing](https://github.com/HsuTing))
+  - [#226](https://github.com/cat-org/core/pull/226) (@cat-org/server) Add graphql ([@HsuTing](https://github.com/HsuTing))
+  - [#225](https://github.com/cat-org/core/pull/225) (@cat-org/koa-graphql) Add new package ([@HsuTing](https://github.com/HsuTing))
+  - [#214](https://github.com/cat-org/core/pull/214) (@cat-org/babel-preset-base) Add declare ([@HsuTing](https://github.com/HsuTing))
+  - [#218](https://github.com/cat-org/core/pull/218) (@cat-org/babel-plugin-transform-flow) Rewrite packages ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#238](https://github.com/cat-org/core/pull/238) (@cat-org/configs) Add relay ([@HsuTing](https://github.com/HsuTing))
+  - [#237](https://github.com/cat-org/core/pull/237) (@cat-org/configs) Can lint dot folders and files ([@HsuTing](https://github.com/HsuTing))
+  - [#222](https://github.com/cat-org/core/pull/222) (@cat-org/configs) Add server to configs ([@HsuTing](https://github.com/HsuTing))
+  - [#219](https://github.com/cat-org/core/pull/219) (@cat-org/babel-plugin-import-css) can import css in nodejs and browser ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#234](https://github.com/cat-org/core/pull/234) (@cat-org/create-project) Add jest ([@HsuTing](https://github.com/HsuTing))
+  - [#231](https://github.com/cat-org/core/pull/231) (@cat-org/create-project) Add version ([@HsuTing](https://github.com/HsuTing))
+  - [#229](https://github.com/cat-org/core/pull/229) (@cat-org/create-project) Add graphql ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `create-project`, `eslint-config-cat`
+  - [#221](https://github.com/cat-org/core/pull/221) (@cat-org/create-project) Fix error with configsEnv ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#220](https://github.com/cat-org/core/pull/220) (@cat-org/babel-preset-base) Fix options ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `create-project`, `website`
+  - [#233](https://github.com/cat-org/core/pull/233) (@cat-org/website) Add testing ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `website`
+  - [#232](https://github.com/cat-org/core/pull/232) (@cat-org/website) Add private pacakge ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#230](https://github.com/cat-org/core/pull/230) (@cat-org/create-project) Rename testings ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.20 (2019-05-19)
 
 #### :rocket: New Feature

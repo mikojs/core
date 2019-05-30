@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/koa-react",
   "repository": "https://github.com/cat-org/core/tree/master/server/koa-react",
-  "version": "1.0.0-beta.20",
+  "version": "1.0.0-beta.21",
   "main": "./lib/index.js",
   "scripts": {
     "copy-test-server": "rm -rf ./src/lib && cp -r ./src/__tests__ ./src/lib",

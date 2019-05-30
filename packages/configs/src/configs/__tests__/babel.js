@@ -39,6 +39,7 @@ describe('babel', () => {
     ${['react']} | ${['@cat-org/base', '@babel/react']} | ${[]}
     ${['css']}   | ${['@cat-org/base']}                 | ${cssPlugins('.css')}
     ${['less']}  | ${['@cat-org/base']}                 | ${cssPlugins('.less')}
+    ${['relay']} | ${['@cat-org/base']}                 | ${['relay']}
   `(
     'run with configsEnv = $configsEnv',
     ({

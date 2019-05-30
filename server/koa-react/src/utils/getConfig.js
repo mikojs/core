@@ -2,7 +2,9 @@
 
 import path from 'path';
 
+import webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
+import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 
 import { type dataType } from './getData';
 
@@ -54,6 +56,12 @@ export default (
       },
     },
   },
+  plugins: [
+    new webpack.EnvironmentPlugin({
+      BROWSER: true,
+    }),
+    new ProgressBarPlugin(),
+  ],
   module: {
     rules: [
       {

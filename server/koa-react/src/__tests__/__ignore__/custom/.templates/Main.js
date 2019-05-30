@@ -1,4 +1,6 @@
 // @flow
+/* eslint-disable require-jsdoc */
+// TODO component should be ignored
 
 import React, { type Node as NodeType } from 'react';
 

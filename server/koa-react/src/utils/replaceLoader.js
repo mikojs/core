@@ -1,5 +1,7 @@
 // @flow
 
+import { invariant } from 'fbjs';
+
 import { getOptions } from 'loader-utils';
 
 /**
@@ -54,7 +56,7 @@ export default function(source: string): string {
       throw new Error('Replace type error');
   }
 
-  if (newSource === source) throw new Error(`Replace failed: ${type}`);
+  invariant(newSource !== source, `Replace failed: ${type}`);
 
   return newSource;
 }

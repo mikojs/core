@@ -39,13 +39,10 @@ export default async (
     useStatic = false,
   }: optionsType = {},
 ): Promise<koaMiddlewareType> => {
-  if (!fs.existsSync(folderPath))
-    throw new Error(
-      `\`${path.relative(
-        process.cwd(),
-        folderPath,
-      )}\` folder can not be found.`,
-    );
+  invariant(
+    fs.existsSync(folderPath),
+    `\`${path.relative(process.cwd(), folderPath)}\` folder can not be found.`,
+  );
 
   const data = getData(folderPath, redirect, basename);
   const config = configFunc(

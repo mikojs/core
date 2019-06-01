@@ -1,6 +1,6 @@
 // @flow
 
-import { emptyFunction } from 'fbjs';
+import { invariant, emptyFunction } from 'fbjs';
 import { type RuleSetRule as RuleSetRuleType } from 'webpack';
 
 import { type optionsType, type configType } from '@cat-org/koa-react';
@@ -20,10 +20,10 @@ export default ({
       ({ test }: RuleSetRuleType) => test?.toString() === /\.css$/.toString(),
     );
 
-    if (!cssLoader || !(cssLoader.use instanceof Array))
-      throw new Error(
-        'You should use `@cat-org/use-css` before using `@cat-org/use-less`',
-      );
+    invariant(
+      cssLoader && cssLoader.use instanceof Array,
+      'You should use `@cat-org/use-css` before using `@cat-org/use-less`',
+    );
 
     cssLoader.test = /\.(css|less)$/;
     cssLoader.use.push({

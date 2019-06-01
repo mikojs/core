@@ -10,7 +10,7 @@
 import path from 'path';
 
 import { type Context as koaContextType } from 'koa';
-import { emptyFunction } from 'fbjs';
+import { invariant, emptyFunction } from 'fbjs';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 
@@ -95,8 +95,7 @@ const run = async (
     cliOptions: { outDir },
   } = parseArgv(process.argv);
 
-  if (!outDir)
-    throw new Error('Must use `--out-dir` or `-d` to build the server');
+  invariant(outDir, 'Must use `--out-dir` or `-d` to build the server');
 
   run({
     dev: process.env.NODE_ENV !== 'production',

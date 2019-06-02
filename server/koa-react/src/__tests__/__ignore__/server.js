@@ -5,7 +5,7 @@ import path from 'path';
 import Koa from 'koa';
 import getPort from 'get-port';
 
-import react, { buildStatic } from '../../index';
+import react from '../../index';
 
 import { type configType } from 'utils/buildJs';
 
@@ -67,12 +67,14 @@ export default async (
       const server = app.listen(port, async () => {
         const { log } = console;
 
+        /** TODO
         if (!dev && useStatic)
           await buildStatic(server, {
             port,
             folderPath,
             buildHtml: true,
           });
+          */
 
         log(`Run server at port: ${port}`);
         resolve(server);

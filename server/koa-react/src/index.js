@@ -11,11 +11,9 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 
 import getData, { type redirectType } from './utils/getData';
 import buildJs, { type configType as buildConfigType } from './utils/buildJs';
-import prevBuildStatic from './utils/buildStatic';
+import buildStatic from './utils/buildStatic';
 import getConfig from './utils/getConfig';
 import server from './utils/server';
-
-export { buildStatic } from './utils/buildStatic';
 
 export type configType = buildConfigType;
 
@@ -85,7 +83,7 @@ export default async (
         urls[`${key}Url`] = `${publicPath}${chunkNames[name]}`;
     });
 
-    if (useStatic) prevBuildStatic(data, urls.commonsUrl);
+    if (useStatic) buildStatic(data, urls.commonsUrl);
   }
 
   return compose([

@@ -32,6 +32,32 @@ const defaultMiddleware = async (
   await next();
 };
 
+/** defaultReact */
+class DefaultReact {
+  /**
+   * @example
+   * new DefaultReact('folder path')
+   *
+   * @param {string} foldePath - folder path
+   * @param {Object} options - koa-react options
+   */
+  constructor(foldePath: string, options?: {}) {}
+
+  /**
+   * @example
+   * defaultReact.buildJs()
+   */
+  buildJs = emptyFunction;
+
+  /**
+   * @example
+   * defaultReact.middleware()
+   *
+   * @return {Function} - koa-react middleware
+   */
+  middleware = () => defaultMiddleware;
+}
+
 /**
  * @example
  * run(context)
@@ -46,47 +72,50 @@ const run = async (
   context: serverContextType,
   port?: number = parseInt(process.env.PORT || 8000, 10),
   callback?: () => void,
-) =>
-  (await server.init(context))
-  |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
-  |> (undefined
-    |> server.start
-    |> ('/graphql'
-      |> server.all
-      |> server.use(
+): Promise<http$Server> => {
+  const react = new (loadModule('@cat-org/koa-react', DefaultReact))(
+    path.resolve(context.dir, './pages'),
+    { dev: context.dev }
+      |> ((options: {}) =>
         loadModule(
-          '@cat-org/koa-graphql',
-          defaultMiddleware,
-          path.resolve(context.dir, './graphql'),
-          {
-            graphiql: context.dev,
-            pretty: context.dev,
-          },
-        ),
-      )
+          '@cat-org/use-css',
+          emptyFunction.thatReturnsArgument,
+          options,
+        ))
+      |> ((options: {}) =>
+        loadModule(
+          '@cat-org/use-less',
+          emptyFunction.thatReturnsArgument,
+          options,
+        )),
+  );
+
+  if (!context.dev) await react.buildJs();
+
+  return (
+    (await server.init(context))
+    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
+    |> (undefined
+      |> server.start
+      |> ('/graphql'
+        |> server.all
+        |> server.use(
+          loadModule(
+            '@cat-org/koa-graphql',
+            defaultMiddleware,
+            path.resolve(context.dir, './graphql'),
+            {
+              graphiql: context.dev,
+              pretty: context.dev,
+            },
+          ),
+        )
+        |> server.end)
       |> server.end)
-    |> server.end)
-  |> server.use(
-    await loadModule(
-      '@cat-org/koa-react',
-      defaultMiddleware,
-      path.resolve(context.dir, './pages'),
-      { dev: context.dev }
-        |> ((options: {}) =>
-          loadModule(
-            '@cat-org/use-css',
-            emptyFunction.thatReturnsArgument,
-            options,
-          ))
-        |> ((options: {}) =>
-          loadModule(
-            '@cat-org/use-less',
-            emptyFunction.thatReturnsArgument,
-            options,
-          )),
-    ),
-  )
-  |> server.run(port, callback);
+    |> server.use(await react.middleware())
+    |> server.run(port, callback)
+  );
+};
 
 (() => {
   if (module.parent) return;

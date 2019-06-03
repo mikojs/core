@@ -1,16 +1,8 @@
 // @flow
 
-import webpack, { type WebpackOptions as WebpackOptionsType } from 'webpack';
+import webpack from 'webpack';
 
-export type configType = {
-  config: WebpackOptionsType,
-  devMiddleware: {|
-    stats?: $PropertyType<
-      $NonMaybeType<$PropertyType<WebpackOptionsType, 'devServer'>>,
-      'stats',
-    >,
-  |},
-};
+import { type configType } from '../index';
 
 export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
   new Promise<{

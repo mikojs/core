@@ -2,7 +2,7 @@
 
 import webpack, { type WebpackOptions as WebpackOptionsType } from 'webpack';
 
-export type configType = {
+export type optionsType = {
   config: WebpackOptionsType,
   devMiddleware: {|
     stats?: $PropertyType<
@@ -12,7 +12,7 @@ export type configType = {
   |},
 };
 
-export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
+export default ({ config, devMiddleware: { stats: logStats } }: optionsType) =>
   new Promise<{
     [string]: string,
   }>((resolve, reject) => {
@@ -27,7 +27,7 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
           hasErrors: () => boolean,
           toString: (
             stats: $PropertyType<
-              $PropertyType<configType, 'devMiddleware'>,
+              $PropertyType<optionsType, 'devMiddleware'>,
               'stats',
             >,
           ) => string,

@@ -10,33 +10,41 @@ import { invariant, emptyFunction } from 'fbjs';
 import { handleUnhandledRejection } from '@cat-org/utils';
 
 import getData, { type redirectType } from './utils/getData';
-import buildJs, { type configType as buildConfigType } from './utils/buildJs';
-import buildStatic from './utils/buildStatic';
+import buildJs, {
+  type optionsType as buildJsOptionsType,
+} from './utils/buildJs';
+import buildStatic, {
+  type optionsType as buildStaticOptionsType,
+} from './utils/buildStatic';
 import getConfig from './utils/getConfig';
 import server from './utils/server';
 
-export type configType = buildConfigType;
+export type configType = buildJsOptionsType;
 
 export type optionsType = {|
   dev?: boolean,
-  config?: (config: buildConfigType, dev: boolean) => buildConfigType,
+  config?: (config: buildJsOptionsType, dev: boolean) => buildJsOptionsType,
   redirect?: redirectType,
   basename?: string,
-  useStatic?: boolean,
 |};
 
 handleUnhandledRejection();
 
-export default async (
+const urls = {};
+
+export default (
   folderPath: string,
   {
     dev = true,
     config: configFunc = emptyFunction.thatReturnsArgument,
     redirect = emptyFunction.thatReturnsArgument,
     basename,
-    useStatic = false,
   }: optionsType = {},
-): Promise<koaMiddlewareType> => {
+): {|
+  buildJs: () => Promise<void>,
+  buildStatic: (options: buildStaticOptionsType) => Promise<void>,
+  middleware: () => Promise<koaMiddlewareType>,
+|} => {
   invariant(
     fs.existsSync(folderPath),
     `\`${path.relative(process.cwd(), folderPath)}\` folder can not be found.`,
@@ -68,28 +76,31 @@ export default async (
 
   const { path: urlsPath, publicPath } = config.config.output;
   const basenamePath = basename ? `${basename.replace(/^\//, '')}/` : '';
-  const urls = {
-    clientUrl: `${publicPath}${basenamePath}client.js`,
-    commonsUrl: `${publicPath}${basenamePath}commons.js`,
+
+  urls.clientUrl = `${publicPath}${basenamePath}client.js`;
+  urls.commonsUrl = `${publicPath}${basenamePath}commons.js`;
+
+  // TODO: check chunk before building js, static
+
+  return {
+    buildJs: async () => {
+      const chunkNames = await buildJs(config);
+
+      ['client', 'commons'].forEach((key: string) => {
+        const name = `${basenamePath}${key}`;
+
+        if (chunkNames[name])
+          urls[`${key}Url`] = `${publicPath}${chunkNames[name]}`;
+      });
+    },
+    buildStatic: (options: buildStaticOptionsType) =>
+      buildStatic(data, urls.commonsUrl, options),
+    middleware: async () =>
+      compose([
+        dev
+          ? await require('koa-webpack')(config)
+          : require('koa-mount')(publicPath, require('koa-static')(urlsPath)),
+        server(basename, data, urls),
+      ]),
   };
-
-  if (!dev) {
-    const chunkNames = await buildJs(config);
-
-    ['client', 'commons'].forEach((key: string) => {
-      const name = `${basenamePath}${key}`;
-
-      if (chunkNames[name])
-        urls[`${key}Url`] = `${publicPath}${chunkNames[name]}`;
-    });
-
-    if (useStatic) buildStatic(data, urls.commonsUrl);
-  }
-
-  return compose([
-    dev
-      ? await require('koa-webpack')(config)
-      : require('koa-mount')(publicPath, require('koa-static')(urlsPath)),
-    server(basename, data, urls),
-  ]);
 };

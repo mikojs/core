@@ -7,7 +7,7 @@ import getPort from 'get-port';
 
 import react from '../../index';
 
-import { type configType } from 'utils/buildJs';
+import { type optionsType as buildJsOptionsType } from 'utils/buildJs';
 
 export default async (
   dev: boolean,
@@ -31,7 +31,10 @@ export default async (
    *
    * @return {Object} - koa react configr
    */
-  const configFunc = ({ config, ...otherConfigs }: configType): configType => {
+  const configFunc = ({
+    config,
+    ...otherConfigs
+  }: buildJsOptionsType): buildJsOptionsType => {
     if (!dev || useStatic)
       config.output = {
         ...config.output,
@@ -44,22 +47,18 @@ export default async (
     };
   };
 
-  app.use(
-    await react(path.resolve(__dirname, './custom'), {
-      dev,
-      config: configFunc,
-      basename: '/custom',
-      useStatic,
-    }),
-  );
+  const customReact = react(path.resolve(__dirname, './custom'), {
+    dev,
+    config: configFunc,
+    basename: '/custom',
+  });
+  const pageReact = react(path.resolve(__dirname, './page'), {
+    dev,
+    config: configFunc,
+  });
 
-  app.use(
-    await react(path.resolve(__dirname, './page'), {
-      dev,
-      config: configFunc,
-      useStatic,
-    }),
-  );
+  app.use(await customReact.middleware());
+  app.use(await pageReact.middleware());
 
   return {
     domain: `http://localhost:${port}`,
@@ -67,14 +66,16 @@ export default async (
       const server = app.listen(port, async () => {
         const { log } = console;
 
-        /** TODO
-        if (!dev && useStatic)
-          await buildStatic(server, {
-            port,
+        if (!dev && useStatic) {
+          await customReact.buildStatic({
+            baseUrl: `http://localhost:${port}`,
             folderPath,
-            buildHtml: true,
           });
-          */
+          await pageReact.buildStatic({
+            baseUrl: `http://localhost:${port}`,
+            folderPath,
+          });
+        }
 
         log(`Run server at port: ${port}`);
         resolve(server);

@@ -53,6 +53,11 @@ export default async (
     config: configFunc,
   });
 
+  if (!dev) {
+    await customReact.buildJs();
+    await pageReact.buildJs();
+  }
+
   app.use(await customReact.middleware());
   app.use(await pageReact.middleware());
 

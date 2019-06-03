@@ -20,19 +20,18 @@ export default async (
     folderPath = path.resolve('./docs'),
   }: optionsType = {},
 ) => {
-  const routePaths = routesData.reduce(
-    (
-      result: $ReadOnlyArray<string>,
-      {
-        routePath,
-      }: $ElementType<$PropertyType<dataType, 'routesData'>, number>,
-    ) => [...result, ...routePath],
-    [commonsUrl],
-  );
-
-  if (routePaths.length !== 0)
-    await Promise.all(
-      routePaths.map(async (routePath: string) => {
+  await Promise.all(
+    routesData
+      .reduce(
+        (
+          result: $ReadOnlyArray<string>,
+          {
+            routePath,
+          }: $ElementType<$PropertyType<dataType, 'routesData'>, number>,
+        ) => [...result, ...routePath],
+        [commonsUrl],
+      )
+      .map(async (routePath: string) => {
         outputFileSync(
           path.resolve(
             folderPath,
@@ -44,5 +43,5 @@ export default async (
           ),
         );
       }),
-    );
+  );
 };

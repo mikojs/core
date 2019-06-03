@@ -1,7 +1,7 @@
 // @flow
 
-import react from '../index';
+import React from '../index';
 
 test('can not found folder', async () => {
-  await expect(react('/test')).rejects.toThrow('folder can not be found.');
+  await expect(new React('/test')).rejects.toThrow('folder can not be found.');
 });

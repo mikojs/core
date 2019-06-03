@@ -4,10 +4,9 @@ import path from 'path';
 
 import Koa from 'koa';
 import getPort from 'get-port';
+import { type configType } from 'koa-webpack';
 
-import react from '../../index';
-
-import { type optionsType as buildJsOptionsType } from 'utils/buildJs';
+import React from '../../index';
 
 export default async (
   dev: boolean,
@@ -31,10 +30,7 @@ export default async (
    *
    * @return {Object} - koa react configr
    */
-  const configFunc = ({
-    config,
-    ...otherConfigs
-  }: buildJsOptionsType): buildJsOptionsType => {
+  const configFunc = ({ config, ...otherConfigs }: configType): configType => {
     if (!dev || useStatic)
       config.output = {
         ...config.output,
@@ -47,12 +43,12 @@ export default async (
     };
   };
 
-  const customReact = react(path.resolve(__dirname, './custom'), {
+  const customReact = new React(path.resolve(__dirname, './custom'), {
     dev,
     config: configFunc,
     basename: '/custom',
   });
-  const pageReact = react(path.resolve(__dirname, './page'), {
+  const pageReact = new React(path.resolve(__dirname, './page'), {
     dev,
     config: configFunc,
   });

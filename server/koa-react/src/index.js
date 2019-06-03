@@ -120,7 +120,7 @@ export default class React {
    * @example
    * await react.buildJs()
    */
-  buildJs = async () => {
+  +buildJs = async () => {
     const { config, basenamePath } = this.store;
 
     invariant(
@@ -145,7 +145,7 @@ export default class React {
    *
    * @param {Object} options - build static options
    */
-  buildStatic = async (options: buildStaticOptionsType) => {
+  +buildStatic = async (options: buildStaticOptionsType) => {
     const { data, urls } = this.store;
 
     await buildStatic(data, urls.commonsUrl, options);
@@ -157,7 +157,7 @@ export default class React {
    *
    * @return {Object} - koa-react middleware
    */
-  middleware = async (): Promise<koaMiddlewareType> => {
+  +middleware = async (): Promise<koaMiddlewareType> => {
     const { dev, data, config, basename, urls } = this.store;
 
     invariant(

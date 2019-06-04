@@ -164,7 +164,7 @@ export default class React {
    *
    * @param {Object} options - build static options
    */
-  +buildStatic = async (options: buildStaticOptionsType) => {
+  +buildStatic = async (options?: buildStaticOptionsType) => {
     const { data, urls, urlsFilePath } = this.store;
 
     try {

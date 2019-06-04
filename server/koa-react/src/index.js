@@ -3,6 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import debug from 'debug';
 import { type Middleware as koaMiddlewareType } from 'koa';
 import compose from 'koa-compose';
 import { type WebpackOptions as WebpackOptionsType } from 'webpack';
@@ -37,6 +38,8 @@ export type optionsType = {|
 |};
 
 handleUnhandledRejection();
+
+const debugLog = debug('react');
 
 /** koa-react */
 export default class React {
@@ -76,6 +79,12 @@ export default class React {
       )}\` folder can not be found.`,
     );
 
+    debugLog({
+      folderPath,
+      dev,
+      basename,
+    });
+
     const data = getData(folderPath, redirect, basename);
     const config = configFunc(
       {
@@ -114,6 +123,8 @@ export default class React {
         commonsUrl: `${publicPath}${basenamePath}commons.js`,
       },
     };
+
+    debugLog(this.store);
   }
 
   /**
@@ -131,12 +142,16 @@ export default class React {
     const { publicPath } = config.config.output;
     const chunkNames = await buildJs(config);
 
+    debugLog(chunkNames);
+
     ['client', 'commons'].forEach((key: string) => {
       const name = `${basenamePath}${key}`;
 
       if (chunkNames[name])
         this.store.urls[`${key}Url`] = `${publicPath}${chunkNames[name]}`;
     });
+
+    debugLog(this.store.urls);
   };
 
   /**

@@ -3,6 +3,7 @@
 import crypto from 'crypto';
 import stream, { type Readable as ReadableType } from 'stream';
 
+import debug from 'debug';
 import {
   type Context as koaContextType,
   type Middleware as koaMiddlewareType,
@@ -23,6 +24,8 @@ import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 
 import Root from './Root';
 import { type dataType } from './getData';
+
+const debugLog = debug('react:server');
 
 /**
  * @example
@@ -68,7 +71,11 @@ export default (
     }),
   );
 
+  debugLog(serverRoutesData);
+
   return async (ctx: koaContextType, next: () => Promise<void>) => {
+    debugLog(ctx.path);
+
     if (commonsUrl === ctx.path) {
       ctx.status = 200;
       ctx.type = 'application/javascript';
@@ -121,6 +128,12 @@ export default (
         Component: store.Component,
         pageProps: initialProps,
       })) || {};
+
+    debugLog({
+      initialProps,
+      documentInitialProps,
+      mainInitialProps,
+    });
 
     // preload scripts
     renderToStaticMarkup(documentHead || null);

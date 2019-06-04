@@ -2,6 +2,7 @@
 
 import path from 'path';
 
+import debug from 'debug';
 import fetch from 'node-fetch';
 import outputFileSync from 'output-file-sync';
 
@@ -11,6 +12,8 @@ export type optionsType = {|
   baseUrl?: string,
   folderPath?: string,
 |};
+
+const debugLog = debug('react:buildStatic');
 
 export default async (
   { routesData }: dataType,
@@ -32,12 +35,19 @@ export default async (
         [commonsUrl],
       )
       .map(async (routePath: string) => {
+        const filePath = path.resolve(
+          folderPath,
+          `.${routePath.replace(/\*$/, 'notFound')}`,
+          /\.js$/.test(routePath) ? '' : './index.html',
+        );
+
+        debugLog({
+          routePath,
+          filePath,
+        });
+
         outputFileSync(
-          path.resolve(
-            folderPath,
-            `.${routePath.replace(/\*$/, 'notFound')}`,
-            /\.js$/.test(routePath) ? '' : './index.html',
-          ),
+          filePath,
           await fetch(`${baseUrl}${routePath}`).then(
             (res: {| text: () => string |}) => res.text(),
           ),

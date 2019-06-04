@@ -2,12 +2,16 @@
 
 import path from 'path';
 
+import debug from 'debug';
+
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 export type redirectType = (
   urlPattern: $ReadOnlyArray<string>,
 ) => $ReadOnlyArray<string>;
+
+const debugLog = debug('react:getData');
 
 export type dataType = {|
   templates: {|
@@ -47,6 +51,8 @@ export default (
           .relative(folderPath, filePath)
           .replace(/\.jsx?$/, '');
 
+        debugLog(relativePath);
+
         if (/^\.templates/.test(relativePath))
           switch (relativePath.replace(/^\.templates\//, '')) {
             case 'Document':
@@ -84,6 +90,8 @@ export default (
         const routePath = redirect([
           relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
         ]);
+
+        debugLog(routePath);
 
         return {
           ...result,

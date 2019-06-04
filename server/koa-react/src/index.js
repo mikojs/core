@@ -3,10 +3,12 @@
 import fs from 'fs';
 import path from 'path';
 
+import debug from 'debug';
 import { type Middleware as koaMiddlewareType } from 'koa';
 import compose from 'koa-compose';
 import { type WebpackOptions as WebpackOptionsType } from 'webpack';
 import { invariant, emptyFunction } from 'fbjs';
+import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -38,6 +40,8 @@ export type optionsType = {|
 
 handleUnhandledRejection();
 
+const debugLog = debug('react');
+
 /** koa-react */
 export default class React {
   store: {|
@@ -50,6 +54,7 @@ export default class React {
       clientUrl: string,
       commonsUrl: string,
     |},
+    urlsFilePath: string | null,
   |};
 
   /**
@@ -76,6 +81,12 @@ export default class React {
       )}\` folder can not be found.`,
     );
 
+    debugLog({
+      folderPath,
+      dev,
+      basename,
+    });
+
     const data = getData(folderPath, redirect, basename);
     const config = configFunc(
       {
@@ -98,10 +109,8 @@ export default class React {
       '`{  publicPath }` in `config.config.output` can not be null',
     );
 
-    const { publicPath } = config.config.output;
+    const { path: urlsPath, publicPath } = config.config.output;
     const basenamePath = basename ? `${basename.replace(/^\//, '')}/` : '';
-
-    // TODO: check chunk before building js, static
 
     this.store = {
       dev,
@@ -113,7 +122,12 @@ export default class React {
         clientUrl: `${publicPath}${basenamePath}client.js`,
         commonsUrl: `${publicPath}${basenamePath}commons.js`,
       },
+      urlsFilePath: !urlsPath
+        ? null
+        : path.resolve(urlsPath, basenamePath, 'urls.json'),
     };
+
+    debugLog(this.store);
   }
 
   /**
@@ -121,7 +135,7 @@ export default class React {
    * await react.buildJs()
    */
   +buildJs = async () => {
-    const { config, basenamePath } = this.store;
+    const { config, basenamePath, urlsFilePath } = this.store;
 
     invariant(
       config.config.output && config.config.output.publicPath,
@@ -131,12 +145,17 @@ export default class React {
     const { publicPath } = config.config.output;
     const chunkNames = await buildJs(config);
 
+    debugLog(chunkNames);
+
     ['client', 'commons'].forEach((key: string) => {
       const name = `${basenamePath}${key}`;
 
       if (chunkNames[name])
         this.store.urls[`${key}Url`] = `${publicPath}${chunkNames[name]}`;
     });
+
+    debugLog(this.store.urls);
+    outputFileSync(urlsFilePath, JSON.stringify(this.store.urls));
   };
 
   /**
@@ -145,8 +164,14 @@ export default class React {
    *
    * @param {Object} options - build static options
    */
-  +buildStatic = async (options: buildStaticOptionsType) => {
-    const { data, urls } = this.store;
+  +buildStatic = async (options?: buildStaticOptionsType) => {
+    const { data, urls, urlsFilePath } = this.store;
+
+    try {
+      this.store.urls = require(urlsFilePath);
+    } catch (e) {
+      if (!/Cannot find module/.test(e.message)) throw e;
+    }
 
     await buildStatic(data, urls.commonsUrl, options);
   };
@@ -158,7 +183,7 @@ export default class React {
    * @return {Object} - koa-react middleware
    */
   +middleware = async (): Promise<koaMiddlewareType> => {
-    const { dev, data, config, basename, urls } = this.store;
+    const { dev, data, config, basename, urls, urlsFilePath } = this.store;
 
     invariant(
       config.config.output &&
@@ -167,6 +192,17 @@ export default class React {
     );
 
     const { path: urlsPath, publicPath } = config.config.output;
+
+    try {
+      if (!dev) this.store.urls = require(urlsFilePath);
+    } catch (e) {
+      invariant(
+        !/Cannot find module/.test(e.message),
+        'Use buildJs before running prod mode',
+      );
+
+      throw e;
+    }
 
     return compose([
       dev

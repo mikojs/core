@@ -1,8 +1,10 @@
 // @flow
 
+import debug from 'debug';
 import { invariant } from 'fbjs';
-
 import { getOptions } from 'loader-utils';
+
+const debugLog = debug('react:replaceLoader');
 
 /**
  * @example
@@ -16,6 +18,11 @@ export default function(source: string): string {
   // eslint-disable-next-line babel/no-invalid-this
   const { type, routers } = getOptions(this) || {};
   let newSource: string = source;
+
+  debugLog({
+    type,
+    routers,
+  });
 
   switch (type) {
     case 'routers':
@@ -56,6 +63,7 @@ export default function(source: string): string {
       throw new Error('Replace type error');
   }
 
+  debugLog({ source, newSource });
   invariant(newSource !== source, `Replace failed: ${type}`);
 
   return newSource;

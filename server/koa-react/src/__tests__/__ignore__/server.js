@@ -54,8 +54,22 @@ export default async (
   });
 
   if (!dev) {
+    const outputFileSync =
+      process.env.NODE_ENV === 'test'
+        ? jest.requireActual('output-file-sync')
+        : require('output-file-sync');
+
     await customReact.buildJs();
     await pageReact.buildJs();
+
+    outputFileSync(
+      customReact.store.urlsFilePath,
+      JSON.stringify(customReact.store.urls),
+    );
+    outputFileSync(
+      pageReact.store.urlsFilePath,
+      JSON.stringify(pageReact.store.urls),
+    );
   }
 
   app.use(await customReact.middleware());

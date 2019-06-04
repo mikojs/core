@@ -58,6 +58,34 @@ class DefaultReact {
   middleware = () => defaultMiddleware;
 }
 
+/** defaultGraphql */
+class DefaultGraphql {
+  /**
+   * @example
+   * new DefaultGraphql('folder path')
+   *
+   * @param {string} foldePath - folder path
+   * @param {Object} options - koa-graphql options
+   */
+  constructor(foldePath: string, options?: {}) {}
+
+  /**
+   * @example
+   * defaultGraphql.relay()
+   */
+  relay = emptyFunction;
+
+  /**
+   * @example
+   * defaultGraphql.middleware()
+   *
+   * @param {Object} options - koa-graphql options
+   *
+   * @return {Function} - koa-graphql middleware
+   */
+  middleware = (options?: {}) => defaultMiddleware;
+}
+
 /**
  * @example
  * run(context)
@@ -89,8 +117,17 @@ const run = async (
           options,
         )),
   );
+  const graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
+    path.resolve(context.dir, './graphql'),
+  );
 
-  if (!context.dev) await react.buildJs();
+  if (context.dev) {
+    if (process.env.NODE_ENV !== 'test')
+      graphql.relay(['--src', context.dir, '--watch']);
+  } else {
+    await graphql.relay(['--src', context.dir]);
+    await react.buildJs();
+  }
 
   return (
     (await server.init(context))
@@ -100,15 +137,10 @@ const run = async (
       |> ('/graphql'
         |> server.all
         |> server.use(
-          loadModule(
-            '@cat-org/koa-graphql',
-            defaultMiddleware,
-            path.resolve(context.dir, './graphql'),
-            {
-              graphiql: context.dev,
-              pretty: context.dev,
-            },
-          ),
+          graphql.middleware({
+            graphiql: context.dev,
+            pretty: context.dev,
+          }),
         )
         |> server.end)
       |> server.end)

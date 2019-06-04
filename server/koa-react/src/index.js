@@ -8,6 +8,7 @@ import { type Middleware as koaMiddlewareType } from 'koa';
 import compose from 'koa-compose';
 import { type WebpackOptions as WebpackOptionsType } from 'webpack';
 import { invariant, emptyFunction } from 'fbjs';
+import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -53,6 +54,7 @@ export default class React {
       clientUrl: string,
       commonsUrl: string,
     |},
+    urlsFilePath: string,
   |};
 
   /**
@@ -122,6 +124,7 @@ export default class React {
         clientUrl: `${publicPath}${basenamePath}client.js`,
         commonsUrl: `${publicPath}${basenamePath}commons.js`,
       },
+      urlsFilePath: `${publicPath}${basenamePath}urls.json`,
     };
 
     debugLog(this.store);
@@ -132,7 +135,7 @@ export default class React {
    * await react.buildJs()
    */
   +buildJs = async () => {
-    const { config, basenamePath } = this.store;
+    const { config, basenamePath, urlsFilePath } = this.store;
 
     invariant(
       config.config.output && config.config.output.publicPath,
@@ -152,6 +155,7 @@ export default class React {
     });
 
     debugLog(this.store.urls);
+    outputFileSync(urlsFilePath, JSON.stringify(this.store.urls));
   };
 
   /**
@@ -161,7 +165,13 @@ export default class React {
    * @param {Object} options - build static options
    */
   +buildStatic = async (options: buildStaticOptionsType) => {
-    const { data, urls } = this.store;
+    const { data, urls, urlsFilePath } = this.store;
+
+    try {
+      this.store.urls = require(urlsFilePath);
+    } catch (e) {
+      if (!/Cannot find module/.test(e.message)) throw e;
+    }
 
     await buildStatic(data, urls.commonsUrl, options);
   };
@@ -173,7 +183,7 @@ export default class React {
    * @return {Object} - koa-react middleware
    */
   +middleware = async (): Promise<koaMiddlewareType> => {
-    const { dev, data, config, basename, urls } = this.store;
+    const { dev, data, config, basename, urls, urlsFilePath } = this.store;
 
     invariant(
       config.config.output &&
@@ -182,6 +192,17 @@ export default class React {
     );
 
     const { path: urlsPath, publicPath } = config.config.output;
+
+    try {
+      if (!dev) this.store.urls = require(urlsFilePath);
+    } catch (e) {
+      invariant(
+        !/Cannot find module/.test(e.message),
+        'Use buildJs before running prod mode',
+      );
+
+      throw e;
+    }
 
     return compose([
       dev

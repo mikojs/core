@@ -54,7 +54,7 @@ export default class React {
       clientUrl: string,
       commonsUrl: string,
     |},
-    urlsFilePath: string,
+    urlsFilePath: string | null,
   |};
 
   /**
@@ -109,10 +109,8 @@ export default class React {
       '`{  publicPath }` in `config.config.output` can not be null',
     );
 
-    const { publicPath } = config.config.output;
+    const { path: urlsPath, publicPath } = config.config.output;
     const basenamePath = basename ? `${basename.replace(/^\//, '')}/` : '';
-
-    // TODO: check chunk before building js, static
 
     this.store = {
       dev,
@@ -124,7 +122,9 @@ export default class React {
         clientUrl: `${publicPath}${basenamePath}client.js`,
         commonsUrl: `${publicPath}${basenamePath}commons.js`,
       },
-      urlsFilePath: `${publicPath}${basenamePath}urls.json`,
+      urlsFilePath: !urlsPath
+        ? null
+        : path.resolve(urlsPath, basenamePath, 'urls.json'),
     };
 
     debugLog(this.store);

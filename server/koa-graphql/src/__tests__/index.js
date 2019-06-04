@@ -6,15 +6,16 @@ import Koa from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
-import graphql from '../index';
+import Graphql from '../index';
 
 let server: http$Server;
 let port: number;
 
 beforeAll(async () => {
   const app = new Koa();
+  const graphql = new Graphql(path.resolve(__dirname, './__ignore__'));
 
-  app.use(graphql(path.resolve(__dirname, './__ignore__')));
+  app.use(graphql.middleware());
   port = await getPort();
   server = app.listen(port);
 });

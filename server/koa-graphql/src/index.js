@@ -1,6 +1,8 @@
 // @flow
 
-import { type GraphQLSchema as GraphQLSchemaType } from 'graphql';
+import path from 'path';
+
+import { printSchema, type GraphQLSchema as GraphQLSchemaType } from 'graphql';
 import {
   makeExecutableSchema,
   type makeExecutableSchemaOptionsType,
@@ -8,6 +10,9 @@ import {
 import graphql, {
   type OptionsData as koaGraphqlOptionsType,
 } from 'koa-graphql';
+import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
+import findCacheDir from 'find-cache-dir';
+import outputFileSync from 'output-file-sync';
 
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
@@ -70,6 +75,27 @@ export default class Graphql {
       resolvers,
     });
   }
+
+  /**
+   * @example
+   * graphql.relay(['--src', './src'])
+   *
+   * @param {Array} argv - argv for relay-compiler
+   *
+   * @return {Object} - child process
+   */
+  +relay = (argv: $ReadOnlyArray<string>): ThenableChildProcessType => {
+    const schemaFilePath = path.resolve(
+      findCacheDir({ name: 'koa-graphql' }),
+      './schema.graphql',
+    );
+
+    outputFileSync(schemaFilePath, printSchema(this.schema));
+
+    return execa('relay-compiler', ['--schema', schemaFilePath, ...argv], {
+      stdio: 'inherit',
+    });
+  };
 
   /**
    * @example

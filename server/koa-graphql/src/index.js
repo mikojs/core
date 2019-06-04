@@ -1,5 +1,8 @@
 // @flow
 
+import path from 'path';
+
+import { printSchema, type GraphQLSchema as GraphQLSchemaType } from 'graphql';
 import {
   makeExecutableSchema,
   type makeExecutableSchemaOptionsType,
@@ -7,7 +10,9 @@ import {
 import graphql, {
   type OptionsData as koaGraphqlOptionsType,
 } from 'koa-graphql';
-import { type Middleware as koaMiddlewareType } from 'koa';
+import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
+import findCacheDir from 'find-cache-dir';
+import outputFileSync from 'output-file-sync';
 
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
@@ -17,52 +22,95 @@ type buildSchemasType = {
   resolvers: $PropertyType<makeExecutableSchema, 'resolvers'>,
 };
 
-export default (
-  folderPath: string,
-  options?: koaGraphqlOptionsType,
-  makeExecutableSchemaOptions?: makeExecutableSchemaOptionsType,
-): koaMiddlewareType => {
-  const { typeDefs, resolvers } = d3DirTree(folderPath, {
-    extensions: /.jsx?$/,
-  })
-    .leaves()
-    .reduce(
-      (
-        result: buildSchemasType,
-        { data: { path: filePath } }: d3DirTreeNodeType,
-      ): buildSchemasType => {
-        const { typeDefs: newTypeDefs, ...newResolvers } =
-          require(filePath).default || require(filePath);
+/** koa-graphql */
+export default class Graphql {
+  schema: GraphQLSchemaType;
 
-        return {
-          typeDefs: [...result.typeDefs, newTypeDefs],
-          resolvers: Object.keys(newResolvers).reduce(
-            (
-              prevResolvers: $PropertyType<buildSchemasType, 'resolvers'>,
-              resolverName: string,
-            ) => ({
-              ...prevResolvers,
-              [resolverName]: {
-                ...prevResolvers[resolverName],
-                ...newResolvers[resolverName],
-              },
-            }),
-            result.resolvers,
-          ),
-        };
-      },
-      {
-        typeDefs: [],
-        resolvers: {},
-      },
-    );
+  /**
+   * @example
+   * new Graphql('folder path')
+   *
+   * @param {string} folderPath - folder path
+   * @param {Object} options - make executable schema options
+   */
+  constructor(folderPath: string, options?: makeExecutableSchemaOptionsType) {
+    const { typeDefs, resolvers } = d3DirTree(folderPath, {
+      extensions: /.jsx?$/,
+    })
+      .leaves()
+      .reduce(
+        (
+          result: buildSchemasType,
+          { data: { path: filePath } }: d3DirTreeNodeType,
+        ): buildSchemasType => {
+          const { typeDefs: newTypeDefs, ...newResolvers } =
+            require(filePath).default || require(filePath);
 
-  return graphql({
-    ...options,
-    schema: makeExecutableSchema({
-      ...makeExecutableSchemaOptions,
+          return {
+            typeDefs: [...result.typeDefs, newTypeDefs],
+            resolvers: Object.keys(newResolvers).reduce(
+              (
+                prevResolvers: $PropertyType<buildSchemasType, 'resolvers'>,
+                resolverName: string,
+              ) => ({
+                ...prevResolvers,
+                [resolverName]: {
+                  ...prevResolvers[resolverName],
+                  ...newResolvers[resolverName],
+                },
+              }),
+              result.resolvers,
+            ),
+          };
+        },
+        {
+          typeDefs: [],
+          resolvers: {},
+        },
+      );
+
+    this.schema = makeExecutableSchema({
+      ...options,
       typeDefs,
       resolvers,
-    }),
-  });
-};
+    });
+  }
+
+  /**
+   * @example
+   * graphql.relay(['--src', './src'])
+   *
+   * @param {Array} argv - argv for relay-compiler
+   *
+   * @return {Object} - child process
+   */
+  +relay = (argv: $ReadOnlyArray<string>): ThenableChildProcessType => {
+    const schemaFilePath = path.resolve(
+      findCacheDir({ name: 'koa-graphql' }),
+      './schema.graphql',
+    );
+
+    outputFileSync(schemaFilePath, printSchema(this.schema));
+
+    return execa.shell(
+      `relay-compiler --schema ${[schemaFilePath, ...argv].join(' ')}`,
+      {
+        stdio: 'inherit',
+      },
+    );
+  };
+
+  /**
+   * @example
+   * graphql.middleware()
+   *
+   * @param {Object} options - koa graphql options
+   *
+   * @return {Function} - koa-graphql middleware
+   */
+  +middleware = (options?: koaGraphqlOptionsType) =>
+    graphql({
+      ...options,
+      schema: this.schema,
+    });
+}

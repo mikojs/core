@@ -180,7 +180,7 @@ export default class React {
    * @example
    * await react.middleware()
    *
-   * @return {Object} - koa-react middleware
+   * @return {Function} - koa-react middleware
    */
   +middleware = async (): Promise<koaMiddlewareType> => {
     const { dev, data, config, basename, urls, urlsFilePath } = this.store;

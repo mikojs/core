@@ -19,6 +19,7 @@ type routerType = Router | Endpoint | Koa;
 
 export type contextType = {|
   dev: boolean,
+  src: string,
   dir: string,
   babelOptions: string | false,
 |};
@@ -26,6 +27,7 @@ export type contextType = {|
 const debugLog = debug('server');
 const context: contextType = {
   dev: true,
+  src: '',
   dir: '',
   babelOptions: false,
 };
@@ -33,7 +35,10 @@ const context: contextType = {
 handleUnhandledRejection();
 
 export default {
-  init: async ({ dev, dir, babelOptions }: contextType): Promise<Koa> => {
+  init: async (
+    { dev, dir, babelOptions }: contextType,
+    callback: () => void | Promise<void> = emptyFunction,
+  ): Promise<Koa> => {
     context.dev = dev;
     context.dir = dir;
     context.babelOptions = babelOptions;
@@ -47,6 +52,7 @@ export default {
 
     // TODO: avoid to trigger webpack again
     await new Promise(resolve => setTimeout(resolve, 1000));
+    await callback();
 
     return new Koa();
   },

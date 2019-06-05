@@ -11,12 +11,26 @@ import path from 'path';
 
 import { type Context as koaContextType } from 'koa';
 import { invariant, emptyFunction } from 'fbjs';
+import commander from 'commander';
+import chalk from 'chalk';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 
 import server, { type contextType as serverContextType } from '../index';
 
+import { version } from '../../package.json';
+
 import loadModule from 'utils/loadModule';
+
+const program = new commander.Command('server')
+  .version(version, '-v, --version')
+  .usage(chalk`{gray [options]}`)
+  .description(
+    chalk`Example:
+  server {gray --skip-build}`,
+  )
+  .option('--skip-build', 'skip build js')
+  .option('--skip-relay', 'skip run relay-compiler');
 
 /**
  * @example
@@ -121,12 +135,18 @@ const run = async (
     path.resolve(context.dir, './graphql'),
   );
 
-  if (context.dev) {
-    if (process.env.NODE_ENV !== 'test')
-      graphql.relay(['--src', context.dir, '--watch']);
-  } else {
-    await graphql.relay(['--src', context.dir]);
-    await react.buildJs();
+  if (process.env.NODE_ENV !== 'test') {
+    const { skipBuild = false, skipRelay = false } = program.parse([
+      ...process.argv,
+    ]);
+
+    if (context.dev) {
+      if (!skipRelay) graphql.relay(['--src', context.dir, '--watch']);
+    } else {
+      if (!skipRelay) await graphql.relay(['--src', context.dir]);
+
+      if (!skipBuild) await react.buildJs();
+    }
   }
 
   return (
@@ -152,16 +172,19 @@ const run = async (
 (() => {
   if (module.parent) return;
 
+  const filterArgv = process.argv.filter(
+    (argv: string) => !['--skip-build', '--skip-relay'].includes(argv),
+  );
   const {
     cliOptions: { outDir },
-  } = parseArgv(process.argv);
+  } = parseArgv(filterArgv);
 
   invariant(outDir, 'Must use `--out-dir` or `-d` to build the server');
 
   run({
     dev: process.env.NODE_ENV !== 'production',
     dir: outDir,
-    babelOptions: process.argv
+    babelOptions: filterArgv
       .slice(2)
       .filter((argv: string) => !['-w', '--watch'].includes(argv))
       .join(' '),

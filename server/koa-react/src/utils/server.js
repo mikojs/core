@@ -186,7 +186,10 @@ export default (
             Loading={emptyFunction.thatReturnsNull}
             Error={ErrorComponent}
             routesData={serverRoutesData}
-            mainInitialProps={mainInitialProps}
+            mainInitialProps={{
+              ...mainInitialProps,
+              Component: store.Component,
+            }}
           />
         </Router>,
         { stream, reactServerRender },

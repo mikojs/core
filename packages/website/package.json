@@ -28,8 +28,5 @@
     "relay-runtime": "^4.0.0",
     "whatwg-fetch": "^3.0.0"
   },
-  "devDependencies": {
-    "relay-compiler": "^4.0.0"
-  },
   "keywords": ["website"]
 }

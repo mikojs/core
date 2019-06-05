@@ -28,7 +28,7 @@ export default class Main extends React.PureComponent<
 > {
   static getInitialProps = async ({
     Component: { query },
-    pageProps: { variables },
+    pageProps: { variables = {} },
   }: mainCtxType<>): propsType => {
     try {
       if (initEnvironment) {
@@ -37,7 +37,6 @@ export default class Main extends React.PureComponent<
         await fetchQuery(environment, query, variables);
 
         return {
-          queryID: query ? query().name : undefined,
           variables,
           relayData: await relaySSR.getCache(),
         };
@@ -49,17 +48,16 @@ export default class Main extends React.PureComponent<
     }
 
     return {
-      queryID: query ? query().name : undefined,
       variables,
     };
   };
 
   render(): NodeType {
-    const { queryID, variables, relayData, children } = this.props;
+    const { Component, variables, relayData, children } = this.props;
     const environment = createEnvironment(
       relayData,
       JSON.stringify({
-        queryID,
+        queryID: Component.query ? Component.query().params.name : undefined,
         variables,
       }),
     );
@@ -67,7 +65,7 @@ export default class Main extends React.PureComponent<
     return (
       <QueryRenderer
         environment={environment}
-        query={queryID}
+        query={Component.query}
         variables={variables}
         render={({ error, props }: ReadyStateType): NodeType => {
           if (error) return <div>{error.message}</div>;
@@ -75,7 +73,7 @@ export default class Main extends React.PureComponent<
           if (!props) return <div>Loading</div>;
 
           return (
-            <QueryPropsContext.Provider {...props}>
+            <QueryPropsContext.Provider value={props}>
               {children}
             </QueryPropsContext.Provider>
           );

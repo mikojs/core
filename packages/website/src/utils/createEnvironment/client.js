@@ -1,6 +1,6 @@
 // @flow
 
-import 'whatwg-fetch';
+import fetch from 'whatwg-fetch';
 import {
   RelayNetworkLayer,
   cacheMiddleware,
@@ -13,6 +13,8 @@ const source = new RecordSource();
 const store = new Store(source);
 
 let storeEnvironment: Environment;
+
+window.fetch = fetch;
 
 export default {
   createEnvironment: (relayData: mixed): Environment => {
@@ -29,7 +31,7 @@ export default {
           lookup: false,
         }),
         urlMiddleware({
-          url: (req: mixed) => process.env.RELAY_ENDPOINT,
+          url: (req: mixed) => 'http://localhost:8000/graphql',
         }),
       ]),
     });

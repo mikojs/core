@@ -1,12 +1,14 @@
 // @flow
 
-import 'node-fetch';
+import fetch from 'node-fetch';
 import {
   RelayNetworkLayer,
   urlMiddleware,
 } from 'react-relay-network-modern/node8';
 import RelaySSR from 'react-relay-network-modern-ssr/node8/server';
 import { Network, Environment, RecordSource, Store } from 'relay-runtime';
+
+global.fetch = fetch;
 
 export default {
   initEnvironment: (): {
@@ -23,7 +25,7 @@ export default {
         store,
         network: new RelayNetworkLayer([
           urlMiddleware({
-            url: (req: mixed) => process.env.RELAY_ENDPOINT,
+            url: (req: mixed) => 'http://localhost:8000/graphql',
           }),
           relaySSR.getMiddleware(),
         ]),

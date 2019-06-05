@@ -30,7 +30,7 @@ debugLog({
 (async () => {
   if (configs.customConfigsPath)
     logger.info(
-      'Using external configsuration',
+      'Using external configuration',
       `Location: ${configs.customConfigsPath}`,
     );
 

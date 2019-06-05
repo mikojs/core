@@ -35,24 +35,4 @@ describe('react isomorphic', () => {
       'Can not find those chunks: ["test"]',
     );
   });
-
-  test('render to node stream', async () => {
-    await expect(
-      renderToNodeStream(
-        React.createElement(() =>
-          React.createElement(
-            lazy(
-              async () => ({
-                default: () => null,
-              }),
-              (Math.floor(Math.random() * 100) + 1).toString(),
-            ),
-          ),
-        ),
-        { stream, reactServerRender },
-      ),
-    ).rejects.toThrow(
-      'Don not use too many `dynamic import` under other `dynamic import`. This is just an alternative plan before `react.lazy` support sever side rendering.',
-    );
-  });
 });

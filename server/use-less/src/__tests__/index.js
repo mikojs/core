@@ -49,28 +49,6 @@ describe('use-less', () => {
     });
   });
 
-  test('use @cat-org/use-less without @cat-org/use-css', () => {
-    expect(() => {
-      useLess().config(
-        {
-          config: {
-            module: {
-              rules: [
-                {
-                  test: /\.css$/,
-                },
-              ],
-            },
-          },
-          devMiddleware: {},
-        },
-        true,
-      );
-    }).toThrow(
-      'You should use `@cat-org/use-css` before using `@cat-org/use-less`',
-    );
-  });
-
   test('splitChunks is false', () => {
     expect(
       useLess().config(

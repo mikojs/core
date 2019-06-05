@@ -10,13 +10,27 @@
 import path from 'path';
 
 import { type Context as koaContextType } from 'koa';
-import { emptyFunction } from 'fbjs';
+import { invariant, emptyFunction } from 'fbjs';
+import commander from 'commander';
+import chalk from 'chalk';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 
 import server, { type contextType as serverContextType } from '../index';
 
+import { version } from '../../package.json';
+
 import loadModule from 'utils/loadModule';
+
+const program = new commander.Command('server')
+  .version(version, '-v, --version')
+  .usage(chalk`{gray [options]}`)
+  .description(
+    chalk`Example:
+  server {gray --skip-build}`,
+  )
+  .option('--skip-build', 'skip build js')
+  .option('--skip-relay', 'skip run relay-compiler');
 
 /**
  * @example
@@ -32,6 +46,60 @@ const defaultMiddleware = async (
   await next();
 };
 
+/** defaultReact */
+class DefaultReact {
+  /**
+   * @example
+   * new DefaultReact('folder path')
+   *
+   * @param {string} foldePath - folder path
+   * @param {Object} options - koa-react options
+   */
+  constructor(foldePath: string, options?: {}) {}
+
+  /**
+   * @example
+   * defaultReact.buildJs()
+   */
+  buildJs = emptyFunction;
+
+  /**
+   * @example
+   * defaultReact.middleware()
+   *
+   * @return {Function} - koa-react middleware
+   */
+  middleware = () => defaultMiddleware;
+}
+
+/** defaultGraphql */
+class DefaultGraphql {
+  /**
+   * @example
+   * new DefaultGraphql('folder path')
+   *
+   * @param {string} foldePath - folder path
+   * @param {Object} options - koa-graphql options
+   */
+  constructor(foldePath: string, options?: {}) {}
+
+  /**
+   * @example
+   * defaultGraphql.relay()
+   */
+  relay = emptyFunction;
+
+  /**
+   * @example
+   * defaultGraphql.middleware()
+   *
+   * @param {Object} options - koa-graphql options
+   *
+   * @return {Function} - koa-graphql middleware
+   */
+  middleware = (options?: {}) => defaultMiddleware;
+}
+
 /**
  * @example
  * run(context)
@@ -46,62 +114,77 @@ const run = async (
   context: serverContextType,
   port?: number = parseInt(process.env.PORT || 8000, 10),
   callback?: () => void,
-) =>
-  (await server.init(context))
-  |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
-  |> (undefined
-    |> server.start
-    |> ('/graphql'
-      |> server.all
-      |> server.use(
+): Promise<http$Server> => {
+  const react = new (loadModule('@cat-org/koa-react', DefaultReact))(
+    path.resolve(context.dir, './pages'),
+    { dev: context.dev }
+      |> ((options: {}) =>
         loadModule(
-          '@cat-org/koa-graphql',
-          defaultMiddleware,
-          path.resolve(context.dir, './graphql'),
-          {
+          '@cat-org/use-css',
+          emptyFunction.thatReturnsArgument,
+          options,
+        ))
+      |> ((options: {}) =>
+        loadModule(
+          '@cat-org/use-less',
+          emptyFunction.thatReturnsArgument,
+          options,
+        )),
+  );
+  const graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
+    path.resolve(context.dir, './graphql'),
+  );
+
+  if (process.env.NODE_ENV !== 'test') {
+    const { skipBuild = false, skipRelay = false } = program.parse([
+      ...process.argv,
+    ]);
+
+    if (context.dev) {
+      if (!skipRelay) graphql.relay(['--src', context.dir, '--watch']);
+    } else {
+      if (!skipRelay) await graphql.relay(['--src', context.dir]);
+
+      if (!skipBuild) await react.buildJs();
+    }
+  }
+
+  return (
+    (await server.init(context))
+    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
+    |> (undefined
+      |> server.start
+      |> ('/graphql'
+        |> server.all
+        |> server.use(
+          graphql.middleware({
             graphiql: context.dev,
             pretty: context.dev,
-          },
-        ),
-      )
+          }),
+        )
+        |> server.end)
       |> server.end)
-    |> server.end)
-  |> server.use(
-    await loadModule(
-      '@cat-org/koa-react',
-      defaultMiddleware,
-      path.resolve(context.dir, './pages'),
-      { dev: context.dev }
-        |> ((options: {}) =>
-          loadModule(
-            '@cat-org/use-css',
-            emptyFunction.thatReturnsArgument,
-            options,
-          ))
-        |> ((options: {}) =>
-          loadModule(
-            '@cat-org/use-less',
-            emptyFunction.thatReturnsArgument,
-            options,
-          )),
-    ),
-  )
-  |> server.run(port, callback);
+    |> server.use(await react.middleware())
+    |> server.run(port, callback)
+  );
+};
 
 (() => {
   if (module.parent) return;
 
+  const filterArgv = process.argv.filter(
+    (argv: string) => !['--skip-build', '--skip-relay'].includes(argv),
+  );
   const {
     cliOptions: { outDir },
-  } = parseArgv(process.argv);
+  } = parseArgv(filterArgv);
 
-  if (!outDir)
-    throw new Error('Must use `--out-dir` or `-d` to build the server');
+  invariant(outDir, 'Must use `--out-dir` or `-d` to build the server');
 
   run({
     dev: process.env.NODE_ENV !== 'production',
     dir: outDir,
-    babelOptions: process.argv
+    babelOptions: filterArgv
       .slice(2)
       .filter((argv: string) => !['-w', '--watch'].includes(argv))
       .join(' '),

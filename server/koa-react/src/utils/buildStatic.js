@@ -2,60 +2,56 @@
 
 import path from 'path';
 
+import debug from 'debug';
 import fetch from 'node-fetch';
 import outputFileSync from 'output-file-sync';
 
 import { type dataType } from './getData';
 
-const routePaths = [];
+export type optionsType = {|
+  baseUrl?: string,
+  folderPath?: string,
+|};
 
-/**
- * @example
- * buildStatic(server)
- *
- * @param {Koa} server - koa server
- * @param {Object} options - build static options
- */
-export const buildStatic = async (
-  server: http$Server,
+const debugLog = debug('react:buildStatic');
+
+export default async (
+  { routesData }: dataType,
+  commonsUrl: string,
   {
-    port = 8000,
+    baseUrl = 'http://localhost:8000',
     folderPath = path.resolve('./docs'),
-    buildHtml = false,
-  }: {|
-    port?: number,
-    folderPath?: string,
-    buildHtml?: boolean,
-  |} = {},
+  }: optionsType = {},
 ) => {
-  if (buildHtml && routePaths.length !== 0)
-    await Promise.all(
-      routePaths.map(async (routePath: string) => {
+  await Promise.all(
+    routesData
+      .reduce(
+        (
+          result: $ReadOnlyArray<string>,
+          {
+            routePath,
+          }: $ElementType<$PropertyType<dataType, 'routesData'>, number>,
+        ) => [...result, ...routePath],
+        [commonsUrl],
+      )
+      .map(async (routePath: string) => {
+        const filePath = path.resolve(
+          folderPath,
+          `.${routePath.replace(/\*$/, 'notFound')}`,
+          /\.js$/.test(routePath) ? '' : './index.html',
+        );
+
+        debugLog({
+          routePath,
+          filePath,
+        });
+
         outputFileSync(
-          path.resolve(
-            folderPath,
-            `.${routePath.replace(/\*$/, 'notFound')}`,
-            /\.js$/.test(routePath) ? '' : './index.html',
-          ),
-          await fetch(`http://localhost:${port}${routePath}`).then(
+          filePath,
+          await fetch(`${baseUrl}${routePath}`).then(
             (res: {| text: () => string |}) => res.text(),
           ),
         );
       }),
-    );
-
-  routePaths.splice(0, routePaths.length);
-  server.close();
-};
-
-export default ({ routesData }: dataType, commonsUrl: string) => {
-  routesData.forEach(
-    ({
-      routePath,
-    }: $ElementType<$PropertyType<dataType, 'routesData'>, number>) => {
-      routePaths.push(...routePath);
-    },
   );
-
-  routePaths.push(commonsUrl);
 };

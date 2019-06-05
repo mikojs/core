@@ -4,10 +4,9 @@ import path from 'path';
 
 import Koa from 'koa';
 import getPort from 'get-port';
+import { type configType } from 'koa-webpack';
 
-import react, { buildStatic } from '../../index';
-
-import { type configType } from 'utils/buildJs';
+import React from '../../index';
 
 export default async (
   dev: boolean,
@@ -44,22 +43,37 @@ export default async (
     };
   };
 
-  app.use(
-    await react(path.resolve(__dirname, './custom'), {
-      dev,
-      config: configFunc,
-      basename: '/custom',
-      useStatic,
-    }),
-  );
+  const customReact = new React(path.resolve(__dirname, './custom'), {
+    dev,
+    config: configFunc,
+    basename: '/custom',
+  });
+  const pageReact = new React(path.resolve(__dirname, './page'), {
+    dev,
+    config: configFunc,
+  });
 
-  app.use(
-    await react(path.resolve(__dirname, './page'), {
-      dev,
-      config: configFunc,
-      useStatic,
-    }),
-  );
+  if (!dev) {
+    const outputFileSync =
+      process.env.NODE_ENV === 'test'
+        ? jest.requireActual('output-file-sync')
+        : require('output-file-sync');
+
+    await customReact.buildJs();
+    await pageReact.buildJs();
+
+    outputFileSync(
+      customReact.store.urlsFilePath,
+      JSON.stringify(customReact.store.urls),
+    );
+    outputFileSync(
+      pageReact.store.urlsFilePath,
+      JSON.stringify(pageReact.store.urls),
+    );
+  }
+
+  app.use(await customReact.middleware());
+  app.use(await pageReact.middleware());
 
   return {
     domain: `http://localhost:${port}`,
@@ -67,12 +81,16 @@ export default async (
       const server = app.listen(port, async () => {
         const { log } = console;
 
-        if (!dev && useStatic)
-          await buildStatic(server, {
-            port,
+        if (!dev && useStatic) {
+          await customReact.buildStatic({
+            baseUrl: `http://localhost:${port}`,
             folderPath,
-            buildHtml: true,
           });
+          await pageReact.buildStatic({
+            baseUrl: `http://localhost:${port}`,
+            folderPath,
+          });
+        }
 
         log(`Run server at port: ${port}`);
         resolve(server);

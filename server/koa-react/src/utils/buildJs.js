@@ -1,16 +1,11 @@
 // @flow
 
-import webpack, { type WebpackOptions as WebpackOptionsType } from 'webpack';
+import debug from 'debug';
+import webpack from 'webpack';
 
-export type configType = {
-  config: WebpackOptionsType,
-  devMiddleware: {|
-    stats?: $PropertyType<
-      $NonMaybeType<$PropertyType<WebpackOptionsType, 'devServer'>>,
-      'stats',
-    >,
-  |},
-};
+import { type configType } from '../index';
+
+const debugLog = debug('react:buildJs');
 
 export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
   new Promise<{
@@ -37,6 +32,8 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
           |},
         },
       ) => {
+        debugLog(err);
+
         if (err) {
           if (err.details) reject(err.details);
           else reject(err);

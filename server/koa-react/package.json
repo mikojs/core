@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/koa-react",
   "repository": "https://github.com/cat-org/core/tree/master/server/koa-react",
-  "version": "1.0.0-beta.20",
+  "version": "1.0.0-beta.21",
   "main": "./lib/index.js",
   "scripts": {
     "copy-test-server": "rm -rf ./src/lib && cp -r ./src/__tests__ ./src/lib",
@@ -14,6 +14,7 @@
   "dependencies": {
     "@cat-org/utils": "^1.0.0-beta.20",
     "d3-hierarchy": "^1.1.8",
+    "debug": "^4.1.1",
     "directory-tree": "^2.2.3",
     "fbjs": "^1.0.0",
     "get-stream": "^5.1.0",
@@ -25,6 +26,7 @@
     "multistream": "^2.1.1",
     "node-fetch": "^2.6.0",
     "output-file-sync": "^2.0.1",
+    "progress-bar-webpack-plugin": "^1.12.1",
     "react-helmet": "^5.2.1",
     "react-hot-loader": "^4.8.5",
     "react-loading": "^2.0.3",

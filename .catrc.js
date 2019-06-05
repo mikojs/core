@@ -134,7 +134,7 @@ module.exports = (() => {
     });
 
   return {
-    configsEnv: ['react', 'less'],
+    configsEnv: ['react', 'relay', 'less'],
 
     // babel
     babel,

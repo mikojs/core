@@ -19,4 +19,7 @@ class Webpack {
 }
 
 export const webpack = new Webpack();
+
+webpack.main.EnvironmentPlugin = class EnvironmentPlugin {};
+
 export default webpack.main;

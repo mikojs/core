@@ -42,6 +42,7 @@ export default {
               },
             ],
           ]),
+      ...(!configsEnv.includes('relay') ? [] : ['relay']),
     ],
     ignore: mockChoice(
       process.env.NODE_ENV === 'test',

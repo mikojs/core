@@ -96,8 +96,10 @@ export const preload = async (
 ) => {
   if (chunkNames.length === 0) return;
 
-  if (level > 10)
-    throw new Error(`Can not find those chunks: ${JSON.stringify(chunkNames)}`);
+  invariant(
+    level <= 10,
+    `Can not find those chunks: ${JSON.stringify(chunkNames)}`,
+  );
 
   const newChunkNames = [];
 
@@ -169,10 +171,10 @@ export const renderToNodeStream = (
     const exportStream = new stream.Readable({ read: () => {} });
     const renderStream = reactServerRender(dom);
 
-    if (level > 10)
-      throw new Error(
-        'Don not use too many `dynamic import` under other `dynamic import`. This is just an alternative plan before `react.lazy` support sever side rendering.',
-      );
+    invariant(
+      level <= 10,
+      'Don not use too many `dynamic import` under other `dynamic import`. This is just an alternative plan before `react.lazy` support sever side rendering.',
+    );
 
     renderStream.on('error', (e: Error) => {
       storeChunkNames.splice(0, storeChunkNames.length);

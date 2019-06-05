@@ -1,39 +1,26 @@
 // @flow
 
-import Koa from 'koa';
-import getPort from 'get-port';
-import { outputFileSync } from 'output-file-sync';
+import buildStatic from '../buildStatic';
 
-import prevBuildStatic, { buildStatic } from '../buildStatic';
+jest.mock('node-fetch', () =>
+  jest.fn(async (url: string) => ({
+    text: () => url,
+  })),
+);
 
-describe('build static', () => {
-  test('not routesData to build', async () => {
-    expect(
-      await buildStatic(new Koa().listen(await getPort())),
-    ).toBeUndefined();
-  });
-
-  test('skip build html', async () => {
-    outputFileSync.destPaths = [];
-    outputFileSync.contents = [];
-
-    prevBuildStatic(
+test('build static', async () => {
+  expect(
+    await buildStatic(
       {
-        routesData: [],
         templates: {
           document: 'document',
           main: 'main',
           loading: 'loading',
           error: 'error',
         },
+        routesData: [],
       },
-      'common.js',
-    );
-
-    expect(
-      await buildStatic(new Koa().listen(await getPort())),
-    ).toBeUndefined();
-    expect(outputFileSync.destPaths).toHaveLength(0);
-    expect(outputFileSync.contents).toHaveLength(0);
-  });
+      '/commons.js',
+    ),
+  ).toBeUndefined();
 });

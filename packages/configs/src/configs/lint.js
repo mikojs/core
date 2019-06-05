@@ -25,7 +25,7 @@ export default {
     'coverage',
 
     // add checking other configs
-    '!.*.js',
+    '!.*',
   ],
   run: (argv: $ReadOnlyArray<string>) => [...argv, '--cache', '--color'],
   env: {

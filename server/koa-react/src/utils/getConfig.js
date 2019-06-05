@@ -16,6 +16,7 @@ export default (
   folderPath: string,
   basename: ?string,
   { routesData, templates }: dataType,
+  exclude?: RegExp,
 ) => ({
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval' : false,
@@ -111,6 +112,7 @@ export default (
             {
               test: /\.jsx?$/,
               include: [folderPath, ROOT_PATH],
+              exclude,
               loader: path.resolve(__dirname, './replaceLoader.js'),
               options: {
                 type: 'react-hot-loader',

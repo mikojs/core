@@ -36,6 +36,7 @@ export type optionsType = {|
   config?: (config: configType, dev: boolean) => configType,
   redirect?: redirectType,
   basename?: string,
+  exclude?: RegExp,
 |};
 
 handleUnhandledRejection();
@@ -71,6 +72,7 @@ export default class React {
       config: configFunc = emptyFunction.thatReturnsArgument,
       redirect = emptyFunction.thatReturnsArgument,
       basename,
+      exclude,
     }: optionsType = {},
   ) {
     invariant(
@@ -87,10 +89,10 @@ export default class React {
       basename,
     });
 
-    const data = getData(folderPath, redirect, basename);
+    const data = getData(folderPath, redirect, basename, exclude);
     const config = configFunc(
       {
-        config: getConfig(dev, folderPath, basename, data),
+        config: getConfig(dev, folderPath, basename, data, exclude),
         devMiddleware: {
           stats: {
             maxModules: 0,

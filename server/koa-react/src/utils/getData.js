@@ -30,7 +30,8 @@ export type dataType = {|
 export default (
   folderPath: string,
   redirect: redirectType,
-  basename: ?string,
+  basename?: string,
+  exclude?: RegExp,
 ): dataType => {
   const notFound = {
     routePath: [`${basename || ''}/*`],
@@ -40,6 +41,7 @@ export default (
 
   return d3DirTree(folderPath, {
     extensions: /.jsx?$/,
+    exclude,
   })
     .leaves()
     .reduce(

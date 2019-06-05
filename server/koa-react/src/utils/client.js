@@ -64,7 +64,10 @@ const render = async (
         Loading={Loading}
         Error={ErrorComponent}
         routesData={routesData}
-        mainInitialProps={mainInitialProps}
+        mainInitialProps={{
+          ...mainInitialProps,
+          Component,
+        }}
       />
     </Router>,
     document.getElementById('__CAT__') ||

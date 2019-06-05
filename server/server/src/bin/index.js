@@ -123,7 +123,7 @@ const run = async (
   (await server.init(context, async () => {
     react = new (loadModule('@cat-org/koa-react', DefaultReact))(
       path.resolve(context.dir, './pages'),
-      { dev: context.dev }
+      { dev: context.dev, exclude: /__generated__/ }
         |> ((options: {}) =>
           loadModule(
             '@cat-org/use-css',

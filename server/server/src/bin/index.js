@@ -14,6 +14,9 @@ import { invariant, emptyFunction } from 'fbjs';
 import commander from 'commander';
 import chalk from 'chalk';
 
+import type reactType from '@cat-org/koa-react';
+import type graphqlType from '@cat-org/koa-graphql';
+
 import parseArgv from '@babel/cli/lib/babel/options';
 
 import server, { type contextType as serverContextType } from '../index';
@@ -31,6 +34,8 @@ const program = new commander.Command('server')
   )
   .option('--skip-build', 'skip build js')
   .option('--skip-relay', 'skip run relay-compiler');
+let react: reactType | DefaultReact;
+let graphql: graphqlType | DefaultGraphql;
 
 /**
  * @example
@@ -113,61 +118,64 @@ class DefaultGraphql {
 const run = async (
   context: serverContextType,
   port?: number = parseInt(process.env.PORT || 8000, 10),
-  callback?: () => void,
-): Promise<http$Server> => {
-  const react = new (loadModule('@cat-org/koa-react', DefaultReact))(
-    path.resolve(context.dir, './pages'),
-    { dev: context.dev }
-      |> ((options: {}) =>
-        loadModule(
-          '@cat-org/use-css',
-          emptyFunction.thatReturnsArgument,
-          options,
-        ))
-      |> ((options: {}) =>
-        loadModule(
-          '@cat-org/use-less',
-          emptyFunction.thatReturnsArgument,
-          options,
-        )),
-  );
-  const graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
-    path.resolve(context.dir, './graphql'),
-  );
+  callback: () => void = emptyFunction,
+) =>
+  (await server.init(context, async () => {
+    react = new (loadModule('@cat-org/koa-react', DefaultReact))(
+      path.resolve(context.dir, './pages'),
+      { dev: context.dev }
+        |> ((options: {}) =>
+          loadModule(
+            '@cat-org/use-css',
+            emptyFunction.thatReturnsArgument,
+            options,
+          ))
+        |> ((options: {}) =>
+          loadModule(
+            '@cat-org/use-less',
+            emptyFunction.thatReturnsArgument,
+            options,
+          )),
+    );
+    graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
+      path.resolve(context.dir, './graphql'),
+    );
 
-  if (process.env.NODE_ENV !== 'test') {
-    const { skipBuild = false, skipRelay = false } = program.parse([
-      ...process.argv,
-    ]);
+    if (process.env.NODE_ENV !== 'test') {
+      const { skipBuild = false, skipRelay = false } = program.parse([
+        ...process.argv,
+      ]);
 
-    if (context.dev) {
-      if (!skipRelay) graphql.relay(['--src', context.dir, '--watch']);
-    } else {
-      if (!skipRelay) await graphql.relay(['--src', context.dir]);
+      if (!skipRelay) await graphql.relay(['--src', context.src]);
 
-      if (!skipBuild) await react.buildJs();
+      if (!context.dev && !skipBuild) await react.buildJs();
     }
-  }
-
-  return (
-    (await server.init(context))
-    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
-    |> (undefined
-      |> server.start
-      |> ('/graphql'
-        |> server.all
-        |> server.use(
-          graphql.middleware({
-            graphiql: context.dev,
-            pretty: context.dev,
-          }),
-        )
-        |> server.end)
+  }))
+  |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
+  |> (undefined
+    |> server.start
+    |> ('/graphql'
+      |> server.all
+      |> server.use(
+        graphql.middleware({
+          graphiql: context.dev,
+          pretty: context.dev,
+        }),
+      )
       |> server.end)
-    |> server.use(await react.middleware())
-    |> server.run(port, callback)
-  );
-};
+    |> server.end)
+  |> server.use(await react.middleware())
+  |> server.run(port, () => {
+    callback();
+
+    if (process.env.NODE_ENV !== 'test') {
+      const { skipRelay = false } = program.parse([...process.argv]);
+
+      if (context.dev) {
+        if (!skipRelay) graphql.relay(['--src', context.src, '--watch']);
+      }
+    }
+  });
 
 (() => {
   if (module.parent) return;
@@ -176,13 +184,17 @@ const run = async (
     (argv: string) => !['--skip-build', '--skip-relay'].includes(argv),
   );
   const {
-    cliOptions: { outDir },
+    cliOptions: {
+      filenames: [src],
+      outDir,
+    },
   } = parseArgv(filterArgv);
 
-  invariant(outDir, 'Must use `--out-dir` or `-d` to build the server');
+  invariant(src && outDir, 'Must use `--out-dir` or `-d` to build the server');
 
   run({
     dev: process.env.NODE_ENV !== 'production',
+    src,
     dir: outDir,
     babelOptions: filterArgv
       .slice(2)

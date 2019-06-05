@@ -108,7 +108,7 @@ export default class Graphql {
    *
    * @return {Function} - koa-graphql middleware
    */
-  +middleware = (options?: koaGraphqlOptionsType) =>
+  +middleware = (options?: $Diff<koaGraphqlOptionsType, { schema: mixed }>) =>
     graphql({
       ...options,
       schema: this.schema,

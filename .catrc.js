@@ -90,7 +90,6 @@ const lint = {
     ...ignore,
     // ignore for @cat-org/eslint-config-cat testing
     'packages/eslint-config-cat/src/__tests__/__ignore__',
-    '!.templates',
   ],
 };
 

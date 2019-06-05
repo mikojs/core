@@ -134,17 +134,19 @@ const run = async (
   const graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
     path.resolve(context.dir, './graphql'),
   );
-  const { skipBuild = false, skipRelay = false } = program.parse([
-    ...process.argv,
-  ]);
 
-  if (context.dev) {
-    if (process.env.NODE_ENV !== 'test' && !skipRelay)
-      graphql.relay(['--src', context.dir, '--watch']);
-  } else {
-    if (!skipRelay) await graphql.relay(['--src', context.dir]);
+  if (process.env.NODE_ENV !== 'test') {
+    const { skipBuild = false, skipRelay = false } = program.parse([
+      ...process.argv,
+    ]);
 
-    if (!skipBuild) await react.buildJs();
+    if (context.dev) {
+      if (!skipRelay) graphql.relay(['--src', context.dir, '--watch']);
+    } else {
+      if (!skipRelay) await graphql.relay(['--src', context.dir]);
+
+      if (!skipBuild) await react.buildJs();
+    }
   }
 
   return (

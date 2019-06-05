@@ -170,16 +170,19 @@ const run = async (
 (() => {
   if (module.parent) return;
 
+  const filterArgv = process.argv.filter(
+    (argv: string) => !['--skip-build', '--skip-relay'].includes(argv),
+  );
   const {
     cliOptions: { outDir },
-  } = parseArgv(process.argv);
+  } = parseArgv(filterArgv);
 
   invariant(outDir, 'Must use `--out-dir` or `-d` to build the server');
 
   run({
     dev: process.env.NODE_ENV !== 'production',
     dir: outDir,
-    babelOptions: process.argv
+    babelOptions: filterArgv
       .slice(2)
       .filter((argv: string) => !['-w', '--watch'].includes(argv))
       .join(' '),

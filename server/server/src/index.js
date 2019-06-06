@@ -22,6 +22,7 @@ export type contextType = {|
   src: string,
   dir: string,
   babelOptions: string | false,
+  port?: number,
 |};
 
 const debugLog = debug('server');
@@ -36,12 +37,14 @@ handleUnhandledRejection();
 
 export default {
   init: async (
-    { dev, dir, babelOptions }: contextType,
-    callback: () => void | Promise<void> = emptyFunction,
+    initContext: contextType,
   ): Promise<Koa> => {
-    context.dev = dev;
-    context.dir = dir;
-    context.babelOptions = babelOptions;
+    Object.keys(initContext).forEach((key: string) => {
+      context[key] = initContext[key];
+    });
+    debugLog(context);
+
+    const { babelOptions } = context;
 
     if (babelOptions)
       await execa.shell(`babel ${babelOptions}`, {
@@ -52,9 +55,24 @@ export default {
 
     // TODO: avoid to trigger webpack again
     await new Promise(resolve => setTimeout(resolve, 1000));
-    await callback();
+
+    chokidar
+      .watch(path.resolve(dir), {
+        ignoreInitial: true,
+      })
+      .on('change', (filePath: string) => {
+        if (/\.jsx?/.test(filePath)) delete require.cache[filePath];
+      });
 
     return new Koa();
+  },
+
+  event: async (
+    callback: () => void | Promise<void>
+  ) => {
+    await callback();
+
+    return emptyFunction.thatReturnsArgument;
   },
 
   start: (prefix: ?string): Router => {
@@ -153,14 +171,12 @@ export default {
     };
   },
 
-  run: (port?: number = 8000, callback?: () => void = emptyFunction) => (
+  run: (
     app: Koa,
   ): http$Server => {
-    debugLog(port);
+    const { dev, dir, babelOptions, port = 8000 } = context;
 
-    return app.listen(parseInt(port, 10), () => {
-      const { dev, dir, babelOptions } = context;
-
+    return app.listen(port, () => {
       logger.succeed(
         chalk`Running server at port: {gray {bold ${port.toString()}}}`,
       );
@@ -178,8 +194,6 @@ export default {
           stdio: 'inherit',
         });
       }
-
-      callback();
     });
   },
 };

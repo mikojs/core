@@ -19,6 +19,17 @@ const context = {
 };
 
 describe('server', () => {
+  test('event work', async () => {
+    const mockCallback = jest.fn();
+    const runningServer = await ((await server.init(context))
+      |> (await server.event(mockCallback))
+      |> server.run);
+
+    runningServer.close();
+
+    expect(mockCallback).toHaveBeenCalled();
+  });
+
   test.each`
     method
     ${'get'}

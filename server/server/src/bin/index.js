@@ -110,14 +110,10 @@ class DefaultGraphql {
  * run(context)
  *
  * @param {Object} context - server context
- * @param {Function} callback - server callback
  *
  * @return {Koa} - koa server
  */
-const run = async (
-  context: serverContextType,
-  callback: () => void = emptyFunction,
-) =>
+const run = async (context: serverContextType) =>
   (await server.init(context))
   |> (await server.event(async () => {
     react = new (loadModule('@cat-org/koa-react', DefaultReact))(
@@ -166,8 +162,6 @@ const run = async (
   |> server.use(await react.middleware())
   |> server.run
   |> (await server.event(() => {
-    callback();
-
     if (process.env.NODE_ENV !== 'test') {
       const { skipRelay = false } = program.parse([...process.argv]);
 

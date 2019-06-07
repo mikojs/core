@@ -196,10 +196,7 @@ const run = async (
     dev: process.env.NODE_ENV !== 'production',
     src,
     dir: outDir,
-    babelOptions: filterArgv
-      .slice(2)
-      .filter((argv: string) => !['-w', '--watch'].includes(argv))
-      .join(' '),
+    babelOptions: filterArgv.slice(2).join(' '),
   });
 })();
 

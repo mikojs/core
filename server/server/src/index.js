@@ -36,17 +36,34 @@ handleUnhandledRejection();
 
 export default {
   init: async (
-    { dev, dir, babelOptions }: contextType,
+    initContext: contextType,
     callback: () => void | Promise<void> = emptyFunction,
   ): Promise<Koa> => {
-    context.dev = dev;
-    context.dir = dir;
-    context.babelOptions = babelOptions;
+    Object.keys(initContext).forEach((key: string) => {
+      context[key] = initContext[key];
+    });
+    debugLog(context);
 
-    if (babelOptions)
-      await execa.shell(`babel ${babelOptions}`, {
-        stdio: 'inherit',
-      });
+    const { dev, babelOptions } = context;
+
+    if (babelOptions) {
+      const options = babelOptions
+        .split(/ /)
+        .filter((argv: string) => !['-w', '--watch'].includes(argv))
+        .join(' ');
+
+      if (dev) {
+        await execa.shell(`babel ${options}`, {
+          stdio: 'inherit',
+        });
+        execa.shell(`babel --skip-initial-build -w ${options}`, {
+          stdio: 'inherit',
+        });
+      } else
+        await execa.shell(`babel ${options}`, {
+          stdio: 'inherit',
+        });
+    }
 
     logger.start('Server start');
 
@@ -159,13 +176,13 @@ export default {
     debugLog(port);
 
     return app.listen(parseInt(port, 10), () => {
-      const { dev, dir, babelOptions } = context;
+      const { dev, dir } = context;
 
       logger.succeed(
         chalk`Running server at port: {gray {bold ${port.toString()}}}`,
       );
 
-      if (dev && babelOptions) {
+      if (dev)
         chokidar
           .watch(path.resolve(dir), {
             ignoreInitial: true,
@@ -173,11 +190,6 @@ export default {
           .on('change', (filePath: string) => {
             if (/\.jsx?/.test(filePath)) delete require.cache[filePath];
           });
-
-        execa.shell(`babel --skip-initial-build -w ${babelOptions}`, {
-          stdio: 'inherit',
-        });
-      }
 
       callback();
     });

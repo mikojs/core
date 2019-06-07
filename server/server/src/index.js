@@ -50,15 +50,12 @@ export default {
         .filter((argv: string) => !['-w', '--watch'].includes(argv))
         .join(' ');
 
-      if (dev) {
-        await execa.shell(`babel ${options}`, {
-          stdio: 'inherit',
-        });
+      await execa.shell(`babel ${options}`, {
+        stdio: 'inherit',
+      });
+
+      if (dev)
         execa.shell(`babel --skip-initial-build -w ${options}`, {
-          stdio: 'inherit',
-        });
-      } else
-        await execa.shell(`babel ${options}`, {
           stdio: 'inherit',
         });
     }

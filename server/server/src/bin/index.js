@@ -141,9 +141,13 @@ const run = async (context: serverContextType) =>
         ...process.argv,
       ]);
 
-      if (!skipRelay) await graphql.relay(['--src', context.src]);
+      if (!skipRelay) {
+        await graphql.relay(['--src', context.src]);
 
-      if (!context.dev && !skipBuild) await react.buildJs();
+        if (context.dev) graphql.relay(['--src', context.src, '--watch']);
+      }
+
+      if (!skipBuild && !context.dev) await react.buildJs();
     }
   }))
   |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
@@ -160,16 +164,7 @@ const run = async (context: serverContextType) =>
       |> server.end)
     |> server.end)
   |> server.use(await react.middleware())
-  |> server.run
-  |> (await server.event(() => {
-    if (process.env.NODE_ENV !== 'test') {
-      const { skipRelay = false } = program.parse([...process.argv]);
-
-      if (context.dev) {
-        if (!skipRelay) graphql.relay(['--src', context.src, '--watch']);
-      }
-    }
-  }));
+  |> server.run;
 
 (async () => {
   if (module.parent) return;

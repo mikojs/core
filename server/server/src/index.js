@@ -36,10 +36,7 @@ const context: contextType = {
 handleUnhandledRejection();
 
 export default {
-  init: async (
-    initContext: contextType,
-    callback: () => void | Promise<void> = emptyFunction,
-  ): Promise<Koa> => {
+  init: async (initContext: contextType): Promise<Koa> => {
     Object.keys(initContext).forEach((key: string) => {
       context[key] = initContext[key];
     });
@@ -70,7 +67,6 @@ export default {
 
     // TODO: avoid to trigger webpack again
     await new Promise(resolve => setTimeout(resolve, 1000));
-    await callback();
 
     return new Koa();
   },

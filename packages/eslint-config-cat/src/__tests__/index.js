@@ -95,22 +95,20 @@ describe('eslint', () => {
 
   test('check amount of rules', () => {
     const testRules = Object.keys(configs?.rules || {})
-      .filter(
-        (ruleName: string): boolean => {
-          switch (ruleName) {
-            case 'arrow-parens':
-              return !ruleIds.includes('flowtype/require-parameter-type');
-            case 'flowtype/no-flow-fix-me-comments':
-            case 'flowtype/generic-spacing':
-            case 'no-warning-comments':
-            case 'no-invalid-this':
-            case 'babel/no-invalid-this':
-              return false;
-            default:
-              return true;
-          }
-        },
-      )
+      .filter((ruleName: string): boolean => {
+        switch (ruleName) {
+          case 'arrow-parens':
+            return !ruleIds.includes('flowtype/require-parameter-type');
+          case 'flowtype/no-flow-fix-me-comments':
+          case 'flowtype/generic-spacing':
+          case 'no-warning-comments':
+          case 'no-invalid-this':
+          case 'babel/no-invalid-this':
+            return false;
+          default:
+            return true;
+        }
+      })
       .sort();
 
     expect(ruleIds.sort()).toEqual(testRules);

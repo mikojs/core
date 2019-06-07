@@ -165,16 +165,14 @@ export default (
       </Document>,
     )
       .split(hash)
-      .map(
-        (docmentText: string): ReadableType => {
-          const docmentStream = new stream.Readable();
+      .map((docmentText: string): ReadableType => {
+        const docmentStream = new stream.Readable();
 
-          docmentStream.push(docmentText);
-          docmentStream.push(null);
+        docmentStream.push(docmentText);
+        docmentStream.push(null);
 
-          return docmentStream;
-        },
-      );
+        return docmentStream;
+      });
 
     // render page
     multistream([

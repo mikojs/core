@@ -120,7 +120,8 @@ const run = async (
   port?: number = parseInt(process.env.PORT || 8000, 10),
   callback: () => void = emptyFunction,
 ) =>
-  (await server.init(context, async () => {
+  (await server.init(context))
+  |> (await server.event(async () => {
     react = new (loadModule('@cat-org/koa-react', DefaultReact))(
       path.resolve(context.dir, './pages'),
       { dev: context.dev, exclude: /__generated__/ }
@@ -165,7 +166,8 @@ const run = async (
       |> server.end)
     |> server.end)
   |> server.use(await react.middleware())
-  |> server.run(port, () => {
+  |> server.run(port)
+  |> (await server.event(() => {
     callback();
 
     if (process.env.NODE_ENV !== 'test') {
@@ -175,7 +177,7 @@ const run = async (
         if (!skipRelay) graphql.relay(['--src', context.src, '--watch']);
       }
     }
-  });
+  }));
 
 (() => {
   if (module.parent) return;

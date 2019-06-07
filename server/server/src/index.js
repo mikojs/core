@@ -74,6 +74,14 @@ export default {
     return new Koa();
   },
 
+  event: async (
+    callback: () => void | Promise<void>,
+  ): emptyFunction.thatReturnsArgument => {
+    await callback();
+
+    return emptyFunction.thatReturnsArgument;
+  },
+
   start: (prefix: ?string): Router => {
     debugLog({
       method: 'start',

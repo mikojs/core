@@ -22,6 +22,7 @@ export type contextType = {|
   src: string,
   dir: string,
   babelOptions: string | false,
+  port?: number,
 |};
 
 const debugLog = debug('server');
@@ -178,14 +179,10 @@ export default {
     };
   },
 
-  run: (port?: number = 8000, callback?: () => void = emptyFunction) => (
-    app: Koa,
-  ): http$Server => {
-    debugLog(port);
+  run: (app: Koa): http$Server => {
+    const { dev, dir, port = 8000 } = context;
 
-    return app.listen(parseInt(port, 10), () => {
-      const { dev, dir } = context;
-
+    return app.listen(port, () => {
       logger.succeed(
         chalk`Running server at port: {gray {bold ${port.toString()}}}`,
       );
@@ -198,8 +195,6 @@ export default {
           .on('change', (filePath: string) => {
             if (/\.jsx?/.test(filePath)) delete require.cache[filePath];
           });
-
-      callback();
     });
   },
 };

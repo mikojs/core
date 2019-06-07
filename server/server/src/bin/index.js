@@ -110,14 +110,12 @@ class DefaultGraphql {
  * run(context)
  *
  * @param {Object} context - server context
- * @param {number} port - server port
  * @param {Function} callback - server callback
  *
  * @return {Koa} - koa server
  */
 const run = async (
   context: serverContextType,
-  port?: number = parseInt(process.env.PORT || 8000, 10),
   callback: () => void = emptyFunction,
 ) =>
   (await server.init(context))
@@ -166,7 +164,7 @@ const run = async (
       |> server.end)
     |> server.end)
   |> server.use(await react.middleware())
-  |> server.run(port)
+  |> server.run
   |> (await server.event(() => {
     callback();
 

@@ -33,30 +33,30 @@ const customMiddleware = (newBody: string) => async (
 };
 
 export default async () =>
-  await ((await server.init(context))
-    |> server.use(customMiddleware('entry router'))
-    |> ('/test'
-      |> server.start
-      |> server.use(customMiddleware('test'))
-      |> ('/get'
-        |> server.get
-        |> server.use(customMiddleware('get'))
-        |> server.end)
-      |> ('/post'
-        |> server.post
-        |> server.use(customMiddleware('post'))
-        |> server.end)
-      |> ('/put'
-        |> server.put
-        |> server.use(customMiddleware('put'))
-        |> server.end)
-      |> ('/del'
-        |> server.del
-        |> server.use(customMiddleware('del'))
-        |> server.end)
-      |> ('/all'
-        |> server.all
-        |> server.use(customMiddleware('all'))
-        |> server.end)
+  (await server.init(context))
+  |> server.use(customMiddleware('entry router'))
+  |> ('/test'
+    |> server.start
+    |> server.use(customMiddleware('test'))
+    |> ('/get'
+      |> server.get
+      |> server.use(customMiddleware('get'))
       |> server.end)
-    |> server.run);
+    |> ('/post'
+      |> server.post
+      |> server.use(customMiddleware('post'))
+      |> server.end)
+    |> ('/put'
+      |> server.put
+      |> server.use(customMiddleware('put'))
+      |> server.end)
+    |> ('/del'
+      |> server.del
+      |> server.use(customMiddleware('del'))
+      |> server.end)
+    |> ('/all'
+      |> server.all
+      |> server.use(customMiddleware('all'))
+      |> server.end)
+    |> server.end)
+  |> server.run;

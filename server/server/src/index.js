@@ -179,22 +179,26 @@ export default {
     };
   },
 
-  run: (app: Koa): http$Server => {
+  run: (app: Koa): Promise<http$Server> => {
     const { dev, dir, port = 8000 } = context;
 
-    return app.listen(port, () => {
-      logger.succeed(
-        chalk`Running server at port: {gray {bold ${port.toString()}}}`,
-      );
+    return new Promise(resolve => {
+      const server = app.listen(port, () => {
+        logger.succeed(
+          chalk`Running server at port: {gray {bold ${port.toString()}}}`,
+        );
 
-      if (dev)
-        chokidar
-          .watch(path.resolve(dir), {
-            ignoreInitial: true,
-          })
-          .on('change', (filePath: string) => {
-            if (/\.jsx?/.test(filePath)) delete require.cache[filePath];
-          });
+        if (dev)
+          chokidar
+            .watch(path.resolve(dir), {
+              ignoreInitial: true,
+            })
+            .on('change', (filePath: string) => {
+              if (/\.jsx?/.test(filePath)) delete require.cache[filePath];
+            });
+
+        resolve(server);
+      });
     });
   },
 };

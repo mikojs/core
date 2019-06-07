@@ -177,7 +177,7 @@ const run = async (
     }
   }));
 
-(() => {
+(async () => {
   if (module.parent) return;
 
   const filterArgv = process.argv.filter(
@@ -192,7 +192,7 @@ const run = async (
 
   invariant(src && outDir, 'Must use `--out-dir` or `-d` to build the server');
 
-  run({
+  await run({
     dev: process.env.NODE_ENV !== 'production',
     src,
     dir: outDir,

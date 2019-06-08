@@ -59,4 +59,4 @@ export default async () =>
       |> server.use(customMiddleware('all'))
       |> server.end)
     |> server.end)
-  |> server.run();
+  |> server.run;

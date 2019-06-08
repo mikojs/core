@@ -110,17 +110,12 @@ class DefaultGraphql {
  * run(context)
  *
  * @param {Object} context - server context
- * @param {number} port - server port
- * @param {Function} callback - server callback
  *
  * @return {Koa} - koa server
  */
-const run = async (
-  context: serverContextType,
-  port?: number = parseInt(process.env.PORT || 8000, 10),
-  callback: () => void = emptyFunction,
-) =>
-  (await server.init(context, async () => {
+const run = async (context: serverContextType) =>
+  (await server.init(context))
+  |> (await server.event(async () => {
     react = new (loadModule('@cat-org/koa-react', DefaultReact))(
       path.resolve(context.dir, './pages'),
       { dev: context.dev, exclude: /__generated__/ }
@@ -146,9 +141,13 @@ const run = async (
         ...process.argv,
       ]);
 
-      if (!skipRelay) await graphql.relay(['--src', context.src]);
+      if (!skipRelay) {
+        await graphql.relay(['--src', context.src]);
 
-      if (!context.dev && !skipBuild) await react.buildJs();
+        if (context.dev) graphql.relay(['--src', context.src, '--watch']);
+      }
+
+      if (!skipBuild && !context.dev) await react.buildJs();
     }
   }))
   |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
@@ -165,19 +164,9 @@ const run = async (
       |> server.end)
     |> server.end)
   |> server.use(await react.middleware())
-  |> server.run(port, () => {
-    callback();
+  |> server.run;
 
-    if (process.env.NODE_ENV !== 'test') {
-      const { skipRelay = false } = program.parse([...process.argv]);
-
-      if (context.dev) {
-        if (!skipRelay) graphql.relay(['--src', context.src, '--watch']);
-      }
-    }
-  });
-
-(() => {
+(async () => {
   if (module.parent) return;
 
   const filterArgv = process.argv.filter(
@@ -192,14 +181,11 @@ const run = async (
 
   invariant(src && outDir, 'Must use `--out-dir` or `-d` to build the server');
 
-  run({
+  await run({
     dev: process.env.NODE_ENV !== 'production',
     src,
     dir: outDir,
-    babelOptions: filterArgv
-      .slice(2)
-      .filter((argv: string) => !['-w', '--watch'].includes(argv))
-      .join(' '),
+    babelOptions: filterArgv.slice(2).join(' '),
   });
 })();
 

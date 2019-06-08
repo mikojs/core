@@ -19,6 +19,17 @@ const context = {
 };
 
 describe('server', () => {
+  test('event work', async () => {
+    const mockCallback = jest.fn();
+    const runningServer = await ((await server.init(context))
+      |> (await server.event(mockCallback))
+      |> server.run);
+
+    runningServer.close();
+
+    expect(mockCallback).toHaveBeenCalled();
+  });
+
   test.each`
     method
     ${'get'}
@@ -49,12 +60,11 @@ describe('server', () => {
   });
 
   test('use dev mode', async () => {
-    const runningServer =
-      (await server.init({
-        ...context,
-        dev: true,
-        babelOptions: 'src -d lib --verbose',
-      })) |> server.run();
+    const runningServer = await ((await server.init({
+      ...context,
+      dev: true,
+      babelOptions: 'src -d lib --verbose',
+    })) |> server.run);
 
     await new Promise(resolve => setTimeout(resolve, 100));
 

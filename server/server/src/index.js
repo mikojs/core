@@ -172,10 +172,9 @@ export default {
     };
   },
 
-  run: (app: Koa): Promise<http$Server> => {
-    const { dev, dir, port = 8000 } = context;
-
-    return new Promise(resolve => {
+  run: (app: Koa): Promise<http$Server> =>
+    new Promise(resolve => {
+      const { dev, dir, port = 8000 } = context;
       const server = app.listen(port, () => {
         logger.succeed(
           chalk`Running server at port: {gray {bold ${port.toString()}}}`,
@@ -192,6 +191,5 @@ export default {
 
         resolve(server);
       });
-    });
-  },
+    }),
 };

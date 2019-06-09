@@ -1,0 +1,21 @@
+// @flow
+
+export default `# default
+*.swp
+*.log
+.DS_Store
+
+# node
+node_modules
+
+# babel
+lib
+
+# eslint
+.eslintcache
+
+# flow
+flow-typed/npm
+
+# jest
+coverage`;

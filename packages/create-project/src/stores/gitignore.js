@@ -2,25 +2,7 @@
 
 import Store from './index';
 
-const template = `# default
-*.swp
-*.log
-.DS_Store
-
-# node
-node_modules
-
-# babel
-lib
-
-# eslint
-.eslintcache
-
-# flow
-flow-typed/npm
-
-# jest
-coverage`;
+import template from 'templates/gitignore';
 
 /** gitignore store */
 class Gitignore extends Store {

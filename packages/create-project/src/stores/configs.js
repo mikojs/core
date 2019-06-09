@@ -2,19 +2,7 @@
 
 import Store from './index';
 
-/**
- * @example
- * template(['react'])
- *
- * @param {Array} configsEnv - configs env
- *
- * @return {string} - content
- */
-const template = (configsEnv: $ReadOnlyArray<string>) => `// @flow
-
-module.exports = {
-  configsEnv: [${configsEnv.map((env: string) => `'${env}'`).join(', ')}],
-};`;
+import template from 'templates/catrc';
 
 /** configs store */
 class Configs extends Store {

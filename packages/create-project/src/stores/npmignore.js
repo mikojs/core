@@ -7,41 +7,7 @@ import readme from './readme';
 import circleci from './circleci';
 import Store from './index';
 
-/**
- * @example
- * template(false)
- *
- * @param {boolean} lerna - lerna option
- *
- * @return {string} - content
- */
-const template = (lerna: boolean) =>
-  lerna
-    ? `# babel
-src`
-    : `# default
-*.log
-
-# node
-node_modules
-
-# babel
-src
-
-# eslint
-.eslintcache
-
-# flow
-.flowignore
-flow-typed
-
-# jest
-coverage
-__tests__
-__mocks__
-
-# circleci
-.circleci`;
+import template from 'templates/npmignore';
 
 /** npmignore store */
 class Npmignore extends Store {

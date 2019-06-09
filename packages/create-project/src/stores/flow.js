@@ -2,38 +2,7 @@
 
 import Store from './index';
 
-/**
- * @example
- * template(false)
- *
- * @param {boolean} useStyles - use styles or not
- *
- * @return {string} - template string
- */
-const template = (
-  useStyles: $PropertyType<$PropertyType<Store, 'ctx'>, 'useStyles'>,
-) => `[ignore]
-# just for findup
-.*/node_modules/findup/test/.*
-
-[include]
-
-[libs]
-./flow-typed
-
-[lints]
-
-[options]${
-  !useStyles
-    ? ''
-    : `
-module.file_ext=.js
-${useStyles === 'less' ? 'module.file_ext=.less' : 'module.file_ext=.css'}`
-}
-module.system.node.resolve_dirname=node_modules
-module.system.node.resolve_dirname=./src
-
-[strict]`;
+import template from 'templates/flowconfig';
 
 /** flow store */
 class Flow extends Store {

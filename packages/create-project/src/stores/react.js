@@ -7,13 +7,7 @@ import jest from './jest';
 import configs from './configs';
 import Store from './index';
 
-const template = `// @flow
-
-import React from 'react';
-
-const Home = () => <div>@cat-org/create-project</div>;
-
-export default Home;`;
+import template from 'templates/pages';
 
 /** react store */
 class React extends Store {

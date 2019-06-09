@@ -17,10 +17,8 @@ let runningServer: http$Server;
 describe('server', () => {
   beforeAll(async () => {
     runningServer = await server({
-      dev: true,
       src: path.resolve(__dirname, '..'),
       dir: path.resolve(__dirname, '..'),
-      babelOptions: false,
     });
   });
 

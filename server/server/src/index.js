@@ -8,7 +8,7 @@ import execa from 'execa';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
 import debug from 'debug';
-import { emptyFunction } from 'fbjs';
+import { invariant, emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -18,43 +18,66 @@ import Endpoint from './utils/Endpoint';
 type routerType = Router | Endpoint | Koa;
 
 export type contextType = {|
-  dev: boolean,
   src: string,
   dir: string,
-  babelOptions: string | false,
+  dev?: boolean,
+  babelOptions?: false | $ReadOnlyArray<string>,
+  port?: number,
 |};
 
 const debugLog = debug('server');
 const context: contextType = {
-  dev: true,
   src: '',
   dir: '',
+  dev: true,
   babelOptions: false,
 };
 
 handleUnhandledRejection();
 
 export default {
-  init: async (
-    { dev, dir, babelOptions }: contextType,
-    callback: () => void | Promise<void> = emptyFunction,
-  ): Promise<Koa> => {
-    context.dev = dev;
-    context.dir = dir;
-    context.babelOptions = babelOptions;
+  init: async (initContext: contextType): Promise<Koa> => {
+    Object.keys(initContext).forEach((key: string) => {
+      context[key] = initContext[key];
+    });
+    debugLog(context);
 
-    if (babelOptions)
-      await execa.shell(`babel ${babelOptions}`, {
+    const { dev, src, dir, babelOptions } = context;
+
+    if (babelOptions) {
+      invariant(
+        !babelOptions.some((option: string) =>
+          ['-d', '--out-dir'].includes(option),
+        ),
+        'Should not use `-d` or `--out-dir`',
+      );
+
+      const options = [src, '-d', dir, ...babelOptions].join(' ');
+
+      await execa.shell(`babel ${options}`, {
         stdio: 'inherit',
       });
+
+      if (dev)
+        execa.shell(`babel --skip-initial-build -w ${options}`, {
+          stdio: 'inherit',
+        });
+    }
 
     logger.start('Server start');
 
     // TODO: avoid to trigger webpack again
     await new Promise(resolve => setTimeout(resolve, 1000));
-    await callback();
 
     return new Koa();
+  },
+
+  event: async (
+    callback: () => void | Promise<void>,
+  ): emptyFunction.thatReturnsArgument => {
+    await callback();
+
+    return emptyFunction.thatReturnsArgument;
   },
 
   start: (prefix: ?string): Router => {
@@ -153,33 +176,24 @@ export default {
     };
   },
 
-  run: (port?: number = 8000, callback?: () => void = emptyFunction) => (
-    app: Koa,
-  ): http$Server => {
-    debugLog(port);
+  run: (app: Koa): Promise<http$Server> =>
+    new Promise(resolve => {
+      const { dev, dir, port = 8000 } = context;
+      const server = app.listen(port, () => {
+        logger.succeed(
+          chalk`Running server at port: {gray {bold ${port.toString()}}}`,
+        );
 
-    return app.listen(parseInt(port, 10), () => {
-      const { dev, dir, babelOptions } = context;
+        if (dev)
+          chokidar
+            .watch(path.resolve(dir), {
+              ignoreInitial: true,
+            })
+            .on('change', (filePath: string) => {
+              if (/\.jsx?/.test(filePath)) delete require.cache[filePath];
+            });
 
-      logger.succeed(
-        chalk`Running server at port: {gray {bold ${port.toString()}}}`,
-      );
-
-      if (dev && babelOptions) {
-        chokidar
-          .watch(path.resolve(dir), {
-            ignoreInitial: true,
-          })
-          .on('change', (filePath: string) => {
-            if (/\.jsx?/.test(filePath)) delete require.cache[filePath];
-          });
-
-        execa.shell(`babel --skip-initial-build -w ${babelOptions}`, {
-          stdio: 'inherit',
-        });
-      }
-
-      callback();
-    });
-  },
+        resolve(server);
+      });
+    }),
 };

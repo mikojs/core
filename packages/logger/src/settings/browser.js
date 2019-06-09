@@ -27,23 +27,21 @@ const transformLog = (logFunc: (message: string) => void) => (
   logFunc(
     ...[
       message.replace(CHALK_PATTERN, '%c'),
-      ...(message.match(CHALK_PATTERN) || []).map(
-        (pattern: string): string => {
-          if (pattern === '}') return store.pop();
+      ...(message.match(CHALK_PATTERN) || []).map((pattern: string): string => {
+        if (pattern === '}') return store.pop();
 
-          const chalkText = pattern.replace(/\{([a-zA-Z]*) /, '$1');
+        const chalkText = pattern.replace(/\{([a-zA-Z]*) /, '$1');
 
-          switch (chalkText) {
-            case 'bold':
-              store.push('font-weight: initial;');
-              return `font-weight: ${chalkText};`;
+        switch (chalkText) {
+          case 'bold':
+            store.push('font-weight: initial;');
+            return `font-weight: ${chalkText};`;
 
-            default:
-              store.push('color: initial;');
-              return `color: ${chalkText};`;
-          }
-        },
-      ),
+          default:
+            store.push('color: initial;');
+            return `color: ${chalkText};`;
+        }
+      }),
     ],
   );
 };

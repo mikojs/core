@@ -13,7 +13,7 @@ import server from '../../index';
 const context = {
   dev: false,
   dir: 'lib',
-  babelOptions: 'src -d lib --verbose',
+  babelOptions: [],
 };
 
 /**
@@ -59,4 +59,4 @@ export default async () =>
       |> server.use(customMiddleware('all'))
       |> server.end)
     |> server.end)
-  |> server.run();
+  |> server.run;

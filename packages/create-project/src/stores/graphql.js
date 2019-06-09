@@ -3,6 +3,7 @@
 import memoizeOne from 'memoize-one';
 import { emptyFunction } from 'fbjs';
 
+import react from './react';
 import relay from './relay';
 import jest from './jest';
 import Store from './index';
@@ -24,7 +25,7 @@ export default {
 
 /** graphql store */
 class Graphql extends Store {
-  +subStores = [relay, jest];
+  +subStores = [react, relay, jest];
 
   storeUseGraphql = false;
 

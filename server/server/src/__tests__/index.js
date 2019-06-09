@@ -15,7 +15,6 @@ import Endpoint from 'utils/Endpoint';
 const context = {
   dev: false,
   dir: 'lib',
-  babelOptions: false,
 };
 
 describe('server', () => {
@@ -63,7 +62,7 @@ describe('server', () => {
     const runningServer = await ((await server.init({
       ...context,
       dev: true,
-      babelOptions: 'src -d lib --verbose',
+      babelOptions: [],
     })) |> server.run);
 
     await new Promise(resolve => setTimeout(resolve, 100));

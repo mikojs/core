@@ -18,18 +18,18 @@ import Endpoint from './utils/Endpoint';
 type routerType = Router | Endpoint | Koa;
 
 export type contextType = {|
-  dev: boolean,
   src: string,
   dir: string,
+  dev?: boolean,
   babelOptions?: false | $ReadOnlyArray<string>,
   port?: number,
 |};
 
 const debugLog = debug('server');
 const context: contextType = {
-  dev: true,
   src: '',
   dir: '',
+  dev: true,
   babelOptions: false,
 };
 

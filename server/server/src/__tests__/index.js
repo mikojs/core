@@ -63,7 +63,7 @@ describe('server', () => {
     const runningServer = await ((await server.init({
       ...context,
       dev: true,
-      babelOptions: [],
+      babelOptions: ['--verbose'],
     })) |> server.run);
 
     await new Promise(resolve => setTimeout(resolve, 100));

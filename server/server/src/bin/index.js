@@ -185,7 +185,11 @@ const run = async (context: serverContextType) =>
     dev: process.env.NODE_ENV !== 'production',
     src,
     dir: outDir,
-    babelOptions: filterArgv.slice(2).join(' '),
+    babelOptions: filterArgv
+      .slice(2)
+      .filter(
+        (argv: string) => ![src, outDir, '-d', '--out-dir'].includes(argv),
+      ),
   });
 })();
 

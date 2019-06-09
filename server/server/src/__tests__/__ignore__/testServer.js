@@ -13,7 +13,7 @@ import server from '../../index';
 const context = {
   dev: false,
   dir: 'lib',
-  babelOptions: 'src -d lib --verbose',
+  babelOptions: [],
 };
 
 /**

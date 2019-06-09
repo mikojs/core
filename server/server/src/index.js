@@ -8,7 +8,7 @@ import execa from 'execa';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
 import debug from 'debug';
-import { emptyFunction } from 'fbjs';
+import { invariant, emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -21,7 +21,7 @@ export type contextType = {|
   dev: boolean,
   src: string,
   dir: string,
-  babelOptions: string | false,
+  babelOptions?: false | $ReadOnlyArray<string>,
   port?: number,
 |};
 
@@ -42,13 +42,17 @@ export default {
     });
     debugLog(context);
 
-    const { dev, babelOptions } = context;
+    const { dev, src, dir, babelOptions } = context;
 
     if (babelOptions) {
-      const options = babelOptions
-        .split(/ /)
-        .filter((argv: string) => !['-w', '--watch'].includes(argv))
-        .join(' ');
+      invariant(
+        !babelOptions.some((option: string) =>
+          ['-d', '--out-dir'].includes(option),
+        ),
+        'Should not use `-d` or `--out-dir`',
+      );
+
+      const options = [src, '-d', dir, ...babelOptions].join(' ');
 
       await execa.shell(`babel ${options}`, {
         stdio: 'inherit',

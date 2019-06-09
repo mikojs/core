@@ -11,6 +11,7 @@ import { type Context as koaContextType } from 'koa';
 import server from '../../index';
 
 const context = {
+  dev: false,
   dir: 'lib',
   babelOptions: [],
 };

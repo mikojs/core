@@ -15,6 +15,7 @@ import Endpoint from 'utils/Endpoint';
 const context = {
   dev: false,
   dir: 'lib',
+  babelOptions: false,
 };
 
 describe('server', () => {

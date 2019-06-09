@@ -1,6 +1,6 @@
 // @flow
 
-import fetch from 'whatwg-fetch';
+import 'whatwg-fetch';
 import {
   RelayNetworkLayer,
   cacheMiddleware,
@@ -13,8 +13,6 @@ const source = new RecordSource();
 const store = new Store(source);
 
 let storeEnvironment: Environment;
-
-window.fetch = fetch;
 
 export default {
   createEnvironment: (relayData: mixed): Environment => {

@@ -6,6 +6,7 @@ import styles from './styles';
 import relay from './relay';
 import jest from './jest';
 import configs from './configs';
+import gitignore from './gitignore';
 import Store from './index';
 
 /**
@@ -143,7 +144,7 @@ export default class Main extends React.PureComponent<
 
 /** react store */
 class React extends Store {
-  +subStores = [styles, relay, jest, configs];
+  +subStores = [styles, relay, jest, configs, gitignore];
 
   storeUseReact = false;
 

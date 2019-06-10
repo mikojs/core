@@ -6,6 +6,7 @@ import { emptyFunction } from 'fbjs';
 import react from './react';
 import relay from './relay';
 import jest from './jest';
+import configs from './configs';
 import gitignore from './gitignore';
 import Store from './index';
 
@@ -26,7 +27,7 @@ export default {
 
 /** graphql store */
 class Graphql extends Store {
-  +subStores = [react, relay, jest, gitignore];
+  +subStores = [react, relay, jest, configs, gitignore];
 
   storeUseGraphql = false;
 

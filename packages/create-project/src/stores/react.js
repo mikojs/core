@@ -28,7 +28,7 @@ const Home = () => <div>@cat-org/create-project</div>;
 export default Home;`
     : `// @flow
 
-import React from 'react';
+import React, { type Node as NodeType } from 'react';
 import { graphql } from 'react-relay';
 
 import contexts from './.templates/contexts';
@@ -57,7 +57,7 @@ import React from 'react';
 
 export default {
   QueryPropsContext: React.createContext(),
-}`;
+};`;
 
 const mainTemplate = `// @flow
 

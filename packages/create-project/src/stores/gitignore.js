@@ -32,6 +32,7 @@ coverage${
   !useRelay
     ? ''
     : `
+
 # relay
 __generated__`
 }`;

@@ -3,11 +3,13 @@
 import Store from './index';
 
 const template = `// @flow
+
 export const { initEnvironment, createEnvironment } = !process.env.BROWSER
   ? require('./server')
   : require('./client');`;
 
 const clientTemplate = `// @flow
+
 import 'whatwg-fetch';
 import {
   RelayNetworkLayer,
@@ -47,6 +49,7 @@ export default {
 };`;
 
 const serverTemplate = `// @flow
+
 import fetch from 'node-fetch';
 import {
   RelayNetworkLayer,
@@ -114,7 +117,7 @@ export default {
 \`
 };`;
 
-const mainTemplate = `/ @flow
+const mainTemplate = `// @flow
 
 import React, { type Node as NodeType } from 'react';
 import {
@@ -209,7 +212,7 @@ class Relay extends Store {
       'src/utils/createEnvironment/client.js': clientTemplate,
       'src/utils/createEnvironment/server.js': serverTemplate,
       'src/graphql/node.js': nodeTemplate,
-      'src/page/.templates/Main.js': mainTemplate,
+      'src/pages/.templates/Main.js': mainTemplate,
     });
 
     if (lerna) return;

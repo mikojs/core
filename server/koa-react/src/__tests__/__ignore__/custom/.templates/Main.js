@@ -4,15 +4,13 @@
 
 import React, { type Node as NodeType } from 'react';
 
-import Context from '../../Context';
-
 import { type mainCtxType } from '../../../../types';
 
 type propsType = {|
   value: string,
   name: string,
   pageProps: {},
-  children: NodeType,
+  children: ({ value: string }) => NodeType,
 |};
 
 export default class Main extends React.PureComponent<propsType> {
@@ -26,13 +24,11 @@ export default class Main extends React.PureComponent<propsType> {
     const { value, name, pageProps, children } = this.props;
 
     return (
-      <Context.Provider value={value}>
-        <div>
-          {name}
-          {JSON.stringify(pageProps)}
-          {children}
-        </div>
-      </Context.Provider>
+      <div>
+        {name}
+        {JSON.stringify(pageProps)}
+        {children({ value })}
+      </div>
     );
   }
 }

@@ -101,7 +101,9 @@ const getPage = (
         (await Component.getInitialProps?.(ctx)) || {};
       // TODO component should be ignored
       // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-      const Page = () => <Component {...initialProps} />;
+      const Page = <P: {}>(props?: P) => (
+        <Component {...props} {...initialProps} />
+      );
 
       if (!ctx.isServer) renderToStaticMarkup(head || null);
 
@@ -157,22 +159,25 @@ export default class Root extends React.PureComponent<propsType, stateType> {
 
     return (
       <Main {...mainInitialProps}>
-        <Suspense fallback={<Loading />}>
-          <Route
-            children={({
-              location: { pathname, search },
-              staticContext,
-            }: contextRouterType) =>
-              React.createElement(
-                // $FlowFixMe can not overwrite context type
-                getPage(routesData, {
-                  location: { pathname, search },
-                  staticContext,
-                }),
-              )
-            }
-          />
-        </Suspense>
+        {<P: { key: string }>(props?: P) => (
+          <Suspense fallback={<Loading />}>
+            <Route
+              children={({
+                location: { pathname, search },
+                staticContext,
+              }: contextRouterType) =>
+                React.createElement(
+                  // $FlowFixMe can not overwrite context type
+                  getPage(routesData, {
+                    location: { pathname, search },
+                    staticContext,
+                  }),
+                  props,
+                )
+              }
+            />
+          </Suspense>
+        )}
       </Main>
     );
   }

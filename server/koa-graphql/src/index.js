@@ -70,6 +70,9 @@ export default class Graphql {
       );
 
     this.schema = makeExecutableSchema({
+      resolverValidationOptions: {
+        requireResolversForResolveType: false,
+      },
       ...options,
       typeDefs,
       resolvers,

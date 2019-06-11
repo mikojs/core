@@ -25,25 +25,13 @@ yarn add ${name}
 ## Develop`
 }`;
 
-/**
- * @example
- * noNpmContent(false)
- *
- * @param {boolean} lerna - lerna option
- *
- * @return {string} - no npm content
- */
-const noNpmContent = (lerna: boolean) => `## Getting Started
+const noNpmContent = `## Getting Started
 
 \`\`\`sh
 yarn install
-\`\`\`${
-  lerna
-    ? ''
-    : `
+\`\`\`
 
-## Usage`
-}`;
+## Usage`;
 
 /**
  * @example
@@ -67,16 +55,20 @@ const template = (
 
 [website]: ${homepage}
 
-${description}
-
-${useNpm ? npmContent(lerna, name) : noNpmContent(lerna)}${
-  lerna
+${description}${
+  lerna && !useNpm
     ? ''
     : `
+
+${useNpm ? npmContent(lerna, name) : noNpmContent}${
+        lerna
+          ? ''
+          : `
 
 - \`dev\`: Run development.
 - \`prod\`: Run production.
 - \`test\`: Run testing.`
+      }`
 }`;
 
 /** readme store */

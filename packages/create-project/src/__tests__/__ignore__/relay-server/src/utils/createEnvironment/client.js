@@ -25,6 +25,7 @@ export default {
           size: 100,
           ttl: 60 * 1000,
         }),
+        // $FlowFixMe TODO
         new RelaySSR(relayData).getMiddleware({
           lookup: false,
         }),

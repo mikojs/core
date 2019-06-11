@@ -157,22 +157,25 @@ export default class Root extends React.PureComponent<propsType, stateType> {
 
     return (
       <Main {...mainInitialProps}>
-        <Suspense fallback={<Loading />}>
-          <Route
-            children={({
-              location: { pathname, search },
-              staticContext,
-            }: contextRouterType) =>
-              React.createElement(
-                // $FlowFixMe can not overwrite context type
-                getPage(routesData, {
-                  location: { pathname, search },
-                  staticContext,
-                }),
-              )
-            }
-          />
-        </Suspense>
+        {<P: { key: string }>(props?: P) => (
+          <Suspense fallback={<Loading />}>
+            <Route
+              children={({
+                location: { pathname, search },
+                staticContext,
+              }: contextRouterType) =>
+                React.createElement(
+                  // $FlowFixMe can not overwrite context type
+                  getPage(routesData, {
+                    location: { pathname, search },
+                    staticContext,
+                  }),
+                  props,
+                )
+              }
+            />
+          </Suspense>
+        )}
       </Main>
     );
   }

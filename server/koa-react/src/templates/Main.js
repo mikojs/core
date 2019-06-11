@@ -4,6 +4,6 @@
 
 import { type Node as NodeType } from 'react';
 
-const Main = ({ children }: {| children: NodeType |}) => children;
+const Main = ({ children }: {| children: () => NodeType |}) => children();
 
 export default Main;

@@ -77,7 +77,10 @@ const lint = {
     },
     overrides: [
       {
-        files: ['packages/create-project/src/__tests__/__ignore__/**'],
+        files: [
+          'packages/create-project/src/__tests__/__ignore__/**',
+          'packages/create-project/src/__tests__/__ignore__/**/.templates/**',
+        ],
         rules: {
           'import/no-extraneous-dependencies': 'off',
           // TODO: component should be ignore

@@ -7,9 +7,3 @@
 [website]: http://cat-org/package-homepage
 
 package description
-
-## Getting Started
-
-```sh
-yarn install
-```

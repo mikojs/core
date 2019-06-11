@@ -12,7 +12,7 @@ type propsType = {|
   value: string,
   name: string,
   pageProps: {},
-  children: NodeType,
+  children: () => NodeType,
 |};
 
 export default class Main extends React.PureComponent<propsType> {
@@ -30,7 +30,7 @@ export default class Main extends React.PureComponent<propsType> {
         <div>
           {name}
           {JSON.stringify(pageProps)}
-          {children}
+          {children()}
         </div>
       </Context.Provider>
     );

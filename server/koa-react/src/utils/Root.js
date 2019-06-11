@@ -101,7 +101,9 @@ const getPage = (
         (await Component.getInitialProps?.(ctx)) || {};
       // TODO component should be ignored
       // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-      const Page = () => <Component {...initialProps} />;
+      const Page = <P: {}>(props?: P) => (
+        <Component {...props} {...initialProps} />
+      );
 
       if (!ctx.isServer) renderToStaticMarkup(head || null);
 

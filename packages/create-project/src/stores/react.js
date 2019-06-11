@@ -5,6 +5,7 @@ import memoizeOne from 'memoize-one';
 import styles from './styles';
 import jest from './jest';
 import configs from './configs';
+import gitignore from './gitignore';
 import Store from './index';
 
 const template = `// @flow
@@ -17,7 +18,7 @@ export default Home;`;
 
 /** react store */
 class React extends Store {
-  +subStores = [styles, jest, configs];
+  +subStores = [styles, jest, configs, gitignore];
 
   storeUseReact = false;
 

@@ -4,6 +4,7 @@ import memoizeOne from 'memoize-one';
 import { emptyFunction } from 'fbjs';
 
 import jest from './jest';
+import gitignore from './gitignore';
 import Store from './index';
 
 const template = `// @flow
@@ -23,7 +24,7 @@ export default {
 
 /** graphql store */
 class Graphql extends Store {
-  +subStores = [jest];
+  +subStores = [jest, gitignore];
 
   storeUseGraphql = false;
 

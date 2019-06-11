@@ -2,7 +2,15 @@
 
 import Store from './index';
 
-const template = `# default
+/**
+ * @example
+ * template(false)
+ *
+ * @param {boolean} useRelay - use relay or not
+ *
+ * @return {string} - content
+ */
+const template = (useRelay: boolean) => `# default
 *.swp
 *.log
 .DS_Store
@@ -20,7 +28,13 @@ lib
 flow-typed/npm
 
 # jest
-coverage`;
+coverage${
+  !useRelay
+    ? ''
+    : `
+# relay
+__generated__`
+}`;
 
 /** gitignore store */
 class Gitignore extends Store {
@@ -30,11 +44,15 @@ class Gitignore extends Store {
    *
    * @param {Object} ctx - store context
    */
-  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({
+    useReact,
+    useGraphql,
+    lerna,
+  }: $PropertyType<Store, 'ctx'>) => {
     if (lerna) return;
 
     await this.writeFiles({
-      '.gitignore': template,
+      '.gitignore': template(Boolean(useReact && useGraphql)),
     });
   };
 }

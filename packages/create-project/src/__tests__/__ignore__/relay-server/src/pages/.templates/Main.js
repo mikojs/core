@@ -3,7 +3,6 @@
 import React, { type Node as NodeType, type ComponentType } from 'react';
 import {
   QueryRenderer,
-  // $FlowFixMe TODO
   fetchQuery,
   type ReadyState as ReadyStateType,
   type GraphQLTaggedNode as GraphQLTaggedNodeType,
@@ -69,7 +68,6 @@ export default class Main extends React.PureComponent<
     const environment = createEnvironment(
       relayData,
       JSON.stringify({
-        // $FlowFixMe TODO
         queryID: Component.query ? Component.query().params.name : undefined,
         variables,
       }),

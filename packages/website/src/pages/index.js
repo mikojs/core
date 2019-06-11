@@ -5,10 +5,6 @@
 import React, { type Node as NodeType } from 'react';
 import { graphql } from 'react-relay';
 
-import contexts from './.templates/contexts';
-
-const { QueryPropsContext } = contexts;
-
 export default class Home extends React.PureComponent<*> {
   static query = graphql`
     query pages_homeQuery {
@@ -18,9 +14,7 @@ export default class Home extends React.PureComponent<*> {
 
   render(): NodeType {
     return (
-      <QueryPropsContext.Consumer>
-        {(props: mixed) => <div>{JSON.stringify(props)}</div>}
-      </QueryPropsContext.Consumer>
+       <div>{JSON.stringify(this.props)}</div>
     );
   }
 }

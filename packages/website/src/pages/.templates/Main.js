@@ -11,8 +11,6 @@ import {
 
 import { type mainCtxType } from '@cat-org/koa-react/lib/types';
 
-import contexts from './contexts';
-
 import { initEnvironment, createEnvironment } from 'utils/createEnvironment';
 
 type propsType = {|
@@ -20,8 +18,6 @@ type propsType = {|
   variables: mixed,
   relayData: mixed,
 |};
-
-const { QueryPropsContext } = contexts;
 
 export default class Main extends React.PureComponent<
   propsType & {| children: NodeType |},
@@ -72,11 +68,7 @@ export default class Main extends React.PureComponent<
 
           if (!props) return <div>Loading</div>;
 
-          return (
-            <QueryPropsContext.Provider value={props}>
-              {children}
-            </QueryPropsContext.Provider>
-          );
+          return children(props);
         }}
       />
     );

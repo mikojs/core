@@ -2,6 +2,7 @@
 
 import memoizeOne from 'memoize-one';
 
+import relay from './relay';
 import styles from './styles';
 import jest from './jest';
 import configs from './configs';
@@ -18,7 +19,7 @@ export default Home;`;
 
 /** react store */
 class React extends Store {
-  +subStores = [styles, jest, configs, gitignore];
+  +subStores = [relay, styles, jest, configs, gitignore];
 
   storeUseReact = false;
 

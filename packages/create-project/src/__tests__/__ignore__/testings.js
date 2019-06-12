@@ -319,6 +319,20 @@ const lernaGraphqlServer = {
   },
 };
 
+const lernaRelayServer = {
+  name: 'lerna/relay-server',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useGraphql: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
 export default [
   basicUsage,
   privatePkg,
@@ -338,6 +352,7 @@ export default [
   lernaReactServerWithCss,
   lernaReactServerWithLess,
   lernaGraphqlServer,
+  lernaRelayServer,
 ].reduce(
   (
     result: $ReadOnlyArray<

@@ -7,6 +7,7 @@ import {
   urlMiddleware,
 } from 'react-relay-network-modern/node8';
 import RelaySSR from 'react-relay-network-modern-ssr/node8/client';
+import { type SSRCache as SSRCacheType } from 'react-relay-network-modern-ssr/node8/server';
 import { Environment, RecordSource, Store } from 'relay-runtime';
 
 const source = new RecordSource();
@@ -15,7 +16,7 @@ const store = new Store(source);
 let storeEnvironment: Environment;
 
 export default {
-  createEnvironment: (relayData: mixed): Environment => {
+  createEnvironment: (relayData?: SSRCacheType): Environment => {
     if (storeEnvironment) return storeEnvironment;
 
     storeEnvironment = new Environment({

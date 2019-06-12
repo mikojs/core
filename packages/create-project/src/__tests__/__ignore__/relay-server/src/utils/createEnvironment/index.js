@@ -13,7 +13,7 @@ export const {
     relaySSR: RelaySSRType,
     environment: EnvironmentType,
   },
-  createEnvironment: (relayData: SSRCacheType, key: string) => EnvironmentType,
+  createEnvironment: (relayData?: SSRCacheType, key: string) => EnvironmentType,
 } = !process.env.BROWSER
   ? require('./server').default || require('./server')
   : require('./client').default || require('./client');

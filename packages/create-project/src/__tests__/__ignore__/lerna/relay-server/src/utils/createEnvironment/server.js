@@ -34,14 +34,18 @@ export default {
       }),
     };
   },
-  createEnvironment: (relayData: SSRCacheType, key: string): Environment => {
+  createEnvironment: (relayData?: SSRCacheType, key: string): Environment => {
     const source = new RecordSource();
     const store = new Store(source);
 
     return new Environment({
       store,
       network: Network.create(
-        () => relayData.find(([dataKey]: [string]) => dataKey === key)[1],
+        () =>
+          // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+          relayData?.find(
+            ([dataKey]: $ElementType<SSRCacheType, number>) => dataKey === key,
+          )?.[1],
       ),
     });
   },

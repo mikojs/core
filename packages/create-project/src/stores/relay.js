@@ -4,9 +4,23 @@ import Store from './index';
 
 const template = `// @flow
 
-export const { initEnvironment, createEnvironment } = !process.env.BROWSER
-  ? require('./server')
-  : require('./client');`;
+import type RelaySSRType, {
+  SSRCache as SSRCacheType,
+} from 'react-relay-network-modern-ssr/node8/server';
+import { type Environment as EnvironmentType } from 'relay-runtime';
+
+export const {
+  initEnvironment,
+  createEnvironment,
+}: {
+  initEnvironment?: () => {
+    relaySSR: RelaySSRType,
+    environment: EnvironmentType,
+  },
+  createEnvironment: (relayData: SSRCacheType, key: string) => EnvironmentType,
+} = !process.env.BROWSER
+  ? require('./server').default || require('./server')
+  : require('./client').default || require('./client');`;
 
 const clientTemplate = `// @flow
 
@@ -55,7 +69,9 @@ import {
   RelayNetworkLayer,
   urlMiddleware,
 } from 'react-relay-network-modern/node8';
-import RelaySSR from 'react-relay-network-modern-ssr/node8/server';
+import RelaySSR, {
+  type SSRCache as SSRCacheType,
+} from 'react-relay-network-modern-ssr/node8/server';
 import { Network, Environment, RecordSource, Store } from 'relay-runtime';
 
 global.fetch = fetch;
@@ -82,7 +98,7 @@ export default {
       }),
     };
   },
-  createEnvironment: (relayData: mixed, key: string): Environment => {
+  createEnvironment: (relayData: SSRCacheType, key: string): Environment => {
     const source = new RecordSource();
     const store = new Store(source);
 

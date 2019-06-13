@@ -1,7 +1,5 @@
 // @flow
 
-// TODO: https://github.com/gajus/eslint-plugin-flowtype/issues/410
-// eslint-disable-next-line no-unused-vars
 import { type ComponentType } from 'react';
 
 export type ctxType<T = {}> = {|

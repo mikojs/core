@@ -27,6 +27,7 @@ class Configs extends Store {
   +end = async ({
     lerna,
     useReact,
+    useGraphql,
     useStyles,
   }: $PropertyType<Store, 'ctx'>) => {
     if (lerna) return;
@@ -42,7 +43,11 @@ class Configs extends Store {
 
     const configsEnv = [];
 
-    if (useReact) configsEnv.push('react');
+    if (useReact) {
+      configsEnv.push('react');
+
+      if (useGraphql) configsEnv.push('relay');
+    }
 
     if (useStyles) configsEnv.push(useStyles);
 

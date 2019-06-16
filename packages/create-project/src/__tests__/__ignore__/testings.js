@@ -196,6 +196,29 @@ const graphqlServer = {
   ],
 };
 
+const relayServer = {
+  name: 'relay-server',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useGraphql: true,
+  },
+  cmds: [
+    ...basicUsage.cmds.slice(0, 4),
+    'yarn add @cat-org/server @cat-org/koa-base',
+    ...basicUsage.cmds.slice(4, 10),
+    'yarn add --dev enzyme-adapter-react-16',
+    ...basicUsage.cmds.slice(10, 11),
+    'yarn add react react-dom @cat-org/koa-react',
+    'yarn add --dev @babel/preset-react',
+    'yarn add @cat-org/koa-graphql',
+    'yarn add react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
+    'yarn add --dev node-fetch',
+    ...basicUsage.cmds.slice(11),
+  ],
+};
+
 // with --lerna
 const lernaBasicUsage = {
   name: 'lerna/basic-usage',
@@ -296,6 +319,20 @@ const lernaGraphqlServer = {
   },
 };
 
+const lernaRelayServer = {
+  name: 'lerna/relay-server',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useGraphql: true,
+  },
+  cmds: lernaBasicUsage.cmds,
+  context: {
+    lerna: true,
+  },
+};
+
 export default [
   basicUsage,
   privatePkg,
@@ -305,6 +342,7 @@ export default [
   reactServerWithCss,
   reactServerWithLess,
   graphqlServer,
+  relayServer,
 
   lernaBasicUsage,
   lernaPrivatePkg,
@@ -314,6 +352,7 @@ export default [
   lernaReactServerWithCss,
   lernaReactServerWithLess,
   lernaGraphqlServer,
+  lernaRelayServer,
 ].reduce(
   (
     result: $ReadOnlyArray<

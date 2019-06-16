@@ -17,7 +17,7 @@ export const {
     relaySSR: RelaySSRType,
     environment: EnvironmentType,
   },
-  createEnvironment: (relayData: SSRCacheType, key: string) => EnvironmentType,
+  createEnvironment: (relayData?: SSRCacheType, key: string) => EnvironmentType,
 } = !process.env.BROWSER
   ? require('./server').default || require('./server')
   : require('./client').default || require('./client');`;
@@ -31,6 +31,7 @@ import {
   urlMiddleware,
 } from 'react-relay-network-modern/node8';
 import RelaySSR from 'react-relay-network-modern-ssr/node8/client';
+import { type SSRCache as SSRCacheType } from 'react-relay-network-modern-ssr/node8/server';
 import { Environment, RecordSource, Store } from 'relay-runtime';
 
 const source = new RecordSource();
@@ -39,7 +40,7 @@ const store = new Store(source);
 let storeEnvironment: Environment;
 
 export default {
-  createEnvironment: (relayData: mixed): Environment => {
+  createEnvironment: (relayData?: SSRCacheType): Environment => {
     if (storeEnvironment) return storeEnvironment;
 
     storeEnvironment = new Environment({
@@ -49,6 +50,7 @@ export default {
           size: 100,
           ttl: 60 * 1000,
         }),
+        // $FlowFixMe https://github.com/relay-tools/react-relay-network-modern-ssr/pull/14
         new RelaySSR(relayData).getMiddleware({
           lookup: false,
         }),
@@ -93,19 +95,24 @@ export default {
           urlMiddleware({
             url: (req: mixed) => 'http://localhost:8000/graphql',
           }),
+          // $FlowFixMe https://github.com/relay-tools/react-relay-network-modern-ssr/pull/14
           relaySSR.getMiddleware(),
         ]),
       }),
     };
   },
-  createEnvironment: (relayData: SSRCacheType, key: string): Environment => {
+  createEnvironment: (relayData?: SSRCacheType, key: string): Environment => {
     const source = new RecordSource();
     const store = new Store(source);
 
     return new Environment({
       store,
       network: Network.create(
-        () => relayData.find(([dataKey]: [string]) => dataKey === key)[1],
+        () =>
+          // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+          relayData?.find(
+            ([dataKey]: $ElementType<SSRCacheType, number>) => dataKey === key,
+          )?.[1],
       ),
     });
   },

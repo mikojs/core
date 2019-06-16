@@ -29,6 +29,7 @@ export default {
           urlMiddleware({
             url: (req: mixed) => 'http://localhost:8000/graphql',
           }),
+          // $FlowFixMe https://github.com/relay-tools/react-relay-network-modern-ssr/pull/14
           relaySSR.getMiddleware(),
         ]),
       }),

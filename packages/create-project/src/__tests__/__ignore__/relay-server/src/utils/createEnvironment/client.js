@@ -26,6 +26,7 @@ export default {
           size: 100,
           ttl: 60 * 1000,
         }),
+        // $FlowFixMe https://github.com/relay-tools/react-relay-network-modern-ssr/pull/14
         new RelaySSR(relayData).getMiddleware({
           lookup: false,
         }),

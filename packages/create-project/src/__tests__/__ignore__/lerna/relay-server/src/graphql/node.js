@@ -5,13 +5,16 @@ export default {
   interface Node {
     id: ID!
   }
-   interface edge {
+
+  interface edge {
     cursor: String!
   }
-   interface Connection {
+
+  interface Connection {
     pageInfo: PageInfo!
   }
-   type PageInfo {
+
+  type PageInfo {
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
     startCursor: String

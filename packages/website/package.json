@@ -24,7 +24,9 @@
     "react-dom": "^16.8.6",
     "react-relay": "^5.0.0",
     "react-relay-network-modern": "^4.0.0",
-    "react-relay-network-modern-ssr": "^1.2.2"
+    "react-relay-network-modern-ssr": "^1.2.2",
+    "relay-runtime": "^5.0.0",
+    "whatwg-fetch": "^3.0.0"
   },
   "keywords": ["website"]
 }

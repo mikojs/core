@@ -28,9 +28,7 @@ type propsType = {|
   children: <P>(props: P) => NodeType,
 |};
 
-export default class Main extends React.PureComponent<
-  propsType & {| children: NodeType |},
-> {
+export default class Main extends React.PureComponent<propsType> {
   static getInitialProps = async ({
     Component: { query },
     pageProps: { variables },

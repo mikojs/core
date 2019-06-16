@@ -87,6 +87,13 @@ const lint = {
           'require-jsdoc': 'off',
         },
       },
+      {
+        files: ['packages/website/**', 'packages/website/**/.templates/**'],
+        rules: {
+          // TODO: component should be ignore
+          'require-jsdoc': 'off',
+        },
+      },
     ],
   }),
   ignore: ignore => [

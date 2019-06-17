@@ -167,7 +167,7 @@ type pageComponentType = ComponentType<*> & {|
 |};
 
 type propsType = {|
-  variables: VariablesType,
+  variables?: VariablesType,
   relayData?: SSRCacheType,
   Component: pageComponentType,
   children: <P>(props: P) => NodeType,
@@ -207,7 +207,7 @@ export default class Main extends React.PureComponent<propsType> {
   };
 
   render(): NodeType {
-    const { variables, relayData, Component, children } = this.props;
+    const { variables = {}, relayData, Component, children } = this.props;
     const environment = createEnvironment(
       relayData,
       JSON.stringify({

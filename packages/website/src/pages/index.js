@@ -3,7 +3,7 @@
 import React, { type Node as NodeType } from 'react';
 import { graphql } from 'react-relay';
 
-export default class Home extends React.PureComponent<*> {
+export default class Home extends React.PureComponent<{| version: string |}> {
   static query = graphql`
     query pages_homeQuery {
       version

@@ -233,6 +233,23 @@ export default class Main extends React.PureComponent<propsType> {
   }
 }`;
 
+const pageTemplate = `// @flow
+
+import React, { type Node as NodeType } from 'react';
+import { graphql } from 'react-relay';
+
+export default class Home extends React.PureComponent<{| version: string |}> {
+  static query = graphql\`
+    query pages_homeQuery {
+      version
+    }
+  \`;
+
+  render(): NodeType {
+    return <div>{JSON.stringify(this.props)}</div>;
+  }
+}`;
+
 /** relay store */
 class Relay extends Store {
   /**
@@ -254,6 +271,7 @@ class Relay extends Store {
       'src/utils/createEnvironment/server.js': serverTemplate,
       'src/graphql/node.js': nodeTemplate,
       'src/pages/.templates/Main.js': mainTemplate,
+      'src/pages/index.js': pageTemplate,
     });
 
     if (lerna) return;

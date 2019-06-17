@@ -12,7 +12,6 @@ const options = {
 };
 
 export default [
-  // baseic usage
   [
     'basic usage',
     options,
@@ -21,7 +20,24 @@ export default [
     `// @flow`,
     'src/filename.js -> lib/filename.js.flow',
   ],
-  // verbose = false
+  [
+    'ignore filename',
+    {
+      ...options,
+      plugins: [
+        [
+          babelPluginTransformFlow,
+          {
+            ignore: new RegExp(options.filename),
+          },
+        ],
+      ],
+    },
+    `// @flow`,
+    false,
+    false,
+    false,
+  ],
   [
     'verbose = false',
     {
@@ -40,7 +56,6 @@ export default [
     `// @flow`,
     false,
   ],
-  // use with plugins
   [
     'use with plugins',
     {
@@ -72,7 +87,6 @@ export default [
 _ref = (_test = 'test', a(_test)), b(_ref);`,
     'src/filename.js -> lib/filename.js.flow',
   ],
-  // .flow file exist
   [
     '.flow file exist',
     {

@@ -32,6 +32,7 @@ const program = new commander.Command('server')
     chalk`Example:
   server {gray --skip-build}`,
   )
+  .option('--skip-server', 'skip run server, just run command')
   .option('--skip-build', 'skip build js')
   .option('--skip-relay', 'skip run relay-compiler');
 let react: reactType | DefaultReact;
@@ -137,9 +138,11 @@ const run = async (context: serverContextType) =>
     );
 
     if (process.env.NODE_ENV !== 'test') {
-      const { skipBuild = false, skipRelay = false } = program.parse([
-        ...process.argv,
-      ]);
+      const {
+        skipServer = false,
+        skipBuild = false,
+        skipRelay = false,
+      } = program.parse([...process.argv]);
 
       if (!skipRelay) {
         await graphql.relay(['--src', context.src]);
@@ -148,6 +151,8 @@ const run = async (context: serverContextType) =>
       }
 
       if (!skipBuild && !context.dev) await react.buildJs();
+
+      if (skipServer) process.exit(0);
     }
   }))
   |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
@@ -170,7 +175,8 @@ const run = async (context: serverContextType) =>
   if (module.parent) return;
 
   const filterArgv = process.argv.filter(
-    (argv: string) => !['--skip-build', '--skip-relay'].includes(argv),
+    (argv: string) =>
+      !['--skip-server', '--skip-build', '--skip-relay'].includes(argv),
   );
   const {
     cliOptions: {

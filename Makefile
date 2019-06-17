@@ -21,6 +21,9 @@ else
 	@$(call babel-build, $(WATCH), --since $(BRANCH))
 endif
 
+test:
+	@yarn lerna exec "yarn dev --skip-server" --stream --scope @cat-org/website
+
 release:
 	@yarn lerna-changelog && \
 		echo "\nContinue with any keyword or exit with 'ctrl + c'..." && \

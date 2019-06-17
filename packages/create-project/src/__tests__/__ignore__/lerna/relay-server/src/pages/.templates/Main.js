@@ -40,7 +40,7 @@ export default class Main extends React.PureComponent<propsType> {
     pageComponentType,
   >): Promise<$Diff<propsType, { Component: mixed, children: mixed }>> => {
     try {
-      if (initEnvironment) {
+      if (initEnvironment && query) {
         const { environment, relaySSR } = initEnvironment();
 
         await fetchQuery(environment, query, variables);

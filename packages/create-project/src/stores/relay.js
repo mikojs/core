@@ -246,9 +246,7 @@ export default class Home extends React.PureComponent<{| version: string |}> {
   \`;
 
   render(): NodeType {
-    return (
-       <div>{JSON.stringify(this.props)}</div>
-    );
+    return <div>{JSON.stringify(this.props)}</div>;
   }
 }`;
 

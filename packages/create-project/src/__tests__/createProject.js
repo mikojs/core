@@ -77,15 +77,14 @@ describe('create project', () => {
               result: number,
               { data: { path: filePath, extension } }: d3DirTreeNodeType,
             ): number => {
-              const content = (
-                outputFileSync.contents.find(
-                  (_: string, contentIndex: number) =>
-                    filePath === outputFileSync.destPaths[contentIndex],
-                ) ||
-                (() => {
-                  throw new Error(`Can not find ${filePath}`);
-                })()
-              )
+              const contentIndex = outputFileSync.destPaths.lastIndexOf(
+                filePath,
+              );
+
+              if (contentIndex === -1)
+                throw new Error(`Can not find ${filePath}`);
+
+              const content = outputFileSync.contents[contentIndex]
                 .replace(/git config --get user.name/g, 'username')
                 .replace(/git config --get user.email/g, 'email')
                 .replace(path.basename(projectDir), 'package-name');
@@ -122,7 +121,12 @@ describe('create project', () => {
                   break;
               }
 
-              return result - 1;
+              return (
+                result -
+                outputFileSync.destPaths.filter(
+                  (destPath: string) => destPath === filePath,
+                ).length
+              );
             },
             outputFileSync.contents.length,
           ),

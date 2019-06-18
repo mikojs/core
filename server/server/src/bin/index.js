@@ -36,6 +36,7 @@ const program = new commander.Command('server')
   .option('--skip-build', 'skip build js')
   .option('--skip-relay', 'skip run relay-compiler')
   .allowUnknownOption();
+
 let react: reactType | DefaultReact;
 let graphql: graphqlType | DefaultGraphql;
 

@@ -8,9 +8,9 @@
   "version": "1.0.0",
   "main": "./lib/index.js",
   "scripts": {
-    "dev": "configs server",
-    "prod": "NODE_ENV=production yarn dev",
-    "test": "yarn dev --skip-server"
+    "dev": "configs server:lerna -w",
+    "prod": "NODE_ENV=production configs server:lerna",
+    "test": "configs server:lerna --skip-server"
   },
   "keywords": ["keyword"],
   "publishConfig": {

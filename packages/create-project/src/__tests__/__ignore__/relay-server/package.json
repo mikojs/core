@@ -8,9 +8,9 @@
   "version": "1.0.0",
   "main": "./lib/index.js",
   "scripts": {
-    "dev": "configs server",
-    "prod": "NODE_ENV=production yarn dev",
-    "test": "yarn dev --skip-server && configs test"
+    "dev": "configs server -w",
+    "prod": "NODE_ENV=production configs server",
+    "test": "configs server --skip-server && configs test"
   },
   "keywords": ["keyword"],
   "engines": {

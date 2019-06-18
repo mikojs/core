@@ -8,8 +8,8 @@
   "version": "1.0.0",
   "main": "./lib/index.js",
   "scripts": {
-    "dev": "configs server",
-    "prod": "NODE_ENV=production yarn dev",
+    "dev": "configs server -w",
+    "prod": "NODE_ENV=production configs server",
     "test": "configs test"
   },
   "keywords": ["keyword"],

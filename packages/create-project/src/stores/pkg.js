@@ -130,14 +130,18 @@ class Pkg extends Store {
 
     if (useServer) {
       this.storePkg.scripts = ({
-        dev: 'configs server',
-        prod: 'NODE_ENV=production yarn dev',
+        dev: lerna ? 'configs server:lerna -w' : 'configs server -w',
+        prod: lerna
+          ? 'NODE_ENV=production configs server:lerna'
+          : 'NODE_ENV=production configs server',
       }: { [string]: string });
 
       if (useReact && useGraphql) {
-        if (lerna) this.storePkg.scripts.test = 'yarn dev --skip-server';
+        if (lerna)
+          this.storePkg.scripts.test = 'configs server:lerna --skip-server';
         else
-          this.storePkg.scripts.test = 'yarn dev --skip-server && configs test';
+          this.storePkg.scripts.test =
+            'configs server --skip-server && configs test';
       } else if (!lerna) this.storePkg.scripts.test = 'configs test';
     } else
       this.storePkg.scripts = {

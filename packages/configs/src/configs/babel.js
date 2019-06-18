@@ -13,7 +13,18 @@ export default {
   ],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
     presets: [
-      '@cat-org/base',
+      ...(!configsEnv.includes('relay')
+        ? ['@cat-org/base']
+        : [
+            [
+              '@cat-org/base',
+              {
+                '@cat-org/transform-flow': {
+                  ignore: /__generated__/,
+                },
+              },
+            ],
+          ]),
       ...(!configsEnv.includes('react') ? [] : ['@babel/react']),
     ],
     plugins: [

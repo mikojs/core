@@ -16,7 +16,10 @@ export default {
     testPathIgnorePatterns: ['__tests__/__ignore__'],
     collectCoverage: true,
     collectCoverageFrom: ['**/src/**/*.js', '!**/bin/*.js'],
-    coveragePathIgnorePatterns: ['__tests__/__ignore__'],
+    coveragePathIgnorePatterns: [
+      '__tests__/__ignore__',
+      ...(!configsEnv.includes('relay') ? [] : ['__generated__']),
+    ],
     coverageDirectory: 'coverage',
     coverageReporters: ['html', 'text'],
     coverageThreshold: {

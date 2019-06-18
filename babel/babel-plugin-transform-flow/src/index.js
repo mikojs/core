@@ -12,6 +12,7 @@ export type optionsType = {|
   relativeRoot: string,
   plugins: $ReadOnlyArray<string>,
   verbose: boolean,
+  ignore?: RegExp,
 |};
 
 export default declare(
@@ -22,6 +23,7 @@ export default declare(
       relativeRoot = './src',
       plugins = [],
       verbose = true,
+      ignore,
     }: optionsType,
   ): {} => {
     assertVersion(7);
@@ -38,6 +40,9 @@ export default declare(
         |},
         code: string,
       |}) => {
+        // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+        if (ignore?.test(filename)) return;
+
         const { log } = console;
         const filePath = `${path.resolve(
           cwd,

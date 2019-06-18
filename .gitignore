@@ -18,5 +18,8 @@ flow-typed/npm
 # jest
 coverage
 
+# relay
+__generated__
+
 # lerna-changelog
 .changelog

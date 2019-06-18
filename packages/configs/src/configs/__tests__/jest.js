@@ -19,4 +19,10 @@ describe('jest', () => {
       expect(jest.config({ configsEnv }).setupFiles).toEqual(expected);
     },
   );
+
+  test('run with configsEnv = relay', () => {
+    expect(
+      jest.config({ configsEnv: ['relay'] }).coveragePathIgnorePatterns,
+    ).toEqual(['__tests__/__ignore__', '__generated__']);
+  });
 });

@@ -32,6 +32,17 @@ const cssPlugins = (extension: string) => [
   ],
 ];
 
+const relayPresetBase = [
+  [
+    '@cat-org/base',
+    {
+      '@cat-org/transform-flow': {
+        ignore: /__generated__/,
+      },
+    },
+  ],
+];
+
 describe('babel', () => {
   test.each`
     configsEnv   | presets                              | plugins
@@ -39,7 +50,7 @@ describe('babel', () => {
     ${['react']} | ${['@cat-org/base', '@babel/react']} | ${[]}
     ${['css']}   | ${['@cat-org/base']}                 | ${cssPlugins('.css')}
     ${['less']}  | ${['@cat-org/base']}                 | ${cssPlugins('.less')}
-    ${['relay']} | ${['@cat-org/base']}                 | ${['relay']}
+    ${['relay']} | ${relayPresetBase}                   | ${['relay']}
   `(
     'run with configsEnv = $configsEnv',
     ({

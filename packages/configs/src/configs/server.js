@@ -1,7 +1,11 @@
 // @flow
 
 export default {
-  install: (install: $ReadOnlyArray<string>) => [...install, '@cat-org/server'],
+  install: (install: $ReadOnlyArray<string>) => [
+    ...install,
+    '@cat-org/server',
+    '@cat-org/koa-base',
+  ],
   run: (argv: $ReadOnlyArray<string>) => [
     ...argv,
     'src',

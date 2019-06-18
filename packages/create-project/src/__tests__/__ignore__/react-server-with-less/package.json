@@ -9,7 +9,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "dev": "configs server",
-    "prod": "NODE_ENV=production configs server",
+    "prod": "NODE_ENV=production yarn dev",
     "test": "configs test"
   },
   "keywords": ["keyword"],

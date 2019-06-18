@@ -114,20 +114,36 @@ class Pkg extends Store {
 
   /**
    * @example
-   * pkg.addScripts(true)
+   * pkg.addScripts(ctx)
    *
-   * @param {boolean} useServer - use server or not
+   * @param {Object} ctx - store context
    */
-  +addScripts = ({ useServer }: $PropertyType<Store, 'ctx'>) => {
+  +addScripts = ({
+    lerna,
+    useServer,
+    useReact,
+    useGraphql,
+  }: $PropertyType<Store, 'ctx'>) => {
+    if (lerna && !useServer) return;
+
     if (!this.storePkg.scripts) this.storePkg.scripts = {};
 
-    if (useServer)
-      this.storePkg.scripts = {
-        dev: 'configs server',
-        prod: 'NODE_ENV=production configs server',
-        test: 'configs test',
-      };
-    else
+    if (useServer) {
+      this.storePkg.scripts = ({
+        dev: lerna ? 'configs server:lerna -w' : 'configs server -w',
+        prod: lerna
+          ? 'NODE_ENV=production configs server:lerna'
+          : 'NODE_ENV=production configs server',
+      }: { [string]: string });
+
+      if (useReact && useGraphql) {
+        if (lerna)
+          this.storePkg.scripts.test = 'configs server:lerna --skip-server';
+        else
+          this.storePkg.scripts.test =
+            'configs server --skip-server && configs test';
+      } else if (!lerna) this.storePkg.scripts.test = 'configs test';
+    } else
       this.storePkg.scripts = {
         dev: 'configs babel -w',
         prod: 'NODE_ENV=production configs babel',
@@ -142,11 +158,8 @@ class Pkg extends Store {
    * @param {Object} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
-    const { lerna } = ctx;
-
     await this.defaultInfo(ctx);
-
-    if (!lerna) this.addScripts(ctx);
+    this.addScripts(ctx);
 
     ctx.pkg = this.storePkg;
   };

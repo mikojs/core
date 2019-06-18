@@ -9,7 +9,7 @@
     "install:all": "make install",
     "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
-    "test": "make babel-changed && configs test"
+    "test": "make babel-changed && lerna run test --stream && configs test"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

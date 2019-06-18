@@ -9,8 +9,9 @@
   "version": "1.0.0-beta.21",
   "main": "./lib/index.js",
   "scripts": {
-    "dev": "configs server:lerna",
-    "prod": "NODE_ENV=production configs server:lerna"
+    "dev": "configs server:lerna -w",
+    "prod": "NODE_ENV=production configs server:lerna",
+    "test": "configs server:lerna --skip-server"
   },
   "dependencies": {
     "@cat-org/koa-base": "^1.0.0-beta.21",

@@ -8,7 +8,7 @@
   "version": "1.0.0",
   "main": "./lib/index.js",
   "scripts": {
-    "dev": "configs server",
+    "dev": "configs server -w",
     "prod": "NODE_ENV=production configs server",
     "test": "configs test"
   },

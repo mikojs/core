@@ -7,6 +7,10 @@
   "repository": "https://github.com/cat-org/core.git",
   "version": "1.0.0",
   "main": "./lib/index.js",
+  "scripts": {
+    "dev": "configs server:lerna -w",
+    "prod": "NODE_ENV=production configs server:lerna"
+  },
   "keywords": ["keyword"],
   "publishConfig": {
     "access": "public"

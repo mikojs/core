@@ -21,6 +21,7 @@ export type contextType = {|
   src: string,
   dir: string,
   dev?: boolean,
+  watch?: boolean,
   babelOptions?: false | $ReadOnlyArray<string>,
   port?: number,
 |};
@@ -30,6 +31,7 @@ const context: contextType = {
   src: '',
   dir: '',
   dev: true,
+  watch: false,
   babelOptions: false,
 };
 
@@ -42,7 +44,7 @@ export default {
     });
     debugLog(context);
 
-    const { dev, src, dir, babelOptions } = context;
+    const { src, dir, dev, watch, babelOptions } = context;
 
     if (babelOptions) {
       invariant(
@@ -58,7 +60,7 @@ export default {
         stdio: 'inherit',
       });
 
-      if (dev)
+      if (dev && watch)
         execa.shell(`babel --skip-initial-build -w ${options}`, {
           stdio: 'inherit',
         });
@@ -178,13 +180,13 @@ export default {
 
   run: (app: Koa): Promise<http$Server> =>
     new Promise(resolve => {
-      const { dev, dir, port = 8000 } = context;
+      const { dir, dev, watch, port = 8000 } = context;
       const server = app.listen(port, () => {
         logger.succeed(
           chalk`Running server at port: {gray {bold ${port.toString()}}}`,
         );
 
-        if (dev)
+        if (dev && watch)
           chokidar
             .watch(path.resolve(dir), {
               ignoreInitial: true,

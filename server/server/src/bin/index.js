@@ -34,7 +34,8 @@ const program = new commander.Command('server')
   )
   .option('--skip-server', 'skip run server, just run command')
   .option('--skip-build', 'skip build js')
-  .option('--skip-relay', 'skip run relay-compiler');
+  .option('--skip-relay', 'skip run relay-compiler')
+  .allowUnknownOption();
 let react: reactType | DefaultReact;
 let graphql: graphqlType | DefaultGraphql;
 
@@ -147,7 +148,8 @@ const run = async (context: serverContextType) =>
       if (!skipRelay) {
         await graphql.relay(['--src', context.src]);
 
-        if (context.dev) graphql.relay(['--src', context.src, '--watch']);
+        if (context.dev && context.watch)
+          graphql.relay(['--src', context.src, '--watch']);
       }
 
       if (!skipBuild && !context.dev) await react.buildJs();
@@ -182,19 +184,22 @@ const run = async (context: serverContextType) =>
     cliOptions: {
       filenames: [src],
       outDir,
+      watch,
     },
   } = parseArgv(filterArgv);
 
   invariant(src && outDir, 'Must use `--out-dir` or `-d` to build the server');
 
   await run({
-    dev: process.env.NODE_ENV !== 'production',
     src,
     dir: outDir,
+    dev: process.env.NODE_ENV !== 'production',
+    watch,
     babelOptions: filterArgv
       .slice(2)
       .filter(
-        (argv: string) => ![src, outDir, '-d', '--out-dir'].includes(argv),
+        (argv: string) =>
+          ![src, outDir, '-d', '--out-dir', '-w', '--watch'].includes(argv),
       ),
   });
 })();

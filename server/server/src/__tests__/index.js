@@ -63,6 +63,7 @@ describe('server', () => {
     const runningServer = await ((await server.init({
       ...context,
       dev: true,
+      watch: true,
       babelOptions: ['--verbose'],
     })) |> server.run);
 

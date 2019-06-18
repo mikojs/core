@@ -1,16 +1,7 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
-import { graphql } from 'react-relay';
+import React from 'react';
 
-export default class Home extends React.PureComponent<{| version: string |}> {
-  static query = graphql`
-    query pages_homeQuery {
-      version
-    }
-  `;
+const Home = () => <div>@cat-org/create-project</div>;
 
-  render(): NodeType {
-    return <div>{JSON.stringify(this.props)}</div>;
-  }
-}
+export default Home;

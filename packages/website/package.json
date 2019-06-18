@@ -9,8 +9,8 @@
   "version": "1.0.0-beta.21",
   "main": "./lib/index.js",
   "scripts": {
-    "dev": "configs server --config-file ../../babel.config.js",
-    "prod": "NODE_ENV=production configs server --config-file ../../babel.config.js"
+    "dev": "configs server:lerna",
+    "prod": "NODE_ENV=production configs server:lerna"
   },
   "dependencies": {
     "@cat-org/koa-base": "^1.0.0-beta.21",

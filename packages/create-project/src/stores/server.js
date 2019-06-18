@@ -49,7 +49,7 @@ class Server extends Store {
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
     if (lerna || !this.storeUseServer) return;
 
-    await this.execa('yarn add @cat-org/server @cat-org/koa-base');
+    await this.execa('yarn configs --install server');
   };
 }
 

@@ -108,7 +108,7 @@ const basicServer = {
   },
   cmds: [
     ...basicUsage.cmds.slice(0, 4),
-    'yarn add @cat-org/server @cat-org/koa-base',
+    'yarn configs --install server',
     ...basicUsage.cmds.slice(4),
   ],
 };
@@ -122,7 +122,7 @@ const reactServer = {
   },
   cmds: [
     ...basicUsage.cmds.slice(0, 4),
-    'yarn add @cat-org/server @cat-org/koa-base',
+    'yarn configs --install server',
     ...basicUsage.cmds.slice(4, 10),
     'yarn add --dev enzyme-adapter-react-16',
     ...basicUsage.cmds.slice(10, 11),
@@ -143,7 +143,7 @@ const reactServerWithCss = {
   },
   cmds: [
     ...basicUsage.cmds.slice(0, 4),
-    'yarn add @cat-org/server @cat-org/koa-base',
+    'yarn configs --install server',
     ...basicUsage.cmds.slice(4, 10),
     'yarn add --dev enzyme-adapter-react-16',
     ...basicUsage.cmds.slice(10, 11),
@@ -166,7 +166,7 @@ const reactServerWithLess = {
   },
   cmds: [
     ...basicUsage.cmds.slice(0, 4),
-    'yarn add @cat-org/server @cat-org/koa-base',
+    'yarn configs --install server',
     ...basicUsage.cmds.slice(4, 10),
     'yarn add --dev enzyme-adapter-react-16',
     ...basicUsage.cmds.slice(10, 11),
@@ -188,7 +188,7 @@ const graphqlServer = {
   },
   cmds: [
     ...basicUsage.cmds.slice(0, 4),
-    'yarn add @cat-org/server @cat-org/koa-base',
+    'yarn configs --install server',
     ...basicUsage.cmds.slice(4, 11),
     'yarn add @cat-org/koa-graphql',
     'yarn add --dev node-fetch',
@@ -206,7 +206,7 @@ const relayServer = {
   },
   cmds: [
     ...basicUsage.cmds.slice(0, 4),
-    'yarn add @cat-org/server @cat-org/koa-base',
+    'yarn configs --install server',
     ...basicUsage.cmds.slice(4, 10),
     'yarn add --dev enzyme-adapter-react-16',
     ...basicUsage.cmds.slice(10, 11),

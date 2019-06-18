@@ -7,6 +7,7 @@ import prettier from './prettier';
 import lint from './lint';
 import lintsteged from './lintsteged';
 import jest from './jest';
+import server from './server';
 
 export default ({
   // babel
@@ -50,17 +51,15 @@ export default ({
   },
 
   // @cat-org/server
-  server: {
+  server,
+  'server:lerna': {
+    ...server,
+    alias: 'server',
     run: (argv: $ReadOnlyArray<string>) => [
-      ...argv,
-      'src',
-      '-d',
-      'lib',
-      '--verbose',
+      ...server.run(argv),
+      '--config-file',
+      '../../babel.config.js',
     ],
-    configFiles: {
-      babel: true,
-    },
   },
 }: {
   [string]: configType,

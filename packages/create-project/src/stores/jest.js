@@ -48,7 +48,7 @@ describe('server', () => {
         await fetch('http://localhost:8000').then((res: ResponseType) =>
           res.text(),
         ),
-      ).toBeDefined();
+      ).not.toBe('Not Found');
     });
   });`
   }${

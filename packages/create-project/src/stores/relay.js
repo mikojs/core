@@ -20,7 +20,8 @@ export const {
   createEnvironment: (relayData?: SSRCacheType, key: string) => EnvironmentType,
 } = !process.env.BROWSER
   ? require('./server').default || require('./server')
-  : require('./client').default || require('./client');`;
+  : /* istanbul ignore next */
+    require('./client').default || require('./client');`;
 
 const clientTemplate = `// @flow
 
@@ -250,6 +251,49 @@ export default class Home extends React.PureComponent<{| version: string |}> {
   }
 }`;
 
+const clientTestTemplate = `// @flow
+
+import path from 'path';
+
+import fetch from 'node-fetch';
+import { fetchQuery } from 'react-relay';
+
+import server from '@cat-org/server/lib/bin';
+
+import client from '../client';
+
+import Home from 'pages';
+
+const { createEnvironment } = client;
+let runningServer: http$Server;
+
+global.fetch = fetch;
+
+describe('client', () => {
+  beforeAll(async () => {
+    runningServer = await server({
+      src: path.resolve(__dirname, '../../..'),
+      dir: path.resolve(__dirname, '../../..'),
+    });
+  });
+
+  test('create environment in the first time', async () => {
+    const environment = createEnvironment();
+
+     expect(await fetchQuery(environment, Home.query)).not.toBeUndefined();
+  });
+
+  test('create environment in the second time', async () => {
+    const environment = createEnvironment();
+
+     expect(await fetchQuery(environment, Home.query)).not.toBeUndefined();
+  });
+
+  afterAll(() => {
+    runningServer.close();
+  });
+});`;
+
 /** relay store */
 class Relay extends Store {
   /**
@@ -269,6 +313,7 @@ class Relay extends Store {
       'src/utils/createEnvironment/index.js': template,
       'src/utils/createEnvironment/client.js': clientTemplate,
       'src/utils/createEnvironment/server.js': serverTemplate,
+      'src/utils/createEnvironment/__tests__/client.js': clientTestTemplate,
       'src/graphql/node.js': nodeTemplate,
       'src/pages/.templates/Main.js': mainTemplate,
       'src/pages/index.js': pageTemplate,

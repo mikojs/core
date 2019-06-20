@@ -8,12 +8,6 @@
 
 The website of @cat-org/core documentation
 
-## Getting Started
-
-```sh
-yarn install
-```
-
 ## Usage
 
 - `dev`: Run development.

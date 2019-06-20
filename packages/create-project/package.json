@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/create-project",
   "repository": "https://github.com/cat-org/core/tree/master/packages/create-project",
-  "version": "1.0.0-beta.22",
+  "version": "1.0.0-beta.23",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {

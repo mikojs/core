@@ -64,12 +64,13 @@ class React extends Store {
    *
    * @param {Object} ctx - store context
    */
-  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({ lerna, useGraphql }: $PropertyType<Store, 'ctx'>) => {
     if (!this.storeUseReact) return;
 
-    await this.writeFiles({
-      'src/pages/index.js': template,
-    });
+    if (!useGraphql)
+      await this.writeFiles({
+        'src/pages/index.js': template,
+      });
 
     if (lerna) return;
 

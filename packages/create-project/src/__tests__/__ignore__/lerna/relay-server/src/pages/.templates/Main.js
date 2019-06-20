@@ -12,10 +12,7 @@ import { type SSRCache as SSRCacheType } from 'react-relay-network-modern-ssr/no
 
 import { type mainCtxType } from '@cat-org/koa-react/lib/types';
 
-import {
-  initEnvironment,
-  createEnvironment,
-} from '../../utils/createEnvironment';
+import { initEnvironment, createEnvironment } from 'utils/createEnvironment';
 
 type pageComponentType = ComponentType<*> & {|
   query?: GraphQLTaggedNodeType,

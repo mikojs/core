@@ -6,32 +6,65 @@ import Store from './index';
 
 /**
  * @example
- * npmContent(false, 'name')
+ * startTemplate(useNpm, name)
  *
- * @param {boolean} lerna - lerna option
+ * @param {boolean} useNpm - use npm or not
  * @param {string} name - pkg name
  *
- * @return {string} - npm content
+ * @return {string} - content
  */
-const npmContent = (lerna: boolean, name: string) => `## Install
+const startTemplate = (useNpm: ?boolean, name: string) =>
+  useNpm
+    ? `
+
+## Install
 
 \`\`\`sh
 yarn add ${name}
-\`\`\`${
-  lerna
-    ? ''
+\`\`\``
     : `
 
-## Develop`
-}`;
-
-const noNpmContent = `## Getting Started
+## Getting Started
 
 \`\`\`sh
 yarn install
-\`\`\`
+\`\`\``;
 
-## Usage`;
+/**
+ * @example
+ * scriptsDescription(lerna)
+ *
+ * @param {boolean} lerna - lerna option
+ *
+ * @return {string} - content
+ */
+const scriptsDescription = (lerna: boolean) => ({
+  dev: 'Run development.',
+  prod: 'Run production.',
+  test: lerna ? 'Run pre-testing.' : 'Run testing.',
+});
+
+/**
+ * @example
+ * scriptsTemplate(lerna, useNpm, scripts)
+ *
+ * @param {boolean} lerna - lerna option
+ * @param {boolean} useNpm - use npm or not
+ * @param {Object} scripts - pkg scripts
+ *
+ * @return {string} - content
+ */
+const scriptsTemplate = (
+  lerna: boolean,
+  useNpm: ?boolean,
+  scripts: { [string]: string },
+) => `
+
+${useNpm ? '## Develop' : '## Usage'}
+
+${Object.keys(scripts)
+  .map((key: string) => `- \`${key}\`: ${scriptsDescription(lerna)[key]}`)
+  .join('\n')}`;
 
 /**
  * @example
@@ -49,26 +82,17 @@ const template = (
     name,
     homepage,
     description,
+    scripts,
   }: $NonMaybeType<$PropertyType<$PropertyType<Store, 'ctx'>, 'pkg'>>,
   useNpm: ?boolean,
 ) => `# [${name}][website] · <!-- badges.start --><!-- badges.end -->
 
 [website]: ${homepage}
 
-${description}${
-  lerna && !useNpm
+${description}${lerna && !useNpm ? '' : startTemplate(useNpm, name)}${
+  !scripts || Object.keys(scripts).length === 0
     ? ''
-    : `
-
-${useNpm ? npmContent(lerna, name) : noNpmContent}${
-        lerna
-          ? ''
-          : `
-
-- \`dev\`: Run development.
-- \`prod\`: Run production.
-- \`test\`: Run testing.`
-      }`
+    : scriptsTemplate(lerna, useNpm, scripts)
 }`;
 
 /** readme store */

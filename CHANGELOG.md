@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.0.0-beta.23 (2019-06-20)
+
+#### :bug: Bug Fix
+
+- `create-project`
+  - [#278](https://github.com/cat-org/core/pull/278) (@cat-org/core, @cat-org/create-project) Fix flow-typed cache ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.22 (2019-06-20)
 
 #### :boom: Breaking Change

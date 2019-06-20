@@ -38,7 +38,7 @@ class License extends Store {
    * @example
    * license.end()
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +end = async ({
     lerna,

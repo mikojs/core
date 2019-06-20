@@ -9,11 +9,11 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@cat-org/utils": "^1.0.0-beta.20",
-    "enzyme": "^3.9.0",
+    "enzyme": "^3.10.0",
     "fbjs": "^1.0.0"
   },
   "devDependencies": {
-    "enzyme-adapter-react-16": "^1.13.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },

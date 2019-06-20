@@ -48,7 +48,7 @@ class React extends Store {
    * @example
    * react.start(ctx)
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     const { useServer } = ctx;
@@ -62,7 +62,7 @@ class React extends Store {
    * @example
    * react.end(ctx)
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +end = async ({ lerna, useGraphql }: $PropertyType<Store, 'ctx'>) => {
     if (!this.storeUseReact) return;

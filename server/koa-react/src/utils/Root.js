@@ -51,7 +51,7 @@ const store: storeType = {};
  * getPage(routsData, ctx)
  *
  * @param {Array} routesData - routes data
- * @param {Object} Context - getInitialProps context
+ * @param {componentContext} Context - getInitialProps context
  *
  * @return {Component} - page component
  */
@@ -92,7 +92,7 @@ const getPage = (
      * @example
      * lazyPage()
      *
-     * @return {Object} - return Page
+     * @return {Page} - return Page
      */
     const lazyPage = async (): $Call<lazyComponentType> => {
       const { default: Component } = await loader();

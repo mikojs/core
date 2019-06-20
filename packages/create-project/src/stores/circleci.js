@@ -106,7 +106,7 @@ class Circleci extends Store {
    * @example
    * circleci.end(ctx)
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +end = async ({ lerna, useNpm }: $PropertyType<Store, 'ctx'>) => {
     if (lerna) return;

@@ -4,7 +4,7 @@
  * @example
  * ora()
  *
- * @return {Object} - mock ora
+ * @return {ora} - mock ora
  */
 const ora = () =>
   ['start', 'succeed', 'fail', 'warn', 'info'].reduce(

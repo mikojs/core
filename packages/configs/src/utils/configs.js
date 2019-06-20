@@ -56,9 +56,9 @@ export class Configs {
    * @example
    * configs.addConfigsEnv({})
    *
-   * @param {Object} config - config from parent
+   * @param {config} config - config from parent
    *
-   * @return {Object} - config with configsEnv
+   * @return {config} - config with configsEnv
    */
   -addConfigsEnv = (config: {}) => ({
     ...config,
@@ -69,9 +69,9 @@ export class Configs {
    * @example
    * configs.removeConfigsEnv({})
    *
-   * @param {Object} config - config with configsEnv
+   * @param {config} config - config with configsEnv
    *
-   * @return {Object} - configs without configsEnv
+   * @return {config} - configs without configsEnv
    */
   -removeConfigsEnv = ({ configsEnv, ...config }: {}) => config;
 

@@ -8,7 +8,7 @@
   "version": "1.0.0-beta.21",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/core": "^7.4.4",
+    "@babel/core": "^7.4.5",
     "@babel/helper-plugin-utils": "^7.0.0",
     "output-file-sync": "^2.0.1"
   },

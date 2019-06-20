@@ -44,7 +44,7 @@ let graphql: graphqlType | DefaultGraphql;
  * @example
  * defaultMiddleware(ctx, next)
  *
- * @param {Object} ctx - koa context
+ * @param {koaContext} ctx - koa context
  * @param {Function} next - koa next function
  */
 const defaultMiddleware = async (
@@ -61,7 +61,7 @@ class DefaultReact {
    * new DefaultReact('folder path')
    *
    * @param {string} foldePath - folder path
-   * @param {Object} options - koa-react options
+   * @param {options} options - koa-react options
    */
   constructor(foldePath: string, options?: {}) {}
 
@@ -87,7 +87,7 @@ class DefaultGraphql {
    * new DefaultGraphql('folder path')
    *
    * @param {string} foldePath - folder path
-   * @param {Object} options - koa-graphql options
+   * @param {options} options - koa-graphql options
    */
   constructor(foldePath: string, options?: {}) {}
 
@@ -101,7 +101,7 @@ class DefaultGraphql {
    * @example
    * defaultGraphql.middleware()
    *
-   * @param {Object} options - koa-graphql options
+   * @param {options} options - koa-graphql options
    *
    * @return {Function} - koa-graphql middleware
    */
@@ -112,7 +112,7 @@ class DefaultGraphql {
  * @example
  * run(context)
  *
- * @param {Object} context - server context
+ * @param {serverContext} context - server context
  *
  * @return {Koa} - koa server
  */

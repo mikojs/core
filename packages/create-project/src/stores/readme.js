@@ -50,7 +50,7 @@ const scriptsDescription = (lerna: boolean) => ({
  *
  * @param {boolean} lerna - lerna option
  * @param {boolean} useNpm - use npm or not
- * @param {Object} scripts - pkg scripts
+ * @param {scripts} scripts - pkg scripts
  *
  * @return {string} - content
  */
@@ -71,7 +71,7 @@ ${Object.keys(scripts)
  * template(pkg, useNpm)
  *
  * @param {boolean} lerna - lerna option
- * @param {Object} pkg - pkg in store context
+ * @param {pkg} pkg - pkg in store context
  * @param {boolean} useNpm - useNpm in store context
  *
  * @return {string} - content
@@ -101,7 +101,7 @@ class Readme extends Store {
    * @example
    * readme.end(ctx)
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +end = async ({ lerna, pkg, useNpm }: $PropertyType<Store, 'ctx'>) => {
     invariant(pkg, 'Can not run readme store without pkg in `ctx`');

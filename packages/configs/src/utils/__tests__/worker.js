@@ -23,18 +23,17 @@ let server: ServerType;
  * @example
  * writeCache({});
  *
- * @param {Object} cacheData - cache data to write
+ * @param {cacheData} cacheData - cache data to write
  *
- * @return {Promise} - not return
+ * @return {void} - not return
  */
-const writeCache = async (cacheData: cacheType) => {
-  await new Promise(resolve => {
+const writeCache = (cacheData: cacheType) =>
+  new Promise(resolve => {
     /* eslint-disable flowtype/no-unused-expressions */
     // $FlowFixMe Flow does not yet support method or property calls in optional chains.
     clientWorker.writeCache(cacheData)?.on('end', resolve);
     /* eslint-enable flowtype/no-unused-expressions */
   });
-};
 
 describe('worker', () => {
   beforeAll(async () => {

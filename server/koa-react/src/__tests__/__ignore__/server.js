@@ -26,9 +26,9 @@ export default async (
    * @example
    * configFunc()
    *
-   * @param {Object} config - koa react config
+   * @param {config} config - koa react config
    *
-   * @return {Object} - koa react configr
+   * @return {config} - koa react config
    */
   const configFunc = ({ config, ...otherConfigs }: configType): configType => {
     if (!dev || useStatic)

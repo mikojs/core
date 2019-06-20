@@ -7,3 +7,9 @@
 [website]: http://cat-org/package-homepage
 
 package description
+
+## Usage
+
+- `dev`: Run development.
+- `prod`: Run production.
+- `test`: Run pre-testing.

@@ -1,5 +1,79 @@
 # CHANGELOG
 
+## 1.0.0-beta.22 (2019-06-20)
+
+#### :boom: Breaking Change
+
+- Other
+  - [#266](https://github.com/cat-org/core/pull/266) (@cat-org/core) Upgrade flow version ([@HsuTing](https://github.com/HsuTing))
+  - [#257](https://github.com/cat-org/core/pull/257) (@cat-org/koa-react) Modify main, use children as function ([@HsuTing](https://github.com/HsuTing))
+  - [#242](https://github.com/cat-org/core/pull/242) (@cat-org/koa-react) Modify api ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `website`
+  - [#255](https://github.com/cat-org/core/pull/255) (@cat-org/server) Simplify babel options ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-flow-typed-install`, `logger`, `website`
+  - [#277](https://github.com/cat-org/core/pull/277) (@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `website`
+  - [#275](https://github.com/cat-org/core/pull/275) (@cat-org/create-project) Add scripts to readme ([@HsuTing](https://github.com/HsuTing))
+  - [#274](https://github.com/cat-org/core/pull/274) (@cat-org/create-project, @cat-org/website) Add testing for coverage 100% ([@HsuTing](https://github.com/HsuTing))
+  - [#272](https://github.com/cat-org/core/pull/272) (@cat-org/website, @cat-org/create-project) Add pre-testing ([@HsuTing](https://github.com/HsuTing))
+  - [#262](https://github.com/cat-org/core/pull/262) (@cat-org/create-project) Add relay ([@HsuTing](https://github.com/HsuTing))
+  - [#255](https://github.com/cat-org/core/pull/255) (@cat-org/server) Simplify babel options ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`, `website`
+  - [#273](https://github.com/cat-org/core/pull/273) (@cat-org/server, @cat-org/configs, @cat-org/create-project) Add server lerna ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#271](https://github.com/cat-org/core/pull/271) (@cat-org/server) Can skip server with command ([@HsuTing](https://github.com/HsuTing))
+  - [#263](https://github.com/cat-org/core/pull/263) (@cat-org/koa-react) Support for custom ComponentType ([@HsuTing](https://github.com/HsuTing))
+  - [#257](https://github.com/cat-org/core/pull/257) (@cat-org/koa-react) Modify main, use children as function ([@HsuTing](https://github.com/HsuTing))
+  - [#253](https://github.com/cat-org/core/pull/253) (@cat-org/server) Add event ([@HsuTing](https://github.com/HsuTing))
+  - [#249](https://github.com/cat-org/core/pull/249) (@cat-org/koa-react) Add exclude to options, add Component to props ([@HsuTing](https://github.com/HsuTing))
+  - [#245](https://github.com/cat-org/core/pull/245) (@cat-org/server) Add skip options ([@HsuTing](https://github.com/HsuTing))
+  - [#244](https://github.com/cat-org/core/pull/244) (@cat-org/koa-graphql) Add relay ([@HsuTing](https://github.com/HsuTing))
+  - [#243](https://github.com/cat-org/core/pull/243) (@cat-org/koa-react) Check chunk names ([@HsuTing](https://github.com/HsuTing))
+  - [#242](https://github.com/cat-org/core/pull/242) (@cat-org/koa-react) Modify api ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#270](https://github.com/cat-org/core/pull/270) (@cat-org/create-project) Overwrite page ([@HsuTing](https://github.com/HsuTing))
+  - [#261](https://github.com/cat-org/core/pull/261) (@cat-org/create-project) Modify README in lerna ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `create-project`
+  - [#276](https://github.com/cat-org/core/pull/276) (@cat-org/create-project) Fix write component file ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`, `website`
+  - [#269](https://github.com/cat-org/core/pull/269) (@cat-org/create-project, @cat-org/babel-plugin-transform-flow, @cat-org/configs) Fix error with relay ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#258](https://github.com/cat-org/core/pull/258) (@cat-org/koa-react, @cat-org/koa-graphql) Fix detail ([@HsuTing](https://github.com/HsuTing))
+  - [#250](https://github.com/cat-org/core/pull/250) (@cat-org/server) Add exclude for **generated** ([@HsuTing](https://github.com/HsuTing))
+  - [#247](https://github.com/cat-org/core/pull/247) chore(deps): bump handlebars from 4.1.0 to 4.1.2 ([@dependabot[bot]](https://github.com/apps/dependabot))
+- `eslint-config-cat`, `logger`
+  - [#254](https://github.com/cat-org/core/pull/254) (@cat-org/core) Fix prettier error ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `website`
+  - [#248](https://github.com/cat-org/core/pull/248) (@cat-org/server) Fix koa-graphql, koa-react build error ([@HsuTing](https://github.com/HsuTing))
+
+#### :memo: Documentation
+
+- `create-project`, `website`
+  - [#267](https://github.com/cat-org/core/pull/267) (@cat-org/website) Add relay ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `create-project`, `website`
+  - [#267](https://github.com/cat-org/core/pull/267) (@cat-org/website) Add relay ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#266](https://github.com/cat-org/core/pull/266) (@cat-org/core) Upgrade flow version ([@HsuTing](https://github.com/HsuTing))
+  - [#264](https://github.com/cat-org/core/pull/264) (@cat-org/koa-react) Fix eslint error ([@HsuTing](https://github.com/HsuTing))
+  - [#251](https://github.com/cat-org/core/pull/251) chore(deps): bump js-yaml from 3.12.1 to 3.13.1 ([@dependabot[bot]](https://github.com/apps/dependabot))
+  - [#247](https://github.com/cat-org/core/pull/247) chore(deps): bump handlebars from 4.1.0 to 4.1.2 ([@dependabot[bot]](https://github.com/apps/dependabot))
+  - [#241](https://github.com/cat-org/core/pull/241) (@cat-org/core) Remove throw ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#246](https://github.com/cat-org/core/pull/246) (@cat-org/configs) Fix typo ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.21 (2019-05-30)
 
 #### :boom: Breaking Change

@@ -59,9 +59,9 @@ const checkParamNames = (argu: string) => {};
  */
 const checkTypes = (argu: string) => 10;
 
-// $expectError jsdoc/check-param-names
 // $expectError jsdoc/require-param
 // $expectError valid-jsdoc
+// $expectError jsdoc/check-param-names
 // $expectError jsdoc/require-param-description
 // $expectError jsdoc/require-param-name
 // $expectError jsdoc/require-param-type

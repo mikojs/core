@@ -12,7 +12,7 @@ restore-cache: &restore-cache
 save-cache: &save-cache
   paths:
     - node_modules
-    - flow-typed
+    - flow-typed/npm
     - ~/.flow-typed
   key: dependencies-{{ checksum "yarn.lock" }}
 

@@ -31,7 +31,7 @@ export default class Graphql {
    * new Graphql('folder path')
    *
    * @param {string} folderPath - folder path
-   * @param {Object} options - make executable schema options
+   * @param {options} options - make executable schema options
    */
   constructor(folderPath: string, options?: makeExecutableSchemaOptionsType) {
     const { typeDefs, resolvers } = d3DirTree(folderPath, {
@@ -85,7 +85,7 @@ export default class Graphql {
    *
    * @param {Array} argv - argv for relay-compiler
    *
-   * @return {Object} - child process
+   * @return {process} - child process
    */
   +relay = (argv: $ReadOnlyArray<string>): ThenableChildProcessType => {
     const schemaFilePath = path.resolve(
@@ -107,7 +107,7 @@ export default class Graphql {
    * @example
    * graphql.middleware()
    *
-   * @param {Object} options - koa graphql options
+   * @param {options} options - koa graphql options
    *
    * @return {Function} - koa-graphql middleware
    */

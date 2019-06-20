@@ -22,7 +22,7 @@ class Configs extends Store {
    * @example
    * configs.end(ctx)
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +end = async ({
     lerna,

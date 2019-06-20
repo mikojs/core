@@ -116,7 +116,7 @@ class Pkg extends Store {
    * @example
    * pkg.addScripts(ctx)
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +addScripts = ({
     lerna,
@@ -155,7 +155,7 @@ class Pkg extends Store {
    * @example
    * pkg.start(ctx)
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     await this.defaultInfo(ctx);

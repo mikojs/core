@@ -49,7 +49,7 @@ class Styles extends Store {
    * @example
    * styles.start(ctx)
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     const { useReact } = ctx;
@@ -63,7 +63,7 @@ class Styles extends Store {
    * @example
    * styles.end(ctx)
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
     if (lerna || !this.storeUseStyles) return;

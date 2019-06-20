@@ -8,7 +8,7 @@ import babel from '../babel';
  *
  * @param {string} extension - file extension
  *
- * @return {Object} css plugins
+ * @return {plugins} css plugins
  */
 const cssPlugins = (extension: string) => [
   [

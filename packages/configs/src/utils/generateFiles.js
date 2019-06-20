@@ -35,7 +35,7 @@ const CONFIG_IGNORE = {
  *
  * @param {string} cliName - cli name
  *
- * @return {Object} - configFiles
+ * @return {configFiles} - configFiles
  */
 const findConfigFiles = (cliName: string): {} => {
   const { alias: cli = cliName, configFiles = {} } = configs.store[cliName];

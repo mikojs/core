@@ -41,7 +41,7 @@ class Flow extends Store {
    * @example
    * flow.end(ctx)
    *
-   * @param {Object} ctx - store context
+   * @param {storeContext} ctx - store context
    */
   +end = async ({ lerna, useStyles }: $PropertyType<Store, 'ctx'>) => {
     if (lerna) return;

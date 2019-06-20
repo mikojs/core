@@ -35,7 +35,7 @@ const GET_NAME = {
  *
  * @param {string} settingsName - name of settings
  *
- * @return {Object} - settings
+ * @return {settings} - settings
  */
 const findSettings = (settingsName: string): ?settingsType => {
   switch (settingsName) {

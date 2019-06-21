@@ -2,7 +2,7 @@
 
 import { emptyFunction } from 'fbjs';
 
-module.exports = {
+export default {
   // for testing config and install
   funcConfig: emptyFunction.thatReturnsArgument,
   emptyConfig: {

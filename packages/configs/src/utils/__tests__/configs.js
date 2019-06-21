@@ -6,6 +6,8 @@ import { emptyFunction } from 'fbjs';
 
 import { Configs } from '../configs';
 
+import customConfig from './__ignore__/configs';
+
 import defaultConfigs from 'configs/defaultConfigs';
 
 // for testing config and install
@@ -28,9 +30,10 @@ describe('configs', () => {
 
   configs.handleCustomConfigs();
   configs.init();
-  configs.handleCustomConfigs(
-    path.resolve(__dirname, './__ignore__/configs.js'),
-  );
+  configs.handleCustomConfigs({
+    config: customConfig,
+    filepath: path.resolve(__dirname, './__ignore__/configs.js'),
+  });
 
   test('func config', () => {
     const { funcConfig } = configs.store;

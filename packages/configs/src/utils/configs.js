@@ -12,6 +12,8 @@ import cosmiconfig from 'cosmiconfig';
 import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
+import { type configType } from '../types';
+
 import defaultConfigs from 'configs/defaultConfigs';
 
 const debugLog = debug('configs:configs');
@@ -79,35 +81,39 @@ export class Configs {
    * @example
    * configs.handleCustomConfigs()
    *
-   * @param {string} customConfigsPath - set custom configsPath
+   * @param {{ config, filepath }} customConfigsObj - custom config
    */
-  +handleCustomConfigs = (customConfigsPath?: string) => {
-    if (!customConfigsPath) return;
+  +handleCustomConfigs = (
+    customConfigsObj: ?{ config: { [string]: configType }, filepath: string },
+  ) => {
+    if (!customConfigsObj) return;
 
-    const customConfigs = require(customConfigsPath);
+    const {
+      config: customConfigs,
+      filepath: customConfigsPath,
+    } = customConfigsObj;
 
     debugLog(`Find custom configs path: ${customConfigsPath}`);
     this.customConfigsPath = customConfigsPath;
     this.rootDir = path.dirname(customConfigsPath);
 
     Object.keys(customConfigs).forEach((key: string) => {
+      const customConfig = customConfigs[key];
+
       if (key === 'configsEnv') {
-        this.configsEnv = customConfigs[key];
+        this.configsEnv = customConfig;
         return;
       }
 
       // handle custom configs is not in default customConfigs
       if (!this.store[key]) {
         // handle custom configs is a function
-        if (typeof customConfigs[key] === 'function')
+        if (typeof customConfig === 'function')
           this.store[key] = () =>
-            ({}
-            |> this.addConfigsEnv
-            |> customConfigs[key]
-            |> this.removeConfigsEnv);
+            ({} |> this.addConfigsEnv |> customConfig |> this.removeConfigsEnv);
         // handle custom configs is not a function
         else {
-          const { config, ...otherSettings } = customConfigs[key];
+          const { config, ...otherSettings } = customConfig;
 
           this.store[key] = { ...otherSettings };
           this.store[key].config = () =>
@@ -121,7 +127,7 @@ export class Configs {
       }
 
       // handle default and custom configs are function
-      if (!this.store[key].config && !customConfigs[key].config) {
+      if (!this.store[key].config && !customConfig.config) {
         const configs = this.store[key];
 
         this.store[key] = () =>
@@ -129,7 +135,7 @@ export class Configs {
           |> this.addConfigsEnv
           |> configs
           |> this.addConfigsEnv
-          |> customConfigs[key]
+          |> customConfig
           |> this.removeConfigsEnv);
         return;
       }
@@ -141,37 +147,37 @@ export class Configs {
 
       // handle default or custom configs is object
       this.store[key] = {
-        alias: customConfigs[key].alias || configs.alias || key,
+        alias: customConfig.alias || configs.alias || key,
         install: (install: $ReadOnlyArray<string>) =>
           install
           |> configs.install || emptyFunction.thatReturnsArgument
-          |> customConfigs[key].install || emptyFunction.thatReturnsArgument,
+          |> customConfig.install || emptyFunction.thatReturnsArgument,
         config: () =>
           ({}
           |> this.addConfigsEnv
           |> configs.config || configs
           |> this.addConfigsEnv
-          |> customConfigs[key].config ||
-            (typeof customConfigs[key] === 'function'
-              ? customConfigs[key]
+          |> customConfig.config ||
+            (typeof customConfig === 'function'
+              ? customConfig
               : emptyFunction.thatReturnsArgument)
           |> this.removeConfigsEnv),
         ignore: () =>
           []
           |> configs.ignore || emptyFunction.thatReturnsArgument
-          |> customConfigs[key].ignore || emptyFunction.thatReturnsArgument,
-        ignoreName: customConfigs[key].ignoreName,
+          |> customConfig.ignore || emptyFunction.thatReturnsArgument,
+        ignoreName: customConfig.ignoreName,
         run: (argv: $ReadOnlyArray<string>) =>
           argv
           |> configs.run || emptyFunction.thatReturnsArgument
-          |> customConfigs[key].run || emptyFunction.thatReturnsArgument,
+          |> customConfig.run || emptyFunction.thatReturnsArgument,
         env: {
           ...configs.env,
-          ...customConfigs[key].env,
+          ...customConfig.env,
         },
         configFiles: {
           ...configs.configFiles,
-          ...customConfigs[key].configFiles,
+          ...customConfig.configFiles,
         },
       };
     });
@@ -183,6 +189,6 @@ export class Configs {
 const configs = new Configs();
 
 configs.init();
-configs.handleCustomConfigs(cosmiconfig('cat').searchSync()?.filepath);
+configs.handleCustomConfigs(cosmiconfig('cat').searchSync());
 
 export default configs;

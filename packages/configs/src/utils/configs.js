@@ -20,19 +20,19 @@ const debugLog = debug('configs:configs');
 
 /** Store configs */
 export class Configs {
-  +store = {};
+  +store: { [string]: configType } = {};
 
-  +rootDir = process.cwd();
+  rootDir = process.cwd();
 
-  +customConfigsPath = null;
+  customConfigsPath = null;
 
-  +configsEnv = [];
+  configsEnv = [];
 
   /**
    * @example
    * configs.init()
    */
-  -init = () => {
+  +init = () => {
     Object.keys(defaultConfigs).forEach((key: string) => {
       if (typeof defaultConfigs[key] === 'function') {
         this.store[key] = () =>
@@ -62,7 +62,7 @@ export class Configs {
    *
    * @return {config} - config with configsEnv
    */
-  -addConfigsEnv = (config: {}) => ({
+  +addConfigsEnv = (config: {}) => ({
     ...config,
     configsEnv: this.configsEnv,
   });
@@ -75,7 +75,7 @@ export class Configs {
    *
    * @return {config} - configs without configsEnv
    */
-  -removeConfigsEnv = ({ configsEnv, ...config }: {}) => config;
+  +removeConfigsEnv = ({ configsEnv, ...config }: {}) => config;
 
   /**
    * @example

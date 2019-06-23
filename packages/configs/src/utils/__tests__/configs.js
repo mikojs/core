@@ -6,64 +6,58 @@ import { emptyFunction } from 'fbjs';
 
 import { Configs } from '../configs';
 
-import customConfig from './__ignore__/configs';
-
-import defaultConfigs from 'configs/defaultConfigs';
-
-// for testing config and install
-defaultConfigs.funcConfig = emptyFunction.thatReturnsArgument;
-defaultConfigs.emptyConfig = {
-  config: emptyFunction.thatReturnsArgument,
-};
-
-defaultConfigs.funcMergeObject = emptyFunction.thatReturnsArgument;
-defaultConfigs.objectMergeFunc = {
-  config: emptyFunction.thatReturnsArgument,
-};
-defaultConfigs.customNoConfig = {
-  config: emptyFunction.thatReturnsArgument,
-};
-defaultConfigs.defaultNoConfig = {};
-
 describe('configs', () => {
   const configs = new Configs();
 
-  configs.handleCustomConfigs();
-  configs.init();
+  // default config
   configs.handleCustomConfigs({
-    config: customConfig,
-    filepath: path.resolve(__dirname, './__ignore__/configs.js'),
+    config: {
+      funcConfig: emptyFunction.thatReturnsArgument,
+      objConfig: {
+        config: emptyFunction.thatReturnsArgument,
+      },
+      funcMergeObject: emptyFunction.thatReturnsArgument,
+      objMergeFunc: {
+        config: emptyFunction.thatReturnsArgument,
+      },
+      noConfigInDefault: {},
+      noConfigInCustom: {
+        config: emptyFunction.thatReturnsArgument,
+      },
+    },
+    filepath: process.cwd(),
   });
 
-  test('func config', () => {
-    const { funcConfig } = configs.store;
-
-    expect(typeof funcConfig).toBe('function');
-    expect(funcConfig()).toEqual({});
-  });
-
-  test('empty config', () => {
-    const { emptyConfig } = configs.store;
-
-    expect(emptyConfig.config()).toEqual({});
-    expect(emptyConfig.ignore()).toEqual([]);
-    expect(emptyConfig.run([])).toEqual([]);
-    expect(emptyConfig.install([])).toEqual([]);
+  // custom config
+  configs.handleCustomConfigs({
+    config: {
+      funcConfig: emptyFunction.thatReturnsArgument,
+      objConfig: {
+        config: emptyFunction.thatReturnsArgument,
+      },
+      funcMergeObject: {
+        config: emptyFunction.thatReturnsArgument,
+      },
+      objMergeFunc: emptyFunction.thatReturnsArgument,
+      noConfigInDefault: {
+        config: emptyFunction.thatReturnsArgument,
+      },
+      noConfigInCustom: {},
+    },
+    filepath: path.resolve(__dirname, './customConfig.js'),
   });
 
   test.each`
-    testName                                | configName
-    ${'not in default'}                     | ${'notInDefault'}
-    ${'not in default func'}                | ${'notInDefaultFunc'}
-    ${'not in default func without config'} | ${'notInDefaultWithoutConfig'}
-    ${'func merge object'}                  | ${'funcMergeObject'}
-    ${'object merge func'}                  | ${'objectMergeFunc'}
-    ${'custom no config'}                   | ${'customNoConfig'}
-    ${'default no config'}                  | ${'defaultNoConfig'}
+    testName                         | configName
+    ${'function config'}             | ${'funcConfig'}
+    ${'object config'}               | ${'objConfig'}
+    ${'func merge object'}           | ${'funcMergeObject'}
+    ${'object merge func'}           | ${'objMergeFunc'}
+    ${'no config in default config'} | ${'noConfigInDefault'}
+    ${'no config in custom config'}  | ${'noConfigInCustom'}
   `('$testName', ({ configName }: {| configName: string |}) => {
-    expect(
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-      configs.store[configName].config?.() || configs.store[configName](),
-    ).toEqual({});
+    expect(configs.store[configName].config({})).toEqual({});
+    expect(configs.store[configName].run([])).toEqual([]);
+    expect(configs.store[configName].install([])).toEqual([]);
   });
 });

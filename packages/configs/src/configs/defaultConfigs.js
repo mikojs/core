@@ -1,6 +1,6 @@
 // @flow
 
-import { type configType } from '../types';
+import { type configsType } from '../types';
 
 import babel from './babel';
 import prettier from './prettier';
@@ -61,6 +61,4 @@ export default ({
       '../../babel.config.js',
     ],
   },
-}: {
-  [string]: configType,
-});
+}: configsType);

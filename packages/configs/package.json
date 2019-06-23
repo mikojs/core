@@ -25,7 +25,12 @@
     "rimraf": "^2.6.3"
   },
   "devDependencies": {
-    "get-port": "^5.0.0"
+    "@babel/core": "^7.4.5",
+    "eslint": "^5.16.0",
+    "get-port": "^5.0.0",
+    "jest": "^24.8.0",
+    "lint-staged": "^8.2.1",
+    "prettier": "^1.18.2"
   },
   "keywords": ["cat-org", "configs"],
   "publishConfig": {

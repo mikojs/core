@@ -1,5 +1,7 @@
 // @flow
 
+import { type Options as OptionsType } from 'lint-staged';
+
 export default {
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
@@ -8,7 +10,7 @@ export default {
     'prettier-package-json',
     '@cat-org/badges',
   ],
-  config: () => ({
+  config: (): OptionsType => ({
     '*.js': ['yarn configs prettier', 'yarn configs lint', 'git add'],
     '*.js.flow': ['yarn configs prettier --parser flow', 'git add'],
     '**/!(README).md': ['yarn configs prettier --parser markdown', 'git add'],

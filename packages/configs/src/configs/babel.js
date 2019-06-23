@@ -1,6 +1,7 @@
 // @flow
 
 import { emptyFunction } from 'fbjs';
+import { type Options as OptionsType } from '@babel/core';
 
 import { mockChoice } from '@cat-org/utils';
 
@@ -11,7 +12,11 @@ export default {
     '@babel/core',
     '@cat-org/babel-plugin-base',
   ],
-  config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
+  config: ({
+    configsEnv,
+  }: {
+    configsEnv: $ReadOnlyArray<string>,
+  }): OptionsType => ({
     presets: [
       ...(!configsEnv.includes('relay')
         ? ['@cat-org/base']

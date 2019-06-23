@@ -6,6 +6,12 @@ import chalk from './utils/chalkPolyfill';
 
 type messageType = string | {};
 type logType = (...messages: $ReadOnlyArray<messageType>) => logsType;
+type funcSettingType = (message: string) => void;
+type objSettingType = {|
+  getName?: (name: string) => string,
+  print: funcSettingType,
+  after?: (name: string) => mixed,
+|};
 
 export type logsType = {
   [string]: logType,
@@ -14,11 +20,7 @@ export type logsType = {
 
 export type settingsType = {
   init?: (...args: $ReadOnlyArray<mixed>) => void,
-  [string]: {|
-    getName?: (name: string) => string,
-    print: (message: string) => void,
-    after?: (name: string) => mixed,
-  |},
+  [string]: funcSettingType | objSettingType,
 };
 
 const GET_NAME = {
@@ -75,7 +77,10 @@ export default (
           getName = GET_NAME[key] || GET_NAME.log,
           print,
           after = emptyFunction,
-        } = logSettings[key];
+        }: objSettingType =
+          typeof logSettings[key] !== 'function'
+            ? logSettings[key]
+            : { print: logSettings[key] };
         const printName = getName(name);
 
         messages.forEach((message: messageType) => {

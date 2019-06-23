@@ -7,12 +7,8 @@ import { type settingsType } from '../index';
 const { log, error, warn, info } = console;
 
 export default ({
-  log: {
-    print: log,
-  },
-  succeed: {
-    print: log,
-  },
+  log,
+  succeed: log,
   fail: {
     print: error,
     after: (): Error | void => {
@@ -26,10 +22,6 @@ export default ({
       );
     },
   },
-  warn: {
-    print: warn,
-  },
-  info: {
-    print: info,
-  },
+  warn,
+  info,
 }: settingsType);

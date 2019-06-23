@@ -47,19 +47,9 @@ const transformLog = (logFunc: (message: string) => void) => (
 };
 
 export default ({
-  log: {
-    print: transformLog(log),
-  },
-  succeed: {
-    print: transformLog(log),
-  },
-  fail: {
-    print: transformLog(error),
-  },
-  warn: {
-    print: transformLog(warn),
-  },
-  info: {
-    print: transformLog(info),
-  },
+  log: transformLog(log),
+  succeed: transformLog(log),
+  fail: transformLog(error),
+  warn: transformLog(warn),
+  info: transformLog(info),
 }: settingsType);

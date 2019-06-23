@@ -28,6 +28,9 @@ describe('configs', () => {
     filepath: process.cwd(),
   });
 
+  // handle no config
+  configs.handleCustomConfigs();
+
   // custom config
   configs.handleCustomConfigs({
     config: {

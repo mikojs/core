@@ -89,9 +89,9 @@ export class Configs {
       }
 
       const customConfig: objConfigType =
-        typeof customConfigs[key] === 'function'
-          ? { config: customConfigs[key] }
-          : customConfigs[key];
+        typeof customConfigs[key] !== 'function'
+          ? customConfigs[key]
+          : { config: customConfigs[key] };
       const config = this.store[key];
 
       if (!config) {

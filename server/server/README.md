@@ -92,10 +92,10 @@ import server from '@cat-org/server';
     |> server.use(async (ctx, next) => {
       await next();
     })
-    |> ('/path' // if this is undefined, this will not add prefix to router
+    |> ('/path'                                 // if this is undefined, this will not add prefix to router
       |> server.start
       |> ('/get'
-        |> server.get // this will render as /path/get with get method (post, put, del, all)
+        |> server.get                           // this will render as /path/get with get method (post, put, del, all)
         |> server.use(async (ctx, next) => {
           await next();
         })
@@ -106,7 +106,7 @@ import server from '@cat-org/server';
       |> server.end)
     |> (undefined
       |> server.start
-      |> ('/get' // -> this will render as /get with get method
+      |> ('/get'                                // this will render as /get with get method
         |> server.get
         |> server.end)
       |> server.end)

@@ -67,39 +67,36 @@ export default (
     if (cliName) {
       const config = configs.store[cliName];
 
-      if (typeof config === 'function')
-        logger.info(`Show ${cliName} config`, config({}));
-      else
-        logger.info(
-          `Show ${cliName} config`,
-          (Object.keys(config): $ReadOnlyArray<string>).reduce(
-            (result: {}, key: string): {} => {
-              switch (key) {
-                case 'install':
-                case 'ignore':
-                case 'run':
-                  return {
-                    ...result,
-                    // $FlowFixMe https://github.com/facebook/flow/issues/2645
-                    [key]: config[key]([]),
-                  };
+      logger.info(
+        `Show ${cliName} config`,
+        (Object.keys(config): $ReadOnlyArray<string>).reduce(
+          (result: {}, key: string): {} => {
+            switch (key) {
+              case 'install':
+              case 'ignore':
+              case 'run':
+                return {
+                  ...result,
+                  // $FlowFixMe https://github.com/facebook/flow/issues/2645
+                  [key]: config[key]([]),
+                };
 
-                case 'config':
-                  return {
-                    ...result,
-                    [key]: config[key]({}),
-                  };
+              case 'config':
+                return {
+                  ...result,
+                  [key]: config[key]({}),
+                };
 
-                default:
-                  return {
-                    ...result,
-                    [key]: config[key],
-                  };
-              }
-            },
-            {},
-          ),
-        );
+              default:
+                return {
+                  ...result,
+                  [key]: config[key],
+                };
+            }
+          },
+          {},
+        ),
+      );
     } else {
       const { log } = console;
 

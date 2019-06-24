@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import { npmWhich } from 'npm-which';
 import { emptyFunction } from 'fbjs';
 
@@ -11,54 +13,59 @@ const babelCli = npmWhich.main().sync('babel');
 
 describe('cli options', () => {
   beforeAll(() => {
-    configs.store['funcConfigInfo'] = emptyFunction.thatReturnsArgument;
-    configs.store['install-package'] = {
-      install: emptyFunction.thatReturnsArgument,
-    };
-
-    configs.store['run-cmd'] = {
-      alias: 'babel',
-      run: emptyFunction.thatReturnsArgument,
-    };
-
-    configs.store['not-found-command'] = {};
-    configs.store['run-error'] = {
-      alias: 'babel',
-      run: () => {
-        throw new Error('run error');
+    configs.handleCustomConfigs({
+      config: {
+        notFoundCommand: {},
+        runError: {
+          alias: 'babel',
+          run: () => {
+            throw new Error('run error');
+          },
+        },
+        runCmd: {
+          alias: 'babel',
+          install: emptyFunction.thatReturnsArgument,
+          config: emptyFunction.thatReturnsArgument,
+          run: emptyFunction.thatReturnsArgument,
+        },
       },
-    };
+      filepath: path.resolve(process.cwd(), './.catrc.js'),
+    });
   });
+
+  test.each`
+    cliName              | expected
+    ${'notFoundCommand'} | ${'process exit'}
+    ${'runError'}        | ${'run error'}
+  `(
+    'Run fail with $cliName',
+    ({ cliName, expected }: {| cliName: string, expected: string |}) => {
+      npmWhich.throwError = true;
+
+      expect(() => {
+        cliOptions([...defaultArgv, cliName]);
+      }).toThrow(expected);
+
+      npmWhich.throwError = false;
+    },
+  );
 
   test('run command with configsEnv', () => {
     expect(
-      cliOptions([...defaultArgv, 'run-cmd', '--configs-env', 'react']),
+      cliOptions([...defaultArgv, 'runCmd', '--configs-env', 'react']),
     ).toEqual({
       cli: babelCli,
       argv: [...defaultArgv, '--configs-env', 'react'],
       env: {},
-      cliName: 'run-cmd',
+      cliName: 'runCmd',
     });
     expect(configs.configsEnv).toEqual(['react']);
   });
 
   test.each`
-    argv
-    ${['--info']}
-    ${['funcConfigInfo', '--info']}
-    ${['babel:lerna', '--info']}
-    ${[]}
-    ${['notFindCliName']}
-  `('Run $argv', ({ argv }: {| argv: $ReadOnlyArray<string> |}) => {
-    expect(() => {
-      cliOptions([...defaultArgv, ...argv]);
-    }).toThrow('process exit');
-  });
-
-  test.each`
-    cliName              | options          | cli          | argv
-    ${'install-package'} | ${['--install']} | ${'install'} | ${['yarn', 'add', '--dev']}
-    ${'run-cmd'}         | ${[]}            | ${babelCli}  | ${defaultArgv}
+    cliName     | options          | cli          | argv
+    ${'runCmd'} | ${['--install']} | ${'install'} | ${['yarn', 'add', '--dev']}
+    ${'runCmd'} | ${[]}            | ${babelCli}  | ${defaultArgv}
   `(
     'Run $cliName successfully with $options',
     ({
@@ -82,19 +89,14 @@ describe('cli options', () => {
   );
 
   test.each`
-    cliName                | expected
-    ${'not-found-command'} | ${'process exit'}
-    ${'run-error'}         | ${'run error'}
-  `(
-    'Run fail with $cliName',
-    ({ cliName, expected }: {| cliName: string, expected: string |}) => {
-      npmWhich.throwError = true;
-
-      expect(() => {
-        cliOptions([...defaultArgv, cliName]);
-      }).toThrow(expected);
-
-      npmWhich.throwError = false;
-    },
-  );
+    argv
+    ${['--info']}
+    ${['runCmd', '--info']}
+    ${[]}
+    ${['notFindCliName']}
+  `('Run $argv', ({ argv }: {| argv: $ReadOnlyArray<string> |}) => {
+    expect(() => {
+      cliOptions([...defaultArgv, ...argv]);
+    }).toThrow('process exit');
+  });
 });

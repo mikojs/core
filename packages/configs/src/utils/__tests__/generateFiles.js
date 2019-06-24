@@ -9,25 +9,32 @@ import generateFiles from '../generateFiles';
 import configs from '../configs';
 import worker from '../worker';
 
-configs.store['not-find-cli-setting'] = emptyFunction.thatReturnsArgument;
-
 describe('generate files', () => {
+  beforeAll(() => {
+    configs.handleCustomConfigs({
+      config: {
+        notFindCli: emptyFunction.thatReturnsArgument,
+        jest: {
+          configFiles: {
+            'babel:lerna': false,
+          },
+        },
+      },
+      filepath: path.resolve(process.cwd(), './.catrc.js'),
+    });
+  });
+
   beforeEach(() => {
     outputFileSync.destPaths = [];
   });
 
   test('error', () => {
     expect(() => {
-      generateFiles('not-find-cli-setting');
+      generateFiles('notFindCli');
     }).toThrow('process exit');
   });
 
   test('generate', () => {
-    configs.store.jest.configFiles = {
-      ...configs.store.jest.configFiles,
-      'babel:lerna': false,
-    };
-
     generateFiles('jest');
 
     expect(worker.server).toBeNull();

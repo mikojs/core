@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 1.0.0-beta.24 (2019-06-24)
+
+#### :boom: Breaking Change
+
+- `configs`, `logger`
+  - [#279](https://github.com/cat-org/core/pull/279) (@cat-org/logger, @cat-org/configs) Support use function and object config ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `configs`
+  - [#280](https://github.com/cat-org/core/pull/280) (@cat-org/configs) Remove not use function config ([@HsuTing](https://github.com/HsuTing))
+
+#### :memo: Documentation
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-flow-typed-install`, `logger`, `utils`, `website`
+  - [#281](https://github.com/cat-org/core/pull/281) (@cat-org/core) Add README ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.23 (2019-06-20)
 
 #### :bug: Bug Fix

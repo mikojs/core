@@ -2,13 +2,16 @@
 
 import path from 'path';
 
-import { emptyFunction } from 'fbjs';
-
 import getConfig from 'index';
 import configs from 'utils/configs';
 
 test('get config', () => {
-  configs.store['get config'] = emptyFunction.thatReturnsArgument;
+  configs.handleCustomConfigs({
+    config: {
+      getConfig: {},
+    },
+    filepath: path.resolve(process.cwd(), './.catrc.js'),
+  });
 
-  expect(getConfig('get config', path.resolve('jest.config.js'))).toEqual({});
+  expect(getConfig('getConfig', path.resolve('jest.config.js'))).toEqual({});
 });

@@ -39,6 +39,7 @@ yarn add @cat-org/babel-plugin-transform-flow --dev
       {
         dir: './cutom-output-dir-path',
         relativeRoot: './relativeRoot-path-from-root',
+        presets: ['other-babel-presets'],
         plugins: ['other-babel-plugins'],
         verbose: false,
         ignore: /ignore-pattern/,

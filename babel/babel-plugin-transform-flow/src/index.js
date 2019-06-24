@@ -10,6 +10,7 @@ import outputFileSync from 'output-file-sync';
 export type optionsType = {|
   dir: string,
   relativeRoot: string,
+  presets: $ReadOnlyArray<string>,
   plugins: $ReadOnlyArray<string>,
   verbose: boolean,
   ignore?: RegExp,
@@ -21,6 +22,7 @@ export default declare(
     {
       dir = './lib',
       relativeRoot = './src',
+      presets = [],
       plugins = [],
       verbose = true,
       ignore,
@@ -54,6 +56,7 @@ export default declare(
           : transformSync(content, {
               filename,
               parserOpts,
+              presets,
               plugins,
               babelrc: false,
               configFile: false,

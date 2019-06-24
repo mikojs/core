@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.0.0 (2019-06-24)
+
+#### :house: Internal
+
+- [#282](https://github.com/cat-org/core/pull/282) (@cat-org/core) Add deploy job ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0-beta.24 (2019-06-24)
 
 #### :boom: Breaking Change

@@ -1,10 +1,8 @@
 // @flow
 
-import { type Options as OptionsType } from 'prettier';
-
 export default {
   install: (install: $ReadOnlyArray<string>) => [...install, 'prettier'],
-  config: (): OptionsType => ({
+  config: () => ({
     singleQuote: true,
     trailingComma: 'all',
   }),

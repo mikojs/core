@@ -1,7 +1,5 @@
 // @flow
 
-import { type Options as OptionsType } from 'eslint';
-
 export default {
   alias: 'esw',
   install: (install: $ReadOnlyArray<string>) => [
@@ -10,7 +8,7 @@ export default {
     'eslint',
     'eslint-watch',
   ],
-  config: (): OptionsType => ({
+  config: () => ({
     extends: ['@cat-org/eslint-config-cat'],
   }),
   ignore: () => [

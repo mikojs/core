@@ -36,10 +36,7 @@ export class Configs {
    *
    * @return {config} - config with configsEnv
    */
-  +addConfigsEnv = <C: {}>(
-    config: C,
-  ): {
-    ...C,
+  +addConfigsEnv = (config: {}): {
     configsEnv: $ReadOnlyArray<string>,
   } => ({
     ...config,
@@ -105,7 +102,7 @@ export class Configs {
           install
           |> config.install || emptyFunction.thatReturnsArgument
           |> customConfig.install || emptyFunction.thatReturnsArgument,
-        config: <C: {}>(configObj: C) =>
+        config: (configObj: {}) =>
           configObj
           |> this.addConfigsEnv
           |> config.config || emptyFunction.thatReturnsArgument

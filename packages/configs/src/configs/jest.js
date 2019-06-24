@@ -1,7 +1,5 @@
 // @flow
 
-import { type Options as OptionsType } from 'jest';
-
 export default {
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
@@ -10,11 +8,7 @@ export default {
     '@cat-org/jest',
   ],
   run: (argv: $ReadOnlyArray<string>) => [...argv, '--coverage=false'],
-  config: ({
-    configsEnv,
-  }: {
-    configsEnv: $ReadOnlyArray<string>,
-  }): OptionsType => ({
+  config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
     setupFiles: [
       '@cat-org/jest',
       ...(!configsEnv.includes('react') ? [] : ['@cat-org/jest/lib/react']),

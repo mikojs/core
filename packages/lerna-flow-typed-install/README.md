@@ -8,10 +8,18 @@
 
 [website]: https://cat-org.github.io/core/lerna-flow-typed-install
 
-Flow-typed install with lerna.
+Run `flow-typed install` in the lerna-managed project.
 
 ## Install
 
 ```sh
-yarn add @cat-org/lerna-flow-typed-install
+yarn add @cat-org/lerna-flow-typed-install --dev
+```
+
+## Run command
+
+Expect for `-f version`, you can use the other options in [flow-typed](https://github.com/flow-typed/flow-typed#flow-typed-install-package-specification---ignoredeps-deps).
+
+```sh
+yarn lerna-flow-typed-install
 ```

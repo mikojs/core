@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/koa-graphql",
-  "description": "Graphql middleware for cat-org server",
+  "description": "Collect the graphql files to build the graphql automatically",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/koa-graphql",

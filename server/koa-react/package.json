@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/koa-react",
-  "description": "React middleware for cat-org server",
+  "description": "Collect the react files to build the pages automatically",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/koa-react",

@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/lerna-flow-typed-install",
-  "description": "Flow-typed install with lerna",
+  "description": "Run `flow-typed install` in the lerna-managed project",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/lerna-flow-typed-install",

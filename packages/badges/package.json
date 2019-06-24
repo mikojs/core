@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/badges",
-  "description": "Badges cli for cat-org",
+  "description": "Use to add badges to `README.md`.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/badges",

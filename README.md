@@ -15,14 +15,46 @@
 
 [homepage]: https://cat-org.github.io/core/
 
-The packages in this repo is used to create a `cat` project.
+The packages in this repo are used to create a new project for `@cat-org/create-project`.
 
-#### Development
+#### Babel
 
-This project use `lerna` to manage packages. Commands:
+Here are the plugins for `babel`.
 
-- `clean:all`: Clean the all files which is built by the packages.
+- [@cat-org/babel-preset-base](./babel/babel-preset-base)
+- [@cat-org/babel-plugin-import-css](./babel/babel-plugin-import-css)
+- [@cat-org/babel-plugin-transform-flow](./babel/babel-plugin-transform-flow)
+
+#### Server
+
+Here are the plugins for building the server.
+
+- [@cat-org/server](./server/server)
+- [@cat-org/koa-base](./server/koa-base)
+- [@cat-org/koa-graphql](./server/koa-graphql)
+- [@cat-org/koa-react](./server/koa-react)
+  - [@cat-org/use-css](./server/use-css)
+  - [@cat-org/use-less](./server/use-less)
+
+#### Others
+
+Here are the other packages for creating a new project.
+
+- [@cat-org/create-project](./packages/create-project)
+- [@cat-org/utils](./packages/utils)
+- [@cat-org/logger](./packages/logger)
+- [@cat-org/configs](./packages/configs)
+- [@cat-org/badges](./packages/badges)
+- [@cat-org/lerna-flow-typed-install](./packages/lerna-flow-typed-instal)
+- [@cat-org/eslint-config-cat](./packages/eslint-config-cat)
+- [@cat-org/jest](./packages/jest)
+
+## Development
+
+This project use `lerna` to manage packages. You can use:
+
 - `install:all`: Install the all pacakges.
 - `prod`: Build the production packages.
 - `release`: Release the packages.
 - `test`: Run the testing.
+- `clean`: Clean the all files which is built by the packages.

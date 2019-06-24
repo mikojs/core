@@ -8,7 +8,7 @@
 
 [website]: https://cat-org.github.io/core/utils
 
-Cat utils.
+Util tools for cat-org.
 
 ## Install
 

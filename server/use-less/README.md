@@ -8,10 +8,19 @@
 
 [website]: https://cat-org.github.io/core/use-less
 
-Add less to cat-org koa-react.
+Add less config to @cat-org/koa-react.
 
 ## Install
 
 ```sh
-yarn add @cat-org/use-less
+yarn add @@cat-org/koa-react cat-org/use-less
+```
+
+## Add `@cat-org/use-less` to config.
+
+```sh
+import React from '@cat-org/koa-react';
+import useLess from '@cat-org/use-less';
+
+const react = new React('./path-to-react-folder', useLess({}));
 ```

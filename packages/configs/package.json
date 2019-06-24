@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/configs",
-  "description": "Configs for cat-org",
+  "description": "Use to manage the multiple configs",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/configs",

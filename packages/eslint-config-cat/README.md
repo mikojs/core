@@ -15,3 +15,11 @@ Eslint config for cat-org.
 ```sh
 yarn add @cat-org/eslint-config-cat
 ```
+
+## Add `@cat-org/eslint-config-cat` to eslint config
+
+```js
+...
+  extends: ['@cat-org/eslint-config-cat'],
+...
+```

@@ -8,6 +8,7 @@
 
 import moment from 'moment';
 import debug from 'debug';
+import { emptyFunction } from 'fbjs';
 
 import configs from 'utils/configs';
 import worker from 'utils/worker';
@@ -19,5 +20,10 @@ export default (cliName: string, filePath: string): {} => {
   debugLog(`filePath: ${filePath}`);
   worker.writeCache({ filePath, using: moment().format() });
 
-  return {} |> configs.store[cliName].config || configs.store[cliName];
+  return (
+    {}
+    |> configs.addConfigsEnv
+    |> configs.store[cliName].config || emptyFunction.thatReturnsArgument
+    |> configs.removeConfigsEnv
+  );
 };

@@ -1,10 +1,10 @@
 // @flow
 
-import { type configType } from '../types';
+import { type configsType } from '../types';
 
 import babel from './babel';
 import prettier from './prettier';
-import lint from './lint';
+import eslint from './eslint';
 import lintsteged from './lintsteged';
 import jest from './jest';
 import server from './server';
@@ -26,12 +26,12 @@ export default ({
   prettier,
 
   // eslint
-  lint,
+  lint: eslint,
   'lint:watch': {
-    ...lint,
+    ...eslint,
     alias: 'esw',
     run: (argv: $ReadOnlyArray<string>) => [
-      ...lint.run(argv),
+      ...eslint.run(argv),
       '-w',
       '--rule',
       'prettier/prettier: off',
@@ -61,6 +61,4 @@ export default ({
       '../../babel.config.js',
     ],
   },
-}: {
-  [string]: configType,
-});
+}: configsType);

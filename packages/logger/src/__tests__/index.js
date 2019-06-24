@@ -30,9 +30,7 @@ describe.each`
       const mockLog = jest.fn();
 
       logger('test', {
-        [name]: {
-          print: mockLog,
-        },
+        [name]: mockLog,
       })[name]('message');
 
       expect(mockLog).toHaveBeenCalledTimes(1);
@@ -56,9 +54,7 @@ test('show json message', () => {
   };
 
   logger('test', {
-    log: {
-      print: mockLog,
-    },
+    log: mockLog,
   }).log(message);
 
   expect(mockLog).toHaveBeenCalledTimes(1);

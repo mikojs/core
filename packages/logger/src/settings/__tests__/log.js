@@ -22,7 +22,10 @@ test('log', () => {
  */
 test('browser', () => {
   Object.keys(browser).forEach((key: string) => {
-    browser[key].print('message');
-    browser[key].print('{cyan {bold message}}');
+    const log =
+      typeof browser[key] !== 'function' ? browser[key].print : browser[key];
+
+    log('message');
+    log('{cyan {bold message}}');
   });
 });

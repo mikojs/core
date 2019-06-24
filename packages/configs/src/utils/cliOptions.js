@@ -80,6 +80,7 @@ export default (
                 case 'run':
                   return {
                     ...result,
+                    // $FlowFixMe https://github.com/facebook/flow/issues/2645
                     [key]: config[key]([]),
                   };
 

@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/logger",
-  "description": "Logger for cat-org",
+  "description": "Normalize the logger with the log name",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/logger",

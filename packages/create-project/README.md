@@ -8,10 +8,13 @@
 
 [website]: https://cat-org.github.io/core/create-project
 
-Use to create a new cat project.
+Use to create a new project.
 
-## Install
+## Run command
 
 ```sh
-yarn add @cat-org/create-project
+yarn create @cat-org/project ./new-project
 ```
+
+- `--lerna`: If you want to add a new project to a lerna-managed project, you can use `yarn create @cat-org/project --lerna`.
+- You can see the all example projects [here](./src/__tests__/__ignore__).

@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/jest",
-  "description": "Jest setup for cat-org",
+  "description": "Jest setup files",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/jest",

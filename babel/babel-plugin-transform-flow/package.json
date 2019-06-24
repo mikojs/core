@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/babel-plugin-transform-flow",
-  "description": "Babel plugin for transforming flow files",
+  "description": "Use to build the flow files with babel",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/babel-plugin-transform-flow",

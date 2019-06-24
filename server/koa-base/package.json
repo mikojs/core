@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/koa-base",
-  "description": "Base middleware for cat-org server",
+  "description": "The base of koa middleware with cat-org",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/koa-base",

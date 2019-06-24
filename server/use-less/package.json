@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/use-less",
-  "description": "Add less to cat-org koa-react",
+  "description": "Add less config to @cat-org/koa-react",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/use-less",

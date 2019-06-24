@@ -8,10 +8,21 @@
 
 [website]: https://cat-org.github.io/core/koa-base
 
-Base middleware for cat-org server.
+The base of koa middleware with cat-org.
 
 ## Install
 
 ```sh
-yarn add @cat-org/koa-base
+yarn add koa @cat-org/koa-base
+```
+
+## Add `@cat-org/koa-base` to server
+
+```js
+import Koa from 'koa';
+import base from '@cat-org/koa-base';
+
+const app = new Koa();
+
+app.use(base);
 ```

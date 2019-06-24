@@ -8,10 +8,37 @@
 
 [website]: https://cat-org.github.io/core/babel-plugin-import-css
 
-Use to make css file can import in node and browser.
+Use to make the css files can be imported into `node` and `browser`.
 
-## Getting Started
+## Install
 
 ```sh
-yarn add @cat-org/babel-plugin-import-css
+yarn add @cat-org/babel-plugin-import-css --dev
+```
+
+## Add `@cat-org/babel-plugin-import-css` to babel config.
+
+```js
+...
+  plugins: [
+    ...
+    '@cat-org/import-css',
+    ...
+  ],
+...
+```
+
+#### Use with less
+
+```js
+...
+  plugins: [
+    ...
+    [
+      '@cat-org/import-css',
+      { test: /\.less$/ },
+    ],
+    ...
+  ],
+...
 ```

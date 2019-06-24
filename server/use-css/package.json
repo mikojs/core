@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/use-css",
-  "description": "Add css to cat-org koa-react",
+  "description": "Add css config to @cat-org/koa-react",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/use-css",

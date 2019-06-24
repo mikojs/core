@@ -8,10 +8,28 @@
 
 [website]: https://cat-org.github.io/core/jest
 
-Jest setup for cat-org.
+Jest setup files.
 
 ## Install
 
 ```sh
-yarn add @cat-org/jest
+yarn add @cat-org/jest --dev
+```
+
+## Add default jest setup file to jest config
+
+```js
+...
+  setupFiles: ['@cat-org/jest']
+...
+```
+
+## Add react jest setup file to jest config
+
+You should install `enzyme-adapter-react-16`, `react`, `react-dom` before using ths config file
+
+```js
+...
+  setupFiles: ['@cat-org/jest/lib/react']
+...
 ```

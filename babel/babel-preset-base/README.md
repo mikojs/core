@@ -13,5 +13,36 @@ The base of babel plugin with cat-org.
 ## Install
 
 ```sh
-yarn add @cat-org/babel-preset-base
+yarn add @cat-org/babel-preset-base --dev
+```
+
+## Add `@cat-org/babel-preset-base` to babel config
+
+```js
+...
+  presets: [
+    ...
+    '@cat-org/base',
+    ...
+  ],
+...
+```
+
+#### With the custom options
+
+```js
+...
+  presets: [
+    ...
+    [
+      '@cat-org/base',
+      {
+        '@cat-org/transform-flow': {
+          plugins: ['plugins'],
+        },
+      },
+    ],
+    ...
+  ],
+...
 ```

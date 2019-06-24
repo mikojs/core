@@ -1,6 +1,6 @@
 {
   "name": "@cat-org/server",
-  "description": "Server for cat-org",
+  "description": "Run koa server with pipeline",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/server",

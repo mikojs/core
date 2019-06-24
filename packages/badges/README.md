@@ -13,5 +13,25 @@ Use to add badges to `README.md`.
 ## Install
 
 ```sh
-yarn add @cat-org/badges
+yarn add @cat-org/badges --dev
+```
+
+## Run command
+
+1. Add `badges.start` and `badges.end` comments to `README.md`.
+2. Run command.
+
+```sh
+yarn badges ./README.md
+```
+
+## Add to `@cat-org/badges` to lint-staged
+
+```js
+...
+  '**/README.md': [
+    'badges',
+    'git add',
+  ],
+...
 ```

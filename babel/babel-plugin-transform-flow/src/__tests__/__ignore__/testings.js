@@ -66,7 +66,7 @@ export default [
           {
             presets: [
               [
-                '@babel/preset-env',
+                '@babel/env',
                 {
                   targets: {
                     browsers: ['last 5 versions', 'ie 9', 'defaults'],

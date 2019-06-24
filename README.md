@@ -21,9 +21,9 @@ The packages in this repo are used to create a new project for `@cat-org/create-
 
 Here are the plugins for `babel`.
 
+- [@cat-org/babel-preset-base](./babel/babel-preset-base)
 - [@cat-org/babel-plugin-import-css](./babel/babel-plugin-import-css)
 - [@cat-org/babel-plugin-transform-flow](./babel/babel-plugin-transform-flow)
-- [@cat-org/babel-preset-base](./babel/babel-preset-base)
 
 #### Server
 

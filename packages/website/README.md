@@ -6,7 +6,7 @@
 
 [website]: https://cat-org.github.io/core
 
-The website of @cat-org/core documentation
+The website of `@cat-org/core` documentation.
 
 ## Usage
 

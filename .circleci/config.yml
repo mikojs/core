@@ -26,6 +26,10 @@ set-debug-env: &set-debug-env
     echo 'DEBUG=configs*' >> $BASH_ENV
     source $BASH_ENV
 
+set-npm-key: &set-npm-key
+  name: Set npm key
+  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+
 jobs:
   test:
     <<: *defaults
@@ -34,7 +38,6 @@ jobs:
       - restore_cache: *restore-cache
       - run: *install-all
       - run: *set-debug-env
-
       - save_cache: *save-cache
 
       - run:
@@ -56,14 +59,27 @@ jobs:
       - restore_cache: *restore-cache
       - run: *install-all
       - run: *set-debug-env
+      - run: *set-npm-key
 
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
-          name: Publish
+          name: Publish beta version
           command: |
             yarn lerna publish from-git \
               --dist-tag beta \
               --yes
+
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore-cache
+      - run: *install-all
+      - run: *set-debug-env
+      - run: *set-npm-key
+
+      - run:
+          name: Publish new version
+          command: yarn lerna publish from-git --yes
 
 workflows:
   version: 2
@@ -82,4 +98,14 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /v\d+(\.\d+){2}(-beta\.\d+)?/
+              only: /^v(\.?\d+){3}-beta\.\d+$/
+
+      - deploy:
+          context: global-env
+          requires:
+            - test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v(\.?\d+){3}$/

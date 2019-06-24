@@ -17,7 +17,7 @@
 
 The packages in this repo are used to create a new project for `@cat-org/create-project`.
 
-#### babel
+#### Babel
 
 Here are the plugins for `babel`.
 
@@ -25,7 +25,7 @@ Here are the plugins for `babel`.
 - [@cat-org/babel-plugin-transform-flow](./babel/babel-plugin-transform-flow)
 - [@cat-org/babel-preset-base](./babel/babel-preset-base)
 
-#### server
+#### Server
 
 Here are the plugins for building the server.
 
@@ -36,9 +36,9 @@ Here are the plugins for building the server.
   - [@cat-org/use-css](./server/use-css)
   - [@cat-org/use-less](./server/use-less)
 
-#### others
+#### Others
 
-Other packages for creating a new project.
+Here are the other packages for creating a new project.
 
 - [@cat-org/create-project](./packages/create-project)
 - [@cat-org/utils](./packages/utils)
@@ -49,7 +49,7 @@ Other packages for creating a new project.
 - [@cat-org/eslint-config-cat](./packages/eslint-config-cat)
 - [@cat-org/jest](./packages/jest)
 
-#### Development
+## Development
 
 This project use `lerna` to manage packages. You can use:
 

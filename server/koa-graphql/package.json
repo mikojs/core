@@ -5,10 +5,10 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/koa-graphql",
   "repository": "https://github.com/cat-org/core/tree/master/server/koa-graphql",
-  "version": "1.0.0-beta.24",
+  "version": "1.0.0",
   "main": "./lib/index.js",
   "dependencies": {
-    "@cat-org/utils": "^1.0.0-beta.24",
+    "@cat-org/utils": "^1.0.0",
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.3",
     "execa": "^1.0.0",

@@ -59,8 +59,9 @@ describe('configs', () => {
     ${'no config in default config'} | ${'noConfigInDefault'}
     ${'no config in custom config'}  | ${'noConfigInCustom'}
   `('$testName', ({ configName }: {| configName: string |}) => {
-    expect(configs.store[configName].config({})).toEqual({});
-    expect(configs.store[configName].run([])).toEqual([]);
     expect(configs.store[configName].install([])).toEqual([]);
+    expect(configs.store[configName].config({})).toEqual({});
+    expect(configs.store[configName].ignore([])).toEqual([]);
+    expect(configs.store[configName].run([])).toEqual([]);
   });
 });

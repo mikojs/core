@@ -55,7 +55,7 @@ yarn server src -d lib --skip-server
 #### Use in testing
 
 ```js
-import server from ''@cat-org/server/lib/bin';
+import server from '@cat-org/server/lib/bin';
 
 let runningServer;
 

@@ -4,9 +4,6 @@
 # TODO: remove, fix koa-graphql type error
 # https://github.com/chentsulin/koa-graphql/issues/120
 <PROJECT_ROOT>/node_modules/koa-graphql
-# TODO: https://github.com/relay-tools/react-relay-network-modern-ssr/pull/14
-<PROJECT_ROOT>/node_modules/react-relay-network-modern-ssr/node8/utils.js.flow
-<PROJECT_ROOT>/node_modules/react-relay-network-modern-ssr/node8/server.js.flow
 
 [include]
 

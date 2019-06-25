@@ -204,8 +204,10 @@ export default class Store {
 
     for (const command of commands) {
       try {
+        const cmd = command.split(/ /);
+
         logger.info(chalk`Run command: {green ${command}}`);
-        await execa.shell(command, {
+        await execa(cmd[0], cmd.slice(1), {
           cwd: projectDir,
           stdio: 'inherit',
         });

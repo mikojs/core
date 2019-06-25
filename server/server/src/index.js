@@ -54,14 +54,14 @@ export default {
         'Should not use `-d` or `--out-dir`',
       );
 
-      const options = [src, '-d', dir, ...babelOptions].join(' ');
+      const options = [src, '-d', dir, ...babelOptions];
 
-      await execa.shell(`babel ${options}`, {
+      await execa('babel', options, {
         stdio: 'inherit',
       });
 
       if (dev && watch)
-        execa.shell(`babel --skip-initial-build -w ${options}`, {
+        execa('babel', ['--skip-initial-build', '-w', ...options], {
           stdio: 'inherit',
         });
     }

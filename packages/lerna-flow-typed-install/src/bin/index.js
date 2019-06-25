@@ -37,11 +37,14 @@ handleUnhandledRejection();
 
     if (!fs.existsSync(nodeModulesPath)) fs.mkdirSync(nodeModulesPath);
 
-    await execa.shell(
-      `flow-typed install -f ${flowVersion.replace(
-        /\^/,
-        '',
-      )} ${process.argv.slice(2).join(' ')}`,
+    await execa(
+      'flow-typed',
+      [
+        'install',
+        '-f',
+        flowVersion.replace(/\^/, ''),
+        ...process.argv.slice(2),
+      ],
       {
         stdio: 'inherit',
       },

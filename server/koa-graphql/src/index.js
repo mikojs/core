@@ -95,12 +95,9 @@ export default class Graphql {
 
     outputFileSync(schemaFilePath, printSchema(this.schema));
 
-    return execa.shell(
-      `relay-compiler --schema ${[schemaFilePath, ...argv].join(' ')}`,
-      {
-        stdio: 'inherit',
-      },
-    );
+    return execa('relay-compiler', ['--schema', schemaFilePath, ...argv], {
+      stdio: 'inherit',
+    });
   };
 
   /**

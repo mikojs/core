@@ -16,7 +16,7 @@
     "commander": "^2.20.0",
     "cosmiconfig": "^5.2.1",
     "debug": "^4.1.1",
-    "execa": "^1.0.0",
+    "execa": "^2.0.0",
     "fbjs": "^1.0.0",
     "is-running": "^2.1.0",
     "moment": "^2.24.0",

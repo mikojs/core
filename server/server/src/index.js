@@ -97,7 +97,7 @@ export default {
   del: (prefix: string) => new Endpoint(prefix, 'del'),
   all: (prefix: string) => new Endpoint(prefix, 'all'),
 
-  use: (middleware: koaMiddlewareType) => <R: routerType>(router: R): R => {
+  use: (middleware: koaMiddlewareType) => <-R: routerType>(router: R): R => {
     router.use(middleware);
 
     return router;
@@ -105,9 +105,9 @@ export default {
 
   end: (
     router: Router | Endpoint,
-  ): (<R: Router | Koa>(parentRouter: R) => R) => {
+  ): (<-R: Router | Koa>(parentRouter: R) => R) => {
     if (router instanceof Endpoint)
-      return <R: Router | Koa>(parentRouter: R): R => {
+      return <-R: Router | Koa>(parentRouter: R): R => {
         /**
          * https://github.com/facebook/flow/issues/2282
          * instanceof not work
@@ -160,7 +160,7 @@ export default {
         return parentRouter;
       };
 
-    return <R: Router | Koa>(parentRouter: R): R => {
+    return <-R: Router | Koa>(parentRouter: R): R => {
       /**
        * https://github.com/facebook/flow/issues/2282
        * instanceof not work

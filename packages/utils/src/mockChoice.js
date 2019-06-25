@@ -1,8 +1,8 @@
 // @flow
 
-export default <ArgType, ResultType>(
+export default <-A, -R>(
   result: boolean,
-  funcOne: (...args: $ReadOnlyArray<ArgType>) => ResultType,
-  funcTwo: (...args: $ReadOnlyArray<ArgType>) => ResultType,
-  ...args: $ReadOnlyArray<ArgType>
-): ResultType => (result ? funcOne(...args) : funcTwo(...args));
+  funcOne: (...args: $ReadOnlyArray<A>) => R,
+  funcTwo: (...args: $ReadOnlyArray<A>) => R,
+  ...args: $ReadOnlyArray<A>
+): R => (result ? funcOne(...args) : funcTwo(...args));

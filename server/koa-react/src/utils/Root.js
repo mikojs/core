@@ -101,7 +101,7 @@ const getPage = (
         (await Component.getInitialProps?.(ctx)) || {};
       // TODO component should be ignored
       // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-      const Page = <P: {}>(props?: P) => (
+      const Page = <-P: {}>(props?: P) => (
         <Component {...props} {...initialProps} />
       );
 
@@ -159,7 +159,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
 
     return (
       <Main {...mainInitialProps}>
-        {<P: { key: string }>(props?: P) => (
+        {<-P: { key: string }>(props?: P) => (
           <Suspense fallback={<Loading />}>
             <Route
               children={({

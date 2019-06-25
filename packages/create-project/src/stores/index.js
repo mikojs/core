@@ -91,7 +91,7 @@ export default class Store {
    *
    * @return {Array} - normalized question array
    */
-  +prompt = <T>(...questions: $ReadOnlyArray<questionType<T>>) =>
+  +prompt = <-T>(...questions: $ReadOnlyArray<questionType<T>>) =>
     inquirer.prompt(
       normalizedQuestions('@cat-org/create-project')(...questions),
     );

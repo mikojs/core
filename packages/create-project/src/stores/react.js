@@ -55,6 +55,8 @@ class React extends Store {
 
     await this.checkReact(useServer);
 
+    // TODO: https://github.com/eslint/eslint/issues/11899
+    // eslint-disable-next-line require-atomic-updates
     ctx.useReact = this.storeUseReact;
   };
 

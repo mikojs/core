@@ -161,6 +161,8 @@ class Pkg extends Store {
     await this.defaultInfo(ctx);
     this.addScripts(ctx);
 
+    // TODO: https://github.com/eslint/eslint/issues/11899
+    // eslint-disable-next-line require-atomic-updates
     ctx.pkg = this.storePkg;
   };
 

@@ -51,7 +51,7 @@ export default {
           size: 100,
           ttl: 60 * 1000,
         }),
-        // $FlowFixMe https://github.com/relay-tools/react-relay-network-modern-ssr/pull/14
+        // $FlowFixMe wait flow upgrade
         new RelaySSR(relayData).getMiddleware({
           lookup: false,
         }),
@@ -96,7 +96,7 @@ export default {
           urlMiddleware({
             url: (req: mixed) => 'http://localhost:8000/graphql',
           }),
-          // $FlowFixMe https://github.com/relay-tools/react-relay-network-modern-ssr/pull/14
+          // $FlowFixMe wait flow upgrade
           relaySSR.getMiddleware(),
         ]),
       }),

@@ -14,28 +14,30 @@ export default memoizeOne(
       [
         {
           name: 'username',
-          cmd: 'git config --get user.name',
+          args: ['config', '--get', 'user.name'],
         },
         {
           name: 'email',
-          cmd: 'git config --get user.email',
+          args: ['config', '--get', 'user.email'],
         },
       ].map(
         async ({
           name,
-          cmd,
+          args,
         }: {|
           name: string,
-          cmd: string,
+          args: $ReadOnlyArray<string>,
         |}): Promise<string> => {
           try {
-            return await execa
-              .shell(cmd)
-              .then(({ stdout }: { stdout: string }) => stdout);
+            const { stdout } = await execa('git', args);
+
+            return stdout;
           } catch (e) {
             debug('create-project:getUser')(e);
             throw logger.fail(
-              chalk`Run {green \`${cmd}\`} before creating project`,
+              chalk`Run {green \`git ${args.join(
+                ' ',
+              )}\`} before creating project`,
             );
           }
         },

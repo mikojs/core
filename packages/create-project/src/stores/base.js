@@ -68,7 +68,7 @@ class Base extends Store {
     await this.execa('yarn flow-typed install');
 
     try {
-      await execa.shell('git', ['status'], {
+      await execa('git', ['status'], {
         cwd: projectDir,
       });
     } catch (e) {

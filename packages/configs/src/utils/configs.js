@@ -51,7 +51,7 @@ export class Configs {
    *
    * @return {config} - configs without configsEnv
    */
-  +removeConfigsEnv = <C: {}>({
+  +removeConfigsEnv = <-C: {}>({
     configsEnv,
     ...config
   }: {

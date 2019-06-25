@@ -19,7 +19,7 @@ export type questionType<T> = {
 export const defaultValidate = (val: string) =>
   val !== '' || 'can not be empty';
 
-export default (projectName: string) => <T>(
+export default (projectName: string) => <-T>(
   ...questions: $ReadOnlyArray<questionType<T>>
 ) =>
   (questions.map(

@@ -4,7 +4,7 @@ import debug from 'debug';
 
 const debugLog = debug('server:loadModule');
 
-export default <T>(
+export default <-T>(
   moduleName: string,
   defaultFunc: T,
   ...options: $ReadOnlyArray<mixed>

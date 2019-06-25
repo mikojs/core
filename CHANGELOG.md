@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.1.0 (2019-06-25)
+
+#### :rocket: New Feature
+
+- [#283](https://github.com/cat-org/core/pull/283) (@cat-org/babel-plugin-transform-flow) Support to use presets ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.0.0 (2019-06-24)
 
 #### :house: Internal

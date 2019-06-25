@@ -8,19 +8,19 @@ class Execa {
 
   cmds = [];
 
-  +main = {
-    shell: (
-      cmd: string,
-    ): Promise<{|
-      stdout: string,
-    |}> => {
-      const stdout = this.mainFunction(cmd);
+  +main = (
+    cmd: string,
+    args: $ReadOnlyArray<string> = [],
+  ): Promise<{|
+    stdout: string,
+  |}> => {
+    const command = [cmd, ...args].join(' ');
+    const stdout = this.mainFunction(command);
 
-      this.cmds.push(cmd);
-      return Promise.resolve({
-        stdout,
-      });
-    },
+    this.cmds.push(command);
+    return Promise.resolve({
+      stdout,
+    });
   };
 }
 

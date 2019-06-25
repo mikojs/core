@@ -111,9 +111,13 @@ export const preload = async (
       }
 
       if (preloadLazyComponents[chunkName]._status !== 1) {
+        // TODO: https://github.com/eslint/eslint/issues/11899
+        // eslint-disable-next-line require-atomic-updates
         preloadLazyComponents[chunkName]._result = (await preloadLazyComponents[
           chunkName
         ]._ctor()).default;
+        // TODO: https://github.com/eslint/eslint/issues/11899
+        // eslint-disable-next-line require-atomic-updates
         preloadLazyComponents[chunkName]._status = 1;
       }
 

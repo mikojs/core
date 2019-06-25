@@ -56,6 +56,8 @@ class Styles extends Store {
 
     await this.checkStyles(useReact);
 
+    // TODO: https://github.com/eslint/eslint/issues/11899
+    // eslint-disable-next-line require-atomic-updates
     ctx.useStyles = this.storeUseStyles;
   };
 

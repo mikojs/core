@@ -13,6 +13,7 @@ import graphql, {
 import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
+import debug from 'debug';
 
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
@@ -21,6 +22,13 @@ type buildSchemasType = {
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
   resolvers: $PropertyType<makeExecutableSchema, 'resolvers'>,
 };
+
+export type optionsType = {
+  schema?: buildSchemasType,
+  options?: makeExecutableSchemaOptionsType,
+};
+
+const debugLog = debug('graphql');
 
 /** koa-graphql */
 export default class Graphql {
@@ -33,7 +41,10 @@ export default class Graphql {
    * @param {string} folderPath - folder path
    * @param {options} options - make executable schema options
    */
-  constructor(folderPath: string, options?: makeExecutableSchemaOptionsType) {
+  constructor(
+    folderPath: string,
+    { schema = {}, options = {} }: optionsType = {},
+  ) {
     const { typeDefs, resolvers } = d3DirTree(folderPath, {
       extensions: /.jsx?$/,
     })
@@ -64,16 +75,25 @@ export default class Graphql {
           };
         },
         {
-          typeDefs: [],
-          resolvers: {},
+          typeDefs:
+            schema.typeDefs instanceof Array || !schema.typeDefs
+              ? schema.typeDefs || []
+              : [schema.typeDefs],
+          resolvers: schema.resolvers || {},
         },
       );
 
+    debugLog({
+      typeDefs,
+      resolvers,
+    });
+
     this.schema = makeExecutableSchema({
+      ...options,
       resolverValidationOptions: {
+        ...options.requireResolversForResolveType,
         requireResolversForResolveType: false,
       },
-      ...options,
       typeDefs,
       resolvers,
     });
@@ -93,6 +113,7 @@ export default class Graphql {
       './schema.graphql',
     );
 
+    debugLog(schemaFilePath);
     outputFileSync(schemaFilePath, printSchema(this.schema));
 
     return execa('relay-compiler', ['--schema', schemaFilePath, ...argv], {

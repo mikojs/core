@@ -13,6 +13,7 @@ import graphql, {
 import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
+import debug from 'debug';
 
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
@@ -21,6 +22,8 @@ type buildSchemasType = {
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
   resolvers: $PropertyType<makeExecutableSchema, 'resolvers'>,
 };
+
+const debugLog = debug('graphql');
 
 /** koa-graphql */
 export default class Graphql {
@@ -79,6 +82,11 @@ export default class Graphql {
         },
       );
 
+    debugLog({
+      typeDefs,
+      resolvers,
+    });
+
     this.schema = makeExecutableSchema({
       ...options,
       resolverValidationOptions: {
@@ -104,6 +112,7 @@ export default class Graphql {
       './schema.graphql',
     );
 
+    debugLog(schemaFilePath);
     outputFileSync(schemaFilePath, printSchema(this.schema));
 
     return execa('relay-compiler', ['--schema', schemaFilePath, ...argv], {

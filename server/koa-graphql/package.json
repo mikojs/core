@@ -10,6 +10,7 @@
   "dependencies": {
     "@cat-org/utils": "^1.1.1",
     "d3-hierarchy": "^1.1.8",
+    "debug": "^4.1.1",
     "directory-tree": "^2.2.3",
     "execa": "^2.0.0",
     "find-cache-dir": "^3.0.0",

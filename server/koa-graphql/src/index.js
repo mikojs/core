@@ -33,7 +33,16 @@ export default class Graphql {
    * @param {string} folderPath - folder path
    * @param {options} options - make executable schema options
    */
-  constructor(folderPath: string, options?: makeExecutableSchemaOptionsType) {
+  constructor(
+    folderPath: string,
+    {
+      schema,
+      options = {},
+    }: {
+      schema?: buildSchemasType,
+      options?: makeExecutableSchemaOptionsType,
+    } = {},
+  ) {
     const { typeDefs, resolvers } = d3DirTree(folderPath, {
       extensions: /.jsx?$/,
     })
@@ -66,14 +75,16 @@ export default class Graphql {
         {
           typeDefs: [],
           resolvers: {},
+          ...schema,
         },
       );
 
     this.schema = makeExecutableSchema({
+      ...options,
       resolverValidationOptions: {
+        ...options.requireResolversForResolveType,
         requireResolversForResolveType: false,
       },
-      ...options,
       typeDefs,
       resolvers,
     });

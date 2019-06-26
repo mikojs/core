@@ -23,6 +23,11 @@ type buildSchemasType = {
   resolvers: $PropertyType<makeExecutableSchema, 'resolvers'>,
 };
 
+export type optionsType = {
+  schema?: buildSchemasType,
+  options?: makeExecutableSchemaOptionsType,
+};
+
 const debugLog = debug('graphql');
 
 /** koa-graphql */
@@ -38,13 +43,7 @@ export default class Graphql {
    */
   constructor(
     folderPath: string,
-    {
-      schema,
-      options = {},
-    }: {
-      schema?: buildSchemasType,
-      options?: makeExecutableSchemaOptionsType,
-    } = {},
+    { schema = {}, options = {} }: optionsType = {},
   ) {
     const { typeDefs, resolvers } = d3DirTree(folderPath, {
       extensions: /.jsx?$/,
@@ -76,9 +75,11 @@ export default class Graphql {
           };
         },
         {
-          typeDefs: [],
-          resolvers: {},
-          ...schema,
+          typeDefs:
+            schema.typeDefs instanceof Array || !schema.typeDefs
+              ? schema.typeDefs || []
+              : [schema.typeDefs],
+          resolvers: schema.resolvers || {},
         },
       );
 

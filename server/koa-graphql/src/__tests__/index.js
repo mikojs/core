@@ -9,9 +9,11 @@ import { outputFileSync } from 'output-file-sync';
 
 import Graphql from '../index';
 
+import runServer from './__ignore__/runServer';
+
 describe('graphql', () => {
   test('relay', () => {
-    const graphql = new Graphql(path.resolve(__dirname, './__ignore__'));
+    const graphql = new Graphql(path.resolve(__dirname, './__ignore__/schema'));
 
     outputFileSync.destPaths = [];
     outputFileSync.contents = [];
@@ -39,52 +41,103 @@ type User {
     ]);
   });
 
-  test('middleware', async () => {
-    const app = new Koa();
-    const graphql = new Graphql(path.resolve(__dirname, './__ignore__'));
-    const port = await getPort();
+  describe('middleware', () => {
+    test('basic usage', async () => {
+      const { server, request } = await runServer();
 
-    app.use(graphql.middleware());
-
-    const server = app.listen(port);
-
-    expect(
-      await fetch(`http://localhost:${port}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          query: `
-    {
-      version
-      users {
+      expect(
+        await request(`
+  {
+    version
+    users {
+      id
+      event {
         id
-        event {
-          id
-          name
-        }
+        name
       }
     }
-  `,
-        }),
-      }).then((res: ResponseType) => res.json()),
-    ).toEqual({
-      data: {
-        version: '1.0.0',
-        users: [
-          {
-            id: 'user-id',
-            event: {
-              id: 'event-id',
-              name: 'event-name',
+  }
+        `),
+      ).toEqual({
+        data: {
+          version: '1.0.0',
+          users: [
+            {
+              id: 'user-id',
+              event: {
+                id: 'event-id',
+                name: 'event-name',
+              },
             },
-          },
-        ],
-      },
+          ],
+        },
+      });
+
+      server.close();
     });
 
-    server.close();
+    test('additional schema with string', async () => {
+      const { server, request } = await runServer({
+        schema: {
+          typeDefs: `
+  extend type Query {
+    key: String!
+  }
+`,
+          resolvers: {
+            Query: {
+              key: () => 'value',
+            },
+          },
+        },
+      });
+
+      expect(
+        await request(`
+  {
+    key
+  }
+        `),
+      ).toEqual({
+        data: {
+          key: 'value',
+        },
+      });
+
+      server.close();
+    });
+
+    test('additional schema with array', async () => {
+      const { server, request } = await runServer({
+        schema: {
+          typeDefs: [
+            `
+  extend type Query {
+    key: String!
+  }
+`,
+          ],
+          resolvers: {
+            Query: {
+              key: () => 'value',
+            },
+          },
+        },
+      });
+
+      expect(
+        await request(`
+  {
+    key
+  }
+        `),
+      ).toEqual({
+        data: {
+          key: 'value',
+        },
+      });
+
+      server.close();
+    });
   });
 });

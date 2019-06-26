@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## 1.1.1 (2019-06-26)
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `lerna-flow-typed-install`
+  - [#287](https://github.com/cat-org/core/pull/287) (@cat-org/core) Add new execa ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`, `utils`
+  - [#284](https://github.com/cat-org/core/pull/284) (@cat-org/core) Add readOnly and writeOnly to generic types ([@HsuTing](https://github.com/HsuTing))
+
+#### :memo: Documentation
+
+- [#285](https://github.com/cat-org/core/pull/285) (@cat-org/server) Fix readme ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `create-project`, `eslint-config-cat`, `website`
+  - [#286](https://github.com/cat-org/core/pull/286) (@cat-org/core) Update react relay network modern ssr ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`, `utils`
+  - [#284](https://github.com/cat-org/core/pull/284) (@cat-org/core) Add readOnly and writeOnly to generic types ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.1.0 (2019-06-25)
 
 #### :rocket: New Feature

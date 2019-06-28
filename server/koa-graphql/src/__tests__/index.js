@@ -3,6 +3,7 @@
 import path from 'path';
 
 import { outputFileSync } from 'output-file-sync';
+import { chokidar } from 'chokidar';
 
 import Graphql from '../index';
 
@@ -132,5 +133,63 @@ type User {
 
       server.close();
     });
+
+    test.each`
+      dev
+      ${true}
+      ${false}
+    `(
+      'update resolver when file is changed with dev = $dev',
+      async ({ dev }: {| dev: boolean |}) => {
+        const { server, request } = await runServer({
+          dev,
+          typeDefs: [
+            `
+  extend type Query {
+    key: String!
+  }
+`,
+          ],
+          resolvers: {
+            Query: {
+              key: () => 'value',
+            },
+          },
+        });
+
+        expect(
+          await request(`
+  {
+    key
+  }
+        `),
+        ).toEqual({
+          data: {
+            key: 'value',
+          },
+        });
+
+        chokidar.watchCallback(
+          path.resolve(__dirname, './__ignore__/schemaChanged/key.js.flow'),
+        );
+        chokidar.watchCallback(
+          path.resolve(__dirname, './__ignore__/schemaChanged/key.js'),
+        );
+
+        const result = await request(`
+  {
+    key
+  }
+      `);
+
+        (dev ? expect(result) : expect(result).not).toEqual({
+          data: {
+            key: 'test',
+          },
+        });
+
+        server.close();
+      },
+    );
   });
 });

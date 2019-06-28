@@ -5,6 +5,7 @@ import path from 'path';
 import { printSchema, type GraphQLSchema as GraphQLSchemaType } from 'graphql';
 import {
   makeExecutableSchema,
+  addResolveFunctionsToSchema,
   type makeExecutableSchemaOptionsType,
 } from 'graphql-tools';
 import graphql, {
@@ -13,6 +14,7 @@ import graphql, {
 import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
+import chokidar from 'chokidar';
 import debug from 'debug';
 
 import { d3DirTree } from '@cat-org/utils';
@@ -24,6 +26,7 @@ type buildSchemasType = {|
 |};
 
 export type optionsType = buildSchemasType & {
+  dev?: boolean,
   options?: makeExecutableSchemaOptionsType,
 };
 
@@ -43,6 +46,7 @@ export default class Graphql {
   constructor(
     folderPath: string,
     {
+      dev = true,
       typeDefs: additionalTypeDefs,
       resolvers: additionalResolvers,
       options = {},
@@ -90,6 +94,29 @@ export default class Graphql {
       typeDefs,
       resolvers,
     });
+
+    if (dev)
+      chokidar
+        .watch(folderPath, {
+          ignoreInitial: true,
+        })
+        .on('change', (filePath: string) => {
+          if (!/\.jsx$/.test(filePath)) return;
+
+          const newResolvers = require(filePath).default || require(filePath);
+
+          delete newResolvers.typeDefs;
+
+          addResolveFunctionsToSchema({
+            schema: this.schema,
+            resolvers: newResolvers,
+            resolverValidationOptions: {
+              ...options.requireResolversForResolveType,
+              requireResolversForResolveType: false,
+            },
+            inheritResolversFromInterfaces: true,
+          });
+        });
 
     this.schema = makeExecutableSchema({
       ...options,

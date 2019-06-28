@@ -8,6 +8,15 @@ class Execa {
 
   cmds = [];
 
+  /**
+   * @example
+   * execa.main('cmd', [])
+   *
+   * @param {string} cmd - command name
+   * @param {Array} args - command argument
+   *
+   * @return {Promise} - command result
+   */
   +main = (
     cmd: string,
     args: $ReadOnlyArray<string> = [],

@@ -116,7 +116,7 @@ debugLog({
         debugLog('Run command fail, remove files');
         debugLog(e);
 
-        removeFiles(e.code);
+        removeFiles(e.exitCode);
       }
       return;
     }

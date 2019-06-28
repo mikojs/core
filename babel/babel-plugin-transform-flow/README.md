@@ -10,6 +10,25 @@
 
 Use to build the flow files with babel.
 
+## Example
+
+#### In
+
+```sh
+├── index.js
+├── index.js.flow
+└── lib.js
+```
+
+#### Out
+
+```sh
+├── index.js
+├── index.js.flow // if flow file exist in the source folder, just copy file to the target folder.
+├── lib.js
+└── lib.js.flow // if flow file does not exist in the source folder, transform the file with plugins to the target folder.
+```
+
 ## Install
 
 ```sh

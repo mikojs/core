@@ -10,6 +10,22 @@
 
 Use to make the css files can be imported into `node` and `browser`.
 
+## Example
+
+#### In
+
+```js
+import styles from './styles.css';
+```
+
+#### Out
+
+```js
+require(globalThis.window
+  ? './styles.css'
+  : '@cat-org/babel-plugin-import-css/emptyCssFile.js');
+```
+
 ## Install
 
 ```sh

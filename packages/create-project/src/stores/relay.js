@@ -127,7 +127,7 @@ export default {
     id: ID!
   }
 
-  interface edge {
+  interface Edge {
     cursor: String!
   }
 

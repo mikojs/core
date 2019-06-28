@@ -29,6 +29,7 @@ release:
 		git add CHANGELOG.md && \
 		git commit -m "chore(root): add CHANGELOG.md"
 	@yarn lerna version
+	@open https://github.com/cat-org/core/releases
 
 clean:
 	@yarn lerna clean && rm -rf ./node_modules

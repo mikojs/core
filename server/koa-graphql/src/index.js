@@ -20,10 +20,10 @@ import debug from 'debug';
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-type buildSchemasType = {|
+type buildSchemasType = {
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
   resolvers: $PropertyType<makeExecutableSchema, 'resolvers'>,
-|};
+};
 
 export type optionsType = buildSchemasType & {
   dev?: boolean,
@@ -101,7 +101,7 @@ export default class Graphql {
           ignoreInitial: true,
         })
         .on('change', (filePath: string) => {
-          if (!/\.jsx$/.test(filePath)) return;
+          if (!/\.jsx?$/.test(filePath)) return;
 
           const newResolvers = require(filePath).default || require(filePath);
 

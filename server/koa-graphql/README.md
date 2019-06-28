@@ -47,13 +47,53 @@ export default {
 };
 ```
 
+#### Add the additional schema
+
+Use with string:
+
+```js
+const graphql = new Graphql('./path-to-graphql-foder', {
+  typeDefs: `
+  type AdditionalType {
+    key: String!
+  }
+  `,
+  resolvers: {
+    AdditionalType: () => { ... },
+  },
+});
+```
+
+Use with Array:
+
+```js
+const graphql = new Graphql('./path-to-graphql-foder', {
+  typeDefs: [
+    `
+  type AdditionalType {
+    key: String!
+  }
+`,
+    `
+  type AdditionalTwoType {
+    key: String!
+  }
+`,
+  ],
+  resolvers: {
+    AdditionalType: () => { ... },
+    AdditionalTwoType: () => { ... },
+  },
+});
+```
+
 #### Give the options to [makeExecutableSchema](https://github.com/apollographql/graphql-tools)
 
 Expect for `typeDefs` and `resolvers`, you can add the other options in `makeExecutableSchema` to this middleware.
 
 ```js
 const graphql = new Graphql('./path-to-graphql-foder', {
-  logger: { log: e => console.log(e) },
+  options: { ... },
 });
 ```
 
@@ -63,9 +103,7 @@ Expect for `schema`, you can add the other options to this middleware.
 
 ```js
 ...
-app.use(graphql.middleware({
-  graphiql: true,
-}));
+app.use(graphql.middleware({ ... }));
 ...
 ```
 

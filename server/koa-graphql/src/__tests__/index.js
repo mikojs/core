@@ -78,16 +78,14 @@ type User {
 
     test('additional schema with string', async () => {
       const { server, request } = await runServer({
-        schema: {
-          typeDefs: `
+        typeDefs: `
   extend type Query {
     key: String!
   }
 `,
-          resolvers: {
-            Query: {
-              key: () => 'value',
-            },
+        resolvers: {
+          Query: {
+            key: () => 'value',
           },
         },
       });
@@ -109,18 +107,16 @@ type User {
 
     test('additional schema with array', async () => {
       const { server, request } = await runServer({
-        schema: {
-          typeDefs: [
-            `
+        typeDefs: [
+          `
   extend type Query {
     key: String!
   }
 `,
-          ],
-          resolvers: {
-            Query: {
-              key: () => 'value',
-            },
+        ],
+        resolvers: {
+          Query: {
+            key: () => 'value',
           },
         },
       });

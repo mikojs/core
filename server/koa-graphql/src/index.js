@@ -18,13 +18,12 @@ import debug from 'debug';
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-type buildSchemasType = {
+type buildSchemasType = {|
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
   resolvers: $PropertyType<makeExecutableSchema, 'resolvers'>,
-};
+|};
 
-export type optionsType = {
-  schema?: buildSchemasType,
+export type optionsType = buildSchemasType & {
   options?: makeExecutableSchemaOptionsType,
 };
 
@@ -43,7 +42,11 @@ export default class Graphql {
    */
   constructor(
     folderPath: string,
-    { schema = {}, options = {} }: optionsType = {},
+    {
+      typeDefs: additionalTypeDefs,
+      resolvers: additionalResolvers,
+      options = {},
+    }: optionsType = {},
   ) {
     const { typeDefs, resolvers } = d3DirTree(folderPath, {
       extensions: /.jsx?$/,
@@ -76,10 +79,10 @@ export default class Graphql {
         },
         {
           typeDefs:
-            schema.typeDefs instanceof Array || !schema.typeDefs
-              ? schema.typeDefs || []
-              : [schema.typeDefs],
-          resolvers: schema.resolvers || {},
+            additionalTypeDefs instanceof Array || !additionalTypeDefs
+              ? additionalTypeDefs || []
+              : [additionalTypeDefs],
+          resolvers: additionalResolvers || {},
         },
       );
 

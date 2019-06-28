@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## 1.1.2 (2019-06-28)
+
+#### :rocket: New Feature
+
+- `create-project`, `website`
+  - [#290](https://github.com/cat-org/core/pull/290) (@cat-org/create-project) Add description to graphql ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#288](https://github.com/cat-org/core/pull/288) (@cat-org/koa-graphql) Can add additional schema ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `create-project`, `website`
+  - [#289](https://github.com/cat-org/core/pull/289) (@cat-org/create-project) Rename edge to Edge ([@HsuTing](https://github.com/HsuTing))
+
+#### :memo: Documentation
+
+- [#291](https://github.com/cat-org/core/pull/291) (@cat-org/babel-plugin-import-css, @cat-org/babel-plugin-transform-flow) Add example to README.md ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.1.1 (2019-06-26)
 
 #### :rocket: New Feature

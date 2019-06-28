@@ -2,9 +2,6 @@
 
 import path from 'path';
 
-import Koa from 'koa';
-import getPort from 'get-port';
-import fetch, { type Response as ResponseType } from 'node-fetch';
 import { outputFileSync } from 'output-file-sync';
 
 import Graphql from '../index';

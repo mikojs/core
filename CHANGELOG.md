@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 1.1.3 (2019-06-28)
+
+#### :boom: Breaking Change
+
+- [#292](https://github.com/cat-org/core/pull/292) (@cat-org/koa-graphql) Modify additional schema option ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `configs`, `create-project`
+  - [#293](https://github.com/cat-org/core/pull/293) (@cat-org/configs) Fix error with errorCode ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `configs`, `create-project`
+  - [#293](https://github.com/cat-org/core/pull/293) (@cat-org/configs) Fix error with errorCode ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.1.2 (2019-06-28)
 
 #### :rocket: New Feature

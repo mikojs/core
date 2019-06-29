@@ -13,7 +13,7 @@ Add less config to @cat-org/koa-react.
 ## Install
 
 ```sh
-yarn add @@cat-org/koa-react cat-org/use-less
+yarn add @cat-org/koa-react cat-org/use-less
 ```
 
 ## Add `@cat-org/use-less` to config.

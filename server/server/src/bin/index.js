@@ -19,11 +19,12 @@ import type graphqlType from '@cat-org/koa-graphql';
 import parseArgv from '@babel/cli/lib/babel/options';
 
 import server, { type contextType as serverContextType } from '../index';
-import defaults from '../defaults';
-import type defaultsReactType from '../defaults/react';
-import type defaultsGraphqlType from '../defaults/graphql';
 
 import { version } from '../../package.json';
+
+import defaultMiddleware from 'defaults/middleware';
+import DefaultReact from 'defaults/react';
+import DefaultGraphql from 'defaults/graphql';
 
 import loadModule from 'utils/loadModule';
 
@@ -39,8 +40,8 @@ const program = new commander.Command('server')
   .option('--skip-relay', 'skip run relay-compiler')
   .allowUnknownOption();
 
-let react: reactType | defaultsReactType;
-let graphql: graphqlType | defaultsGraphqlType;
+let react: reactType | DefaultReact;
+let graphql: graphqlType | DefaultGraphql;
 
 /**
  * @example
@@ -53,7 +54,7 @@ let graphql: graphqlType | defaultsGraphqlType;
 const run = async (context: serverContextType) =>
   (await server.init(context))
   |> (await server.event(async () => {
-    react = new (loadModule('@cat-org/koa-react', defaults.react))(
+    react = new (loadModule('@cat-org/koa-react', DefaultReact))(
       path.resolve(context.dir, './pages'),
       { dev: context.dev, exclude: /__generated__/ }
         |> ((options: {}) =>
@@ -69,7 +70,7 @@ const run = async (context: serverContextType) =>
             options,
           )),
     );
-    graphql = new (loadModule('@cat-org/koa-graphql', defaults.graphql))(
+    graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
       path.resolve(context.dir, './graphql'),
       { dev: context.dev },
     );
@@ -93,7 +94,7 @@ const run = async (context: serverContextType) =>
       if (skipServer) process.exit(0);
     }
   }))
-  |> server.use(loadModule('@cat-org/koa-base', defaults.middleware))
+  |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
   |> (undefined
     |> server.start
     |> ('/graphql'

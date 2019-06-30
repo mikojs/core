@@ -7,6 +7,9 @@
   "repository": "https://github.com/cat-org/core/tree/master/server/use-dnd",
   "version": "1.0.0",
   "main": "./lib/index.js",
+  "dependencies": {
+    "graphql-type-json": "^0.3.0"
+  },
   "peerDependencies": {
     "@cat-org/koa-graphql": ">=1.0.0",
     "@cat-org/koa-react": ">=1.0.0"

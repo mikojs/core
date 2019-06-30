@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 1.1.5 (2019-06-30)
+
+#### :rocket: New Feature
+
+- [#294](https://github.com/cat-org/core/pull/294) (@cat-org/koa-graphql) Support hot reload ([@HsuTing](https://github.com/HsuTing))
+
+#### :memo: Documentation
+
+- [#295](https://github.com/cat-org/core/pull/295) (@cat-org/babel-plugin-import-css) Modify README ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- Other
+  - [#297](https://github.com/cat-org/core/pull/297) (@cat-org/server) Modify server cli ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-cat`, `jest`
+  - [#296](https://github.com/cat-org/core/pull/296) (@cat-org/core) Modify detail ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.1.3 (2019-06-28)
 
 #### :boom: Breaking Change

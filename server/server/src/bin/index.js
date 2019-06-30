@@ -9,7 +9,6 @@
 
 import path from 'path';
 
-import { type Context as koaContextType } from 'koa';
 import { invariant, emptyFunction } from 'fbjs';
 import commander from 'commander';
 import chalk from 'chalk';
@@ -20,6 +19,9 @@ import type graphqlType from '@cat-org/koa-graphql';
 import parseArgv from '@babel/cli/lib/babel/options';
 
 import server, { type contextType as serverContextType } from '../index';
+import defaults from '../defaults';
+import type defaultsReactType from '../defaults/react';
+import type defaultsGraphqlType from '../defaults/graphql';
 
 import { version } from '../../package.json';
 
@@ -37,76 +39,8 @@ const program = new commander.Command('server')
   .option('--skip-relay', 'skip run relay-compiler')
   .allowUnknownOption();
 
-let react: reactType | DefaultReact;
-let graphql: graphqlType | DefaultGraphql;
-
-/**
- * @example
- * defaultMiddleware(ctx, next)
- *
- * @param {koaContext} ctx - koa context
- * @param {Function} next - koa next function
- */
-const defaultMiddleware = async (
-  ctx: koaContextType,
-  next: () => Promise<void>,
-) => {
-  await next();
-};
-
-/** defaultReact */
-class DefaultReact {
-  /**
-   * @example
-   * new DefaultReact('folder path')
-   *
-   * @param {string} foldePath - folder path
-   * @param {options} options - koa-react options
-   */
-  constructor(foldePath: string, options?: {}) {}
-
-  /**
-   * @example
-   * defaultReact.buildJs()
-   */
-  buildJs = emptyFunction;
-
-  /**
-   * @example
-   * defaultReact.middleware()
-   *
-   * @return {Function} - koa-react middleware
-   */
-  middleware = () => defaultMiddleware;
-}
-
-/** defaultGraphql */
-class DefaultGraphql {
-  /**
-   * @example
-   * new DefaultGraphql('folder path')
-   *
-   * @param {string} foldePath - folder path
-   * @param {options} options - koa-graphql options
-   */
-  constructor(foldePath: string, options?: {}) {}
-
-  /**
-   * @example
-   * defaultGraphql.relay()
-   */
-  relay = emptyFunction;
-
-  /**
-   * @example
-   * defaultGraphql.middleware()
-   *
-   * @param {options} options - koa-graphql options
-   *
-   * @return {Function} - koa-graphql middleware
-   */
-  middleware = (options?: {}) => defaultMiddleware;
-}
+let react: reactType | defaultsReactType;
+let graphql: graphqlType | defaultsGraphqlType;
 
 /**
  * @example
@@ -119,7 +53,7 @@ class DefaultGraphql {
 const run = async (context: serverContextType) =>
   (await server.init(context))
   |> (await server.event(async () => {
-    react = new (loadModule('@cat-org/koa-react', DefaultReact))(
+    react = new (loadModule('@cat-org/koa-react', defaults.react))(
       path.resolve(context.dir, './pages'),
       { dev: context.dev, exclude: /__generated__/ }
         |> ((options: {}) =>
@@ -135,7 +69,7 @@ const run = async (context: serverContextType) =>
             options,
           )),
     );
-    graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
+    graphql = new (loadModule('@cat-org/koa-graphql', defaults.graphql))(
       path.resolve(context.dir, './graphql'),
       { dev: context.dev },
     );
@@ -159,7 +93,7 @@ const run = async (context: serverContextType) =>
       if (skipServer) process.exit(0);
     }
   }))
-  |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
+  |> server.use(loadModule('@cat-org/koa-base', defaults.middleware))
   |> (undefined
     |> server.start
     |> ('/graphql'

@@ -9,7 +9,6 @@
 
 import path from 'path';
 
-import { type Context as koaContextType } from 'koa';
 import { invariant, emptyFunction } from 'fbjs';
 import commander from 'commander';
 import chalk from 'chalk';
@@ -22,6 +21,10 @@ import parseArgv from '@babel/cli/lib/babel/options';
 import server, { type contextType as serverContextType } from '../index';
 
 import { version } from '../../package.json';
+
+import defaultMiddleware from 'defaults/middleware';
+import DefaultReact from 'defaults/react';
+import DefaultGraphql from 'defaults/graphql';
 
 import loadModule from 'utils/loadModule';
 
@@ -39,74 +42,6 @@ const program = new commander.Command('server')
 
 let react: reactType | DefaultReact;
 let graphql: graphqlType | DefaultGraphql;
-
-/**
- * @example
- * defaultMiddleware(ctx, next)
- *
- * @param {koaContext} ctx - koa context
- * @param {Function} next - koa next function
- */
-const defaultMiddleware = async (
-  ctx: koaContextType,
-  next: () => Promise<void>,
-) => {
-  await next();
-};
-
-/** defaultReact */
-class DefaultReact {
-  /**
-   * @example
-   * new DefaultReact('folder path')
-   *
-   * @param {string} foldePath - folder path
-   * @param {options} options - koa-react options
-   */
-  constructor(foldePath: string, options?: {}) {}
-
-  /**
-   * @example
-   * defaultReact.buildJs()
-   */
-  buildJs = emptyFunction;
-
-  /**
-   * @example
-   * defaultReact.middleware()
-   *
-   * @return {Function} - koa-react middleware
-   */
-  middleware = () => defaultMiddleware;
-}
-
-/** defaultGraphql */
-class DefaultGraphql {
-  /**
-   * @example
-   * new DefaultGraphql('folder path')
-   *
-   * @param {string} foldePath - folder path
-   * @param {options} options - koa-graphql options
-   */
-  constructor(foldePath: string, options?: {}) {}
-
-  /**
-   * @example
-   * defaultGraphql.relay()
-   */
-  relay = emptyFunction;
-
-  /**
-   * @example
-   * defaultGraphql.middleware()
-   *
-   * @param {options} options - koa-graphql options
-   *
-   * @return {Function} - koa-graphql middleware
-   */
-  middleware = (options?: {}) => defaultMiddleware;
-}
 
 /**
  * @example

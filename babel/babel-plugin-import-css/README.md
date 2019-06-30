@@ -8,7 +8,7 @@
 
 [website]: https://cat-org.github.io/core/babel-plugin-import-css
 
-Use to make the css files can be imported into `node` and `browser`.
+Use to make the css files can be imported into `node` and `browser` with `babel-plugin-css-modules-transform`.
 
 ## Example
 
@@ -29,7 +29,7 @@ require(globalThis.window
 ## Install
 
 ```sh
-yarn add @cat-org/babel-plugin-import-css --dev
+yarn add babel-plugin-css-modules-transform @cat-org/babel-plugin-import-css --dev
 ```
 
 ## Add `@cat-org/babel-plugin-import-css` to babel config.
@@ -38,6 +38,12 @@ yarn add @cat-org/babel-plugin-import-css --dev
 ...
   plugins: [
     ...
+    [
+      'css-modules-transform',
+      {
+        keepImport: true,
+      },
+    ],
     '@cat-org/import-css',
     ...
   ],
@@ -50,6 +56,12 @@ yarn add @cat-org/babel-plugin-import-css --dev
 ...
   plugins: [
     ...
+    [
+      'css-modules-transform',
+      {
+        keepImport: true,
+      },
+    ],
     [
       '@cat-org/import-css',
       { test: /\.less$/ },

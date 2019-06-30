@@ -10,11 +10,19 @@
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0"
   },
+  "peerDependencies": {
+    "@babel/core": ">=7.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/traverse": "^7.4.5"
   },
-  "keywords": ["babel plugin", "cat-org", "import css"],
+  "keywords": [
+    "babel plugin",
+    "babel-plugin-css-modules-transform",
+    "cat-org",
+    "import css"
+  ],
   "publishConfig": {
     "access": "public"
   }

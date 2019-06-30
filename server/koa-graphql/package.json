@@ -21,6 +21,9 @@
     "output-file-sync": "^2.0.1",
     "relay-compiler": "^5.0.0"
   },
+  "peerDependencies": {
+    "koa": ">=2.0.0"
+  },
   "devDependencies": {
     "get-port": "^5.0.0",
     "koa": "^2.7.0",

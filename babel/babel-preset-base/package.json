@@ -17,6 +17,9 @@
     "babel-plugin-module-resolver": "^3.2.0",
     "fbjs": "^1.0.0"
   },
+  "peerDependencies": {
+    "@babel/core": ">=7.0.0"
+  },
   "keywords": ["babel preset", "base", "cat-org"],
   "publishConfig": {
     "access": "public"

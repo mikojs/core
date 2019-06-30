@@ -12,6 +12,9 @@
     "@babel/helper-plugin-utils": "^7.0.0",
     "output-file-sync": "^2.0.1"
   },
+  "peerDependencies": {
+    "@babel/core": ">=7.0.0"
+  },
   "keywords": ["babel plugin", "cat-org", "transform flow files"],
   "publishConfig": {
     "access": "public"

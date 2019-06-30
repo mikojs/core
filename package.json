@@ -22,6 +22,7 @@
     "babel-jest": "^24.8.0",
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-css-modules-transform": "^1.6.2",
+    "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-relay": "^5.0.0",
     "babel-plugin-transform-imports": "^1.5.1",
     "eslint": "^6.0.1",
@@ -32,11 +33,14 @@
     "graphql": "^14.3.1",
     "husky": "^2.5.0",
     "jest": "^24.8.0",
+    "koa": "^2.7.0",
     "lerna": "^3.15.0",
     "lerna-changelog": "^0.8.2",
     "lint-staged": "^8.2.1",
     "prettier": "^1.18.2",
-    "prettier-package-json": "^2.1.0"
+    "prettier-package-json": "^2.1.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "engines": {
     "node": ">= 10.2.1",

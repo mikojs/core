@@ -4,7 +4,6 @@ export default {
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
     'jest',
-    'babel-jest',
     '@cat-org/jest',
   ],
   run: (argv: $ReadOnlyArray<string>) => [...argv, '--coverage=false'],

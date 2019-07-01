@@ -36,7 +36,7 @@ debugLog({
 
   switch (cli) {
     case 'install':
-      execa(argv[0], argv.slice(1), {
+      await execa(argv[0], argv.slice(1), {
         stdio: 'inherit',
       });
       return;

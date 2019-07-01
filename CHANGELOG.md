@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.1.6 (2019-07-01)
+
+#### :bug: Bug Fix
+
+- `create-project`
+  - [#299](https://github.com/cat-org/core/pull/299) (@cat-org/create-project) Fix install server error ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.1.5 (2019-06-30)
 
 #### :rocket: New Feature

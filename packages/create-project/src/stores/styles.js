@@ -70,12 +70,13 @@ class Styles extends Store {
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
     if (lerna || !this.storeUseStyles) return;
 
-    this.execa(
-      this.storeUseStyles === 'less'
-        ? 'yarn add @cat-org/use-less'
-        : 'yarn add @cat-org/use-css',
-      'yarn add --dev babel-plugin-css-modules-transform @cat-org/import-css',
+    await this.execa(
+      'yarn add @cat-org/use-css',
+      'yarn add --dev babel-plugin-css-modules-transform @cat-org/babel-plugin-import-css',
     );
+
+    if (this.storeUseStyles === 'less')
+      await this.execa('yarn add @cat-org/use-less');
   };
 }
 

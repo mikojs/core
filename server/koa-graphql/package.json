@@ -15,21 +15,22 @@
     "directory-tree": "^2.2.3",
     "execa": "^2.0.0",
     "find-cache-dir": "^3.0.0",
-    "graphql": "^14.3.1",
     "graphql-tools": "^4.0.5",
     "koa-graphql": "^0.8.0",
     "output-file-sync": "^2.0.1",
     "relay-compiler": "^5.0.0"
   },
   "peerDependencies": {
+    "graphql": ">=14.0.0",
     "koa": ">=2.0.0"
   },
   "devDependencies": {
     "get-port": "^5.0.0",
+    "graphql": "^14.3.1",
     "koa": "^2.7.0",
     "node-fetch": "^2.6.0"
   },
-  "keywords": ["cat-org", "graphql", "middleware"],
+  "keywords": ["cat-org", "graphql", "koa"],
   "publishConfig": {
     "access": "public"
   }

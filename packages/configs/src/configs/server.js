@@ -3,6 +3,7 @@
 export default {
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
+    'koa',
     '@cat-org/server',
     '@cat-org/koa-base',
   ],

@@ -204,7 +204,13 @@ export default class Store {
 
     for (const command of commands) {
       try {
-        const cmd = command.split(/ /);
+        const message = command.match(/".*"/);
+        const cmd = !message
+          ? command.split(/ /)
+          : command
+              .replace(message[0], '$message')
+              .split(/ /)
+              .map((text: string) => (text === '$message' ? message[0] : text));
 
         logger.info(chalk`Run command: {green ${command}}`);
         await execa(cmd[0], cmd.slice(1), {

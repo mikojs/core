@@ -6,11 +6,12 @@ import { emptyFunction } from 'fbjs';
 import react from './react';
 import pkg from './pkg';
 import graphql from './graphql';
+import configs from './configs';
 import Store from './index';
 
 /** server store */
 class Server extends Store {
-  +subStores = [react, graphql, pkg];
+  +subStores = [react, graphql, pkg, configs];
 
   storeUseServer = false;
 
@@ -38,18 +39,6 @@ class Server extends Store {
     await this.checkServer();
 
     ctx.useServer = this.storeUseServer;
-  };
-
-  /**
-   * @example
-   * server.end(ctx)
-   *
-   * @param {storeContext} ctx - store context
-   */
-  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
-    if (lerna || !this.storeUseServer) return;
-
-    await this.execa('yarn configs --install server');
   };
 }
 

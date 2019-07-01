@@ -109,6 +109,8 @@ class Jest extends Store {
     if (lerna) return;
 
     await this.execa('yarn add --dev node-fetch');
+
+    if (useReact) await this.execa('yarn add --dev enzyme-adapter-react-16');
   };
 }
 

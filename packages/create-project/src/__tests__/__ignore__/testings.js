@@ -127,7 +127,7 @@ const reactServer = {
     'yarn add react react-dom @cat-org/koa-react',
     'yarn add --dev @babel/preset-react',
     'yarn add --dev node-fetch',
-    'yarn add --dev enzyme-adapter-react-16',
+    'yarn add --dev enzyme enzyme-adapter-react-16',
     ...basicUsage.cmds.slice(11),
   ],
 };
@@ -147,9 +147,9 @@ const reactServerWithCss = {
     'yarn add react react-dom @cat-org/koa-react',
     'yarn add --dev @babel/preset-react',
     'yarn add @cat-org/use-css',
-    'yarn add --dev babel-plugin-css-modules-transform @cat-org/import-css',
+    'yarn add --dev babel-plugin-css-modules-transform @cat-org/babel-plugin-import-css',
     'yarn add --dev node-fetch',
-    'yarn add --dev enzyme-adapter-react-16',
+    'yarn add --dev enzyme enzyme-adapter-react-16',
     ...basicUsage.cmds.slice(11),
   ],
 };
@@ -169,9 +169,9 @@ const reactServerWithLess = {
     'yarn add react react-dom @cat-org/koa-react',
     'yarn add --dev @babel/preset-react',
     'yarn add @cat-org/use-less',
-    'yarn add --dev babel-plugin-css-modules-transform @cat-org/import-css',
+    'yarn add --dev babel-plugin-css-modules-transform @cat-org/babel-plugin-import-css',
     'yarn add --dev node-fetch',
-    'yarn add --dev enzyme-adapter-react-16',
+    'yarn add --dev enzyme enzyme-adapter-react-16',
     ...basicUsage.cmds.slice(11),
   ],
 };
@@ -210,7 +210,7 @@ const relayServer = {
     'yarn add @cat-org/koa-graphql',
     'yarn add react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
     'yarn add --dev node-fetch',
-    'yarn add --dev enzyme-adapter-react-16',
+    'yarn add --dev enzyme enzyme-adapter-react-16',
     ...basicUsage.cmds.slice(11),
   ],
 };

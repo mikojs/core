@@ -13,7 +13,7 @@ Collect the react files to build the pages automatically.
 ## Install
 
 ```sh
-yarn add koa @cat-org/koa-react
+yarn add koa react react-dom webpack @cat-org/koa-react
 ```
 
 ## Use `@cat-org/koa-react` to server

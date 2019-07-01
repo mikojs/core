@@ -77,7 +77,7 @@ class React extends Store {
     if (lerna) return;
 
     await this.execa(
-      'yarn add react react-dom @cat-org/koa-react',
+      'yarn add react react-dom webpack @cat-org/koa-react',
       'yarn add --dev @babel/preset-react',
     );
   };

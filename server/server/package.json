@@ -20,11 +20,14 @@
     "debug": "^4.1.1",
     "execa": "^2.0.0",
     "fbjs": "^1.0.0",
-    "koa": "^2.7.0",
     "koa-router": "^7.4.0",
     "ora": "^3.4.0"
   },
+  "peerDependencies": {
+    "koa": ">=2.0.0"
+  },
   "devDependencies": {
+    "koa": "^2.7.0",
     "node-fetch": "^2.6.0"
   },
   "keywords": ["cat-org", "server"],

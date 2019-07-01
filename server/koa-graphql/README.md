@@ -13,7 +13,7 @@ Collect the graphql files to build the graphql automatically.
 ## Install
 
 ```sh
-yarn add koa @cat-org/koa-graphql
+yarn add koa graphql @cat-org/koa-graphql
 ```
 
 ## Use `@cat-org/koa-graphql` to server

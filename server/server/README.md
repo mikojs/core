@@ -13,7 +13,7 @@ Run koa server with pipeline.
 ## Install
 
 ```sh
-yarn add @cat-org/server
+yarn add koa @cat-org/server
 ```
 
 ## Run server without any files

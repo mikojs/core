@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/jest",
   "repository": "https://github.com/cat-org/core/tree/master/packages/jest",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@cat-org/utils": "^1.1.1",

@@ -3,6 +3,7 @@
 export default {
   install: (install: $ReadOnlyArray<string>) => [
     ...install.filter((text: string) => text !== '--dev'),
+    'koa',
     '@cat-org/server',
     '@cat-org/koa-base',
   ],

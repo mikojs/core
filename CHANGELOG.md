@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 1.2.0 (2019-07-01)
+
+#### :bug: Bug Fix
+
+- `configs`, `jest`
+  - [#303](https://github.com/cat-org/core/pull/303) (@cat-org/configs) Fix server config ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#301](https://github.com/cat-org/core/pull/301) (@cat-org/create-project) Fix flow error ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`
+  - [#300](https://github.com/cat-org/core/pull/300) (@cat-org/create-project) Fix install error ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.1.6 (2019-07-01)
 
 #### :bug: Bug Fix

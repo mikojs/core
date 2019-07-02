@@ -11,12 +11,6 @@ const babel = config => {
 
   config.plugins.push(
     [
-      '@babel/proposal-class-properties',
-      {
-        loose: true,
-      },
-    ],
-    [
       '@babel/transform-runtime',
       {
         corejs: false,
@@ -133,6 +127,12 @@ module.exports = (() => {
           {
             root: ['./src'],
             cwd: 'packagejson',
+          },
+        ],
+        [
+          '@babel/proposal-class-properties',
+          {
+            loose: true,
           },
         ],
       ],

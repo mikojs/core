@@ -2,6 +2,8 @@
 
 import debug from 'debug';
 
+import { requireModule } from '@cat-org/utils';
+
 const debugLog = debug('server:loadModule');
 
 export default <-T>(
@@ -12,10 +14,9 @@ export default <-T>(
   debugLog(moduleName, options);
 
   try {
-    if (options.length === 0)
-      return require(moduleName).default || require(moduleName);
+    if (options.length === 0) return requireModule(moduleName);
 
-    return (require(moduleName).default || require(moduleName))(...options);
+    return requireModule(moduleName)(...options);
   } catch (e) {
     debugLog(e);
 

@@ -343,6 +343,7 @@ class Relay extends Store {
 
     await this.execa(
       'yarn add react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
+      'yarn add --dev babel-plugin-relay',
     );
   };
 }

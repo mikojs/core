@@ -28,6 +28,16 @@ export default {
       ...(!configsEnv.includes('react') ? [] : ['@babel/react']),
     ],
     plugins: [
+      ...(!configsEnv.includes('react')
+        ? []
+        : [
+            [
+              '@babel/proposal-class-properties',
+              {
+                loose: true,
+              },
+            ],
+          ]),
       ...(!configsEnv.some((env: string) => ['css', 'less'].includes(env))
         ? []
         : [

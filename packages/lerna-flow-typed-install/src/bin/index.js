@@ -9,7 +9,7 @@ import npmWhich from 'npm-which';
 import debug from 'debug';
 import execa from 'execa';
 
-import { handleUnhandledRejection } from '@cat-org/utils';
+import { handleUnhandledRejection, requireModule } from '@cat-org/utils';
 import catLogger from '@cat-org/logger';
 
 const debugLog = debug('lerna-flow-typed-install:bin');
@@ -20,12 +20,12 @@ handleUnhandledRejection();
   const logger = catLogger('@cat-org/lerna-flow-typed-install');
 
   try {
-    const {
-      devDependencies: { 'flow-bin': flowVersion } = {},
-    } = require(path.resolve(
-      npmWhich(process.cwd()).sync('lerna'),
-      '../../../package.json',
-    ));
+    const { devDependencies: { 'flow-bin': flowVersion } = {} } = requireModule(
+      path.resolve(
+        npmWhich(process.cwd()).sync('lerna'),
+        '../../../package.json',
+      ),
+    );
 
     if (!flowVersion)
       throw logger.fail(

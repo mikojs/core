@@ -17,7 +17,7 @@ import outputFileSync from 'output-file-sync';
 import chokidar from 'chokidar';
 import debug from 'debug';
 
-import { d3DirTree } from '@cat-org/utils';
+import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 type buildSchemasType = {
@@ -61,8 +61,9 @@ export default class Graphql {
           result: buildSchemasType,
           { data: { path: filePath } }: d3DirTreeNodeType,
         ): buildSchemasType => {
-          const { typeDefs: newTypeDefs, ...newResolvers } =
-            require(filePath).default || require(filePath);
+          const { typeDefs: newTypeDefs, ...newResolvers } = requireModule(
+            filePath,
+          );
 
           return {
             typeDefs: [...result.typeDefs, newTypeDefs],
@@ -103,7 +104,7 @@ export default class Graphql {
         .on('change', (filePath: string) => {
           if (!/\.jsx?$/.test(filePath)) return;
 
-          const newResolvers = require(filePath).default || require(filePath);
+          const newResolvers = requireModule(filePath);
 
           delete newResolvers.typeDefs;
 

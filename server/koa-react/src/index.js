@@ -10,7 +10,7 @@ import { type WebpackOptions as WebpackOptionsType } from 'webpack';
 import { invariant, emptyFunction } from 'fbjs';
 import outputFileSync from 'output-file-sync';
 
-import { handleUnhandledRejection } from '@cat-org/utils';
+import { handleUnhandledRejection, requireModule } from '@cat-org/utils';
 
 import getData, { type redirectType, type dataType } from './utils/getData';
 import buildJs from './utils/buildJs';
@@ -169,10 +169,12 @@ export default class React {
   +buildStatic = async (options?: buildStaticOptionsType) => {
     const { data, urls, urlsFilePath } = this.store;
 
-    try {
-      this.store.urls = require(urlsFilePath);
-    } catch (e) {
-      if (!/Cannot find module/.test(e.message)) throw e;
+    if (urlsFilePath) {
+      try {
+        this.store.urls = requireModule(urlsFilePath);
+      } catch (e) {
+        if (!/Cannot find module/.test(e.message)) throw e;
+      }
     }
 
     await buildStatic(data, urls.commonsUrl, options);
@@ -196,7 +198,7 @@ export default class React {
     const { path: urlsPath, publicPath } = config.config.output;
 
     try {
-      if (!dev) this.store.urls = require(urlsFilePath);
+      if (!dev && urlsFilePath) this.store.urls = requireModule(urlsFilePath);
     } catch (e) {
       invariant(
         !/Cannot find module/.test(e.message),

@@ -8281,13 +8281,13 @@ multimatch@^2.1.0:
     arrify "^1.0.0"
     minimatch "^3.0.0"
 
-multistream@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/multistream/-/multistream-2.1.1.tgz#629d3a29bd76623489980d04519a2c365948148c"
-  integrity sha512-xasv76hl6nr1dEy3lPvy7Ej7K/Lx3O/FCvwge8PeVJpciPPoNCbaANcNiBug3IpdvTveZUcAV0DJzdnUDMesNQ==
+multistream@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/multistream/-/multistream-3.0.0.tgz#93d6a672828c311a5b228212d319a5e9073d2e45"
+  integrity sha512-v1Fx9uhHEpTB725/Kj8YpRCvrLhb20LeABFLw+0dkBkKUUAbDCY6CUUNzGQsJ94ji/p50wBPsRjIQXN1iOwZYA==
   dependencies:
     inherits "^2.0.1"
-    readable-stream "^2.0.5"
+    readable-stream "^3.4.0"
 
 mute-stream@0.0.7:
   version "0.0.7"
@@ -9773,10 +9773,10 @@ react-helmet@^5.2.1:
     react-fast-compare "^2.0.2"
     react-side-effect "^1.1.0"
 
-react-hot-loader@^4.11.1:
-  version "4.11.1"
-  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.11.1.tgz#2cabbd0f1c8a44c28837b86d6ce28521e6d9a8ac"
-  integrity sha512-HAC0UedYzM3mD+ZaQHesntFO0yi2ftOV4ZMMRTj43E4GvW5sQqYTPvur+6J7EaH3MDr/RqjDKXyCqKepV8+y7w==
+react-hot-loader@^4.12.0:
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.12.0.tgz#cb93d78db8b97fd7c1f5ab688a7eeaa4ad47df3f"
+  integrity sha512-N+8ct1euiQnwqqDyX+SrxsgZ13ax4e8JiHbSAPf7xAshPxF3iTqVJQUxOLH90RXOFaT8LLynq0VPz3rCK7AW1A==
   dependencies:
     fast-levenshtein "^2.0.6"
     global "^4.3.0"
@@ -9818,10 +9818,10 @@ react-relay-network-modern-ssr@^1.2.4:
   resolved "https://registry.yarnpkg.com/react-relay-network-modern-ssr/-/react-relay-network-modern-ssr-1.2.4.tgz#3d55ee9e9ed7ed07a2c7c56fc274eba3114777e1"
   integrity sha512-WG7QunjWP1zv7hp+sOwpeAtqCt5mukxdtqvoFAoK9BOjAwlovBLVwX4fj3q859VEN6HM4e2GLRhkkfrsOwM6jQ==
 
-react-relay-network-modern@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/react-relay-network-modern/-/react-relay-network-modern-4.0.1.tgz#2e4cb00a863055de1e846c02bcc8b7b534c34485"
-  integrity sha512-ITfEYmaeLCbixvYbmXDeL4RFGfSHzazeTS8xXDgYkTKSPexpBAA43KpgZBKfM1fjIUa4q2IQBgyNgVmC4QxmjQ==
+react-relay-network-modern@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/react-relay-network-modern/-/react-relay-network-modern-4.0.2.tgz#f87df3c9b4c03c5139e8374110e216ce5e837bf5"
+  integrity sha512-eTeMEk+4t4z32dHsf5nEi/7Dp74ygDptwAS4bSOgishq1qOAjs/BngppO9ehBbI4Y6YV6wjulSAGamde4XngEQ==
 
 react-relay@^5.0.0:
   version "5.0.0"
@@ -10012,7 +10012,7 @@ read@1, read@~1.0.1:
   dependencies:
     mute-stream "~0.0.4"
 
-"readable-stream@1 || 2", readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.0.6, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.6, readable-stream@~2.3.6:
+"readable-stream@1 || 2", readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.6, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.6, readable-stream@~2.3.6:
   version "2.3.6"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.6.tgz#b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
   integrity sha512-tQtKA9WIAhBF3+VLAseyMqZeBjW0AHJoxOtYqSUZNJxauErmLbVm2FW1y+J/YA9dUrAC39ITejlZWhVIwawkKw==
@@ -10029,6 +10029,15 @@ readable-stream@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.1.1.tgz#ed6bbc6c5ba58b090039ff18ce670515795aeb06"
   integrity sha512-DkN66hPyqDhnIQ6Jcsvx9bFjhw214O4poMBcIMgPVpQvNy9a0e0Uhg5SqySyDKAmUlwt8LonTBz1ezOnM8pUdA==
+  dependencies:
+    inherits "^2.0.3"
+    string_decoder "^1.1.1"
+    util-deprecate "^1.0.1"
+
+readable-stream@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.4.0.tgz#a51c26754658e0a3c21dbf59163bd45ba6f447fc"
+  integrity sha512-jItXPLmrSR8jmTRmRWJXCnGJsfy85mB3Wd/uINMXA65yrnFo0cPClFIUWzo2najVNSl+mx7/4W8ttlLWJe99pQ==
   dependencies:
     inherits "^2.0.3"
     string_decoder "^1.1.1"

@@ -2,35 +2,17 @@
 
 import replaceLoader from '../replaceLoader';
 
-const ROUTERS = {
-  routesData: 'routesData',
-  main: 'main',
-  loading: 'loading',
-  error: 'error',
-};
-const SOURCE =
-  '/** routesData */."templates/Main"."templates/Loading"."templates/Error"';
+import testings from './__ignore__/testings';
 
 describe('replace loader', () => {
-  test.each`
-    type                  | routers      | source                            | expected
-    ${'routers'}          | ${ROUTERS}   | ${SOURCE}                         | ${'routesData."main"."loading"."error"'}
-    ${'set-config'}       | ${undefined} | ${'/** setConfig */'}             | ${"require('react-hot-loader').setConfig || "}
-    ${'react-hot-loader'} | ${undefined} | ${'module.exports = module;'}     | ${"module.exports = require('react-hot-loader/root').hot(module);"}
-    ${'react-hot-loader'} | ${undefined} | ${'exports["default"] = module;'} | ${'exports["default"] = require(\'react-hot-loader/root\').hot(module);'}
-  `(
+  test.each(testings)(
     'run with source = $source and type = $type',
-    ({
-      type,
-      routers,
-      source,
-      expected,
-    }: {
+    (
       type: string,
-      routers?: { [string]: string },
+      routers: ?{ [string]: string },
       source: string,
       expected: string,
-    }) => {
+    ) => {
       expect(replaceLoader.bind({ query: { type, routers } })(source)).toBe(
         expected,
       );

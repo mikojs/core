@@ -4692,10 +4692,10 @@ eslint-plugin-import@^2.18.0:
     read-pkg-up "^2.0.0"
     resolve "^1.11.0"
 
-eslint-plugin-jsdoc@^8.6.0:
-  version "8.6.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-8.6.0.tgz#5a4bc764c55b81bd15c18630b5c29a5625ca0141"
-  integrity sha512-04h778Afn4AEa7V68Zt+sg1jJuP7y/JoyJeLQYkvKZcb7p2HIN+MirMSLHRL15vJGbAZKco4kT5rYYc1nP2/3w==
+eslint-plugin-jsdoc@^10.0.3:
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-10.0.3.tgz#bb0dace5e54b63be721062c9705acc11dc6f7e17"
+  integrity sha512-aTlXmX4iCWf/vZyzcT13ggrHG6WW1QFvFbtrAVHU+Llcm1T7cvS/zQgPdRms2fY5XR4qBmsfeUuLe7RsszzhxQ==
   dependencies:
     comment-parser "^0.5.5"
     debug "^4.1.1"
@@ -7530,10 +7530,10 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lint-staged@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-9.0.0.tgz#3ab93063f11ee2e6782769149de0f1e815d49731"
-  integrity sha512-32TJoaeyAaj3rvabaXWe0eOhAhnsYRixEmXuSxKbs0uczFbwVjoDhJ/s2g6r1v8jMTw7t5OzXlHR8iaKtz8nLQ==
+lint-staged@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-9.0.1.tgz#dc31e3808052cf65727d26a3568620e4f75a5aa5"
+  integrity sha512-LZ6n/uzOYJRxmjUrEE6v3wHcL/YOkIMphSwfsyQwmKyFB0l/bRe0AQSG4+QUXHk71C9d2H7Z5KvIZi+qslyrVQ==
   dependencies:
     chalk "^2.4.2"
     commander "^2.20.0"
@@ -11799,10 +11799,10 @@ webpack-sources@^1.3.0:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^4.35.0:
-  version "4.35.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.35.0.tgz#ad3f0f8190876328806ccb7a36f3ce6e764b8378"
-  integrity sha512-M5hL3qpVvtr8d4YaJANbAQBc4uT01G33eDpl/psRTBCfjxFTihdhin1NtAKB1ruDwzeVdcsHHV3NX+QsAgOosw==
+webpack@^4.35.2:
+  version "4.35.2"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.35.2.tgz#5c8b8a66602cbbd6ec65c6e6747914a61c1449b1"
+  integrity sha512-TZAmorNymV4q66gAM/h90cEjG+N3627Q2MnkSgKlX/z3DlNVKUtqy57lz1WmZU2+FUZwzM+qm7cGaO95PyrX5A==
   dependencies:
     "@webassemblyjs/ast" "1.8.5"
     "@webassemblyjs/helper-module-context" "1.8.5"

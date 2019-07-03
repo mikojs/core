@@ -6,11 +6,11 @@ import testings from './__ignore__/testings';
 
 describe('replace loader', () => {
   test.each(testings)(
-    'run with source = $source and type = $type',
+    'run with type = %s and source = %s',
     (
       type: string,
-      routers: ?{ [string]: string },
       source: string,
+      routers: ?{ [string]: string },
       expected: string,
     ) => {
       expect(replaceLoader.bind({ query: { type, routers } })(source)).toBe(

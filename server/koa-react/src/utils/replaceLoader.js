@@ -1,5 +1,7 @@
 // @flow
 
+import crypto from 'crypto';
+
 import debug from 'debug';
 import { invariant } from 'fbjs';
 import { getOptions } from 'loader-utils';
@@ -46,18 +48,22 @@ export default function(source: string): string {
       );
       break;
 
-    case 'react-hot-loader':
+    case 'react-hot-loader': {
+      const key = `_replace_${crypto
+        .createHmac('sha256', source)
+        .digest('hex')
+        .slice(0, 5)}`;
+
       if (/module\.exports/.test(source))
-        newSource = source.replace(
-          /module\.exports = ((.|\n)*?);/,
-          `module.exports = require('react-hot-loader/root').hot($1);`,
-        );
+        newSource = `${source.replace(/module\.exports/g, `var ${key}`)}
+
+module.exports = require('react-hot-loader/root').hot(${key});`;
       else if (/exports\["default"\]/.test(source))
-        newSource = source.replace(
-          /exports\["default"\] = (((?!void 0).|\n)*?);/,
-          `exports["default"] = require('react-hot-loader/root').hot($1);`,
-        );
+        newSource = `${source.replace(/exports\["default"\]/g, `var ${key}`)}
+
+exports["default"] = require('react-hot-loader/root').hot(${key});`;
       break;
+    }
 
     default:
       throw new Error('Replace type error');

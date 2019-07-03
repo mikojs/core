@@ -50,7 +50,14 @@
     "react-dom": "^16.8.6",
     "webpack": "^4.35.0"
   },
-  "keywords": ["cat-org", "koa", "react", "webpack"],
+  "keywords": [
+    "cat-org",
+    "koa",
+    "react",
+    "react-helmet",
+    "react-router-dom",
+    "webpack"
+  ],
   "publishConfig": {
     "access": "public"
   }

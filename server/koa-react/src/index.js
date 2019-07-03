@@ -4,13 +4,20 @@ import fs from 'fs';
 import path from 'path';
 
 import debug from 'debug';
-import { type Middleware as koaMiddlewareType } from 'koa';
+import {
+  type Middleware as koaMiddlewareType,
+  type Context as koaContextType,
+} from 'koa';
 import compose from 'koa-compose';
 import { type WebpackOptions as WebpackOptionsType } from 'webpack';
 import { invariant, emptyFunction } from 'fbjs';
 import outputFileSync from 'output-file-sync';
 
-import { handleUnhandledRejection, requireModule } from '@cat-org/utils';
+import {
+  handleUnhandledRejection,
+  requireModule,
+  mockChoice,
+} from '@cat-org/utils';
 
 import getData, { type redirectType, type dataType } from './utils/getData';
 import buildJs from './utils/buildJs';
@@ -210,7 +217,16 @@ export default class React {
 
     return compose([
       dev
-        ? await require('koa-webpack')(config)
+        ? await mockChoice(
+            process.env.NODE_ENV === 'test',
+            emptyFunction.thatReturns(
+              async (ctx: koaContextType, next: () => Promise<void>) => {
+                await next();
+              },
+            ),
+            require('koa-webpack'),
+            config,
+          )
         : require('koa-mount')(publicPath, require('koa-static')(urlsPath)),
       server(basename, data, urls),
     ]);

@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.2.2 (2019-07-03)
+
+#### :bug: Bug Fix
+
+- [#312](https://github.com/cat-org/core/pull/312) (@cat-org/server) Fix koa-graphql options ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.2.1 (2019-07-03)
 
 #### :rocket: New Feature

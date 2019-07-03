@@ -19,7 +19,8 @@ export const {
   },
   createEnvironment: (relayData?: SSRCacheType, key: string) => EnvironmentType,
 } = !process.env.BROWSER
-  ? require('./server').default || require('./server')
+  ? /* istanbul ignore next */
+    require('./server').default || require('./server')
   : /* istanbul ignore next */
     require('./client').default || require('./client');`;
 

@@ -72,7 +72,7 @@ const run = async (context: serverContextType) =>
     );
     graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
       path.resolve(context.dir, './graphql'),
-      { dev: context.dev },
+      { dev: context.dev && context.watch },
     );
 
     if (process.env.NODE_ENV !== 'test') {

@@ -1,5 +1,36 @@
 # CHANGELOG
 
+## 1.2.1 (2019-07-03)
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-flow-typed-install`, `website`
+  - [#306](https://github.com/cat-org/core/pull/306) (@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `create-project`, `website`
+  - [#310](https://github.com/cat-org/core/pull/310) (@cat-org/koa-react, @cat-org/server) Fix testing ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#307](https://github.com/cat-org/core/pull/307) (@cat-org/koa-react) Fix replace export ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `lerna-flow-typed-install`, `utils`
+  - [#305](https://github.com/cat-org/core/pull/305) (@cat-org/koa-react) Fix koa react server ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`
+  - [#304](https://github.com/cat-org/core/pull/304) (@cat-org/create-project, @cat-org/configs) Fix relay packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :memo: Documentation
+
+- [#309](https://github.com/cat-org/core/pull/309) (@cat-org/kao-react) Modify README ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `eslint-config-cat`
+  - [#308](https://github.com/cat-org/core/pull/308) (@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.2.0 (2019-07-01)
 
 #### :bug: Bug Fix

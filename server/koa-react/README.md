@@ -139,17 +139,17 @@ This middleware is like [next.js](https://github.com/zeit/next.js). However, thi
 
 #### Page component
 
-Each component will build to the page like `next.js`. If you want to redirect the page or use like `/path/:id`, you need to use the `redirect` in the options of the middleware.
+Each component will be used to build the page like `next.js`. If you want to redirect the page or use like `/path/:id`, you need to add the `redirect` options in the middleware.
 
 ```js
 export default class Page extend React.PureComponent {
   /**
-   * This function is optional. You only need to add this function when you need to get the initial props.
+   * This function is optional. You only need to add this function when you need to get the initial props or set the helmet.
    *
    * @param {ctx} ctx - koa context in server and react-router-dom context in client
    * @param {boolean} isServer - is in Server or not
    *
-   * @return {object} - the initial props and
+   * @return {object} - the initial props and head(optional)
    */
   static getInitialProps = ({ ctx, isServer }) => {
     // do some thing
@@ -256,7 +256,7 @@ export default class Main extend React.PureComponent {
     return (
       <div>
         ...
-        {children()}
+        {children(/** you can pass the data to page component */)}
       </div>
     );
   }

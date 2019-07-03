@@ -12,6 +12,9 @@ export default {
       tagNamePreference: {
         returns: 'return',
       },
+      additionalTagNames: {
+        customTags: ['flow', 'jest-environment', 'relayHash'],
+      },
     },
   },
   rules: {

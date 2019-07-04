@@ -13,7 +13,7 @@ export default {
         returns: 'return',
       },
       additionalTagNames: {
-        customTags: ['flow', 'jest-environment', 'relayHash'],
+        customTags: ['flow', 'jest-environment'],
       },
     },
   },

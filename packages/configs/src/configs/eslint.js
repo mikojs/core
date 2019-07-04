@@ -8,8 +8,10 @@ export default {
     'eslint',
     'eslint-watch',
   ],
-  config: () => ({
-    extends: ['@cat-org/eslint-config-cat'],
+  config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
+    extends: !configsEnv.includes('relay')
+      ? '@cat-org/cat'
+      : '@cat-org/cat/relay',
   }),
   ignore: () => [
     // node

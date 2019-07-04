@@ -33,23 +33,11 @@ export default {
     'no-invalid-this': 'off',
     'babel/no-invalid-this': 'error',
 
-    'require-jsdoc': [
-      'error',
-      {
-        require: {
-          FunctionDeclaration: true,
-          MethodDefinition: true,
-          ClassDeclaration: true,
-          ArrowFunctionExpression: true,
-          FunctionExpression: true,
-        },
-      },
-    ],
-
     'prefer-destructuring': 'error',
 
     strict: ['error', 'never'],
 
-    'valid-jsdoc': 'error',
+    // FIXME: remove after eslint remove
+    'require-jsdoc': 'off',
   },
 };

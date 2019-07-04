@@ -7,6 +7,14 @@ import { type configType } from '../index';
 
 const debugLog = debug('react:buildJs');
 
+/**
+ * @example
+ * buildJs(config)
+ *
+ * @param {config} config - koa webpack config
+ *
+ * @return {{ string: string }} - build js strings
+ */
 export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
   new Promise<{
     [string]: string,

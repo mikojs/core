@@ -100,7 +100,7 @@ const getPage = (
         // $FlowFixMe Flow does not yet support method or property calls in optional chains.
         (await Component.getInitialProps?.(ctx)) || {};
       // TODO component should be ignored
-      // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+      // eslint-disable-next-line jsdoc/require-jsdoc
       const Page = <-P: {}>(props?: P) => (
         <Component {...props} {...initialProps} />
       );
@@ -125,9 +125,16 @@ const getPage = (
   return store.Page;
 };
 
-// TODO component should be ignored
-/* eslint-disable require-jsdoc */
+/** Root Component to control the page Components */
 export default class Root extends React.PureComponent<propsType, stateType> {
+  /**
+   * @example
+   * Root.preload({})
+   *
+   * @param {store} prevStore - prev store
+   *
+   * @return {store} - new store
+   */
   static preload = (prevStore?: storeType = store): storeType => {
     Object.keys(prevStore).forEach((key: string) => {
       store[key] = prevStore[key];
@@ -143,6 +150,8 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     errorInfo: null,
   };
 
+  // TODO component should be ignored
+  // eslint-disable-next-line jsdoc/require-jsdoc
   componentDidCatch(
     error: $PropertyType<stateType, 'error'>,
     errorInfo: $PropertyType<stateType, 'errorInfo'>,
@@ -150,6 +159,8 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     this.setState({ error, errorInfo });
   }
 
+  // TODO component should be ignored
+  // eslint-disable-next-line jsdoc/require-jsdoc
   render(): NodeType {
     const { Main, Loading, Error, routesData, mainInitialProps } = this.props;
     const { error, errorInfo } = this.state;

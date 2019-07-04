@@ -6,6 +6,15 @@ import { requireModule } from '@cat-org/utils';
 
 const debugLog = debug('server:loadModule');
 
+/**
+ * @example
+ * loadMoudle('module name', () => {}, 'argu')
+ *
+ * @param {string} moduleName - module name
+ * @param {any} defaultFunc - default function which is used when module is noe found
+ *
+ * @return {any} - module
+ */
 export default <-T>(
   moduleName: string,
   defaultFunc: T,

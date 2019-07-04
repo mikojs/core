@@ -1,6 +1,4 @@
 // @flow
-/* eslint-disable require-jsdoc */
-// TODO component should be ignored
 
 import React, { type Node as NodeType } from 'react';
 
@@ -9,11 +7,20 @@ type propsType = {|
   test: string,
 |};
 
+/** Home Component */
 export default class Home extends React.PureComponent<propsType> {
+  /**
+   * @example
+   * Home.getInitialProps()
+   *
+   * @return {initialProps} - initial props
+   */
   static getInitialProps = () => ({
     test: 'value',
   });
 
+  // TODO component should be ignored
+  // eslint-disable-next-line jsdoc/require-jsdoc
   render(): NodeType {
     const { value, test } = this.props;
 

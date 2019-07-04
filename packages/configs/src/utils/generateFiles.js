@@ -71,6 +71,12 @@ const findConfigFiles = (cliName: string): {} => {
   );
 };
 
+/**
+ * @example
+ * generateFiles('cli')
+ *
+ * @param {string} cliName - cli name
+ */
 export default (cliName: string) => {
   const configFiles = findConfigFiles(cliName);
   const cache = {

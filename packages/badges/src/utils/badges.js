@@ -143,6 +143,15 @@ ${badges
 `;
 };
 
+/**
+ * @example
+ * badges('readme', context)
+ *
+ * @param {string} readme - readme content
+ * @param {context} ctx - readme context
+ *
+ * @return {Promise} - modified readme
+ */
 export default async (readme: string, ctx: ctxType): Promise<?string> => {
   const repo = await getRepo();
 

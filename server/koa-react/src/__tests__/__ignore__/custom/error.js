@@ -1,7 +1,7 @@
 // @flow
-/* eslint-disable require-jsdoc, flowtype/require-return-type */
-// TODO component should be ignored
 
+// TODO component should be ignored
+// eslint-disable-next-line jsdoc/require-jsdoc
 const ErrorComponent = () => {
   throw new Error('custom error');
 };

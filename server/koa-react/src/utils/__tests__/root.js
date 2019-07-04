@@ -13,10 +13,9 @@ import ErrorComponent from 'templates/Error';
 
 describe('root', () => {
   test('catch error', () => {
-    /* eslint-disable require-jsdoc, flowtype/require-return-type */
     // TODO component should be ignored
+    // eslint-disable-next-line jsdoc/require-jsdoc
     const Component = () => <div>render</div>;
-    /* eslint-enable require-jsdoc, flowtype/require-return-type */
 
     Root.preload({
       originalUrl: '/',

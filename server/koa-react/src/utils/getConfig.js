@@ -11,6 +11,18 @@ import { type dataType } from './getData';
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
 const ROOT_PATH = path.resolve(__dirname, './Root.js');
 
+/**
+ * @example
+ * getConfig(true, '/folder-path', '/', data)
+ *
+ * @param {boolean} dev - is dev or not
+ * @param {string} folderPath - folder path
+ * @param {string} basename - basename to join url
+ * @param {data} data - routes data
+ * @param {RegExp} exclude - exclude file path
+ *
+ * @return {config} - webpack config
+ */
 export default (
   dev: boolean,
   folderPath: string,

@@ -5,6 +5,12 @@ import path from 'path';
 
 import { emptyFunction } from 'fbjs';
 
+/**
+ * @example
+ * createLogs()
+ *
+ * @return {['combined', { stream: stream }]} - create logs data
+ */
 export default (): [
   string,
   {

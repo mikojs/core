@@ -27,6 +27,17 @@ export type dataType = {|
   |}>,
 |};
 
+/**
+ * @example
+ * getData('/folder-path', () => {})
+ *
+ * @param {string} folderPath - folder path
+ * @param {function} redirect - redirect url path
+ * @param {string} basename - basename to join url
+ * @param {RegExp} exclude - exclude file path
+ *
+ * @return {data} - routes data
+ */
 export default (
   folderPath: string,
   redirect: redirectType,

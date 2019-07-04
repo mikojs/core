@@ -20,7 +20,7 @@ export const Suspense = ExecutionEnvironment.canUseEventListeners
   ? React.Suspense
   : ((): ComponentType<{| children: NodeType, fallback: NodeType |}> => {
       // TODO component should be ignored
-      // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+      // eslint-disable-next-line jsdoc/require-jsdoc
       const ServerSuspense = ({
         children,
       }: {|
@@ -60,8 +60,8 @@ export const lazy = (
     ? React.lazy(lazyComponent)
     : ((): lazyDoneComponentType => {
         // TODO component should be ignored
-        // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
-        const ServerLazy = (props: {}) => {
+        // eslint-disable-next-line jsdoc/require-jsdoc
+        const ServerLazy = (props: {}): NodeType => {
           if (!storeChunkNames.includes(chunkName))
             storeChunkNames.push(chunkName);
 

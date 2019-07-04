@@ -51,6 +51,16 @@ export const initStore = () =>
     },
   });
 
+/**
+ * @example
+ * server('/', data, {})
+ *
+ * @param {string} basename - basename to join urls path
+ * @param {data} data - routes data
+ * @param {urls} urls - urls data
+ *
+ * @return {middleware} - koa middleware
+ */
 export default (
   basename: ?string,
   { routesData, templates }: dataType,

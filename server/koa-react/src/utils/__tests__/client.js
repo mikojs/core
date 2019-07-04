@@ -7,7 +7,7 @@ import client from '../client';
 import { type propsType as rootPropsType } from '../Root';
 
 // TODO component should be ignored
-// eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+// eslint-disable-next-line jsdoc/require-jsdoc
 const routePage = () => <div>test</div>;
 const routeData = {
   exact: true,

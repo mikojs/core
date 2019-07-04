@@ -48,7 +48,7 @@ const render = async (
     })();
   const { default: Component } = await loader();
   // TODO component should be ignored
-  // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+  // eslint-disable-next-line jsdoc/require-jsdoc
   const Page = <-P>(props: P) => (
     <Component {...props} {...store.initialProps} />
   );

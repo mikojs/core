@@ -8,6 +8,13 @@ import { type configType } from 'koa-webpack';
 
 import React from '../../index';
 
+/**
+ * @example
+ * server(true, true)
+ *
+ * @param {boolean} dev - is dev or not
+ * @param {boolean} useStatic - is static or not
+ */
 export default async (
   dev: boolean,
   useStatic: boolean,

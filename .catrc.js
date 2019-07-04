@@ -2,7 +2,7 @@
 
 /* eslint-disable flowtype/require-return-type */
 /* eslint-disable flowtype/require-parameter-type */
-/* eslint-disable require-jsdoc */
+/* eslint-disable jsdoc/require-jsdoc */
 
 const babel = config => {
   if (!config.plugins) config.plugins = [];
@@ -78,14 +78,14 @@ const lint = {
         rules: {
           'import/no-extraneous-dependencies': 'off',
           // TODO: component should be ignore
-          'require-jsdoc': 'off',
+          'jsdoc/require-jsdoc': 'off',
         },
       },
       {
         files: ['packages/website/**', 'packages/website/**/.templates/**'],
         rules: {
           // TODO: component should be ignore
-          'require-jsdoc': 'off',
+          'jsdoc/require-jsdoc': 'off',
         },
       },
     ],

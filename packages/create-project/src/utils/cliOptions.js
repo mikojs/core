@@ -13,6 +13,14 @@ import type StoresType from 'stores';
 
 const debugLog = debug('create-project:cliOptions');
 
+/**
+ * @example
+ * cliOptions([])
+ *
+ * @param {Array} argv - command line
+ *
+ * @return {ctx} - store context
+ */
 export default (
   argv: $ReadOnlyArray<string>,
 ): $PropertyType<StoresType, 'ctx'> => {

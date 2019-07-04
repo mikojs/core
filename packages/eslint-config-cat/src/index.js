@@ -16,6 +16,11 @@ type configType = {
   plugins?: $ReadOnlyArray<string>,
   settings?: {
     [string]: {},
+    jsdoc?: {
+      additionalTagNames: {
+        customTags: $ReadOnlyArray<string>,
+      },
+    },
   },
   rules?: {
     [string]:
@@ -40,7 +45,7 @@ const defaultConfig = {
   },
 };
 
-const configs = [
+export default [
   defaultConfig,
   importConfig,
   flowtypeConfig,
@@ -79,5 +84,3 @@ const configs = [
     ),
   ({}: configType),
 );
-
-export default configs;

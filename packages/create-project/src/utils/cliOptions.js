@@ -17,7 +17,7 @@ const debugLog = debug('create-project:cliOptions');
  * @example
  * cliOptions([])
  *
- * @param {Array} argv - argv array
+ * @param {Array} argv - command line
  *
  * @return {ctx} - store context
  */

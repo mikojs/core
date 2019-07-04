@@ -13,7 +13,7 @@ const debugLog = debug('react:buildJs');
  *
  * @param {config} config - koa webpack config
  *
- * @return {{ string: string }} - build js strings
+ * @return {{ string: string }} - js filenames which are build from webpack
  */
 export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
   new Promise<{

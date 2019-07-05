@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.3.1 (2019-07-05)
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `logger`, `utils`, `website`
+  - [#320](https://github.com/cat-org/core/pull/320) (@cat-org/eslint-config-cat) Add new rules ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.3.0 (2019-07-05)
 
 #### :rocket: New Feature

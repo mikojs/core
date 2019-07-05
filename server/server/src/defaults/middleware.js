@@ -7,7 +7,7 @@ import { type Context as koaContextType } from 'koa';
  * app.use(middleware)
  *
  * @param {koaContextType} ctx - koa context
- * @param {Promise<>} next - koa next function
+ * @param {Function} next - koa next function
  */
 export default async (ctx: koaContextType, next: () => Promise<void>) => {
   await next();

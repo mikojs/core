@@ -9,10 +9,7 @@ export default {
     'eslint-watch',
   ],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
-    extends: [
-      '@cat-org/cat',
-      ...(!configsEnv.includes('react') ? [] : ['@cat-org/cat/react']),
-    ],
+    extends: '@cat-org/cat',
     settings: {
       jsdoc: {
         additionalTagNames: {
@@ -24,6 +21,14 @@ export default {
           ],
         },
       },
+    },
+    rules: {
+      ...(!configsEnv.includes('react')
+        ? {}
+        : {
+            'jsdoc/require-example': ['error', { exemptedBy: ['react'] }],
+            'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
+          }),
     },
   }),
   ignore: () => [

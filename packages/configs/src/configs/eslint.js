@@ -28,6 +28,7 @@ export default {
         : {
             'jsdoc/require-example': ['error', { exemptedBy: ['react'] }],
             'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
+            'jsdoc/require-returns': ['error', { exemptedBy: ['react'] }],
           }),
     },
   }),

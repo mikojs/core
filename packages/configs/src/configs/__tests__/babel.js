@@ -17,7 +17,7 @@ const reactPlugins = [
  *
  * @param {string} extension - file extension
  *
- * @return {plugins} css plugins
+ * @return {Array} css plugins
  */
 const cssPlugins = (extension: string) => [
   [

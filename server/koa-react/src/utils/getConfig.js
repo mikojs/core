@@ -18,10 +18,10 @@ const ROOT_PATH = path.resolve(__dirname, './Root.js');
  * @param {boolean} dev - is dev or not
  * @param {string} folderPath - folder path
  * @param {string} basename - basename to join url
- * @param {data} data - routes data
+ * @param {dataType} data - routes data
  * @param {RegExp} exclude - exclude file path
  *
- * @return {config} - webpack config
+ * @return {object} - webpack config
  */
 export default (
   dev: boolean,

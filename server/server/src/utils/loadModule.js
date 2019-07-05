@@ -12,7 +12,7 @@ const debugLog = debug('server:loadModule');
  *
  * @param {string} moduleName - module name
  * @param {any} defaultFunc - default function which is used when module is noe found
- * @param {optinos} options - options to give the module or the default function
+ * @param {Array} options - options to give the module or the default function
  *
  * @return {any} - module
  */

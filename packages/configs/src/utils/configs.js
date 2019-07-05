@@ -32,9 +32,9 @@ export class Configs {
    * @example
    * configs.addConfigsEnv({})
    *
-   * @param {config} config - config from parent
+   * @param {object} config - config from parent
    *
-   * @return {config} - config with configsEnv
+   * @return {object} - config with configsEnv
    */
   +addConfigsEnv = (config: {}): {
     configsEnv: $ReadOnlyArray<string>,
@@ -47,9 +47,9 @@ export class Configs {
    * @example
    * configs.removeConfigsEnv({})
    *
-   * @param {config} config - config with configsEnv
+   * @param {object} config - config with configsEnv
    *
-   * @return {config} - configs without configsEnv
+   * @return {object} - configs without configsEnv
    */
   +removeConfigsEnv = <-C: {}>({
     configsEnv,
@@ -63,7 +63,7 @@ export class Configs {
    * @example
    * configs.handleCustomConfigs()
    *
-   * @param {{ config, filepath }} customConfigsObj - custom config
+   * @param {{ config: configsType, filepath: string }} customConfigsObj - custom config
    */
   +handleCustomConfigs = (
     customConfigsObj: ?{ config: configsType, filepath: string },

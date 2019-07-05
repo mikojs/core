@@ -33,7 +33,7 @@ class Base extends Store {
    * @example
    * base.init(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +init = async (ctx: $PropertyType<Store, 'ctx'>) => {
     const storeNames = [];
@@ -56,7 +56,7 @@ class Base extends Store {
    * @example
    * bese.end(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +end = async ({
     projectDir,

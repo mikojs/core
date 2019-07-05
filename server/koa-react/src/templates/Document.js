@@ -14,7 +14,7 @@ export default class Document extends React.PureComponent<propsType> {
    * @example
    * Document.getInitialProps({ ctx })
    *
-   * @return {initialProps} initialProps - initial props
+   * @return {propsType} - initial props
    */
   static getInitialProps = () => ({
     // Reference: https://github.com/joshbuchea/HEAD

@@ -16,7 +16,7 @@ const debugLog = debug('badges:cliOptions');
  *
  * @param {Array} argv - command line
  *
- * @return {options} - cli options
+ * @return {Array<string>} - cli options
  */
 export default (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
   const program = new commander.Command('badges')

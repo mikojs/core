@@ -93,7 +93,7 @@ class Jest extends Store {
    * @example
    * jest.end(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +end = async ({
     useReact,

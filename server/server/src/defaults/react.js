@@ -11,7 +11,7 @@ export default class React {
    * new DefaultReact('folder path')
    *
    * @param {string} foldePath - folder path
-   * @param {options} options - koa-react options
+   * @param {object} options - koa-react options
    */
   constructor(foldePath: string, options?: {}) {}
 

@@ -38,10 +38,10 @@ export const Suspense = ExecutionEnvironment.canUseEventListeners
  * @example
  * lazy(import('component'), 'component')
  *
- * @param {Promise} lazyComponent - dynamic import component
+ * @param {lazyComponentType} lazyComponent - dynamic import component
  * @param {string} chunkName - chunk name
  *
- * @return {Component} - lazy component
+ * @return {ComponentType} - lazy component
  */
 export const lazy = (
   lazyComponent: lazyComponentType,
@@ -85,8 +85,6 @@ export const lazy = (
  *
  * @param {Array} chunkNames - chunk names
  * @param {number} level - preload level
- *
- * @return {Promise} - null;
  */
 export const preload = async (
   chunkNames?: $ReadOnlyArray<string> = [],
@@ -132,7 +130,7 @@ export const preload = async (
  * hydrate(<div>test</div>, document.getElement('__CAT__'))
  *
  * @param {ReactNode} dom - react node to render
- * @param {HTMLELement} main - main dom to mount
+ * @param {object} main - main dom to mount
  */
 export const hydrate = async (dom: NodeType, main: HTMLElement) => {
   const chunkNames = window.__CHUNKS_NAMES__;
@@ -156,10 +154,10 @@ export const hydrate = async (dom: NodeType, main: HTMLElement) => {
  * renderToNodeStream(<div>test</div>, stream);
  *
  * @param {ReactNode} dom - react node to render
- * @param {Stream} stream - node stream
+ * @param {{ stream: streamType, reactClientRender, renderToNodeStreamType }} option - stream library and server render function
  * @param {number} level - render level
  *
- * @return {Stream} - render stream
+ * @return {Promise<string>} - render stream
  */
 export const renderToNodeStream = (
   dom: NodeType,

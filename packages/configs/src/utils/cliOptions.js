@@ -21,7 +21,7 @@ const debugLog = debug('configs:cliOptions');
  *
  * @param {Array} argv - command line
  *
- * @return {options} - cli options
+ * @return {{ cli: string, argv: Array<string>, env: object, cliName: string }} - cli options
  */
 export default (
   argv: $ReadOnlyArray<string>,

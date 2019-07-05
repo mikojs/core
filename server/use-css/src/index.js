@@ -8,9 +8,9 @@ import { type optionsType, type configType } from '@cat-org/koa-react';
  * @example
  * useCss({})
  *
- * @param {config} config - prev @cat-org/koa-react config
+ * @param {optionsType} config - prev @cat-org/koa-react config
  *
- * @return {config} - @cat-org/koa-react config
+ * @return {optionsType} - @cat-org/koa-react config
  */
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,

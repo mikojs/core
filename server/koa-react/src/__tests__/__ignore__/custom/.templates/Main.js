@@ -17,9 +17,9 @@ export default class Main extends React.PureComponent<propsType> {
    * @example
    * Main.getInitialProps(context)
    *
-   * @param {context} context - context data
+   * @param {mainCtxType} context - context data
    *
-   * @return {initialProps} - initial props
+   * @return {propsType} - initial props
    */
   static getInitialProps = ({ Component, pageProps }: mainCtxType<{}>) => ({
     value: 'test data',

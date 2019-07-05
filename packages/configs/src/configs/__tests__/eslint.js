@@ -5,6 +5,7 @@ import eslint from '../eslint';
 const reactRules = {
   'jsdoc/require-example': ['error', { exemptedBy: ['react'] }],
   'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
+  'jsdoc/require-returns': ['error', { exemptedBy: ['react'] }],
 };
 
 describe('eslint', () => {

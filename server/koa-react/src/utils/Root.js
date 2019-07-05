@@ -33,7 +33,7 @@ type stateType = {|
   errorInfo: ?$PropertyType<errorPropsType, 'errorInfo'>,
 |};
 
-type storeType = {
+export type storeType = {
   originalUrl: string,
   chunkName: string,
   initialProps: {|
@@ -51,9 +51,9 @@ const store: storeType = {};
  * getPage(routsData, ctx)
  *
  * @param {Array} routesData - routes data
- * @param {componentContext} Context - getInitialProps context
+ * @param {{ location: object, staticContext: koaContextType }} Context - getInitialProps context
  *
- * @return {Component} - page component
+ * @return {ComponentType} - page component
  */
 const getPage = (
   routesData: $PropertyType<propsType, 'routesData'>,
@@ -92,7 +92,7 @@ const getPage = (
      * @example
      * lazyPage()
      *
-     * @return {Page} - return Page
+     * @return {ComponentType} - return Page
      */
     const lazyPage = async (): $Call<lazyComponentType> => {
       const { default: Component } = await loader();

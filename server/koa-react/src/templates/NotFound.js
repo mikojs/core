@@ -13,9 +13,9 @@ export default class NotFound extends React.PureComponent<*> {
    * @example
    * NotFound.getInitialProps({ ctx })
    *
-   * @param {context} context - cnotext data
+   * @param {ctxType} context - cnotext data
    *
-   * @return {initialProps} - initial props
+   * @return {object} - initial props
    */
   static getInitialProps = ({
     ctx,

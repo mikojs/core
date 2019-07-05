@@ -36,7 +36,7 @@ export type dataType = {|
  * @param {string} basename - basename to join url
  * @param {RegExp} exclude - exclude file path
  *
- * @return {data} - routes data
+ * @return {dataType} - routes data
  */
 export default (
   folderPath: string,

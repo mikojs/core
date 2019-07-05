@@ -33,7 +33,7 @@ export default class Endpoint {
    * @example
    * endpoint.use(async (ctx, next) => { })
    *
-   * @param {koaMiddleware} middleware - koa middleware
+   * @param {koaMiddlewareType} middleware - koa middleware
    */
   +use = (middleware: koaMiddlewareType) => {
     this.middlewares.push(middleware);

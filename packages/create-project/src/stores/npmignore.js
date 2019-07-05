@@ -67,7 +67,7 @@ class Npmignore extends Store {
    * @example
    * npmignore.start(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     await this.checkNpm();
@@ -79,7 +79,7 @@ class Npmignore extends Store {
    * @example
    * npmignore.end(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
     if (!this.storeUseNpm) return;

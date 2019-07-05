@@ -71,7 +71,6 @@ const requireParameterType = (argu): string => {
  * requireReturnType('test');
  *
  * @param {any} argu - any
- * @return {Promise<void>} - any
  */
 const promiseIngore = async (argu: string) => {
   await new Promise((resolve, reject) => {

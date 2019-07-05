@@ -9,6 +9,16 @@
  */
 const correctFunction = (argu: string) => 10;
 
+// $expectError jsdoc/no-undefined-types
+/**
+ * @example
+ * undefinedTypes('test');
+ *
+ * @param {UndefinedTypes} argu - example argu
+ * @return {10} - example return
+ */
+const undefinedTypes = (argu: string) => 10;
+
 // $expectError jsdoc/newline-after-description
 // $expectError jsdoc/require-example
 /**
@@ -22,17 +32,26 @@ const noExample = (argu: string) => 10;
 // $expectError jsdoc/check-tag-names
 /**
  * @example
- * correctFunction('test');
+ * noParams('test');
  *
  * @Param {string} argu - example argu
  * @return {10} - example return
  */
 const noParams = (argu: string) => 10;
 
+// $expectError jsdoc/require-returns
+/**
+ * @example
+ * noReturn('test');
+ *
+ * @param {number} argu - example argu
+ */
+const noReturn = (argu: string) => 10;
+
 // $expectError jsdoc/require-hyphen-before-param-description
 /**
  * @example
- * correctFunction('test');
+ * noHyphen('test');
  *
  * @param {number} argu example argu
  */

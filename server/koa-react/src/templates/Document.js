@@ -28,8 +28,7 @@ export default class Document extends React.PureComponent<propsType> {
     ),
   });
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   render(): NodeType {
     const { helmet, children } = this.props;
 

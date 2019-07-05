@@ -13,8 +13,7 @@ export default class Loading extends React.PureComponent<propsType> {
   rootDOM: HTMLElement;
   loadingDOM: HTMLElement;
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   constructor(props: propsType) {
     super(props);
 
@@ -26,20 +25,17 @@ export default class Loading extends React.PureComponent<propsType> {
     this.loadingDOM = document.createElement('div');
   }
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   componentDidMount() {
     this.rootDOM.appendChild(this.loadingDOM);
   }
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   componentWillUnmount() {
     this.rootDOM.removeChild(this.loadingDOM);
   }
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   render(): NodeType {
     return ReactDOM.createPortal(
       <div style={styles}>

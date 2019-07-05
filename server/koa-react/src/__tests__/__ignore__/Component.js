@@ -22,8 +22,7 @@ export default class Component extends React.PureComponent<propsType> {
     path: ctx.path,
   });
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   render(): NodeType {
     const { path } = this.props;
 

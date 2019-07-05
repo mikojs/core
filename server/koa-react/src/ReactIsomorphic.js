@@ -19,8 +19,7 @@ const storeChunkNames = [];
 export const Suspense = ExecutionEnvironment.canUseEventListeners
   ? React.Suspense
   : ((): ComponentType<{| children: NodeType, fallback: NodeType |}> => {
-      // TODO component should be ignored
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @react server side Suspense Component */
       const ServerSuspense = ({
         children,
       }: {|
@@ -59,8 +58,7 @@ export const lazy = (
   const Component = ExecutionEnvironment.canUseEventListeners
     ? React.lazy(lazyComponent)
     : ((): lazyDoneComponentType => {
-        // TODO component should be ignored
-        // eslint-disable-next-line jsdoc/require-jsdoc
+        /** @react server side lazy Component */
         const ServerLazy = (props: {}): NodeType => {
           if (!storeChunkNames.includes(chunkName))
             storeChunkNames.push(chunkName);

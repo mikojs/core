@@ -99,8 +99,7 @@ const getPage = (
       const { head, ...initialProps } =
         // $FlowFixMe Flow does not yet support method or property calls in optional chains.
         (await Component.getInitialProps?.(ctx)) || {};
-      // TODO component should be ignored
-      // eslint-disable-next-line jsdoc/require-jsdoc
+      /** @react render the page */
       const Page = <-P: {}>(props?: P) => (
         <Component {...props} {...initialProps} />
       );
@@ -150,8 +149,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     errorInfo: null,
   };
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   componentDidCatch(
     error: $PropertyType<stateType, 'error'>,
     errorInfo: $PropertyType<stateType, 'errorInfo'>,
@@ -159,8 +157,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     this.setState({ error, errorInfo });
   }
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   render(): NodeType {
     const { Main, Loading, Error, routesData, mainInitialProps } = this.props;
     const { error, errorInfo } = this.state;

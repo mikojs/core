@@ -2,8 +2,7 @@
 
 import { type Node as NodeType } from 'react';
 
-// TODO component should be ignored
-// eslint-disable-next-line jsdoc/require-jsdoc
+/** @react control the all page Components */
 const Main = ({ children }: {| children: () => NodeType |}) => children();
 
 export default Main;

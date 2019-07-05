@@ -7,8 +7,7 @@ import { type errorPropsType } from '../types';
 
 import * as styles from './styles/error';
 
-// TODO component should be ignored
-// eslint-disable-next-line jsdoc/require-jsdoc
+/** @react render the error page */
 const Error = ({
   error: { message },
   errorInfo: { componentStack },

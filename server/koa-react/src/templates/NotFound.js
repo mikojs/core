@@ -33,8 +33,7 @@ export default class NotFound extends React.PureComponent<*> {
     };
   };
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   render(): NodeType {
     return (
       <div style={styles.root}>

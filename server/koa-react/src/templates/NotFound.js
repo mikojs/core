@@ -7,7 +7,7 @@ import { type ctxType } from '../types';
 
 import * as styles from './styles/notFound';
 
-/** NotFound Component to render the not found page */
+/** render the not found page */
 export default class NotFound extends React.PureComponent<*> {
   /**
    * @example

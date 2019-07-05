@@ -8,7 +8,7 @@ import styles from './styles/loading';
 
 type propsType = {};
 
-/** Loading Component to rneder the loading page */
+/** render the loading page */
 export default class Loading extends React.PureComponent<propsType> {
   rootDOM: HTMLElement;
   loadingDOM: HTMLElement;

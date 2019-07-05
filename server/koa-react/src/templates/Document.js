@@ -8,7 +8,7 @@ type propsType = {|
   children: NodeType,
 |};
 
-/** Document Component to build the html */
+/** render the html */
 export default class Document extends React.PureComponent<propsType> {
   /**
    * @example

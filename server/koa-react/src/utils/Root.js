@@ -124,7 +124,7 @@ const getPage = (
   return store.Page;
 };
 
-/** Root Component to control the page Components */
+/** control the all page Components */
 export default class Root extends React.PureComponent<propsType, stateType> {
   /**
    * @example

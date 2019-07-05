@@ -195,7 +195,7 @@ type propsType = {|
   children: <P>(props: P) => NodeType,
 |};
 
-/** Main Component to control the all page Components */
+/** control the all page Components */
 export default class Main extends React.PureComponent<propsType> {
   /**
    * @example
@@ -270,7 +270,7 @@ const pageTemplate = `// @flow
 import React, { type Node as NodeType } from 'react';
 import { graphql } from 'react-relay';
 
-/** Home Component to render the home page */
+/** render the home page */
 export default class Home extends React.PureComponent<{| version: string |}> {
   static query = graphql\`
     query pages_homeQuery {

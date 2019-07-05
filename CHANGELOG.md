@@ -1,5 +1,33 @@
 # CHANGELOG
 
+## 1.3.0 (2019-07-05)
+
+#### :rocket: New Feature
+
+- `create-project`
+  - [#319](https://github.com/cat-org/core/pull/319) (@cat-org/create-project) Add lint staged ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `eslint-config-cat`
+  - [#318](https://github.com/cat-org/core/pull/318) (@cat-org/eslint-config-cat) Remove react config ([@HsuTing](https://github.com/HsuTing))
+  - [#314](https://github.com/cat-org/core/pull/314) (@cat-org/eslint-config-cat) Add relay config ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`, `eslint-config-cat`, `website`
+  - [#317](https://github.com/cat-org/core/pull/317) (@cat-org/eslint-config-cat) Fix react jsdoc ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `logger`, `utils`
+  - [#315](https://github.com/cat-org/core/pull/315) (@cat-org/eslint-config-cat) Use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `configs`, `eslint-config-cat`, `utils`
+  - [#316](https://github.com/cat-org/core/pull/316) (@cat-org/core) Revert use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `logger`, `utils`
+  - [#315](https://github.com/cat-org/core/pull/315) (@cat-org/eslint-config-cat) Use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.2.2 (2019-07-03)
 
 #### :bug: Bug Fix

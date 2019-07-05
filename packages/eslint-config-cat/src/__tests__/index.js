@@ -106,6 +106,7 @@ describe('eslint', () => {
           case 'no-warning-comments':
           case 'no-invalid-this':
           case 'babel/no-invalid-this':
+          case 'valid-jsdoc':
             return false;
           default:
             return true;

@@ -38,6 +38,7 @@ export default {
     strict: ['error', 'never'],
 
     // FIXME: remove after eslint remove
+    'valid-jsdoc': 'off',
     'require-jsdoc': 'off',
   },
 };

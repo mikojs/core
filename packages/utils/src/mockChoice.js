@@ -5,8 +5,9 @@
  * mockChoice(true, () => {}, () => {})
  *
  * @param {boolean} result - determine to use which one
- * @param {function} funcOne - use when result is true
- * @param {function} funcTwo - use when result is false
+ * @param {Function} funcOne - use when result is true
+ * @param {Function} funcTwo - use when result is false
+ * @param {args} args - arguments to give the function
  *
  * @return {any} result of running function
  */

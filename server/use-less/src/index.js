@@ -9,6 +9,8 @@ import { type optionsType, type configType } from '@cat-org/koa-react';
  * @example
  * useLess({})
  *
+ * @param {config} config - prev @cat-org/koa-react config
+ *
  * @return {config} - @cat-org/koa-react config
  */
 export default ({

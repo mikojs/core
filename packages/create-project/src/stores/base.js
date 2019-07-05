@@ -82,7 +82,10 @@ class Base extends Store {
       await this.execa(
         'git init',
         'git add .',
+        // TODO: remove after removing @cat-org/koa-graphql
+        'yarn configs lint-staged',
         `git commit -m "chore(root): project init, create-project: v${version}"`,
+        'node ./node_modules/husky/husky.js install',
         ...(repository ? [`git remote add origin ${repository}`] : []),
       );
     }

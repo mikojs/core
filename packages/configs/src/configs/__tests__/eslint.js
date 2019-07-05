@@ -2,29 +2,34 @@
 
 import eslint from '../eslint';
 
+const reactRules = {
+  'jsdoc/require-example': ['error', { exemptedBy: ['react'] }],
+  'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
+};
+
 describe('eslint', () => {
   test.each`
-    configsEnv   | extendConfig              | customTags
-    ${[]}        | ${[]}                     | ${['flow', 'jest-environment']}
-    ${['react']} | ${['@cat-org/cat/react']} | ${['flow', 'jest-environment', 'react']}
-    ${['relay']} | ${[]}                     | ${['flow', 'jest-environment', 'relayHash']}
+    configsEnv   | customTags                                   | rules
+    ${[]}        | ${['flow', 'jest-environment']}              | ${{}}
+    ${['react']} | ${['flow', 'jest-environment', 'react']}     | ${reactRules}
+    ${['relay']} | ${['flow', 'jest-environment', 'relayHash']} | ${{}}
   `(
     'run with configsEnv = $configsEnv',
     ({
       configsEnv,
-      extendConfig,
       customTags,
+      rules,
     }: {|
       configsEnv: $ReadOnlyArray<string>,
-      extendConfig: $ReadOnlyArray<string>,
       customTags: $ReadOnlyArray<string>,
+      rules: {},
     |}) => {
       const config = eslint.config({ configsEnv });
 
-      expect(config.extends).toEqual(['@cat-org/cat', ...extendConfig]);
       expect(config.settings.jsdoc.additionalTagNames.customTags).toEqual(
         customTags,
       );
+      expect(config.rules).toEqual(rules);
     },
   );
 });

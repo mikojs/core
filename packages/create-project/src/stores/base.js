@@ -82,6 +82,7 @@ class Base extends Store {
       await this.execa(
         'git init',
         'git add .',
+        'yarn configs lint-staged',
         `git commit -m "chore(root): project init, create-project: v${version}"`,
         ...(repository ? [`git remote add origin ${repository}`] : []),
       );

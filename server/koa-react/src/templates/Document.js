@@ -14,8 +14,6 @@ export default class Document extends React.PureComponent<propsType> {
    * @example
    * Document.getInitialProps({ ctx })
    *
-   * @param {context} context - context data
-   *
    * @return {initialProps} initialProps - initial props
    */
   static getInitialProps = () => ({

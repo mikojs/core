@@ -32,7 +32,7 @@ export type dataType = {|
  * getData('/folder-path', () => {})
  *
  * @param {string} folderPath - folder path
- * @param {function} redirect - redirect url path
+ * @param {Function} redirect - redirect url path
  * @param {string} basename - basename to join url
  * @param {RegExp} exclude - exclude file path
  *

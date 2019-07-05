@@ -36,7 +36,7 @@ const customMiddleware = (newBody: string) => async (
  * @example
  * testServer()
  *
- * @return {httpServer} - http server
+ * @return {object} - http server
  */
 export default async () =>
   (await server.init(context))

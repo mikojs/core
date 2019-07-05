@@ -41,7 +41,7 @@ export default class Graphql {
    * new Graphql('folder path')
    *
    * @param {string} folderPath - folder path
-   * @param {options} options - make executable schema options
+   * @param {optionsType} options - make executable schema options
    */
   constructor(
     folderPath: string,
@@ -156,7 +156,7 @@ export default class Graphql {
    * @example
    * graphql.middleware()
    *
-   * @param {options} options - koa graphql options
+   * @param {koaGraphqlOptionsType} options - koa graphql options
    *
    * @return {Function} - koa-graphql middleware
    */

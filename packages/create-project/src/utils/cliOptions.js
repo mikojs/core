@@ -19,7 +19,7 @@ const debugLog = debug('create-project:cliOptions');
  *
  * @param {Array} argv - command line
  *
- * @return {ctx} - store context
+ * @return {StoresType.ctx} - store context
  */
 export default (
   argv: $ReadOnlyArray<string>,

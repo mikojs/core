@@ -66,7 +66,9 @@ export default class Store {
    * @example
    * store.run(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
+   *
+   * @return {Promise<Array<Store>>} - sotre array
    */
   +run = async (ctx: ctxType): Promise<$ReadOnlyArray<Store>> => {
     const stores = [];
@@ -172,7 +174,7 @@ export default class Store {
    * @example
    * store.writeFiles({ 'path': 'test' })
    *
-   * @param {files} files - files object
+   * @param {{ string: string }} files - files object
    */
   +writeFiles = async (files: { [string]: string }) => {
     const { projectDir } = this.ctx;

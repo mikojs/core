@@ -43,7 +43,7 @@ class Gitignore extends Store {
    * @example
    * gitignore.end(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +end = async ({
     useReact,

@@ -47,9 +47,9 @@ let graphql: graphqlType | DefaultGraphql;
  * @example
  * run(context)
  *
- * @param {serverContext} context - server context
+ * @param {serverContextType} context - server context
  *
- * @return {Koa} - koa server
+ * @return {object} - http server
  */
 const run = async (context: serverContextType): Promise<http$Server> => {
   context.dev = context.dev || true;

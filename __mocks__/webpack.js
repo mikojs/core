@@ -10,7 +10,7 @@ class Webpack {
    * @example
    * webpack.main({}, () => {})
    *
-   * @param {config} config - webpack config
+   * @param {object} config - webpack config
    * @param {Function} callback - trigger callback after rendering
    */
   +main = (config: {||}, callback: (err: ?Error, stats: {}) => {}) => {

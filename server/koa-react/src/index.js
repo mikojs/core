@@ -70,7 +70,7 @@ export default class React {
    * new React('folder path')
    *
    * @param {string} folderPath - folder path
-   * @param {options} options - koa-react options
+   * @param {optionsType} options - koa-react options
    */
   constructor(
     folderPath: string,
@@ -171,7 +171,7 @@ export default class React {
    * @example
    * await react.buildStatic(options)
    *
-   * @param {options} options - build static options
+   * @param {buildStaticOptionsType} options - build static options
    */
   +buildStatic = async (options?: buildStaticOptionsType) => {
     const { data, urls, urlsFilePath } = this.store;

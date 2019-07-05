@@ -14,9 +14,9 @@ export default class Component extends React.PureComponent<propsType> {
    * @example
    * Component.getInitialProps(context)
    *
-   * @param {context} context - context data
+   * @param {ctxType} context - context data
    *
-   * @return {initialProps} - initial props
+   * @return {propsType} - initial props
    */
   static getInitialProps = ({ ctx }: ctxType<>) => ({
     path: ctx.path,

@@ -33,7 +33,7 @@ class Server extends Store {
    * @example
    * server.start(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     await this.checkServer();

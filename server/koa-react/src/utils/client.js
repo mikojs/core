@@ -27,7 +27,7 @@ setConfig({
  *
  * @param {Array} routesData - routes data
  *
- * @return {Component} - page component
+ * @return {ComponentType} - page component
  */
 const render = async (
   routesData: $PropertyType<rootPropsType, 'routesData'>,

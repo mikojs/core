@@ -11,7 +11,7 @@ const debugLog = debug('react:buildJs');
  * @example
  * buildJs(config)
  *
- * @param {config} config - koa webpack config
+ * @param {configType} config - koa webpack config
  *
  * @return {{ string: string }} - js filenames which are build from webpack
  */

@@ -22,7 +22,7 @@ const debugLog = debug('configs:config');
  * @param {string} cliName - cli name
  * @param {string} filePath - file path
  *
- * @return {config} - cli config
+ * @return {object} - cli config
  */
 export default (cliName: string, filePath: string): {} => {
   debugLog(`cliName: ${cliName}`);

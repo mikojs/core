@@ -12,9 +12,9 @@ import Graphql, { type optionsType } from '../../index';
  * @example
  * runServer(options)
  *
- * @param {options} options - @cat-org/koa-graphql options
+ * @param {optionsType} options - @cat-org/koa-graphql options
  *
- * @return {{ server: httpServer, request: Function }} - server and request
+ * @return {Promise<{ server: object, request: Function }>} - server and request function
  */
 export default async (
   options?: optionsType,

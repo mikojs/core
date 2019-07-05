@@ -39,7 +39,7 @@ export class Worker {
    * @example
    * worker.init()
    *
-   * @return {Promise} - a server or null
+   * @return {Promise<net.Server>} - a server or null
    */
   +init = async (): Promise<net.Server | null> => {
     this.server = await new Promise(resolve => {
@@ -67,9 +67,9 @@ export class Worker {
    * @example
    * worker.writeCache({})
    *
-   * @param {string} data - cache
+   * @param {cacheType} data - cache
    *
-   * @return {client | null} - a client socket or null
+   * @return {net.Socket} - a client socket or null
    */
   +writeCache = (data: cacheType): ?net.Socket => {
     const { filePath, pid, using } = data;

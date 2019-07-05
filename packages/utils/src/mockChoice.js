@@ -7,7 +7,7 @@
  * @param {boolean} result - determine to use which one
  * @param {Function} funcOne - use when result is true
  * @param {Function} funcTwo - use when result is false
- * @param {args} args - arguments to give the function
+ * @param {Array} args - arguments to give the function
  *
  * @return {any} result of running function
  */

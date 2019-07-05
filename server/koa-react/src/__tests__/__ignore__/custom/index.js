@@ -13,7 +13,7 @@ export default class Home extends React.PureComponent<propsType> {
    * @example
    * Home.getInitialProps()
    *
-   * @return {initialProps} - initial props
+   * @return {propsType} - initial props
    */
   static getInitialProps = () => ({
     test: 'value',

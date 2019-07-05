@@ -19,9 +19,9 @@ const debugLog = debug('react:buildStatic');
  * @example
  * buildStatic(data, '/commons-url', options)
  *
- * @param {data} data - routes data
+ * @param {dataType} data - routes data
  * @param {string} commonsUrl - commons url
- * @param {{ baseUrl: string, folderPath: string }} options - options
+ * @param {optionsType} options - build static options
  */
 export default async (
   { routesData }: dataType,

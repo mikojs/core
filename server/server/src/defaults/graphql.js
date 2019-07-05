@@ -11,7 +11,7 @@ export default class Graphql {
    * new DefaultGraphql('folder path')
    *
    * @param {string} foldePath - folder path
-   * @param {options} options - koa-graphql options
+   * @param {object} options - koa-graphql options
    */
   constructor(foldePath: string, options?: {}) {}
 

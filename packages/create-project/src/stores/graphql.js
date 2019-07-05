@@ -59,7 +59,7 @@ class Graphql extends Store {
    * @example
    * graphql.start(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     const { useServer } = ctx;
@@ -75,7 +75,7 @@ class Graphql extends Store {
    * @example
    * graphql.end(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
     if (!this.storeUseGraphql) return;

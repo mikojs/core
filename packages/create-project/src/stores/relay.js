@@ -201,9 +201,9 @@ export default class Main extends React.PureComponent<propsType> {
    * @example
    * Main.getInitialProps(ctx)
    *
-   * @param {ctx} ctx - context from @cat-org/koa-react
+   * @param {mainCtxType} ctx - context from @cat-org/koa-react
    *
-   * @return {initialProps} - initial props
+   * @return {propsType} - initial props
    */
   static getInitialProps = async ({
     Component: { query },

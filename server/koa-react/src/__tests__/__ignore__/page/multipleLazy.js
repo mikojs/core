@@ -4,8 +4,7 @@ import React, { type Node as NodeType } from 'react';
 
 import { lazy } from '../../../ReactIsomorphic';
 
-// TODO component should be ignored
-// eslint-disable-next-line jsdoc/require-jsdoc
+/** @react lazy component two */
 const TestTwoComponent = () => 'multiple lazy';
 const TestTwo = lazy(
   async () => ({
@@ -14,8 +13,7 @@ const TestTwo = lazy(
   'test-lazy-2',
 );
 
-// TODO component should be ignored
-// eslint-disable-next-line jsdoc/require-jsdoc
+/** @react lazy component one */
 const TestOneComponent = () => <TestTwo />;
 const TestOne = lazy(
   async () => ({
@@ -26,8 +24,7 @@ const TestOne = lazy(
 
 /** MultipleLazy Component */
 export default class MultipleLazy extends React.PureComponent<*> {
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   render(): NodeType {
     return <TestOne />;
   }

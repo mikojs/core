@@ -3,8 +3,7 @@
 import React, { type Node as NodeType } from 'react';
 import { type Helmet as HelmetType } from 'react-helmet';
 
-// TODO: component should be ignored
-// eslint-disable-next-line jsdoc/require-jsdoc
+/** @react render the html */
 export default ({
   helmet,
   children,

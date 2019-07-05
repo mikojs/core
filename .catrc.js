@@ -77,15 +77,6 @@ const lint = {
         ],
         rules: {
           'import/no-extraneous-dependencies': 'off',
-          // TODO: component should be ignore
-          'jsdoc/require-jsdoc': 'off',
-        },
-      },
-      {
-        files: ['packages/website/**', 'packages/website/**/.templates/**'],
-        rules: {
-          // TODO: component should be ignore
-          'jsdoc/require-jsdoc': 'off',
         },
       },
     ],

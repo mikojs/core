@@ -6,8 +6,7 @@ import { mount } from 'enzyme';
 import client from '../client';
 import { type propsType as rootPropsType } from '../Root';
 
-// TODO component should be ignored
-// eslint-disable-next-line jsdoc/require-jsdoc
+/** @react test router page Component */
 const routePage = () => <div>test</div>;
 const routeData = {
   exact: true,

@@ -16,11 +16,6 @@ type configType = {
   plugins?: $ReadOnlyArray<string>,
   settings?: {
     [string]: {},
-    jsdoc?: {
-      additionalTagNames: {
-        customTags: $ReadOnlyArray<string>,
-      },
-    },
   },
   rules?: {
     [string]:

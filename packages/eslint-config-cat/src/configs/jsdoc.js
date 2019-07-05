@@ -12,9 +12,6 @@ export default {
       tagNamePreference: {
         returns: 'return',
       },
-      additionalTagNames: {
-        customTags: ['flow', 'jest-environment'],
-      },
     },
   },
   rules: {

@@ -9,10 +9,18 @@ export default {
     'eslint-watch',
   ],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
-    extends: [
-      '@cat-org/cat',
-      ...(!configsEnv.includes('relay') ? [] : ['@cat-org/cat/relay']),
-    ],
+    extends: '@cat-org/cat',
+    settings: {
+      jsdoc: {
+        additionalTagNames: {
+          customTags: [
+            'flow',
+            'jest-environment',
+            ...(!configsEnv.includes('relay') ? [] : ['relayHash']),
+          ],
+        },
+      },
+    },
   }),
   ignore: () => [
     // node

@@ -20,6 +20,6 @@ yarn add @cat-org/eslint-config-cat
 
 ```js
 ...
-  extends: ['@cat-org/eslint-config-cat'],
+  extends: '@cat-org/cat',
 ...
 ```

@@ -19,8 +19,7 @@ export default class Home extends React.PureComponent<propsType> {
     test: 'value',
   });
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   render(): NodeType {
     const { value, test } = this.props;
 

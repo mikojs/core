@@ -27,8 +27,7 @@ export default class Main extends React.PureComponent<propsType> {
     pageProps,
   });
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   render(): NodeType {
     const { value, name, pageProps, children } = this.props;
 

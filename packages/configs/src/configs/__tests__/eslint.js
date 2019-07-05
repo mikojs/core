@@ -4,22 +4,27 @@ import eslint from '../eslint';
 
 describe('eslint', () => {
   test.each`
-    configsEnv   | expected
-    ${[]}        | ${['flow', 'jest-environment']}
-    ${['relay']} | ${['flow', 'jest-environment', 'relayHash']}
+    configsEnv   | extendConfig              | customTags
+    ${[]}        | ${[]}                     | ${['flow', 'jest-environment']}
+    ${['react']} | ${['@cat-org/cat/react']} | ${['flow', 'jest-environment', 'react']}
+    ${['relay']} | ${[]}                     | ${['flow', 'jest-environment', 'relayHash']}
   `(
     'run with configsEnv = $configsEnv',
     ({
       configsEnv,
-      expected,
+      extendConfig,
+      customTags,
     }: {|
       configsEnv: $ReadOnlyArray<string>,
-      expected: $ReadOnlyArray<string>,
+      extendConfig: $ReadOnlyArray<string>,
+      customTags: $ReadOnlyArray<string>,
     |}) => {
-      expect(
-        eslint.config({ configsEnv }).settings.jsdoc.additionalTagNames
-          .customTags,
-      ).toEqual(expected);
+      const config = eslint.config({ configsEnv });
+
+      expect(config.extends).toEqual(['@cat-org/cat', ...extendConfig]);
+      expect(config.settings.jsdoc.additionalTagNames.customTags).toEqual(
+        customTags,
+      );
     },
   );
 });

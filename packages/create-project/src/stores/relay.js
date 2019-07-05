@@ -195,7 +195,16 @@ type propsType = {|
   children: <P>(props: P) => NodeType,
 |};
 
+/** control the all page Components */
 export default class Main extends React.PureComponent<propsType> {
+  /**
+   * @example
+   * Main.getInitialProps(ctx)
+   *
+   * @param {ctx} ctx - context from @cat-org/koa-react
+   *
+   * @return {initialProps} - initial props
+   */
   static getInitialProps = async ({
     Component: { query },
     pageProps: { variables },
@@ -228,6 +237,7 @@ export default class Main extends React.PureComponent<propsType> {
     };
   };
 
+  /** @react */
   render(): NodeType {
     const { variables = {}, relayData, Component, children } = this.props;
     const environment = createEnvironment(
@@ -260,6 +270,7 @@ const pageTemplate = `// @flow
 import React, { type Node as NodeType } from 'react';
 import { graphql } from 'react-relay';
 
+/** render the home page */
 export default class Home extends React.PureComponent<{| version: string |}> {
   static query = graphql\`
     query pages_homeQuery {
@@ -267,6 +278,7 @@ export default class Home extends React.PureComponent<{| version: string |}> {
     }
   \`;
 
+  /** @react */
   render(): NodeType {
     return <div>{JSON.stringify(this.props)}</div>;
   }

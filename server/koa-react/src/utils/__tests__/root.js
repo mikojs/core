@@ -13,8 +13,7 @@ import ErrorComponent from 'templates/Error';
 
 describe('root', () => {
   test('catch error', () => {
-    // TODO component should be ignored
-    // eslint-disable-next-line jsdoc/require-jsdoc
+    /** @react default Component */
     const Component = () => <div>render</div>;
 
     Root.preload({

@@ -7,7 +7,7 @@ import { type ctxType } from '../types';
 
 import * as styles from './styles/notFound';
 
-/** NotFound Component to render the not found page */
+/** render the not found page */
 export default class NotFound extends React.PureComponent<*> {
   /**
    * @example
@@ -33,8 +33,7 @@ export default class NotFound extends React.PureComponent<*> {
     };
   };
 
-  // TODO component should be ignored
-  // eslint-disable-next-line jsdoc/require-jsdoc
+  /** @react */
   render(): NodeType {
     return (
       <div style={styles.root}>

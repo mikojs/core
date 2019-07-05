@@ -25,7 +25,16 @@ type propsType = {|
   children: <P>(props: P) => NodeType,
 |};
 
+/** control the all page Components */
 export default class Main extends React.PureComponent<propsType> {
+  /**
+   * @example
+   * Main.getInitialProps(ctx)
+   *
+   * @param {ctx} ctx - context from @cat-org/koa-react
+   *
+   * @return {initialProps} - initial props
+   */
   static getInitialProps = async ({
     Component: { query },
     pageProps: { variables },
@@ -58,6 +67,7 @@ export default class Main extends React.PureComponent<propsType> {
     };
   };
 
+  /** @react */
   render(): NodeType {
     const { variables = {}, relayData, Component, children } = this.props;
     const environment = createEnvironment(

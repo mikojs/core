@@ -5,8 +5,8 @@ import eslint from '../eslint';
 describe('eslint', () => {
   test.each`
     configsEnv   | expected
-    ${[]}        | ${'@cat-org/cat'}
-    ${['relay']} | ${'@cat-org/cat/relay'}
+    ${[]}        | ${['flow', 'jest-environment']}
+    ${['relay']} | ${['flow', 'jest-environment', 'relayHash']}
   `(
     'run with configsEnv = $configsEnv',
     ({
@@ -16,7 +16,10 @@ describe('eslint', () => {
       configsEnv: $ReadOnlyArray<string>,
       expected: $ReadOnlyArray<string>,
     |}) => {
-      expect(eslint.config({ configsEnv }).extends).toEqual(expected);
+      expect(
+        eslint.config({ configsEnv }).settings.jsdoc.additionalTagNames
+          .customTags,
+      ).toEqual(expected);
     },
   );
 });

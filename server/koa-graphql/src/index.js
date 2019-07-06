@@ -2,15 +2,13 @@
 
 import path from 'path';
 
+import { type Context as koaContextType } from 'koa';
 import { printSchema, type GraphQLSchema as GraphQLSchemaType } from 'graphql';
 import {
   makeExecutableSchema,
   addResolveFunctionsToSchema,
   type makeExecutableSchemaOptionsType,
 } from 'graphql-tools';
-import graphql, {
-  type OptionsData as koaGraphqlOptionsType,
-} from 'koa-graphql';
 import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
@@ -19,6 +17,10 @@ import debug from 'debug';
 
 import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
+
+import graphql, {
+  type OptionsData as koaGraphqlOptionsType,
+} from 'express-graphql';
 
 type buildSchemasType = {
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
@@ -160,9 +162,18 @@ export default class Graphql {
    *
    * @return {Function} - koa-graphql middleware
    */
-  +middleware = (options?: $Diff<koaGraphqlOptionsType, { schema: mixed }>) =>
-    graphql({
+  +middleware = (
+    options?: $Diff<koaGraphqlOptionsType, { schema: mixed }>,
+  ) => async (ctx: koaContextType, next: () => Promise<void>) => {
+    await graphql({
       ...options,
       schema: this.schema,
-    });
+    })(
+      // $FlowFixMe remove after express-graphql publish
+      ctx.req,
+      // $FlowFixMe remove after express-graphql publish
+      ctx.res,
+    );
+    await next();
+  };
 }

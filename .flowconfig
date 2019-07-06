@@ -1,9 +1,6 @@
 [ignore]
 # ignore for @cat-org/eslint-config-cat
 <PROJECT_ROOT>/packages/eslint-config-cat/src/__tests__/__ignore__
-# TODO: remove, fix koa-graphql type error
-# https://github.com/chentsulin/koa-graphql/issues/120
-<PROJECT_ROOT>/node_modules/koa-graphql
 
 [include]
 

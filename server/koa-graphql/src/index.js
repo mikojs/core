@@ -21,7 +21,7 @@ import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
 import graphql, {
-  type OptionsData as koaGraphqlOptionsType,
+  type OptionsData as expressGraphqlOptionsType,
 } from 'express-graphql';
 
 type buildSchemasType = {
@@ -160,11 +160,13 @@ export default class Graphql {
    * @example
    * graphql.middleware()
    *
-   * @param {koaGraphqlOptionsType} options - koa graphql options
+   * @param {expressGraphqlOptionsType} options - koa graphql options
    *
    * @return {Function} - koa-graphql middleware
    */
-  +middleware = (options?: $Diff<koaGraphqlOptionsType, { schema: mixed }>) =>
+  +middleware = (
+    options?: $Diff<expressGraphqlOptionsType, { schema: mixed }>,
+  ) =>
     compose([
       bodyparser(),
       async (ctx: koaContextType, next: () => Promise<void>) => {

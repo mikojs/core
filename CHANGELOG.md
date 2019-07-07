@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 1.3.2 (2019-07-07)
+
+#### :boom: Breaking Change
+
+- `configs`, `eslint-config-cat`
+  - [#321](https://github.com/cat-org/core/pull/321) (@cat-org/koa-graphql) Copy express graphql ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `configs`, `eslint-config-cat`
+  - [#321](https://github.com/cat-org/core/pull/321) (@cat-org/koa-graphql) Copy express graphql ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `create-project`
+  - [#322](https://github.com/cat-org/core/pull/322) (@cat-org/create-project) Use lint-staged to check project ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.3.1 (2019-07-05)
 
 #### :rocket: New Feature

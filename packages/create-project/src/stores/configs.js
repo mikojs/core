@@ -22,10 +22,11 @@ class Configs extends Store {
    * @example
    * configs.end(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +end = async ({
     lerna,
+    useServer,
     useReact,
     useGraphql,
     useStyles,
@@ -37,8 +38,7 @@ class Configs extends Store {
       ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
         (configName: string) => `yarn configs --install ${configName}`,
       ),
-      // for @cat-org/jest/lib/react
-      ...(!useReact ? [] : ['yarn add --dev enzyme-adapter-react-16']),
+      ...(!useServer ? [] : ['yarn configs --install server']),
     );
 
     const configsEnv = [];

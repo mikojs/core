@@ -2,23 +2,27 @@
 
 import path from 'path';
 
+import { type Context as koaContextType } from 'koa';
 import { printSchema, type GraphQLSchema as GraphQLSchemaType } from 'graphql';
 import {
   makeExecutableSchema,
   addResolveFunctionsToSchema,
   type makeExecutableSchemaOptionsType,
 } from 'graphql-tools';
-import graphql, {
-  type OptionsData as koaGraphqlOptionsType,
-} from 'koa-graphql';
 import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
 import chokidar from 'chokidar';
+import compose from 'koa-compose';
+import bodyparser from 'koa-bodyparser';
 import debug from 'debug';
 
-import { d3DirTree } from '@cat-org/utils';
+import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
+
+import graphql, {
+  type OptionsData as expressGraphqlOptionsType,
+} from 'express-graphql';
 
 type buildSchemasType = {
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
@@ -41,7 +45,7 @@ export default class Graphql {
    * new Graphql('folder path')
    *
    * @param {string} folderPath - folder path
-   * @param {options} options - make executable schema options
+   * @param {optionsType} options - make executable schema options
    */
   constructor(
     folderPath: string,
@@ -61,8 +65,9 @@ export default class Graphql {
           result: buildSchemasType,
           { data: { path: filePath } }: d3DirTreeNodeType,
         ): buildSchemasType => {
-          const { typeDefs: newTypeDefs, ...newResolvers } =
-            require(filePath).default || require(filePath);
+          const { typeDefs: newTypeDefs, ...newResolvers } = requireModule(
+            filePath,
+          );
 
           return {
             typeDefs: [...result.typeDefs, newTypeDefs],
@@ -103,7 +108,7 @@ export default class Graphql {
         .on('change', (filePath: string) => {
           if (!/\.jsx?$/.test(filePath)) return;
 
-          const newResolvers = require(filePath).default || require(filePath);
+          const newResolvers = requireModule(filePath);
 
           delete newResolvers.typeDefs;
 
@@ -155,13 +160,28 @@ export default class Graphql {
    * @example
    * graphql.middleware()
    *
-   * @param {options} options - koa graphql options
+   * @param {expressGraphqlOptionsType} options - koa graphql options
    *
    * @return {Function} - koa-graphql middleware
    */
-  +middleware = (options?: $Diff<koaGraphqlOptionsType, { schema: mixed }>) =>
-    graphql({
-      ...options,
-      schema: this.schema,
-    });
+  +middleware = (
+    options?: $Diff<expressGraphqlOptionsType, { schema: mixed }>,
+  ) =>
+    compose([
+      bodyparser(),
+      async (ctx: koaContextType, next: () => Promise<void>) => {
+        // $FlowFixMe remove after express-graphql publish
+        ctx.req.body = ctx.request.body;
+
+        await graphql({
+          ...options,
+          schema: this.schema,
+        })(
+          // $FlowFixMe remove after express-graphql publish
+          ctx.req,
+          // $FlowFixMe remove after express-graphql publish
+          ctx.res,
+        );
+      },
+    ]);
 }

@@ -33,7 +33,7 @@ type stateType = {|
   errorInfo: ?$PropertyType<errorPropsType, 'errorInfo'>,
 |};
 
-type storeType = {
+export type storeType = {
   originalUrl: string,
   chunkName: string,
   initialProps: {|
@@ -51,9 +51,9 @@ const store: storeType = {};
  * getPage(routsData, ctx)
  *
  * @param {Array} routesData - routes data
- * @param {componentContext} Context - getInitialProps context
+ * @param {{ location: object, staticContext: koaContextType }} Context - getInitialProps context
  *
- * @return {Component} - page component
+ * @return {ComponentType} - page component
  */
 const getPage = (
   routesData: $PropertyType<propsType, 'routesData'>,
@@ -92,15 +92,14 @@ const getPage = (
      * @example
      * lazyPage()
      *
-     * @return {Page} - return Page
+     * @return {ComponentType} - return Page
      */
     const lazyPage = async (): $Call<lazyComponentType> => {
       const { default: Component } = await loader();
       const { head, ...initialProps } =
         // $FlowFixMe Flow does not yet support method or property calls in optional chains.
         (await Component.getInitialProps?.(ctx)) || {};
-      // TODO component should be ignored
-      // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+      /** @react render the page */
       const Page = <-P: {}>(props?: P) => (
         <Component {...props} {...initialProps} />
       );
@@ -125,9 +124,16 @@ const getPage = (
   return store.Page;
 };
 
-// TODO component should be ignored
-/* eslint-disable require-jsdoc */
+/** control the all page Components */
 export default class Root extends React.PureComponent<propsType, stateType> {
+  /**
+   * @example
+   * Root.preload({})
+   *
+   * @param {store} prevStore - prev store
+   *
+   * @return {store} - new store
+   */
   static preload = (prevStore?: storeType = store): storeType => {
     Object.keys(prevStore).forEach((key: string) => {
       store[key] = prevStore[key];
@@ -143,6 +149,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     errorInfo: null,
   };
 
+  /** @react */
   componentDidCatch(
     error: $PropertyType<stateType, 'error'>,
     errorInfo: $PropertyType<stateType, 'errorInfo'>,
@@ -150,6 +157,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     this.setState({ error, errorInfo });
   }
 
+  /** @react */
   render(): NodeType {
     const { Main, Loading, Error, routesData, mainInitialProps } = this.props;
     const { error, errorInfo } = this.state;

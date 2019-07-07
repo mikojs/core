@@ -2,7 +2,7 @@
 
 /* eslint-disable flowtype/require-return-type */
 /* eslint-disable flowtype/require-parameter-type */
-/* eslint-disable require-jsdoc */
+/* eslint-disable jsdoc/require-jsdoc */
 
 const babel = config => {
   if (!config.plugins) config.plugins = [];
@@ -10,12 +10,6 @@ const babel = config => {
   if (!config.overrides) config.overrides = [];
 
   config.plugins.push(
-    [
-      '@babel/proposal-class-properties',
-      {
-        loose: true,
-      },
-    ],
     [
       '@babel/transform-runtime',
       {
@@ -83,15 +77,6 @@ const lint = {
         ],
         rules: {
           'import/no-extraneous-dependencies': 'off',
-          // TODO: component should be ignore
-          'require-jsdoc': 'off',
-        },
-      },
-      {
-        files: ['packages/website/**', 'packages/website/**/.templates/**'],
-        rules: {
-          // TODO: component should be ignore
-          'require-jsdoc': 'off',
         },
       },
     ],
@@ -106,7 +91,11 @@ const lint = {
 const jest = {
   config: ({ collectCoverageFrom, ...config }) => ({
     ...config,
-    collectCoverageFrom: [...collectCoverageFrom, '!**/packages/jest/**'],
+    collectCoverageFrom: [
+      ...collectCoverageFrom,
+      '!**/packages/jest/**',
+      '!**/express-graphql/**',
+    ],
   }),
   configFiles: {
     lint: true,
@@ -133,6 +122,12 @@ module.exports = (() => {
           {
             root: ['./src'],
             cwd: 'packagejson',
+          },
+        ],
+        [
+          '@babel/proposal-class-properties',
+          {
+            loose: true,
           },
         ],
       ],

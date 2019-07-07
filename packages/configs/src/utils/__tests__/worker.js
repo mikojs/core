@@ -23,9 +23,9 @@ let server: ServerType;
  * @example
  * writeCache({});
  *
- * @param {cacheData} cacheData - cache data to write
+ * @param {cacheType} cacheData - cache data to write
  *
- * @return {void} - not return
+ * @return {Promise<>} - not return anything
  */
 const writeCache = (cacheData: cacheType) =>
   new Promise(resolve => {

@@ -47,68 +47,74 @@ let graphql: graphqlType | DefaultGraphql;
  * @example
  * run(context)
  *
- * @param {serverContext} context - server context
+ * @param {serverContextType} context - server context
  *
- * @return {Koa} - koa server
+ * @return {object} - http server
  */
-const run = async (context: serverContextType) =>
-  (await server.init(context))
-  |> (await server.event(async () => {
-    react = new (loadModule('@cat-org/koa-react', DefaultReact))(
-      path.resolve(context.dir, './pages'),
-      { dev: context.dev, exclude: /__generated__/ }
-        |> ((options: {}) =>
-          loadModule(
-            '@cat-org/use-css',
-            emptyFunction.thatReturnsArgument,
-            options,
-          ))
-        |> ((options: {}) =>
-          loadModule(
-            '@cat-org/use-less',
-            emptyFunction.thatReturnsArgument,
-            options,
-          )),
-    );
-    graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
-      path.resolve(context.dir, './graphql'),
-      { dev: context.dev },
-    );
+const run = async (context: serverContextType): Promise<http$Server> => {
+  context.dev = context.dev || true;
+  context.watch = context.watch || false;
 
-    if (process.env.NODE_ENV !== 'test') {
-      const {
-        skipServer = false,
-        skipBuild = false,
-        skipRelay = false,
-      } = program.parse([...process.argv]);
+  return (
+    (await server.init(context))
+    |> (await server.event(async () => {
+      react = new (loadModule('@cat-org/koa-react', DefaultReact))(
+        path.resolve(context.dir, './pages'),
+        { dev: context.dev, exclude: /__generated__/ }
+          |> ((options: {}) =>
+            loadModule(
+              '@cat-org/use-css',
+              emptyFunction.thatReturnsArgument,
+              options,
+            ))
+          |> ((options: {}) =>
+            loadModule(
+              '@cat-org/use-less',
+              emptyFunction.thatReturnsArgument,
+              options,
+            )),
+      );
+      graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
+        path.resolve(context.dir, './graphql'),
+        { dev: context.dev && context.watch },
+      );
 
-      if (!skipRelay) {
-        await graphql.relay(['--src', context.src]);
+      if (process.env.NODE_ENV !== 'test') {
+        const {
+          skipServer = false,
+          skipBuild = false,
+          skipRelay = false,
+        } = program.parse([...process.argv]);
 
-        if (context.dev && context.watch)
-          graphql.relay(['--src', context.src, '--watch']);
+        if (!skipRelay) {
+          await graphql.relay(['--src', context.src]);
+
+          if (context.dev && context.watch)
+            graphql.relay(['--src', context.src, '--watch']);
+        }
+
+        if (!skipBuild && !context.dev) await react.buildJs();
+
+        if (skipServer) process.exit(0);
       }
-
-      if (!skipBuild && !context.dev) await react.buildJs();
-
-      if (skipServer) process.exit(0);
-    }
-  }))
-  |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
-  |> (undefined
-    |> server.start
-    |> ('/graphql'
-      |> server.all
-      |> server.use(
-        graphql.middleware({
-          graphiql: context.dev,
-          pretty: context.dev,
-        }),
-      )
+    }))
+    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
+    |> (undefined
+      |> server.start
+      |> ('/graphql'
+        |> server.all
+        |> server.use(
+          graphql.middleware({
+            graphiql: context.dev,
+            pretty: context.dev,
+          }),
+        )
+        |> server.end)
       |> server.end)
-    |> server.end)
-  |> server.use(await react.middleware())
-  |> server.run;
+    |> server.use(await react.middleware())
+    |> server.run
+  );
+};
 
 (async () => {
   if (module.parent) return;

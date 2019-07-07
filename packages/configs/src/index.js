@@ -15,6 +15,15 @@ import worker from 'utils/worker';
 
 const debugLog = debug('configs:config');
 
+/**
+ * @example
+ * config('cli', '/file-path')
+ *
+ * @param {string} cliName - cli name
+ * @param {string} filePath - file path
+ *
+ * @return {object} - cli config
+ */
 export default (cliName: string, filePath: string): {} => {
   debugLog(`cliName: ${cliName}`);
   debugLog(`filePath: ${filePath}`);

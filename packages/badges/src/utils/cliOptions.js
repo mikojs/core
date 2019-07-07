@@ -10,6 +10,14 @@ import logger from './logger';
 
 const debugLog = debug('badges:cliOptions');
 
+/**
+ * @example
+ * cliOptions([])
+ *
+ * @param {Array} argv - command line
+ *
+ * @return {Array<string>} - cli options
+ */
 export default (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
   const program = new commander.Command('badges')
     .version(version, '-v, --version')

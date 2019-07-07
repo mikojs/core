@@ -15,7 +15,7 @@ class Execa {
    * @param {string} cmd - command name
    * @param {Array} args - command argument
    *
-   * @return {Promise} - command result
+   * @return {Promise<{ stdout: string }>} - command result
    */
   +main = (
     cmd: string,

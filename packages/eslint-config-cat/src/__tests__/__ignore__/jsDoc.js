@@ -9,6 +9,16 @@
  */
 const correctFunction = (argu: string) => 10;
 
+// $expectError jsdoc/no-undefined-types
+/**
+ * @example
+ * undefinedTypes('test');
+ *
+ * @param {UndefinedTypes} argu - example argu
+ * @return {10} - example return
+ */
+const undefinedTypes = (argu: string) => 10;
+
 // $expectError jsdoc/newline-after-description
 // $expectError jsdoc/require-example
 /**
@@ -22,25 +32,32 @@ const noExample = (argu: string) => 10;
 // $expectError jsdoc/check-tag-names
 /**
  * @example
- * correctFunction('test');
+ * noParams('test');
  *
  * @Param {string} argu - example argu
  * @return {10} - example return
  */
 const noParams = (argu: string) => 10;
 
-// $expectError valid-jsdoc
+// $expectError jsdoc/require-returns
+/**
+ * @example
+ * noReturn('test');
+ *
+ * @param {number} argu - example argu
+ */
+const noReturn = (argu: string) => 10;
+
 // $expectError jsdoc/require-hyphen-before-param-description
 /**
  * @example
- * correctFunction('test');
+ * noHyphen('test');
  *
  * @param {number} argu example argu
  */
-const noReturns = (argu: string) => 10;
+const noHyphen = (argu: string) => {};
 
 // $expectError jsdoc/check-param-names
-// $expectError valid-jsdoc
 /**
  * @example
  * checkParamNames();
@@ -60,7 +77,6 @@ const checkParamNames = (argu: string) => {};
 const checkTypes = (argu: string) => 10;
 
 // $expectError jsdoc/require-param
-// $expectError valid-jsdoc
 // $expectError jsdoc/check-param-names
 // $expectError jsdoc/require-param-description
 // $expectError jsdoc/require-param-name
@@ -74,7 +90,6 @@ const checkTypes = (argu: string) => 10;
  */
 const requireParam = (argu: string) => 10;
 
-// $expectError valid-jsdoc
 // $expectError jsdoc/require-returns-description
 // $expectError jsdoc/require-returns-type
 /**
@@ -86,14 +101,14 @@ const requireParam = (argu: string) => 10;
  */
 const requireReturn = (argu: string) => 10;
 
-// $expectError require-jsdoc
+// $expectError jsdoc/require-jsdoc
 const functionDeclarationRequiredJsDoc = () => 10;
 
-// $expectError require-jsdoc
+// $expectError jsdoc/require-jsdoc
 class classDeclarationRequiredJsDoc {
   test = 'test';
 
-  // $expectError require-jsdoc
+  // $expectError jsdoc/require-jsdoc
   methodDefinitionRequiredJsdoc(): number {
     return 10;
   }
@@ -111,7 +126,7 @@ class classDeclarationRequiredJsDoc {
 }
 
 const testObj = {
-  // $expectError require-jsdoc
+  // $expectError jsdoc/require-jsdoc
   methodDefinitionRequiredJsdoc(): number {
     return 10;
   },

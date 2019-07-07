@@ -19,7 +19,8 @@ export const {
   },
   createEnvironment: (relayData?: SSRCacheType, key: string) => EnvironmentType,
 } = !process.env.BROWSER
-  ? require('./server').default || require('./server')
+  ? /* istanbul ignore next */
+    require('./server').default || require('./server')
   : /* istanbul ignore next */
     require('./client').default || require('./client');`;
 
@@ -194,7 +195,16 @@ type propsType = {|
   children: <P>(props: P) => NodeType,
 |};
 
+/** control the all page Components */
 export default class Main extends React.PureComponent<propsType> {
+  /**
+   * @example
+   * Main.getInitialProps(ctx)
+   *
+   * @param {mainCtxType} ctx - context from @cat-org/koa-react
+   *
+   * @return {propsType} - initial props
+   */
   static getInitialProps = async ({
     Component: { query },
     pageProps: { variables },
@@ -227,6 +237,7 @@ export default class Main extends React.PureComponent<propsType> {
     };
   };
 
+  /** @react */
   render(): NodeType {
     const { variables = {}, relayData, Component, children } = this.props;
     const environment = createEnvironment(
@@ -259,6 +270,7 @@ const pageTemplate = `// @flow
 import React, { type Node as NodeType } from 'react';
 import { graphql } from 'react-relay';
 
+/** render the home page */
 export default class Home extends React.PureComponent<{| version: string |}> {
   static query = graphql\`
     query pages_homeQuery {
@@ -266,6 +278,7 @@ export default class Home extends React.PureComponent<{| version: string |}> {
     }
   \`;
 
+  /** @react */
   render(): NodeType {
     return <div>{JSON.stringify(this.props)}</div>;
   }
@@ -320,7 +333,7 @@ class Relay extends Store {
    * @example
    * relay.end(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +end = async ({
     useReact,
@@ -343,6 +356,7 @@ class Relay extends Store {
 
     await this.execa(
       'yarn add react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
+      'yarn add --dev babel-plugin-relay',
     );
   };
 }

@@ -1,6 +1,4 @@
 // @flow
-/* eslint-disable require-jsdoc */
-// TODO component should be ignored
 
 import React, { type Node as NodeType } from 'react';
 
@@ -13,13 +11,23 @@ type propsType = {|
   children: ({ value: string }) => NodeType,
 |};
 
+/** Main Component */
 export default class Main extends React.PureComponent<propsType> {
+  /**
+   * @example
+   * Main.getInitialProps(context)
+   *
+   * @param {mainCtxType} context - context data
+   *
+   * @return {propsType} - initial props
+   */
   static getInitialProps = ({ Component, pageProps }: mainCtxType<{}>) => ({
     value: 'test data',
     name: Component.name,
     pageProps,
   });
 
+  /** @react */
   render(): NodeType {
     const { value, name, pageProps, children } = this.props;
 

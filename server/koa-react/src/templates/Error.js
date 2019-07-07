@@ -1,6 +1,4 @@
 // @flow
-/* eslint-disable require-jsdoc, flowtype/require-return-type */
-// TODO component should be ignored
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
@@ -9,6 +7,7 @@ import { type errorPropsType } from '../types';
 
 import * as styles from './styles/error';
 
+/** @react render the error page */
 const Error = ({
   error: { message },
   errorInfo: { componentStack },

@@ -99,11 +99,14 @@ describe('eslint', () => {
         switch (ruleName) {
           case 'arrow-parens':
             return !ruleIds.includes('flowtype/require-parameter-type');
+          case 'require-jsdoc':
+            return !ruleIds.includes('jsdoc/require-jsdoc');
           case 'flowtype/no-flow-fix-me-comments':
           case 'flowtype/generic-spacing':
           case 'no-warning-comments':
           case 'no-invalid-this':
           case 'babel/no-invalid-this':
+          case 'valid-jsdoc':
             return false;
           default:
             return true;

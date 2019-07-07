@@ -1,6 +1,4 @@
 // @flow
-/* eslint-disable require-jsdoc */
-// TODO component should be ignored
 
 import React, { type Node as NodeType } from 'react';
 import { Helmet } from 'react-helmet';
@@ -10,7 +8,14 @@ type propsType = {|
   children: NodeType,
 |};
 
+/** render the html */
 export default class Document extends React.PureComponent<propsType> {
+  /**
+   * @example
+   * Document.getInitialProps({ ctx })
+   *
+   * @return {propsType} - initial props
+   */
   static getInitialProps = () => ({
     // Reference: https://github.com/joshbuchea/HEAD
     head: (
@@ -23,6 +28,7 @@ export default class Document extends React.PureComponent<propsType> {
     ),
   });
 
+  /** @react */
   render(): NodeType {
     const { helmet, children } = this.props;
 

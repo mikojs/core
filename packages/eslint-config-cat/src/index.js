@@ -6,14 +6,13 @@ import jsdocConfig from './configs/jsdoc';
 import extendsConfig from './configs/extendsConfigs';
 
 type configType = {
-  extends?: $ReadOnlyArray<string>,
+  extends: $ReadOnlyArray<string>,
   parser?: 'babel-eslint',
   env?: {|
     jest: true,
     node: true,
     browser: true,
   |},
-  plugins?: $ReadOnlyArray<string>,
   settings?: {
     [string]: {},
   },
@@ -40,7 +39,7 @@ const defaultConfig = {
   },
 };
 
-const configs = [
+export default [
   defaultConfig,
   importConfig,
   flowtypeConfig,
@@ -52,10 +51,9 @@ const configs = [
       (config: configType, key: string): configType => {
         switch (key) {
           case 'extends':
-          case 'plugins':
             return {
               ...config,
-              [key]: [...(newConfig[key] || []), ...(otherConfig[key] || [])],
+              [key]: [...newConfig[key], ...otherConfig[key]],
             };
 
           case 'settings':
@@ -75,9 +73,9 @@ const configs = [
             };
         }
       },
-      {},
+      {
+        extends: [],
+      },
     ),
-  ({}: configType),
+  ({ extends: [] }: configType),
 );
-
-export default configs;

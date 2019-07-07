@@ -15,6 +15,14 @@ export type optionsType = {|
 
 const debugLog = debug('react:buildStatic');
 
+/**
+ * @example
+ * buildStatic(data, '/commons-url', options)
+ *
+ * @param {dataType} data - routes data
+ * @param {string} commonsUrl - commons url
+ * @param {optionsType} options - build static options
+ */
 export default async (
   { routesData }: dataType,
   commonsUrl: string,

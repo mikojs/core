@@ -4,6 +4,14 @@ import { emptyFunction } from 'fbjs';
 
 import { type optionsType, type configType } from '@cat-org/koa-react';
 
+/**
+ * @example
+ * useCss({})
+ *
+ * @param {optionsType} config - prev @cat-org/koa-react config
+ *
+ * @return {optionsType} - @cat-org/koa-react config
+ */
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,
   ...options

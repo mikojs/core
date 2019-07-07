@@ -93,7 +93,7 @@ class Jest extends Store {
    * @example
    * jest.end(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +end = async ({
     useReact,
@@ -109,6 +109,9 @@ class Jest extends Store {
     if (lerna) return;
 
     await this.execa('yarn add --dev node-fetch');
+
+    if (useReact)
+      await this.execa('yarn add --dev enzyme enzyme-adapter-react-16');
   };
 }
 

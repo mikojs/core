@@ -2,13 +2,22 @@
 
 import babel from '../babel';
 
+const reactPlugins = [
+  [
+    '@babel/proposal-class-properties',
+    {
+      loose: true,
+    },
+  ],
+];
+
 /**
  * @example
  * cssPlugins('.less')
  *
  * @param {string} extension - file extension
  *
- * @return {plugins} css plugins
+ * @return {Array} css plugins
  */
 const cssPlugins = (extension: string) => [
   [
@@ -47,7 +56,7 @@ describe('babel', () => {
   test.each`
     configsEnv   | presets                              | plugins
     ${[]}        | ${['@cat-org/base']}                 | ${[]}
-    ${['react']} | ${['@cat-org/base', '@babel/react']} | ${[]}
+    ${['react']} | ${['@cat-org/base', '@babel/react']} | ${reactPlugins}
     ${['css']}   | ${['@cat-org/base']}                 | ${cssPlugins('.css')}
     ${['less']}  | ${['@cat-org/base']}                 | ${cssPlugins('.less')}
     ${['relay']} | ${relayPresetBase}                   | ${['relay']}

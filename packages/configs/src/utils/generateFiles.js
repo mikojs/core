@@ -35,7 +35,7 @@ const CONFIG_IGNORE = {
  *
  * @param {string} cliName - cli name
  *
- * @return {configFiles} - configFiles
+ * @return {object} - configFiles object to generate the files
  */
 const findConfigFiles = (cliName: string): {} => {
   const { alias: cli = cliName, configFiles = {} } = configs.store[cliName];
@@ -71,6 +71,12 @@ const findConfigFiles = (cliName: string): {} => {
   );
 };
 
+/**
+ * @example
+ * generateFiles('cli')
+ *
+ * @param {string} cliName - cli name
+ */
 export default (cliName: string) => {
   const configFiles = findConfigFiles(cliName);
   const cache = {

@@ -15,6 +15,14 @@ import configs from './configs';
 
 const debugLog = debug('configs:cliOptions');
 
+/**
+ * @example
+ * cliOptions([])
+ *
+ * @param {Array} argv - command line
+ *
+ * @return {{ cli: string, argv: Array<string>, env: object, cliName: string }} - cli options
+ */
 export default (
   argv: $ReadOnlyArray<string>,
 ): {|

@@ -2,8 +2,20 @@
 
 import debug from 'debug';
 
+import { requireModule } from '@cat-org/utils';
+
 const debugLog = debug('server:loadModule');
 
+/**
+ * @example
+ * loadMoudle('module name', () => {}, 'argu')
+ *
+ * @param {string} moduleName - module name
+ * @param {any} defaultFunc - default function which is used when module is noe found
+ * @param {Array} options - options to give the module or the default function
+ *
+ * @return {any} - module
+ */
 export default <-T>(
   moduleName: string,
   defaultFunc: T,
@@ -12,10 +24,9 @@ export default <-T>(
   debugLog(moduleName, options);
 
   try {
-    if (options.length === 0)
-      return require(moduleName).default || require(moduleName);
+    if (options.length === 0) return requireModule(moduleName);
 
-    return (require(moduleName).default || require(moduleName))(...options);
+    return requireModule(moduleName)(...options);
   } catch (e) {
     debugLog(e);
 

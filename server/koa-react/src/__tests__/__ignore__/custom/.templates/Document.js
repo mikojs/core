@@ -3,6 +3,7 @@
 import React, { type Node as NodeType } from 'react';
 import { type Helmet as HelmetType } from 'react-helmet';
 
+/** @react render the html */
 export default ({
   helmet,
   children,

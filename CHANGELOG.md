@@ -1,5 +1,132 @@
 # CHANGELOG
 
+## 1.3.2 (2019-07-07)
+
+#### :boom: Breaking Change
+
+- `configs`, `eslint-config-cat`
+  - [#321](https://github.com/cat-org/core/pull/321) (@cat-org/koa-graphql) Copy express graphql ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `configs`, `eslint-config-cat`
+  - [#321](https://github.com/cat-org/core/pull/321) (@cat-org/koa-graphql) Copy express graphql ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `create-project`
+  - [#322](https://github.com/cat-org/core/pull/322) (@cat-org/create-project) Use lint-staged to check project ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.3.1 (2019-07-05)
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `logger`, `utils`, `website`
+  - [#320](https://github.com/cat-org/core/pull/320) (@cat-org/eslint-config-cat) Add new rules ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.3.0 (2019-07-05)
+
+#### :rocket: New Feature
+
+- `create-project`
+  - [#319](https://github.com/cat-org/core/pull/319) (@cat-org/create-project) Add lint staged ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `eslint-config-cat`
+  - [#318](https://github.com/cat-org/core/pull/318) (@cat-org/eslint-config-cat) Remove react config ([@HsuTing](https://github.com/HsuTing))
+  - [#314](https://github.com/cat-org/core/pull/314) (@cat-org/eslint-config-cat) Add relay config ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`, `eslint-config-cat`, `website`
+  - [#317](https://github.com/cat-org/core/pull/317) (@cat-org/eslint-config-cat) Fix react jsdoc ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `logger`, `utils`
+  - [#315](https://github.com/cat-org/core/pull/315) (@cat-org/eslint-config-cat) Use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `configs`, `eslint-config-cat`, `utils`
+  - [#316](https://github.com/cat-org/core/pull/316) (@cat-org/core) Revert use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `logger`, `utils`
+  - [#315](https://github.com/cat-org/core/pull/315) (@cat-org/eslint-config-cat) Use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.2.2 (2019-07-03)
+
+#### :bug: Bug Fix
+
+- [#312](https://github.com/cat-org/core/pull/312) (@cat-org/server) Fix koa-graphql options ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.2.1 (2019-07-03)
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-flow-typed-install`, `website`
+  - [#306](https://github.com/cat-org/core/pull/306) (@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `create-project`, `website`
+  - [#310](https://github.com/cat-org/core/pull/310) (@cat-org/koa-react, @cat-org/server) Fix testing ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#307](https://github.com/cat-org/core/pull/307) (@cat-org/koa-react) Fix replace export ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `lerna-flow-typed-install`, `utils`
+  - [#305](https://github.com/cat-org/core/pull/305) (@cat-org/koa-react) Fix koa react server ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`
+  - [#304](https://github.com/cat-org/core/pull/304) (@cat-org/create-project, @cat-org/configs) Fix relay packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :memo: Documentation
+
+- [#309](https://github.com/cat-org/core/pull/309) (@cat-org/kao-react) Modify README ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `eslint-config-cat`
+  - [#308](https://github.com/cat-org/core/pull/308) (@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.2.0 (2019-07-01)
+
+#### :bug: Bug Fix
+
+- `configs`, `jest`
+  - [#303](https://github.com/cat-org/core/pull/303) (@cat-org/configs) Fix server config ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#301](https://github.com/cat-org/core/pull/301) (@cat-org/create-project) Fix flow error ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`
+  - [#300](https://github.com/cat-org/core/pull/300) (@cat-org/create-project) Fix install error ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.1.6 (2019-07-01)
+
+#### :bug: Bug Fix
+
+- `create-project`
+  - [#299](https://github.com/cat-org/core/pull/299) (@cat-org/create-project) Fix install server error ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.1.5 (2019-06-30)
 
 #### :rocket: New Feature

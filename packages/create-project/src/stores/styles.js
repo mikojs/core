@@ -49,7 +49,7 @@ class Styles extends Store {
    * @example
    * styles.start(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     const { useReact } = ctx;
@@ -65,17 +65,18 @@ class Styles extends Store {
    * @example
    * styles.end(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
     if (lerna || !this.storeUseStyles) return;
 
-    this.execa(
-      this.storeUseStyles === 'less'
-        ? 'yarn add @cat-org/use-less'
-        : 'yarn add @cat-org/use-css',
-      'yarn add --dev babel-plugin-css-modules-transform @cat-org/import-css',
+    await this.execa(
+      'yarn add @cat-org/use-css',
+      'yarn add --dev babel-plugin-css-modules-transform @cat-org/babel-plugin-import-css',
     );
+
+    if (this.storeUseStyles === 'less')
+      await this.execa('yarn add @cat-org/use-less');
   };
 }
 

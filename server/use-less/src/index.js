@@ -5,6 +5,14 @@ import { type RuleSetRule as RuleSetRuleType } from 'webpack';
 
 import { type optionsType, type configType } from '@cat-org/koa-react';
 
+/**
+ * @example
+ * useLess({})
+ *
+ * @param {optionsType} config - prev @cat-org/koa-react config
+ *
+ * @return {optionsType} - @cat-org/koa-react config
+ */
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,
   ...options

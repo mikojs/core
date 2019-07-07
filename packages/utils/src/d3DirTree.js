@@ -27,6 +27,15 @@ export type d3DirTreeOptionsType = {|
   extensions?: RegExp,
 |};
 
+/**
+ * @example
+ * d3DirTree('/file-path')
+ *
+ * @param {string} filePath - file path
+ * @param {d3DirTreeOptionsType} options - d3 dir tree options
+ *
+ * @return {d3DirTreeNodeType} - d3 dir tree
+ */
 export default (
   filePath: string,
   options?: d3DirTreeOptionsType,

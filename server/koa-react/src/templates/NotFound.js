@@ -1,6 +1,4 @@
 // @flow
-/* eslint-disable require-jsdoc */
-// TODO component should be ignored
 
 import React, { type Node as NodeType } from 'react';
 import { Helmet } from 'react-helmet';
@@ -9,7 +7,16 @@ import { type ctxType } from '../types';
 
 import * as styles from './styles/notFound';
 
+/** render the not found page */
 export default class NotFound extends React.PureComponent<*> {
+  /**
+   * @example
+   * NotFound.getInitialProps({ ctx })
+   *
+   * @param {ctxType} context - cnotext data
+   *
+   * @return {object} - initial props
+   */
   static getInitialProps = ({
     ctx,
   }: ctxType<{| status: number |}>): {|
@@ -26,6 +33,7 @@ export default class NotFound extends React.PureComponent<*> {
     };
   };
 
+  /** @react */
   render(): NodeType {
     return (
       <div style={styles.root}>

@@ -8,6 +8,15 @@ import { type configType } from 'koa-webpack';
 
 import React from '../../index';
 
+/**
+ * @example
+ * server(true, true)
+ *
+ * @param {boolean} dev - is dev or not
+ * @param {boolean} useStatic - is static or not
+ *
+ * @return {{ domain: string, server: object }} - domain and http server
+ */
 export default async (
   dev: boolean,
   useStatic: boolean,
@@ -26,9 +35,9 @@ export default async (
    * @example
    * configFunc()
    *
-   * @param {config} config - koa react config
+   * @param {configType} config - prev koa react config
    *
-   * @return {config} - koa react config
+   * @return {configType} - koa react config
    */
   const configFunc = ({ config, ...otherConfigs }: configType): configType => {
     if (!dev || useStatic)

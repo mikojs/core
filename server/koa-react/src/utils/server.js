@@ -20,9 +20,11 @@ import multistream from 'multistream';
 import getStream from 'get-stream';
 import { emptyFunction } from 'fbjs';
 
+import { requireModule } from '@cat-org/utils';
+
 import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 
-import Root from './Root';
+import Root, { type storeType } from './Root';
 import { type dataType } from './getData';
 
 const debugLog = debug('react:server');
@@ -31,7 +33,7 @@ const debugLog = debug('react:server');
  * @example
  * initStore()
  *
- * @return {Store} - init store
+ * @return {storeType} - init store
  */
 export const initStore = () =>
   Root.preload({
@@ -49,6 +51,16 @@ export const initStore = () =>
     },
   });
 
+/**
+ * @example
+ * server('/', data, {})
+ *
+ * @param {string} basename - basename to join urls path
+ * @param {dataType} data - routes data
+ * @param {object} urls - urls data
+ *
+ * @return {koaMiddlewareType} - koa middleware
+ */
 export default (
   basename: ?string,
   { routesData, templates }: dataType,
@@ -64,7 +76,7 @@ export default (
       path: routePath,
       component: {
         loader: async () => ({
-          default: require(filePath).default || require(filePath),
+          default: requireModule(filePath),
         }),
         chunkName,
       },
@@ -95,9 +107,9 @@ export default (
     ctx.type = 'text/html';
     ctx.respond = false;
 
-    const Document = require(templates.document);
-    const Main = require(templates.main);
-    const ErrorComponent = require(templates.error);
+    const Document = requireModule(templates.document);
+    const Main = requireModule(templates.main);
+    const ErrorComponent = requireModule(templates.error);
 
     // [start] preload
     // preload Page

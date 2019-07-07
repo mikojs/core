@@ -1,6 +1,4 @@
 // @flow
-/* eslint-disable require-jsdoc */
-// TODO component should be ignored
 
 import React, { type Node as NodeType } from 'react';
 import ReactDOM from 'react-dom';
@@ -10,10 +8,12 @@ import styles from './styles/loading';
 
 type propsType = {};
 
+/** render the loading page */
 export default class Loading extends React.PureComponent<propsType> {
   rootDOM: HTMLElement;
   loadingDOM: HTMLElement;
 
+  /** @react */
   constructor(props: propsType) {
     super(props);
 
@@ -25,14 +25,17 @@ export default class Loading extends React.PureComponent<propsType> {
     this.loadingDOM = document.createElement('div');
   }
 
+  /** @react */
   componentDidMount() {
     this.rootDOM.appendChild(this.loadingDOM);
   }
 
+  /** @react */
   componentWillUnmount() {
     this.rootDOM.removeChild(this.loadingDOM);
   }
 
+  /** @react */
   render(): NodeType {
     return ReactDOM.createPortal(
       <div style={styles}>

@@ -8,6 +8,14 @@ import fetch, { type Response as ResponseType } from 'node-fetch';
 
 import Graphql, { type optionsType } from '../../index';
 
+/**
+ * @example
+ * runServer(options)
+ *
+ * @param {optionsType} options - @cat-org/koa-graphql options
+ *
+ * @return {Promise<{ server: object, request: Function }>} - server and request function
+ */
 export default async (
   options?: optionsType,
 ): Promise<{

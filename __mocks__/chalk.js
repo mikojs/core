@@ -1,5 +1,14 @@
 // @flow
 
+/**
+ * @example
+ * chalk`{red text}`
+ *
+ * @param {Array} texts - string template text array
+ * @param {Array} keys - string template key array
+ *
+ * @return {string} - chalk string
+ */
 export default (
   texts: $ReadOnlyArray<string>,
   ...keys: $ReadOnlyArray<string>

@@ -1,5 +1,9 @@
 // @flow
 
-export default () => async (ctx: {||}, next: () => Promise<void>) => {
-  await next();
+/**
+ * @example
+ * koaWebpack()
+ */
+export default () => {
+  throw new Error('never use');
 };

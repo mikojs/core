@@ -23,6 +23,12 @@ describe('react', () => {
     expect(() => new React('/test')).toThrow('folder can not be found.');
   });
 
+  test('not find urls file path', async () => {
+    react.store.urlsFilePath = null;
+
+    expect(await react.buildStatic()).toBeUndefined();
+  });
+
   test('not find module in buildStatic', async () => {
     react.store.urlsFilePath = path.resolve(
       __dirname,

@@ -19,6 +19,14 @@ export type questionType<T> = {
 export const defaultValidate = (val: string) =>
   val !== '' || 'can not be empty';
 
+/**
+ * @example
+ * normalizedQuestions('project name')
+ *
+ * @param {string} projectName - project name
+ *
+ * @return {Function} - prompt function
+ */
 export default (projectName: string) => <-T>(
   ...questions: $ReadOnlyArray<questionType<T>>
 ) =>

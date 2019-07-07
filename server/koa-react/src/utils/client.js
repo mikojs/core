@@ -27,7 +27,7 @@ setConfig({
  *
  * @param {Array} routesData - routes data
  *
- * @return {Component} - page component
+ * @return {ComponentType} - page component
  */
 const render = async (
   routesData: $PropertyType<rootPropsType, 'routesData'>,
@@ -47,8 +47,7 @@ const render = async (
       throw new Error('Can not find page component');
     })();
   const { default: Component } = await loader();
-  // TODO component should be ignored
-  // eslint-disable-next-line require-jsdoc, flowtype/require-return-type
+  /** @react page Component */
   const Page = <-P>(props: P) => (
     <Component {...props} {...store.initialProps} />
   );

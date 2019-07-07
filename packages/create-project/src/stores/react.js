@@ -13,6 +13,7 @@ const template = `// @flow
 
 import React from 'react';
 
+/** @react render the home page */
 const Home = () => <div>@cat-org/create-project</div>;
 
 export default Home;`;
@@ -48,7 +49,7 @@ class React extends Store {
    * @example
    * react.start(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +start = async (ctx: $PropertyType<Store, 'ctx'>) => {
     const { useServer } = ctx;
@@ -64,7 +65,7 @@ class React extends Store {
    * @example
    * react.end(ctx)
    *
-   * @param {storeContext} ctx - store context
+   * @param {Store.ctx} ctx - store context
    */
   +end = async ({ lerna, useGraphql }: $PropertyType<Store, 'ctx'>) => {
     if (!this.storeUseReact) return;
@@ -78,7 +79,7 @@ class React extends Store {
 
     await this.execa(
       'yarn add react react-dom @cat-org/koa-react',
-      'yarn add --dev @babel/preset-react',
+      'yarn add --dev webpack @babel/preset-react @babel/plugin-proposal-class-properties',
     );
   };
 }

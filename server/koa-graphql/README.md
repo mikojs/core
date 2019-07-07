@@ -10,10 +10,12 @@
 
 Collect the graphql files to build the graphql automatically.
 
+`Warning: This package copies 'express-graphql' which is not published. This can work with the basic usage, and it maybe run fail with the some special conditions.`
+
 ## Install
 
 ```sh
-yarn add koa @cat-org/koa-graphql
+yarn add koa graphql @cat-org/koa-graphql
 ```
 
 ## Use `@cat-org/koa-graphql` to server
@@ -97,7 +99,7 @@ const graphql = new Graphql('./path-to-graphql-foder', {
 });
 ```
 
-#### Give the options to [koa-graphql](https://github.com/chentsulin/koa-graphql)
+#### Give the options to [express-graphql](https://github.com/graphql/express-graphql)
 
 Expect for `schema`, you can add the other options to this middleware.
 

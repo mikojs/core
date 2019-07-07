@@ -37,7 +37,7 @@ const GET_NAME = {
  *
  * @param {string} settingsName - name of settings
  *
- * @return {settings} - settings
+ * @return {settingsType} - settings
  */
 const findSettings = (settingsName: string): ?settingsType => {
   switch (settingsName) {
@@ -50,6 +50,15 @@ const findSettings = (settingsName: string): ?settingsType => {
   }
 };
 
+/**
+ * @example
+ * logger('name')
+ *
+ * @param {string} name - logger name
+ * @param {string | { key: string }} settingsNameOrObj - settings name or settings object
+ *
+ * @return {logsType} - logger
+ */
 export default (
   name: string,
   settingsNameOrObj?: string | settingsType = 'log',

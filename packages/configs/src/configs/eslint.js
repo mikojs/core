@@ -8,8 +8,28 @@ export default {
     'eslint',
     'eslint-watch',
   ],
-  config: () => ({
-    extends: ['@cat-org/eslint-config-cat'],
+  config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
+    extends: '@cat-org/cat',
+    rules: {
+      'jsdoc/check-tag-names': [
+        'error',
+        {
+          definedTags: [
+            'flow',
+            'jest-environment',
+            ...(!configsEnv.includes('react') ? [] : ['react']),
+            ...(!configsEnv.includes('relay') ? [] : ['relayHash']),
+          ],
+        },
+      ],
+      ...(!configsEnv.includes('react')
+        ? {}
+        : {
+            'jsdoc/require-example': ['error', { exemptedBy: ['react'] }],
+            'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
+            'jsdoc/require-returns': ['error', { exemptedBy: ['react'] }],
+          }),
+    },
   }),
   ignore: () => [
     // node

@@ -9,7 +9,7 @@ export default {
     ...install,
     '@babel/cli',
     '@babel/core',
-    '@cat-org/babel-plugin-base',
+    '@cat-org/babel-preset-base',
   ],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
     presets: [
@@ -28,6 +28,16 @@ export default {
       ...(!configsEnv.includes('react') ? [] : ['@babel/react']),
     ],
     plugins: [
+      ...(!configsEnv.includes('react')
+        ? []
+        : [
+            [
+              '@babel/proposal-class-properties',
+              {
+                loose: true,
+              },
+            ],
+          ]),
       ...(!configsEnv.some((env: string) => ['css', 'less'].includes(env))
         ? []
         : [

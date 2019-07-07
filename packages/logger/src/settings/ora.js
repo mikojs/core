@@ -35,7 +35,7 @@ class OraStore {
    * @example
    * oraStore.getFunc();
    *
-   * @return {settings} - settings
+   * @return {settingsType} - settings
    */
   +getFunc = (): settingsType => {
     this.func = {
@@ -93,7 +93,7 @@ class OraStore {
    *
    * @param {string} name - name of logger
    *
-   * @return {logger} - ora object with the function of logger
+   * @return {oraType} - ora object with the function of logger
    */
   +after = (name: string): oraType => {
     const store = { ...this.store };

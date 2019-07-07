@@ -13,9 +13,8 @@ const DEFAULT_GIT_COMMANDS = [
   'yarn flow-typed install',
   'git init',
   'git add .',
-  'yarn configs lint-staged',
-  `git commit -m "chore(root): project init, create-project: v${version}"`,
   'node ./node_modules/husky/husky.js install',
+  `git commit -m "chore(root): project init, create-project: v${version}"`,
 ];
 
 describe('base', () => {

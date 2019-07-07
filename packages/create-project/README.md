@@ -8,7 +8,7 @@
 
 [website]: https://cat-org.github.io/core/create-project
 
-Use to create a new project.
+Use to create a new project. This package supports to use with `babel`, `flow`, `prettier`, `eslint`, and `jest`. This will also use `husky` and `lint-staged` to check the commit.
 
 ## Run command
 

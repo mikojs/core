@@ -68,30 +68,12 @@ add "&raw" to the end of the URL within a browser.
       height: 100vh;
     }
   </style>
-  <style>
-    // graphiql/graphiql.css
-    ${loadFileStaticlyFromNPM('graphiql/graphiql.css')}
-  </style>
-  <script>
-    // promise-polyfill/dist/polyfill.min.js
-    ${loadFileStaticlyFromNPM('promise-polyfill/dist/polyfill.min.js')}
-  </script>
-  <script>
-    // unfetch/dist/unfetch.umd.js
-    ${loadFileStaticlyFromNPM('unfetch/dist/unfetch.umd.js')}
-  </script>
-  <script>
-    // react/umd/react.production.min.js
-    ${loadFileStaticlyFromNPM('react/umd/react.production.min.js')}
-  </script>
-  <script>
-    // react-dom/umd/react-dom.production.min.js
-    ${loadFileStaticlyFromNPM('react-dom/umd/react-dom.production.min.js')}
-  </script>
-  <script>
-    // graphiql/graphiql.min.js
-    ${loadFileStaticlyFromNPM('graphiql/graphiql.min.js')}
-  </script>
+  <link href="//cdn.jsdelivr.net/npm/graphiql@0.8.0/graphiql.css" rel="stylesheet" />
+  <script src="//cdn.jsdelivr.net/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
+  <script src="//cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js"></script>
+  <script src="//cdn.jsdelivr.net/react/15.4.2/react.min.js"></script>
+  <script src="//cdn.jsdelivr.net/react/15.4.2/react-dom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/graphiql@0.8.0/graphiql.min.js"></script>
 </head>
 <body>
   <div id="graphiql">Loading...</div>

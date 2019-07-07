@@ -506,8 +506,8 @@ function canDisplayGraphiQL(request: $Request, params: GraphQLParams): boolean {
  * Helper function for sending a response using only the core Node server APIs.
  */
 function sendResponse(response: $Response, type: string, data: string): void {
-  const chunk = new Buffer(data, 'utf8');
   response.setHeader('Content-Type', type + '; charset=utf-8');
-  response.setHeader('Content-Length', String(chunk.length));
-  response.end(chunk);
+  response.setHeader('Content-Length', String(data.length));
+  response.statusCode = 200;
+  response.end(data);
 }

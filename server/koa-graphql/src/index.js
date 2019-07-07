@@ -13,6 +13,8 @@ import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
 import chokidar from 'chokidar';
+import compose from 'koa-compose';
+import bodyparser from 'koa-bodyparser';
 import debug from 'debug';
 
 import { d3DirTree, requireModule } from '@cat-org/utils';
@@ -162,18 +164,22 @@ export default class Graphql {
    *
    * @return {Function} - koa-graphql middleware
    */
-  +middleware = (
-    options?: $Diff<koaGraphqlOptionsType, { schema: mixed }>,
-  ) => async (ctx: koaContextType, next: () => Promise<void>) => {
-    await graphql({
-      ...options,
-      schema: this.schema,
-    })(
-      // $FlowFixMe remove after express-graphql publish
-      ctx.req,
-      // $FlowFixMe remove after express-graphql publish
-      ctx.res,
-    );
-    await next();
-  };
+  +middleware = (options?: $Diff<koaGraphqlOptionsType, { schema: mixed }>) =>
+    compose([
+      bodyparser(),
+      async (ctx: koaContextType, next: () => Promise<void>) => {
+        // $FlowFixMe remove after express-graphql publish
+        ctx.req.body = ctx.request.body;
+
+        await graphql({
+          ...options,
+          schema: this.schema,
+        })(
+          // $FlowFixMe remove after express-graphql publish
+          ctx.req,
+          // $FlowFixMe remove after express-graphql publish
+          ctx.res,
+        );
+      },
+    ]);
 }

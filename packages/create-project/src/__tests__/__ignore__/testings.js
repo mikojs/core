@@ -72,7 +72,6 @@ const basicUsage = {
     'yarn configs --install babel',
     'yarn configs --install prettier',
     'yarn configs --install lint',
-    'yarn configs --install lint-staged',
     'yarn configs --install jest',
     'yarn add --dev flow-bin flow-typed',
     'yarn flow-typed install',

@@ -16,7 +16,8 @@
     "execa": "^2.0.2",
     "find-cache-dir": "^3.0.0",
     "graphql-tools": "^4.0.5",
-    "koa-graphql": "^0.8.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-compose": "^4.1.0",
     "output-file-sync": "^2.0.1",
     "relay-compiler": "^5.0.0"
   },

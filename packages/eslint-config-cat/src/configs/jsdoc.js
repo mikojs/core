@@ -16,7 +16,12 @@ export default {
   },
   rules: {
     'jsdoc/check-param-names': 'error',
-    'jsdoc/check-tag-names': 'error',
+    'jsdoc/check-tag-names': [
+      'error',
+      {
+        definedTags: ['flow', 'jest-environment'],
+      },
+    ],
     'jsdoc/check-types': 'error',
     'jsdoc/no-undefined-types': 'error',
     'jsdoc/newline-after-description': 'error',

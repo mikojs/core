@@ -10,19 +10,18 @@ export default {
   ],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
     extends: '@cat-org/cat',
-    settings: {
-      jsdoc: {
-        additionalTagNames: {
-          customTags: [
+    rules: {
+      'jsdoc/check-tag-names': [
+        'error',
+        {
+          definedTags: [
             'flow',
             'jest-environment',
             ...(!configsEnv.includes('react') ? [] : ['react']),
             ...(!configsEnv.includes('relay') ? [] : ['relayHash']),
           ],
         },
-      },
-    },
-    rules: {
+      ],
       ...(!configsEnv.includes('react')
         ? {}
         : {

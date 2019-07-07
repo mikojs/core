@@ -76,7 +76,13 @@ const run = async (context: serverContextType): Promise<http$Server> => {
       );
       graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
         path.resolve(context.dir, './graphql'),
-        { dev: context.dev && context.watch },
+        { dev: context.dev && context.watch }
+          |> ((options: {}) =>
+            loadModule(
+              '@cat-org/use-dnd',
+              emptyFunction.thatReturnsArgument,
+              options,
+            )),
       );
 
       if (process.env.NODE_ENV !== 'test') {

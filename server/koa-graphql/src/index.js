@@ -26,10 +26,12 @@ import graphql, {
 
 type buildSchemasType = {
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
-  resolvers: $PropertyType<makeExecutableSchema, 'resolvers'>,
+  resolvers: $PropertyType<makeExecutableSchemaOptionsType, 'resolvers'>,
 };
 
-export type optionsType = buildSchemasType & {
+export type optionsType = {
+  typeDefs?: $PropertyType<buildSchemasType, 'typeDefs'>,
+  resolvers?: $PropertyType<buildSchemasType, 'resolvers'>,
   dev?: boolean,
   options?: makeExecutableSchemaOptionsType,
 };

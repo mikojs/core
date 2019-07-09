@@ -6,7 +6,7 @@ import webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 
-import { type dataType } from './getData';
+import type CacheType from './Cache';
 
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
 const ROOT_PATH = path.resolve(__dirname, './Root.js');
@@ -18,7 +18,7 @@ const ROOT_PATH = path.resolve(__dirname, './Root.js');
  * @param {boolean} dev - is dev or not
  * @param {string} folderPath - folder path
  * @param {string} basename - basename to join url
- * @param {dataType} data - routes data
+ * @param {CacheType} cache - cache data
  * @param {RegExp} exclude - exclude file path
  *
  * @return {object} - webpack config
@@ -27,7 +27,7 @@ export default (
   dev: boolean,
   folderPath: string,
   basename: ?string,
-  { routesData, templates }: dataType,
+  cache: CacheType,
   exclude?: RegExp,
 ) => ({
   mode: dev ? 'development' : 'production',
@@ -64,7 +64,7 @@ export default (
             ? 'commons'
             : `${basename.replace(/^\//, '')}/commons`,
           chunks: 'all',
-          minChunks: routesData.length > 2 ? routesData.length * 0.5 : 2,
+          minChunks: cache.length > 2 ? cache.length * 0.5 : 2,
         },
       },
     },
@@ -83,31 +83,6 @@ export default (
         loader: path.resolve(__dirname, './replaceLoader.js'),
         options: {
           type: 'routers',
-          routers: {
-            routesData: `[${routesData
-              .map(
-                ({
-                  routePath,
-                  chunkName,
-                  filePath,
-                }: $ElementType<
-                  $PropertyType<dataType, 'routesData'>,
-                  number,
-                >): string =>
-                  `{ ${[
-                    'exact: true',
-                    `path: ${JSON.stringify(routePath)}`,
-                    `component: { ${[
-                      `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
-                      `chunkName: '${chunkName}'`,
-                    ].join(', ')} }`,
-                  ].join(', ')} }`,
-              )
-              .join(', ')}] ||`,
-            main: templates.main,
-            loading: templates.loading,
-            error: templates.error,
-          },
         },
       },
       ...(!dev

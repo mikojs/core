@@ -103,6 +103,8 @@ chokidar
   });
 ```
 
+Note: This function will only update the resolvers. This can not update the schema definition becuse `graphql-tool` does not support add new schema definition.
+
 #### Give the options to [makeExecutableSchema](https://github.com/apollographql/graphql-tools)
 
 Expect for `typeDefs` and `resolvers`, you can add the other options in `makeExecutableSchema` to this middleware.

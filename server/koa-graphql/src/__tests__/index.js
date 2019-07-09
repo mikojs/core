@@ -3,7 +3,6 @@
 import path from 'path';
 
 import { outputFileSync } from 'output-file-sync';
-import { chokidar } from 'chokidar';
 
 import Graphql from '../index';
 
@@ -118,48 +117,26 @@ type User {
       server.close();
     });
 
-    test.each`
-      dev      | filename | expected
-      ${true}  | ${'key'} | ${'test'}
-      ${false} | ${'key'} | ${'test'}
-    `(
-      'update resolver when file is changed with dev = $dev',
-      async ({
-        dev,
-        filename,
-        expected,
-      }: {|
-        dev: boolean,
-        filename: string,
-        expected: string,
-      |}) => {
-        const { server, request } = await runServer({
-          ...additionalSchema,
-          dev,
-        });
+    test('update resolver when file is changed', async () => {
+      const { server, graphql, request } = await runServer({
+        ...additionalSchema,
+      });
 
-        expect(await request(requestQuery)).toEqual(requestResult);
+      expect(await request(requestQuery)).toEqual(requestResult);
 
-        chokidar.watchCallback(
-          path.resolve(
-            __dirname,
-            `./__ignore__/schemaChanged/${filename}.js.flow`,
-          ),
-        );
-        chokidar.watchCallback(
-          path.resolve(__dirname, `./__ignore__/schemaChanged/${filename}.js`),
-        );
+      graphql.update(
+        path.resolve(__dirname, `./__ignore__/schemaChanged/key.js`),
+      );
 
-        const result = await request(requestQuery);
+      const result = await request(requestQuery);
 
-        (dev ? expect(result) : expect(result).not).toEqual({
-          data: {
-            key: expected,
-          },
-        });
+      expect(result).toEqual({
+        data: {
+          key: 'test',
+        },
+      });
 
-        server.close();
-      },
-    );
+      server.close();
+    });
   });
 });

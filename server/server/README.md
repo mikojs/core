@@ -85,9 +85,14 @@ import server from '@cat-org/server';
     dir: 'lib',
   })
     |> server.event(async () => {
-      // do something after babel bulid
-      // this will not use like as a middleware
-      // this will only run at the begin
+      /**
+       * Do something after babel bulid.
+       * This will not use like as a middleware and this will only run at the begin.
+       * If you want to do something when file is built with `babel watch`, you can return the update functions array.
+       *
+       * For example:
+       * return [ (filePath: string) => { /** do something with update file path */ } ];
+       */
     })
     |> server.use(async (ctx, next) => {
       await next();

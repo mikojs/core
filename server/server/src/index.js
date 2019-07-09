@@ -26,7 +26,14 @@ export type contextType = {|
   port?: number,
 |};
 
+type watchFuncType = (filePath: string) => void;
+
 const debugLog = debug('server');
+const watchFunc = [
+  (filePath: string) => {
+    delete require.cache[filePath];
+  },
+];
 const context: contextType = {
   src: '',
   dir: '',
@@ -75,9 +82,11 @@ export default {
   },
 
   event: async (
-    callback: () => void | Promise<void>,
+    callback: () =>
+      | $ReadOnlyArray<watchFuncType>
+      | Promise<$ReadOnlyArray<watchFuncType>>,
   ): emptyFunction.thatReturnsArgument => {
-    await callback();
+    watchFunc.push(...((await callback()) || []));
 
     return emptyFunction.thatReturnsArgument;
   },
@@ -192,7 +201,11 @@ export default {
               ignoreInitial: true,
             })
             .on('change', (filePath: string) => {
-              if (/\.jsx?$/.test(filePath)) delete require.cache[filePath];
+              if (!/\.jsx?$/.test(filePath)) return;
+
+              watchFunc.forEach((update: watchFuncType) => {
+                update(filePath);
+              });
             });
 
         resolve(server);

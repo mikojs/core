@@ -20,6 +20,7 @@ export default async (
   options?: optionsType,
 ): Promise<{
   server: http$Server,
+  graphql: Graphql,
   request: (query: string) => Promise<{ data: {} }>,
 }> => {
   const app = new Koa();
@@ -32,6 +33,7 @@ export default async (
 
   return {
     server,
+    graphql,
     request: (query: string) =>
       fetch(`http://localhost:${port}`, {
         method: 'POST',

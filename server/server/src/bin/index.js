@@ -57,7 +57,9 @@ const run = async (context: serverContextType): Promise<http$Server> => {
 
   return (
     (await server.init(context))
-    |> (await server.event(async () => {
+    |> (await server.event(async (): Promise<
+      $ReadOnlyArray<(filePath: string) => void>,
+    > => {
       react = new (loadModule('@cat-org/koa-react', DefaultReact))(
         path.resolve(context.dir, './pages'),
         { dev: context.dev, exclude: /__generated__/ }
@@ -97,6 +99,8 @@ const run = async (context: serverContextType): Promise<http$Server> => {
 
         if (skipServer) process.exit(0);
       }
+
+      return [graphql.update];
     }))
     |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
     |> (undefined

@@ -89,6 +89,20 @@ const graphql = new Graphql('./path-to-graphql-foder', {
 });
 ```
 
+#### Update resolver with `babel watch`
+
+```js
+const graphql = new Graphql('./path-to-graphql-folder');
+
+chokidar
+  .watch('./path-to-graphql-folder', {
+    ignoreInitial: true,
+  })
+  .on('change', (filePath: string) => {
+    graphql.update(filePath);
+  });
+```
+
 #### Give the options to [makeExecutableSchema](https://github.com/apollographql/graphql-tools)
 
 Expect for `typeDefs` and `resolvers`, you can add the other options in `makeExecutableSchema` to this middleware.

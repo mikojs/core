@@ -23,6 +23,12 @@ export default class Graphql {
 
   /**
    * @example
+   * defaultGraphql.update()
+   */
+  update = emptyFunction;
+
+  /**
+   * @example
    * defaultGraphql.middleware()
    */
   middleware = emptyFunction.thatReturns(middleware);

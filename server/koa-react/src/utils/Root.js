@@ -10,21 +10,11 @@ import {
 import { type Context as koaContextType } from 'koa';
 import { ExecutionEnvironment } from 'fbjs';
 
+import constants from './constants';
 import { type errorPropsType } from '../types';
 import { lazy, Suspense, type lazyComponentType } from '../ReactIsomorphic';
 
 export type propsType = {|
-  Main: ComponentType<*>,
-  Loading: ComponentType<{||}>,
-  Error: ComponentType<errorPropsType>,
-  routesData: $ReadOnlyArray<{|
-    exact: true,
-    path: $ReadOnlyArray<string>,
-    component: {|
-      loader: lazyComponentType,
-      chunkName: string,
-    |},
-  |}>,
   mainInitialProps: {},
 |};
 
@@ -45,18 +35,17 @@ export type storeType = {
 };
 
 const store: storeType = {};
+const { Main, Loading, ErrorComponent } = constants;
 
 /**
  * @example
- * getPage(routsData, ctx)
+ * getPage(ctx)
  *
- * @param {Array} routesData - routes data
  * @param {{ location: object, staticContext: koaContextType }} Context - getInitialProps context
  *
  * @return {ComponentType} - page component
  */
 const getPage = (
-  routesData: $PropertyType<propsType, 'routesData'>,
   {
     location: { pathname, search },
     staticContext,
@@ -86,7 +75,7 @@ const getPage = (
           component: { loader, chunkName },
         },
       },
-    ] = matchRoutes(routesData, ctx.ctx.path);
+    ] = matchRoutes(constants.routesData, ctx.ctx.path);
 
     /**
      * @example
@@ -159,11 +148,11 @@ export default class Root extends React.PureComponent<propsType, stateType> {
 
   /** @react */
   render(): NodeType {
-    const { Main, Loading, Error, routesData, mainInitialProps } = this.props;
+    const { mainInitialProps } = this.props;
     const { error, errorInfo } = this.state;
 
     if (error && errorInfo)
-      return <Error error={error} errorInfo={errorInfo} />;
+      return <ErrorComponent error={error} errorInfo={errorInfo} />;
 
     return (
       <Main {...mainInitialProps}>
@@ -176,7 +165,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
               }: contextRouterType) =>
                 React.createElement(
                   // $FlowFixMe can not overwrite context type
-                  getPage(routesData, {
+                  getPage({
                     location: { pathname, search },
                     staticContext,
                   }),
@@ -190,4 +179,3 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     );
   }
 }
-/* eslint-enable require-jsdoc, flowtype/require-return-type */

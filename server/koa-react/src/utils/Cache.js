@@ -208,16 +208,4 @@ export default class Cache {
       }),
     );
   }
-
-  get routesLink() {
-    return this.store.routesData.reduce(
-      (
-        result: $ReadOnlyArray<string>,
-        {
-          routePath,
-        }: $ElementType<$PropertyType<dataType, 'routesData'>, number>,
-      ) => [...result, ...routePath],
-      [],
-    );
-  }
 }

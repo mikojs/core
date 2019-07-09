@@ -9,38 +9,25 @@ import { mockChoice, handleUnhandledRejection } from '@cat-org/utils';
 import { lazy, hydrate } from '../ReactIsomorphic';
 
 import Root, { type propsType as rootPropsType } from './Root';
-
-import Main from 'templates/Main';
-import Loading from 'templates/Loading';
-import ErrorComponent from 'templates/Error';
+import constants from './constants';
 
 const setConfig = /** setConfig */ emptyFunction;
 
 handleUnhandledRejection();
 setConfig({
-  errorReporter: ErrorComponent,
+  errorReporter: constants.ErrorComponent,
 });
 
-/**
- * @example
- * render([])
- *
- * @param {Array} routesData - routes data
- *
- * @return {ComponentType} - page component
- */
-const render = async (
-  routesData: $PropertyType<rootPropsType, 'routesData'>,
-): Promise<ComponentType<{||}>> => {
+(async () => {
   const { mainInitialProps, ...store } = window.__CAT_DATA__;
   // preload page
   const {
     component: { loader },
   } =
-    routesData.find(
+    constants.routesData.find(
       ({
         component: { chunkName },
-      }: $ElementType<$PropertyType<rootPropsType, 'routesData'>, number>) =>
+      }: $ElementType<$PropertyType<typeof constants, 'routesData'>, number>) =>
         store.chunkName === chunkName,
     ) ||
     (() => {
@@ -61,10 +48,6 @@ const render = async (
   await hydrate(
     <Router>
       <Root
-        Main={Main}
-        Loading={Loading}
-        Error={ErrorComponent}
-        routesData={routesData}
         mainInitialProps={{
           ...mainInitialProps,
           Component,
@@ -78,13 +61,4 @@ const render = async (
   );
 
   return Page;
-};
-
-mockChoice(
-  process.env.NODE_ENV === 'test',
-  emptyFunction,
-  render,
-  /** routesData */ [],
-);
-
-export default render;
+})();

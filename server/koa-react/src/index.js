@@ -19,7 +19,6 @@ import {
   mockChoice,
 } from '@cat-org/utils';
 
-import Cache, { type redirectType } from './utils/Cache';
 import buildJs from './utils/buildJs';
 import buildStatic, {
   type optionsType as buildStaticOptionsType,
@@ -54,7 +53,6 @@ const debugLog = debug('react');
 export default class React {
   store: {|
     dev: boolean,
-    cache: Cache,
     config: configType,
     basename?: string,
     basenamePath: string,
@@ -96,10 +94,10 @@ export default class React {
       basename,
     });
 
-    const cache = new Cache(folderPath, redirect, basename, exclude);
+    // TODO: const cache = new Cache(folderPath, redirect, basename, exclude);
     const config = configFunc(
       {
-        config: getConfig(dev, folderPath, basename, cache, exclude),
+        config: getConfig(dev, folderPath, basename, exclude),
         devMiddleware: {
           stats: {
             maxModules: 0,
@@ -123,7 +121,6 @@ export default class React {
 
     this.store = {
       dev,
-      cache,
       config,
       basename,
       basenamePath,
@@ -174,7 +171,7 @@ export default class React {
    * @param {buildStaticOptionsType} options - build static options
    */
   +buildStatic = async (options?: buildStaticOptionsType) => {
-    const { cache, urls, urlsFilePath } = this.store;
+    const { urls, urlsFilePath } = this.store;
 
     if (urlsFilePath) {
       try {
@@ -184,7 +181,7 @@ export default class React {
       }
     }
 
-    await buildStatic(cache, urls.commonsUrl, options);
+    await buildStatic(urls.commonsUrl, options);
   };
 
   /**
@@ -194,7 +191,7 @@ export default class React {
    * @return {Function} - koa-react middleware
    */
   +middleware = async (): Promise<koaMiddlewareType> => {
-    const { dev, cache, config, basename, urls, urlsFilePath } = this.store;
+    const { dev, config, basename, urls, urlsFilePath } = this.store;
 
     invariant(
       config.config.output &&
@@ -228,7 +225,7 @@ export default class React {
             config,
           )
         : require('koa-mount')(publicPath, require('koa-static')(urlsPath)),
-      server(basename, cache, urls),
+      server(basename, urls),
     ]);
   };
 }

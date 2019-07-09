@@ -25,7 +25,7 @@ import { requireModule } from '@cat-org/utils';
 import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 
 import Root, { type storeType } from './Root';
-import type CacheType from './Cache';
+import constants from './constants';
 
 const debugLog = debug('react:server');
 
@@ -56,14 +56,12 @@ export const initStore = () =>
  * server('/', data, {})
  *
  * @param {string} basename - basename to join urls path
- * @param {CacheType} cache - cache data
  * @param {object} urls - urls data
  *
  * @return {koaMiddlewareType} - koa middleware
  */
 export default (
   basename: ?string,
-  cache: CacheType,
   { clientUrl, commonsUrl }: { [string]: string },
 ) => async (ctx: koaContextType, next: () => Promise<void>) => {
   debugLog(ctx.path);
@@ -87,15 +85,13 @@ export default (
   ctx.type = 'text/html';
   ctx.respond = false;
 
-  const Document = requireModule(cache.templates.document);
-  const Main = requireModule(cache.templates.main);
-  const ErrorComponent = requireModule(cache.templates.error);
+  const { Document, Main, ErrorComponent } = constants;
 
   // [start] preload
   // preload Page
   const store = initStore();
 
-  Root.getPage(cache.server, {
+  Root.getPage({
     location: { pathname: ctx.path, search: `?${ctx.querystring}` },
     staticContext: ctx,
   });
@@ -170,10 +166,6 @@ export default (
     await renderToNodeStream(
       <Router location={ctx.url} context={{ ...ctx, url: undefined }}>
         <Root
-          Main={Main}
-          Loading={emptyFunction.thatReturnsNull}
-          Error={ErrorComponent}
-          routesData={cache.server}
           mainInitialProps={{
             ...mainInitialProps,
             Component: store.Component,

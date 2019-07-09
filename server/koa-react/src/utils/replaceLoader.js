@@ -18,29 +18,14 @@ const debugLog = debug('react:replaceLoader');
  */
 export default function(source: string): string {
   // eslint-disable-next-line babel/no-invalid-this
-  const { type, routers } = getOptions(this) || {};
+  const { type } = getOptions(this) || {};
   let newSource: string = source;
 
   debugLog({
     type,
-    routers,
   });
 
   switch (type) {
-    case 'routers':
-      newSource = source
-        .replace(/\/\*\* routesData \*\//, routers.routesData)
-        .replace(/['"]((?!['"]).|\/)*templates\/Main['"]/, `"${routers.main}"`)
-        .replace(
-          /['"]((?!['"]).|\/)*templates\/Loading['"]/,
-          `"${routers.loading}"`,
-        )
-        .replace(
-          /['"]((?!['"]).|\/)*templates\/Error['"]/,
-          `"${routers.error}"`,
-        );
-      break;
-
     case 'set-config':
       newSource = source.replace(
         /\/\*\* setConfig \*\//,

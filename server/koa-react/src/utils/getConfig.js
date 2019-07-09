@@ -6,7 +6,7 @@ import webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 
-import type CacheType from './Cache';
+import constants from './constants';
 
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
 const ROOT_PATH = path.resolve(__dirname, './Root.js');
@@ -18,7 +18,6 @@ const ROOT_PATH = path.resolve(__dirname, './Root.js');
  * @param {boolean} dev - is dev or not
  * @param {string} folderPath - folder path
  * @param {string} basename - basename to join url
- * @param {CacheType} cache - cache data
  * @param {RegExp} exclude - exclude file path
  *
  * @return {object} - webpack config
@@ -27,7 +26,6 @@ export default (
   dev: boolean,
   folderPath: string,
   basename: ?string,
-  cache: CacheType,
   exclude?: RegExp,
 ) => ({
   mode: dev ? 'development' : 'production',
@@ -64,7 +62,7 @@ export default (
             ? 'commons'
             : `${basename.replace(/^\//, '')}/commons`,
           chunks: 'all',
-          minChunks: cache.length > 2 ? cache.length * 0.5 : 2,
+          minChunks: constants.routesData.length > 2 ? constants.routesData.length * 0.5 : 2,
         },
       },
     },
@@ -88,14 +86,6 @@ export default (
       ...(!dev
         ? []
         : [
-            {
-              test: /\.jsx?$/,
-              include: [CLIENT_PATH],
-              loader: path.resolve(__dirname, './replaceLoader.js'),
-              options: {
-                type: 'set-config',
-              },
-            },
             {
               test: /\.jsx?$/,
               include: [folderPath, ROOT_PATH],

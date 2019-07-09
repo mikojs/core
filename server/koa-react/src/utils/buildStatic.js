@@ -6,7 +6,7 @@ import debug from 'debug';
 import fetch from 'node-fetch';
 import outputFileSync from 'output-file-sync';
 
-import type CacheType from './Cache';
+import constants from './constants';
 
 export type optionsType = {|
   baseUrl?: string,
@@ -19,7 +19,6 @@ const debugLog = debug('react:buildStatic');
  * @example
  * buildStatic(data, '/commons-url', options)
  *
- * @param {CacheType} cache - cache data
  * @param {string} commonsUrl - commons url
  * @param {optionsType} options - build static options
  */
@@ -32,7 +31,15 @@ export default async (
   }: optionsType = {},
 ) => {
   await Promise.all(
-    [commonsUrl, ...cache.routesLink].map(async (routePath: string) => {
+    constants.routesData.reduce(
+      (
+        result: $ReadOnlyArray<string>,
+        {
+          routePath,
+        }: $ElementType<$PropertyType<typeof constants, 'routesData'>, number>,
+      ) => [...result, ...routePath],
+      [commonsUrl],
+    ).map(async (routePath: string) => {
       const filePath = path.resolve(
         folderPath,
         `.${routePath.replace(/\*$/, 'notFound')}`,

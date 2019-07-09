@@ -18,6 +18,7 @@ import debug from 'debug';
 
 import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
+import { type $MaybeType } from '@cat-org/utils/lib/types';
 
 import graphql, {
   type OptionsData as expressGraphqlOptionsType,
@@ -28,11 +29,10 @@ type buildSchemasType = {
   resolvers: $PropertyType<makeExecutableSchemaOptionsType, 'resolvers'>,
 };
 
-export type optionsType = buildSchemasType & {
-  typeDefs?: $PropertyType<buildSchemasType, 'typeDefs'>,
-  resolvers?: $PropertyType<buildSchemasType, 'resolvers'>,
-  options?: makeExecutableSchemaOptionsType,
-};
+export type optionsType = buildSchemasType &
+  $MaybeType<buildSchemasType> & {
+    options?: makeExecutableSchemaOptionsType,
+  };
 
 const debugLog = debug('graphql');
 

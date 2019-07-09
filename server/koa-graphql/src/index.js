@@ -12,7 +12,6 @@ import {
 import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
-import chokidar from 'chokidar';
 import compose from 'koa-compose';
 import bodyparser from 'koa-bodyparser';
 import debug from 'debug';
@@ -41,6 +40,7 @@ const debugLog = debug('graphql');
 /** koa-graphql */
 export default class Graphql {
   schema: GraphQLSchemaType;
+  options: $PropertyType<optionsType, 'options'>;
 
   /**
    * @example
@@ -102,29 +102,7 @@ export default class Graphql {
       resolvers,
     });
 
-    if (dev)
-      chokidar
-        .watch(folderPath, {
-          ignoreInitial: true,
-        })
-        .on('change', (filePath: string) => {
-          if (!/\.jsx?$/.test(filePath)) return;
-
-          const newResolvers = requireModule(filePath);
-
-          delete newResolvers.typeDefs;
-
-          addResolveFunctionsToSchema({
-            schema: this.schema,
-            resolvers: newResolvers,
-            resolverValidationOptions: {
-              ...options.requireResolversForResolveType,
-              requireResolversForResolveType: false,
-            },
-            inheritResolversFromInterfaces: true,
-          });
-        });
-
+    this.options = options;
     this.schema = makeExecutableSchema({
       ...options,
       resolverValidationOptions: {
@@ -135,6 +113,28 @@ export default class Graphql {
       resolvers,
     });
   }
+
+  /**
+   * @example
+   * graphql.watch('/file-path')
+   *
+   * @param {string} filePath - file path
+   */
+  watch = (filePath: string) => {
+    const newResolvers = requireModule(filePath);
+
+    delete newResolvers.typeDefs;
+
+    addResolveFunctionsToSchema({
+      schema: this.schema,
+      resolvers: newResolvers,
+      resolverValidationOptions: {
+        ...this.options?.requireResolversForResolveType,
+        requireResolversForResolveType: false,
+      },
+      inheritResolversFromInterfaces: true,
+    });
+  };
 
   /**
    * @example

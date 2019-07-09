@@ -31,7 +31,6 @@ type buildSchemasType = {
 export type optionsType = buildSchemasType & {
   typeDefs?: $PropertyType<buildSchemasType, 'typeDefs'>,
   resolvers?: $PropertyType<buildSchemasType, 'resolvers'>,
-  dev?: boolean,
   options?: makeExecutableSchemaOptionsType,
 };
 
@@ -52,7 +51,6 @@ export default class Graphql {
   constructor(
     folderPath: string,
     {
-      dev = true,
       typeDefs: additionalTypeDefs,
       resolvers: additionalResolvers,
       options = {},
@@ -116,11 +114,11 @@ export default class Graphql {
 
   /**
    * @example
-   * graphql.watch('/file-path')
+   * graphql.update('/file-path')
    *
    * @param {string} filePath - file path
    */
-  watch = (filePath: string) => {
+  update = (filePath: string) => {
     const newResolvers = requireModule(filePath);
 
     delete newResolvers.typeDefs;

@@ -19,5 +19,6 @@ it('test d3DirTree', () => {
     'normalizedQuestions.js',
     'requireModule.js',
     'throwMessageInIndex.js',
+    'types.js',
   ]);
 });

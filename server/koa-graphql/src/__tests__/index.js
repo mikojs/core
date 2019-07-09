@@ -9,6 +9,31 @@ import Graphql from '../index';
 
 import runServer from './__ignore__/runServer';
 
+const additionalSchema = {
+  typeDefs: `
+  extend type Query {
+    key: String!
+  }
+`,
+  resolvers: {
+    Query: {
+      key: () => 'value',
+    },
+  },
+};
+
+const requestQuery = `
+  {
+    key
+  }
+`;
+
+const requestResult = {
+  data: {
+    key: 'value',
+  },
+};
+
 describe('graphql', () => {
   test('relay', () => {
     const graphql = new Graphql(path.resolve(__dirname, './__ignore__/schema'));
@@ -75,116 +100,61 @@ type User {
     });
 
     test('additional schema with string', async () => {
-      const { server, request } = await runServer({
-        typeDefs: `
-  extend type Query {
-    key: String!
-  }
-`,
-        resolvers: {
-          Query: {
-            key: () => 'value',
-          },
-        },
-      });
+      const { server, request } = await runServer(additionalSchema);
 
-      expect(
-        await request(`
-  {
-    key
-  }
-        `),
-      ).toEqual({
-        data: {
-          key: 'value',
-        },
-      });
+      expect(await request(requestQuery)).toEqual(requestResult);
 
       server.close();
     });
 
     test('additional schema with array', async () => {
       const { server, request } = await runServer({
-        typeDefs: [
-          `
-  extend type Query {
-    key: String!
-  }
-`,
-        ],
-        resolvers: {
-          Query: {
-            key: () => 'value',
-          },
-        },
+        ...additionalSchema,
+        typeDefs: [additionalSchema.typeDefs],
       });
 
-      expect(
-        await request(`
-  {
-    key
-  }
-        `),
-      ).toEqual({
-        data: {
-          key: 'value',
-        },
-      });
+      expect(await request(requestQuery)).toEqual(requestResult);
 
       server.close();
     });
 
     test.each`
-      dev
-      ${true}
-      ${false}
+      dev      | filename | expected
+      ${true}  | ${'key'} | ${'test'}
+      ${false} | ${'key'} | ${'test'}
     `(
       'update resolver when file is changed with dev = $dev',
-      async ({ dev }: {| dev: boolean |}) => {
+      async ({
+        dev,
+        filename,
+        expected,
+      }: {|
+        dev: boolean,
+        filename: string,
+        expected: string,
+      |}) => {
         const { server, request } = await runServer({
+          ...additionalSchema,
           dev,
-          typeDefs: [
-            `
-  extend type Query {
-    key: String!
-  }
-`,
-          ],
-          resolvers: {
-            Query: {
-              key: () => 'value',
-            },
-          },
         });
 
-        expect(
-          await request(`
-  {
-    key
-  }
-        `),
-        ).toEqual({
-          data: {
-            key: 'value',
-          },
-        });
+        expect(await request(requestQuery)).toEqual(requestResult);
 
         chokidar.watchCallback(
-          path.resolve(__dirname, './__ignore__/schemaChanged/key.js.flow'),
+          path.resolve(
+            __dirname,
+            `./__ignore__/schemaChanged/${filename}.js.flow`,
+          ),
         );
         chokidar.watchCallback(
-          path.resolve(__dirname, './__ignore__/schemaChanged/key.js'),
+          path.resolve(__dirname, `./__ignore__/schemaChanged/${filename}.js`),
         );
 
-        const result = await request(`
-  {
-    key
-  }
-      `);
+        const result = await request(requestQuery);
 
         (dev ? expect(result) : expect(result).not).toEqual({
           data: {
-            key: 'test',
+            key: expected,
           },
         });
 

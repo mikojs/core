@@ -66,7 +66,7 @@ export default (
   cache: CacheType,
   { clientUrl, commonsUrl }: { [string]: string },
 ): koaMiddlewareType => {
-  const serverRoutesData = cache.routesData.map(
+  const routesData = cache.routesData.map(
     ({
       routePath,
       chunkName,
@@ -83,7 +83,7 @@ export default (
     }),
   );
 
-  debugLog(serverRoutesData);
+  debugLog(routesData);
 
   return async (ctx: koaContextType, next: () => Promise<void>) => {
     debugLog(ctx.path);
@@ -115,7 +115,7 @@ export default (
     // preload Page
     const store = initStore();
 
-    Root.getPage(serverRoutesData, {
+    Root.getPage(routesData, {
       location: { pathname: ctx.path, search: `?${ctx.querystring}` },
       staticContext: ctx,
     });
@@ -195,7 +195,7 @@ export default (
             Main={Main}
             Loading={emptyFunction.thatReturnsNull}
             Error={ErrorComponent}
-            routesData={serverRoutesData}
+            routesData={routesData}
             mainInitialProps={{
               ...mainInitialProps,
               Component: store.Component,

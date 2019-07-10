@@ -19,7 +19,6 @@ import {
   mockChoice,
 } from '@cat-org/utils';
 
-import getData, { type redirectType, type dataType } from './utils/getData';
 import buildJs from './utils/buildJs';
 import buildStatic, {
   type optionsType as buildStaticOptionsType,
@@ -41,7 +40,7 @@ export type configType = {
 export type optionsType = {|
   dev?: boolean,
   config?: (config: configType, dev: boolean) => configType,
-  redirect?: redirectType,
+  // TODO: redirect?: redirectType,
   basename?: string,
   exclude?: RegExp,
 |};
@@ -54,7 +53,6 @@ const debugLog = debug('react');
 export default class React {
   store: {|
     dev: boolean,
-    data: dataType,
     config: configType,
     basename?: string,
     basenamePath: string,
@@ -77,7 +75,7 @@ export default class React {
     {
       dev = true,
       config: configFunc = emptyFunction.thatReturnsArgument,
-      redirect = emptyFunction.thatReturnsArgument,
+      // TODO: redirect = emptyFunction.thatReturnsArgument,
       basename,
       exclude,
     }: optionsType = {},
@@ -96,10 +94,10 @@ export default class React {
       basename,
     });
 
-    const data = getData(folderPath, redirect, basename, exclude);
+    // TODO: const data = getData(folderPath, redirect, basename, exclude);
     const config = configFunc(
       {
-        config: getConfig(dev, folderPath, basename, data, exclude),
+        config: getConfig(dev, folderPath, basename, exclude),
         devMiddleware: {
           stats: {
             maxModules: 0,
@@ -123,7 +121,6 @@ export default class React {
 
     this.store = {
       dev,
-      data,
       config,
       basename,
       basenamePath,
@@ -174,7 +171,7 @@ export default class React {
    * @param {buildStaticOptionsType} options - build static options
    */
   +buildStatic = async (options?: buildStaticOptionsType) => {
-    const { data, urls, urlsFilePath } = this.store;
+    const { urls, urlsFilePath } = this.store;
 
     if (urlsFilePath) {
       try {
@@ -184,7 +181,7 @@ export default class React {
       }
     }
 
-    await buildStatic(data, urls.commonsUrl, options);
+    await buildStatic(urls.commonsUrl, options);
   };
 
   /**
@@ -194,7 +191,7 @@ export default class React {
    * @return {Function} - koa-react middleware
    */
   +middleware = async (): Promise<koaMiddlewareType> => {
-    const { dev, data, config, basename, urls, urlsFilePath } = this.store;
+    const { dev, config, basename, urls, urlsFilePath } = this.store;
 
     invariant(
       config.config.output &&
@@ -228,7 +225,7 @@ export default class React {
             config,
           )
         : require('koa-mount')(publicPath, require('koa-static')(urlsPath)),
-      server(basename, data, urls),
+      server(basename, urls),
     ]);
   };
 }

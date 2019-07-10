@@ -7,13 +7,13 @@ import debug from 'debug';
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-export type redirectType = (
+type redirectType = (
   urlPattern: $ReadOnlyArray<string>,
 ) => $ReadOnlyArray<string>;
 
 const debugLog = debug('react:getData');
 
-export type dataType = {|
+type dataType = {|
   templates: {|
     document: string,
     main: string,

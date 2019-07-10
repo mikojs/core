@@ -6,7 +6,7 @@ import debug from 'debug';
 import fetch from 'node-fetch';
 import outputFileSync from 'output-file-sync';
 
-import { type dataType } from './getData';
+import constants from './constants';
 
 export type optionsType = {|
   baseUrl?: string,
@@ -14,17 +14,16 @@ export type optionsType = {|
 |};
 
 const debugLog = debug('react:buildStatic');
+const { routesData } = constants;
 
 /**
  * @example
  * buildStatic(data, '/commons-url', options)
  *
- * @param {dataType} data - routes data
  * @param {string} commonsUrl - commons url
  * @param {optionsType} options - build static options
  */
 export default async (
-  { routesData }: dataType,
   commonsUrl: string,
   {
     baseUrl = 'http://localhost:8000',
@@ -36,9 +35,7 @@ export default async (
       .reduce(
         (
           result: $ReadOnlyArray<string>,
-          {
-            routePath,
-          }: $ElementType<$PropertyType<dataType, 'routesData'>, number>,
+          { path: routePath }: $ElementType<typeof routesData, number>,
         ) => [...result, ...routePath],
         [commonsUrl],
       )

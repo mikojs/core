@@ -19,11 +19,12 @@ import {
   mockChoice,
 } from '@cat-org/utils';
 
+import Cache from './utils/Cache';
+import getConfig from './utils/getConfig';
 import buildJs from './utils/buildJs';
 import buildStatic, {
   type optionsType as buildStaticOptionsType,
 } from './utils/buildStatic';
-import getConfig from './utils/getConfig';
 import server from './utils/server';
 
 // TODO: use koa-webpack type
@@ -53,6 +54,7 @@ const debugLog = debug('react');
 export default class React {
   store: {|
     dev: boolean,
+    cache: Cache,
     config: configType,
     basename?: string,
     basenamePath: string,
@@ -95,9 +97,10 @@ export default class React {
     });
 
     // TODO: const data = getData(folderPath, redirect, basename, exclude);
+    const cache = new Cache();
     const config = configFunc(
       {
-        config: getConfig(dev, folderPath, basename, exclude),
+        config: getConfig(dev, folderPath, basename, exclude, cache),
         devMiddleware: {
           stats: {
             maxModules: 0,
@@ -121,6 +124,7 @@ export default class React {
 
     this.store = {
       dev,
+      cache,
       config,
       basename,
       basenamePath,
@@ -171,7 +175,7 @@ export default class React {
    * @param {buildStaticOptionsType} options - build static options
    */
   +buildStatic = async (options?: buildStaticOptionsType) => {
-    const { urls, urlsFilePath } = this.store;
+    const { cache, urls, urlsFilePath } = this.store;
 
     if (urlsFilePath) {
       try {
@@ -181,7 +185,7 @@ export default class React {
       }
     }
 
-    await buildStatic(urls.commonsUrl, options);
+    await buildStatic(urls.commonsUrl, options, cache);
   };
 
   /**
@@ -191,7 +195,7 @@ export default class React {
    * @return {Function} - koa-react middleware
    */
   +middleware = async (): Promise<koaMiddlewareType> => {
-    const { dev, config, basename, urls, urlsFilePath } = this.store;
+    const { dev, cache, config, basename, urls, urlsFilePath } = this.store;
 
     invariant(
       config.config.output &&
@@ -225,7 +229,7 @@ export default class React {
             config,
           )
         : require('koa-mount')(publicPath, require('koa-static')(urlsPath)),
-      server(basename, urls),
+      server(basename, urls, cache),
     ]);
   };
 }

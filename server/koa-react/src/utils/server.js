@@ -22,7 +22,7 @@ import getStream from 'get-stream';
 import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 
 import Root, { type storeType } from './Root';
-import constants from './constants';
+import type CacheType from './Cache';
 
 const debugLog = debug('react:server');
 
@@ -60,6 +60,7 @@ export const initStore = () =>
 export default (
   basename: ?string,
   { clientUrl, commonsUrl }: { [string]: string },
+  cache: CacheType,
 ) => async (ctx: koaContextType, next: () => Promise<void>) => {
   debugLog(ctx.path);
 
@@ -82,13 +83,13 @@ export default (
   ctx.type = 'text/html';
   ctx.respond = false;
 
-  const { Document, Main, ErrorComponent } = constants;
+  const { Document, Main, ErrorComponent } = cache;
 
   // [start] preload
   // preload Page
   const store = initStore();
 
-  Root.getPage({
+  Root.getPage(cache, {
     location: { pathname: ctx.path, search: `?${ctx.querystring}` },
     staticContext: ctx,
   });
@@ -163,6 +164,7 @@ export default (
     await renderToNodeStream(
       <Router location={ctx.url} context={{ ...ctx, url: undefined }}>
         <Root
+          cache={cache}
           mainInitialProps={{
             ...mainInitialProps,
             Component: store.Component,

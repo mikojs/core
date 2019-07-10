@@ -1,6 +1,7 @@
 // @flow
 
 import buildStatic from '../buildStatic';
+import Cache from '../Cache';
 
 jest.mock('node-fetch', () =>
   jest.fn(async (url: string) => ({
@@ -11,16 +12,9 @@ jest.mock('node-fetch', () =>
 test('build static', async () => {
   expect(
     await buildStatic(
-      {
-        templates: {
-          document: 'document',
-          main: 'main',
-          loading: 'loading',
-          error: 'error',
-        },
-        routesData: [],
-      },
       '/commons.js',
+      undefined,
+      new Cache(),
     ),
   ).toBeUndefined();
 });

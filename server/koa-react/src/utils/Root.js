@@ -13,9 +13,10 @@ import { ExecutionEnvironment } from 'fbjs';
 import { type errorPropsType } from '../types';
 import { lazy, Suspense, type lazyComponentType } from '../ReactIsomorphic';
 
-import constants from './constants';
+import type CacheType from './Cache';
 
 export type propsType = {|
+  cache: CacheType,
   mainInitialProps: {},
 |};
 
@@ -36,7 +37,6 @@ export type storeType = {
 };
 
 const store: storeType = {};
-const { routesData, Main, Loading, ErrorComponent } = constants;
 
 /**
  * @example
@@ -46,7 +46,7 @@ const { routesData, Main, Loading, ErrorComponent } = constants;
  *
  * @return {ComponentType} - page component
  */
-const getPage = ({
+const getPage = (cache: CacheType, {
   location: { pathname, search },
   staticContext,
 }: {
@@ -74,7 +74,7 @@ const getPage = ({
           component: { loader, chunkName },
         },
       },
-    ] = matchRoutes(routesData, ctx.ctx.path);
+    ] = matchRoutes(cache.routesData, ctx.ctx.path);
 
     /**
      * @example
@@ -147,8 +147,9 @@ export default class Root extends React.PureComponent<propsType, stateType> {
 
   /** @react */
   render(): NodeType {
-    const { mainInitialProps } = this.props;
+    const { cache, mainInitialProps } = this.props;
     const { error, errorInfo } = this.state;
+    const { Main, Loading, ErrorComponent } = cache;
 
     if (error && errorInfo)
       return <ErrorComponent error={error} errorInfo={errorInfo} />;
@@ -164,7 +165,7 @@ export default class Root extends React.PureComponent<propsType, stateType> {
               }: contextRouterType) =>
                 React.createElement(
                   // $FlowFixMe can not overwrite context type
-                  getPage({
+                  getPage(cache, {
                     location: { pathname, search },
                     staticContext,
                   }),

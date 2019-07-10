@@ -6,7 +6,7 @@ import debug from 'debug';
 import fetch from 'node-fetch';
 import outputFileSync from 'output-file-sync';
 
-import constants from './constants';
+import type CacheType from './Cache';
 
 export type optionsType = {|
   baseUrl?: string,
@@ -14,7 +14,6 @@ export type optionsType = {|
 |};
 
 const debugLog = debug('react:buildStatic');
-const { routesData } = constants;
 
 /**
  * @example
@@ -29,13 +28,14 @@ export default async (
     baseUrl = 'http://localhost:8000',
     folderPath = path.resolve('./docs'),
   }: optionsType = {},
+  cache: CacheType,
 ) => {
   await Promise.all(
-    routesData
+    cache.routesData
       .reduce(
         (
           result: $ReadOnlyArray<string>,
-          { path: routePath }: $ElementType<typeof routesData, number>,
+          { path: routePath }: $ElementType<$PropertyType<CacheType, 'routesData'>, number>,
         ) => [...result, ...routePath],
         [commonsUrl],
       )

@@ -13,7 +13,7 @@ import ErrorComponent from 'templates/Error';
 
 describe('root', () => {
   test('catch error', () => {
-    /** @react default Component */
+    /** TODO
     const Component = () => <div>render</div>;
 
     Root.preload({
@@ -70,5 +70,6 @@ describe('root', () => {
     await Root.preload().lazyPage();
 
     expect(Root.preload().initialProps.head).toBeUndefined();
+    */
   });
 });

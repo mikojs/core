@@ -9,14 +9,14 @@ import { handleUnhandledRejection } from '@cat-org/utils';
 import { lazy, hydrate } from '../ReactIsomorphic';
 
 import Root from './Root';
-import constants from './constants';
+import Cache from './Cache';
 
 const setConfig = /** setConfig */ emptyFunction;
-const { routesData, ErrorComponent } = constants;
+const cache = new Cache();
 
 handleUnhandledRejection();
 setConfig({
-  errorReporter: ErrorComponent,
+  errorReporter: cache.ErrorComponent,
 });
 
 (async () => {
@@ -25,8 +25,8 @@ setConfig({
   const {
     component: { loader },
   } =
-    routesData.find(
-      ({ component: { chunkName } }: $ElementType<typeof routesData, number>) =>
+    cache.routesData.find(
+      ({ component: { chunkName } }: $ElementType<$PropertyType<Cache, 'routesData'>, number>) =>
         store.chunkName === chunkName,
     ) ||
     (() => {
@@ -47,6 +47,7 @@ setConfig({
   await hydrate(
     <Router>
       <Root
+        cache={cache}
         mainInitialProps={{
           ...mainInitialProps,
           Component,

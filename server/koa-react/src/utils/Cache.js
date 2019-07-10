@@ -12,6 +12,15 @@ import Main from 'templates/Main';
 import Loading from 'templates/Loading';
 import ErrorComponent from 'templates/Error';
 
+type routesDataType = $ReadOnlyArray<{|
+  exact: true,
+  path: $ReadOnlyArray<string>,
+  component: {|
+    loader: lazyComponentType,
+    chunkName: string,
+  |},
+|}>;
+
 /**
  * @example
  * serverRequire(Component)
@@ -24,8 +33,12 @@ const serverRequire = (PageComponent: ComponentType<*>) => async () => ({
   default: PageComponent,
 });
 
-export default ({
-  routesData: [
+export default class Cache {
+  Document: ComponentType<*> = Document;
+  Main: ComponentType<*> = Main;
+  Loading: ComponentType<{||}> = Loading;
+  ErrorComponent: ComponentType<errorPropsType> = ErrorComponent;
+  routesData: routesDataType = [
     {
       exact: true,
       path: ['/*'],
@@ -34,22 +47,5 @@ export default ({
         chunkName: 'pages/notFound',
       },
     },
-  ],
-  Document,
-  Main,
-  Loading,
-  ErrorComponent,
-}: {
-  routesData: $ReadOnlyArray<{|
-    exact: true,
-    path: $ReadOnlyArray<string>,
-    component: {|
-      loader: lazyComponentType,
-      chunkName: string,
-    |},
-  |}>,
-  Document: ComponentType<*>,
-  Main: ComponentType<*>,
-  Loading: ComponentType<{||}>,
-  ErrorComponent: ComponentType<errorPropsType>,
-});
+  ];
+};

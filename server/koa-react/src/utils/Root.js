@@ -21,8 +21,9 @@ export type propsType = {|
     exact: true,
     path: $ReadOnlyArray<string>,
     component: {|
-      loader: lazyComponentType,
+      filePath: string,
       chunkName: string,
+      loader: lazyComponentType,
     |},
   |}>,
   mainInitialProps: {},

@@ -37,7 +37,7 @@ export default async (
         (
           result: $ReadOnlyArray<string>,
           {
-            routePath,
+            path: routePath,
           }: $ElementType<$PropertyType<CacheType, 'routesData'>, number>,
         ) => [...result, ...routePath],
         [commonsUrl],

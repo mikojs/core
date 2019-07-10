@@ -88,9 +88,8 @@ export default (
             routesData: `[${cache.routesData
               .map(
                 ({
-                  routePath,
-                  chunkName,
-                  filePath,
+                  path: routePath,
+                  component: { filePath, chunkName },
                 }: $ElementType<
                   $PropertyType<CacheType, 'routesData'>,
                   number,

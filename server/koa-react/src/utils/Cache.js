@@ -4,14 +4,12 @@ import path from 'path';
 
 import debug from 'debug';
 
-import { d3DirTree } from '@cat-org/utils';
+import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-type routesDataType = $ReadOnlyArray<{|
-  routePath: $ReadOnlyArray<string>,
-  chunkName: string,
-  filePath: string,
-|}>;
+import { type propsType as rootPropsType } from './Root';
+
+import NotFound from 'templates/NotFound';
 
 export type redirectType = (
   urlPattern: $ReadOnlyArray<string>,
@@ -21,7 +19,7 @@ const debugLog = debug('react:Cache');
 
 /** Cache to store the parse data */
 export default class Cache {
-  routesData: routesDataType;
+  routesData: $PropertyType<rootPropsType, 'routesData'>;
   document: string;
   main: string;
   loading: string;
@@ -43,9 +41,15 @@ export default class Cache {
     exclude?: RegExp,
   ) {
     const notFound = {
-      routePath: [`${basename || ''}/*`],
-      chunkName: `pages${basename || ''}/notFound`,
-      filePath: path.resolve(__dirname, '../templates/NotFound.js'),
+      exact: true,
+      path: [`${basename || ''}/*`],
+      component: {
+        filePath: path.resolve(__dirname, '../templates/NotFound.js'),
+        chunkName: `pages${basename || ''}/notFound`,
+        loader: async () => ({
+          default: NotFound,
+        }),
+      },
     };
 
     this.routesData = [notFound];
@@ -87,12 +91,22 @@ export default class Cache {
             case 'NotFound':
               this.routesData = [
                 ...this.routesData.filter(
-                  ({ chunkName }: $ElementType<routesDataType, number>) =>
-                    chunkName !== notFound.chunkName,
+                  ({
+                    component: { chunkName },
+                  }: $ElementType<
+                    $PropertyType<rootPropsType, 'routesData'>,
+                    number,
+                  >) => chunkName !== notFound.component.chunkName,
                 ),
                 {
                   ...notFound,
-                  filePath,
+                  component: {
+                    ...notFound.component,
+                    filePath,
+                    loader: async () => ({
+                      default: requireModule(filePath),
+                    }),
+                  },
                 },
               ];
               return;
@@ -109,15 +123,27 @@ export default class Cache {
 
         this.routesData = [
           {
-            routePath: !basename
+            exact: true,
+            path: !basename
               ? routePath
               : routePath.map((prevPath: string) => `${basename}${prevPath}`),
-            chunkName: `pages${basename || ''}/${relativePath}`,
-            filePath,
+            component: {
+              filePath,
+              chunkName: `pages${basename || ''}/${relativePath}`,
+              loader: async () => ({
+                default: requireModule(filePath),
+              }),
+            },
           },
           ...this.routesData,
         ];
         return;
       });
+
+    debugLog(this.routesData);
+    debugLog(this.document);
+    debugLog(this.main);
+    debugLog(this.loading);
+    debugLog(this.error);
   }
 }

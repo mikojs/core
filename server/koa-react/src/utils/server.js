@@ -25,7 +25,7 @@ import { requireModule } from '@cat-org/utils';
 import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 
 import Root, { type storeType } from './Root';
-import { type dataType } from './getData';
+import type CacheType from './Cache';
 
 const debugLog = debug('react:server');
 
@@ -56,22 +56,22 @@ export const initStore = () =>
  * server('/', data, {})
  *
  * @param {string} basename - basename to join urls path
- * @param {dataType} data - routes data
+ * @param {CacheType} cache - cache data
  * @param {object} urls - urls data
  *
  * @return {koaMiddlewareType} - koa middleware
  */
 export default (
   basename: ?string,
-  { routesData, templates }: dataType,
+  cache: CacheType,
   { clientUrl, commonsUrl }: { [string]: string },
 ): koaMiddlewareType => {
-  const serverRoutesData = routesData.map(
+  const serverRoutesData = cache.routesData.map(
     ({
       routePath,
       chunkName,
       filePath,
-    }: $ElementType<$PropertyType<dataType, 'routesData'>, number>) => ({
+    }: $ElementType<$PropertyType<CacheType, 'routesData'>, number>) => ({
       exact: true,
       path: routePath,
       component: {
@@ -107,9 +107,9 @@ export default (
     ctx.type = 'text/html';
     ctx.respond = false;
 
-    const Document = requireModule(templates.document);
-    const Main = requireModule(templates.main);
-    const ErrorComponent = requireModule(templates.error);
+    const Document = requireModule(cache.document);
+    const Main = requireModule(cache.main);
+    const ErrorComponent = requireModule(cache.error);
 
     // [start] preload
     // preload Page

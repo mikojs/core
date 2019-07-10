@@ -6,7 +6,7 @@ import webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 
-import { type dataType } from './getData';
+import type CacheType from './Cache';
 
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
 const ROOT_PATH = path.resolve(__dirname, './Root.js');
@@ -18,8 +18,8 @@ const ROOT_PATH = path.resolve(__dirname, './Root.js');
  * @param {boolean} dev - is dev or not
  * @param {string} folderPath - folder path
  * @param {string} basename - basename to join url
- * @param {dataType} data - routes data
  * @param {RegExp} exclude - exclude file path
+ * @param {CacheType} cache - cache data
  *
  * @return {object} - webpack config
  */
@@ -27,8 +27,8 @@ export default (
   dev: boolean,
   folderPath: string,
   basename: ?string,
-  { routesData, templates }: dataType,
   exclude?: RegExp,
+  cache: CacheType,
 ) => ({
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval' : false,
@@ -64,7 +64,8 @@ export default (
             ? 'commons'
             : `${basename.replace(/^\//, '')}/commons`,
           chunks: 'all',
-          minChunks: routesData.length > 2 ? routesData.length * 0.5 : 2,
+          minChunks:
+            cache.routesData.length > 2 ? cache.routesData.length * 0.5 : 2,
         },
       },
     },
@@ -84,14 +85,14 @@ export default (
         options: {
           type: 'routers',
           routers: {
-            routesData: `[${routesData
+            routesData: `[${cache.routesData
               .map(
                 ({
                   routePath,
                   chunkName,
                   filePath,
                 }: $ElementType<
-                  $PropertyType<dataType, 'routesData'>,
+                  $PropertyType<CacheType, 'routesData'>,
                   number,
                 >): string =>
                   `{ ${[
@@ -104,9 +105,9 @@ export default (
                   ].join(', ')} }`,
               )
               .join(', ')}] ||`,
-            main: templates.main,
-            loading: templates.loading,
-            error: templates.error,
+            main: cache.main,
+            loading: cache.loading,
+            error: cache.error,
           },
         },
       },

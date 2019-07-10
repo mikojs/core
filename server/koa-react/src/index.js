@@ -19,12 +19,12 @@ import {
   mockChoice,
 } from '@cat-org/utils';
 
-import getData, { type redirectType, type dataType } from './utils/getData';
+import Cache, { type redirectType } from './utils/Cache';
+import getConfig from './utils/getConfig';
 import buildJs from './utils/buildJs';
 import buildStatic, {
   type optionsType as buildStaticOptionsType,
 } from './utils/buildStatic';
-import getConfig from './utils/getConfig';
 import server from './utils/server';
 
 // TODO: use koa-webpack type
@@ -53,8 +53,8 @@ const debugLog = debug('react');
 /** koa-react */
 export default class React {
   store: {|
+    cache: Cache,
     dev: boolean,
-    data: dataType,
     config: configType,
     basename?: string,
     basenamePath: string,
@@ -96,10 +96,10 @@ export default class React {
       basename,
     });
 
-    const data = getData(folderPath, redirect, basename, exclude);
+    const cache = new Cache(folderPath, redirect, basename, exclude);
     const config = configFunc(
       {
-        config: getConfig(dev, folderPath, basename, data, exclude),
+        config: getConfig(dev, folderPath, basename, exclude, cache),
         devMiddleware: {
           stats: {
             maxModules: 0,
@@ -122,8 +122,8 @@ export default class React {
     const basenamePath = basename ? `${basename.replace(/^\//, '')}/` : '';
 
     this.store = {
+      cache,
       dev,
-      data,
       config,
       basename,
       basenamePath,
@@ -174,7 +174,7 @@ export default class React {
    * @param {buildStaticOptionsType} options - build static options
    */
   +buildStatic = async (options?: buildStaticOptionsType) => {
-    const { data, urls, urlsFilePath } = this.store;
+    const { cache, urls, urlsFilePath } = this.store;
 
     if (urlsFilePath) {
       try {
@@ -184,7 +184,7 @@ export default class React {
       }
     }
 
-    await buildStatic(data, urls.commonsUrl, options);
+    await buildStatic(cache, urls.commonsUrl, options);
   };
 
   /**
@@ -194,7 +194,7 @@ export default class React {
    * @return {Function} - koa-react middleware
    */
   +middleware = async (): Promise<koaMiddlewareType> => {
-    const { dev, data, config, basename, urls, urlsFilePath } = this.store;
+    const { cache, dev, config, basename, urls, urlsFilePath } = this.store;
 
     invariant(
       config.config.output &&
@@ -228,7 +228,7 @@ export default class React {
             config,
           )
         : require('koa-mount')(publicPath, require('koa-static')(urlsPath)),
-      server(basename, data, urls),
+      server(basename, cache, urls),
     ]);
   };
 }

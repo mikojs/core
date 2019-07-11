@@ -84,30 +84,7 @@ export default (
         loader: path.resolve(__dirname, './replaceLoader.js'),
         options: {
           type: 'routers',
-          routers: {
-            routesData: `[${cache.routesData
-              .map(
-                ({
-                  path: routePath,
-                  component: { filePath, chunkName },
-                }: $ElementType<
-                  $PropertyType<CacheType, 'routesData'>,
-                  number,
-                >): string =>
-                  `{ ${[
-                    'exact: true',
-                    `path: ${JSON.stringify(routePath)}`,
-                    `component: { ${[
-                      `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
-                      `chunkName: '${chunkName}'`,
-                    ].join(', ')} }`,
-                  ].join(', ')} }`,
-              )
-              .join(', ')}] ||`,
-            main: cache.main,
-            loading: cache.loading,
-            error: cache.error,
-          },
+          cacheDir: cache.cacheDir(),
         },
       },
       ...(!dev

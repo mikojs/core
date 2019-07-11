@@ -146,6 +146,9 @@ export default class React {
   +buildJs = async () => {
     const { config, basenamePath, urlsFilePath } = this.store;
 
+    // FIXME: avoid to trigger webpack again
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     invariant(
       config.config.output && config.config.output.publicPath,
       '`{ publicPath }` in `config.config.output` can not be null',
@@ -214,6 +217,9 @@ export default class React {
 
       throw e;
     }
+
+    // FIXME: avoid to trigger webpack again
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     return compose([
       dev

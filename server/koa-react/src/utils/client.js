@@ -13,6 +13,7 @@ import Root, { type propsType as rootPropsType } from './Root';
 import Main from 'templates/Main';
 import Loading from 'templates/Loading';
 import ErrorComponent from 'templates/Error';
+import routesData from 'templates/routesData';
 
 const setConfig = /** setConfig */ emptyFunction;
 
@@ -22,7 +23,6 @@ setConfig({
 });
 
 (async () => {
-  const routesData = /** routesData */ [];
   const { mainInitialProps, ...store } = window.__CAT_DATA__;
   // preload page
   const {

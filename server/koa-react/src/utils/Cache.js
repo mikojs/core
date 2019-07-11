@@ -3,6 +3,8 @@
 import path from 'path';
 
 import debug from 'debug';
+import findCacheDir from 'find-cache-dir';
+import outputFileSync from 'output-file-sync';
 
 import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
@@ -24,6 +26,8 @@ export default class Cache {
   main: string;
   loading: string;
   error: string;
+  cacheDir: $Call<findCacheDir>;
+  writeFile: (filename: string, content: string) => string;
 
   /**
    * @example
@@ -57,6 +61,12 @@ export default class Cache {
     this.main = path.resolve(__dirname, '../templates/Main.js');
     this.loading = path.resolve(__dirname, '../templates/Loading.js');
     this.error = path.resolve(__dirname, '../templates/Error.js');
+    this.cacheDir = findCacheDir({
+      name: basename || 'no-basename',
+      thunk: true,
+    });
+    this.writeFile = (filename: string, content: string) =>
+      outputFileSync(this.cacheDir(filename), content);
 
     d3DirTree(folderPath, {
       extensions: /.jsx?$/,
@@ -139,6 +149,41 @@ export default class Cache {
         ];
         return;
       });
+
+    this.writeFile(
+      'routesData.js',
+      `module.exports = [${this.routesData
+        .map(
+          ({
+            path: routePath,
+            component: { filePath, chunkName },
+          }: $ElementType<
+            $PropertyType<rootPropsType, 'routesData'>,
+            number,
+          >): string =>
+            `{ ${[
+              'exact: true',
+              `path: ${JSON.stringify(routePath)}`,
+              `component: { ${[
+                `chunkName: '${chunkName}'`,
+                `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
+              ].join(', ')} }`,
+            ].join(', ')} }`,
+        )
+        .join(', ')}]`,
+    );
+    this.writeFile(
+      'Main.js',
+      `module.exports = require('${this.main}').default || require('${this.main}');`,
+    );
+    this.writeFile(
+      'Loading.js',
+      `module.exports = require('${this.loading}').default || require('${this.loading}');`,
+    );
+    this.writeFile(
+      'Error.js',
+      `module.exports = require('${this.error}').default || require('${this.error}');`,
+    );
 
     debugLog(this.routesData);
     debugLog(this.document);

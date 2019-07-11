@@ -17,6 +17,7 @@
     "debug": "^4.1.1",
     "directory-tree": "^2.2.3",
     "fbjs": "^1.0.0",
+    "find-cache-dir": "^3.0.0",
     "get-stream": "^5.1.0",
     "koa-compose": "^4.1.0",
     "koa-mount": "^4.0.0",

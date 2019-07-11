@@ -21,13 +21,18 @@ const debugLog = debug('react:Cache');
 
 /** Cache to store the parse data */
 export default class Cache {
+  store: {|
+    folderPath: string,
+    redirect: redirectType,
+    basename: ?string,
+    exclude: ?RegExp,
+  |};
   routesData: $PropertyType<rootPropsType, 'routesData'>;
   document: string;
   main: string;
   loading: string;
   error: string;
   cacheDir: $Call<findCacheDir>;
-  writeFile: (filename: string, content: string) => string;
 
   /**
    * @example
@@ -44,19 +49,25 @@ export default class Cache {
     basename?: string,
     exclude?: RegExp,
   ) {
-    const notFound = {
-      exact: true,
-      path: [`${basename || ''}/*`],
-      component: {
-        filePath: path.resolve(__dirname, '../templates/NotFound.js'),
-        chunkName: `pages${basename || ''}/notFound`,
-        loader: async () => ({
-          default: NotFound,
-        }),
-      },
+    this.store = {
+      folderPath,
+      redirect,
+      basename,
+      exclude,
     };
-
-    this.routesData = [notFound];
+    this.routesData = [
+      {
+        exact: true,
+        path: [`${basename || ''}/*`],
+        component: {
+          filePath: path.resolve(__dirname, '../templates/NotFound.js'),
+          chunkName: `pages${basename || ''}/notFound`,
+          loader: async () => ({
+            default: NotFound,
+          }),
+        },
+      },
+    ];
     this.document = path.resolve(__dirname, '../templates/Document.js');
     this.main = path.resolve(__dirname, '../templates/Main.js');
     this.loading = path.resolve(__dirname, '../templates/Loading.js');
@@ -65,8 +76,6 @@ export default class Cache {
       name: basename || 'no-basename',
       thunk: true,
     });
-    this.writeFile = (filename: string, content: string) =>
-      outputFileSync(this.cacheDir(filename), content);
 
     d3DirTree(folderPath, {
       extensions: /.jsx?$/,
@@ -100,18 +109,11 @@ export default class Cache {
 
             case 'NotFound':
               this.routesData = [
-                ...this.routesData.filter(
-                  ({
-                    component: { chunkName },
-                  }: $ElementType<
-                    $PropertyType<rootPropsType, 'routesData'>,
-                    number,
-                  >) => chunkName !== notFound.component.chunkName,
-                ),
+                ...this.routesData.slice(0, this.routesData.length - 1),
                 {
-                  ...notFound,
+                  ...this.routesData[this.routesData.length - 1],
                   component: {
-                    ...notFound.component,
+                    ...this.routesData[this.routesData.length - 1].component,
                     filePath,
                     loader: async () => ({
                       default: requireModule(filePath),
@@ -150,28 +152,7 @@ export default class Cache {
         return;
       });
 
-    this.writeFile(
-      'routesData.js',
-      `module.exports = [${this.routesData
-        .map(
-          ({
-            path: routePath,
-            component: { filePath, chunkName },
-          }: $ElementType<
-            $PropertyType<rootPropsType, 'routesData'>,
-            number,
-          >): string =>
-            `{ ${[
-              'exact: true',
-              `path: ${JSON.stringify(routePath)}`,
-              `component: { ${[
-                `chunkName: '${chunkName}'`,
-                `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
-              ].join(', ')} }`,
-            ].join(', ')} }`,
-        )
-        .join(', ')}]`,
-    );
+    this.writeFile('routesData.js', this.clientRoutesData());
     this.writeFile(
       'Main.js',
       `module.exports = require('${this.main}').default || require('${this.main}');`,
@@ -185,10 +166,142 @@ export default class Cache {
       `module.exports = require('${this.error}').default || require('${this.error}');`,
     );
 
-    debugLog(this.routesData);
     debugLog(this.document);
-    debugLog(this.main);
-    debugLog(this.loading);
-    debugLog(this.error);
   }
+
+  /**
+   * @example
+   * cache.writeFile('filename', 'content')
+   *
+   * @param {string} filename - filename to write in the cache dir
+   * @param {string} content - file content
+   */
+  +writeFile = (filename: string, content: string) => {
+    debugLog(filename, content);
+    outputFileSync(this.cacheDir(filename), content);
+  };
+
+  /**
+   * @example
+   * cache.clientRoutesData()
+   *
+   * @return {string} - client routes data string
+   */
+  +clientRoutesData = () =>
+    `module.exports = [${this.routesData
+      .map(
+        ({
+          path: routePath,
+          component: { filePath, chunkName },
+        }: $ElementType<
+          $PropertyType<rootPropsType, 'routesData'>,
+          number,
+        >): string =>
+          `{ ${[
+            'exact: true',
+            `path: ${JSON.stringify(routePath)}`,
+            `component: { ${[
+              `chunkName: '${chunkName}'`,
+              `loader: () => import(/* webpackChunkName: "${chunkName}" */ '${filePath}')`,
+            ].join(', ')} }`,
+          ].join(', ')} }`,
+      )
+      .join(', ')}]`;
+
+  /**
+   * @example
+   * cache.update('filePath')
+   *
+   * @param {string} filePath - file path to watch
+   */
+  +update = (filePath: string) => {
+    const { folderPath, redirect, basename, exclude } = this.store;
+
+    if (exclude && exclude.test(filePath)) return;
+
+    if (!new RegExp(path.resolve(folderPath)).test(filePath)) return;
+
+    const relativePath = path
+      .relative(folderPath, filePath)
+      .replace(/\.jsx?$/, '');
+
+    debugLog(relativePath);
+
+    if (/^\.templates/.test(relativePath)) {
+      switch (relativePath.replace(/^\.templates\//, '')) {
+        case 'Document':
+          this.document = filePath;
+          debugLog(this.document);
+          return;
+
+        case 'Main':
+          this.main = filePath;
+          this.writeFile(
+            'Main.js',
+            `module.exports = require('${this.main}').default || require('${this.main}');`,
+          );
+          return;
+
+        case 'Loading':
+          this.loading = filePath;
+          this.writeFile(
+            'Loading.js',
+            `module.exports = require('${this.loading}').default || require('${this.loading}');`,
+          );
+          return;
+
+        case 'Error':
+          this.error = filePath;
+          this.writeFile(
+            'Error.js',
+            `module.exports = require('${this.error}').default || require('${this.error}');`,
+          );
+          return;
+
+        case 'NotFound':
+          this.routesData = [
+            ...this.routesData.slice(0, this.routesData.length - 1),
+            {
+              ...this.routesData[this.routesData.length - 1],
+              component: {
+                ...this.routesData[this.routesData.length - 1].component,
+                filePath,
+                loader: async () => ({
+                  default: requireModule(filePath),
+                }),
+              },
+            },
+          ];
+          this.writeFile('routesData.js', this.clientRoutesData());
+          return;
+
+        default:
+          return;
+      }
+    }
+
+    const routePath = redirect([
+      relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
+    ]);
+
+    debugLog(routePath);
+
+    this.routesData = [
+      {
+        exact: true,
+        path: !basename
+          ? routePath
+          : routePath.map((prevPath: string) => `${basename}${prevPath}`),
+        component: {
+          filePath,
+          chunkName: `pages${basename || ''}/${relativePath}`,
+          loader: async () => ({
+            default: requireModule(filePath),
+          }),
+        },
+      },
+      ...this.routesData,
+    ];
+    this.writeFile('routesData.js', this.clientRoutesData());
+  };
 }

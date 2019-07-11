@@ -103,7 +103,7 @@ const run = async (context: serverContextType): Promise<http$Server> => {
         if (skipServer) process.exit(0);
       }
 
-      return [graphql.update];
+      return [react.update, graphql.update];
     }))
     |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
     |> (undefined

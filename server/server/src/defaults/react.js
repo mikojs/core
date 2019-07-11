@@ -23,6 +23,12 @@ export default class React {
 
   /**
    * @example
+   * defaultReact.update()
+   */
+  update = emptyFunction;
+
+  /**
+   * @example
    * defaultReact.middleware()
    */
   middleware = emptyFunction.thatReturns(middleware);

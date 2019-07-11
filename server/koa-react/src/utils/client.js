@@ -4,7 +4,7 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { emptyFunction } from 'fbjs';
 
-import { handleUnhandledRejection } from '@cat-org/utils';
+import { mockChoice, handleUnhandledRejection } from '@cat-org/utils';
 
 import { lazy, hydrate } from '../ReactIsomorphic';
 
@@ -22,7 +22,11 @@ setConfig({
   errorReporter: ErrorComponent,
 });
 
-(async () => {
+/**
+ * @example
+ * run()
+ */
+const run = async () => {
   const { mainInitialProps, ...store } = window.__CAT_DATA__;
   // preload page
   const {
@@ -67,4 +71,8 @@ setConfig({
         throw new Error('Can not find main HTMLElement');
       })(),
   );
-})();
+};
+
+mockChoice(process.env.NODE_ENV === 'test', emptyFunction, run);
+
+export default run;

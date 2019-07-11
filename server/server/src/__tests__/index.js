@@ -70,8 +70,9 @@ describe('server', () => {
     await new Promise(resolve => setTimeout(resolve, 100));
 
     require.cache['test.js'] = true;
-    chokidar.watchCallback('test.js');
-    chokidar.watchCallback('test');
+    chokidar.watchCallback('add', 'test.js');
+    chokidar.watchCallback('delete', 'test.js');
+    chokidar.watchCallback('add', 'test');
     runningServer.close();
   });
 });

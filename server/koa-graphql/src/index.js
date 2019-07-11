@@ -127,6 +127,8 @@ export default class Graphql {
 
     delete newResolvers.typeDefs;
 
+    if (Object.keys(newResolvers).length === 0) return;
+
     addResolveFunctionsToSchema({
       schema: this.schema,
       resolvers: newResolvers,

@@ -7,13 +7,8 @@ import testings from './__ignore__/testings';
 describe('replace loader', () => {
   test.each(testings)(
     'run with type = %s and source = %s',
-    (
-      type: string,
-      source: string,
-      routers: ?{ [string]: string },
-      expected: string,
-    ) => {
-      expect(replaceLoader.bind({ query: { type, routers } })(source)).toBe(
+    (type: string, source: string, cacheDir?: string, expected: string) => {
+      expect(replaceLoader.bind({ query: { type, cacheDir } })(source)).toBe(
         expected,
       );
     },

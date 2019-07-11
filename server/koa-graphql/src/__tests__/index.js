@@ -117,26 +117,35 @@ type User {
       server.close();
     });
 
-    test('update resolver when file is changed', async () => {
-      const { server, graphql, request } = await runServer({
-        ...additionalSchema,
-      });
+    test.each`
+      filePath                               | isEqual
+      ${'./__ignore__/schemaChanged/key.js'} | ${true}
+      ${'./notIncludePath.js'}               | ${false}
+    `(
+      'update resolver when file is changed with filePath = $filePath',
+      async ({
+        filePath,
+        isEqual,
+      }: {|
+        filePath: string,
+        isEqual: boolean,
+      |}) => {
+        const { server, graphql, request } = await runServer(additionalSchema);
 
-      expect(await request(requestQuery)).toEqual(requestResult);
+        expect(await request(requestQuery)).toEqual(requestResult);
 
-      graphql.update(
-        path.resolve(__dirname, `./__ignore__/schemaChanged/key.js`),
-      );
+        graphql.update(path.resolve(__dirname, filePath));
 
-      const result = await request(requestQuery);
+        const result = await request(requestQuery);
 
-      expect(result).toEqual({
-        data: {
-          key: 'test',
-        },
-      });
+        (isEqual ? expect(result) : expect(result).not).toEqual({
+          data: {
+            key: 'test',
+          },
+        });
 
-      server.close();
-    });
+        server.close();
+      },
+    );
   });
 });

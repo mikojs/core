@@ -3,14 +3,9 @@
 export default [
   [
     'routers',
-    '/** routesData */."templates/Main"."templates/Loading"."templates/Error"',
-    {
-      routesData: 'routesData',
-      main: 'main',
-      loading: 'loading',
-      error: 'error',
-    },
-    'routesData."main"."loading"."error"',
+    '"templates/Main"."templates/Loading"."templates/Error"."templates/routesData"',
+    '/cache-dir',
+    '"/cache-dir/Main"."/cache-dir/Loading"."/cache-dir/Error"."/cache-dir/routesData"',
   ],
   [
     'set-config',

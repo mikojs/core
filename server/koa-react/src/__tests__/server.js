@@ -12,7 +12,7 @@ import { webpack } from 'webpack';
 import { outputFileSync } from 'output-file-sync';
 
 import runningServer from './__ignore__/server';
-import testings from './__ignore__/testings';
+import pagesTestings from './__ignore__/pagesTestings';
 
 let server: http$Server;
 let domain: string;
@@ -71,7 +71,7 @@ describe.each`
       domain = newDomain;
     });
 
-    test.each(testings)(
+    test.each(pagesTestings)(
       'get %s',
       async (
         urlPath: string,

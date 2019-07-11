@@ -2,55 +2,58 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
+import { emptyFunction } from 'fbjs';
 
 import client from '../client';
-import { type propsType as rootPropsType } from '../Root';
+import Root from '../Root';
 
-/** @react test router page Component */
-const routePage = () => <div>test</div>;
-const routeData = {
-  exact: true,
-  path: ['/'],
-  component: {
-    loader: async () => ({
-      default: routePage,
-    }),
-    chunkName: 'test',
+jest.mock('../../templates/routesData', () => [
+  {
+    exact: true,
+    path: ['*'],
+    component: {
+      loader: async () => ({
+        default: () => <div>test</div>,
+      }),
+      chunkName: 'test',
+    },
   },
-};
-
-window.__CAT_DATA__ = {
-  mainInitialProps: {},
-  chunkName: routeData.component.chunkName,
-};
-window.__CHUNKS_NAMES__ = [routeData.component.chunkName];
+]);
 
 describe('client', () => {
   test.each`
-    message                            | routesData
-    ${'Can not find page component'}   | ${[]}
-    ${'Can not find main HTMLElement'} | ${[routeData]}
+    message                            | chunkName
+    ${'Can not find page component'}   | ${'not found'}
+    ${'Can not find main HTMLElement'} | ${'test'}
   `(
     'error with message = $message',
     async ({
       message,
-      routesData,
+      chunkName,
     }: {|
       message: string,
-      routesData: $PropertyType<rootPropsType, 'routesData'>,
+      chunkName: string,
     |}) => {
-      await expect(client(routesData)).rejects.toThrow(message);
+      window.__CAT_DATA__ = {
+        mainInitialProps: {},
+        chunkName,
+      };
+      window.__CHUNKS_NAMES__ = [chunkName];
+
+      await expect(client()).rejects.toThrow(message);
     },
   );
 
   test('work', async () => {
-    const main = global.document.createElement('main');
+    global.document.querySelector('body').innerHTML =
+      '<main id="__CAT__"><script>var __CHUNKS_NAMES__ = ["test"];</script></main>';
 
-    main.setAttribute('id', '__CAT__');
-    global.document.querySelector('body').appendChild(main);
+    await client();
 
-    const Page = await client([routeData]);
+    const {
+      Page: { _result: Component = emptyFunction },
+    } = Root.preload();
 
-    expect(mount(<Page />).contains(routePage())).toBeTruthy();
+    expect(mount(<Component />).html()).toBe('<div>test</div>');
   });
 });

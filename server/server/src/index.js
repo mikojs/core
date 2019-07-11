@@ -75,9 +75,6 @@ export default {
 
     logger.start('Server start');
 
-    // TODO: avoid to trigger webpack again
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
     return new Koa();
   },
 

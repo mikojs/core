@@ -39,6 +39,7 @@ const debugLog = debug('graphql');
 /** koa-graphql */
 export default class Graphql {
   schema: GraphQLSchemaType;
+  folderPath: string;
   options: $PropertyType<optionsType, 'options'>;
 
   /**
@@ -100,6 +101,7 @@ export default class Graphql {
       resolvers,
     });
 
+    this.folderPath = folderPath;
     this.options = options;
     this.schema = makeExecutableSchema({
       ...options,
@@ -119,6 +121,8 @@ export default class Graphql {
    * @param {string} filePath - file path
    */
   update = (filePath: string) => {
+    if (!new RegExp(path.resolve(this.folderPath)).test(filePath)) return;
+
     const newResolvers = requireModule(filePath);
 
     delete newResolvers.typeDefs;

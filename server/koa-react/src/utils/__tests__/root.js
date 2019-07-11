@@ -53,10 +53,11 @@ describe('root', () => {
           exact: true,
           path: ['/'],
           component: {
+            filePath: 'test',
+            chunkName: 'test',
             loader: async () => ({
               default: () => null,
             }),
-            chunkName: 'test',
           },
         },
       ],

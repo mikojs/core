@@ -12,6 +12,7 @@ import path from 'path';
 import { invariant, emptyFunction } from 'fbjs';
 import commander from 'commander';
 import chalk from 'chalk';
+import debug from 'debug';
 
 import type reactType from '@cat-org/koa-react';
 import type graphqlType from '@cat-org/koa-graphql';
@@ -28,6 +29,7 @@ import DefaultGraphql from 'defaults/graphql';
 
 import loadModule from 'utils/loadModule';
 
+const debugLog = debug('server:bin');
 const program = new commander.Command('server')
   .version(version, '-v, --version')
   .usage(chalk`{gray [options]}`)
@@ -54,6 +56,7 @@ let graphql: graphqlType | DefaultGraphql;
 const run = async (context: serverContextType): Promise<http$Server> => {
   context.dev = context.dev || true;
   context.watch = context.watch || false;
+  debugLog(context);
 
   return (
     (await server.init(context))

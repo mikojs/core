@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type ComponentType } from 'react';
+import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { emptyFunction } from 'fbjs';
 
@@ -13,6 +13,7 @@ import Root, { type propsType as rootPropsType } from './Root';
 import Main from 'templates/Main';
 import Loading from 'templates/Loading';
 import ErrorComponent from 'templates/Error';
+import routesData from 'templates/routesData';
 
 const setConfig = /** setConfig */ emptyFunction;
 
@@ -23,15 +24,9 @@ setConfig({
 
 /**
  * @example
- * render([])
- *
- * @param {Array} routesData - routes data
- *
- * @return {ComponentType} - page component
+ * run()
  */
-const render = async (
-  routesData: $PropertyType<rootPropsType, 'routesData'>,
-): Promise<ComponentType<{||}>> => {
+const run = async () => {
   const { mainInitialProps, ...store } = window.__CAT_DATA__;
   // preload page
   const {
@@ -76,15 +71,8 @@ const render = async (
         throw new Error('Can not find main HTMLElement');
       })(),
   );
-
-  return Page;
 };
 
-mockChoice(
-  process.env.NODE_ENV === 'test',
-  emptyFunction,
-  render,
-  /** routesData */ [],
-);
+mockChoice(process.env.NODE_ENV === 'test', emptyFunction, run);
 
-export default render;
+export default run;

@@ -283,6 +283,7 @@ export default class Cache {
     const routePath = redirect([
       relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
     ]);
+    const chunkName = `pages${basename || ''}/${relativePath}`;
 
     debugLog(routePath);
 
@@ -294,13 +295,18 @@ export default class Cache {
           : routePath.map((prevPath: string) => `${basename}${prevPath}`),
         component: {
           filePath,
-          chunkName: `pages${basename || ''}/${relativePath}`,
+          chunkName,
           loader: async () => ({
             default: requireModule(filePath),
           }),
         },
       },
-      ...this.routesData,
+      ...this.routesData.filter(
+        ({
+          component: { chunkName: routeChunkName },
+        }: $ElementType<$PropertyType<rootPropsType, 'routesData'>, number>) =>
+          routeChunkName !== chunkName,
+      ),
     ];
     this.writeFile('routesData.js', this.clientRoutesData());
   };

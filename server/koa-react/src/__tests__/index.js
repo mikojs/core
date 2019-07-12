@@ -62,7 +62,7 @@ describe('react', () => {
   });
 
   test.each(updateTestings)(
-    'udpate with %s',
+    'udpate cache with %s',
     async (
       filePath: string,
       destPaths: $ReadOnlyArray<string>,

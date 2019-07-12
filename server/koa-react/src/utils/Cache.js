@@ -19,6 +19,18 @@ export type redirectType = (
 
 const debugLog = debug('react:Cache');
 
+/**
+ * @example
+ * getLoader('/file-path')
+ *
+ * @param {string} filePath - file path to get loader
+ *
+ * @return {Function} - loader
+ */
+const getLoader = (filePath: string) => async () => ({
+  default: requireModule(filePath),
+});
+
 /** Cache to store the parse data */
 export default class Cache {
   store: {|
@@ -115,9 +127,7 @@ export default class Cache {
                   component: {
                     ...this.routesData[this.routesData.length - 1].component,
                     filePath,
-                    loader: async () => ({
-                      default: requireModule(filePath),
-                    }),
+                    loader: getLoader(filePath),
                   },
                 },
               ];
@@ -127,24 +137,14 @@ export default class Cache {
               return;
           }
 
-        const routePath = redirect([
-          relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
-        ]);
-
-        debugLog(routePath);
-
         this.routesData = [
           {
             exact: true,
-            path: !basename
-              ? routePath
-              : routePath.map((prevPath: string) => `${basename}${prevPath}`),
+            path: this.getPath(relativePath),
             component: {
               filePath,
               chunkName: `pages${basename || ''}/${relativePath}`,
-              loader: async () => ({
-                default: requireModule(filePath),
-              }),
+              loader: getLoader(filePath),
             },
           },
           ...this.routesData,
@@ -168,6 +168,27 @@ export default class Cache {
 
     debugLog(this.document);
   }
+
+  /**
+   * @example
+   * cache.getPath('/relative-path')
+   *
+   * @param {string} relativePath - relative path
+   *
+   * @return {Array} - path for react-router-dom
+   */
+  +getPath = (relativePath: string): $ReadOnlyArray<string> => {
+    const { redirect, basename } = this.store;
+    const routePath = redirect([
+      relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
+    ]);
+
+    debugLog(routePath);
+
+    return !basename
+      ? routePath
+      : routePath.map((prevPath: string) => `${basename}${prevPath}`);
+  };
 
   /**
    * @example
@@ -215,7 +236,7 @@ export default class Cache {
    * @param {string} filePath - file path to watch
    */
   +update = (filePath: string) => {
-    const { folderPath, redirect, basename, exclude } = this.store;
+    const { folderPath, basename, exclude } = this.store;
 
     if (exclude && exclude.test(filePath)) return;
 
@@ -266,9 +287,7 @@ export default class Cache {
               component: {
                 ...this.routesData[this.routesData.length - 1].component,
                 filePath,
-                loader: async () => ({
-                  default: requireModule(filePath),
-                }),
+                loader: getLoader(filePath),
               },
             },
           ];
@@ -280,25 +299,16 @@ export default class Cache {
       }
     }
 
-    const routePath = redirect([
-      relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
-    ]);
     const chunkName = `pages${basename || ''}/${relativePath}`;
-
-    debugLog(routePath);
 
     this.routesData = [
       {
         exact: true,
-        path: !basename
-          ? routePath
-          : routePath.map((prevPath: string) => `${basename}${prevPath}`),
+        path: this.getPath(relativePath),
         component: {
           filePath,
           chunkName,
-          loader: async () => ({
-            default: requireModule(filePath),
-          }),
+          loader: getLoader(filePath),
         },
       },
       ...this.routesData.filter(

@@ -221,7 +221,10 @@ export default class Cache {
   +getPath = (relativePath: string): $ReadOnlyArray<string> => {
     const { redirect, basename } = this.store;
     const routePath = redirect([
-      relativePath.replace(/(\/?index)?$/, '').replace(/^/, '/'),
+      relativePath
+        .replace(/(\/?index)?$/, '')
+        .replace(/^/, '/')
+        .replace(/\/\[([^[\]]*)\]/g, '/:$1'),
     ]);
 
     debugLog(routePath);

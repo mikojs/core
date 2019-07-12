@@ -43,6 +43,20 @@ export default () => 'Home';
 
 You can see [here](./#how-to-write-the-components) to lerna more about writing the components.
 
+#### Update page with `babel watch`
+
+```js
+const react = new React('./path-to-react-folder');
+
+chokidar
+  .watch('./path-to-react-folder', {
+    ignoreInitial: true,
+  })
+  .on('change', (filePath: string) => {
+    react.update(filePath);
+  });
+```
+
 #### With the custom options
 
 ```js

@@ -197,8 +197,12 @@ export default {
             .watch(path.resolve(dir), {
               ignoreInitial: true,
             })
-            .on('change', (filePath: string) => {
-              if (!/\.jsx?$/.test(filePath)) return;
+            .on('all', (event: string, filePath: string) => {
+              if (
+                !['add', 'change'].includes(event) ||
+                !/\.jsx?$/.test(filePath)
+              )
+                return;
 
               watchFunc.forEach((update: watchFuncType) => {
                 update(filePath);

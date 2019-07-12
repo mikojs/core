@@ -118,9 +118,10 @@ type User {
     });
 
     test.each`
-      filePath                               | isEqual
-      ${'./__ignore__/schemaChanged/key.js'} | ${true}
-      ${'./notIncludePath.js'}               | ${false}
+      filePath                                          | isEqual
+      ${'./__ignore__/schemaChanged/key.js'}            | ${true}
+      ${'./__ignore__/schemaChanged/emptyResolvers.js'} | ${false}
+      ${'./notIncludePath.js'}                          | ${false}
     `(
       'update resolver when file is changed with filePath = $filePath',
       async ({

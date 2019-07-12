@@ -141,6 +141,16 @@ export default class React {
 
   /**
    * @example
+   * react.update('filePath')
+   *
+   * @param {string} filePath - file path to watch
+   */
+  +update = (filePath: string) => {
+    this.store.cache.update(filePath);
+  };
+
+  /**
+   * @example
    * await react.buildJs()
    */
   +buildJs = async () => {

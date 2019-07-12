@@ -2,7 +2,11 @@
 
 import path from 'path';
 
+import { outputFileSync } from 'output-file-sync';
+
 import React from '../index';
+
+import updateTestings from './__ignore__/updateTestings';
 
 jest.mock('node-fetch', () =>
   jest.fn(async (url: string) => ({
@@ -12,6 +16,7 @@ jest.mock('node-fetch', () =>
 
 const react = new React(path.resolve(__dirname, './__ignore__/page'), {
   dev: false,
+  exclude: /exclude/,
 });
 
 describe('react', () => {
@@ -55,4 +60,20 @@ describe('react', () => {
 
     await expect(react.middleware()).rejects.toThrow('error');
   });
+
+  test.each(updateTestings)(
+    'udpate cache with %s',
+    async (
+      filePath: string,
+      destPaths: $ReadOnlyArray<string>,
+      contents: $ReadOnlyArray<string>,
+    ) => {
+      outputFileSync.destPaths = [];
+      outputFileSync.contents = [];
+      react.update(filePath);
+
+      expect(outputFileSync.destPaths).toEqual(destPaths);
+      expect(outputFileSync.contents).toEqual(contents);
+    },
+  );
 });

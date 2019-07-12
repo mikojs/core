@@ -1,5 +1,39 @@
 # CHANGELOG
 
+## 1.4.0 (2019-07-12)
+
+#### :rocket: New Feature
+
+- Other
+  - [#335](https://github.com/cat-org/core/pull/335) (@cat-org/koa-react) Add cache watch ([@HsuTing](https://github.com/HsuTing))
+  - [#332](https://github.com/cat-org/core/pull/332) (@cat-org/koa-react) Support to use dynamic routes and templates ([@HsuTing](https://github.com/HsuTing))
+  - [#326](https://github.com/cat-org/core/pull/326) (@cat-org/koa-graphql, @cat-org/server) Detect changed ([@HsuTing](https://github.com/HsuTing))
+- `utils`
+  - [#329](https://github.com/cat-org/core/pull/329) (@cat-org/utils) Add flow utility ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `website`
+  - [#323](https://github.com/cat-org/core/pull/323) (@cat-org/koa-graphql) Add node schema ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- Other
+  - [#334](https://github.com/cat-org/core/pull/334) chore(deps): bump lodash from 4.17.11 to 4.17.14 ([@dependabot[bot]](https://github.com/apps/dependabot))
+  - [#333](https://github.com/cat-org/core/pull/333) chore(deps): bump lodash.template from 4.4.0 to 4.5.0 ([@dependabot[bot]](https://github.com/apps/dependabot))
+  - [#324](https://github.com/cat-org/core/pull/324) (@cat-org/koa-graphql) Modified flow type ([@HsuTing](https://github.com/HsuTing))
+- `utils`
+  - [#330](https://github.com/cat-org/core/pull/330) (@cat-org/utils) Revert "Add flow utility (#329)" ([@HsuTing](https://github.com/HsuTing))
+
+#### :memo: Documentation
+
+- [#336](https://github.com/cat-org/core/pull/336) (@cat-org/koa-react) Update README ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- [#325](https://github.com/cat-org/core/pull/325) (@cat-org/koa-graphql) Use variables in Testing ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.3.2 (2019-07-07)
 
 #### :boom: Breaking Change

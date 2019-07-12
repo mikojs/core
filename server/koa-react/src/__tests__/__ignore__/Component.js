@@ -2,7 +2,7 @@
 
 import React, { type Node as NodeType } from 'react';
 
-import { type ctxType } from '../../types';
+import { type pageCtxType } from '../../types';
 
 type propsType = {|
   path: string,
@@ -14,11 +14,11 @@ export default class Component extends React.PureComponent<propsType> {
    * @example
    * Component.getInitialProps(context)
    *
-   * @param {ctxType} context - context data
+   * @param {pageCtxType} context - context data
    *
    * @return {propsType} - initial props
    */
-  static getInitialProps = ({ ctx }: ctxType<>) => ({
+  static getInitialProps = ({ ctx }: pageCtxType<>) => ({
     path: ctx.path,
   });
 

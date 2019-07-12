@@ -3,7 +3,7 @@
 import React, { type Node as NodeType } from 'react';
 import { Helmet } from 'react-helmet';
 
-import { type ctxType } from '../types';
+import { type pageCtxType } from '../types';
 
 import * as styles from './styles/notFound';
 
@@ -13,13 +13,13 @@ export default class NotFound extends React.PureComponent<*> {
    * @example
    * NotFound.getInitialProps({ ctx })
    *
-   * @param {ctxType} context - cnotext data
+   * @param {pageCtxType} context - cnotext data
    *
    * @return {object} - initial props
    */
   static getInitialProps = ({
     ctx,
-  }: ctxType<{| status: number |}>): {|
+  }: pageCtxType<{| status: number |}>): {|
     head: NodeType,
   |} => {
     ctx.status = 404;

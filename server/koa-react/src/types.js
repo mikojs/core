@@ -1,8 +1,9 @@
 // @flow
 
 import { type ComponentType } from 'react';
+import { type Match as MatchType } from 'react-router-dom';
 
-export type ctxType<T = {}> = {|
+type ctxType<T = {}> = {|
   ctx: {|
     path: string,
     querystring: string,
@@ -26,4 +27,8 @@ export type errorPropsType = {|
   errorInfo: {|
     componentStack: string,
   |},
+|};
+
+export type pageCtxType<T = {}> = ctxType<T> & {|
+  match: MatchType,
 |};

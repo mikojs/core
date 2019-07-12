@@ -2,7 +2,28 @@
 
 import path from 'path';
 
-const routesData = `module.exports = [{ exact: true, path: ["/"], component: { chunkName: 'pages/index', loader: () => import(/* webpackChunkName: "pages/index" */ '/Users/hsuting/Desktop/work/core/server/koa-react/src/__tests__/__ignore__/page/index.js') } }, { exact: true, path: ["/otherPath"], component: { chunkName: 'pages/otherPath', loader: () => import(/* webpackChunkName: "pages/otherPath" */ '/Users/hsuting/Desktop/work/core/server/koa-react/src/__tests__/__ignore__/page/otherPath.js') } }, { exact: true, path: ["/otherFolder/otherFolder"], component: { chunkName: 'pages/otherFolder/otherFolder/index', loader: () => import(/* webpackChunkName: "pages/otherFolder/otherFolder/index" */ '/Users/hsuting/Desktop/work/core/server/koa-react/src/__tests__/__ignore__/page/otherFolder/otherFolder/index.js') } }, { exact: true, path: ["/noGetInitialProps"], component: { chunkName: 'pages/noGetInitialProps', loader: () => import(/* webpackChunkName: "pages/noGetInitialProps" */ '/Users/hsuting/Desktop/work/core/server/koa-react/src/__tests__/__ignore__/page/noGetInitialProps.js') } }, { exact: true, path: ["/multipleLazy"], component: { chunkName: 'pages/multipleLazy', loader: () => import(/* webpackChunkName: "pages/multipleLazy" */ '/Users/hsuting/Desktop/work/core/server/koa-react/src/__tests__/__ignore__/page/multipleLazy.js') } }, { exact: true, path: ["/error"], component: { chunkName: 'pages/error', loader: () => import(/* webpackChunkName: "pages/error" */ '/Users/hsuting/Desktop/work/core/server/koa-react/src/__tests__/__ignore__/page/error.js') } }, { exact: true, path: ["/*"], component: { chunkName: 'pages/notFound', loader: () => import(/* webpackChunkName: "pages/notFound" */ '/Users/hsuting/Desktop/work/core/server/koa-react/src/templates/NotFound.js') } }]`;
+const routesData = `module.exports = [{ exact: true, path: ["/"], component: { chunkName: 'pages/index', loader: () => import(/* webpackChunkName: "pages/index" */ '${path.resolve(
+  __dirname,
+  './page/index.js',
+)}') } }, { exact: true, path: ["/otherPath"], component: { chunkName: 'pages/otherPath', loader: () => import(/* webpackChunkName: "pages/otherPath" */ '${path.resolve(
+  __dirname,
+  './page/otherPath.js',
+)}') } }, { exact: true, path: ["/otherFolder/otherFolder"], component: { chunkName: 'pages/otherFolder/otherFolder/index', loader: () => import(/* webpackChunkName: "pages/otherFolder/otherFolder/index" */ '${path.resolve(
+  __dirname,
+  './page/otherFolder/otherFolder/index.js',
+)}') } }, { exact: true, path: ["/noGetInitialProps"], component: { chunkName: 'pages/noGetInitialProps', loader: () => import(/* webpackChunkName: "pages/noGetInitialProps" */ '${path.resolve(
+  __dirname,
+  './page/noGetInitialProps.js',
+)}') } }, { exact: true, path: ["/multipleLazy"], component: { chunkName: 'pages/multipleLazy', loader: () => import(/* webpackChunkName: "pages/multipleLazy" */ '${path.resolve(
+  __dirname,
+  './page/multipleLazy.js',
+)}') } }, { exact: true, path: ["/error"], component: { chunkName: 'pages/error', loader: () => import(/* webpackChunkName: "pages/error" */ '${path.resolve(
+  __dirname,
+  './page/error.js',
+)}') } }, { exact: true, path: ["/*"], component: { chunkName: 'pages/notFound', loader: () => import(/* webpackChunkName: "pages/notFound" */ '${path.resolve(
+  __dirname,
+  '../../templates/NotFound.js',
+)}') } }]`;
 
 const mainFilePath = path.resolve(__dirname, './page/.templates/Main.js');
 const loadingFilePath = path.resolve(__dirname, './page/.templates/Loading.js');

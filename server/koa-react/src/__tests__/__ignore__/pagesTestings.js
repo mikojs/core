@@ -49,18 +49,18 @@ export default [
     {},
   ],
   [
-    '/aaaa/bbbb',
+    '/bbbb/aaaa',
     'pages/[bar]/[foo]',
     head,
-    `/aaaa/bbbb<!-- -->-<!-- -->${modifyDoubleQuotes({
-      bar: 'aaaa',
-      foo: 'bbbb',
+    `/bbbb/aaaa<!-- -->-<!-- -->${modifyDoubleQuotes({
+      bar: 'bbbb',
+      foo: 'aaaa',
     })}`,
     {
-      path: '/aaaa/bbbb',
+      path: '/bbbb/aaaa',
       params: {
-        bar: 'aaaa',
-        foo: 'bbbb',
+        bar: 'bbbb',
+        foo: 'aaaa',
       },
     },
     {},

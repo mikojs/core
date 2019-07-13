@@ -98,6 +98,11 @@ export default async (
           await pageReact.buildStatic({
             baseUrl: `http://localhost:${port}`,
             folderPath,
+            urlParamsRedirect: (route: string) =>
+              route
+                .replace(/:foo/, 'aaaa')
+                .replace(/:bar/, 'bbbb')
+                .replace(/\(.*\)/, ''),
           });
         }
 

@@ -11,9 +11,23 @@ import type CacheType from './Cache';
 export type optionsType = {|
   baseUrl?: string,
   folderPath?: string,
+  urlParamsRedirect?: (route: string) => ?string,
 |};
 
 const debugLog = debug('react:buildStatic');
+
+/**
+ * @example
+ * urlParamsWarning('/:id')
+ *
+ * @param {string} route - route string
+ */
+const urlParamsWarning = (route: string) => {
+  const { warn } = console;
+
+  warn(`You should not use the url parameters with building static: ${route}`);
+  warn(`Use "urlParamsRedirect" in the options with building static.`);
+};
 
 /**
  * @example
@@ -29,6 +43,7 @@ export default async (
   {
     baseUrl = 'http://localhost:8000',
     folderPath = path.resolve('./docs'),
+    urlParamsRedirect = urlParamsWarning,
   }: optionsType = {},
 ) => {
   await Promise.all(
@@ -39,7 +54,17 @@ export default async (
           {
             path: routePath,
           }: $ElementType<$PropertyType<CacheType, 'routesData'>, number>,
-        ) => [...result, ...routePath],
+        ) => [
+          ...result,
+          ...routePath
+            .map((route: string) =>
+              !/\/:/.test(route)
+                ? route
+                : // $FlowFixMe https://github.com/facebook/flow/issues/1414
+                  urlParamsRedirect(route),
+            )
+            .filter((route: ?string) => route),
+        ],
         [commonsUrl],
       )
       .map(async (routePath: string) => {

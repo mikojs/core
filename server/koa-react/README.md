@@ -153,7 +153,7 @@ This middleware is like [next.js](https://github.com/zeit/next.js). However, thi
 
 #### Page component
 
-Each component will be used to build the page like `next.js`. If you want to redirect the page or use like `/path/:id`, you need to add the `redirect` options in the middleware.
+Each component will be used to build the page like `next.js`. If you want to use the url parameters, you can add a file like `[foo].js` or make a folder like `[foo]`. Then, you can get the variables from the match in the arguments of the `getInitialProps`. You can see [here](https://reacttraining.com/react-router/web/example/url-params) to lerna the more information about `match`.
 
 ```js
 export default class Page extend React.PureComponent {

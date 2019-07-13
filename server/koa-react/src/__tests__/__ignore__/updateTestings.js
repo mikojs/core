@@ -11,6 +11,12 @@ const routesData = `module.exports = [{ exact: true, path: ["/"], component: { c
 )}') } }, { exact: true, path: ["/otherFolder/otherFolder"], component: { chunkName: 'pages/otherFolder/otherFolder/index', loader: () => import(/* webpackChunkName: "pages/otherFolder/otherFolder/index" */ '${path.resolve(
   __dirname,
   './page/otherFolder/otherFolder/index.js',
+)}') } }, { exact: true, path: ["/otherFolder/otherFolder/:foo"], component: { chunkName: 'pages/otherFolder/otherFolder/[foo]', loader: () => import(/* webpackChunkName: "pages/otherFolder/otherFolder/[foo]" */ '${path.resolve(
+  __dirname,
+  './page/otherFolder/otherFolder/[foo].js',
+)}') } }, { exact: true, path: ["/otherFolder/:foo"], component: { chunkName: 'pages/otherFolder/[foo]', loader: () => import(/* webpackChunkName: "pages/otherFolder/[foo]" */ '${path.resolve(
+  __dirname,
+  './page/otherFolder/[foo].js',
 )}') } }, { exact: true, path: ["/noGetInitialProps"], component: { chunkName: 'pages/noGetInitialProps', loader: () => import(/* webpackChunkName: "pages/noGetInitialProps" */ '${path.resolve(
   __dirname,
   './page/noGetInitialProps.js',
@@ -20,6 +26,12 @@ const routesData = `module.exports = [{ exact: true, path: ["/"], component: { c
 )}') } }, { exact: true, path: ["/error"], component: { chunkName: 'pages/error', loader: () => import(/* webpackChunkName: "pages/error" */ '${path.resolve(
   __dirname,
   './page/error.js',
+)}') } }, { exact: true, path: ["/:foo(aaaa)"], component: { chunkName: 'pages/[foo(aaaa)]', loader: () => import(/* webpackChunkName: "pages/[foo(aaaa)]" */ '${path.resolve(
+  __dirname,
+  './page/[foo(aaaa)].js',
+)}') } }, { exact: true, path: ["/:bar/:foo"], component: { chunkName: 'pages/[bar]/[foo]', loader: () => import(/* webpackChunkName: "pages/[bar]/[foo]" */ '${path.resolve(
+  __dirname,
+  './page/[bar]/[foo].js',
 )}') } }, { exact: true, path: ["/*"], component: { chunkName: 'pages/notFound', loader: () => import(/* webpackChunkName: "pages/notFound" */ '${path.resolve(
   __dirname,
   '../../templates/NotFound.js',

@@ -62,7 +62,10 @@ const getPage = (
     location: { pathname, search },
     staticContext,
   }: {
-    location: { pathname: string, search: string },
+    location: $Diff<
+      $PropertyType<contextRouterType, 'location'>,
+      { state: mixed, hash: mixed },
+    >,
     staticContext?: koaContextType,
   },
 ): $PropertyType<storeType, 'Page'> => {
@@ -86,6 +89,7 @@ const getPage = (
         route: {
           component: { loader, chunkName },
         },
+        match,
       },
     ] = matchRoutes(routesData, ctx.ctx.path);
 
@@ -99,7 +103,7 @@ const getPage = (
       const { default: Component } = await loader();
       const { head, ...initialProps } =
         // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-        (await Component.getInitialProps?.(ctx)) || {};
+        (await Component.getInitialProps?.({ ...ctx, match })) || {};
       /** @react render the page */
       const Page = <-P: {}>(props?: P) => (
         <Component {...props} {...initialProps} />

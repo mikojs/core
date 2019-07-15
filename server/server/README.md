@@ -79,43 +79,45 @@ describe('server', () => {
 import server from '@cat-org/server';
 
 (async () => {
-  // `runningServer` is from `app.listen()`, you can close or do other things
-  const runningServer = await ((await server.init({
-    src: 'src',
-    dir: 'lib',
-  })
-    |> server.event(async () => {
-      /**
-       * Do something after babel bulid.
-       * This will not use like as a middleware and this will only run at the begin.
-       * If you want to do something when file is built with `babel watch`, you can return the update functions array.
-       *
-       * For example:
-       * return [ (filePath: string) => { /** do something with update file path */ } ];
-       */
-    })
-    |> server.use(async (ctx, next) => {
-      await next();
-    })
-    |> ('/path'                                 // if this is undefined, this will not add prefix to router
-      |> server.start
-      |> ('/get'
-        |> server.get                           // this will render as /path/get with get method (post, put, del, all)
+  // `runningServer` is from `(new Koa()).listen()`, you can close server or do other things
+  const runningServer = await (
+    (await server.init({
+      src: 'src',
+      dir: 'lib',
+    }))
+      |> (await server.event(async () => {
+        /**
+         * Do something after babel bulid.
+         * This will not use like as a middleware and this will only run at the begin.
+         * If you want to do something when file is built with `babel watch`, you can return the update functions array.
+         *
+         * For example:
+         * return [ (filePath: string) => { /** do something with update file path */ } ];
+         */
+      }))
+      |> server.use(async (ctx, next) => {
+        await next();
+      })
+      |> ('/path'                                 // if this is undefined, this will not add prefix to router
+        |> server.start
+        |> ('/get'
+          |> server.get                           // this will render as /path/get with get method (post, put, del, all)
+          |> server.use(async (ctx, next) => {
+            await next();
+          })
+          |> server.end)
         |> server.use(async (ctx, next) => {
           await next();
         })
         |> server.end)
-      |> server.use(async (ctx, next) => {
-        await next();
-      })
-      |> server.end)
-    |> (undefined
-      |> server.start
-      |> ('/get'                                // this will render as /get with get method
-        |> server.get
+      |> (undefined
+        |> server.start
+        |> ('/get'                                // this will render as /get with get method
+          |> server.get
+          |> server.end)
         |> server.end)
-      |> server.end)
-    |> server.run);
+      |> server.run
+  );
 })();
 ```
 

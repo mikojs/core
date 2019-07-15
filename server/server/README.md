@@ -116,7 +116,7 @@ import server from '@cat-org/server';
           |> server.get
           |> server.end)
         |> server.end)
-      |> server.run
+      |> server.run                               // run server
   );
 })();
 ```
@@ -132,4 +132,18 @@ await server.init({
   babelOptions: ['--verbose'],
   port: 8000,
 });
+```
+
+#### Write custom `server.run`
+
+```js
+...
+  |> app => new Promise(resolve => {
+    const server = app.listen(port, () => {
+      // do somthing
+
+      // you should watch the changed files in dev mode
+      resolve(server.watch(server));
+    });
+  })
 ```

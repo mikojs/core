@@ -15,6 +15,7 @@ import chalk from 'chalk';
 import debug from 'debug';
 
 import parseArgv from '@babel/cli/lib/babel/options';
+import dirCommand from '@babel/cli/lib/babel/dir';
 
 import server from '../index';
 
@@ -39,6 +40,13 @@ const program = new commander.Command('server')
   .option('--skip-relay', 'skip run relay-compiler')
   .allowUnknownOption();
 
+const {
+  skipServer = false,
+  skipBuild = false,
+  skipRelay = false,
+  options,
+} = program.parse([...process.argv]);
+
 /**
  * @example
  * run(context)
@@ -60,8 +68,6 @@ const run = async ({
   watch?: boolean,
   port?: number,
 |}): Promise<http$Server> => {
-  const watchFuncs = [];
-
   debugLog({
     src,
     dir,
@@ -70,17 +76,16 @@ const run = async ({
     port,
   });
 
-  // TODO: babel build
   const react = new (loadModule('@cat-org/koa-react', DefaultReact))(
     path.resolve(dir, './pages'),
-    { dev: dev, exclude: /__generated__/ }
-      |> ((options: {}) =>
+    { dev, exclude: /__generated__/ }
+      |> ((config: {}) =>
         loadModule(
           '@cat-org/use-css',
           emptyFunction.thatReturnsArgument,
           options,
         ))
-      |> ((options: {}) =>
+      |> ((config: {}) =>
         loadModule(
           '@cat-org/use-less',
           emptyFunction.thatReturnsArgument,
@@ -92,12 +97,6 @@ const run = async ({
   );
 
   if (process.env.NODE_ENV !== 'test') {
-    const {
-      skipServer = false,
-      skipBuild = false,
-      skipRelay = false,
-    } = program.parse([...process.argv]);
-
     if (!skipRelay) {
       await graphql.relay(['--src', src]);
 
@@ -107,8 +106,6 @@ const run = async ({
     if (!skipBuild && !dev) await react.buildJs();
 
     if (skipServer) process.exit(0);
-
-    watchFuncs.push(react.update, graphql.update);
   }
 
   return (
@@ -128,32 +125,53 @@ const run = async ({
       |> server.end)
     |> server.use(await react.middleware())
     |> server.run(port)
-    |> (dev ? server.watch(dir, watchFuncs) : emptyFunction.thatReturnsArgument)
+    |> (dev
+      ? server.watch(dir, [react.update, graphql.update])
+      : emptyFunction.thatReturnsArgument)
   );
 };
 
 (async () => {
   if (module.parent) return;
 
-  const filterArgv = process.argv.filter(
-    (argv: string) =>
-      !['--skip-server', '--skip-build', '--skip-relay'].includes(argv),
+  const dev = process.env.NODE_ENV !== 'production';
+  const opts = parseArgv(
+    process.argv.filter((argv: string) =>
+      options.some(
+        ({ short, long }: { short: string, long: string }) =>
+          short !== argv && long !== argv,
+      ),
+    ),
   );
-  const {
-    cliOptions: {
-      filenames: [src],
-      outDir,
-      watch,
-    },
-  } = parseArgv(filterArgv);
 
-  invariant(src && outDir, 'Must use `--out-dir` or `-d` to build the server');
+  invariant(
+    opts.cliOptions.outDir,
+    'Must use `--out-dir` or `-d` to build the server',
+  );
+
+  await dirCommand({
+    ...opts,
+    cliOptions: {
+      ...opts.cliOptions,
+      watch: false,
+    },
+  });
+
+  if (dev && opts.cliOptions.watch)
+    dirCommand({
+      ...opts,
+      cliOptions: {
+        ...opts.cliOptions,
+        skipInitialBuild: true,
+        watch: true,
+      },
+    });
 
   await run({
-    src,
-    dir: outDir,
-    dev: process.env.NODE_ENV !== 'production',
-    watch,
+    src: opts.cliOptions.filenames[0],
+    dir: opts.cliOptions.outDir,
+    dev,
+    watch: opts.cliOptions.watch,
   });
 })();
 

@@ -173,6 +173,7 @@ const run = async ({
     dir: opts.cliOptions.outDir,
     dev,
     watch: opts.cliOptions.watch,
+    port: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined,
   });
 })();
 

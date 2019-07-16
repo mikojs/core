@@ -31,7 +31,8 @@ export default {
           lookup: false,
         }),
         urlMiddleware({
-          url: (req: mixed) => 'http://localhost:8000/graphql',
+          url: (req: mixed) =>
+            `http://localhost:${process.env.PORT || '8000'}/graphql`,
         }),
       ]),
     });

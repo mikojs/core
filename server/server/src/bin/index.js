@@ -14,12 +14,10 @@ import commander from 'commander';
 import chalk from 'chalk';
 import debug from 'debug';
 
-import type reactType from '@cat-org/koa-react';
-import type graphqlType from '@cat-org/koa-graphql';
-
 import parseArgv from '@babel/cli/lib/babel/options';
+import dirCommand from '@babel/cli/lib/babel/dir';
 
-import server, { type contextType as serverContextType } from '../index';
+import server from '../index';
 
 import { version } from '../../package.json';
 
@@ -42,69 +40,76 @@ const program = new commander.Command('server')
   .option('--skip-relay', 'skip run relay-compiler')
   .allowUnknownOption();
 
-let react: reactType | DefaultReact;
-let graphql: graphqlType | DefaultGraphql;
+const {
+  skipServer = false,
+  skipBuild = false,
+  skipRelay = false,
+  options,
+} = program.parse([...process.argv]);
 
 /**
  * @example
  * run(context)
  *
- * @param {serverContextType} context - server context
+ * @param {object} context - server context
  *
  * @return {object} - http server
  */
-const run = async (context: serverContextType): Promise<http$Server> => {
-  context.dev = context.dev || true;
-  context.watch = context.watch || false;
-  debugLog(context);
+const run = async ({
+  src,
+  dir,
+  dev = true,
+  watch = false,
+  port,
+}: {|
+  src: string,
+  dir: string,
+  dev?: boolean,
+  watch?: boolean,
+  port?: number,
+|}): Promise<http$Server> => {
+  debugLog({
+    src,
+    dir,
+    dev,
+    watch,
+    port,
+  });
+
+  const react = new (loadModule('@cat-org/koa-react', DefaultReact))(
+    path.resolve(dir, './pages'),
+    { dev, exclude: /__generated__/ }
+      |> ((config: {}) =>
+        loadModule(
+          '@cat-org/use-css',
+          emptyFunction.thatReturnsArgument,
+          config,
+        ))
+      |> ((config: {}) =>
+        loadModule(
+          '@cat-org/use-less',
+          emptyFunction.thatReturnsArgument,
+          config,
+        )),
+  );
+  const graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
+    path.resolve(dir, './graphql'),
+  );
+
+  if (process.env.NODE_ENV !== 'test') {
+    if (!skipRelay) {
+      await graphql.relay(['--src', src]);
+
+      if (dev && watch) graphql.relay(['--src', src, '--watch']);
+    }
+
+    if (!skipBuild && !dev) await react.buildJs();
+
+    if (skipServer) process.exit(0);
+  }
 
   return (
-    (await server.init(context))
-    |> (await server.event(async (): Promise<
-      $ReadOnlyArray<(filePath: string) => void>,
-    > => {
-      react = new (loadModule('@cat-org/koa-react', DefaultReact))(
-        path.resolve(context.dir, './pages'),
-        { dev: context.dev, exclude: /__generated__/ }
-          |> ((options: {}) =>
-            loadModule(
-              '@cat-org/use-css',
-              emptyFunction.thatReturnsArgument,
-              options,
-            ))
-          |> ((options: {}) =>
-            loadModule(
-              '@cat-org/use-less',
-              emptyFunction.thatReturnsArgument,
-              options,
-            )),
-      );
-      graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
-        path.resolve(context.dir, './graphql'),
-        { dev: context.dev && context.watch },
-      );
-
-      if (process.env.NODE_ENV !== 'test') {
-        const {
-          skipServer = false,
-          skipBuild = false,
-          skipRelay = false,
-        } = program.parse([...process.argv]);
-
-        if (!skipRelay) {
-          await graphql.relay(['--src', context.src]);
-
-          if (context.dev && context.watch)
-            graphql.relay(['--src', context.src, '--watch']);
-        }
-
-        if (!skipBuild && !context.dev) await react.buildJs();
-
-        if (skipServer) process.exit(0);
-      }
-
-      return [react.update, graphql.update];
-    }))
+    server.init()
     |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
     |> (undefined
       |> server.start
@@ -112,45 +117,63 @@ const run = async (context: serverContextType): Promise<http$Server> => {
         |> server.all
         |> server.use(
           graphql.middleware({
-            graphiql: context.dev,
-            pretty: context.dev,
+            graphiql: dev,
+            pretty: dev,
           }),
         )
         |> server.end)
       |> server.end)
     |> server.use(await react.middleware())
-    |> server.run
+    |> server.run(port)
+    |> (dev
+      ? server.watch(dir, [react.update, graphql.update])
+      : emptyFunction.thatReturnsArgument)
   );
 };
 
 (async () => {
   if (module.parent) return;
 
-  const filterArgv = process.argv.filter(
-    (argv: string) =>
-      !['--skip-server', '--skip-build', '--skip-relay'].includes(argv),
+  const dev = process.env.NODE_ENV !== 'production';
+  const opts = parseArgv(
+    process.argv.filter(
+      (argv: string) =>
+        !options.some(
+          ({ short, long }: { short: string, long: string }) =>
+            short === argv || long === argv,
+        ),
+    ),
   );
-  const {
-    cliOptions: {
-      filenames: [src],
-      outDir,
-      watch,
-    },
-  } = parseArgv(filterArgv);
 
-  invariant(src && outDir, 'Must use `--out-dir` or `-d` to build the server');
+  invariant(
+    opts.cliOptions.outDir,
+    'Must use `--out-dir` or `-d` to build the server',
+  );
+
+  await dirCommand({
+    ...opts,
+    cliOptions: {
+      ...opts.cliOptions,
+      watch: false,
+    },
+  });
+
+  if (dev && opts.cliOptions.watch)
+    dirCommand({
+      ...opts,
+      cliOptions: {
+        ...opts.cliOptions,
+        skipInitialBuild: true,
+        watch: true,
+      },
+    });
 
   await run({
-    src,
-    dir: outDir,
-    dev: process.env.NODE_ENV !== 'production',
-    watch,
-    babelOptions: filterArgv
-      .slice(2)
-      .filter(
-        (argv: string) =>
-          ![src, outDir, '-d', '--out-dir', '-w', '--watch'].includes(argv),
-      ),
+    src: opts.cliOptions.filenames[0],
+    dir: opts.cliOptions.outDir,
+    dev,
+    watch: opts.cliOptions.watch,
+    port: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined,
   });
 })();
 

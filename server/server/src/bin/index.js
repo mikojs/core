@@ -83,13 +83,13 @@ const run = async ({
         loadModule(
           '@cat-org/use-css',
           emptyFunction.thatReturnsArgument,
-          options,
+          config,
         ))
       |> ((config: {}) =>
         loadModule(
           '@cat-org/use-less',
           emptyFunction.thatReturnsArgument,
-          options,
+          config,
         )),
   );
   const graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
@@ -136,11 +136,12 @@ const run = async ({
 
   const dev = process.env.NODE_ENV !== 'production';
   const opts = parseArgv(
-    process.argv.filter((argv: string) =>
-      options.some(
-        ({ short, long }: { short: string, long: string }) =>
-          short !== argv && long !== argv,
-      ),
+    process.argv.filter(
+      (argv: string) =>
+        !options.some(
+          ({ short, long }: { short: string, long: string }) =>
+            short === argv || long === argv,
+        ),
     ),
   );
 

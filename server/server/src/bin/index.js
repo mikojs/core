@@ -9,13 +9,15 @@
 
 import path from 'path';
 
-import { invariant, emptyFunction } from 'fbjs';
+import parseArgv from '@babel/cli/lib/babel/options';
+import fileCommand from '@babel/cli/lib/babel/file';
+import dirCommand from '@babel/cli/lib/babel/dir';
+import { emptyFunction } from 'fbjs';
 import commander from 'commander';
 import chalk from 'chalk';
 import debug from 'debug';
 
-import parseArgv from '@babel/cli/lib/babel/options';
-import dirCommand from '@babel/cli/lib/babel/dir';
+import { requireModule } from '@cat-org/utils';
 
 import server from '../index';
 
@@ -26,6 +28,8 @@ import DefaultReact from 'defaults/react';
 import DefaultGraphql from 'defaults/graphql';
 
 import loadModule from 'utils/loadModule';
+import findOptionsPath from 'utils/findOptionsPath';
+import logger from 'utils/logger';
 
 const debugLog = debug('server:bin');
 const program = new commander.Command('server')
@@ -144,11 +148,45 @@ const run = async ({
         ),
     ),
   );
+  const customFile = opts.cliOptions.outFile;
 
-  invariant(
-    opts.cliOptions.outDir,
-    'Must use `--out-dir` or `-d` to build the server',
-  );
+  if (customFile) {
+    const { log } = console;
+
+    logger.info('Run with custom server');
+
+    if (opts.cliOptions.verbose)
+      log(
+        `${path.relative(
+          process.cwd(),
+          opts.cliOptions.filenames[0],
+        )} -> ${path.relative(process.cwd(), opts.cliOptions.outFile)}`,
+      );
+
+    await fileCommand({
+      ...opts,
+      cliOptions: {
+        ...opts.cliOptions,
+        watch: false,
+      },
+    });
+
+    const { src, dir } = findOptionsPath(
+      opts.cliOptions.filenames[0],
+      opts.cliOptions.outFile,
+    );
+
+    opts.babelOptions = {
+      ...opts.babelOptions,
+      ignore: opts.cliOptions.filenames,
+    };
+    opts.cliOptions = {
+      ...opts.cliOptions,
+      outFile: undefined,
+      filenames: [src],
+      outDir: dir,
+    };
+  }
 
   await dirCommand({
     ...opts,
@@ -168,7 +206,7 @@ const run = async ({
       },
     });
 
-  await run({
+  await (customFile ? requireModule(path.resolve(customFile)) : run)({
     src: opts.cliOptions.filenames[0],
     dir: opts.cliOptions.outDir,
     dev,

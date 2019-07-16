@@ -4,11 +4,9 @@ import path from 'path';
 
 import Koa, { type Middleware as koaMiddlewareType } from 'koa';
 import Router from 'koa-router';
-import execa from 'execa';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
 import debug from 'debug';
-import { invariant, emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -17,77 +15,23 @@ import Endpoint from './utils/Endpoint';
 
 type routerType = Router | Endpoint | Koa;
 
-export type contextType = {|
-  src: string,
-  dir: string,
-  dev?: boolean,
-  watch?: boolean,
-  babelOptions?: false | $ReadOnlyArray<string>,
-  port?: number,
-|};
-
 type watchFuncType = (filePath: string) => void;
 
 const debugLog = debug('server');
-const watchFunc = [
-  (filePath: string) => {
-    delete require.cache[filePath];
-  },
-];
-const context: contextType = {
-  src: '',
-  dir: '',
-  dev: true,
-  watch: false,
-  babelOptions: false,
+
+/**
+ * @example
+ * removeCache('/file-path')
+ *
+ * @param {string} filePath - remvoe cache from file path
+ */
+const removeCache = (filePath: string) => {
+  delete require.cache[filePath];
 };
 
 handleUnhandledRejection();
 
 export default {
-  init: async (initContext: contextType): Promise<Koa> => {
-    Object.keys(initContext).forEach((key: string) => {
-      context[key] = initContext[key];
-    });
-    debugLog(context);
-
-    const { src, dir, dev, watch, babelOptions } = context;
-
-    if (babelOptions) {
-      invariant(
-        !babelOptions.some((option: string) =>
-          ['-d', '--out-dir'].includes(option),
-        ),
-        'Should not use `-d` or `--out-dir`',
-      );
-
-      const options = [src, '-d', dir, ...babelOptions];
-
-      await execa('babel', options, {
-        stdio: 'inherit',
-      });
-
-      if (dev && watch)
-        execa('babel', ['--skip-initial-build', '-w', ...options], {
-          stdio: 'inherit',
-        });
-    }
-
-    logger.start('Server start');
-
-    return new Koa();
-  },
-
-  event: async (
-    callback: () =>
-      | $ReadOnlyArray<watchFuncType>
-      | Promise<$ReadOnlyArray<watchFuncType>>,
-  ): emptyFunction.thatReturnsArgument => {
-    watchFunc.push(...((await callback()) || []));
-
-    return emptyFunction.thatReturnsArgument;
-  },
-
   start: (prefix: ?string): Router => {
     debugLog({
       method: 'start',
@@ -184,30 +128,37 @@ export default {
     };
   },
 
-  run: (app: Koa): Promise<http$Server> =>
+  watch: (dir: string, watchFuncs: $ReadOnlyArray<watchFuncType>) => <R>(
+    router: R,
+  ): R => {
+    chokidar
+      .watch(path.resolve(dir), {
+        ignoreInitial: true,
+      })
+      .on('all', (event: string, filePath: string) => {
+        if (!['add', 'change'].includes(event) || !/\.jsx?$/.test(filePath))
+          return;
+
+        [removeCache, ...watchFuncs].forEach((watchFunc: watchFuncType) => {
+          watchFunc(filePath);
+        });
+      });
+
+    return router;
+  },
+
+  init: (): Koa => {
+    logger.start('Server start');
+
+    return new Koa();
+  },
+
+  run: (port?: number = 8000) => (app: Koa): Promise<http$Server> =>
     new Promise(resolve => {
-      const { dir, dev, watch, port = 8000 } = context;
       const server = app.listen(port, () => {
         logger.succeed(
           chalk`Running server at port: {gray {bold ${port.toString()}}}`,
         );
-
-        if (dev && watch)
-          chokidar
-            .watch(path.resolve(dir), {
-              ignoreInitial: true,
-            })
-            .on('all', (event: string, filePath: string) => {
-              if (
-                !['add', 'change'].includes(event) ||
-                !/\.jsx?$/.test(filePath)
-              )
-                return;
-
-              watchFunc.forEach((update: watchFuncType) => {
-                update(filePath);
-              });
-            });
 
         resolve(server);
       });

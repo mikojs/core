@@ -19,17 +19,6 @@ const context = {
 };
 
 describe('server', () => {
-  test('event work', async () => {
-    const mockCallback = jest.fn();
-    const runningServer = await ((await server.init(context))
-      |> (await server.event(mockCallback))
-      |> server.run);
-
-    runningServer.close();
-
-    expect(mockCallback).toHaveBeenCalled();
-  });
-
   test.each`
     method
     ${'get'}
@@ -48,6 +37,17 @@ describe('server', () => {
     },
   );
 
+  test('server.watch work', async () => {
+    const mockRouter = jest.fn();
+
+    expect(server.watch('dir', [])(mockRouter)).toEqual(mockRouter);
+
+    require.cache['test.js'] = true;
+    chokidar.watchCallback('add', 'test.js');
+    chokidar.watchCallback('delete', 'test.js');
+    chokidar.watchCallback('add', 'test');
+  });
+
   test('can not find `test` method in `koa-router`', async () => {
     await expect(
       (async () =>
@@ -57,22 +57,5 @@ describe('server', () => {
           |> (new Endpoint('/test', 'test') |> server.end)
           |> server.end))(),
     ).rejects.toThrow('process exit');
-  });
-
-  test('use dev mode', async () => {
-    const runningServer = await ((await server.init({
-      ...context,
-      dev: true,
-      watch: true,
-      babelOptions: ['--verbose'],
-    })) |> server.run);
-
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    require.cache['test.js'] = true;
-    chokidar.watchCallback('add', 'test.js');
-    chokidar.watchCallback('delete', 'test.js');
-    chokidar.watchCallback('add', 'test');
-    runningServer.close();
   });
 });

@@ -29,46 +29,29 @@ export type contextType = {|
 type watchFuncType = (filePath: string) => void;
 
 const debugLog = debug('server');
+const watchFunc = [
+  (filePath: string) => {
+    delete require.cache[filePath];
+  },
+];
+const context: contextType = {
+  src: '',
+  dir: '',
+  dev: true,
+  watch: false,
+  babelOptions: false,
+};
 
 handleUnhandledRejection();
 
-/** Server */
-class Server {
-  +context: contextType = {
-    src: '',
-    dir: '',
-    dev: true,
-    watch: false,
-    babelOptions: false,
-  };
-
-  /**
-   * @example
-   * watchFunc('/new-file-path')
-   *
-   * @param {string} filePath - file path which is added or modified
-   */
-  +watchFunc = [
-    (filePath: string) => {
-      delete require.cache[filePath];
-    },
-  ];
-
-  /**
-   * @example
-   * server.init(context)
-   *
-   * @param {contextType} initContext - init context
-   *
-   * @return {Promise<Koa>} - koa server
-   */
-  +init = async (initContext: contextType): Promise<Koa> => {
+export default {
+  init: async (initContext: contextType): Promise<Koa> => {
     Object.keys(initContext).forEach((key: string) => {
-      this.context[key] = initContext[key];
+      context[key] = initContext[key];
     });
-    debugLog(this.context);
+    debugLog(context);
 
-    const { src, dir, dev, watch, babelOptions } = this.context;
+    const { src, dir, dev, watch, babelOptions } = context;
 
     if (babelOptions) {
       invariant(
@@ -93,116 +76,40 @@ class Server {
     logger.start('Server start');
 
     return new Koa();
-  };
+  },
 
-  /**
-   * @example
-   * server.event(() => {})
-   *
-   * @param {Function} callback - callback function to run;
-   *
-   * @return {Function} - return the empty function which will return any argument.
-   */
-  +event = async (
+  event: async (
     callback: () =>
       | $ReadOnlyArray<watchFuncType>
       | Promise<$ReadOnlyArray<watchFuncType>>,
   ): emptyFunction.thatReturnsArgument => {
-    this.watchFunc.push(...((await callback()) || []));
+    watchFunc.push(...((await callback()) || []));
 
     return emptyFunction.thatReturnsArgument;
-  };
+  },
 
-  /**
-   * @example
-   * server.start(undefined)
-   *
-   * @param {string} prefix - prefix for router
-   *
-   * @return {Router} - koa-router
-   */
-  +start = (prefix: ?string): Router => {
+  start: (prefix: ?string): Router => {
     debugLog({
       method: 'start',
       prefix,
     });
 
     return prefix ? new Router({ prefix }) : new Router();
-  };
+  },
 
-  /**
-   * @example
-   * server.get('/get')
-   *
-   * @param {string} prefix - prefix for path
-   *
-   * @return {Endpoint} - end point of the router
-   */
-  +get = (prefix: string) => new Endpoint(prefix, 'get');
+  get: (prefix: string) => new Endpoint(prefix, 'get'),
+  post: (prefix: string) => new Endpoint(prefix, 'post'),
+  put: (prefix: string) => new Endpoint(prefix, 'put'),
+  del: (prefix: string) => new Endpoint(prefix, 'del'),
+  all: (prefix: string) => new Endpoint(prefix, 'all'),
 
-  /**
-   * @example
-   * server.post('/post')
-   *
-   * @param {string} prefix - prefix for path
-   *
-   * @return {Endpoint} - end point of the router
-   */
-  +post = (prefix: string) => new Endpoint(prefix, 'post');
-
-  /**
-   * @example
-   * server.put('/put')
-   *
-   * @param {string} prefix - prefix for path
-   *
-   * @return {Endpoint} - end point of the router
-   */
-  +put = (prefix: string) => new Endpoint(prefix, 'put');
-
-  /**
-   * @example
-   * server.del('/del')
-   *
-   * @param {string} prefix - prefix for path
-   *
-   * @return {Endpoint} - end point of the router
-   */
-  +del = (prefix: string) => new Endpoint(prefix, 'del');
-
-  /**
-   * @example
-   * server.all('/all')
-   *
-   * @param {string} prefix - prefix for path
-   *
-   * @return {Endpoint} - end point of the router
-   */
-  +all = (prefix: string) => new Endpoint(prefix, 'all');
-
-  /**
-   * @example
-   * server.use(async (ctx, next) => { await next(); })
-   *
-   * @param {koaMiddlewareType} middleware - koa middleware
-   *
-   * @return {Function} - add new middleware to router
-   */
-  +use = (middleware: koaMiddlewareType) => <-R: routerType>(router: R): R => {
+  use: (middleware: koaMiddlewareType) => <-R: routerType>(router: R): R => {
     router.use(middleware);
 
     return router;
-  };
+  },
 
-  /**
-   * @example
-   * server.end(router)
-   *
-   * @param {Router | Endpoint} router - prev router
-   *
-   * @return {Function} - add new router to parent router
-   */
-  +end = (
+  end: (
     router: Router | Endpoint,
   ): (<-R: Router | Koa>(parentRouter: R) => R) => {
     if (router instanceof Endpoint)
@@ -275,55 +182,34 @@ class Server {
 
       return parentRouter;
     };
-  };
+  },
 
-  /**
-   * @example
-   * server.watch(server)
-   *
-   * @param {Koa | Promise<Koa>} server - koa server or Promise to return koa server
-   *
-   * @return {Koa | Promise<Koa>} - server from the argument
-   */
-  +watch = <S>(server: S): S => {
-    const { dir, dev, watch } = this.context;
-
-    if (dev && watch)
-      chokidar
-        .watch(path.resolve(dir), {
-          ignoreInitial: true,
-        })
-        .on('all', (event: string, filePath: string) => {
-          if (!['add', 'change'].includes(event) || !/\.jsx?$/.test(filePath))
-            return;
-
-          this.watchFunc.forEach((update: watchFuncType) => {
-            update(filePath);
-          });
-        });
-
-    return server;
-  };
-
-  /**
-   * @example
-   * server.run(app)
-   *
-   * @param {Koa} app - koa server
-   *
-   * @return {Promise} - http server
-   */
-  +run = (app: Koa): Promise<http$Server> =>
+  run: (app: Koa): Promise<http$Server> =>
     new Promise(resolve => {
-      const { port = 8000 } = this.context;
+      const { dir, dev, watch, port = 8000 } = context;
       const server = app.listen(port, () => {
         logger.succeed(
           chalk`Running server at port: {gray {bold ${port.toString()}}}`,
         );
 
-        resolve(this.watch(server));
-      });
-    });
-}
+        if (dev && watch)
+          chokidar
+            .watch(path.resolve(dir), {
+              ignoreInitial: true,
+            })
+            .on('all', (event: string, filePath: string) => {
+              if (
+                !['add', 'change'].includes(event) ||
+                !/\.jsx?$/.test(filePath)
+              )
+                return;
 
-export default new Server();
+              watchFunc.forEach((update: watchFuncType) => {
+                update(filePath);
+              });
+            });
+
+        resolve(server);
+      });
+    }),
+};

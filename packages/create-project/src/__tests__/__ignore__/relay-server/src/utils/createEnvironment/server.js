@@ -27,7 +27,8 @@ export default {
         store,
         network: new RelayNetworkLayer([
           urlMiddleware({
-            url: (req: mixed) => 'http://localhost:8000/graphql',
+            url: (req: mixed) =>
+              `http://localhost:${process.env.PORT || '8000'}/graphql`,
           }),
           // $FlowFixMe wait flow upgrade
           relaySSR.getMiddleware(),

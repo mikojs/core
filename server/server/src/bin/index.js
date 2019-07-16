@@ -14,12 +14,9 @@ import commander from 'commander';
 import chalk from 'chalk';
 import debug from 'debug';
 
-import type reactType from '@cat-org/koa-react';
-import type graphqlType from '@cat-org/koa-graphql';
-
 import parseArgv from '@babel/cli/lib/babel/options';
 
-import server, { type contextType as serverContextType } from '../index';
+import server from '../index';
 
 import { version } from '../../package.json';
 
@@ -42,69 +39,80 @@ const program = new commander.Command('server')
   .option('--skip-relay', 'skip run relay-compiler')
   .allowUnknownOption();
 
-let react: reactType | DefaultReact;
-let graphql: graphqlType | DefaultGraphql;
-
 /**
  * @example
  * run(context)
  *
- * @param {serverContextType} context - server context
+ * @param {object} context - server context
  *
  * @return {object} - http server
  */
-const run = async (context: serverContextType): Promise<http$Server> => {
-  context.dev = context.dev || true;
-  context.watch = context.watch || false;
-  debugLog(context);
+const run = async ({
+  src,
+  dir,
+  dev = true,
+  watch = false,
+  port,
+}: {|
+  src: string,
+  dir: string,
+  dev?: boolean,
+  watch?: boolean,
+  port?: number,
+|}): Promise<http$Server> => {
+  const watchFuncs = [];
+
+  debugLog({
+    src,
+    dir,
+    dev,
+    watch,
+    port,
+  });
+
+  // TODO: babel build
+  const react = new (loadModule('@cat-org/koa-react', DefaultReact))(
+    path.resolve(dir, './pages'),
+    { dev: dev, exclude: /__generated__/ }
+      |> ((options: {}) =>
+        loadModule(
+          '@cat-org/use-css',
+          emptyFunction.thatReturnsArgument,
+          options,
+        ))
+      |> ((options: {}) =>
+        loadModule(
+          '@cat-org/use-less',
+          emptyFunction.thatReturnsArgument,
+          options,
+        )),
+  );
+  const graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
+    path.resolve(dir, './graphql'),
+  );
+
+  if (process.env.NODE_ENV !== 'test') {
+    const {
+      skipServer = false,
+      skipBuild = false,
+      skipRelay = false,
+    } = program.parse([...process.argv]);
+
+    if (!skipRelay) {
+      await graphql.relay(['--src', src]);
+
+      if (dev && watch) graphql.relay(['--src', src, '--watch']);
+    }
+
+    if (!skipBuild && !dev) await react.buildJs();
+
+    if (skipServer) process.exit(0);
+
+    watchFuncs.push(react.update, graphql.update);
+  }
 
   return (
-    (await server.init(context))
-    |> (await server.event(async (): Promise<
-      $ReadOnlyArray<(filePath: string) => void>,
-    > => {
-      react = new (loadModule('@cat-org/koa-react', DefaultReact))(
-        path.resolve(context.dir, './pages'),
-        { dev: context.dev, exclude: /__generated__/ }
-          |> ((options: {}) =>
-            loadModule(
-              '@cat-org/use-css',
-              emptyFunction.thatReturnsArgument,
-              options,
-            ))
-          |> ((options: {}) =>
-            loadModule(
-              '@cat-org/use-less',
-              emptyFunction.thatReturnsArgument,
-              options,
-            )),
-      );
-      graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
-        path.resolve(context.dir, './graphql'),
-        { dev: context.dev && context.watch },
-      );
-
-      if (process.env.NODE_ENV !== 'test') {
-        const {
-          skipServer = false,
-          skipBuild = false,
-          skipRelay = false,
-        } = program.parse([...process.argv]);
-
-        if (!skipRelay) {
-          await graphql.relay(['--src', context.src]);
-
-          if (context.dev && context.watch)
-            graphql.relay(['--src', context.src, '--watch']);
-        }
-
-        if (!skipBuild && !context.dev) await react.buildJs();
-
-        if (skipServer) process.exit(0);
-      }
-
-      return [react.update, graphql.update];
-    }))
+    server.init()
     |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
     |> (undefined
       |> server.start
@@ -112,14 +120,15 @@ const run = async (context: serverContextType): Promise<http$Server> => {
         |> server.all
         |> server.use(
           graphql.middleware({
-            graphiql: context.dev,
-            pretty: context.dev,
+            graphiql: dev,
+            pretty: dev,
           }),
         )
         |> server.end)
       |> server.end)
     |> server.use(await react.middleware())
-    |> server.run
+    |> server.run(port)
+    |> (dev ? server.watch(dir, watchFuncs) : emptyFunction.thatReturnsArgument)
   );
 };
 
@@ -145,12 +154,6 @@ const run = async (context: serverContextType): Promise<http$Server> => {
     dir: outDir,
     dev: process.env.NODE_ENV !== 'production',
     watch,
-    babelOptions: filterArgv
-      .slice(2)
-      .filter(
-        (argv: string) =>
-          ![src, outDir, '-d', '--out-dir', '-w', '--watch'].includes(argv),
-      ),
   });
 })();
 

@@ -10,7 +10,6 @@
 import path from 'path';
 
 import parseArgv from '@babel/cli/lib/babel/options';
-import fileCommand from '@babel/cli/lib/babel/file';
 import dirCommand from '@babel/cli/lib/babel/dir';
 import { emptyFunction } from 'fbjs';
 import commander from 'commander';
@@ -151,35 +150,13 @@ const run = async ({
   const customFile = opts.cliOptions.outFile;
 
   if (customFile) {
-    const { log } = console;
-
     logger.info('Run with custom server');
-
-    if (opts.cliOptions.verbose)
-      log(
-        `${path.relative(
-          process.cwd(),
-          opts.cliOptions.filenames[0],
-        )} -> ${path.relative(process.cwd(), opts.cliOptions.outFile)}`,
-      );
-
-    await fileCommand({
-      ...opts,
-      cliOptions: {
-        ...opts.cliOptions,
-        watch: false,
-      },
-    });
 
     const { src, dir } = findOptionsPath(
       opts.cliOptions.filenames[0],
       opts.cliOptions.outFile,
     );
 
-    opts.babelOptions = {
-      ...opts.babelOptions,
-      ignore: opts.cliOptions.filenames,
-    };
     opts.cliOptions = {
       ...opts.cliOptions,
       outFile: undefined,

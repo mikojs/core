@@ -128,7 +128,7 @@ const run = async ({
       |> server.end)
     |> server.use(await react.middleware())
     |> server.run(port)
-    |> (dev
+    |> (dev && watch
       ? server.watch(dir, [react.update, graphql.update])
       : emptyFunction.thatReturnsArgument)
   );

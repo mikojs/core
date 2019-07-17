@@ -8,7 +8,7 @@
 
 [website]: https://cat-org.github.io/core/server
 
-Run koa server with pipeline.
+Run koa server with `pipeline` and `babel`. This package is just a helper. You can replace any method in `@cat-org/server` by using the custom functions.
 
 ## Install
 
@@ -16,43 +16,37 @@ Run koa server with pipeline.
 yarn add koa @cat-org/server
 ```
 
-## Run server without any files
-
-You can add those modules in your project and `@cat-org/server` will load the default config for those modules.
-
-- `@cat-org/koa-base`
-- `@cat-org/koa-graphql`
-- `@cat-org/koa-react`
-  - `@cat-org/use-css`
-  - `@cat-org/use-less`
-
 #### Run command
 
-This command is base on `babel` cli. You can use any `babel` command, but this is needed to use `-d` or `--out-dir` in the command.
+This command is base on `babel`. You can use any `babel` command expect for `yarn server ./src/server.js`.
+If you want to use the `default server`, you need to have a soruce folder. For example:
 
 ```sh
 yarn server src -d lib
 ```
 
-Run command without building js in the production mode.
+If you want to use the `custom server`, you need to add a custom server file, For example:
 
-```sh
-NODE_ENV=production yarn server src -d lib --skip-build
+```js
+import server form '@cat-org/server';
+
+export default () =>
+  server.init()
+    |> server.run()
 ```
 
-Run command without running relay-compiler.
+And run with:
 
 ```sh
-yarn server src -d lib --skip-relay
+yarn server ./src/server.js -o ./lib/server.js
 ```
 
-Run command without running server.
+###### Environment variables
 
-```sh
-yarn server src -d lib --skip-server
-```
+- `PORT`: Set the port of the server
+- `NODE_ENV`: Set the dev mode or not.
 
-#### Use in testing
+#### Use default server in testing
 
 ```js
 import server from '@cat-org/server/lib/bin';
@@ -78,58 +72,72 @@ describe('server', () => {
 ```js
 import server from '@cat-org/server';
 
-(async () => {
-  // `runningServer` is from `(new Koa()).listen()`, you can close server or do other things
-  const runningServer = await (
-    (await server.init({
-      src: 'src',
-      dir: 'lib',
-    }))
-      |> (await server.event(async () => {
-        /**
-         * Do something after babel bulid.
-         * This will not use like as a middleware and this will only run at the begin.
-         * If you want to do something when file is built with `babel watch`, you can return the update functions array.
-         *
-         * For example:
-         * return [ (filePath: string) => { /** do something with update file path */ } ];
-         */
-      }))
+export default ({ src, dir, dev, watch, port }) =>
+  server.init()
+  |> server.use(async (ctx, next) => {
+    await next();
+  })
+  |> ('/path'  // if this is undefined, this will not add prefix to router
+    |> server.start
+    |> ('/get'
+    |> server.get  // this will render as /path/get with get method (post, put, del, all)
       |> server.use(async (ctx, next) => {
         await next();
       })
-      |> ('/path'                                 // if this is undefined, this will not add prefix to router
-        |> server.start
-        |> ('/get'
-          |> server.get                           // this will render as /path/get with get method (post, put, del, all)
-          |> server.use(async (ctx, next) => {
-            await next();
-          })
-          |> server.end)
-        |> server.use(async (ctx, next) => {
-          await next();
-        })
-        |> server.end)
-      |> (undefined
-        |> server.start
-        |> ('/get'                                // this will render as /get with get method
-          |> server.get
-          |> server.end)
-        |> server.end)
-      |> server.run                               // run server
-  );
-})();
+      |> server.end)
+    |> server.use(async (ctx, next) => {
+      await next();
+    })
+    |> server.end)
+  |> (undefined
+    |> server.start
+    |> ('/get'  // this will render as /get with get method
+      |> server.get
+      |> server.end)
+    |> server.end)
+  |> server.run()
+  |> server.watch(dir, []);
 ```
 
-#### With the custom options
+- `init`: Just use to return `Koa`. You can replace by `new Koa()`.
+- `use`: Add middleware to the router or the server.
+- `start`, `end`: Add a new router.
+- `get`, `post`, `put`, `del`, `all`: Add method to this router.
+- `run`: Just use to return a promise with `new Koa().listen(port)`. The default of the port is 8000.
+- `watch`: Use this function to watch the changed file. This method is based on `chokidar`. You can write the same function by yourself. If you want to add the function to handle the changed file, you can add an array in the second argument.
 
-```js
-await server.init({
-  src: 'src',
-  dir: 'lib',
-  dev: true,
-  watch: true,
-  babelOptions: ['--verbose'],
-  port: 8000,
-});
+## Load plugins with default server
+
+You can add those packages in your project and `@cat-org/server` will load the default config for those modules.
+
+- `@cat-org/koa-base`
+- `@cat-org/koa-graphql`
+- `@cat-org/koa-react`
+  - `@cat-org/use-css`
+  - `@cat-org/use-less`
+
+You only need to do this:
+
+```sh
+yarn add @cat-org/package-name
+```
+
+#### Options about those plugins
+
+- Run command without building js in the production mode.
+
+```sh
+NODE_ENV=production yarn server src -d lib --skip-build
+```
+
+- Run command without running relay-compiler.
+
+```sh
+yarn server src -d lib --skip-relay
+```
+
+- Run command without running server.
+
+```sh
+yarn server src -d lib --skip-server
 ```

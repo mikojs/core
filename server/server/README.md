@@ -127,17 +127,17 @@ yarn add @cat-org/package-name
 - Run command without building js in the production mode.
 
 ```sh
-NODE_ENV=production yarn server src -d lib --skip-build
+SKIP_BUILD=true NODE_ENV=production yarn server src -d lib
 ```
 
 - Run command without running relay-compiler.
 
 ```sh
-yarn server src -d lib --skip-relay
+SKIP_RELAY=true yarn server src -d lib
 ```
 
 - Run command without running server.
 
 ```sh
-yarn server src -d lib --skip-server
+SKIP_SERVER=true yarn server src -d lib
 ```

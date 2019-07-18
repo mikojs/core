@@ -6,7 +6,8 @@ import path from 'path';
 import parseArgv from '@babel/cli/lib/babel/options';
 import dirCommand from '@babel/cli/lib/babel/dir';
 import debug from 'debug';
-import execa from 'execa';
+import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
+import chokidar from 'chokidar';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
 
@@ -23,7 +24,7 @@ handleUnhandledRejection();
   const customFile = opts.cliOptions.outFile;
 
   if (customFile) {
-    logger.info('Run with custom server');
+    logger.info('Run custom server');
     debugLog(opts);
 
     const { src, dir } = findOptionsPath(
@@ -59,20 +60,31 @@ handleUnhandledRejection();
       },
     });
 
-  execa(
+  const serverArgu = [
+    customFile
+      ? path.resolve(customFile)
+      : path.resolve(__dirname, '../defaults'),
+    '--src',
+    opts.cliOptions.filenames[0],
+    '--dir',
+    opts.cliOptions.outDir,
+    ...(opts.cliOptions.watch ? ['--watch'] : []),
+  ];
+
+  let subprocess: ThenableChildProcessType = execa(
     path.resolve(__dirname, './server.js'),
-    [
-      customFile
-        ? path.resolve(customFile)
-        : path.resolve(__dirname, '../defaults'),
-      '--src',
-      opts.cliOptions.filenames[0],
-      '--dir',
-      opts.cliOptions.outDir,
-      ...(opts.cliOptions.watch ? ['--watch'] : []),
-    ],
+    serverArgu,
     {
       stdio: 'inherit',
     },
   );
+
+  if (customFile)
+    chokidar.watch(path.resolve(customFile)).on('change', () => {
+      logger.log('Restart custom server');
+      subprocess.cancel();
+      subprocess = execa(path.resolve(__dirname, './server.js'), serverArgu, {
+        stdio: 'inherit',
+      });
+    });
 })();

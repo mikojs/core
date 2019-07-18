@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "configs server:lerna -w",
     "prod": "NODE_ENV=production configs server:lerna",
-    "test": "configs server:lerna --skip-server"
+    "test": "SKIP_SERVER=true configs server:lerna"
   },
   "keywords": ["keyword"],
   "publishConfig": {

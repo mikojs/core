@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "configs server -w",
     "prod": "NODE_ENV=production configs server",
-    "test": "configs server --skip-server && configs test"
+    "test": "SKIP_SERVER=true configs server && configs test"
   },
   "keywords": ["keyword"],
   "engines": {

@@ -21,7 +21,7 @@ import path from 'path';
 
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
-import server from '@cat-org/server/lib/bin';${
+import server from '@cat-org/server/lib/defaults';${
   !useGraphql
     ? ''
     : `

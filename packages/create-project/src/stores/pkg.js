@@ -138,10 +138,10 @@ class Pkg extends Store {
 
       if (useReact && useGraphql) {
         if (lerna)
-          this.storePkg.scripts.test = 'configs server:lerna --skip-server';
+          this.storePkg.scripts.test = 'SKIP_SERVER=true configs server:lerna';
         else
           this.storePkg.scripts.test =
-            'configs server --skip-server && configs test';
+            'SKIP_SERVER=true configs server && configs test';
       } else if (!lerna) this.storePkg.scripts.test = 'configs test';
     } else
       this.storePkg.scripts = {

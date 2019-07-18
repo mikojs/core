@@ -33,6 +33,8 @@ const requestResult = {
   },
 };
 
+let runningServer: http$Server;
+
 describe('graphql', () => {
   test('relay', () => {
     const graphql = new Graphql(path.resolve(__dirname, './__ignore__/schema'));
@@ -67,6 +69,8 @@ type User {
     test('basic usage', async () => {
       const { server, request } = await runServer();
 
+      runningServer = server;
+
       expect(
         await request(`
   {
@@ -94,16 +98,14 @@ type User {
           ],
         },
       });
-
-      server.close();
     });
 
     test('additional schema with string', async () => {
       const { server, request } = await runServer(additionalSchema);
 
-      expect(await request(requestQuery)).toEqual(requestResult);
+      runningServer = server;
 
-      server.close();
+      expect(await request(requestQuery)).toEqual(requestResult);
     });
 
     test('additional schema with array', async () => {
@@ -112,9 +114,9 @@ type User {
         typeDefs: [additionalSchema.typeDefs],
       });
 
-      expect(await request(requestQuery)).toEqual(requestResult);
+      runningServer = server;
 
-      server.close();
+      expect(await request(requestQuery)).toEqual(requestResult);
     });
 
     test.each`
@@ -133,6 +135,8 @@ type User {
       |}) => {
         const { server, graphql, request } = await runServer(additionalSchema);
 
+        runningServer = server;
+
         expect(await request(requestQuery)).toEqual(requestResult);
 
         graphql.update(path.resolve(__dirname, filePath));
@@ -144,9 +148,11 @@ type User {
             key: 'test',
           },
         });
-
-        server.close();
       },
     );
+
+    afterEach(() => {
+      runningServer.close();
+    });
   });
 });

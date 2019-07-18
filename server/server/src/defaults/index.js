@@ -59,6 +59,7 @@ export default async ({
     path.resolve(dir, './graphql'),
   );
 
+  /* istanbul ignore if */
   if (process.env.NODE_ENV !== 'test') {
     if (!process.env.SKIP_RELAY) {
       await graphql.relay(['--src', src]);

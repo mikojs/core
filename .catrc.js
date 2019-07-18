@@ -9,7 +9,26 @@ const babel = config => {
 
   if (!config.overrides) config.overrides = [];
 
+  if (process.env.NODE_ENV !== 'test' && !process.env.USE_DEFAULT_BABEL) {
+    const configBase = config.presets.find(
+      preset => preset[0] === '@cat-org/base',
+    );
+
+    if (configBase)
+      configBase[1] = {
+        ...configBase[1],
+        '@cat-org/transform-flow': {
+          ...configBase[1]['@cat-org/transform-flow'],
+          plugins: [
+            // FIXME: remove after flow support
+            ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
+          ],
+        },
+      };
+  }
+
   config.plugins.push(
+    ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
     [
       '@babel/transform-runtime',
       {
@@ -35,30 +54,6 @@ const babel = config => {
       },
     ],
   );
-
-  config.overrides.push({
-    test: ['./packages/configs', './server/server', './server/use-less'],
-    presets:
-      process.env.NODE_ENV === 'test' || process.env.USE_DEFAULT_BABEL
-        ? []
-        : [
-            [
-              '@cat-org/base',
-              {
-                '@cat-org/transform-flow': {
-                  plugins: [
-                    // FIXME: remove after flow support
-                    [
-                      '@babel/proposal-pipeline-operator',
-                      { proposal: 'minimal' },
-                    ],
-                  ],
-                },
-              },
-            ],
-          ],
-    plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
-  });
 
   return config;
 };

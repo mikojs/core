@@ -2,6 +2,7 @@
 // @flow
 
 import path from 'path';
+import readline from 'readline';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 import dirCommand from '@babel/cli/lib/babel/dir';
@@ -79,12 +80,37 @@ handleUnhandledRejection();
     },
   );
 
-  if (customFile)
-    chokidar.watch(path.resolve(customFile)).on('change', () => {
-      logger.log('Restart custom server');
-      subprocess.cancel();
-      subprocess = execa(path.resolve(__dirname, './server.js'), serverArgu, {
-        stdio: 'inherit',
-      });
+  if (!customFile || !opts.cliOptions.watch) return;
+
+  logger.log(
+    'Use `rs` to restart custom server',
+    'Use `exit` or `Ctrl + c` to stop custom server',
+  );
+
+  /**
+   * @example
+   * restart()
+   */
+  const restart = () => {
+    logger.log(
+      'Restart custom server',
+      'Use `rs` to restart custom server',
+      'Use `exit` or `Ctrl + c` to stop custom server',
+    );
+
+    subprocess.cancel();
+    subprocess = execa(path.resolve(__dirname, './server.js'), serverArgu, {
+      stdio: 'inherit',
     });
+  };
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  chokidar.watch(path.resolve(customFile)).on('change', restart);
+  rl.on('line', (line: string) => {
+    if (line === 'rs') restart();
+    else if (line === 'exit') process.exit(0);
+  });
 })();

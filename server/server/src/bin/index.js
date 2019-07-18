@@ -21,6 +21,7 @@ const debugLog = debug('server:bin');
 
   if (customFile) {
     logger.info('Run with custom server');
+    debugLog(opts);
 
     const { src, dir } = findOptionsPath(
       opts.cliOptions.filenames[0],

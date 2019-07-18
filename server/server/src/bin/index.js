@@ -25,7 +25,7 @@ handleUnhandledRejection();
   const customFile = opts.cliOptions.outFile;
 
   if (customFile) {
-    logger.info('Run custom server');
+    logger.info('Run the custom server');
     debugLog(opts);
 
     const { src, dir } = findOptionsPath(
@@ -83,8 +83,8 @@ handleUnhandledRejection();
   if (!customFile || !opts.cliOptions.watch) return;
 
   logger.log(
-    'Use `rs` to restart custom server',
-    'Use `exit` or `Ctrl + c` to stop custom server',
+    'Use `rs` to restart the custom server',
+    'Use `exit` or `ctrl + c` to stop the custom server',
   );
 
   /**
@@ -93,9 +93,9 @@ handleUnhandledRejection();
    */
   const restart = () => {
     logger.log(
-      'Restart custom server',
-      'Use `rs` to restart custom server',
-      'Use `exit` or `Ctrl + c` to stop custom server',
+      'Restart the custom server',
+      'Use `rs` to restart the custom server',
+      'Use `exit` or `ctrl + c` to stop the custom server',
     );
 
     subprocess.cancel();

@@ -18,7 +18,7 @@ const program = new commander.Command('server')
   .usage(chalk`{green <server file path>}`)
   .description(
     chalk`Example:
-  server ./server.js {gray --src ./src --dir ./lib}`,
+  server {green ./server.js} {gray --src ./src --dir ./lib}`,
   )
   .option('--src <path>', 'src folder path')
   .option('--dir <path>', 'dir folder path')

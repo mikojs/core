@@ -30,7 +30,7 @@
     "koa": "^2.7.0",
     "node-fetch": "^2.6.0"
   },
-  "keywords": ["cat-org", "server"],
+  "keywords": ["babel", "cat-org", "koa", "pipeline", "server"],
   "publishConfig": {
     "access": "public"
   }

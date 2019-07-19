@@ -195,4 +195,3 @@ export default class Root extends React.PureComponent<propsType, stateType> {
     );
   }
 }
-/* eslint-enable require-jsdoc, flowtype/require-return-type */

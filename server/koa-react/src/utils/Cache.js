@@ -9,7 +9,7 @@ import outputFileSync from 'output-file-sync';
 import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-import { type propsType as rootPropsType } from './Root';
+import type PagesHelperType from './PagesHelper';
 
 import NotFound from 'templates/NotFound';
 
@@ -47,7 +47,7 @@ export default class Cache {
     basename: ?string,
     exclude: ?RegExp,
   |};
-  routesData: $PropertyType<rootPropsType, 'routesData'>;
+  routesData: $PropertyType<PagesHelperType, 'routesData'>;
   document: string;
   main: string;
   loading: string;
@@ -259,7 +259,7 @@ export default class Cache {
           path: routePath,
           component: { filePath, chunkName },
         }: $ElementType<
-          $PropertyType<rootPropsType, 'routesData'>,
+          $PropertyType<PagesHelperType, 'routesData'>,
           number,
         >): string =>
           `{ ${[
@@ -333,7 +333,7 @@ export default class Cache {
               ({
                 component: { chunkName: routeChunkName },
               }: $ElementType<
-                $PropertyType<rootPropsType, 'routesData'>,
+                $PropertyType<PagesHelperType, 'routesData'>,
                 number,
               >) => routeChunkName !== chunkName,
             ),

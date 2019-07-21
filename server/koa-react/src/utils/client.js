@@ -9,11 +9,19 @@ import { mockChoice, handleUnhandledRejection } from '@cat-org/utils';
 import { lazy, hydrate } from '../ReactIsomorphic';
 
 import Root, { type propsType as rootPropsType } from './Root';
+import PagesHelper from './PagesHelper';
 
 import Main from 'templates/Main';
 import Loading from 'templates/Loading';
 import ErrorComponent from 'templates/Error';
 import routesData from 'templates/routesData';
+
+export type preloadType = {|
+  originalUrl: $PropertyType<PagesHelper, 'originalUrl'>,
+  chunkName: $PropertyType<PagesHelper, 'chunkName'>,
+  initialProps: $PropertyType<PagesHelper, 'initialProps'>,
+  mainInitialProps: $PropertyType<rootPropsType, 'mainInitialProps'>,
+|};
 
 const setConfig = /** setConfig */ emptyFunction;
 
@@ -27,30 +35,32 @@ setConfig({
  * run()
  */
 const run = async () => {
-  const { mainInitialProps, ...store } = window.__CAT_DATA__;
+  const {
+    originalUrl,
+    chunkName,
+    initialProps,
+    mainInitialProps,
+  }: preloadType = window.__CAT_DATA__;
   // preload page
   const {
     component: { loader },
   } =
     routesData.find(
       ({
-        component: { chunkName },
-      }: $ElementType<$PropertyType<rootPropsType, 'routesData'>, number>) =>
-        store.chunkName === chunkName,
+        component,
+      }: $ElementType<$PropertyType<PagesHelper, 'routesData'>, number>) =>
+        chunkName === component.chunkName,
     ) ||
     (() => {
       throw new Error('Can not find page component');
     })();
   const { default: Component } = await loader();
   /** @react page Component */
-  const Page = <-P>(props: P) => (
-    <Component {...props} {...store.initialProps} />
-  );
+  const Page = <-P>(props: P) => <Component {...props} {...initialProps} />;
+  const pagesHelper = new PagesHelper(routesData);
 
-  Root.preload({
-    ...store,
-    Page: lazy(async () => ({ default: Page }), store.chunkName),
-  });
+  pagesHelper.originalUrl = originalUrl;
+  pagesHelper.Page = lazy(async () => ({ default: Page }), chunkName);
 
   // render
   await hydrate(
@@ -59,7 +69,7 @@ const run = async () => {
         Main={Main}
         Loading={Loading}
         Error={ErrorComponent}
-        routesData={routesData}
+        pagesHelper={pagesHelper}
         mainInitialProps={{
           ...mainInitialProps,
           Component,

@@ -1,10 +1,11 @@
 // @flow
 
 import React from 'react';
-// import { mount } from 'enzyme';
-// import { emptyFunction } from 'fbjs';
+import { mount } from 'enzyme';
+import { emptyFunction } from 'fbjs';
 
 import client from '../client';
+import Root from '../Root';
 
 jest.mock('../../templates/routesData', () => [
   {
@@ -49,12 +50,10 @@ describe('client', () => {
 
     await client();
 
-    /* TODO
     const {
       Page: { _result: Component = emptyFunction },
     } = Root.preload();
 
     expect(mount(<Component />).html()).toBe('<div>test</div>');
-    */
   });
 });

@@ -24,12 +24,32 @@ import { requireModule } from '@cat-org/utils';
 
 import { lazy, renderToNodeStream } from '../ReactIsomorphic';
 
-import PagesHelper from './PagesHelper';
-import Root from './Root';
+import Root, { type storeType } from './Root';
 import type CacheType from './Cache';
-import { type preloadType } from './client';
 
 const debugLog = debug('react:server');
+
+/**
+ * @example
+ * initStore()
+ *
+ * @return {storeType} - init store
+ */
+export const initStore = () =>
+  Root.preload({
+    originalUrl: '',
+    chunkName: '',
+    initialProps: {},
+    Component: () => {
+      throw new Error('Can not use init Component');
+    },
+    Page: () => {
+      throw new Error('Can not use init Page');
+    },
+    lazyPage: async () => {
+      throw new Error('Can not use init lazy Page');
+    },
+  });
 
 /**
  * @example
@@ -73,20 +93,20 @@ export default (
 
   // [start] preload
   // preload Page
-  const pagesHelper = new PagesHelper(cache.routesData);
+  const store = initStore();
 
-  pagesHelper.getPage({
+  Root.getPage(cache.routesData, {
     location: { pathname: ctx.path, search: `?${ctx.querystring}` },
     staticContext: ctx,
   });
 
-  const Page = await pagesHelper.lazyPage();
+  const Page = await store.lazyPage();
 
-  pagesHelper.Page = lazy(async () => Page, pagesHelper.chunkName);
+  store.Page = lazy(async () => Page, store.chunkName);
 
   // preload Document and Main
   const initialProps = {
-    ...pagesHelper.initialProps,
+    ...store.initialProps,
     head: undefined,
   };
   const { head: documentHead, ...documentInitialProps } =
@@ -97,7 +117,7 @@ export default (
     (await Main.getInitialProps?.({
       ctx,
       isServer: true,
-      Component: pagesHelper.Component,
+      Component: store.Component,
       pageProps: initialProps,
     })) || {};
 
@@ -110,17 +130,17 @@ export default (
   // preload scripts
   renderToStaticMarkup(documentHead || null);
   renderToStaticMarkup(mainHead || null);
-  renderToStaticMarkup(pagesHelper.initialProps.head || null);
+  renderToStaticMarkup(store.initialProps.head || null);
   renderToStaticMarkup(
     <Helmet>
-      <script>{`var __CAT_DATA__ = ${JSON.stringify(
-        ({
-          originalUrl: pagesHelper.originalUrl,
-          chunkName: pagesHelper.chunkName,
-          initialProps,
-          mainInitialProps,
-        }: preloadType),
-      )};`}</script>
+      <script>{`var __CAT_DATA__ = ${JSON.stringify({
+        ...store,
+        initialProps,
+        Component: undefined,
+        Page: undefined,
+        lazyPage: undefined,
+        mainInitialProps,
+      })};`}</script>
       <script src={commonsUrl} async />
       <script src={clientUrl} async />
     </Helmet>,
@@ -153,10 +173,10 @@ export default (
           Main={Main}
           Loading={emptyFunction.thatReturnsNull}
           Error={ErrorComponent}
-          pagesHelper={pagesHelper}
+          routesData={cache.routesData}
           mainInitialProps={{
             ...mainInitialProps,
-            Component: pagesHelper.Component,
+            Component: store.Component,
           }}
         />
       </Router>,

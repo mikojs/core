@@ -122,7 +122,7 @@ You only need to do this:
 yarn add @cat-org/package-name
 ```
 
-#### Options about those plugins
+#### Environment variables about those plugins
 
 - Run command without building js in the production mode.
 

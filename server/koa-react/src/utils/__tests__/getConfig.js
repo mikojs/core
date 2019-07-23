@@ -19,7 +19,7 @@ test('routes data is smaller then 2', async () => {
       '/',
       undefined,
       undefined,
-      new Cache('/folderPath', () => []),
+      new Cache('/folderPath', () => {}),
     ).optimization.splitChunks.cacheGroups.commons.minChunks,
   ).toBe(2);
 });

@@ -77,7 +77,7 @@ export default class React {
     {
       dev = true,
       config: configFunc = emptyFunction.thatReturnsArgument,
-      redirect = emptyFunction.thatReturnsArgument,
+      redirect = emptyFunction,
       basename,
       exclude,
     }: optionsType = {},

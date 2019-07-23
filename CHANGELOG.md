@@ -1,5 +1,38 @@
 # CHANGELOG
 
+## 1.5.0 (2019-07-23)
+
+#### :boom: Breaking Change
+
+- `create-project`, `website`
+  - [#343](https://github.com/cat-org/core/pull/343) (@cat-org/server) Move defaults server to a new file ([@HsuTing](https://github.com/HsuTing))
+  - [#341](https://github.com/cat-org/core/pull/341) (@cat-org/server) Move babel to cli ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#339](https://github.com/cat-org/core/pull/339) (@cat-org/server) Revert "Add server.watch for custom server.run (#338)" ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-flow-typed-install`
+  - [#347](https://github.com/cat-org/core/pull/347) (@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#346](https://github.com/cat-org/core/pull/346) (@cat-org/koa-react) Make redirect to handle all routesData ([@HsuTing](https://github.com/HsuTing))
+  - [#345](https://github.com/cat-org/core/pull/345) (@cat-org/server) Modify detail ([@HsuTing](https://github.com/HsuTing))
+  - [#344](https://github.com/cat-org/core/pull/344) (@cat-org/server) Can watch custom server ([@HsuTing](https://github.com/HsuTing))
+  - [#342](https://github.com/cat-org/core/pull/342) (@cat-org/server) Support custom server ([@HsuTing](https://github.com/HsuTing))
+  - [#338](https://github.com/cat-org/core/pull/338) (@cat-org/server) Add server.watch for custom server.run ([@HsuTing](https://github.com/HsuTing))
+  - [#337](https://github.com/cat-org/core/pull/337) (@cat-org/koa-react) Can use url params ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `website`
+  - [#343](https://github.com/cat-org/core/pull/343) (@cat-org/server) Move defaults server to a new file ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `create-project`, `website`
+  - [#341](https://github.com/cat-org/core/pull/341) (@cat-org/server) Move babel to cli ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.4.0 (2019-07-12)
 
 #### :rocket: New Feature

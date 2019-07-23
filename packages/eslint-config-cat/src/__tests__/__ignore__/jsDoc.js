@@ -19,8 +19,8 @@ const correctFunction = (argu: string) => 10;
  */
 const undefinedTypes = (argu: string) => 10;
 
-// $expectError jsdoc/newline-after-description
 // $expectError jsdoc/require-example
+// $expectError jsdoc/newline-after-description
 /**
  * desc
  * @param {number} argu - example argu
@@ -57,6 +57,7 @@ const noReturn = (argu: string) => 10;
  */
 const noHyphen = (argu: string) => {};
 
+// $expectError jsdoc/require-param
 // $expectError jsdoc/check-param-names
 /**
  * @example

@@ -340,7 +340,6 @@ export default class Cache {
             ),
           ];
           redirect(this.routesData);
-
           this.writeFile('routesData.js', this.clientRoutesData());
           break;
       }

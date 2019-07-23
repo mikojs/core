@@ -14,8 +14,8 @@ import { type propsType as rootPropsType } from './Root';
 import NotFound from 'templates/NotFound';
 
 export type redirectType = (
-  urlPattern: $ReadOnlyArray<string>,
-) => $ReadOnlyArray<string>;
+  routesData: $PropertyType<rootPropsType, 'routesData'>,
+) => void;
 
 type fileType =
   | 'document'
@@ -133,6 +133,7 @@ export default class Cache {
         );
       });
 
+    redirect(this.routesData);
     this.writeFile('routesData.js', this.clientRoutesData());
     this.writeFile(
       'Main.js',
@@ -219,13 +220,13 @@ export default class Cache {
    * @return {Array} - path for react-router-dom
    */
   +getPath = (relativePath: string): $ReadOnlyArray<string> => {
-    const { redirect, basename } = this.store;
-    const routePath = redirect([
+    const { basename } = this.store;
+    const routePath = [
       relativePath
         .replace(/(\/?index)?$/, '')
         .replace(/^/, '/')
         .replace(/\/\[([^[\]]*)\]/g, '/:$1'),
-    ]);
+    ];
 
     debugLog(routePath);
 
@@ -280,7 +281,7 @@ export default class Cache {
    * @param {string} filePath - file path to watch
    */
   +update = (filePath: string) => {
-    const { folderPath, basename, exclude } = this.store;
+    const { folderPath, basename, exclude, redirect } = this.store;
 
     if (exclude && exclude.test(filePath)) return;
 
@@ -338,6 +339,8 @@ export default class Cache {
               >) => routeChunkName !== chunkName,
             ),
           ];
+          redirect(this.routesData);
+
           this.writeFile('routesData.js', this.clientRoutesData());
           break;
       }

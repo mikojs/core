@@ -1,0 +1,14 @@
+{
+  "name": "@cat-org/use-dnd",
+  "description": "Add dnd config to @cat-org/koa-react",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://cat-org.github.io/core/use-dnd",
+  "repository": "https://github.com/cat-org/core/tree/master/server/use-dnd",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "keywords": ["cat-org", "koa-react", "use-dnd", "webpack plugin"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

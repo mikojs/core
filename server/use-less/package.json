@@ -17,7 +17,7 @@
     "@cat-org/use-css": ">=1.0.0"
   },
   "devDependencies": {
-    "webpack": "^4.35.2"
+    "webpack": "^4.36.1"
   },
   "keywords": ["cat-org", "koa-react", "use-less"],
   "publishConfig": {

@@ -16,7 +16,7 @@ export default async (
   path: string,
   method?: string = 'get',
   options?: {} = {},
-): fetch => {
+): Promise<string | {}> => {
   if (method === 'del')
     return fetch(`http://localhost:8000${path}`, {
       ...options,

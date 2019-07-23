@@ -3,7 +3,7 @@
 import path from 'path';
 
 import debug from 'debug';
-import fetch from 'node-fetch';
+import fetch, { type Response as ResponseType } from 'node-fetch';
 import outputFileSync from 'output-file-sync';
 
 import type CacheType from './Cache';
@@ -81,8 +81,8 @@ export default async (
 
         outputFileSync(
           filePath,
-          await fetch(`${baseUrl}${routePath}`).then(
-            (res: {| text: () => string |}) => res.text(),
+          await fetch(`${baseUrl}${routePath}`).then((res: ResponseType) =>
+            res.text(),
           ),
         );
       }),

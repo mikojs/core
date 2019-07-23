@@ -14,8 +14,8 @@
     "@babel/core": ">=7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/traverse": "^7.4.5"
+    "@babel/core": "^7.5.5",
+    "@babel/traverse": "^7.5.5"
   },
   "keywords": [
     "babel plugin",

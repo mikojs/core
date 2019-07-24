@@ -15,7 +15,7 @@ import NotFound from 'templates/NotFound';
 
 export type redirectType = (
   routesData: $PropertyType<rootPropsType, 'routesData'>,
-) => void;
+) => $PropertyType<rootPropsType, 'routesData'>;
 
 type fileType =
   | 'document'

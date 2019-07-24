@@ -49,7 +49,7 @@ yarn server ./src/server.js -o ./lib/server.js
 #### Use default server in testing
 
 ```js
-import server from '@cat-org/server/lib/bin';
+import server from '@cat-org/server/lib/defaults';
 
 let runningServer;
 

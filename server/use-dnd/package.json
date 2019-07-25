@@ -7,6 +7,12 @@
   "repository": "https://github.com/cat-org/core/tree/master/server/use-dnd",
   "version": "1.0.0",
   "main": "./lib/index.js",
+  "dependencies": {
+    "fbjs": "^1.0.0"
+  },
+  "peerDependencies": {
+    "@cat-org/koa-react": ">=1.0.0"
+  },
   "keywords": ["cat-org", "koa-react", "use-dnd", "webpack plugin"],
   "publishConfig": {
     "access": "public"

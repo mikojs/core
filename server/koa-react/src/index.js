@@ -19,7 +19,7 @@ import {
   mockChoice,
 } from '@cat-org/utils';
 
-import Cache, { type redirectType } from './utils/Cache';
+import Cache, { type handlerType } from './utils/Cache';
 import getConfig from './utils/getConfig';
 import buildJs from './utils/buildJs';
 import buildStatic, {
@@ -42,7 +42,7 @@ export type configType = {
 export type optionsType = {|
   dev?: boolean,
   config?: (config: configType, dev: boolean) => configType,
-  redirect?: redirectType,
+  handler?: handlerType,
   basename?: string,
   exclude?: RegExp,
 |};
@@ -80,7 +80,7 @@ export default class React {
     {
       dev = true,
       config: configFunc = emptyFunction.thatReturnsArgument,
-      redirect = emptyFunction.thatReturnsArgument,
+      handler = emptyFunction.thatReturnsArgument,
       basename,
       exclude,
     }: optionsType = {},
@@ -99,7 +99,7 @@ export default class React {
       basename,
     });
 
-    const cache = new Cache(folderPath, redirect, basename, exclude);
+    const cache = new Cache(folderPath, handler, basename, exclude);
     const config = configFunc(
       {
         config: getConfig(dev, folderPath, basename, exclude, cache),

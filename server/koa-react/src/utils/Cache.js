@@ -133,7 +133,7 @@ export default class Cache {
         );
       });
 
-    handler(this.routesData);
+    this.routesData = handler(this.routesData);
     this.writeFile('routesData.js', this.clientRoutesData());
     this.writeFile(
       'Main.js',
@@ -339,7 +339,7 @@ export default class Cache {
               >) => routeChunkName !== chunkName,
             ),
           ];
-          handler(this.routesData);
+          this.routesData = handler(this.routesData);
           this.writeFile('routesData.js', this.clientRoutesData());
           break;
       }

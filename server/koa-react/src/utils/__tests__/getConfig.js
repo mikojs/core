@@ -1,5 +1,7 @@
 // @flow
 
+import { emptyFunction } from 'fbjs';
+
 import getConfig from '../getConfig';
 import Cache from '../Cache';
 
@@ -19,7 +21,7 @@ test('routes data is smaller then 2', async () => {
       '/',
       undefined,
       undefined,
-      new Cache('/folderPath', () => {}),
+      new Cache('/folderPath', emptyFunction.thatReturnsArgument),
     ).optimization.splitChunks.cacheGroups.commons.minChunks,
   ).toBe(2);
 });

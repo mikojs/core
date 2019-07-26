@@ -13,9 +13,9 @@ import { type propsType as rootPropsType } from './Root';
 
 import NotFound from 'templates/NotFound';
 
-export type redirectType = (
+export type handlerType = (
   routesData: $PropertyType<rootPropsType, 'routesData'>,
-) => void;
+) => $PropertyType<rootPropsType, 'routesData'>;
 
 type fileType =
   | 'document'
@@ -43,7 +43,7 @@ const getLoader = (filePath: string) => async () => ({
 export default class Cache {
   store: {|
     folderPath: string,
-    redirect: redirectType,
+    handler: handlerType,
     basename: ?string,
     exclude: ?RegExp,
   |};
@@ -59,19 +59,19 @@ export default class Cache {
    * new cache('/folder-path', () => {})
    *
    * @param {string} folderPath - folder path
-   * @param {Function} redirect - redirect url path
+   * @param {Function} handler - handler url path
    * @param {string} basename - basename to join url
    * @param {RegExp} exclude - exclude file path
    */
   constructor(
     folderPath: string,
-    redirect: redirectType,
+    handler: handlerType,
     basename?: string,
     exclude?: RegExp,
   ) {
     this.store = {
       folderPath,
-      redirect,
+      handler,
       basename,
       exclude,
     };
@@ -133,7 +133,7 @@ export default class Cache {
         );
       });
 
-    redirect(this.routesData);
+    this.routesData = handler(this.routesData);
     this.writeFile('routesData.js', this.clientRoutesData());
     this.writeFile(
       'Main.js',
@@ -281,7 +281,7 @@ export default class Cache {
    * @param {string} filePath - file path to watch
    */
   +update = (filePath: string) => {
-    const { folderPath, basename, exclude, redirect } = this.store;
+    const { folderPath, basename, exclude, handler } = this.store;
 
     if (exclude && exclude.test(filePath)) return;
 
@@ -339,7 +339,7 @@ export default class Cache {
               >) => routeChunkName !== chunkName,
             ),
           ];
-          redirect(this.routesData);
+          this.routesData = handler(this.routesData);
           this.writeFile('routesData.js', this.clientRoutesData());
           break;
       }

@@ -62,7 +62,7 @@ chokidar
 ```js
 const react = new React('./path-to-react-folder', {
   dev: true,
-  redirect: prevPaths => redirectPaths,
+  headler: routesData => routesData, // use to handle the all routes data.
   basename: '/basename',
   exclude: /ignore/,
 });

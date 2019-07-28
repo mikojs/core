@@ -7,6 +7,16 @@
   "repository": "https://github.com/cat-org/core/tree/master/components/react-renderer",
   "version": "1.0.0",
   "main": "./lib/index.js",
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
+  },
+  "devDependencies": {
+    "d3-hierarchy": "^1.1.8",
+    "enzyme": "^3.10.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
   "keywords": ["cat-org", "d3-hierarchy", "react"],
   "publishConfig": {
     "access": "public"

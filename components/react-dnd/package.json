@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/react-renderer",
+  "name": "@cat-org/react-dnd",
   "description": "Render the react components with the data from d3-hierarchy",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/react-renderer",
-  "repository": "https://github.com/cat-org/core/tree/master/components/react-renderer",
+  "homepage": "https://cat-org.github.io/core/react-dnd",
+  "repository": "https://github.com/cat-org/core/tree/master/components/react-dnd",
   "version": "1.0.0",
   "main": "./lib/index.js",
   "peerDependencies": {

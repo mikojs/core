@@ -14,7 +14,7 @@ type sourceType = {|
   children: $ReadOnlyArray<sourceType>,
 |};
 
-const Renderer = React.memo<{| source: sourceType |}>(
+const Dnd = React.memo<{| source: sourceType |}>(
   ({
     source: {
       data: { type, props = {} },
@@ -27,10 +27,10 @@ const Renderer = React.memo<{| source: sourceType |}>(
       ...props,
       children: !props.children
         ? children.map((child: sourceType) => (
-            <Renderer key={child.id} source={child} />
+            <Dnd key={child.id} source={child} />
           ))
         : props.children,
     }),
 );
 
-export default Renderer;
+export default Dnd;

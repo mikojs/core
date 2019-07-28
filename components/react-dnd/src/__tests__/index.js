@@ -8,7 +8,7 @@ import React, {
 import * as d3 from 'd3-hierarchy';
 import { mount } from 'enzyme';
 
-import Renderer from '../index';
+import Dnd from '../index';
 
 import testings from './__ignore__/testings';
 
@@ -26,7 +26,7 @@ const parse = d3
   .id((d: dataType) => d.id)
   .parentId((d: dataType) => d.parentId);
 
-describe('renderer', () => {
+describe('dnd', () => {
   test.each(testings)(
     '%s',
     (
@@ -34,7 +34,7 @@ describe('renderer', () => {
       data: $ReadOnlyArray<dataType>,
       expected: ElementType<*>,
     ) => {
-      expect(mount(<Renderer source={parse(data)} />).html()).toBe(
+      expect(mount(<Dnd source={parse(data)} />).html()).toBe(
         mount(expected).html(),
       );
     },

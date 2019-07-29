@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.5.1 (2019-07-29)
+
+#### :rocket: New Feature
+
+- [#349](https://github.com/cat-org/core/pull/349) (@cat-org/use-dnd) Add new package ([@HsuTing](https://github.com/HsuTing))
+
+#### :memo: Documentation
+
+- [#348](https://github.com/cat-org/core/pull/348) (@cat-org/server) Modify README.md ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- [#351](https://github.com/cat-org/core/pull/351) (@cat-org/use-dnd) Remove use dnd ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.5.0 (2019-07-23)
 
 #### :boom: Breaking Change

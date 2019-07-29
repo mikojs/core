@@ -8,6 +8,7 @@
   "version": "1.0.0",
   "main": "./lib/index.js",
   "dependencies": {
+    "d3-hierarchy": "^1.1.8",
     "react-draggable": "^3.3.0"
   },
   "peerDependencies": {
@@ -15,8 +16,6 @@
     "react-dom": ">=16.0.0"
   },
   "devDependencies": {
-    "d3-hierarchy": "^1.1.8",
-    "enzyme": "^3.10.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },

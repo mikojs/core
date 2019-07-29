@@ -62,7 +62,7 @@ chokidar
 ```js
 const react = new React('./path-to-react-folder', {
   dev: true,
-  headler: routesData => routesData, // use to handle the all routes data.
+  headler: routesData => routesData, // use to handle the all routes data. You can use this to sort the path or add the custom routeData.
   basename: '/basename',
   exclude: /ignore/,
 });

@@ -7,6 +7,9 @@
   "repository": "https://github.com/cat-org/core/tree/master/components/react-dnd",
   "version": "1.0.0",
   "main": "./lib/index.js",
+  "dependencies": {
+    "react-draggable": "^3.3.0"
+  },
   "peerDependencies": {
     "react": ">=16.0.0",
     "react-dom": ">=16.0.0"

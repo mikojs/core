@@ -1,36 +1,9 @@
 // @flow
 
-import React, { type ComponentType, type Node as NodeType } from 'react';
+import React from 'react';
 
-type sourceType = {|
-  id: string,
-  data: {|
-    type: string | ComponentType<*>,
-    props?: {
-      children?: NodeType,
-    },
-    children: $ReadOnlyArray<sourceType>,
-  |},
-  children: $ReadOnlyArray<sourceType>,
-|};
+import PreviewerComponent from './Previewer';
 
-const Dnd = React.memo<{| source: sourceType |}>(
-  ({
-    source: {
-      data: { type, props = {} },
-      children,
-    },
-  }: {
-    source: sourceType,
-  }) =>
-    React.createElement(type, {
-      ...props,
-      children: !props.children
-        ? children.map((child: sourceType) => (
-            <Dnd key={child.id} source={child} />
-          ))
-        : props.children,
-    }),
-);
+export const Previewer = PreviewerComponent;
 
-export default Dnd;
+export default React.memo<*>(() => null);

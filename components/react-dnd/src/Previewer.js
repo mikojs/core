@@ -3,27 +3,29 @@
 import React, { type ComponentType, type Node as NodeType } from 'react';
 import Draggable from 'react-draggable';
 
-type sourceType = {|
+export type sourceType = {|
   id: string,
   data: {|
     type: string | ComponentType<*>,
     props?: {
       children?: NodeType,
     },
-    children: $ReadOnlyArray<sourceType>,
   |},
   children: $ReadOnlyArray<sourceType>,
 |};
 
-const Previewer = React.memo<{| source: sourceType |}>(
+type propsType = {|
+  source: sourceType,
+|};
+
+/** @react */
+const Previewer = React.memo<propsType>(
   ({
     source: {
       data: { type, props = {} },
-      children,
+      children = [],
     },
-  }: {
-    source: sourceType,
-  }) => (
+  }: propsType) => (
     <Draggable>
       {React.createElement(type, {
         ...props,

@@ -2,8 +2,13 @@
 
 import React from 'react';
 
-import PreviewerComponent from './Previewer';
+import Provider, { DataContext, type contextType } from './Provider';
+import Previewer from './Previewer';
 
-export const Previewer = PreviewerComponent;
-
-export default React.memo<*>(() => null);
+export default React.memo<{||}>(() => (
+  <Provider>
+    <DataContext.Consumer>
+      {({ source }: contextType) => <Previewer source={source} />}
+    </DataContext.Consumer>
+  </Provider>
+));

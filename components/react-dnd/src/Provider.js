@@ -2,19 +2,21 @@
 
 import React, { type Node as NodeType } from 'react';
 import * as d3 from 'd3-hierarchy';
+import { emptyFunction } from 'fbjs';
 
-import { type sourceType } from './Previewer';
-
-export type contextType = {|
-  source: sourceType,
-|};
+import { type propsType as previewerPropsType } from './Previewer';
 
 type propsType = {|
   children: NodeType,
 |};
 
 type stateType = {|
-  source: $PropertyType<contextType, 'source'>,
+  data: $ReadOnlyArray<
+    $PropertyType<$PropertyType<previewerPropsType, 'source'>, 'data'> & {
+      id: string,
+      parentId?: string | null,
+    },
+  >,
 |};
 
 const parse = d3
@@ -22,18 +24,16 @@ const parse = d3
   .id(({ id }: {| id: string |}) => id)
   .parentId(({ parentId }: {| parentId: string |}) => parentId);
 
-const defaultSource = parse([
+const DEFAULT_DATA = [
   {
     id: 'root',
     type: 'div',
-    props: {
-      children: 'Root',
-    },
   },
-]);
+];
 
-export const DataContext = React.createContext<contextType>({
-  source: defaultSource,
+export const DataContext = React.createContext<previewerPropsType>({
+  source: parse(DEFAULT_DATA),
+  handler: emptyFunction,
 });
 
 /** Use to provide the source data */
@@ -42,16 +42,52 @@ export default class Provider extends React.PureComponent<
   stateType,
 > {
   state = {
-    source: defaultSource,
+    data: DEFAULT_DATA,
+  };
+
+  /**
+   * @example
+   * provider.handler(draggedId, targetId)
+   *
+   * @param {string} draggedId - the id of the dragged DOM
+   * @param {string} targetId - the id of the target DOM
+   */
+  +handler = (draggedId: string, targetId: string) => {
+    const data = [...this.state.data];
+    const draggedIndex = data.findIndex(
+      ({ id }: $ElementType<$PropertyType<stateType, 'data'>, number>) =>
+        id === draggedId,
+    );
+    const targetIndex = data.findIndex(
+      ({ id }: $ElementType<$PropertyType<stateType, 'data'>, number>) =>
+        id === targetId,
+    );
+    const draggedDOM = data[draggedIndex];
+    const targetDOM = data[targetIndex];
+
+    data[targetIndex] = {
+      ...draggedDOM,
+      parentId: targetDOM.parentId || null,
+    };
+    data[draggedIndex] = {
+      ...targetDOM,
+      parentId: draggedDOM.parentId || null,
+    };
+
+    this.setState({ data });
   };
 
   /** @react */
   render(): NodeType {
     const { children } = this.props;
-    const { source } = this.state;
+    const { data } = this.state;
 
     return (
-      <DataContext.Provider value={{ source }}>{children}</DataContext.Provider>
+      <DataContext.Provider
+        value={{ source: parse(data), handler: this.handler }}
+      >
+        {children}
+      </DataContext.Provider>
     );
   }
 }

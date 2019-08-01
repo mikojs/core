@@ -24,6 +24,11 @@ export default class Document extends React.PureComponent<propsType> {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <title>cat-org</title>
+
+        <link
+          rel="stylesheet"
+          href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+        />
       </Helmet>
     ),
   });

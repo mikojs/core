@@ -2,14 +2,17 @@
 
 import React from 'react';
 
-import Provider, { DataContext } from './Provider';
-import Previewer, { type propsType as previewerPropsType } from './Previewer';
+import Provider, { DataContext, type contextType } from './Provider';
+import Previewer from './Previewer';
+import Main from './Main';
 
 export default React.memo<{||}>(() => (
   <Provider>
     <DataContext.Consumer>
-      {({ source, handler }: previewerPropsType) => (
-        <Previewer source={source} handler={handler} />
+      {({ source, move, add }: contextType) => (
+        <Main add={add}>
+          <Previewer source={source} handler={move} />
+        </Main>
       )}
     </DataContext.Consumer>
   </Provider>

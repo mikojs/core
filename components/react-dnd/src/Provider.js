@@ -22,6 +22,12 @@ type stateType = {|
   >,
 |};
 
+export type contextType = {|
+  source: $PropertyType<previewerPropsType, 'source'>,
+  move: $PropertyType<previewerPropsType, 'handler'>,
+  add: $PropertyType<previewerPropsType, 'handler'>,
+|};
+
 const parse = d3
   .stratify()
   .id(({ id }: {| id: string |}) => id)
@@ -34,9 +40,10 @@ const DEFAULT_DATA = [
   },
 ];
 
-export const DataContext = React.createContext<previewerPropsType>({
+export const DataContext = React.createContext<contextType>({
   source: parse(DEFAULT_DATA),
-  handler: emptyFunction,
+  move: emptyFunction,
+  add: emptyFunction,
 });
 
 /** Use to provide the source data */
@@ -48,7 +55,7 @@ export default class Provider extends React.PureComponent<
     data: DEFAULT_DATA,
   };
 
-  +handler = memoizeOne((draggedId: string, targetId: string) => {
+  +move = memoizeOne((draggedId: string, targetId: string) => {
     const data = [...this.state.data];
     const draggedIndex = data.findIndex(
       ({ id }: $ElementType<$PropertyType<stateType, 'data'>, number>) =>
@@ -73,6 +80,8 @@ export default class Provider extends React.PureComponent<
     this.setState({ data });
   });
 
+  +add = memoizeOne((draggedId: string, targetId: string) => {});
+
   /** @react */
   render(): NodeType {
     const { children } = this.props;
@@ -80,7 +89,7 @@ export default class Provider extends React.PureComponent<
 
     return (
       <DataContext.Provider
-        value={{ source: parse(data), handler: this.handler }}
+        value={{ source: parse(data), move: this.move, add: this.add }}
       >
         <DndProvider backend={HTML5Backend}>{children}</DndProvider>
       </DataContext.Provider>

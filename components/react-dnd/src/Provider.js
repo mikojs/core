@@ -4,6 +4,7 @@ import React, { type Node as NodeType } from 'react';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import * as d3 from 'd3-hierarchy';
+import memoizeOne from 'memoize-one';
 import { emptyFunction } from 'fbjs';
 
 import { type propsType as previewerPropsType } from './Previewer';
@@ -47,14 +48,7 @@ export default class Provider extends React.PureComponent<
     data: DEFAULT_DATA,
   };
 
-  /**
-   * @example
-   * provider.handler(draggedId, targetId)
-   *
-   * @param {string} draggedId - the id of the dragged DOM
-   * @param {string} targetId - the id of the target DOM
-   */
-  +handler = (draggedId: string, targetId: string) => {
+  +handler = memoizeOne((draggedId: string, targetId: string) => {
     const data = [...this.state.data];
     const draggedIndex = data.findIndex(
       ({ id }: $ElementType<$PropertyType<stateType, 'data'>, number>) =>
@@ -77,7 +71,7 @@ export default class Provider extends React.PureComponent<
     };
 
     this.setState({ data });
-  };
+  });
 
   /** @react */
   render(): NodeType {

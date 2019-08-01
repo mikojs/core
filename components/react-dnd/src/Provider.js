@@ -1,6 +1,8 @@
 // @flow
 
 import React, { type Node as NodeType } from 'react';
+import { DndProvider } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import * as d3 from 'd3-hierarchy';
 import { emptyFunction } from 'fbjs';
 
@@ -86,7 +88,7 @@ export default class Provider extends React.PureComponent<
       <DataContext.Provider
         value={{ source: parse(data), handler: this.handler }}
       >
-        {children}
+        <DndProvider backend={HTML5Backend}>{children}</DndProvider>
       </DataContext.Provider>
     );
   }

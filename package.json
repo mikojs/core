@@ -53,8 +53,5 @@
       "post-merge": "make babel-all",
       "post-checkout": "make babel-changed BRANCH=master"
     }
-  },
-  "resolutions": {
-    "react-relay-network-modern": "4.0.2"
   }
 }

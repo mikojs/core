@@ -17,6 +17,7 @@ const DEFAULT_DATA = [
   {
     id: 'root',
     parentId: null,
+    dndType: 'previewer',
     type: 'root',
   },
 ];

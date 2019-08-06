@@ -30,5 +30,6 @@ export type dataType = $ReadOnlyArray<
 >;
 
 export type contextType = {|
+  manager: sourceType,
   previewer: sourceType,
 |};

@@ -26,12 +26,25 @@ const Renderer = React.memo<propsType>(
       ));
 
     if (ExecutionEnvironment.canUseEventListeners) {
-      const [{ isDragging }, connectDrag] = useDrag({
-        item: { id, type: dndType },
-        collect: (monitor: {| isDragging: () => boolean |}) => ({
-          isDragging: monitor.isDragging(),
-        }),
-      });
+      newProps.ref = useRef(null);
+
+      if (['component', 'new-component'].includes(dndType)) {
+        const [{ isDragging }, connectDrag] = useDrag({
+          item: { id, type: dndType },
+          collect: (monitor: {| isDragging: () => boolean |}) => ({
+            isDragging: monitor.isDragging(),
+          }),
+        });
+
+        connectDrag(newProps.ref);
+        newProps.style = !isDragging
+          ? newProps.style
+          : {
+              ...newProps.style,
+              opacity: 0,
+            };
+      }
+
       const [, connectDrop] = useDrop({
         accept: ['manager', 'previewer', 'component', 'new-component'],
         hover: ({ id: draggedId }: {| id: string |}) => {
@@ -39,15 +52,6 @@ const Renderer = React.memo<propsType>(
         },
       });
 
-      newProps.ref = useRef(null);
-      newProps.style = !isDragging
-        ? newProps.style
-        : {
-            ...newProps.style,
-            opacity: 0,
-          };
-
-      connectDrag(newProps.ref);
       connectDrop(newProps.ref);
     }
 

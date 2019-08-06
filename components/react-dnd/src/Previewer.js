@@ -11,13 +11,13 @@ type propsType = {
     | ((null | HTMLDivElement) => mixed),
 };
 
-const Previewer = React.memo<propsType>(
-  ({ children, forwardedRef }: propsType) => (
-    <div ref={forwardedRef} style={styles}>
-      {children}
-    </div>
-  ),
+/** @react render the Previewer Container */
+const Previewer = ({ children, forwardedRef }: propsType) => (
+  <div ref={forwardedRef} style={styles}>
+    {children}
+  </div>
 );
+const MemoPreviewer = React.memo<propsType>(Previewer);
 
 export default React.forwardRef<
   $Diff<propsType, { forwardedRef: mixed }>,
@@ -26,5 +26,5 @@ export default React.forwardRef<
   (
     props: $Diff<propsType, { forwardedRef: mixed }>,
     ref: $PropertyType<propsType, 'forwardedRef'>,
-  ) => <Previewer {...props} forwardedRef={ref} />,
+  ) => <MemoPreviewer {...props} forwardedRef={ref} />,
 );

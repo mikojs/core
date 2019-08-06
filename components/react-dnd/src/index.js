@@ -20,7 +20,8 @@ const TODO_LIST = [
 ];
 */
 
-const Dnd = React.memo<{||}>(() => (
+/** @react use to control the all components */
+const Dnd = () => (
   <Provider>
     <DndProvider backend={HTML5Backend}>
       <DataContext.Consumer>
@@ -50,6 +51,6 @@ const Dnd = React.memo<{||}>(() => (
       </DataContext.Consumer>
     </DndProvider>
   </Provider>
-));
+);
 
-export default Dnd;
+export default React.memo<{||}>(Dnd);

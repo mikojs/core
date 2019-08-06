@@ -9,11 +9,11 @@ type propsType = {
     | ((null | HTMLDivElement) => mixed),
 };
 
-const Manager = React.memo<propsType>(
-  ({ children, forwardedRef }: propsType) => (
-    <div ref={forwardedRef}>{children}</div>
-  ),
+/** @react render the Manager Container */
+const Manager = ({ children, forwardedRef }: propsType) => (
+  <div ref={forwardedRef}>{children}</div>
 );
+const MemoManager = React.memo<propsType>(Manager);
 
 export default React.forwardRef<
   $Diff<propsType, { forwardedRef: mixed }>,
@@ -22,5 +22,5 @@ export default React.forwardRef<
   (
     props: $Diff<propsType, { forwardedRef: mixed }>,
     ref: $PropertyType<propsType, 'forwardedRef'>,
-  ) => <Manager {...props} forwardedRef={ref} />,
+  ) => <MemoManager {...props} forwardedRef={ref} />,
 );

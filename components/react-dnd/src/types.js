@@ -8,7 +8,7 @@ import {
 
 import typeof RendererType from './Renderer';
 
-type sourceType = {|
+export type sourceType = {|
   id: string,
   data: {
     dndType: 'manager' | 'previewer' | 'component' | 'new-component',
@@ -30,5 +30,5 @@ export type dataType = $ReadOnlyArray<
 >;
 
 export type contextType = {|
-  source: sourceType,
+  previewer: sourceType,
 |};

@@ -4,21 +4,22 @@ import React, { type Node as NodeType } from 'react';
 import * as d3 from 'd3-hierarchy';
 
 import { type dataType, type contextType } from './types';
+import Previewer from './Previewer';
 
 type propsType = {|
   children: NodeType,
 |};
 
 type stateType = {|
-  data: dataType,
+  previewer: dataType,
 |};
 
-const DEFAULT_DATA = [
+const DEFAULT_PREVIEWER = [
   {
     id: 'root',
     parentId: null,
     dndType: 'previewer',
-    type: 'root',
+    type: Previewer,
   },
 ];
 
@@ -28,7 +29,7 @@ const parse = d3
   .parentId(({ parentId }: {| parentId: string |}) => parentId);
 
 export const DataContext = React.createContext<contextType>({
-  source: parse(DEFAULT_DATA),
+  previewer: parse(DEFAULT_PREVIEWER),
 });
 
 /** Provide the source data and the methods to handle the source data*/
@@ -37,16 +38,16 @@ export default class Provider extends React.PureComponent<
   stateType,
 > {
   state = {
-    data: DEFAULT_DATA,
+    previewer: DEFAULT_PREVIEWER,
   };
 
   /** @react */
   render(): NodeType {
     const { children } = this.props;
-    const { data } = this.state;
+    const { previewer } = this.state;
 
     return (
-      <DataContext.Provider value={{ source: parse(data) }}>
+      <DataContext.Provider value={{ previewer: parse(previewer) }}>
         {children}
       </DataContext.Provider>
     );

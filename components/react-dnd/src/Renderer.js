@@ -4,10 +4,10 @@ import React, { useRef, type Node as NodeType } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { ExecutionEnvironment } from 'fbjs';
 
-import { type contextType } from './types';
+import { type sourceType } from './types';
 
 type propsType = {|
-  source: $PropertyType<contextType, 'source'>,
+  source: sourceType,
 |};
 
 const Renderer = React.memo<propsType>(
@@ -21,11 +21,9 @@ const Renderer = React.memo<propsType>(
     const newProps = { ...props };
 
     if (children.length !== 0)
-      newProps.children = children.map(
-        (child: $PropertyType<contextType, 'source'>) => (
-          <Renderer key={child.id} source={child} />
-        ),
-      );
+      newProps.children = children.map((child: sourceType) => (
+        <Renderer key={child.id} source={child} />
+      ));
 
     if (ExecutionEnvironment.canUseEventListeners) {
       const [{ isDragging }, connectDrag] = useDrag({

@@ -2,6 +2,8 @@
 
 import React, { type Node as NodeType } from 'react';
 
+import styles from './styles/previewer';
+
 type propsType = {
   children: NodeType,
   forwardedRef:
@@ -11,7 +13,9 @@ type propsType = {
 
 const Previewer = React.memo<propsType>(
   ({ children, forwardedRef }: propsType) => (
-    <div ref={forwardedRef}>{children}</div>
+    <div ref={forwardedRef} style={styles}>
+      {children}
+    </div>
   ),
 );
 

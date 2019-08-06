@@ -1,11 +1,7 @@
 // @flow
 
-export const root = {
+export default {
   display: 'grid',
   gridTemplateColumns: '250px auto',
   height: '100vh',
-};
-
-export const manager = {
-  background: 'gray',
 };

@@ -4,8 +4,10 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import Provider from './Provider';
-import * as styles from './styles';
+import Provider, { DataContext } from './Provider';
+import Renderer from './Renderer';
+import styles from './styles';
+import { type contextType } from './types';
 
 /*
 const Example = React.memo(() => 'test');
@@ -20,11 +22,15 @@ const TODO_LIST = [
 const Dnd = React.memo<{||}>(() => (
   <Provider>
     <DndProvider backend={HTML5Backend}>
-      <div style={styles.root}>
-        <div style={styles.manager} />
+      <DataContext.Consumer>
+        {({ manager, previewer }: contextType) => (
+          <div style={styles}>
+            <Renderer source={manager} />
 
-        <div />
-      </div>
+            <Renderer source={previewer} />
+          </div>
+        )}
+      </DataContext.Consumer>
     </DndProvider>
   </Provider>
 ));

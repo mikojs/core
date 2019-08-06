@@ -10,19 +10,18 @@ import Renderer from './Renderer';
 import * as styles from './styles';
 import { type contextType } from './types';
 
-/*
-const Example = React.memo(() => 'test');
+/* eslint-disable */
+const Example = React.memo(({ forwardedRef }) => (
+  <div ref={forwardedRef}>test</div>
+));
 const TODO_LIST = [
-  {
-    id: 'example',
-    Component: Example,
-  },
+  React.forwardRef((props, ref) => <Example forwardedRef={ref} />),
 ];
-*/
+/* eslint-enable */
 
 /** @react use to control the all components */
 const Dnd = () => (
-  <Provider>
+  <Provider components={TODO_LIST}>
     <DndProvider backend={HTML5Backend}>
       <DataContext.Consumer>
         {({ manager, previewer }: contextType) => (

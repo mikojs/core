@@ -1,28 +1,23 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React, { type Node as NodeType, type ComponentType } from 'react';
 import * as d3 from 'd3-hierarchy';
 
 import { type dataType, type contextType } from './types';
-import Manager from './Manager';
 import Previewer from './Previewer';
 
+import initializeComponents, {
+  DEFAULT_MANAGER,
+} from './utils/initializeComponents';
+
 type propsType = {|
+  components: $ReadOnlyArray<ComponentType<*>>,
   children: NodeType,
 |};
 
 type stateType = {|
   previewer: dataType,
 |};
-
-const DEFAULT_MANAGER = [
-  {
-    id: 'manager',
-    parentId: null,
-    dndType: 'manager',
-    type: Manager,
-  },
-];
 
 const DEFAULT_PREVIEWER = [
   {
@@ -54,12 +49,15 @@ export default class Provider extends React.PureComponent<
 
   /** @react */
   render(): NodeType {
-    const { children } = this.props;
+    const { components, children } = this.props;
     const { previewer } = this.state;
 
     return (
       <DataContext.Provider
-        value={{ manager: parse(DEFAULT_MANAGER), previewer: parse(previewer) }}
+        value={{
+          manager: parse(initializeComponents(components)),
+          previewer: parse(previewer),
+        }}
       >
         {children}
       </DataContext.Provider>

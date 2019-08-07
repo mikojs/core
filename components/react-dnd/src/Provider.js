@@ -78,16 +78,20 @@ export default class Provider extends React.PureComponent<
           )
             break;
 
-          const data = [...previewer];
-
-          data.push({
-            ...components[draggedIndex],
-            id: uuid(),
-            parentId: targetId,
-            dndType: 'component',
+          this.setState({
+            previewer: [
+              ...previewer.filter(
+                ({ dndType: prevDndType }: $ElementType<dataType, number>) =>
+                  prevDndType !== 'temp-component',
+              ),
+              {
+                ...components[draggedIndex],
+                id: uuid(),
+                parentId: targetId,
+                dndType: 'temp-component',
+              },
+            ],
           });
-
-          this.setState({ previewer: data });
           break;
         }
 

@@ -12,7 +12,12 @@ import { type contextType } from './types';
 
 /* eslint-disable */
 const Example = React.memo(({ forwardedRef }) => (
-  <div ref={forwardedRef}>test</div>
+  <div
+    ref={forwardedRef}
+    style={{ padding: '5px 10px', background: 'red', textAlign: 'center' }}
+  >
+    test
+  </div>
 ));
 const TODO_LIST = [
   React.forwardRef((props, ref) => <Example forwardedRef={ref} />),

@@ -11,7 +11,12 @@ import typeof RendererType from './Renderer';
 export type sourceType = {|
   id: string,
   data: {
-    dndType: 'manager' | 'previewer' | 'component' | 'new-component',
+    dndType:
+      | 'manager'
+      | 'previewer'
+      | 'component'
+      | 'new-component'
+      | 'temp-component',
     type: string | ComponentType<*>,
     props?: {
       ref?: RefType<RendererType>,

@@ -4,10 +4,11 @@ import React, { useRef, type Node as NodeType } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { ExecutionEnvironment } from 'fbjs';
 
-import { type sourceType } from './types';
+import { type sourceType, type contextType } from './types';
 
 type propsType = {|
   source: sourceType,
+  handler: $PropertyType<contextType, 'handler'>,
 |};
 
 /** @react render the Renderer Component for the source data */
@@ -17,6 +18,7 @@ const Renderer = ({
     data: { dndType, type, props = {} },
     children = [],
   },
+  handler,
 }: propsType): NodeType => {
   const newProps = { ...props };
 
@@ -25,6 +27,7 @@ const Renderer = ({
       React.createElement(React.memo<propsType>(Renderer), {
         key: child.id,
         source: child,
+        handler,
       }),
     );
 
@@ -50,8 +53,14 @@ const Renderer = ({
 
     const [, connectDrop] = useDrop({
       accept: ['manager', 'previewer', 'component', 'new-component'],
-      hover: ({ id: draggedId }: {| id: string |}) => {
-        // TODO if (draggedId !== id) handler(draggedId, id);
+      hover: ({
+        id: draggedId,
+        type: draggedType,
+      }: {|
+        id: string,
+        type: string,
+      |}) => {
+        if (draggedId !== id) handler(draggedType, draggedId, id);
       },
     });
 

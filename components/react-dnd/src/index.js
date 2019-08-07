@@ -3,7 +3,7 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd-cjs';
 import HTML5Backend from 'react-dnd-html5-backend-cjs';
-import Frame, { FrameContextConsumer } from 'react-frame-component';
+import Frame from 'react-frame-component';
 
 import Provider, { DataContext } from './Provider';
 import Renderer from './Renderer';
@@ -37,13 +37,7 @@ const Dnd = () => (
                 />
               }
             >
-              <FrameContextConsumer>
-                {({ window }: { window: mixed }) => (
-                  <DndProvider backend={HTML5Backend} context={window}>
-                    <Renderer source={previewer} handler={handler} />
-                  </DndProvider>
-                )}
-              </FrameContextConsumer>
+              <Renderer source={previewer} handler={handler} />
             </Frame>
           </div>
         )}

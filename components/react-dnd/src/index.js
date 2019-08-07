@@ -1,8 +1,8 @@
 // @flow
 
 import React from 'react';
-import { DndProvider } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd-cjs';
+import HTML5Backend from 'react-dnd-html5-backend-cjs';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 
 import Provider, { DataContext } from './Provider';

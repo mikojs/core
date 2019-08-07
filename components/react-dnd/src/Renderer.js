@@ -1,7 +1,7 @@
 // @flow
 
 import React, { useRef, type Node as NodeType } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd-cjs';
 import { ExecutionEnvironment } from 'fbjs';
 
 import { type sourceType, type contextType } from './types';

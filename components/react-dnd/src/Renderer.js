@@ -16,7 +16,7 @@ const Renderer = React.memo<propsType>(
   ({
     source: {
       id,
-      data: { dndType, type, props = {} },
+      data: { kind, type, props = {} },
       children = [],
     },
     handler,
@@ -31,9 +31,9 @@ const Renderer = React.memo<propsType>(
     if (ExecutionEnvironment.canUseEventListeners) {
       newProps.ref = useRef(null);
 
-      if (['component', 'new-component'].includes(dndType)) {
+      if (['component', 'new-component'].includes(kind)) {
         const [{ isDragging }, connectDrag] = useDrag({
-          item: { id, type: dndType },
+          item: { id, type: kind },
           collect: (monitor: {| isDragging: () => boolean |}) => ({
             isDragging: monitor.isDragging(),
           }),

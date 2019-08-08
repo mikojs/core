@@ -10,7 +10,7 @@ const DEFAULT_MANAGER = [
   {
     id: 'manager',
     parentId: null,
-    dndType: 'manager',
+    kind: 'manager',
     type: Manager,
   },
 ];
@@ -20,7 +20,7 @@ export default memoizeOne((components: $ReadOnlyArray<ComponentType<*>>) => [
   ...components.map((component: ComponentType<*>) => ({
     id: uuid(),
     parentId: 'manager',
-    dndType: 'new-component',
+    kind: 'new-component',
     type: component,
   })),
 ]);

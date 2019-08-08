@@ -11,7 +11,7 @@ import typeof RendererType from './Renderer';
 export type sourceType = {|
   id: string,
   data: {
-    dndType: 'manager' | 'previewer' | 'component' | 'new-component',
+    kind: 'manager' | 'previewer' | 'component' | 'new-component',
     type: string | ComponentType<*>,
     props?: {
       ref?: RefType<RendererType>,
@@ -32,5 +32,5 @@ export type dataType = $ReadOnlyArray<
 export type contextType = {|
   manager: sourceType,
   previewer: sourceType,
-  handler: (dndType: string, draggedId: string, targetId: string) => void,
+  handler: (kind: string, draggedId: string, targetId: string) => void,
 |};

@@ -4,7 +4,6 @@ import React, { type Node as NodeType, type ComponentType } from 'react';
 import * as d3 from 'd3-hierarchy';
 import memoizeOne from 'memoize-one';
 import { emptyFunction } from 'fbjs';
-import uuid from 'uuid/v4';
 
 import { type dataType, type contextType } from './types';
 import Previewer from './Previewer';
@@ -82,13 +81,11 @@ export default class Provider extends React.PureComponent<
             previewer: [
               ...previewer.filter(
                 ({ dndType: prevDndType }: $ElementType<dataType, number>) =>
-                  prevDndType !== 'temp-component',
+                  prevDndType !== 'new-component',
               ),
               {
                 ...components[draggedIndex],
-                id: uuid(),
                 parentId: targetId,
-                dndType: 'temp-component',
               },
             ],
           });

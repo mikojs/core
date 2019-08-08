@@ -3,9 +3,10 @@
 import React, { type Node as NodeType, type ComponentType } from 'react';
 import * as d3 from 'd3-hierarchy';
 import memoizeOne from 'memoize-one';
-import { emptyFunction } from 'fbjs';
+import { emptyFunction, areEqual } from 'fbjs';
+import uuid from 'uuid/v4';
 
-import { type kindType, type dataType, type contextType } from './types';
+import { type dndItemType, type dataType, type contextType } from './types';
 import Previewer from './Previewer';
 
 import initializeComponents from './utils/initializeComponents';
@@ -37,7 +38,8 @@ const parse = d3
 export const DataContext = React.createContext<contextType>({
   manager: parse(initializeComponents([])),
   previewer: parse(DEFAULT_PREVIEWER),
-  handler: emptyFunction,
+  hover: emptyFunction,
+  drop: emptyFunction,
 });
 
 /** Provide the source data and the methods to handle the source data*/
@@ -50,56 +52,65 @@ export default class Provider extends React.PureComponent<
     previewer: DEFAULT_PREVIEWER,
   };
 
-  +handler = memoizeOne(
-    (kind: kindType, draggedId: string, targetId: string) => {
-      const { components, previewer } = this.state;
+  +hover = memoizeOne((current: dndItemType, target: dndItemType) => {
+    const { components, previewer } = this.state;
 
-      switch (kind) {
-        case 'new-component': {
-          const draggedIndex = components.findIndex(
-            ({
-              id,
-            }: $ElementType<$PropertyType<stateType, 'previewer'>, number>) =>
-              id === draggedId,
-          );
-          const targetIndex = previewer.findIndex(
-            ({
-              id,
-            }: $ElementType<$PropertyType<stateType, 'previewer'>, number>) =>
-              id === targetId,
-          );
+    if (current.type === 'new-component' && target.type === 'previewer') {
+      const draggedIndex = components.findIndex(
+        ({ id }: $ElementType<$PropertyType<stateType, 'previewer'>, number>) =>
+          id === current.id,
+      );
+      const targetIndex = previewer.findIndex(
+        ({ id }: $ElementType<$PropertyType<stateType, 'previewer'>, number>) =>
+          id === target.id,
+      );
 
-          if (
-            targetIndex === -1 ||
-            !['previewer', 'component'].includes(previewer[targetIndex].kind)
-          )
-            break;
+      if (
+        targetIndex === -1 ||
+        !['previewer', 'component'].includes(previewer[targetIndex].kind)
+      )
+        return;
 
-          this.setState({
-            previewer: [
-              ...previewer.filter(
-                ({ kind: prevKind }: $ElementType<dataType, number>) =>
-                  prevKind !== 'new-component',
-              ),
-              {
-                ...components[draggedIndex],
-                parentId: targetId,
-              },
-            ],
-          });
-          break;
-        }
+      this.setState({
+        previewer: [
+          ...previewer.filter(
+            ({ kind }: $ElementType<dataType, number>) =>
+              kind !== 'new-component',
+          ),
+          {
+            ...components[draggedIndex],
+            parentId: target.id,
+          },
+        ],
+      });
+      return;
+    }
+  }, areEqual);
 
-        case 'manager':
-        case 'previewer':
-        case 'component':
-          break;
+  /**
+   * @example
+   * drop(current, target)
+   *
+   * @param {dndItemType} current - current dnd item
+   * @param {dndItemType} target - target dnd item
+   */
+  +drop = (current: dndItemType, target: dndItemType) => {
+    if (current.type !== 'new-component' && target.type !== 'previewer') return;
 
-        default:
-          throw new Error(`Can not find ${kind} type`);
-      }
-    },
-  );
+    const { previewer } = this.state;
+
+    this.setState({
+      previewer: previewer.map((data: $ElementType<dataType, number>) =>
+        data.kind !== 'new-component'
+          ? data
+          : {
+              ...data,
+              id: uuid(),
+              kind: 'component',
+            },
+      ),
+    });
+  };
 
   /** @react */
   render(): NodeType {
@@ -111,7 +122,8 @@ export default class Provider extends React.PureComponent<
         value={{
           manager: parse(components),
           previewer: parse(previewer),
-          handler: this.handler,
+          hover: this.hover,
+          drop: this.drop,
         }}
       >
         {children}

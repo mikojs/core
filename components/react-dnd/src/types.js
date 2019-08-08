@@ -8,7 +8,12 @@ import {
 
 import typeof RendererType from './Renderer';
 
-export type kindType = 'manager' | 'previewer' | 'component' | 'new-component';
+type kindType = 'manager' | 'previewer' | 'component' | 'new-component';
+
+export type dndItemType = {|
+  id: string,
+  type: kindType,
+|};
 
 export type sourceType = {|
   id: string,
@@ -34,5 +39,6 @@ export type dataType = $ReadOnlyArray<
 export type contextType = {|
   manager: sourceType,
   previewer: sourceType,
-  handler: (kind: kindType, draggedId: string, targetId: string) => void,
+  hover: (current: dndItemType, target: dndItemType) => void,
+  drop: (current: dndItemType, target: dndItemType) => void,
 |};

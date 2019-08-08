@@ -4,11 +4,12 @@ import React, { useRef, type Node as NodeType } from 'react';
 import { useDrag, useDrop } from 'react-dnd-cjs';
 import { ExecutionEnvironment } from 'fbjs';
 
-import { type kindType, type sourceType, type contextType } from './types';
+import { type dndItemType, type sourceType, type contextType } from './types';
 
 type propsType = {|
   source: sourceType,
-  handler: $PropertyType<contextType, 'handler'>,
+  hover: $PropertyType<contextType, 'hover'>,
+  drop: $PropertyType<contextType, 'drop'>,
 |};
 
 /** @react render the Renderer Component for the source data */
@@ -19,13 +20,15 @@ const Renderer = React.memo<propsType>(
       data: { kind, type, props = {} },
       children = [],
     },
-    handler,
+    hover,
+    drop,
   }: propsType): NodeType => {
     const newProps = { ...props };
+    const item = { id, type: kind };
 
     if (children.length !== 0)
       newProps.children = children.map((child: sourceType) => (
-        <Renderer key={child.id} source={child} handler={handler} />
+        <Renderer key={child.id} source={child} hover={hover} drop={drop} />
       ));
 
     if (ExecutionEnvironment.canUseEventListeners) {
@@ -33,7 +36,7 @@ const Renderer = React.memo<propsType>(
 
       if (['component', 'new-component'].includes(kind)) {
         const [{ isDragging }, connectDrag] = useDrag({
-          item: { id, type: kind },
+          item,
           collect: (monitor: {| isDragging: () => boolean |}) => ({
             isDragging: monitor.isDragging(),
           }),
@@ -50,14 +53,11 @@ const Renderer = React.memo<propsType>(
 
       const [, connectDrop] = useDrop({
         accept: ['manager', 'previewer', 'component', 'new-component'],
-        hover: ({
-          id: draggedId,
-          type: draggedType,
-        }: {|
-          id: string,
-          type: kindType,
-        |}) => {
-          if (draggedId !== id) handler(draggedType, draggedId, id);
+        hover: (current: dndItemType) => {
+          if (current.id !== item.id) hover(current, item);
+        },
+        drop: (current: dndItemType) => {
+          if (current.id !== item.id) drop(current, item);
         },
       });
 

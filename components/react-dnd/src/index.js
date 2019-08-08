@@ -34,9 +34,9 @@ const Dnd = () => (
   <Provider components={TODO_LIST}>
     <DndProvider backend={HTML5Backend}>
       <DataContext.Consumer>
-        {({ manager, previewer, handler }: contextType) => (
+        {({ manager, previewer, hover, drop }: contextType) => (
           <div style={styles.root}>
-            <Renderer source={manager} handler={handler} />
+            <Renderer source={manager} hover={hover} drop={drop} />
 
             <Frame
               style={styles.iframe}
@@ -47,7 +47,7 @@ const Dnd = () => (
                 />
               }
             >
-              <Renderer source={previewer} handler={handler} />
+              <Renderer source={previewer} hover={hover} drop={drop} />
             </Frame>
           </div>
         )}

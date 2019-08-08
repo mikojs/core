@@ -8,9 +8,7 @@ import { emptyFunction } from 'fbjs';
 import { type dataType, type contextType } from './types';
 import Previewer from './Previewer';
 
-import initializeComponents, {
-  DEFAULT_MANAGER,
-} from './utils/initializeComponents';
+import initializeComponents from './utils/initializeComponents';
 
 type propsType = {|
   components: $ReadOnlyArray<ComponentType<*>>,
@@ -37,7 +35,7 @@ const parse = d3
   .parentId(({ parentId }: {| parentId: string |}) => parentId);
 
 export const DataContext = React.createContext<contextType>({
-  manager: parse(DEFAULT_MANAGER),
+  manager: parse(initializeComponents([])),
   previewer: parse(DEFAULT_PREVIEWER),
   handler: emptyFunction,
 });

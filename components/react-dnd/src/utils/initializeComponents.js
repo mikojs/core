@@ -6,7 +6,7 @@ import uuid from 'uuid/v4';
 
 import Manager from '../Manager';
 
-export const DEFAULT_MANAGER = [
+const DEFAULT_MANAGER = [
   {
     id: 'manager',
     parentId: null,

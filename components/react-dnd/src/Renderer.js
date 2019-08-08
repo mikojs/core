@@ -12,62 +12,62 @@ type propsType = {|
 |};
 
 /** @react render the Renderer Component for the source data */
-const Renderer = ({
-  source: {
-    id,
-    data: { dndType, type, props = {} },
-    children = [],
-  },
-  handler,
-}: propsType): NodeType => {
-  const newProps = { ...props };
+const Renderer = React.memo<propsType>(
+  ({
+    source: {
+      id,
+      data: { dndType, type, props = {} },
+      children = [],
+    },
+    handler,
+  }: propsType): NodeType => {
+    const newProps = { ...props };
 
-  if (children.length !== 0)
-    newProps.children = children.map((child: sourceType) =>
-      React.createElement(React.memo<propsType>(Renderer), {
-        key: child.id,
-        source: child,
-        handler,
-      }),
-    );
+    if (children.length !== 0)
+      newProps.children = children.map((child: sourceType) => (
+        <Renderer key={child.id} source={child} handler={handler} />
+      ));
 
-  if (ExecutionEnvironment.canUseEventListeners) {
-    newProps.ref = useRef(null);
+    if (ExecutionEnvironment.canUseEventListeners) {
+      newProps.ref = useRef(null);
 
-    if (['component', 'new-component'].includes(dndType)) {
-      const [{ isDragging }, connectDrag] = useDrag({
-        item: { id, type: dndType },
-        collect: (monitor: {| isDragging: () => boolean |}) => ({
-          isDragging: monitor.isDragging(),
-        }),
+      if (['component', 'new-component'].includes(dndType)) {
+        const [{ isDragging }, connectDrag] = useDrag({
+          item: { id, type: dndType },
+          collect: (monitor: {| isDragging: () => boolean |}) => ({
+            isDragging: monitor.isDragging(),
+          }),
+        });
+
+        connectDrag(newProps.ref);
+        newProps.style = !isDragging
+          ? newProps.style
+          : {
+              ...newProps.style,
+              opacity: 0,
+            };
+      }
+
+      const [, connectDrop] = useDrop({
+        accept: ['manager', 'previewer', 'component', 'new-component'],
+        hover: ({
+          id: draggedId,
+          type: draggedType,
+        }: {|
+          id: string,
+          type: string,
+        |}) => {
+          if (draggedId !== id) handler(draggedType, draggedId, id);
+        },
       });
 
-      connectDrag(newProps.ref);
-      newProps.style = !isDragging
-        ? newProps.style
-        : {
-            ...newProps.style,
-            opacity: 0,
-          };
+      connectDrop(newProps.ref);
     }
 
-    const [, connectDrop] = useDrop({
-      accept: ['manager', 'previewer', 'component', 'new-component'],
-      hover: ({
-        id: draggedId,
-        type: draggedType,
-      }: {|
-        id: string,
-        type: string,
-      |}) => {
-        if (draggedId !== id) handler(draggedType, draggedId, id);
-      },
-    });
+    return React.createElement(type, newProps);
+  },
+);
 
-    connectDrop(newProps.ref);
-  }
+Renderer.displayName = 'Memo(Renderer)';
 
-  return React.createElement(type, newProps);
-};
-
-export default React.memo<propsType>(Renderer);
+export default Renderer;

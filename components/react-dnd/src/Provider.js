@@ -5,7 +5,7 @@ import * as d3 from 'd3-hierarchy';
 import memoizeOne from 'memoize-one';
 import { emptyFunction } from 'fbjs';
 
-import { type dataType, type contextType } from './types';
+import { type kindType, type dataType, type contextType } from './types';
 import Previewer from './Previewer';
 
 import initializeComponents from './utils/initializeComponents';
@@ -50,54 +50,56 @@ export default class Provider extends React.PureComponent<
     previewer: DEFAULT_PREVIEWER,
   };
 
-  +handler = memoizeOne((kind: string, draggedId: string, targetId: string) => {
-    const { components, previewer } = this.state;
+  +handler = memoizeOne(
+    (kind: kindType, draggedId: string, targetId: string) => {
+      const { components, previewer } = this.state;
 
-    switch (kind) {
-      case 'new-component': {
-        const draggedIndex = components.findIndex(
-          ({
-            id,
-          }: $ElementType<$PropertyType<stateType, 'previewer'>, number>) =>
-            id === draggedId,
-        );
-        const targetIndex = previewer.findIndex(
-          ({
-            id,
-          }: $ElementType<$PropertyType<stateType, 'previewer'>, number>) =>
-            id === targetId,
-        );
+      switch (kind) {
+        case 'new-component': {
+          const draggedIndex = components.findIndex(
+            ({
+              id,
+            }: $ElementType<$PropertyType<stateType, 'previewer'>, number>) =>
+              id === draggedId,
+          );
+          const targetIndex = previewer.findIndex(
+            ({
+              id,
+            }: $ElementType<$PropertyType<stateType, 'previewer'>, number>) =>
+              id === targetId,
+          );
 
-        if (
-          targetIndex === -1 ||
-          !['previewer', 'component'].includes(previewer[targetIndex].kind)
-        )
+          if (
+            targetIndex === -1 ||
+            !['previewer', 'component'].includes(previewer[targetIndex].kind)
+          )
+            break;
+
+          this.setState({
+            previewer: [
+              ...previewer.filter(
+                ({ kind: prevKind }: $ElementType<dataType, number>) =>
+                  prevKind !== 'new-component',
+              ),
+              {
+                ...components[draggedIndex],
+                parentId: targetId,
+              },
+            ],
+          });
+          break;
+        }
+
+        case 'manager':
+        case 'previewer':
+        case 'component':
           break;
 
-        this.setState({
-          previewer: [
-            ...previewer.filter(
-              ({ kind: prevKind }: $ElementType<dataType, number>) =>
-                prevKind !== 'new-component',
-            ),
-            {
-              ...components[draggedIndex],
-              parentId: targetId,
-            },
-          ],
-        });
-        break;
+        default:
+          throw new Error(`Can not find ${kind} type`);
       }
-
-      case 'manager':
-      case 'previewer':
-      case 'component':
-        break;
-
-      default:
-        throw new Error(`Can not find ${kind} type`);
-    }
-  });
+    },
+  );
 
   /** @react */
   render(): NodeType {

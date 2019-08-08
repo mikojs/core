@@ -4,7 +4,7 @@ import React, { useRef, type Node as NodeType } from 'react';
 import { useDrag, useDrop } from 'react-dnd-cjs';
 import { ExecutionEnvironment } from 'fbjs';
 
-import { type sourceType, type contextType } from './types';
+import { type kindType, type sourceType, type contextType } from './types';
 
 type propsType = {|
   source: sourceType,
@@ -55,7 +55,7 @@ const Renderer = React.memo<propsType>(
           type: draggedType,
         }: {|
           id: string,
-          type: string,
+          type: kindType,
         |}) => {
           if (draggedId !== id) handler(draggedType, draggedId, id);
         },

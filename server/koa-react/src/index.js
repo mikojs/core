@@ -12,6 +12,7 @@ import compose from 'koa-compose';
 import { type WebpackOptions as WebpackOptionsType } from 'webpack';
 import { invariant, emptyFunction } from 'fbjs';
 import outputFileSync from 'output-file-sync';
+import address from 'address';
 
 import {
   handleUnhandledRejection,
@@ -111,6 +112,7 @@ export default class React {
         },
         hotClient: {
           logLevel: 'warn',
+          host: address.ip(),
         },
       },
       dev,

@@ -12,6 +12,8 @@ type propsType = {|
   drop: $PropertyType<contextType, 'drop'>,
 |};
 
+const CAN_MOVE_COMPONENT = ['component', 'new-component'];
+
 /** @react render the Renderer Component for the source data */
 const Renderer = React.memo<propsType>(
   ({
@@ -34,7 +36,7 @@ const Renderer = React.memo<propsType>(
     if (ExecutionEnvironment.canUseEventListeners) {
       newProps.ref = useRef(null);
 
-      if (['component', 'new-component'].includes(kind)) {
+      if (CAN_MOVE_COMPONENT.includes(kind)) {
         const [{ isDragging }, connectDrag] = useDrag({
           item,
           collect: (monitor: {| isDragging: () => boolean |}) => ({
@@ -49,19 +51,25 @@ const Renderer = React.memo<propsType>(
               ...newProps.style,
               opacity: 0,
             };
+      } else {
+        const [, connectDrop] = useDrop({
+          accept: CAN_MOVE_COMPONENT,
+          hover: (current: dndItemType) => {
+            if (current.id !== item.id) hover(current, item);
+          },
+          drop: (current: dndItemType) => {
+            if (current.id !== item.id) drop(current, item);
+          },
+        });
+
+        connectDrop(newProps.ref);
       }
 
-      const [, connectDrop] = useDrop({
-        accept: ['manager', 'previewer', 'component', 'new-component'],
-        hover: (current: dndItemType) => {
-          if (current.id !== item.id) hover(current, item);
-        },
-        drop: (current: dndItemType) => {
-          if (current.id !== item.id) drop(current, item);
-        },
-      });
-
-      connectDrop(newProps.ref);
+      if ('preview-component' === kind)
+        newProps.style = {
+          ...newProps.style,
+          opacity: 0.5,
+        };
     }
 
     return React.createElement(type, newProps);

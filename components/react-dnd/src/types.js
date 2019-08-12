@@ -8,7 +8,12 @@ import {
 
 import typeof RendererType from './Renderer';
 
-type kindType = 'manager' | 'previewer' | 'component' | 'new-component';
+type kindType =
+  | 'manager'
+  | 'previewer'
+  | 'component'
+  | 'new-component'
+  | 'preview-component';
 
 export type dndItemType = {|
   id: string,

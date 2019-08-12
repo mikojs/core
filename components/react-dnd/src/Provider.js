@@ -75,10 +75,11 @@ export default class Provider extends React.PureComponent<
         previewer: [
           ...previewer.filter(
             ({ kind }: $ElementType<dataType, number>) =>
-              kind !== 'new-component',
+              kind !== 'preview-component',
           ),
           {
             ...components[draggedIndex],
+            kind: 'preview-component',
             parentId: target.id,
           },
         ],
@@ -101,7 +102,7 @@ export default class Provider extends React.PureComponent<
 
     this.setState({
       previewer: previewer.map((data: $ElementType<dataType, number>) =>
-        data.kind !== 'new-component'
+        data.kind !== 'preview-component'
           ? data
           : {
               ...data,

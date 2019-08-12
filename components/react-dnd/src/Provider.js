@@ -57,12 +57,10 @@ export default class Provider extends React.PureComponent<
 
     if (current.type === 'new-component' && target.type === 'previewer') {
       const draggedIndex = components.findIndex(
-        ({ id }: $ElementType<$PropertyType<stateType, 'previewer'>, number>) =>
-          id === current.id,
+        ({ id }: $ElementType<dataType, number>) => id === current.id,
       );
       const targetIndex = previewer.findIndex(
-        ({ id }: $ElementType<$PropertyType<stateType, 'previewer'>, number>) =>
-          id === target.id,
+        ({ id }: $ElementType<dataType, number>) => id === target.id,
       );
 
       if (

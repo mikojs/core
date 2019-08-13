@@ -47,6 +47,8 @@ export default class Provider extends React.PureComponent<
   propsType,
   stateType,
 > {
+  hasPreviewComponent = false;
+
   state = {
     components: initializeComponents(this.props.components),
     previewer: DEFAULT_PREVIEWER,
@@ -55,34 +57,57 @@ export default class Provider extends React.PureComponent<
   +hover = memoizeOne((current: dndItemType, target: dndItemType) => {
     const { components, previewer } = this.state;
 
-    if (current.type === 'new-component' && target.type === 'previewer') {
-      const draggedIndex = components.findIndex(
-        ({ id }: $ElementType<dataType, number>) => id === current.id,
-      );
-      const targetIndex = previewer.findIndex(
-        ({ id }: $ElementType<dataType, number>) => id === target.id,
-      );
+    if (current.type === 'new-component') {
+      switch (target.type) {
+        case 'manager':
+          if (!this.hasPreviewComponent) return;
 
-      if (
-        targetIndex === -1 ||
-        !['previewer', 'component'].includes(previewer[targetIndex].kind)
-      )
-        return;
+          this.setState({
+            previewer: previewer.filter(
+              ({ kind }: $ElementType<dataType, number>) =>
+                kind !== 'preview-component',
+            ),
+          });
+          return;
 
-      this.setState({
-        previewer: [
-          ...previewer.filter(
-            ({ kind }: $ElementType<dataType, number>) =>
-              kind !== 'preview-component',
-          ),
-          {
-            ...components[draggedIndex],
-            kind: 'preview-component',
-            parentId: target.id,
-          },
-        ],
-      });
-      return;
+        case 'previewer': {
+          const draggedIndex = components.findIndex(
+            ({ id }: $ElementType<dataType, number>) => id === current.id,
+          );
+          const targetIndex = previewer.findIndex(
+            ({ id }: $ElementType<dataType, number>) => id === target.id,
+          );
+
+          if (
+            targetIndex === -1 ||
+            !['previewer', 'component'].includes(previewer[targetIndex].kind)
+          )
+            return;
+
+          const newPreviewer = [
+            ...(!this.hasPreviewComponent
+              ? previewer
+              : previewer.filter(
+                  ({ kind }: $ElementType<dataType, number>) =>
+                    kind !== 'preview-component',
+                )),
+            {
+              ...components[draggedIndex],
+              kind: 'preview-component',
+              parentId: target.id,
+            },
+          ];
+
+          this.hasPreviewComponent = true;
+          this.setState({
+            previewer: newPreviewer,
+          });
+          return;
+        }
+
+        default:
+          return;
+      }
     }
   }, areEqual);
 
@@ -94,10 +119,16 @@ export default class Provider extends React.PureComponent<
    * @param {dndItemType} target - target dnd item
    */
   +drop = (current: dndItemType, target: dndItemType) => {
-    if (current.type !== 'new-component' && target.type !== 'previewer') return;
+    if (
+      !this.hasPreviewComponent ||
+      current.type !== 'new-component' ||
+      target.type !== 'previewer'
+    )
+      return;
 
     const { previewer } = this.state;
 
+    this.hasPreviewComponent = false;
     this.setState({
       previewer: previewer.map((data: $ElementType<dataType, number>) =>
         data.kind !== 'preview-component'

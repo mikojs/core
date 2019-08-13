@@ -30,7 +30,7 @@ const DEFAULT_PREVIEWER = [
   },
 ];
 
-const parse = d3
+export const parse = d3
   .stratify()
   .id(({ id }: {| id: string |}) => id)
   .parentId(({ parentId }: {| parentId: string |}) => parentId);

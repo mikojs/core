@@ -62,6 +62,7 @@ export default class Provider extends React.PureComponent<
         case 'manager':
           if (!this.hasPreviewComponent) return;
 
+          this.hasPreviewComponent = false;
           this.setState({
             previewer: previewer.filter(
               ({ kind }: $ElementType<dataType, number>) =>
@@ -119,27 +120,27 @@ export default class Provider extends React.PureComponent<
    * @param {dndItemType} target - target dnd item
    */
   +drop = (current: dndItemType, target: dndItemType) => {
-    if (
-      !this.hasPreviewComponent ||
-      current.type !== 'new-component' ||
-      target.type !== 'previewer'
-    )
-      return;
-
     const { previewer } = this.state;
 
-    this.hasPreviewComponent = false;
-    this.setState({
-      previewer: previewer.map((data: $ElementType<dataType, number>) =>
-        data.kind !== 'preview-component'
-          ? data
-          : {
-              ...data,
-              id: uuid(),
-              kind: 'component',
-            },
-      ),
-    });
+    if (current.type === 'new-component' && target.type === 'previewer') {
+      this.hasPreviewComponent = false;
+      this.setState({
+        previewer: previewer.map((data: $ElementType<dataType, number>) =>
+          data.kind !== 'preview-component'
+            ? data
+            : {
+                ...data,
+                id: uuid(),
+                kind: 'component',
+              },
+        ),
+      });
+    } else if (current.type === 'component' && target.type === 'manager')
+      this.setState({
+        previewer: previewer.filter(
+          (data: $ElementType<dataType, number>) => data.id !== current.id,
+        ),
+      });
   };
 
   /** @react */

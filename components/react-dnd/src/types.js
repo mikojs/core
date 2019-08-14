@@ -8,7 +8,7 @@ import {
 
 import typeof RendererType from './Renderer';
 
-type kindType =
+export type kindType =
   | 'manager'
   | 'previewer'
   | 'component'

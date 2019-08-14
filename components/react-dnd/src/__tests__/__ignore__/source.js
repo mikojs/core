@@ -4,7 +4,7 @@ import React from 'react';
 
 import { parse } from '../../Provider';
 
-const Example = React.forwardRef<{}, HTMLElement>(
+export const Example = React.forwardRef<{}, HTMLElement>(
   (
     props: {},
     ref: { current: null | HTMLElement, ... } | ((null | HTMLElement) => mixed),

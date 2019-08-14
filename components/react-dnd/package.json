@@ -7,15 +7,26 @@
   "repository": "https://github.com/cat-org/core/tree/master/components/react-dnd",
   "version": "1.0.0",
   "main": "./lib/index.js",
+  "dependencies": {
+    "d3-hierarchy": "^1.1.8",
+    "fbjs": "^1.0.0",
+    "memoize-one": "^5.0.5",
+    "react-dnd-cjs": "^9.3.2",
+    "react-dnd-html5-backend-cjs": "^9.3.2",
+    "react-frame-component": "^4.1.1",
+    "uuid": "^3.3.2"
+  },
   "peerDependencies": {
     "react": ">=16.0.0",
     "react-dom": ">=16.0.0"
   },
   "devDependencies": {
+    "enzyme": "^3.10.0",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
-  "keywords": ["cat-org", "d3-hierarchy", "react"],
+  "keywords": ["cat-org", "d3-hierarchy", "react", "react-dnd"],
   "publishConfig": {
     "access": "public"
   }

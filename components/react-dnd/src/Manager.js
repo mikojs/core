@@ -2,6 +2,8 @@
 
 import React, { type Node as NodeType } from 'react';
 
+import styles from './styles/manager';
+
 type propsType = {
   children: NodeType,
   forwardedRef:
@@ -11,7 +13,9 @@ type propsType = {
 
 /** @react render the Manager Container */
 const Manager = ({ children, forwardedRef }: propsType) => (
-  <div ref={forwardedRef}>{children}</div>
+  <div ref={forwardedRef} style={styles}>
+    {children}
+  </div>
 );
 const MemoManager = React.memo<propsType>(Manager);
 

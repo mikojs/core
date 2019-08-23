@@ -1,7 +1,8 @@
 // @flow
 
-import React, { useRef, type Node as NodeType } from 'react';
-import { useDrag, useDrop } from 'react-dnd-cjs';
+import React, { useRef, useEffect, type Node as NodeType } from 'react';
+import { useDrag, useDrop, type monitorType } from 'react-dnd-cjs';
+import { getEmptyImage } from 'react-dnd-html5-backend-cjs';
 import { ExecutionEnvironment } from 'fbjs';
 
 import { type dndItemType, type sourceType, type contextType } from './types';
@@ -37,9 +38,9 @@ const Renderer = React.memo<propsType>(
       newProps.ref = useRef(null);
 
       if (CAN_MOVE_COMPONENT.includes(kind)) {
-        const [{ isDragging }, connectDrag] = useDrag({
+        const [{ isDragging }, connectDrag, connectPreview] = useDrag({
           item,
-          collect: (monitor: {| isDragging: () => boolean |}) => ({
+          collect: (monitor: monitorType) => ({
             isDragging: monitor.isDragging(),
           }),
         });
@@ -51,9 +52,16 @@ const Renderer = React.memo<propsType>(
               ...newProps.style,
               opacity: 0,
             };
+
+        useEffect(() => {
+          connectPreview(getEmptyImage(), { captureDraggingState: true });
+        });
       } else {
-        const [, connectDrop] = useDrop({
+        const [{ isOver }, connectDrop] = useDrop({
           accept: CAN_MOVE_COMPONENT,
+          collect: (monitor: monitorType) => ({
+            isOver: monitor.isOver(),
+          }),
           hover: (current: dndItemType) => {
             if (current.id !== item.id) hover(current, item);
           },
@@ -61,6 +69,8 @@ const Renderer = React.memo<propsType>(
             if (current.id !== item.id) drop(current, item);
           },
         });
+
+        if (['manager', 'previewer'].includes(kind)) newProps.isOver = isOver;
 
         connectDrop(newProps.ref);
       }

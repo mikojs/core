@@ -9,7 +9,7 @@
 import path from 'path';
 
 import cosmiconfig from 'cosmiconfig';
-import { emptyFunction } from 'fbjs';
+import { emptyFunction, filterObject } from 'fbjs';
 import debug from 'debug';
 
 import { type objConfigType, type configsType } from '../types';
@@ -51,13 +51,8 @@ export class Configs {
    *
    * @return {object} - configs without configsEnv
    */
-  +removeConfigsEnv = <-C: {}>({
-    configsEnv,
-    ...config
-  }: {
-    ...C,
-    configsEnv: $ReadOnlyArray<string>,
-  }): C => config;
+  +removeConfigsEnv = (config: {}): {} =>
+    filterObject(config, (value: mixed, key: string) => key !== 'configsEnv');
 
   /**
    * @example

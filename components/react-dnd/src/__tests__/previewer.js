@@ -11,7 +11,7 @@ test('Previewer', () => {
   expect(
     mount(
       <DndProvider backend={HTML5Backend}>
-        <Previewer>
+        <Previewer isOver={false}>
           <div>test</div>
         </Previewer>
       </DndProvider>,

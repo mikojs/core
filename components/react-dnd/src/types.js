@@ -29,6 +29,7 @@ export type sourceType = {|
       ref?: RefType<RendererType>,
       children?: NodeType,
       style?: {},
+      [string]: mixed,
     },
   },
   children: $ReadOnlyArray<sourceType>,

@@ -6,6 +6,7 @@ import HTML5Backend from 'react-dnd-html5-backend-cjs';
 import Frame from 'react-frame-component';
 
 import Provider, { DataContext } from './Provider';
+import DragLayer from './DragLayer';
 import Renderer from './Renderer';
 import * as styles from './styles';
 import { type contextType } from './types';
@@ -33,25 +34,27 @@ const TODO_LIST = [
 const Dnd = () => (
   <Provider components={TODO_LIST}>
     <DndProvider backend={HTML5Backend}>
-      <DataContext.Consumer>
-        {({ manager, previewer, hover, drop }: contextType) => (
-          <div style={styles.root}>
-            <Renderer source={manager} hover={hover} drop={drop} />
+      <DragLayer>
+        <DataContext.Consumer>
+          {({ manager, previewer, hover, drop }: contextType) => (
+            <div style={styles.root}>
+              <Renderer source={manager} hover={hover} drop={drop} />
 
-            <Frame
-              style={styles.iframe}
-              head={
-                <link
-                  rel="stylesheet"
-                  href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
-                />
-              }
-            >
-              <Renderer source={previewer} hover={hover} drop={drop} />
-            </Frame>
-          </div>
-        )}
-      </DataContext.Consumer>
+              <Frame
+                style={styles.iframe}
+                head={
+                  <link
+                    rel="stylesheet"
+                    href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+                  />
+                }
+              >
+                <Renderer source={previewer} hover={hover} drop={drop} />
+              </Frame>
+            </div>
+          )}
+        </DataContext.Consumer>
+      </DragLayer>
     </DndProvider>
   </Provider>
 );

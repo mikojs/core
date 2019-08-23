@@ -11,6 +11,7 @@ import source from './__ignore__/source';
 let count: number = 0;
 
 reactDndCjs.monitor = {
+  isOver: () => true,
   isDragging: (): boolean => {
     count += 1;
 

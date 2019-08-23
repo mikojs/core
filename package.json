@@ -27,7 +27,7 @@
     "eslint": "^6.1.0",
     "eslint-watch": "^6.0.0",
     "fbjs": "^1.0.0",
-    "flow-bin": "^0.103.0",
+    "flow-bin": "^0.106.0",
     "flow-typed": "^2.6.0",
     "graphql": "^14.4.2",
     "husky": "^3.0.1",
@@ -53,5 +53,9 @@
       "post-merge": "make babel-all",
       "post-checkout": "make babel-changed BRANCH=master"
     }
+  },
+  "resolutions": {
+    "eslint": "6.1.0",
+    "graphql": "14.4.2"
   }
 }

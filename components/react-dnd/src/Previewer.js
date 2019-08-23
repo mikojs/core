@@ -28,10 +28,14 @@ const Previewer = ({ children, forwardedRef, isOver }: propsType): NodeType => {
   const { setAdditionalOffset } = useContext(DragLayerContext);
 
   useMemo(() => {
+    if (!isOver) {
+      setAdditionalOffset({ x: 0, y: 0 });
+      return;
+    }
+
     const { x, y } = getElementPosition(window.frameElement);
 
-    if (isOver) setAdditionalOffset({ x, y });
-    else setAdditionalOffset({ x: 0, y: 0 });
+    setAdditionalOffset({ x, y });
   }, [isOver]);
   useEffect(() => {
     dragDropManager.getBackend().addEventListeners(window);

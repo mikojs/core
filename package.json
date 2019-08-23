@@ -55,7 +55,6 @@
     }
   },
   "resolutions": {
-    "eslint": "6.1.0",
-    "graphql": "14.4.2"
+    "eslint": "6.1.0"
   }
 }

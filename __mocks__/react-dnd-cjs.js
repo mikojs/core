@@ -1,5 +1,8 @@
 // @flow
 
+type arguType = {| collect: (monitor: {}) => {} |};
+type returnType = [{}, () => void, () => void];
+
 /** mock react-dnd-cjs */
 class ReactDndCjs {
   drag: {};
@@ -16,10 +19,10 @@ class ReactDndCjs {
    *
    * @return {Array} - drag result
    */
-  +useDrag = (drag: { collect: (monitor: {}) => {} }): [{}, () => void] => {
+  +useDrag = (drag: arguType): returnType => {
     this.drag = drag;
 
-    return [drag.collect(this.monitor), jest.fn()];
+    return [drag.collect(this.monitor), jest.fn(), jest.fn()];
   };
 
   /**
@@ -30,13 +33,15 @@ class ReactDndCjs {
    *
    * @return {Array} - drop result
    */
-  +useDrop = (drop: {}): [void, () => void] => {
+  +useDrop = (drop: arguType): returnType => {
     this.drop = drop;
 
-    return [undefined, jest.fn()];
+    return [drop.collect(this.monitor), jest.fn(), jest.fn()];
   };
 }
 
-export const { DndContext, DndProvider } = jest.requireActual('react-dnd-cjs');
+export const { DndContext, DndProvider, useDragLayer } = jest.requireActual(
+  'react-dnd-cjs',
+);
 export const reactDndCjs = new ReactDndCjs();
 export const { useDrag, useDrop } = reactDndCjs;

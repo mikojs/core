@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React from 'react';
 
 import { type pageCtxType } from '../../types';
 
@@ -8,24 +8,19 @@ type propsType = {|
   path: string,
 |};
 
-/** Component */
-export default class Component extends React.PureComponent<propsType> {
-  /**
-   * @example
-   * Component.getInitialProps(context)
-   *
-   * @param {pageCtxType} context - context data
-   *
-   * @return {propsType} - initial props
-   */
-  static getInitialProps = ({ ctx }: pageCtxType<>) => ({
-    path: ctx.path,
-  });
+/** @react Component */
+const Component = ({ path }: propsType) => <div>{path}</div>;
 
-  /** @react */
-  render(): NodeType {
-    const { path } = this.props;
+/**
+ * @example
+ * Component.getInitialProps(context)
+ *
+ * @param {pageCtxType} context - context data
+ *
+ * @return {propsType} - initial props
+ */
+Component.getInitialProps = ({ ctx }: pageCtxType<>) => ({
+  path: ctx.path,
+});
 
-    return <div>{path}</div>;
-  }
-}
+export default React.memo<propsType>(Component);

@@ -8,48 +8,43 @@ type propsType = {|
   children: NodeType,
 |};
 
-/** render the html */
-export default class Document extends React.PureComponent<propsType> {
-  /**
-   * @example
-   * Document.getInitialProps({ ctx })
-   *
-   * @return {propsType} - initial props
-   */
-  static getInitialProps = () => ({
-    // Reference: https://github.com/joshbuchea/HEAD
-    head: (
-      <Helmet>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+/** @react render the html */
+const Document = ({ helmet, children }: propsType) => (
+  <html>
+    <head>
+      {helmet.meta.toComponent()}
+      {helmet.title.toComponent()}
+      {helmet.link.toComponent()}
+    </head>
 
-        <title>cat-org</title>
+    <body>
+      {children}
+      {helmet.script.toComponent()}
+    </body>
+  </html>
+);
 
-        <link
-          rel="stylesheet"
-          href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
-        />
-      </Helmet>
-    ),
-  });
+/**
+ * @example
+ * Document.getInitialProps({ ctx })
+ *
+ * @return {propsType} - initial props
+ */
+Document.getInitialProps = () => ({
+  // Reference: https://github.com/joshbuchea/HEAD
+  head: (
+    <Helmet>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  /** @react */
-  render(): NodeType {
-    const { helmet, children } = this.props;
+      <title>cat-org</title>
 
-    return (
-      <html>
-        <head>
-          {helmet.meta.toComponent()}
-          {helmet.title.toComponent()}
-          {helmet.link.toComponent()}
-        </head>
+      <link
+        rel="stylesheet"
+        href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+      />
+    </Helmet>
+  ),
+});
 
-        <body>
-          {children}
-          {helmet.script.toComponent()}
-        </body>
-      </html>
-    );
-  }
-}
+export default React.memo<propsType>(Document);

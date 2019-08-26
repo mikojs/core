@@ -1,32 +1,27 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React from 'react';
 
 type propsType = {|
   value: string,
   test: string,
 |};
 
-/** Home Component */
-export default class Home extends React.PureComponent<propsType> {
-  /**
-   * @example
-   * Home.getInitialProps()
-   *
-   * @return {propsType} - initial props
-   */
-  static getInitialProps = () => ({
-    test: 'value',
-  });
+/** @react Home Component */
+const Home = ({ value, test }: propsType) => (
+  <div>
+    {value}-{test}
+  </div>
+);
 
-  /** @react */
-  render(): NodeType {
-    const { value, test } = this.props;
+/**
+ * @example
+ * Home.getInitialProps()
+ *
+ * @return {propsType} - initial props
+ */
+Home.getInitialProps = () => ({
+  test: 'value',
+});
 
-    return (
-      <div>
-        {value}-{test}
-      </div>
-    );
-  }
-}
+export default React.memo<propsType>(Home);

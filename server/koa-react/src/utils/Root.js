@@ -2,6 +2,7 @@
 
 import React, { type ComponentType, type Node as NodeType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { isMemo } from 'react-is';
 import { matchRoutes } from 'react-router-config';
 import {
   Route,
@@ -52,7 +53,7 @@ const store: storeType = {};
  * getPage(routsData, ctx)
  *
  * @param {Array} routesData - routes data
- * @param {{ location: object, staticContext: koaContextType }} Context - getInitialProps context
+ * @param {{ location: object, staticContext: koaContextType }} Context - use to make ctx for getInitialProps
  *
  * @return {ComponentType} - page component
  */
@@ -103,7 +104,10 @@ const getPage = (
       const { default: Component } = await loader();
       const { head, ...initialProps } =
         // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-        (await Component.getInitialProps?.({ ...ctx, match })) || {};
+        (await (!isMemo(Component)
+          ? Component
+          : Component.type
+        ).getInitialProps?.({ ...ctx, match })) || {};
       /** @react render the page */
       const Page = <-P: {}>(props?: P) => (
         <Component {...props} {...initialProps} />

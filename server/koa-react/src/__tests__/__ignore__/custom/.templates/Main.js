@@ -1,6 +1,7 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React, { type Node as NodeType, type ComponentType } from 'react';
+import { isMemo } from 'react-is';
 
 import { type mainCtxType } from '../../../../types';
 
@@ -28,9 +29,12 @@ const Main = ({ value, name, pageProps, children }: propsType) => (
  *
  * @return {propsType} - initial props
  */
-Main.getInitialProps = ({ Component, pageProps }: mainCtxType<{}>) => ({
+Main.getInitialProps = ({
+  Component,
+  pageProps,
+}: mainCtxType<{}, {}, ComponentType<{}> & { type: { name: string } }>) => ({
   value: 'test data',
-  name: Component.name,
+  name: (!isMemo(Component) ? Component : Component.type).name,
   pageProps,
 });
 

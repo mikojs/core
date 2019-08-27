@@ -131,6 +131,7 @@ export default node;`;
 const mainTemplate = `// @flow
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
+import { isMemo } from 'react-is';
 import {
   QueryRenderer,
   fetchQuery,
@@ -146,6 +147,9 @@ import { initEnvironment, createEnvironment } from 'utils/createEnvironment';
 
 type pageComponentType = ComponentType<*> & {|
   query?: GraphQLTaggedNodeType,
+  type: {
+    query?: GraphQLTaggedNodeType,
+  },
 |};
 
 type propsType = {|
@@ -155,94 +159,102 @@ type propsType = {|
   children: <P>(props: P) => NodeType,
 |};
 
-/** control the all page Components */
-export default class Main extends React.PureComponent<propsType> {
-  /**
-   * @example
-   * Main.getInitialProps(ctx)
-   *
-   * @param {mainCtxType} ctx - context from @cat-org/koa-react
-   *
-   * @return {propsType} - initial props
-   */
-  static getInitialProps = async ({
-    Component: { query },
-    pageProps: { variables },
-  }: mainCtxType<
-    {
-      variables?: VariablesType,
-    },
-    {},
-    pageComponentType,
-  >): Promise<$Diff<propsType, { Component: mixed, children: mixed }>> => {
-    try {
-      if (initEnvironment && query) {
-        const { environment, relaySSR } = initEnvironment();
-
-        await fetchQuery(environment, query, variables);
-
-        return {
-          variables,
-          relayData: await relaySSR.getCache(),
-        };
-      }
-    } catch (e) {
-      const { log } = console;
-
-      log(e);
-    }
-
-    return {
+/** @react control the all page Components */
+const Main = ({
+  variables = {},
+  relayData,
+  Component,
+  children,
+}: propsType): NodeType => {
+  const { query } = (!isMemo(Component) ? Component : Component.type) || {};
+  const environment = createEnvironment(
+    relayData,
+    JSON.stringify({
+      queryID: query?.()?.params.name,
       variables,
-    };
-  };
+    }),
+  );
 
-  /** @react */
-  render(): NodeType {
-    const { variables = {}, relayData, Component, children } = this.props;
-    const environment = createEnvironment(
-      relayData,
-      JSON.stringify({
-        queryID: Component.query ? Component.query().params.name : undefined,
+  return (
+    <QueryRenderer
+      environment={environment}
+      query={query}
+      variables={variables}
+      render={({ error, props }: ReadyStateType): NodeType => {
+        if (error) return <div>{error.message}</div>;
+
+        if (!props) return <div>Loading</div>;
+
+        return children(props);
+      }}
+    />
+  );
+};
+
+/**
+ * @example
+ * Main.getInitialProps(ctx)
+ *
+ * @param {mainCtxType} ctx - context from @cat-org/koa-react
+ *
+ * @return {propsType} - initial props
+ */
+Main.getInitialProps = async ({
+  Component,
+  pageProps: { variables },
+}: mainCtxType<
+  {
+    variables?: VariablesType,
+  },
+  {},
+  pageComponentType,
+>): Promise<$Diff<propsType, { Component: mixed, children: mixed }>> => {
+  try {
+    const { query } = (!isMemo(Component) ? Component : Component.type) || {};
+
+    if (initEnvironment && query) {
+      const { environment, relaySSR } = initEnvironment();
+
+      await fetchQuery(environment, query, variables);
+
+      return {
         variables,
-      }),
-    );
+        relayData: await relaySSR.getCache(),
+      };
+    }
+  } catch (e) {
+    const { log } = console;
 
-    return (
-      <QueryRenderer
-        environment={environment}
-        query={Component.query}
-        variables={variables}
-        render={({ error, props }: ReadyStateType): NodeType => {
-          if (error) return <div>{error.message}</div>;
-
-          if (!props) return <div>Loading</div>;
-
-          return children(props);
-        }}
-      />
-    );
+    log(e);
   }
-}`;
+
+  return {
+    variables,
+  };
+};
+
+export default React.memo<propsType>(Main);`;
 
 const pageTemplate = `// @flow
 
-import React, { type Node as NodeType } from 'react';
+import React from 'react';
 import { graphql } from 'react-relay';
 
-/** render the home page */
-export default class Home extends React.PureComponent<{| version: string |}> {
-  static query = graphql\`
-    query pages_homeQuery {
-      version
-    }
-  \`;
+type propsType = {|
+  version: string,
+|};
 
-  /** @react */
-  render(): NodeType {
-    return <div>{JSON.stringify(this.props)}</div>;
+/** @react render the home page */
+const Home = (props: propsType) => <div>{JSON.stringify(props)}</div>;
+
+Home.query = graphql\`
+  query pages_homeQuery {
+    version
   }
-}`;
+\`;
+
+export const { query } = Home;
+export default React.memo<propsType>(Home);`;
 
 const clientTestTemplate = `// @flow
 
@@ -255,7 +267,7 @@ import server from '@cat-org/server/lib/defaults';
 
 import client from '../client';
 
-import Home from 'pages';
+import { query } from 'pages';
 
 const { createEnvironment } = client;
 let runningServer: http$Server;
@@ -273,13 +285,13 @@ describe('client', () => {
   test('create environment in the first time', async () => {
     const environment = createEnvironment();
 
-    expect(await fetchQuery(environment, Home.query)).not.toBeUndefined();
+    expect(await fetchQuery(environment, query)).not.toBeUndefined();
   });
 
   test('create environment in the second time', async () => {
     const environment = createEnvironment();
 
-    expect(await fetchQuery(environment, Home.query)).not.toBeUndefined();
+    expect(await fetchQuery(environment, query)).not.toBeUndefined();
   });
 
   afterAll(() => {
@@ -315,7 +327,7 @@ class Relay extends Store {
     if (lerna) return;
 
     await this.execa(
-      'yarn add react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
+      'yarn add react-is react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
       'yarn add --dev babel-plugin-relay',
     );
   };

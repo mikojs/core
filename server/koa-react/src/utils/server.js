@@ -9,6 +9,7 @@ import {
   type Middleware as koaMiddlewareType,
 } from 'koa';
 import React from 'react';
+import { isMemo } from 'react-is';
 import {
   renderToStaticMarkup,
   renderToString,
@@ -111,10 +112,13 @@ export default (
   };
   const { head: documentHead, ...documentInitialProps } =
     // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-    (await Document.getInitialProps?.({ ctx, isServer: true })) || {};
+    (await (!isMemo(Document) ? Document : Document.type).getInitialProps?.({
+      ctx,
+      isServer: true,
+    })) || {};
   const { head: mainHead, ...mainInitialProps } =
     // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-    (await Main.getInitialProps?.({
+    (await (!isMemo(Main) ? Main : Main.type).getInitialProps?.({
       ctx,
       isServer: true,
       Component: store.Component,

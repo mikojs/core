@@ -1,6 +1,7 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React, { type Node as NodeType, type ComponentType } from 'react';
+import { isMemo } from 'react-is';
 
 import { type mainCtxType } from '../../../../types';
 
@@ -11,32 +12,30 @@ type propsType = {|
   children: ({ value: string }) => NodeType,
 |};
 
-/** Main Component */
-export default class Main extends React.PureComponent<propsType> {
-  /**
-   * @example
-   * Main.getInitialProps(context)
-   *
-   * @param {mainCtxType} context - context data
-   *
-   * @return {propsType} - initial props
-   */
-  static getInitialProps = ({ Component, pageProps }: mainCtxType<{}>) => ({
-    value: 'test data',
-    name: Component.name,
-    pageProps,
-  });
+/** @react Main Component */
+const Main = ({ value, name, pageProps, children }: propsType) => (
+  <div>
+    {name}
+    {JSON.stringify(pageProps)}
+    {children({ value })}
+  </div>
+);
 
-  /** @react */
-  render(): NodeType {
-    const { value, name, pageProps, children } = this.props;
+/**
+ * @example
+ * Main.getInitialProps(context)
+ *
+ * @param {mainCtxType} context - context data
+ *
+ * @return {propsType} - initial props
+ */
+Main.getInitialProps = ({
+  Component,
+  pageProps,
+}: mainCtxType<{}, {}, ComponentType<{}> & { type: { name: string } }>) => ({
+  value: 'test data',
+  name: (!isMemo(Component) ? Component : Component.type).name,
+  pageProps,
+});
 
-    return (
-      <div>
-        {name}
-        {JSON.stringify(pageProps)}
-        {children({ value })}
-      </div>
-    );
-  }
-}
+export default React.memo<propsType>(Main);

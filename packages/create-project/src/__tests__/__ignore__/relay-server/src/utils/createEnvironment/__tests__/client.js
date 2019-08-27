@@ -9,7 +9,7 @@ import server from '@cat-org/server/lib/defaults';
 
 import client from '../client';
 
-import Home from 'pages';
+import { query } from 'pages';
 
 const { createEnvironment } = client;
 let runningServer: http$Server;
@@ -27,13 +27,13 @@ describe('client', () => {
   test('create environment in the first time', async () => {
     const environment = createEnvironment();
 
-    expect(await fetchQuery(environment, Home.query)).not.toBeUndefined();
+    expect(await fetchQuery(environment, query)).not.toBeUndefined();
   });
 
   test('create environment in the second time', async () => {
     const environment = createEnvironment();
 
-    expect(await fetchQuery(environment, Home.query)).not.toBeUndefined();
+    expect(await fetchQuery(environment, query)).not.toBeUndefined();
   });
 
   afterAll(() => {

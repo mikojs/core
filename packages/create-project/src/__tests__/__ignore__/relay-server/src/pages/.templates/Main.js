@@ -1,6 +1,7 @@
 // @flow
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
+import { isMemo } from 'react-is';
 import {
   QueryRenderer,
   fetchQuery,
@@ -16,6 +17,9 @@ import { initEnvironment, createEnvironment } from 'utils/createEnvironment';
 
 type pageComponentType = ComponentType<*> & {|
   query?: GraphQLTaggedNodeType,
+  type: {
+    query?: GraphQLTaggedNodeType,
+  },
 |};
 
 type propsType = {|
@@ -25,72 +29,78 @@ type propsType = {|
   children: <P>(props: P) => NodeType,
 |};
 
-/** control the all page Components */
-export default class Main extends React.PureComponent<propsType> {
-  /**
-   * @example
-   * Main.getInitialProps(ctx)
-   *
-   * @param {mainCtxType} ctx - context from @cat-org/koa-react
-   *
-   * @return {propsType} - initial props
-   */
-  static getInitialProps = async ({
-    Component: { query },
-    pageProps: { variables },
-  }: mainCtxType<
-    {
-      variables?: VariablesType,
-    },
-    {},
-    pageComponentType,
-  >): Promise<$Diff<propsType, { Component: mixed, children: mixed }>> => {
-    try {
-      if (initEnvironment && query) {
-        const { environment, relaySSR } = initEnvironment();
-
-        await fetchQuery(environment, query, variables);
-
-        return {
-          variables,
-          relayData: await relaySSR.getCache(),
-        };
-      }
-    } catch (e) {
-      const { log } = console;
-
-      log(e);
-    }
-
-    return {
+/** @react control the all page Components */
+const Main = ({
+  variables = {},
+  relayData,
+  Component,
+  children,
+}: propsType): NodeType => {
+  const { query } = (!isMemo(Component) ? Component : Component.type) || {};
+  const environment = createEnvironment(
+    relayData,
+    JSON.stringify({
+      queryID: query?.()?.params.name,
       variables,
-    };
-  };
+    }),
+  );
 
-  /** @react */
-  render(): NodeType {
-    const { variables = {}, relayData, Component, children } = this.props;
-    const environment = createEnvironment(
-      relayData,
-      JSON.stringify({
-        queryID: Component.query ? Component.query().params.name : undefined,
+  return (
+    <QueryRenderer
+      environment={environment}
+      query={query}
+      variables={variables}
+      render={({ error, props }: ReadyStateType): NodeType => {
+        if (error) return <div>{error.message}</div>;
+
+        if (!props) return <div>Loading</div>;
+
+        return children(props);
+      }}
+    />
+  );
+};
+
+/**
+ * @example
+ * Main.getInitialProps(ctx)
+ *
+ * @param {mainCtxType} ctx - context from @cat-org/koa-react
+ *
+ * @return {propsType} - initial props
+ */
+Main.getInitialProps = async ({
+  Component,
+  pageProps: { variables },
+}: mainCtxType<
+  {
+    variables?: VariablesType,
+  },
+  {},
+  pageComponentType,
+>): Promise<$Diff<propsType, { Component: mixed, children: mixed }>> => {
+  try {
+    const { query } = (!isMemo(Component) ? Component : Component.type) || {};
+
+    if (initEnvironment && query) {
+      const { environment, relaySSR } = initEnvironment();
+
+      await fetchQuery(environment, query, variables);
+
+      return {
         variables,
-      }),
-    );
+        relayData: await relaySSR.getCache(),
+      };
+    }
+  } catch (e) {
+    const { log } = console;
 
-    return (
-      <QueryRenderer
-        environment={environment}
-        query={Component.query}
-        variables={variables}
-        render={({ error, props }: ReadyStateType): NodeType => {
-          if (error) return <div>{error.message}</div>;
-
-          if (!props) return <div>Loading</div>;
-
-          return children(props);
-        }}
-      />
-    );
+    log(e);
   }
-}
+
+  return {
+    variables,
+  };
+};
+
+export default React.memo<propsType>(Main);

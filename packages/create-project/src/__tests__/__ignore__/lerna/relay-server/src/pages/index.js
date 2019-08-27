@@ -1,18 +1,20 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React from 'react';
 import { graphql } from 'react-relay';
 
-/** render the home page */
-export default class Home extends React.PureComponent<{| version: string |}> {
-  static query = graphql`
-    query pages_homeQuery {
-      version
-    }
-  `;
+type propsType = {|
+  version: string,
+|};
 
-  /** @react */
-  render(): NodeType {
-    return <div>{JSON.stringify(this.props)}</div>;
+/** @react render the home page */
+const Home = (props: propsType) => <div>{JSON.stringify(props)}</div>;
+
+Home.query = graphql`
+  query pages_homeQuery {
+    version
   }
-}
+`;
+
+export const { query } = Home;
+export default React.memo<propsType>(Home);

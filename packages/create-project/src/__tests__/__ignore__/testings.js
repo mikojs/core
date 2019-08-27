@@ -209,7 +209,7 @@ const relayServer = {
     'yarn add react react-dom @cat-org/koa-react',
     'yarn add --dev webpack @babel/preset-react @babel/plugin-proposal-class-properties',
     'yarn add graphql @cat-org/koa-graphql',
-    'yarn add react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
+    'yarn add react-is react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
     'yarn add --dev babel-plugin-relay',
     'yarn add --dev node-fetch',
     'yarn add --dev enzyme enzyme-adapter-react-16',

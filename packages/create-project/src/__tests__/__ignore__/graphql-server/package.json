@@ -12,6 +12,10 @@
     "prod": "NODE_ENV=production configs server",
     "test": "configs test"
   },
+  "dependencies": {
+    "@cat-org/server": "version",
+    "node-fetch": "version"
+  },
   "keywords": ["keyword"],
   "engines": {
     "node": ">= node version",

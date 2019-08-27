@@ -64,17 +64,6 @@ const lint = {
     globals: {
       __CAT_DATA__: true,
     },
-    overrides: [
-      {
-        files: [
-          'packages/create-project/src/__tests__/__ignore__/**',
-          'packages/create-project/src/__tests__/__ignore__/**/.templates/**',
-        ],
-        rules: {
-          'import/no-extraneous-dependencies': 'off',
-        },
-      },
-    ],
   }),
   ignore: ignore => [
     ...ignore,

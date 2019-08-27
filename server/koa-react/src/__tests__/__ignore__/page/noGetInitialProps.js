@@ -1,11 +1,8 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React from 'react';
 
-/** NoGetInitialProps Component */
-export default class NoGetInitialProps extends React.PureComponent<*> {
-  /** @react */
-  render(): NodeType {
-    return <div>noGetInitialProps</div>;
-  }
-}
+/** @react NoGetInitialProps Component */
+const NoGetInitialProps = () => <div>noGetInitialProps</div>;
+
+export default React.memo<{||}>(NoGetInitialProps);

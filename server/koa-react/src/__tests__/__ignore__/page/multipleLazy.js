@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React from 'react';
 
 import { lazy } from '../../../ReactIsomorphic';
 
@@ -22,10 +22,7 @@ const TestOne = lazy(
   'test-lazy-1',
 );
 
-/** MultipleLazy Component */
-export default class MultipleLazy extends React.PureComponent<*> {
-  /** @react */
-  render(): NodeType {
-    return <TestOne />;
-  }
-}
+/** @react MultipleLazy Component */
+const MultipleLazy = () => <TestOne />;
+
+export default React.memo<{||}>(MultipleLazy);

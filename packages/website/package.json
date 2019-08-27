@@ -24,6 +24,7 @@
     "node-fetch": "^2.6.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-is": "^16.9.0",
     "react-relay": "^5.0.0",
     "react-relay-network-modern": "^4.0.2",
     "react-relay-network-modern-ssr": "^1.2.4",

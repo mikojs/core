@@ -1,6 +1,10 @@
 // @flow
 
-import React, { type Node as NodeType, type ComponentType } from 'react';
+import React, {
+  useState,
+  type Node as NodeType,
+  type ComponentType,
+} from 'react';
 import * as d3 from 'd3-hierarchy';
 import memoizeOne from 'memoize-one';
 import { emptyFunction, areEqual } from 'fbjs';
@@ -29,6 +33,7 @@ const DEFAULT_PREVIEWER = [
     type: Previewer,
   },
 ];
+let hasPreviewComponent: boolean = false;
 
 export const parse = d3
   .stratify()
@@ -42,90 +47,79 @@ export const DataContext = React.createContext<contextType>({
   drop: emptyFunction,
 });
 
-/** Provide the source data and the methods to handle the source data*/
-export default class Provider extends React.PureComponent<
-  propsType,
-  stateType,
-> {
-  hasPreviewComponent = false;
+export const getHover = memoizeOne(
+  (
+    components: $PropertyType<stateType, 'components'>,
+    previewer: $PropertyType<stateType, 'previewer'>,
+    setPreviewer: (previewer: $PropertyType<stateType, 'previewer'>) => void,
+  ) =>
+    memoizeOne((current: dndItemType, target: dndItemType) => {
+      if (current.type === 'new-component') {
+        switch (target.type) {
+          case 'manager':
+            if (!hasPreviewComponent) return;
 
-  state = {
-    components: initializeComponents(this.props.components),
-    previewer: DEFAULT_PREVIEWER,
-  };
-
-  +hover = memoizeOne((current: dndItemType, target: dndItemType) => {
-    const { components, previewer } = this.state;
-
-    if (current.type === 'new-component') {
-      switch (target.type) {
-        case 'manager':
-          if (!this.hasPreviewComponent) return;
-
-          this.hasPreviewComponent = false;
-          this.setState({
-            previewer: previewer.filter(
-              ({ kind }: $ElementType<dataType, number>) =>
-                kind !== 'preview-component',
-            ),
-          });
-          return;
-
-        case 'previewer': {
-          const draggedIndex = components.findIndex(
-            ({ id }: $ElementType<dataType, number>) => id === current.id,
-          );
-          const targetIndex = previewer.findIndex(
-            ({ id }: $ElementType<dataType, number>) => id === target.id,
-          );
-
-          if (
-            targetIndex === -1 ||
-            !['previewer', 'component'].includes(previewer[targetIndex].kind)
-          )
+            hasPreviewComponent = false;
+            setPreviewer(
+              previewer.filter(
+                ({ kind }: $ElementType<dataType, number>) =>
+                  kind !== 'preview-component',
+              ),
+            );
             return;
 
-          const newPreviewer = [
-            ...(!this.hasPreviewComponent
-              ? previewer
-              : previewer.filter(
-                  ({ kind }: $ElementType<dataType, number>) =>
-                    kind !== 'preview-component',
-                )),
-            {
-              ...components[draggedIndex],
-              kind: 'preview-component',
-              parentId: target.id,
-            },
-          ];
+          case 'previewer': {
+            const draggedIndex = components.findIndex(
+              ({ id }: $ElementType<dataType, number>) => id === current.id,
+            );
+            const targetIndex = previewer.findIndex(
+              ({ id }: $ElementType<dataType, number>) => id === target.id,
+            );
 
-          this.hasPreviewComponent = true;
-          this.setState({
-            previewer: newPreviewer,
-          });
-          return;
+            if (
+              draggedIndex === -1 ||
+              targetIndex === -1 ||
+              !['previewer', 'component'].includes(previewer[targetIndex].kind)
+            )
+              return;
+
+            const newPreviewer = [
+              ...(!hasPreviewComponent
+                ? previewer
+                : previewer.filter(
+                    ({ kind }: $ElementType<dataType, number>) =>
+                      kind !== 'preview-component',
+                  )),
+              {
+                ...components[draggedIndex],
+                kind: 'preview-component',
+                parentId: target.id,
+              },
+            ];
+
+            hasPreviewComponent = true;
+            setPreviewer(newPreviewer);
+            return;
+          }
+
+          default:
+            return;
         }
-
-        default:
-          return;
       }
-    }
-  }, areEqual);
+    }, areEqual),
+  areEqual,
+);
 
-  /**
-   * @example
-   * drop(current, target)
-   *
-   * @param {dndItemType} current - current dnd item
-   * @param {dndItemType} target - target dnd item
-   */
-  +drop = (current: dndItemType, target: dndItemType) => {
-    const { previewer } = this.state;
-
+export const getDrop = memoizeOne(
+  (
+    previewer: $PropertyType<stateType, 'previewer'>,
+    setPreviewer: (previewer: $PropertyType<stateType, 'previewer'>) => void,
+  ) => (current: dndItemType, target: dndItemType) => {
     if (current.type === 'new-component' && target.type === 'previewer') {
-      this.hasPreviewComponent = false;
-      this.setState({
-        previewer: previewer.map((data: $ElementType<dataType, number>) =>
+      hasPreviewComponent = false;
+
+      setPreviewer(
+        previewer.map((data: $ElementType<dataType, number>) =>
           data.kind !== 'preview-component'
             ? data
             : {
@@ -134,31 +128,37 @@ export default class Provider extends React.PureComponent<
                 kind: 'component',
               },
         ),
-      });
+      );
     } else if (current.type === 'component' && target.type === 'manager')
-      this.setState({
-        previewer: previewer.filter(
+      setPreviewer(
+        previewer.filter(
           (data: $ElementType<dataType, number>) => data.id !== current.id,
         ),
-      });
-  };
+      );
+  },
+  areEqual,
+);
 
-  /** @react */
-  render(): NodeType {
-    const { children } = this.props;
-    const { components, previewer } = this.state;
+/** @react Provide the source data and the methods to handle the source data*/
+const Provider = ({
+  children,
+  components: initComponents,
+}: propsType): NodeType => {
+  const [components] = useState(initializeComponents(initComponents));
+  const [previewer, setPreviewer] = useState(DEFAULT_PREVIEWER);
 
-    return (
-      <DataContext.Provider
-        value={{
-          manager: parse(components),
-          previewer: parse(previewer),
-          hover: this.hover,
-          drop: this.drop,
-        }}
-      >
-        {children}
-      </DataContext.Provider>
-    );
-  }
-}
+  return (
+    <DataContext.Provider
+      value={{
+        manager: parse(components),
+        previewer: parse(previewer),
+        hover: getHover(components, previewer, setPreviewer),
+        drop: getDrop(previewer, setPreviewer),
+      }}
+    >
+      {children}
+    </DataContext.Provider>
+  );
+};
+
+export default React.memo<propsType>(Provider);

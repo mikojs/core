@@ -1,90 +1,211 @@
 // @flow
 
-import React from 'react';
-import { mount } from 'enzyme';
+import { getHover, getDrop } from '../Provider';
 
-import Provider from '../Provider';
-import { type dataType } from '../types';
+jest.mock('uuid/v4', () => jest.fn(() => 'id'));
 
-import { Example } from './__ignore__/source';
-import getItem from './__ignore__/getItem';
-import findDiff from './__ignore__/findDiff';
+const previewer = {
+  id: 'component',
+  parentId: null,
+  kind: 'component',
+  type: 'div',
+};
 
-let newComponent: $ElementType<dataType, number>;
-const wrapper = mount(
-  <Provider components={[Example]}>
-    <div />
-  </Provider>,
-);
+const component = {
+  id: 'new-component',
+  parentId: null,
+  kind: 'new-component',
+  type: 'div',
+};
 
 describe('Provider', () => {
-  beforeAll(() => {
-    newComponent = wrapper
-      .state('components')
-      .find(
-        ({ kind }: $ElementType<dataType, number>) => kind === 'new-component',
-      );
-  });
+  describe('getHover', () => {
+    test('hover "new component" on "previewer"', () => {
+      const mockSetPreviewer = jest.fn();
 
-  test('new-component hover previewer', () => {
-    const previewer = wrapper.state('previewer');
-
-    wrapper.instance().hover(getItem(newComponent), getItem(previewer[0]));
-
-    expect(findDiff(previewer, wrapper.state('previewer'))).toEqual({
-      type: 'add',
-      components: ['preview-component'],
-    });
-  });
-
-  test('new-component hover manager', () => {
-    const previewer = wrapper.state('previewer');
-
-    wrapper
-      .instance()
-      .hover(getItem(newComponent), getItem(wrapper.state('components')[0]));
-
-    expect(findDiff(previewer, wrapper.state('previewer'))).toEqual({
-      type: 'remove',
-      components: ['preview-component'],
-    });
-  });
-
-  test('add new-component to previewer', () => {
-    const previewer = wrapper.state('previewer');
-
-    wrapper.instance().hover(getItem(newComponent), getItem(previewer[0]));
-
-    expect(findDiff(previewer, wrapper.state('previewer'))).toEqual({
-      type: 'add',
-      components: ['preview-component'],
-    });
-
-    wrapper.instance().drop(getItem(newComponent), getItem(previewer[0]));
-
-    expect(findDiff(previewer, wrapper.state('previewer'))).toEqual({
-      type: 'add',
-      components: ['component'],
-    });
-  });
-
-  test('remove component in previewer', () => {
-    const previewer = wrapper.state('previewer');
-
-    wrapper
-      .instance()
-      .drop(
-        getItem(
-          previewer.find(
-            ({ kind }: $ElementType<dataType, number>) => kind === 'component',
-          ),
-        ),
-        getItem(wrapper.state('components')[0]),
+      getHover(
+        [component],
+        [
+          {
+            ...previewer,
+            id: 'previewer',
+          },
+        ],
+        mockSetPreviewer,
+      )(
+        {
+          id: 'new-component',
+          type: 'new-component',
+        },
+        {
+          id: 'previewer',
+          type: 'previewer',
+        },
       );
 
-    expect(findDiff(previewer, wrapper.state('previewer'))).toEqual({
-      type: 'remove',
-      components: ['component'],
+      expect(mockSetPreviewer).toHaveBeenCalledWith([
+        {
+          ...previewer,
+          id: 'previewer',
+        },
+        {
+          ...component,
+          kind: 'preview-component',
+          parentId: 'previewer',
+        },
+      ]);
+    });
+
+    test('next: hover "new component" on "previewer" again, should remove "preview component"', () => {
+      const mockSetPreviewer = jest.fn();
+
+      getHover(
+        [component],
+        [
+          {
+            ...previewer,
+            id: 'previewer',
+          },
+          {
+            ...previewer,
+            id: 'should be removed',
+            kind: 'preview-component',
+          },
+        ],
+        mockSetPreviewer,
+      )(
+        {
+          id: 'new-component',
+          type: 'new-component',
+        },
+        {
+          id: 'previewer',
+          type: 'previewer',
+        },
+      );
+
+      expect(mockSetPreviewer).toHaveBeenCalledWith([
+        {
+          ...previewer,
+          id: 'previewer',
+        },
+        {
+          ...component,
+          kind: 'preview-component',
+          parentId: 'previewer',
+        },
+      ]);
+    });
+
+    test('next: hover "new component" on "manager"', () => {
+      const mockSetPreviewer = jest.fn();
+
+      getHover(
+        [],
+        [
+          {
+            ...previewer,
+            kind: 'preview-component',
+          },
+        ],
+        mockSetPreviewer,
+      )(
+        {
+          id: 'new-component',
+          type: 'new-component',
+        },
+        {
+          id: 'manager',
+          type: 'manager',
+        },
+      );
+
+      expect(mockSetPreviewer).toHaveBeenCalledWith([]);
+    });
+
+    test('next: hover "new component" on "manager" again, should be ignored', () => {
+      const mockSetPreviewer = jest.fn();
+
+      getHover([], [], mockSetPreviewer)(
+        {
+          id: 'new-component',
+          type: 'new-component',
+        },
+        {
+          id: 'manager',
+          type: 'manager',
+        },
+      );
+
+      expect(mockSetPreviewer).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getDrop', () => {
+    test('add "new component" to "previewer"', () => {
+      const mockSetPreviewer = jest.fn();
+
+      getDrop(
+        [
+          previewer,
+          {
+            ...previewer,
+            kind: 'preview-component',
+          },
+        ],
+        mockSetPreviewer,
+      )(
+        {
+          id: 'component',
+          type: 'new-component',
+        },
+        {
+          id: 'previewer',
+          type: 'previewer',
+        },
+      );
+
+      expect(mockSetPreviewer).toHaveBeenCalledWith([
+        previewer,
+        {
+          ...previewer,
+          id: 'id',
+        },
+      ]);
+    });
+
+    test('drop "component" to "manager" for removing', () => {
+      const mockSetPreviewer = jest.fn();
+
+      getDrop([previewer], mockSetPreviewer)(
+        {
+          id: 'component',
+          type: 'component',
+        },
+        {
+          id: 'manager',
+          type: 'manager',
+        },
+      );
+
+      expect(mockSetPreviewer).toHaveBeenCalledWith([]);
+    });
+
+    test('drop "new component" to "manager"', () => {
+      const mockSetPreviewer = jest.fn();
+
+      getDrop([], mockSetPreviewer)(
+        {
+          id: 'component',
+          type: 'new-component',
+        },
+        {
+          id: 'manager',
+          type: 'manager',
+        },
+      );
+
+      expect(mockSetPreviewer).not.toHaveBeenCalled();
     });
   });
 });

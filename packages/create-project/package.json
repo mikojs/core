@@ -25,6 +25,7 @@
     "validator": "^11.1.0"
   },
   "devDependencies": {
+    "@cat-org/configs": "^1.5.0",
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.3",
     "prettier": "^1.18.2",

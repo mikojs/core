@@ -12,6 +12,7 @@ import { execa } from 'execa';
 
 import { d3DirTree } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
+import configs from '@cat-org/configs/lib/configs';
 
 import testings, {
   type inquirerResultType,
@@ -26,6 +27,12 @@ const storePkg = {
   version: '1.0.0',
   main: './lib/index.js',
 };
+const PASS_COMMANDS = [
+  'git config --get user.name',
+  'git config --get user.email',
+  'yarn flow-typed install',
+  'git status',
+];
 
 describe('create project', () => {
   beforeEach(() => {
@@ -54,7 +61,6 @@ describe('create project', () => {
       name: string,
       projectDir: string,
       inquirerResult: inquirerResultType,
-      cmds: $ReadOnlyArray<string>,
       context?: contextType,
     ) => {
       outputFileSync.destPaths = [];
@@ -68,6 +74,94 @@ describe('create project', () => {
         lerna: false,
         ...context,
       });
+
+      const pkgInstalled = execa.cmds.reduce(
+        (
+          result: {| devDependencies: {}, dependencies: {} |},
+          cmd: string,
+        ): {|
+          devDependencies: {},
+          dependencies: {},
+        |} => {
+          if (/yarn add --dev/.test(cmd))
+            return {
+              ...result,
+              devDependencies: cmd
+                .replace(/yarn add --dev /, '')
+                .split(/ /)
+                .reduce(
+                  (devDependencies: {}, pkgName: string) => ({
+                    ...devDependencies,
+                    [pkgName]: 'version',
+                  }),
+                  result.devDependencies,
+                ),
+            };
+
+          if (/yarn add/.test(cmd))
+            return {
+              ...result,
+              dependencies: cmd
+                .replace(/yarn add /, '')
+                .split(/ /)
+                .reduce(
+                  (dependencies: {}, pkgName: string) => ({
+                    ...dependencies,
+                    [pkgName]: 'version',
+                  }),
+                  result.dependencies,
+                ),
+            };
+
+          if (/yarn configs --install/.test(cmd)) {
+            const configType = cmd.replace(/yarn configs --install /, '');
+            const configPackages =
+              // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+              configs[configType]?.install?.(['--dev']) ||
+              (() => {
+                throw new Error(`Can not find config type: ${configType}`);
+              })();
+            const isDevDependencies = configPackages[0] === '--dev';
+
+            return {
+              ...result,
+              devDependencies: !isDevDependencies
+                ? result.devDependencies
+                : configPackages.slice(1).reduce(
+                    (devDependencies: {}, pkgName: string) => ({
+                      ...devDependencies,
+                      [pkgName]: 'version',
+                    }),
+                    result.devDependencies,
+                  ),
+              dependencies: isDevDependencies
+                ? result.dependencies
+                : configPackages.reduce(
+                    (dependencies: {}, pkgName: string) => ({
+                      ...dependencies,
+                      [pkgName]: 'version',
+                    }),
+                    result.dependencies,
+                  ),
+            };
+          }
+
+          if (!PASS_COMMANDS.includes(cmd))
+            throw new Error(`Find not expect command: ${cmd}`);
+
+          return result;
+        },
+        {
+          devDependencies: {},
+          dependencies: {},
+        },
+      );
+
+      if (Object.keys(pkgInstalled.devDependencies).length === 0)
+        delete pkgInstalled.devDependencies;
+
+      if (Object.keys(pkgInstalled.dependencies).length === 0)
+        delete pkgInstalled.dependencies;
 
       expect(
         d3DirTree(projectDir, { exclude: /.*\.swp/ })
@@ -95,7 +189,10 @@ describe('create project', () => {
 
               switch (extension) {
                 case '.json':
-                  const jsonContent = JSON.parse(content);
+                  const jsonContent = {
+                    ...JSON.parse(content),
+                    ...pkgInstalled,
+                  };
 
                   expect(
                     prettier
@@ -127,7 +224,6 @@ describe('create project', () => {
             outputFileSync.contents.length,
           ),
       ).toBe(0);
-      expect(execa.cmds).toEqual(cmds);
     },
   );
 });

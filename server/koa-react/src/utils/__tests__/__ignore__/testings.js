@@ -1,5 +1,7 @@
 // @flow
 
+import { componentKey } from '../../replaceLoader';
+
 export default [
   [
     'routers',
@@ -8,10 +10,11 @@ export default [
     '"/cache-dir/Main"."/cache-dir/Loading"."/cache-dir/Error"."/cache-dir/routesData"',
   ],
   [
-    'set-config',
-    '/** setConfig */',
+    'client',
+    '/** setConfig */ Component = _ref["default"]; /** Component */',
     undefined,
-    "require('react-hot-loader').setConfig || ",
+    `require('react-hot-loader').setConfig ||  Component = _ref["default"];
+var ${componentKey} = _ref["${componentKey}"]; ${componentKey} || `,
   ],
   [
     'react-hot-loader',
@@ -19,7 +22,8 @@ export default [
     undefined,
     `var _replace_fd5c1 = module;
 
-module.exports = require('react-hot-loader/root').hot(_replace_fd5c1);`,
+exports["${componentKey}"] = _replace_fd5c1;
+exports["default"] = require('react-hot-loader/root').hot(_replace_fd5c1);`,
   ],
   [
     'react-hot-loader',
@@ -27,30 +31,7 @@ module.exports = require('react-hot-loader/root').hot(_replace_fd5c1);`,
     undefined,
     `var _replace_41d81 = module;
 
+exports["${componentKey}"] = _replace_41d81;
 exports["default"] = require('react-hot-loader/root').hot(_replace_41d81);`,
-  ],
-  [
-    'react-hot-loader',
-    `module.exports = module;
-
-module.test = () => {};`,
-    undefined,
-    `var _replace_1ffc4 = module;
-
-module.test = () => {};
-
-module.exports = require('react-hot-loader/root').hot(_replace_1ffc4);`,
-  ],
-  [
-    'react-hot-loader',
-    `exports["default"] = module;
-
-module.test = () => {};`,
-    undefined,
-    `var _replace_cecb6 = module;
-
-module.test = () => {};
-
-exports["default"] = require('react-hot-loader/root').hot(_replace_cecb6);`,
   ],
 ];

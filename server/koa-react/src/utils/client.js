@@ -62,7 +62,7 @@ const run = async () => {
         routesData={routesData}
         mainInitialProps={{
           ...mainInitialProps,
-          Component,
+          Component: /** Component */ Component,
         }}
       />
     </Router>,

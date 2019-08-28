@@ -95,7 +95,7 @@ export default (
               include: [CLIENT_PATH],
               loader: path.resolve(__dirname, './replaceLoader.js'),
               options: {
-                type: 'set-config',
+                type: 'client',
               },
             },
             {

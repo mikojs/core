@@ -12,19 +12,6 @@
     "prod": "NODE_ENV=production configs server:lerna",
     "test": "SKIP_SERVER=true configs server:lerna"
   },
-  "dependencies": {
-    "@cat-org/koa-graphql": " version",
-    "@cat-org/koa-react": "version",
-    "@cat-org/server": "version",
-    "node-fetch": "version",
-    "react": "version",
-    "react-is": "version",
-    "react-relay": "version",
-    "react-relay-network-modern": "version",
-    "react-relay-network-modern-ssr": "version",
-    "relay-runtime": "version",
-    "whatwg-fetch": "version"
-  },
   "keywords": ["keyword"],
   "publishConfig": {
     "access": "public"

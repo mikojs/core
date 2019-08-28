@@ -11,10 +11,6 @@
     "dev": "configs server:lerna -w",
     "prod": "NODE_ENV=production configs server:lerna"
   },
-  "dependencies": {
-    "@cat-org/server": "version",
-    "node-fetch": "version"
-  },
   "keywords": ["keyword"],
   "publishConfig": {
     "access": "public"

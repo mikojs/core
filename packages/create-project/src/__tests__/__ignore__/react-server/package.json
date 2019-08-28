@@ -12,6 +12,38 @@
     "prod": "NODE_ENV=production configs server",
     "test": "configs test"
   },
+  "dependencies": {
+    "@cat-org/koa-base": "version",
+    "@cat-org/koa-react": "version",
+    "@cat-org/server": "version",
+    "koa": "version",
+    "react": "version",
+    "react-dom": "version"
+  },
+  "devDependencies": {
+    "@babel/cli": "version",
+    "@babel/core": "version",
+    "@babel/plugin-proposal-class-properties": "version",
+    "@babel/preset-react": "version",
+    "@cat-org/babel-preset-base": "version",
+    "@cat-org/badges": "version",
+    "@cat-org/configs": "version",
+    "@cat-org/eslint-config-cat": "version",
+    "@cat-org/jest": "version",
+    "enzyme": "version",
+    "enzyme-adapter-react-16": "version",
+    "eslint": "version",
+    "eslint-watch": "version",
+    "flow-bin": "version",
+    "flow-typed": "version",
+    "husky": "version",
+    "jest": "version",
+    "lint-staged": "version",
+    "node-fetch": "version",
+    "prettier": "version",
+    "prettier-package-json": "version",
+    "webpack": "version"
+  },
   "keywords": ["keyword"],
   "engines": {
     "node": ">= node version",

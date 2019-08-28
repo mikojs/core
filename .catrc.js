@@ -67,8 +67,8 @@ const lint = {
     overrides: [
       {
         files: [
-          'packages/create-project/src/__tests__/__ignore__/**',
-          'packages/create-project/src/__tests__/__ignore__/**/.templates/**',
+          'packages/create-project/src/__tests__/__ignore__/lerna/**',
+          'packages/create-project/src/__tests__/__ignore__/lerna/**/.templates/**',
         ],
         rules: {
           'import/no-extraneous-dependencies': 'off',

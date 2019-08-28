@@ -13,8 +13,30 @@
     "test": "configs test"
   },
   "dependencies": {
+    "@cat-org/koa-base": "version",
+    "@cat-org/koa-graphql": "version",
     "@cat-org/server": "version",
-    "node-fetch": "version"
+    "graphql": "version",
+    "koa": "version"
+  },
+  "devDependencies": {
+    "@babel/cli": "version",
+    "@babel/core": "version",
+    "@cat-org/babel-preset-base": "version",
+    "@cat-org/badges": "version",
+    "@cat-org/configs": "version",
+    "@cat-org/eslint-config-cat": "version",
+    "@cat-org/jest": "version",
+    "eslint": "version",
+    "eslint-watch": "version",
+    "flow-bin": "version",
+    "flow-typed": "version",
+    "husky": "version",
+    "jest": "version",
+    "lint-staged": "version",
+    "node-fetch": "version",
+    "prettier": "version",
+    "prettier-package-json": "version"
   },
   "keywords": ["keyword"],
   "engines": {

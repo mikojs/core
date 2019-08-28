@@ -1,10 +1,10 @@
 // @flow
 
-import defaultConfigs from '../defaultConfigs';
+import configs from '../index';
 
-describe('default config', () => {
-  Object.keys(defaultConfigs).forEach((configKey: string) => {
-    const config = defaultConfigs[configKey];
+describe('configs', () => {
+  Object.keys(configs).forEach((configKey: string) => {
+    const config = configs[configKey];
 
     describe(configKey, () => {
       Object.keys(config).forEach((key: string) => {

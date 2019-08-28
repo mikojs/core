@@ -14,7 +14,7 @@ import debug from 'debug';
 
 import { type objConfigType, type configsType } from '../types';
 
-import defaultConfigs from 'configs/defaultConfigs';
+import defaultConfigs from 'configs';
 
 const debugLog = debug('configs:configs');
 

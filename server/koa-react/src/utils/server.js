@@ -13,7 +13,7 @@ import { isMemo } from 'react-is';
 import {
   renderToStaticMarkup,
   renderToString,
-  renderToNodeStream as reactServerRender,
+  renderToNodeStream,
 } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -22,8 +22,6 @@ import getStream from 'get-stream';
 import { emptyFunction } from 'fbjs';
 
 import { requireModule } from '@cat-org/utils';
-
-import { renderToNodeStream } from '../ReactIsomorphic';
 
 import type CacheType from './Cache';
 
@@ -130,7 +128,7 @@ export default (
   // render page
   multistream([
     upperDocument,
-    await renderToNodeStream(
+    renderToNodeStream(
       <Router location={ctx.url} context={{}}>
         <Root
           Main={Main}
@@ -142,7 +140,6 @@ export default (
           pageInitialProps={pageInitialProps}
         />
       </Router>,
-      { stream, reactServerRender },
     ),
     lowerDocument,
   ])

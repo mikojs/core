@@ -10,7 +10,6 @@ import { emptyFunction, ExecutionEnvironment } from 'fbjs';
 import { withRouter, type Location as locationType } from 'react-router-dom';
 
 import { type errorPropsType } from '../types';
-import { type lazyComponentType } from '../ReactIsomorphic';
 
 import ErrorCatch from './ErrorCatch';
 import getPage from './getPage';
@@ -25,7 +24,9 @@ export type propsType = {|
     component: {|
       filePath: string,
       chunkName: string,
-      loader: lazyComponentType,
+      loader: () => Promise<{|
+        default: ComponentType<*>,
+      |}>,
     |},
   |}>,
   InitialPage: ComponentType<*>,

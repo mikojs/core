@@ -96,11 +96,6 @@ describe.each`
             head,
             '<main id="__CAT__">',
             `<div>${main}</div>`,
-            /error/.test(urlPath)
-              ? ''
-              : `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
-                  [],
-                )};</script>`,
             '</main>',
             `<script data-react-helmet="true">var __CAT_DATA__ = ${JSON.stringify(
               {

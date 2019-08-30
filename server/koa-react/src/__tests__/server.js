@@ -78,7 +78,7 @@ describe.each`
         chunkName: string,
         head: string,
         main: string,
-        initialProps: {},
+        pageInitialProps: {},
         mainInitialProps: {},
       ) => {
         const isCustom = /custom/.test(urlPath);
@@ -98,18 +98,15 @@ describe.each`
             `<div>${main}</div>`,
             /error/.test(urlPath)
               ? ''
-              : `<script>var __CHUNKS_NAMES__ = ${JSON.stringify([
-                  chunkName,
-                ])};</script>`,
+              : `<script>var __CHUNKS_NAMES__ = ${JSON.stringify(
+                  [],
+                )};</script>`,
             '</main>',
             `<script data-react-helmet="true">var __CAT_DATA__ = ${JSON.stringify(
               {
-                originalUrl: isStatic
-                  ? urlPath.replace(/notFound/, '*').replace(/\?.*$/, '')
-                  : urlPath,
-                chunkName,
-                initialProps,
                 mainInitialProps,
+                pageInitialProps,
+                chunkName,
               },
             )};</script>`,
             `<script data-react-helmet="true" src="${publicPath}${

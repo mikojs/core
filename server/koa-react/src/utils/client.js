@@ -43,7 +43,7 @@ const run = async () => {
   const { default: InitialPage } = await loader();
 
   // render
-  await hydrate(
+  hydrate(
     <Router>
       <Root
         Main={Main}

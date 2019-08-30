@@ -9,7 +9,7 @@ import outputFileSync from 'output-file-sync';
 import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
 
-import { type propsType as rootPropsType } from './Root';
+import { type propsType as rootPropsType } from 'components/Root';
 
 import NotFound from 'templates/NotFound';
 

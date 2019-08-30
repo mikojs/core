@@ -84,7 +84,9 @@ const Root = ({
         if (cancel) return;
 
         updatePage({
-          ...newPageData,
+          Page: newPageData.Page,
+          mainProps: newPageData.mainProps,
+          pageProps: newPageData.pageProps,
           isLoading: false,
         });
       })();
@@ -98,7 +100,7 @@ const Root = ({
 
   return (
     <ErrorCatch Error={Error}>
-      <Main {...mainProps}>
+      <Main {...mainProps} Component={Page}>
         {<-P: { key: string }>(props?: P) =>
           isLoading ? <Loading /> : <Page {...props} {...pageProps} />
         }

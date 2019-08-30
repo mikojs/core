@@ -6,9 +6,9 @@ import { emptyFunction } from 'fbjs';
 
 import { mockChoice, handleUnhandledRejection } from '@cat-org/utils';
 
-import { lazy, hydrate } from '../ReactIsomorphic';
+import { hydrate } from '../ReactIsomorphic';
 
-import Root, { type propsType as rootPropsType } from './Root';
+import Root, { type propsType as rootPropsType } from 'components/Root';
 
 import Main from 'templates/Main';
 import Loading from 'templates/Loading';
@@ -27,30 +27,21 @@ setConfig({
  * run()
  */
 const run = async () => {
-  const { mainInitialProps, ...store } = window.__CAT_DATA__;
+  const { mainInitialProps, pageInitialProps, chunkName } = window.__CAT_DATA__;
   // preload page
   const {
     component: { loader },
   } =
     routesData.find(
       ({
-        component: { chunkName },
+        component: { chunkName: componentChunkName },
       }: $ElementType<$PropertyType<rootPropsType, 'routesData'>, number>) =>
-        store.chunkName === chunkName,
+        chunkName === componentChunkName,
     ) ||
     (() => {
       throw new Error('Can not find page component');
     })();
-  const { default: Component } = await loader();
-  /** @react page Component */
-  const Page = <-P>(props: P) => (
-    <Component {...props} {...store.initialProps} />
-  );
-
-  Root.preload({
-    ...store,
-    Page: lazy(async () => ({ default: Page }), store.chunkName),
-  });
+  const { default: InitialPage } = await loader();
 
   // render
   await hydrate(
@@ -60,10 +51,9 @@ const run = async () => {
         Loading={Loading}
         Error={ErrorComponent}
         routesData={routesData}
-        mainInitialProps={{
-          ...mainInitialProps,
-          Component: /** Component */ Component,
-        }}
+        InitialPage={InitialPage}
+        mainInitialProps={mainInitialProps}
+        pageInitialProps={pageInitialProps}
       />
     </Router>,
     document.getElementById('__CAT__') ||

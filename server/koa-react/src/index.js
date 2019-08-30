@@ -27,7 +27,6 @@ import buildStatic, {
   type optionsType as buildStaticOptionsType,
 } from './utils/buildStatic';
 import server from './utils/server';
-import { type propsType as rootPropsType } from 'utils/Root';
 
 // TODO: use koa-webpack type
 export type configType = {
@@ -47,8 +46,6 @@ export type optionsType = {|
   basename?: string,
   exclude?: RegExp,
 |};
-
-export type routesDataType = $PropertyType<rootPropsType, 'routesData'>;
 
 handleUnhandledRejection();
 

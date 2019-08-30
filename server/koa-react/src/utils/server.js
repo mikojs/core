@@ -23,34 +23,14 @@ import { emptyFunction } from 'fbjs';
 
 import { requireModule } from '@cat-org/utils';
 
-import { lazy, renderToNodeStream } from '../ReactIsomorphic';
+import { renderToNodeStream } from '../ReactIsomorphic';
 
-import Root, { type storeType } from './Root';
 import type CacheType from './Cache';
 
-const debugLog = debug('react:server');
+import Root from 'components/Root';
+import getPage from 'components/getPage';
 
-/**
- * @example
- * initStore()
- *
- * @return {storeType} - init store
- */
-export const initStore = () =>
-  Root.preload({
-    originalUrl: '',
-    chunkName: '',
-    initialProps: {},
-    Component: () => {
-      throw new Error('Can not use init Component');
-    },
-    Page: () => {
-      throw new Error('Can not use init Page');
-    },
-    lazyPage: async () => {
-      throw new Error('Can not use init lazy Page');
-    },
-  });
+const debugLog = debug('react:server');
 
 /**
  * @example
@@ -93,57 +73,36 @@ export default (
   const ErrorComponent = requireModule(cache.error);
 
   // [start] preload
-  // preload Page
-  const store = initStore();
-
-  Root.getPage(cache.routesData, {
-    location: { pathname: ctx.path, search: `?${ctx.querystring}` },
-    staticContext: ctx,
-  });
-
-  const Page = await store.lazyPage();
-
-  store.Page = lazy(async () => Page, store.chunkName);
-
-  // preload Document and Main
-  const initialProps = {
-    ...store.initialProps,
-    head: undefined,
-  };
+  // preload Document, Main, Page
   const { head: documentHead, ...documentInitialProps } =
     // $FlowFixMe Flow does not yet support method or property calls in optional chains.
     (await (!isMemo(Document) ? Document : Document.type).getInitialProps?.({
       ctx,
       isServer: true,
     })) || {};
-  const { head: mainHead, ...mainInitialProps } =
-    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
-    (await (!isMemo(Main) ? Main : Main.type).getInitialProps?.({
-      ctx,
-      isServer: true,
-      Component: store.Component,
-      pageProps: initialProps,
-    })) || {};
+  renderToStaticMarkup(documentHead || null);
+
+  const {
+    Page: InitialPage,
+    mainProps: mainInitialProps,
+    pageProps: pageInitialProps,
+    chunkName,
+  } = await getPage(Main, cache.routesData, ctx, true);
 
   debugLog({
-    initialProps,
     documentInitialProps,
     mainInitialProps,
+    pageInitialProps,
+    chunkName,
   });
 
   // preload scripts
-  renderToStaticMarkup(documentHead || null);
-  renderToStaticMarkup(mainHead || null);
-  renderToStaticMarkup(store.initialProps.head || null);
   renderToStaticMarkup(
     <Helmet>
       <script>{`var __CAT_DATA__ = ${JSON.stringify({
-        ...store,
-        initialProps,
-        Component: undefined,
-        Page: undefined,
-        lazyPage: undefined,
         mainInitialProps,
+        pageInitialProps,
+        chunkName,
       })};`}</script>
       <script src={commonsUrl} async />
       <script src={clientUrl} async />
@@ -172,16 +131,15 @@ export default (
   multistream([
     upperDocument,
     await renderToNodeStream(
-      <Router location={ctx.url} context={{ ...ctx, url: undefined }}>
+      <Router location={ctx.url} context={{}}>
         <Root
           Main={Main}
           Loading={emptyFunction.thatReturnsNull}
           Error={ErrorComponent}
           routesData={cache.routesData}
-          mainInitialProps={{
-            ...mainInitialProps,
-            Component: store.Component,
-          }}
+          InitialPage={InitialPage}
+          mainInitialProps={mainInitialProps}
+          pageInitialProps={pageInitialProps}
         />
       </Router>,
       { stream, reactServerRender },

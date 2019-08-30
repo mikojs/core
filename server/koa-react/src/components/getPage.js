@@ -31,11 +31,12 @@ export default async (
   Page: $PropertyType<rootPropsType, 'InitialPage'>,
   mainProps: $PropertyType<rootPropsType, 'mainInitialProps'>,
   pageProps: $PropertyType<rootPropsType, 'pageInitialProps'>,
+  chunkName: string,
 |}> => {
   const [
     {
       route: {
-        component: { loader },
+        component: { loader, chunkName },
       },
       match,
     },
@@ -64,5 +65,6 @@ export default async (
     Page,
     mainProps,
     pageProps,
+    chunkName,
   };
 };

@@ -8,8 +8,6 @@ import { getOptions } from 'loader-utils';
 
 const debugLog = debug('react:replaceLoader');
 
-export const componentKey = `_component_${new Date().getTime()}`;
-
 /**
  * @example
  * replaceLoader(source)
@@ -36,18 +34,11 @@ export default function(source: string): string {
       );
       break;
 
-    case 'client':
-      newSource = source
-        .replace(
-          /\/\*\* setConfig \*\//,
-          `require('react-hot-loader').setConfig || `,
-        )
-        .replace(
-          /Component = (.*)\["default"\];/,
-          `Component = $1["default"];
-var ${componentKey} = $1["${componentKey}"];`,
-        )
-        .replace(/\/\*\* Component \*\//, `${componentKey} || `);
+    case 'set-config':
+      newSource = source.replace(
+        /\/\*\* setConfig \*\//,
+        `require('react-hot-loader').setConfig || `,
+      );
       break;
 
     case 'react-hot-loader': {
@@ -59,12 +50,10 @@ var ${componentKey} = $1["${componentKey}"];`,
       if (/module\.exports/.test(source))
         newSource = `${source.replace(/module\.exports/g, `var ${key}`)}
 
-exports["${componentKey}"] = ${key};
-exports["default"] = require('react-hot-loader/root').hot(${key});`;
+module.exports = require('react-hot-loader/root').hot(${key});`;
       else if (/exports\["default"\]/.test(source))
         newSource = `${source.replace(/exports\["default"\]/g, `var ${key}`)}
 
-exports["${componentKey}"] = ${key};
 exports["default"] = require('react-hot-loader/root').hot(${key});`;
       break;
     }

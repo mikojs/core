@@ -31,26 +31,14 @@ exports["default"] = require('react-hot-loader/root').hot(_replace_41d81);`,
   ],
   [
     'react-hot-loader',
-    `module.exports = module;
-
-module.test = () => {};`,
-    undefined,
-    `var _replace_1ffc4 = module;
-
-module.test = () => {};
-
-module.exports = require('react-hot-loader/root').hot(_replace_1ffc4);`,
-  ],
-  [
-    'react-hot-loader',
     `exports["default"] = module;
 
-module.test = () => {};`,
+exports.test = () => {};`,
     undefined,
-    `var _replace_cecb6 = module;
+    `var _replace_293fa = module;
 
-module.test = () => {};
+exports.test = () => {};
 
-exports["default"] = require('react-hot-loader/root').hot(_replace_cecb6);`,
+exports["default"] = require('react-hot-loader/root').hot(_replace_293fa);`,
   ],
 ];

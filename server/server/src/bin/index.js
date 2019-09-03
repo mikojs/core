@@ -80,7 +80,14 @@ handleUnhandledRejection();
     },
   );
 
-  if (!customFile || !opts.cliOptions.watch) return;
+  if (!customFile || !opts.cliOptions.watch) {
+    try {
+      await subprocess;
+    } catch (e) {
+      process.exit(e.exitCode);
+    }
+    return;
+  }
 
   logger.log(
     'Use `rs` to restart the custom server',

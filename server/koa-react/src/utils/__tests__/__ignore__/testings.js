@@ -19,6 +19,9 @@ export default [
     undefined,
     `var _replace_fd5c1 = module;
 
+if (require('react-is').isMemo(_replace_fd5c1))
+  require('hoist-non-react-statics')(_replace_fd5c1, _replace_fd5c1.type);
+
 module.exports = require('react-hot-loader/root').hot(_replace_fd5c1);`,
   ],
   [
@@ -26,6 +29,9 @@ module.exports = require('react-hot-loader/root').hot(_replace_fd5c1);`,
     'exports["default"] = module;',
     undefined,
     `var _replace_41d81 = module;
+
+if (require('react-is').isMemo(_replace_41d81))
+  require('hoist-non-react-statics')(_replace_41d81, _replace_41d81.type);
 
 exports["default"] = require('react-hot-loader/root').hot(_replace_41d81);`,
   ],
@@ -38,6 +44,9 @@ exports.test = () => {};`,
     `var _replace_293fa = module;
 
 exports.test = () => {};
+
+if (require('react-is').isMemo(_replace_293fa))
+  require('hoist-non-react-statics')(_replace_293fa, _replace_293fa.type);
 
 exports["default"] = require('react-hot-loader/root').hot(_replace_293fa);`,
   ],

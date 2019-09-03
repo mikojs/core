@@ -88,25 +88,41 @@ describe('Root', () => {
         PageB.getInitialProps,
         pageBRender,
         loadingRender,
-      ].forEach((mockFn: JestMockFn<*, *>, index: number) => {
-        const expectedTime = expectedTimes[index];
+      ].forEach(
+        (mockFn: JestMockFn<$ReadOnlyArray<void>, void>, index: number) => {
+          const expectedTime = expectedTimes[index];
 
-        test(
-          [
-            'Main.getInitialProps',
-            'mainRender',
-            'PageA.getInitialProps',
-            'pageARender',
-            'PageB.getInitialProps',
-            'pageBRender',
-            'loadingRender',
-          ][index],
-          () => {
-            if (expectedTime === 0) expect(mockFn).not.toHaveBeenCalled();
-            else expect(mockFn).toHaveBeenCalledTimes(expectedTime);
-          },
-        );
-      });
+          test(
+            [
+              'Main.getInitialProps',
+              'mainRender',
+              'PageA.getInitialProps',
+              'pageARender',
+              'PageB.getInitialProps',
+              'pageBRender',
+              'loadingRender',
+            ][index],
+            () => {
+              if (expectedTime === 0) expect(mockFn).not.toHaveBeenCalled();
+              else expect(mockFn).toHaveBeenCalledTimes(expectedTime);
+            },
+          );
+        },
+      );
     },
   );
+
+  test('update page after component is unmount', async () => {
+    mainRender.mockReset();
+
+    expect(mainRender).not.toHaveBeenCalled();
+
+    wrapper.find(Link).simulate('click', { button: 0 });
+
+    expect(mainRender).toHaveBeenCalledTimes(1);
+
+    wrapper.unmount();
+
+    expect(mainRender).toHaveBeenCalledTimes(1);
+  });
 });

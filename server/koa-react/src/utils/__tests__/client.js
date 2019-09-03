@@ -1,11 +1,9 @@
 // @flow
 
 import React from 'react';
-import { mount } from 'enzyme';
-import { emptyFunction } from 'fbjs';
+import { act } from 'react-dom/test-utils';
 
 import client from '../client';
-import Root from '../Root';
 
 jest.mock('../../templates/routesData', () => [
   {
@@ -36,24 +34,28 @@ describe('client', () => {
     |}) => {
       window.__CAT_DATA__ = {
         mainInitialProps: {},
+        pageInitialProps: {},
         chunkName,
       };
-      window.__CHUNKS_NAMES__ = [chunkName];
 
       await expect(client()).rejects.toThrow(message);
     },
   );
 
   test('work', async () => {
-    global.document.querySelector('body').innerHTML =
-      '<main id="__CAT__"><script>var __CHUNKS_NAMES__ = ["test"];</script></main>';
+    const expected = '<main id="__CAT__"><div>test</div></main>';
 
-    await client();
+    global.document.querySelector('body').innerHTML = expected;
+    window.__CAT_DATA__ = {
+      mainInitialProps: {},
+      pageInitialProps: {},
+      chunkName: 'test',
+    };
 
-    const {
-      Page: { _result: Component = emptyFunction },
-    } = Root.preload();
+    await act(async () => {
+      await client();
+    });
 
-    expect(mount(<Component />).html()).toBe('<div>test</div>');
+    expect(global.document.querySelector('body').innerHTML).toBe(expected);
   });
 });

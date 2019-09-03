@@ -3,6 +3,8 @@
 import { type ComponentType } from 'react';
 import { type Match as MatchType } from 'react-router-dom';
 
+import { type propsType as rootPropsType } from './components/Root';
+
 type ctxType<T = {}> = {|
   ctx: {|
     path: string,
@@ -16,6 +18,8 @@ type ctxType<T = {}> = {|
   |} & T,
   isServer: boolean,
 |};
+
+export type routesDataType = $PropertyType<rootPropsType, 'routesData'>;
 
 export type mainCtxType<P = {}, T = {}, C = ComponentType<P>> = ctxType<T> & {|
   Component: C,

@@ -20,9 +20,6 @@ const routesData = `module.exports = [{ exact: true, path: ["/"], component: { c
 )}') } }, { exact: true, path: ["/noGetInitialProps"], component: { chunkName: 'pages/noGetInitialProps', loader: () => import(/* webpackChunkName: "pages/noGetInitialProps" */ '${path.resolve(
   __dirname,
   './page/noGetInitialProps.js',
-)}') } }, { exact: true, path: ["/multipleLazy"], component: { chunkName: 'pages/multipleLazy', loader: () => import(/* webpackChunkName: "pages/multipleLazy" */ '${path.resolve(
-  __dirname,
-  './page/multipleLazy.js',
 )}') } }, { exact: true, path: ["/error"], component: { chunkName: 'pages/error', loader: () => import(/* webpackChunkName: "pages/error" */ '${path.resolve(
   __dirname,
   './page/error.js',

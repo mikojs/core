@@ -268,7 +268,7 @@ import client from '../client';
 
 const { createEnvironment } = client;
 const query = graphql\`
-  query pages_homeQuery {
+  query clientQuery {
     version
   }
 \`;

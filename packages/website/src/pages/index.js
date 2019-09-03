@@ -16,5 +16,4 @@ Home.query = graphql`
   }
 `;
 
-export const { query } = Home;
 export default React.memo<propsType>(Home);

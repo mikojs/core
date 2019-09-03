@@ -55,7 +55,7 @@ const Renderer = React.memo<propsType>(
 
         useEffect(() => {
           connectPreview(getEmptyImage(), { captureDraggingState: true });
-        });
+        }, []);
       } else {
         const [{ isOver }, connectDrop] = useDrop({
           accept: CAN_MOVE_COMPONENT,

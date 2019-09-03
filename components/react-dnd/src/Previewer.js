@@ -1,11 +1,6 @@
 // @flow
 
-import React, {
-  useContext,
-  useEffect,
-  useMemo,
-  type Node as NodeType,
-} from 'react';
+import React, { useContext, useEffect, type Node as NodeType } from 'react';
 import { DndContext } from 'react-dnd-cjs';
 import { FrameContext } from 'react-frame-component';
 import { getElementPosition } from 'fbjs';
@@ -27,7 +22,7 @@ const Previewer = ({ children, forwardedRef, isOver }: propsType): NodeType => {
   const { window } = useContext(FrameContext);
   const { setAdditionalOffset } = useContext(DragLayerContext);
 
-  useMemo(() => {
+  useEffect(() => {
     if (!isOver) {
       setAdditionalOffset({ x: 0, y: 0 });
       return;
@@ -39,7 +34,7 @@ const Previewer = ({ children, forwardedRef, isOver }: propsType): NodeType => {
   }, [isOver]);
   useEffect(() => {
     dragDropManager.getBackend().addEventListeners(window);
-  });
+  }, []);
 
   return (
     <main ref={forwardedRef} style={styles}>

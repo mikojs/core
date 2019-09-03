@@ -3,10 +3,11 @@
 import React, {
   useState,
   useEffect,
+  useRef,
   type ComponentType,
   type Node as NodeType,
 } from 'react';
-import { emptyFunction, ExecutionEnvironment } from 'fbjs';
+import { ExecutionEnvironment } from 'fbjs';
 import { withRouter, type Location as locationType } from 'react-router-dom';
 
 import { type errorPropsType } from '../types';
@@ -61,36 +62,27 @@ const Root = ({
         hostname: window.location.hostname,
         protocol: window.location.protocol,
       };
-  const [{ Page, mainProps, pageProps, isLoading }, updatePage] = useState({
+  const [{ Page, mainProps, pageProps }, updatePage] = useState({
     Page: InitialPage,
     mainProps: mainInitialProps,
     pageProps: pageInitialProps,
-    isLoading: false,
   });
+  const prevCtxRef = useRef(ctx);
 
   useEffect((): (() => void) => {
     let cancel: boolean = false;
 
-    if (!isServer && isMounted)
-      (async () => {
-        updatePage({
-          Page: emptyFunction.thatReturnsNull,
-          mainProps: {},
-          pageProps: {},
-          isLoading: true,
-        });
+    prevCtxRef.current = ctx;
 
+    if (!isServer && isMounted) {
+      (async () => {
         const newPageData = await getPage(Main, routesData, ctx, isServer);
 
         if (cancel) return;
 
-        updatePage({
-          Page: newPageData.Page,
-          mainProps: newPageData.mainProps,
-          pageProps: newPageData.pageProps,
-          isLoading: false,
-        });
+        updatePage(newPageData);
       })();
+    }
 
     if (!isMounted) isMounted = true;
 
@@ -98,12 +90,17 @@ const Root = ({
       cancel = true;
     };
   }, [ctx.originalUrl]);
+  const { current: prevCtx } = prevCtxRef;
 
   return (
     <ErrorCatch Error={Error}>
       <Main {...mainProps} Component={Page}>
         {<-P: { key: string }>(props?: P) =>
-          isLoading ? <Loading /> : <Page {...props} {...pageProps} />
+          prevCtx.originalUrl !== ctx.originalUrl ? (
+            <Loading />
+          ) : (
+            <Page {...props} {...pageProps} />
+          )
         }
       </Main>
     </ErrorCatch>

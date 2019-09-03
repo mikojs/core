@@ -77,6 +77,7 @@ describe('Root', () => {
 
         // TODO: remove, https://github.com/airbnb/enzyme/issues/2171
         wrapper.update();
+
         expect(wrapper.contains(<Page />)).toBeTruthy();
       });
 

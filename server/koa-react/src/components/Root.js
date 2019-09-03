@@ -74,7 +74,7 @@ const Root = ({
 
     prevCtxRef.current = ctx;
 
-    if (!isServer && isMounted) {
+    if (!isServer && isMounted)
       (async () => {
         const newPageData = await getPage(Main, routesData, ctx, isServer);
 
@@ -82,7 +82,6 @@ const Root = ({
 
         updatePage(newPageData);
       })();
-    }
 
     if (!isMounted) isMounted = true;
 

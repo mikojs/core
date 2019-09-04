@@ -13,6 +13,7 @@
     "debug": "^4.1.1",
     "directory-tree": "^2.2.4",
     "execa": "^2.0.4",
+    "express-graphql": "^0.9.0",
     "find-cache-dir": "^3.0.0",
     "graphql-tools": "^4.0.5",
     "koa-bodyparser": "^4.2.1",

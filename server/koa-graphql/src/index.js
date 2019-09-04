@@ -4,6 +4,9 @@ import path from 'path';
 
 import { type Context as koaContextType } from 'koa';
 import { printSchema, type GraphQLSchema as GraphQLSchemaType } from 'graphql';
+import graphql, {
+  type OptionsData as expressGraphqlOptionsType,
+} from 'express-graphql';
 import {
   makeExecutableSchema,
   addResolveFunctionsToSchema,
@@ -18,10 +21,6 @@ import debug from 'debug';
 
 import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
-
-import graphql, {
-  type OptionsData as expressGraphqlOptionsType,
-} from 'express-graphql';
 
 type buildSchemasType = {
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
@@ -176,16 +175,16 @@ export default class Graphql {
     compose([
       bodyparser(),
       async (ctx: koaContextType, next: () => Promise<void>) => {
-        // $FlowFixMe remove after express-graphql publish
+        // $FlowFixMe fix after koa can add custom context
         ctx.req.body = ctx.request.body;
 
         await graphql({
           ...options,
           schema: this.schema,
         })(
-          // $FlowFixMe remove after express-graphql publish
+          // $FlowFixMe fix after koa can add custom context
           ctx.req,
-          // $FlowFixMe remove after express-graphql publish
+          // $FlowFixMe fix after koa can add custom context
           ctx.res,
         );
       },

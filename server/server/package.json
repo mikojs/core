@@ -16,9 +16,9 @@
     "@cat-org/utils": "^1.3.1",
     "chalk": "^2.4.2",
     "chokidar": "^3.0.2",
-    "commander": "^2.20.0",
+    "commander": "^3.0.1",
     "debug": "^4.1.1",
-    "execa": "^2.0.3",
+    "execa": "^2.0.4",
     "fbjs": "^1.0.0",
     "koa-router": "^7.4.0",
     "ora": "^3.4.0"
@@ -27,7 +27,7 @@
     "koa": ">=2.0.0"
   },
   "devDependencies": {
-    "koa": "^2.7.0",
+    "koa": "^2.8.1",
     "node-fetch": "^2.6.0"
   },
   "keywords": ["babel", "cat-org", "koa", "pipeline", "server"],

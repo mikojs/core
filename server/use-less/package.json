@@ -9,7 +9,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "fbjs": "^1.0.0",
-    "less": "^3.9.0",
+    "less": "^3.10.3",
     "less-loader": "^5.0.0"
   },
   "peerDependencies": {
@@ -17,7 +17,7 @@
     "@cat-org/use-css": ">=1.0.0"
   },
   "devDependencies": {
-    "webpack": "^4.36.1"
+    "webpack": "^4.39.3"
   },
   "keywords": ["cat-org", "koa-react", "use-less"],
   "publishConfig": {

@@ -1,15 +1,22 @@
 // @flow
 
+import {
+  type IncomingMessage as incomingMessageType,
+  type ServerResponse as serverResponseType,
+} from 'http';
 import path from 'path';
 
 import { type Context as koaContextType } from 'koa';
 import { printSchema, type GraphQLSchema as GraphQLSchemaType } from 'graphql';
+import graphql, {
+  type OptionsData as expressGraphqlOptionsType,
+} from 'express-graphql';
 import {
   makeExecutableSchema,
   addResolveFunctionsToSchema,
   type makeExecutableSchemaOptionsType,
 } from 'graphql-tools';
-import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
+import execa, { type ExecaPromise as execaPromiseType } from 'execa';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
 import compose from 'koa-compose';
@@ -18,10 +25,6 @@ import debug from 'debug';
 
 import { d3DirTree, requireModule } from '@cat-org/utils';
 import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
-
-import graphql, {
-  type OptionsData as expressGraphqlOptionsType,
-} from 'express-graphql';
 
 type buildSchemasType = {
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
@@ -148,7 +151,7 @@ export default class Graphql {
    *
    * @return {process} - child process
    */
-  +relay = (argv: $ReadOnlyArray<string>): ThenableChildProcessType => {
+  +relay = (argv: $ReadOnlyArray<string>): execaPromiseType => {
     const schemaFilePath = path.resolve(
       findCacheDir({ name: 'koa-graphql' }),
       './schema.graphql',
@@ -175,19 +178,23 @@ export default class Graphql {
   ) =>
     compose([
       bodyparser(),
-      async (ctx: koaContextType, next: () => Promise<void>) => {
-        // $FlowFixMe remove after express-graphql publish
+      async (
+        ctx: {
+          ...koaContextType,
+          req: incomingMessageType & {|
+            body: mixed,
+          |},
+          res: serverResponseType & {| json?: ?(data: mixed) => void |},
+        },
+        next: () => Promise<void>,
+      ) => {
         ctx.req.body = ctx.request.body;
+        ctx.res.statusCode = 200;
 
         await graphql({
           ...options,
           schema: this.schema,
-        })(
-          // $FlowFixMe remove after express-graphql publish
-          ctx.req,
-          // $FlowFixMe remove after express-graphql publish
-          ctx.res,
-        );
+        })(ctx.req, ctx.res);
       },
     ]);
 }

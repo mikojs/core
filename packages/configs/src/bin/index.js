@@ -3,7 +3,7 @@
 
 import path from 'path';
 
-import execa from 'execa';
+import execa, { type Result as resultType } from 'execa';
 import debug from 'debug';
 import isRunning from 'is-running';
 import chalk from 'chalk';
@@ -107,7 +107,7 @@ debugLog({
         const successCode = await execa(argv[0], [cli, ...argv.slice(2)], {
           stdio: 'inherit',
           env,
-        }).then(({ code }: { code: number }) => code);
+        }).then(({ exitCode }: resultType) => exitCode);
 
         debugLog('Run command success, remove files');
 

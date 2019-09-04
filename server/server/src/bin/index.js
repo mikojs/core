@@ -7,7 +7,10 @@ import readline from 'readline';
 import parseArgv from '@babel/cli/lib/babel/options';
 import dirCommand from '@babel/cli/lib/babel/dir';
 import debug from 'debug';
-import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
+import execa, {
+  type ExecaPromise as execaPromiseType,
+  type ExecaError as execaErrorType,
+} from 'execa';
 import chokidar from 'chokidar';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
@@ -72,7 +75,7 @@ handleUnhandledRejection();
     ...(opts.cliOptions.watch ? ['--watch'] : []),
   ];
 
-  let subprocess: ThenableChildProcessType = execa(
+  let subprocess: execaPromiseType = execa(
     path.resolve(__dirname, './server.js'),
     serverArgu,
     {
@@ -81,11 +84,9 @@ handleUnhandledRejection();
   );
 
   if (!customFile || !opts.cliOptions.watch) {
-    try {
-      await subprocess;
-    } catch (e) {
-      process.exit(e.exitCode);
-    }
+    await subprocess.catch(({ exitCode }: execaErrorType) => {
+      process.exit(exitCode);
+    });
     return;
   }
 
@@ -105,7 +106,9 @@ handleUnhandledRejection();
       'Use `exit` or `ctrl + c` to stop the custom server',
     );
 
-    subprocess.cancel();
+    subprocess
+      // $FlowFixMe https://github.com/flow-typed/flow-typed/pull/3548
+      .cancel();
     subprocess = execa(path.resolve(__dirname, './server.js'), serverArgu, {
       stdio: 'inherit',
     });

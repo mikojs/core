@@ -17,7 +17,7 @@ import {
 } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import multistream from 'multistream';
+import Multistream from 'multistream';
 import getStream from 'get-stream';
 import { emptyFunction } from 'fbjs';
 
@@ -126,7 +126,7 @@ export default (
     });
 
   // render page
-  multistream([
+  new Multistream([
     upperDocument,
     renderToNodeStream(
       <Router location={ctx.url} context={{}}>

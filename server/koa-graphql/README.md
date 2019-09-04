@@ -10,8 +10,6 @@
 
 Collect the graphql files to build the graphql automatically.
 
-`Warning: This package copies 'express-graphql' which is not published. This can work with the basic usage, and it maybe run fail with the some special conditions.`
-
 ## Install
 
 ```sh

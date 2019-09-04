@@ -189,6 +189,7 @@ export default class Graphql {
         next: () => Promise<void>,
       ) => {
         ctx.req.body = ctx.request.body;
+        ctx.res.statusCode = 200;
 
         await graphql({
           ...options,

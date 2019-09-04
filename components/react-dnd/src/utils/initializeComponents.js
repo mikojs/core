@@ -1,10 +1,16 @@
 // @flow
 
-import { type ComponentType } from 'react';
 import memoizeOne from 'memoize-one';
 import uuid from 'uuid/v4';
+import { emptyFunction } from 'fbjs';
 
+import { type dataType } from '../types';
 import Manager from '../Manager';
+
+export type initializeComponentsType = $ReadOnlyArray<{|
+  type: $PropertyType<$ElementType<dataType, number>, 'type'>,
+  icon: $PropertyType<$ElementType<dataType, number>, 'icon'>,
+|}>;
 
 const DEFAULT_MANAGER = [
   {
@@ -12,15 +18,19 @@ const DEFAULT_MANAGER = [
     parentId: null,
     kind: 'manager',
     type: Manager,
+    icon: emptyFunction,
   },
 ];
 
-export default memoizeOne((components: $ReadOnlyArray<ComponentType<*>>) => [
+export default memoizeOne((components: initializeComponentsType) => [
   ...DEFAULT_MANAGER,
-  ...components.map((component: ComponentType<*>) => ({
-    id: uuid(),
-    parentId: 'manager',
-    kind: 'new-component',
-    type: component,
-  })),
+  ...components.map(
+    ({ type, icon }: $ElementType<initializeComponentsType, number>) => ({
+      id: uuid(),
+      parentId: 'manager',
+      kind: 'new-component',
+      type: icon,
+      icon: type,
+    }),
+  ),
 ]);

@@ -1,5 +1,7 @@
 // @flow
 
+import { emptyFunction } from 'fbjs';
+
 import { getHover, getDrop } from '../Provider';
 
 jest.mock('uuid/v4', () => jest.fn(() => 'id'));
@@ -9,6 +11,7 @@ const previewer = {
   parentId: null,
   kind: 'component',
   type: 'div',
+  icon: emptyFunction,
 };
 
 const component = {
@@ -16,6 +19,7 @@ const component = {
   parentId: null,
   kind: 'new-component',
   type: 'div',
+  icon: emptyFunction,
 };
 
 describe('Provider', () => {

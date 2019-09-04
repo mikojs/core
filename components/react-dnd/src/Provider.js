@@ -1,10 +1,6 @@
 // @flow
 
-import React, {
-  useState,
-  type Node as NodeType,
-  type ComponentType,
-} from 'react';
+import React, { useState, type Node as NodeType } from 'react';
 import * as d3 from 'd3-hierarchy';
 import memoizeOne from 'memoize-one';
 import { emptyFunction, areEqual } from 'fbjs';
@@ -13,10 +9,12 @@ import uuid from 'uuid/v4';
 import { type dndItemType, type dataType, type contextType } from './types';
 import Previewer from './Previewer';
 
-import initializeComponents from './utils/initializeComponents';
+import initializeComponents, {
+  type initializeComponentsType,
+} from './utils/initializeComponents';
 
 type propsType = {|
-  components: $ReadOnlyArray<ComponentType<*>>,
+  components: initializeComponentsType,
   children: NodeType,
 |};
 
@@ -31,6 +29,7 @@ const DEFAULT_PREVIEWER = [
     parentId: null,
     kind: 'previewer',
     type: Previewer,
+    icon: emptyFunction,
   },
 ];
 let hasPreviewComponent: boolean = false;

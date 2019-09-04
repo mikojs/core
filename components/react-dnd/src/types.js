@@ -31,6 +31,7 @@ export type sourceType = {|
       style?: {},
       [string]: mixed,
     },
+    icon: string | ComponentType<*>,
   },
   children: $ReadOnlyArray<sourceType>,
 |};

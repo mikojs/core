@@ -20,9 +20,9 @@ export const DragLayerContext = React.createContext<contextType>({
 
 /** @react render the custom drag layer */
 const DragLayer = ({ children }: propsType): NodeType => {
-  const { isDragging, initialOffset, currentOffset } = useDragLayer(
+  const { item, isDragging, initialOffset, currentOffset } = useDragLayer(
     (monitor: monitorType) => ({
-      // TODO: itemType: monitor.getItemType(),
+      item: monitor.getItem(),
       isDragging: monitor.isDragging(),
       initialOffset: monitor.getInitialSourceClientOffset(),
       currentOffset: monitor.getSourceClientOffset(),
@@ -45,7 +45,7 @@ const DragLayer = ({ children }: propsType): NodeType => {
                   }
             }
           >
-            <button>test</button>
+            {React.createElement(item.icon)}
           </div>
         </div>
       )}

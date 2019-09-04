@@ -29,8 +29,8 @@ export default memoizeOne((components: initializeComponentsType) => [
       id: uuid(),
       parentId: 'manager',
       kind: 'new-component',
-      type: icon,
-      icon: type,
+      type,
+      icon,
     }),
   ),
 ]);

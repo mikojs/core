@@ -12,7 +12,10 @@ export default {
       '@cat-org/jest',
       ...(!configsEnv.includes('react') ? [] : ['@cat-org/jest/lib/react']),
     ],
-    testPathIgnorePatterns: ['__tests__/__ignore__'],
+    testPathIgnorePatterns: [
+      '__tests__/__ignore__',
+      ...(!configsEnv.includes('relay') ? [] : ['__tests__/__generated__']),
+    ],
     collectCoverage: true,
     collectCoverageFrom: ['**/src/**/*.js', '!**/bin/*.js'],
     coveragePathIgnorePatterns: [

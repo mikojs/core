@@ -15,11 +15,6 @@ export type kindType =
   | 'new-component'
   | 'preview-component';
 
-export type dndItemType = {|
-  id: string,
-  type: kindType,
-|};
-
 export type sourceType = {|
   id: string,
   data: {
@@ -31,6 +26,7 @@ export type sourceType = {|
       style?: {},
       [string]: mixed,
     },
+    icon: string | ComponentType<*>,
   },
   children: $ReadOnlyArray<sourceType>,
 |};
@@ -41,6 +37,12 @@ export type dataType = $ReadOnlyArray<
     parentId?: string | null,
   },
 >;
+
+export type dndItemType = {|
+  id: string,
+  type: kindType,
+  icon: $PropertyType<$ElementType<dataType, number>, 'icon'>,
+|};
 
 export type contextType = {|
   manager: sourceType,

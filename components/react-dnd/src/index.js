@@ -25,8 +25,29 @@ const Example = React.memo(({ forwardedRef, style }) => (
     test
   </div>
 ));
+const Icon = React.memo(({ forwardedRef, style }) => (
+  <div
+    ref={forwardedRef}
+    style={{
+      ...styles,
+      width: '100px',
+      height: '20px',
+      background: 'blue',
+    }}
+  >
+    icon
+  </div>
+));
+
 const TODO_LIST = [
-  React.forwardRef((props, ref) => <Example {...props} forwardedRef={ref} />),
+  {
+    type: React.forwardRef((props, ref) => (
+      <Example {...props} forwardedRef={ref} />
+    )),
+    icon: React.forwardRef((props, ref) => (
+      <Icon {...props} forwardedRef={ref} />
+    )),
+  },
 ];
 /* eslint-enable */
 

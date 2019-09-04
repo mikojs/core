@@ -20,14 +20,14 @@ const Renderer = React.memo<propsType>(
   ({
     source: {
       id,
-      data: { kind, type, props = {} },
+      data: { kind, type, props = {}, icon },
       children = [],
     },
     hover,
     drop,
   }: propsType): NodeType => {
     const newProps = { ...props };
-    const item = { id, type: kind };
+    const item = { id, type: kind, icon };
 
     if (children.length !== 0)
       newProps.children = children.map((child: sourceType) => (
@@ -82,7 +82,10 @@ const Renderer = React.memo<propsType>(
         };
     }
 
-    return React.createElement(type, newProps);
+    return React.createElement(
+      kind === 'new-component' ? icon : type,
+      newProps,
+    );
   },
 );
 

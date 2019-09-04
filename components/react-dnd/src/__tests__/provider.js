@@ -9,6 +9,7 @@ const previewer = {
   parentId: null,
   kind: 'component',
   type: 'div',
+  icon: 'div',
 };
 
 const component = {
@@ -16,6 +17,7 @@ const component = {
   parentId: null,
   kind: 'new-component',
   type: 'div',
+  icon: 'div',
 };
 
 describe('Provider', () => {
@@ -36,10 +38,12 @@ describe('Provider', () => {
         {
           id: 'new-component',
           type: 'new-component',
+          icon: 'div',
         },
         {
           id: 'previewer',
           type: 'previewer',
+          icon: 'div',
         },
       );
 
@@ -77,10 +81,12 @@ describe('Provider', () => {
         {
           id: 'new-component',
           type: 'new-component',
+          icon: 'div',
         },
         {
           id: 'previewer',
           type: 'previewer',
+          icon: 'div',
         },
       );
 
@@ -113,10 +119,12 @@ describe('Provider', () => {
         {
           id: 'new-component',
           type: 'new-component',
+          icon: 'div',
         },
         {
           id: 'manager',
           type: 'manager',
+          icon: 'div',
         },
       );
 
@@ -130,10 +138,12 @@ describe('Provider', () => {
         {
           id: 'new-component',
           type: 'new-component',
+          icon: 'div',
         },
         {
           id: 'manager',
           type: 'manager',
+          icon: 'div',
         },
       );
 
@@ -158,10 +168,12 @@ describe('Provider', () => {
         {
           id: 'component',
           type: 'new-component',
+          icon: 'div',
         },
         {
           id: 'previewer',
           type: 'previewer',
+          icon: 'div',
         },
       );
 
@@ -181,10 +193,12 @@ describe('Provider', () => {
         {
           id: 'component',
           type: 'component',
+          icon: 'div',
         },
         {
           id: 'manager',
           type: 'manager',
+          icon: 'div',
         },
       );
 
@@ -198,10 +212,12 @@ describe('Provider', () => {
         {
           id: 'component',
           type: 'new-component',
+          icon: 'div',
         },
         {
           id: 'manager',
           type: 'manager',
+          icon: 'div',
         },
       );
 

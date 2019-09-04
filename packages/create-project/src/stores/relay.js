@@ -253,7 +253,6 @@ Home.query = graphql\`
   }
 \`;
 
-export const { query } = Home;
 export default React.memo<propsType>(Home);`;
 
 const clientTestTemplate = `// @flow
@@ -261,15 +260,18 @@ const clientTestTemplate = `// @flow
 import path from 'path';
 
 import fetch from 'node-fetch';
-import { fetchQuery } from 'react-relay';
+import { fetchQuery, graphql } from 'react-relay';
 
 import server from '@cat-org/server/lib/defaults';
 
 import client from '../client';
 
-import { query } from 'pages';
-
 const { createEnvironment } = client;
+const query = graphql\`
+  query clientQuery {
+    version
+  }
+\`;
 let runningServer: http$Server;
 
 global.fetch = fetch;

@@ -4,25 +4,34 @@ import jest from '../jest';
 
 describe('jest', () => {
   test.each`
-    configsEnv   | expected
-    ${[]}        | ${['@cat-org/jest']}
-    ${['react']} | ${['@cat-org/jest', '@cat-org/jest/lib/react']}
+    configsEnv   | setupFiles                     | testPathIgnorePatterns         | coveragePathIgnorePatterns
+    ${[]}        | ${[]}                          | ${[]}                          | ${[]}
+    ${['react']} | ${['@cat-org/jest/lib/react']} | ${[]}                          | ${[]}
+    ${['relay']} | ${[]}                          | ${['__tests__/__generated__']} | ${['__generated__']}
   `(
     'run with configsEnv = $configsEnv',
     ({
       configsEnv,
-      expected,
+      setupFiles,
+      testPathIgnorePatterns,
+      coveragePathIgnorePatterns,
     }: {|
       configsEnv: $ReadOnlyArray<string>,
-      expected: $ReadOnlyArray<string>,
+      setupFiles: $ReadOnlyArray<string>,
+      testPathIgnorePatterns: $ReadOnlyArray<string>,
+      coveragePathIgnorePatterns: $ReadOnlyArray<string>,
     |}) => {
-      expect(jest.config({ configsEnv }).setupFiles).toEqual(expected);
+      const result = jest.config({ configsEnv });
+
+      expect(result.setupFiles).toEqual(['@cat-org/jest', ...setupFiles]);
+      expect(result.testPathIgnorePatterns).toEqual([
+        '__tests__/__ignore__',
+        ...testPathIgnorePatterns,
+      ]);
+      expect(result.coveragePathIgnorePatterns).toEqual([
+        '__tests__/__ignore__',
+        ...coveragePathIgnorePatterns,
+      ]);
     },
   );
-
-  test('run with configsEnv = relay', () => {
-    expect(
-      jest.config({ configsEnv: ['relay'] }).coveragePathIgnorePatterns,
-    ).toEqual(['__tests__/__ignore__', '__generated__']);
-  });
 });

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, type Node as NodeType } from 'react';
+import React, { useState, useEffect, type Node as NodeType } from 'react';
 import { useDragLayer, type monitorType } from 'react-dnd-cjs';
 import { emptyFunction } from 'fbjs';
 
@@ -25,10 +25,16 @@ const DragLayer = ({ children }: propsType): NodeType => {
       item: monitor.getItem(),
       isDragging: monitor.isDragging(),
       initialOffset: monitor.getInitialSourceClientOffset(),
-      currentOffset: monitor.getSourceClientOffset(),
+      currentOffset: monitor.getClientOffset(),
     }),
   );
   const [additionalOffset, setAdditionalOffset] = useState({ x: 0, y: 0 });
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(setLoading, 100, false);
+  }, [item]);
 
   return (
     <DragLayerContext.Provider value={{ setAdditionalOffset }}>
@@ -36,12 +42,12 @@ const DragLayer = ({ children }: propsType): NodeType => {
         <div style={styles.root}>
           <div
             style={
-              !initialOffset || !currentOffset
+              !initialOffset || !currentOffset || loading
                 ? styles.hide
                 : {
                     transform: `translate(${currentOffset.x +
-                      additionalOffset.x}px, ${currentOffset.y +
-                      additionalOffset.y}px)`,
+                      additionalOffset.x -
+                      10}px, ${currentOffset.y + additionalOffset.y - 10}px)`,
                   }
             }
           >

@@ -1,5 +1,49 @@
 # CHANGELOG
 
+## 1.5.2 (2019-09-04)
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-flow-typed-install`, `utils`, `website`
+  - [#376](https://github.com/cat-org/core/pull/376) (@cat-org/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#370](https://github.com/cat-org/core/pull/370) (@cat-org/koa-react) Fix page bug and support to update Main ([@HsuTing](https://github.com/HsuTing))
+  - [#359](https://github.com/cat-org/core/pull/359) (@cat-org/react-dnd) Can use custom drag layer ([@HsuTing](https://github.com/HsuTing))
+  - [#356](https://github.com/cat-org/core/pull/356) (@cat-org/react-dnd) Write react dnd ([@HsuTing](https://github.com/HsuTing))
+  - [#357](https://github.com/cat-org/core/pull/357) (@cat-org/koa-react) Add local ip for hot reload ([@HsuTing](https://github.com/HsuTing))
+  - [#353](https://github.com/cat-org/core/pull/353) (@cat-org/koa-react) Add normalize.css to default Document ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `website`
+  - [#364](https://github.com/cat-org/core/pull/364) (@cat-org/core) Remove class Component as possible ([@HsuTing](https://github.com/HsuTing))
+- `website`
+  - [#355](https://github.com/cat-org/core/pull/355) (@cat-org/react-dnd) Add package ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `configs`, `create-project`, `website`
+  - [#375](https://github.com/cat-org/core/pull/375) (@cat-org/koa-react) Fix memo error ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#370](https://github.com/cat-org/core/pull/370) (@cat-org/koa-react) Fix page bug and support to update Main ([@HsuTing](https://github.com/HsuTing))
+  - [#366](https://github.com/cat-org/core/pull/366) chore(deps): bump eslint-utils from 1.3.1 to 1.4.2 ([@dependabot[bot]](https://github.com/apps/dependabot))
+  - [#363](https://github.com/cat-org/core/pull/363) (@cat-org/core) Fix flow error ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-cat`
+  - [#368](https://github.com/cat-org/core/pull/368) (@cat-org/core) Fix eslint parser error ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#361](https://github.com/cat-org/core/pull/361) (@cat-org/core) Fix lint and flow ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- Other
+  - [#374](https://github.com/cat-org/core/pull/374) (@cat-org/react-dnd) Modify code style ([@HsuTing](https://github.com/HsuTing))
+  - [#354](https://github.com/cat-org/core/pull/354) (@cat-org/core) Remove lock version ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`
+  - [#369](https://github.com/cat-org/core/pull/369) (@cat-org/create-project) Add check packages ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-cat`
+  - [#368](https://github.com/cat-org/core/pull/368) (@cat-org/core) Fix eslint parser error ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.5.1 (2019-07-29)
 
 #### :rocket: New Feature

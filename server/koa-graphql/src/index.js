@@ -12,7 +12,7 @@ import {
   addResolveFunctionsToSchema,
   type makeExecutableSchemaOptionsType,
 } from 'graphql-tools';
-import execa, { ThenableChildProcess as ThenableChildProcessType } from 'execa';
+import execa, { type ExecaPromise as execaPromiseType } from 'execa';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
 import compose from 'koa-compose';
@@ -147,7 +147,7 @@ export default class Graphql {
    *
    * @return {process} - child process
    */
-  +relay = (argv: $ReadOnlyArray<string>): ThenableChildProcessType => {
+  +relay = (argv: $ReadOnlyArray<string>): execaPromiseType => {
     const schemaFilePath = path.resolve(
       findCacheDir({ name: 'koa-graphql' }),
       './schema.graphql',

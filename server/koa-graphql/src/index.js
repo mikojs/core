@@ -1,5 +1,9 @@
 // @flow
 
+import {
+  type IncomingMessage as incomingMessageType,
+  type ServerResponse as serverResponseType,
+} from 'http';
 import path from 'path';
 
 import { type Context as koaContextType } from 'koa';
@@ -174,19 +178,22 @@ export default class Graphql {
   ) =>
     compose([
       bodyparser(),
-      async (ctx: koaContextType, next: () => Promise<void>) => {
-        // $FlowFixMe fix after koa can add custom context
+      async (
+        ctx: {
+          ...koaContextType,
+          req: incomingMessageType & {|
+            body: mixed,
+          |},
+          res: serverResponseType & {| json?: ?(data: mixed) => void |},
+        },
+        next: () => Promise<void>,
+      ) => {
         ctx.req.body = ctx.request.body;
 
         await graphql({
           ...options,
           schema: this.schema,
-        })(
-          // $FlowFixMe fix after koa can add custom context
-          ctx.req,
-          // $FlowFixMe fix after koa can add custom context
-          ctx.res,
-        );
+        })(ctx.req, ctx.res);
       },
     ]);
 }

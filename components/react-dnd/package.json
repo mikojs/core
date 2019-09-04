@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/react-dnd",
   "repository": "https://github.com/cat-org/core/tree/master/components/react-dnd",
-  "version": "1.0.0",
+  "version": "1.5.2",
   "main": "./lib/index.js",
   "dependencies": {
     "d3-hierarchy": "^1.1.8",

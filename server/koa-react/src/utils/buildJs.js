@@ -2,7 +2,8 @@
 
 import debug from 'debug';
 import webpack, {
-  type WebpackError as webpackErrorType,
+  // $FlowFixMe TODO: https://github.com/flow-typed/flow-typed/pull/3552
+  type webpackError as webpackErrorType,
   type Stats as statsType,
 } from 'webpack';
 
@@ -39,7 +40,7 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
 
       const { log } = console;
 
-      log(stats.toString(logStats));
+      log(stats.toString({ logStats, colors: true }));
       resolve(stats.toJson().assetsByChunkName);
     });
   });

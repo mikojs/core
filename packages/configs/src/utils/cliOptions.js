@@ -48,7 +48,7 @@ export default (
     .option(
       '--configs-env [env]',
       'configs environment variables',
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
       (value: string) => value?.split(','),
     )
     .allowUnknownOption();
@@ -85,7 +85,7 @@ export default (
               case 'run':
                 return {
                   ...result,
-                  // $FlowFixMe https://github.com/facebook/flow/issues/2645
+                  // $FlowFixMe TODO: https://github.com/facebook/flow/issues/2645
                   [key]: config[key]([]),
                 };
 

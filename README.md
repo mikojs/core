@@ -1,4 +1,4 @@
-# [Core][homepage] · <!-- badges.start -->[![circleci][circleci-image]][circleci-link] ![github-size][github-size-image] ![engine-node][engine-node-image] ![engine-npm][engine-npm-image] ![engine-yarn][engine-yarn-image] [![license][license-image]][license-link] [![lerna][lerna-image]][lerna-link] [![git-search-todo][git-search-todo-image]][git-search-todo-link] [![git-search-eslint-disable][git-search-eslint-disable-image]][git-search-eslint-disable-link] [![git-search-eslint-disable-line][git-search-eslint-disable-line-image]][git-search-eslint-disable-line-link] [![git-search-eslint-disable-next-line][git-search-eslint-disable-next-line-image]][git-search-eslint-disable-next-line-link] [![git-search-FlowFixMe][git-search-flowfixme-image]][git-search-flowfixme-link]
+# [Core][homepage] · <!-- badges.start -->[![circleci][circleci-image]][circleci-link] ![github-size][github-size-image] ![engine-node][engine-node-image] ![engine-npm][engine-npm-image] ![engine-yarn][engine-yarn-image] [![license][license-image]][license-link] [![lerna][lerna-image]][lerna-link] [![git-search-todo][git-search-todo-image]][git-search-todo-link]
 
 [circleci-image]: https://img.shields.io/circleci/project/github/cat-org/core/master.svg
 [circleci-link]: https://circleci.com/gh/cat-org/core
@@ -10,16 +10,8 @@
 [license-link]: ./LICENSE
 [lerna-image]: https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg
 [lerna-link]: https://lernajs.io
-[git-search-todo-image]: https://img.shields.io/github/search/cat-org/core/todo
-[git-search-todo-link]: https://github.com/cat-org/core/search?q=todo&unscoped_q=todo
-[git-search-eslint-disable-image]: https://img.shields.io/github/search/cat-org/core/eslint-disable
-[git-search-eslint-disable-link]: https://github.com/cat-org/core/search?q=eslint-disable&unscoped_q=eslint-disable
-[git-search-eslint-disable-line-image]: https://img.shields.io/github/search/cat-org/core/eslint-disable-line
-[git-search-eslint-disable-line-link]: https://github.com/cat-org/core/search?q=eslint-disable-line&unscoped_q=eslint-disable-line
-[git-search-eslint-disable-next-line-image]: https://img.shields.io/github/search/cat-org/core/eslint-disable-next-line
-[git-search-eslint-disable-next-line-link]: https://github.com/cat-org/core/search?q=eslint-disable-next-line&unscoped_q=eslint-disable-next-line
-[git-search-flowfixme-image]: https://img.shields.io/github/search/cat-org/core/FlowFixMe
-[git-search-flowfixme-link]: https://github.com/cat-org/core/search?q=FlowFixMe&unscoped_q=FlowFixMe
+[git-search-todo-image]: https://img.shields.io/github/search/cat-org/core/todo+-language:markdown?label=todo
+[git-search-todo-link]: https://github.com/cat-org/core/search?q=todo+-language:markdown&unscoped_q=todo+-language:markdown
 
 <!-- badges.end -->
 

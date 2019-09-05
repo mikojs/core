@@ -43,14 +43,14 @@ export default async (
   ] = matchRoutes(routesData, ctx.path);
   const { default: Page } = await loader();
   const { head: pageHead, ...pageProps } =
-    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
     (await (!isMemo(Page) ? Page : Page.type).getInitialProps?.({
       ctx,
       isServer,
       match,
     })) || {};
   const { head: mainHead, ...mainProps } =
-    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
     (await (!isMemo(Main) ? Main : Main.type).getInitialProps?.({
       ctx,
       isServer,

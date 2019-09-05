@@ -72,7 +72,7 @@ export default (
     settingsNameOrObj instanceof Object
       ? settingsNameOrObj
       : /**
-         * https://github.com/facebook/flow/issues/2282
+         * TODO: https://github.com/facebook/flow/issues/2282
          * instanceof not work
          *
          * $FlowFixMe
@@ -97,7 +97,7 @@ export default (
             message instanceof Object
               ? JSON.stringify(message, null, 2)
               : /**
-                 * https://github.com/facebook/flow/issues/2282
+                 * TODO: https://github.com/facebook/flow/issues/2282
                  * instanceof not work
                  *
                  * $FlowFixMe

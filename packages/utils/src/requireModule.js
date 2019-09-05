@@ -10,7 +10,7 @@
  */
 export default (moduleName: string) =>
   /\.json$/.test(moduleName)
-    ? // $FlowFixMe
+    ? // $FlowFixMe The parameter passed to require must be a string literal.
       require(moduleName)
-    : // $FlowFixMe
+    : // $FlowFixMe The parameter passed to require must be a string literal.
       require(moduleName).default || require(moduleName);

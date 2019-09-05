@@ -26,10 +26,6 @@ const ALL_BADGES = [
   'license',
   'lerna',
   'git-search-todo',
-  'git-search-eslint-disable',
-  'git-search-eslint-disable-line',
-  'git-search-eslint-disable-next-line',
-  'git-search-FlowFixMe',
 ];
 
 describe('badges', () => {

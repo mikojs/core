@@ -116,7 +116,7 @@ describe('create project', () => {
           if (/yarn configs --install/.test(cmd)) {
             const configType = cmd.replace(/yarn configs --install /, '');
             const configPackages =
-              // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+              // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
               configs[configType]?.install?.(['--dev']) ||
               (() => {
                 throw new Error(`Can not find config type: ${configType}`);

@@ -118,6 +118,42 @@ const getBadges = (
       image: 'https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg',
       link: 'https://lernajs.io',
     },
+    {
+      filePath: './.git',
+      badgeName: 'git-search-todo',
+      image: 'https://img.shields.io/github/search/cat-org/core/todo',
+      link: 'https://github.com/cat-org/core/search?q=todo&unscoped_q=todo',
+    },
+    {
+      filePath: './.git',
+      badgeName: 'git-search-eslint-disable',
+      image: 'https://img.shields.io/github/search/cat-org/core/eslint-disable',
+      link:
+        'https://github.com/cat-org/core/search?q=eslint-disable&unscoped_q=eslint-disable',
+    },
+    {
+      filePath: './.git',
+      badgeName: 'git-search-eslint-disable-line',
+      image:
+        'https://img.shields.io/github/search/cat-org/core/eslint-disable-line',
+      link:
+        'https://github.com/cat-org/core/search?q=eslint-disable-line&unscoped_q=eslint-disable-line',
+    },
+    {
+      filePath: './.git',
+      badgeName: 'git-search-eslint-disable-next-line',
+      image:
+        'https://img.shields.io/github/search/cat-org/core/eslint-disable-next-line',
+      link:
+        'https://github.com/cat-org/core/search?q=eslint-disable-next-line&unscoped_q=eslint-disable-next-line',
+    },
+    {
+      filePath: './.git',
+      badgeName: 'git-search-FlowFixMe',
+      image: 'https://img.shields.io/github/search/cat-org/core/FlowFixMe',
+      link:
+        'https://github.com/cat-org/core/search?q=FlowFixMe&unscoped_q=FlowFixMe',
+    },
   ].filter(
     ({ filePath, filterFunc = emptyFunction.thatReturnsArgument }: badgeType) =>
       filterFunc(fs.existsSync(path.resolve(rootPath, filePath))),

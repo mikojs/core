@@ -22,9 +22,9 @@ export default ({
   ...options,
   config: (config: configType, dev: boolean): configType => {
     const prevConfig = configFunc(config, dev);
-    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
     const cssLoader = prevConfig.config.module?.rules?.find(
-      // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+      // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
       ({ test }: RuleSetRuleType) => test?.toString() === /\.css$/.toString(),
     );
 

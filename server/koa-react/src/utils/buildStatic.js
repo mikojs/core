@@ -60,7 +60,7 @@ export default async (
             .map((route: string) =>
               !/\/:/.test(route)
                 ? route
-                : // $FlowFixMe https://github.com/facebook/flow/issues/1414
+                : // $FlowFixMe TODO: https://github.com/facebook/flow/issues/1414
                   urlParamsRedirect(route),
             )
             .filter((route: ?string) => route),

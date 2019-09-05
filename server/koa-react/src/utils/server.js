@@ -73,7 +73,7 @@ export default (
   // [start] preload
   // preload Document, Main, Page
   const { head: documentHead, ...documentInitialProps } =
-    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
     (await (!isMemo(Document) ? Document : Document.type).getInitialProps?.({
       ctx,
       isServer: true,

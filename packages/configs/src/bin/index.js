@@ -65,7 +65,7 @@ debugLog({
 
         Object.keys(worker.cache).forEach((key: string) => {
           /* eslint-disable flowtype/no-unused-expressions */
-          // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+          // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
           worker.cache[key]?.pids.forEach((pid: number) => {
             /* eslint-enable flowtype/no-unused-expressions */
             if (!isRunning(pid))

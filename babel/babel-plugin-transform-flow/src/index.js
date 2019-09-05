@@ -42,7 +42,7 @@ export default declare(
         |},
         code: string,
       |}) => {
-        // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+        // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
         if (ignore?.test(filename)) return;
 
         const { log } = console;

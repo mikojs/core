@@ -30,7 +30,7 @@ export default {
             url: (req: mixed) =>
               `http://localhost:${process.env.PORT || '8000'}/graphql`,
           }),
-          // $FlowFixMe wait flow upgrade
+          // $FlowFixMe TODO: wait flow upgrade
           relaySSR.getMiddleware(),
         ]),
       }),
@@ -44,7 +44,7 @@ export default {
       store,
       network: Network.create(
         () =>
-          // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+          // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
           relayData?.find(
             ([dataKey]: $ElementType<SSRCacheType, number>) => dataKey === key,
           )?.[1],

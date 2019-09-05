@@ -106,9 +106,7 @@ handleUnhandledRejection();
       'Use `exit` or `ctrl + c` to stop the custom server',
     );
 
-    subprocess
-      // $FlowFixMe https://github.com/flow-typed/flow-typed/pull/3548
-      .cancel();
+    subprocess.cancel();
     subprocess = execa(path.resolve(__dirname, './server.js'), serverArgu, {
       stdio: 'inherit',
     });

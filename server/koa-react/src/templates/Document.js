@@ -10,7 +10,7 @@ type propsType = {|
 
 /** @react render the html */
 const Document = ({ helmet, children }: propsType) => (
-  <html>
+  <html lang="en">
     <head>
       {helmet.meta.toComponent()}
       {helmet.title.toComponent()}

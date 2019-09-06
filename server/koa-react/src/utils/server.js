@@ -126,6 +126,7 @@ export default (
     });
 
   // render page
+  ctx.res.write('<!DOCTYPE html>');
   new Multistream([
     upperDocument,
     renderToNodeStream(

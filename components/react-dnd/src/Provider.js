@@ -12,6 +12,7 @@ import Previewer from './Previewer';
 import initializeComponents, {
   type initializeComponentsType,
 } from './utils/initializeComponents';
+import hoverOnPreviewer from './utils/hoverOnPreviewer';
 
 type propsType = {|
   components: initializeComponentsType,
@@ -68,38 +69,24 @@ export const getHover = memoizeOne(
             return;
 
           case 'previewer': {
-            const draggedIndex = components.findIndex(
-              ({ id }: $ElementType<dataType, number>) => id === current.id,
-            );
-            const targetIndex = previewer.findIndex(
-              ({ id }: $ElementType<dataType, number>) => id === target.id,
+            const newPreviewer = hoverOnPreviewer(
+              components,
+              previewer,
+              current,
+              target,
+              hasPreviewComponent,
             );
 
-            if (
-              draggedIndex === -1 ||
-              targetIndex === -1 ||
-              !['previewer', 'component'].includes(previewer[targetIndex].kind)
-            )
-              return;
-
-            const newPreviewer = [
-              ...(!hasPreviewComponent
-                ? previewer
-                : previewer.filter(
-                    ({ kind }: $ElementType<dataType, number>) =>
-                      kind !== 'preview-component',
-                  )),
-              {
-                ...components[draggedIndex],
-                kind: 'preview-component',
-                parentId: target.id,
-              },
-            ];
+            if (!newPreviewer) return;
 
             hasPreviewComponent = true;
             setPreviewer(newPreviewer);
             return;
           }
+
+          case 'component':
+            // TODO
+            return;
 
           default:
             return;

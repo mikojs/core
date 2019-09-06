@@ -42,6 +42,7 @@ export type dndItemType = {|
   id: string,
   type: kindType,
   icon: $PropertyType<$ElementType<dataType, number>, 'icon'>,
+  ref: {| current: ?HTMLElement |},
 |};
 
 export type contextType = {|

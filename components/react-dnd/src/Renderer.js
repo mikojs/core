@@ -26,8 +26,9 @@ const Renderer = React.memo<propsType>(
     hover,
     drop,
   }: propsType): NodeType => {
-    const newProps = { ...props };
-    const item = { id, type: kind, icon };
+    const ref = useRef(null);
+    const newProps = { ...props, ref };
+    const item = { id, type: kind, icon, ref };
 
     if (children.length !== 0)
       newProps.children = children.map((child: sourceType) => (
@@ -35,8 +36,6 @@ const Renderer = React.memo<propsType>(
       ));
 
     if (ExecutionEnvironment.canUseEventListeners) {
-      newProps.ref = useRef(null);
-
       if (CAN_MOVE_COMPONENT.includes(kind)) {
         const [{ isDragging }, connectDrag, connectPreview] = useDrag({
           item,
@@ -45,7 +44,6 @@ const Renderer = React.memo<propsType>(
           }),
         });
 
-        connectDrag(newProps.ref);
         newProps.style = !isDragging
           ? newProps.style
           : {
@@ -53,26 +51,40 @@ const Renderer = React.memo<propsType>(
               opacity: 0,
             };
 
+        connectDrag(ref);
         useEffect(() => {
           connectPreview(getEmptyImage(), { captureDraggingState: true });
         }, []);
+
+        if (kind === 'component') {
+          const [, connectDrop] = useDrop({
+            accept: CAN_MOVE_COMPONENT,
+            hover: (current: dndItemType, monitor: monitorType) => {
+              if (current.id !== item.id && monitor.isOver({ shallow: true }))
+                hover(current, item);
+            },
+          });
+
+          connectDrop(ref);
+        }
       } else {
         const [{ isOver }, connectDrop] = useDrop({
           accept: CAN_MOVE_COMPONENT,
           collect: (monitor: monitorType) => ({
             isOver: monitor.isOver(),
           }),
-          hover: (current: dndItemType) => {
-            if (current.id !== item.id) hover(current, item);
+          hover: (current: dndItemType, monitor: monitorType) => {
+            if (current.id !== item.id && monitor.isOver({ shallow: true }))
+              hover(current, item);
           },
-          drop: (current: dndItemType) => {
+          drop: (current: dndItemType, monitor: monitorType) => {
             if (current.id !== item.id) drop(current, item);
           },
         });
 
         if (['manager', 'previewer'].includes(kind)) newProps.isOver = isOver;
 
-        connectDrop(newProps.ref);
+        connectDrop(ref);
       }
 
       if ('preview-component' === kind)

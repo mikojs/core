@@ -1,5 +1,7 @@
 // @flow
 
+import { createRef } from 'react';
+
 import { getHover, getDrop } from '../Provider';
 import { type kindType } from '../types';
 
@@ -39,6 +41,7 @@ const getItem = (kind: kindType) => ({
   id: kind,
   type: kind,
   icon: 'div',
+  ref: createRef(),
 });
 
 describe('Provider', () => {

@@ -3,7 +3,7 @@
 export const root = {
   display: 'grid',
   gridTemplateColumns: '250px auto',
-  height: '100%',
+  height: '100vh',
 };
 
 export const iframe = {

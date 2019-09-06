@@ -93,6 +93,7 @@ describe.each`
             .replace(/ data-reactroot=""/g, ''),
         ).toBe(
           [
+            '<!DOCTYPE html>',
             head,
             '<main id="__CAT__">',
             `<div>${main}</div>`,

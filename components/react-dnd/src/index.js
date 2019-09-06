@@ -29,7 +29,7 @@ const Icon = React.memo(({ forwardedRef, style }) => (
   <div
     ref={forwardedRef}
     style={{
-      ...styles,
+      ...style,
       width: '100px',
       height: '20px',
       background: 'blue',

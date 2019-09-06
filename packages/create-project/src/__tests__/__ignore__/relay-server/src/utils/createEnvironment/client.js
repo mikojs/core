@@ -26,7 +26,7 @@ export default {
           size: 100,
           ttl: 60 * 1000,
         }),
-        // $FlowFixMe wait flow upgrade
+        // $FlowFixMe TODO: wait flow upgrade
         new RelaySSR(relayData).getMiddleware({
           lookup: false,
         }),

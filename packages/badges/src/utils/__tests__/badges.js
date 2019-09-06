@@ -25,6 +25,7 @@ const ALL_BADGES = [
   'engine-node',
   'license',
   'lerna',
+  'git-search-todo',
 ];
 
 describe('badges', () => {

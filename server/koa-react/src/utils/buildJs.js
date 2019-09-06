@@ -1,7 +1,11 @@
 // @flow
 
 import debug from 'debug';
-import webpack from 'webpack';
+import webpack, {
+  // $FlowFixMe TODO: https://github.com/flow-typed/flow-typed/pull/3552
+  type webpackError as webpackErrorType,
+  type Stats as statsType,
+} from 'webpack';
 
 import { type configType } from '../index';
 
@@ -19,45 +23,24 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
   new Promise<{
     [string]: string,
   }>((resolve, reject) => {
-    webpack(
-      config,
-      // $FlowFixMe: after flow-typed add webpack type
-      (
-        err: Error & {
-          details?: string,
-        },
-        stats: {
-          hasErrors: () => boolean,
-          toString: (
-            stats: $PropertyType<
-              $PropertyType<configType, 'devMiddleware'>,
-              'stats',
-            >,
-          ) => string,
-          toJson: () => {|
-            errors: $ReadOnlyArray<string>,
-            assetsByChunkName: {| [string]: string |},
-          |},
-        },
-      ) => {
-        debugLog(err);
+    webpack(config, (err: webpackErrorType, stats: statsType) => {
+      debugLog(err);
 
-        if (err) {
-          if (err.details) reject(err.details);
-          else reject(err);
+      if (err) {
+        if (err.details) reject(err.details);
+        else reject(err);
 
-          return;
-        }
+        return;
+      }
 
-        if (stats.hasErrors()) {
-          reject(stats.toJson().errors);
-          return;
-        }
+      if (stats.hasErrors()) {
+        reject(stats.toJson().errors);
+        return;
+      }
 
-        const { log } = console;
+      const { log } = console;
 
-        log(stats.toString(logStats));
-        resolve(stats.toJson().assetsByChunkName);
-      },
-    );
+      log(stats.toString({ logStats, colors: true }));
+      resolve(stats.toJson().assetsByChunkName);
+    });
   });

@@ -4,7 +4,7 @@ export const root = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  height: '100%',
+  height: '100vh',
   textAlign: 'center',
   background: '#fff',
   color: '#000',

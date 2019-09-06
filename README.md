@@ -1,4 +1,4 @@
-# [Core][homepage] · <!-- badges.start -->[![circleci][circleci-image]][circleci-link] ![github-size][github-size-image] ![engine-node][engine-node-image] ![engine-npm][engine-npm-image] ![engine-yarn][engine-yarn-image] [![license][license-image]][license-link] [![lerna][lerna-image]][lerna-link]
+# [Core][homepage] · <!-- badges.start -->[![circleci][circleci-image]][circleci-link] ![github-size][github-size-image] ![engine-node][engine-node-image] ![engine-npm][engine-npm-image] ![engine-yarn][engine-yarn-image] [![license][license-image]][license-link] [![lerna][lerna-image]][lerna-link] [![git-search-todo][git-search-todo-image]][git-search-todo-link]
 
 [circleci-image]: https://img.shields.io/circleci/project/github/cat-org/core/master.svg
 [circleci-link]: https://circleci.com/gh/cat-org/core
@@ -10,6 +10,8 @@
 [license-link]: ./LICENSE
 [lerna-image]: https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg
 [lerna-link]: https://lernajs.io
+[git-search-todo-image]: https://img.shields.io/github/search/cat-org/core/todo+-language:markdown?label=todo
+[git-search-todo-link]: https://github.com/cat-org/core/search?q=todo+-language:markdown&unscoped_q=todo+-language:markdown
 
 <!-- badges.end -->
 

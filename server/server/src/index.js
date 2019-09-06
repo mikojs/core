@@ -59,7 +59,7 @@ export default {
     if (router instanceof Endpoint)
       return <-R: Router | Koa>(parentRouter: R): R => {
         /**
-         * https://github.com/facebook/flow/issues/2282
+         * TODO: https://github.com/facebook/flow/issues/2282
          * instanceof not work
          *
          * $FlowFixMe
@@ -112,7 +112,7 @@ export default {
 
     return <-R: Router | Koa>(parentRouter: R): R => {
       /**
-       * https://github.com/facebook/flow/issues/2282
+       * TODO: https://github.com/facebook/flow/issues/2282
        * instanceof not work
        */
       parentRouter.use(

@@ -30,7 +30,7 @@ let server: ServerType;
 const writeCache = (cacheData: cacheType) =>
   new Promise(resolve => {
     /* eslint-disable flowtype/no-unused-expressions */
-    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
     clientWorker.writeCache(cacheData)?.on('end', resolve);
     /* eslint-enable flowtype/no-unused-expressions */
   });
@@ -41,7 +41,7 @@ describe('worker', () => {
 
     serverWorker = new Worker(port);
     clientWorker = new Worker(port);
-    // $FlowFixMe Flow does not yet support method or property calls in optional chains.
+    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
     server = await serverWorker?.init();
   });
 

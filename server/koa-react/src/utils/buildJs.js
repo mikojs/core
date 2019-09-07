@@ -2,8 +2,7 @@
 
 import debug from 'debug';
 import webpack, {
-  // $FlowFixMe TODO: https://github.com/flow-typed/flow-typed/pull/3552
-  type webpackError as webpackErrorType,
+  type WebpackError as webpackErrorType,
   type Stats as statsType,
 } from 'webpack';
 

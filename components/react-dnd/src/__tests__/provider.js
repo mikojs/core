@@ -1,24 +1,45 @@
 // @flow
 
 import { getHover, getDrop } from '../Provider';
+import { type kindType } from '../types';
 
 jest.mock('uuid/v4', () => jest.fn(() => 'id'));
 
-const previewer = {
-  id: 'component',
-  parentId: null,
-  kind: 'component',
+/**
+ * @example
+ * getComponent('component')
+ *
+ * @param {kindType} kind - kind of component
+ * @param {string} id - id of component
+ * @param {string} parentId - parent id of component
+ *
+ * @return {object} - component data
+ */
+const getComponent = (
+  kind: kindType,
+  id: string = kind,
+  parentId: ?string = null,
+) => ({
+  id,
+  parentId,
+  kind,
   type: 'div',
   icon: 'div',
-};
+});
 
-const component = {
-  id: 'new-component',
-  parentId: null,
-  kind: 'new-component',
-  type: 'div',
+/**
+ * @example
+ * getItem('component')
+ *
+ * @param {kindType} kind - kind of component
+ *
+ * @return {object} item data
+ */
+const getItem = (kind: kindType) => ({
+  id: kind,
+  type: kind,
   icon: 'div',
-};
+});
 
 describe('Provider', () => {
   describe('getHover', () => {
@@ -26,37 +47,14 @@ describe('Provider', () => {
       const mockSetPreviewer = jest.fn();
 
       getHover(
-        [component],
-        [
-          {
-            ...previewer,
-            id: 'previewer',
-          },
-        ],
+        [getComponent('new-component')],
+        [getComponent('previewer')],
         mockSetPreviewer,
-      )(
-        {
-          id: 'new-component',
-          type: 'new-component',
-          icon: 'div',
-        },
-        {
-          id: 'previewer',
-          type: 'previewer',
-          icon: 'div',
-        },
-      );
+      )(getItem('new-component'), getItem('previewer'));
 
       expect(mockSetPreviewer).toHaveBeenCalledWith([
-        {
-          ...previewer,
-          id: 'previewer',
-        },
-        {
-          ...component,
-          kind: 'preview-component',
-          parentId: 'previewer',
-        },
+        getComponent('previewer'),
+        getComponent('preview-component', 'new-component', 'previewer'),
       ]);
     });
 
@@ -64,68 +62,26 @@ describe('Provider', () => {
       const mockSetPreviewer = jest.fn();
 
       getHover(
-        [component],
+        [getComponent('new-component')],
         [
-          {
-            ...previewer,
-            id: 'previewer',
-          },
-          {
-            ...previewer,
-            id: 'should be removed',
-            kind: 'preview-component',
-          },
+          getComponent('previewer'),
+          getComponent('preview-component', 'should be removed', 'previewer'),
         ],
         mockSetPreviewer,
-      )(
-        {
-          id: 'new-component',
-          type: 'new-component',
-          icon: 'div',
-        },
-        {
-          id: 'previewer',
-          type: 'previewer',
-          icon: 'div',
-        },
-      );
+      )(getItem('new-component'), getItem('previewer'));
 
       expect(mockSetPreviewer).toHaveBeenCalledWith([
-        {
-          ...previewer,
-          id: 'previewer',
-        },
-        {
-          ...component,
-          kind: 'preview-component',
-          parentId: 'previewer',
-        },
+        getComponent('previewer'),
+        getComponent('preview-component', 'new-component', 'previewer'),
       ]);
     });
 
     test('next: hover "new component" on "manager"', () => {
       const mockSetPreviewer = jest.fn();
 
-      getHover(
-        [],
-        [
-          {
-            ...previewer,
-            kind: 'preview-component',
-          },
-        ],
-        mockSetPreviewer,
-      )(
-        {
-          id: 'new-component',
-          type: 'new-component',
-          icon: 'div',
-        },
-        {
-          id: 'manager',
-          type: 'manager',
-          icon: 'div',
-        },
+      getHover([], [getComponent('preview-component')], mockSetPreviewer)(
+        getItem('new-component'),
+        getItem('manager'),
       );
 
       expect(mockSetPreviewer).toHaveBeenCalledWith([]);
@@ -135,16 +91,8 @@ describe('Provider', () => {
       const mockSetPreviewer = jest.fn();
 
       getHover([], [], mockSetPreviewer)(
-        {
-          id: 'new-component',
-          type: 'new-component',
-          icon: 'div',
-        },
-        {
-          id: 'manager',
-          type: 'manager',
-          icon: 'div',
-        },
+        getItem('new-component'),
+        getItem('manager'),
       );
 
       expect(mockSetPreviewer).not.toHaveBeenCalled();
@@ -157,49 +105,24 @@ describe('Provider', () => {
 
       getDrop(
         [
-          previewer,
-          {
-            ...previewer,
-            kind: 'preview-component',
-          },
+          getComponent('previewer'),
+          getComponent('preview-component', 'new-component', 'previewer'),
         ],
         mockSetPreviewer,
-      )(
-        {
-          id: 'component',
-          type: 'new-component',
-          icon: 'div',
-        },
-        {
-          id: 'previewer',
-          type: 'previewer',
-          icon: 'div',
-        },
-      );
+      )(getItem('new-component'), getItem('previewer'));
 
       expect(mockSetPreviewer).toHaveBeenCalledWith([
-        previewer,
-        {
-          ...previewer,
-          id: 'id',
-        },
+        getComponent('previewer'),
+        getComponent('component', 'id', 'previewer'),
       ]);
     });
 
     test('drop "component" to "manager" for removing', () => {
       const mockSetPreviewer = jest.fn();
 
-      getDrop([previewer], mockSetPreviewer)(
-        {
-          id: 'component',
-          type: 'component',
-          icon: 'div',
-        },
-        {
-          id: 'manager',
-          type: 'manager',
-          icon: 'div',
-        },
+      getDrop([getComponent('component')], mockSetPreviewer)(
+        getItem('component'),
+        getItem('manager'),
       );
 
       expect(mockSetPreviewer).toHaveBeenCalledWith([]);
@@ -209,16 +132,8 @@ describe('Provider', () => {
       const mockSetPreviewer = jest.fn();
 
       getDrop([], mockSetPreviewer)(
-        {
-          id: 'component',
-          type: 'new-component',
-          icon: 'div',
-        },
-        {
-          id: 'manager',
-          type: 'manager',
-          icon: 'div',
-        },
+        getItem('new-component'),
+        getItem('manager'),
       );
 
       expect(mockSetPreviewer).not.toHaveBeenCalled();

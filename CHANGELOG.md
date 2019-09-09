@@ -1,5 +1,34 @@
 # CHANGELOG
 
+## 1.5.3 (2019-09-09)
+
+#### :rocket: New Feature
+
+- `badges`
+  - [#379](https://github.com/cat-org/core/pull/379) (@cat-org/badges) Add new badge ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#377](https://github.com/cat-org/core/pull/377) (@cat-org/core) Add icon to the custom drag layer ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- Other
+  - [#383](https://github.com/cat-org/core/pull/383) (@cat-org/koa-react) Fix flow error ([@HsuTing](https://github.com/HsuTing))
+  - [#382](https://github.com/cat-org/core/pull/382) (@cat-org/koa-react) Fix server rendering ([@HsuTing](https://github.com/HsuTing))
+  - [#378](https://github.com/cat-org/core/pull/378) (@cat-org/server) Fix server flow error ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `logger`, `utils`, `website`
+  - [#380](https://github.com/cat-org/core/pull/380) (@cat-org/badges) Fix badges count ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- Other
+  - [#385](https://github.com/cat-org/core/pull/385) (@cat-org/react-dnd) Modify testing ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `logger`, `utils`, `website`
+  - [#380](https://github.com/cat-org/core/pull/380) (@cat-org/badges) Fix badges count ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.5.2 (2019-09-04)
 
 #### :rocket: New Feature

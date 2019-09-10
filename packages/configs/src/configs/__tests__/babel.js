@@ -52,14 +52,32 @@ const relayPresetBase = [
   ],
 ];
 
+const serverPresetBase = [
+  [
+    '@cat-org/base',
+    {
+      '@cat-org/transform-flow': {
+        plugins: [
+          ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
+        ],
+      },
+    },
+  ],
+];
+
+const serverPlugins = [
+  ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
+];
+
 describe('babel', () => {
   test.each`
-    configsEnv   | presets                              | plugins
-    ${[]}        | ${['@cat-org/base']}                 | ${[]}
-    ${['react']} | ${['@cat-org/base', '@babel/react']} | ${reactPlugins}
-    ${['css']}   | ${['@cat-org/base']}                 | ${cssPlugins('.css')}
-    ${['less']}  | ${['@cat-org/base']}                 | ${cssPlugins('.less')}
-    ${['relay']} | ${relayPresetBase}                   | ${['relay']}
+    configsEnv    | presets                              | plugins
+    ${[]}         | ${['@cat-org/base']}                 | ${[]}
+    ${['react']}  | ${['@cat-org/base', '@babel/react']} | ${reactPlugins}
+    ${['css']}    | ${['@cat-org/base']}                 | ${cssPlugins('.css')}
+    ${['less']}   | ${['@cat-org/base']}                 | ${cssPlugins('.less')}
+    ${['relay']}  | ${relayPresetBase}                   | ${['relay']}
+    ${['server']} | ${serverPresetBase}                  | ${serverPlugins}
   `(
     'run with configsEnv = $configsEnv',
     ({

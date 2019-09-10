@@ -13,14 +13,28 @@ export default {
   ],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
     presets: [
-      ...(!configsEnv.includes('relay')
+      ...(!configsEnv.some((env: string) => ['relay', 'server'].includes(env))
         ? ['@cat-org/base']
         : [
             [
               '@cat-org/base',
               {
                 '@cat-org/transform-flow': {
-                  ignore: /__generated__/,
+                  ...(!configsEnv.includes('relay')
+                    ? {}
+                    : {
+                        ignore: /__generated__/,
+                      }),
+                  ...(!configsEnv.includes('server')
+                    ? {}
+                    : {
+                        plugins: [
+                          [
+                            '@babel/proposal-pipeline-operator',
+                            { proposal: 'minimal' },
+                          ],
+                        ],
+                      }),
                 },
               },
             ],
@@ -64,6 +78,9 @@ export default {
             ],
           ]),
       ...(!configsEnv.includes('relay') ? [] : ['relay']),
+      ...(!configsEnv.includes('server')
+        ? []
+        : [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]]),
     ],
     ignore: mockChoice(
       process.env.NODE_ENV === 'test',

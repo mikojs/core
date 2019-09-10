@@ -145,14 +145,7 @@ export default (
   } = configs.store[cliName];
 
   try {
-    debugLog({
-      cli,
-      install: install([]),
-      run: run([]),
-      env,
-    });
-
-    return {
+    const result = {
       cli: shouldInstall ? 'install' : npmWhich(process.cwd()).sync(cli),
       argv: shouldInstall
         ? install(['yarn', 'add', '--dev'])
@@ -160,6 +153,10 @@ export default (
       env,
       cliName,
     };
+
+    debugLog(result);
+
+    return result;
   } catch (e) {
     if (/not found/.test(e.message))
       throw logger.fail(e.message.replace(/not found/, 'Not found cli'));

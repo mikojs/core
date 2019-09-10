@@ -22,7 +22,7 @@ import loadModule from 'utils/loadModule';
  * @example
  * defaults(context)
  *
- * @param {object} context - server context
+ * @param {contextType} context - server context
  *
  * @return {object} - http server
  */

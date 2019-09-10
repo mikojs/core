@@ -10,7 +10,7 @@ import path from 'path';
 
 import { emptyFunction } from 'fbjs';
 
-import server from '../index';
+import server, { type contextType } from '../index';
 
 import defaultMiddleware from './middleware';
 import DefaultReact from './react';
@@ -32,13 +32,7 @@ export default async ({
   dev = true,
   watch = false,
   port,
-}: {|
-  src: string,
-  dir: string,
-  dev?: boolean,
-  watch?: boolean,
-  port?: number,
-|}): Promise<http$Server> => {
+}: contextType): Promise<http$Server> => {
   const react = new (loadModule('@cat-org/koa-react', DefaultReact))(
     path.resolve(dir, './pages'),
     { dev, exclude: /__generated__/ }

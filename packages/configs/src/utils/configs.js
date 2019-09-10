@@ -132,7 +132,7 @@ const configs = new Configs();
 
 configs.handleCustomConfigs({
   config: defaultConfigs,
-  filepath: process.cwd(),
+  filepath: path.resolve(process.cwd(), './node_modules'),
 });
 configs.handleCustomConfigs(cosmiconfig('cat').searchSync());
 

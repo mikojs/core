@@ -40,7 +40,7 @@ describe('cli options', () => {
   `(
     'Run fail with $cliName',
     ({ cliName, expected }: {| cliName: string, expected: string |}) => {
-      npmWhich.throwError = true;
+      npmWhich.throwError = cliName === 'notFoundCommand';
 
       expect(() => {
         cliOptions([...defaultArgv, cliName]);

@@ -9,9 +9,9 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/runtime": "^7.5.5",
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/runtime": "^7.6.0",
     "@cat-org/logger": "^1.5.3",
     "@cat-org/utils": "^1.5.3",
     "chalk": "^2.4.2",

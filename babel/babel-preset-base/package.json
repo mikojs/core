@@ -9,8 +9,8 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
-    "@babel/preset-env": "^7.5.5",
+    "@babel/plugin-proposal-optional-chaining": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
     "@babel/preset-flow": "^7.0.0",
     "@cat-org/babel-plugin-transform-flow": "^1.5.3",
     "@cat-org/utils": "^1.5.3",

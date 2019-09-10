@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.5.4 (2019-09-10)
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-flow-typed-install`
+  - [#387](https://github.com/cat-org/core/pull/387) (@cat-org/core) Upgrade package ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-flow-typed-install`
+  - [#387](https://github.com/cat-org/core/pull/387) (@cat-org/core) Upgrade package ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#386](https://github.com/cat-org/core/pull/386) (@cat-org/configs) Fix configs path error ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.5.3 (2019-09-09)
 
 #### :rocket: New Feature

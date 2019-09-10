@@ -17,7 +17,6 @@ import { type objConfigType, type configsType } from '../types';
 import defaultConfigs from 'configs';
 
 const debugLog = debug('configs:configs');
-const IGNORE_PATTERN = 'IGNORE';
 
 /** Store configs */
 export class Configs {
@@ -71,11 +70,8 @@ export class Configs {
       filepath: customConfigsPath,
     } = customConfigsObj;
 
-    if (!new RegExp(IGNORE_PATTERN).test(customConfigsPath)) {
-      debugLog(customConfigsObj);
-      this.customConfigsPath = customConfigsPath;
-    }
-
+    debugLog(customConfigsObj);
+    this.customConfigsPath = customConfigsPath;
     this.rootDir = path.dirname(customConfigsPath);
 
     Object.keys(customConfigs).forEach((key: string) => {
@@ -136,7 +132,7 @@ const configs = new Configs();
 
 configs.handleCustomConfigs({
   config: defaultConfigs,
-  filepath: path.resolve(process.cwd(), IGNORE_PATTERN),
+  filepath: path.resolve(process.cwd(), './node_modules'),
 });
 configs.handleCustomConfigs(cosmiconfig('cat').searchSync());
 

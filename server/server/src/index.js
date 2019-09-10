@@ -17,6 +17,14 @@ type routerType = Router | Endpoint | Koa;
 
 type watchFuncType = (filePath: string) => void;
 
+export type contextType = {|
+  src: string,
+  dir: string,
+  dev?: boolean,
+  watch?: boolean,
+  port?: number,
+|};
+
 const debugLog = debug('server');
 
 /**

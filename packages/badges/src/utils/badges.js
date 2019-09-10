@@ -121,10 +121,8 @@ const getBadges = (
     {
       filePath: './.git',
       badgeName: 'git-search-todo',
-      image:
-        'https://img.shields.io/github/search/cat-org/core/todo+-language:markdown?label=todo',
-      link:
-        'https://github.com/cat-org/core/search?q=todo+-language:markdown&unscoped_q=todo+-language:markdown',
+      image: `https://img.shields.io/github/search/${username}/${projectName}/todo+-language:markdown?label=todo`,
+      link: `https://github.com/${username}/${projectName}/search?q=todo+-language:markdown&unscoped_q=todo+-language:markdown`,
     },
   ].filter(
     ({ filePath, filterFunc = emptyFunction.thatReturnsArgument }: badgeType) =>

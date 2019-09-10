@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 1.5.5 (2019-09-10)
+
+#### :rocket: New Feature
+
+- `configs`
+  - [#389](https://github.com/cat-org/core/pull/389) (@cat-org/configs) Add server configsEnv ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `badges`
+  - [#388](https://github.com/cat-org/core/pull/388) (@cat-org/badges) Remove core in search link ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.5.4 (2019-09-10)
 
 #### :rocket: New Feature

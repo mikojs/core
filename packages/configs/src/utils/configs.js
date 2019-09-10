@@ -70,9 +70,11 @@ export class Configs {
       filepath: customConfigsPath,
     } = customConfigsObj;
 
-    debugLog(customConfigsObj);
-    this.customConfigsPath = customConfigsPath;
-    this.rootDir = path.dirname(customConfigsPath);
+    if (customConfigsPath !== __dirname) {
+      debugLog(customConfigsObj);
+      this.customConfigsPath = customConfigsPath;
+      this.rootDir = path.dirname(customConfigsPath);
+    }
 
     Object.keys(customConfigs).forEach((key: string) => {
       if (key === 'configsEnv') {
@@ -132,7 +134,7 @@ const configs = new Configs();
 
 configs.handleCustomConfigs({
   config: defaultConfigs,
-  filepath: path.resolve(process.cwd(), './node_modules'),
+  filepath: __dirname,
 });
 configs.handleCustomConfigs(cosmiconfig('cat').searchSync());
 

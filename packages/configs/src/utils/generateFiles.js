@@ -34,20 +34,30 @@ const CONFIG_IGNORE = {
  * findConfigFiles('cliName')
  *
  * @param {string} cliName - cli name
+ * @param {Array} customConfigFiles - custom config filenames
  *
  * @return {object} - configFiles object to generate the files
  */
-const findConfigFiles = (cliName: string): {} => {
+const findConfigFiles = (
+  cliName: string,
+  customConfigFiles?: ?$ReadOnlyArray<string>,
+): {} => {
   const { alias: cli = cliName, configFiles = {} } = configs.store[cliName];
 
   if (!configFiles[cliName]) {
-    if (!CONFIG_FILES[cli])
-      throw logger.fail(
-        'Can not generate the config file',
-        chalk`Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
-      );
+    if (!CONFIG_FILES[cli]) {
+      if (!(customConfigFiles instanceof Array))
+        throw logger.fail(
+          'Can not generate the config file, You can:',
+          chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
+          chalk`  - Run command with {cyan \`--configs-files\`} options`,
+        );
 
-    configFiles[cliName] = path.resolve(configs.rootDir, CONFIG_FILES[cli]);
+      customConfigFiles.forEach((key: string) => {
+        configFiles[key] = true;
+      });
+    } else
+      configFiles[cliName] = path.resolve(configs.rootDir, CONFIG_FILES[cli]);
   }
 
   return (Object.keys(configFiles): $ReadOnlyArray<string>).reduce(
@@ -76,9 +86,13 @@ const findConfigFiles = (cliName: string): {} => {
  * generateFiles('cli')
  *
  * @param {string} cliName - cli name
+ * @param {Array} customConfigFiles - custom config filenames
  */
-export default (cliName: string) => {
-  const configFiles = findConfigFiles(cliName);
+export default (
+  cliName: string,
+  customConfigFiles: ?$ReadOnlyArray<string>,
+) => {
+  const configFiles = findConfigFiles(cliName, customConfigFiles);
   const cache = {
     pid: process.pid,
     using: moment().format(),

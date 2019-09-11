@@ -2,6 +2,7 @@
 
 import { type configsType } from '../types';
 
+import execa from './execa';
 import babel from './babel';
 import prettier from './prettier';
 import eslint from './eslint';
@@ -10,6 +11,9 @@ import jest from './jest';
 import server from './server';
 
 export default ({
+  // custom command
+  execa,
+
   // babel
   babel,
   'babel:lerna': {

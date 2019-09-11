@@ -30,6 +30,7 @@ export default (
   argv: $ReadOnlyArray<string>,
   env: {},
   cliName: string,
+  configsFiles: ?$ReadOnlyArray<string>,
 |} => {
   const program = new commander.Command('configs')
     .version(version, '-v, --version')
@@ -41,13 +42,20 @@ export default (
   configs {green babel:lerna -w}
   configs {gray --info}
   configs {green babel:lerna} {gray --info}
-  configs {green babel} {gray --configs-env env}`,
+  configs {green babel} {gray --configs-env envA,envB}
+  configs {green execa run custom command} {gray --configs-env envA,envB --configs-files babel,lint}`,
     )
     .option('--install', 'install packages by config')
     .option('--info', 'print more info about configs')
     .option(
       '--configs-env [env]',
       'configs environment variables',
+      // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+      (value: string) => value?.split(','),
+    )
+    .option(
+      '--configs-files [fileName]',
+      'use to generate the new config files which are not defined in the cli configs',
       // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
       (value: string) => value?.split(','),
     )
@@ -59,6 +67,7 @@ export default (
     install: shouldInstall = false,
     info = false,
     configsEnv,
+    configsFiles,
   } = program.parse([...argv]);
 
   debugLog({
@@ -67,6 +76,7 @@ export default (
     shouldInstall,
     info,
     configsEnv,
+    configsFiles,
   });
 
   if (configsEnv) configs.configsEnv = configsEnv;
@@ -146,12 +156,17 @@ export default (
 
   try {
     const result = {
-      cli: shouldInstall ? 'install' : npmWhich(process.cwd()).sync(cli),
+      cli: shouldInstall
+        ? 'install'
+        : cli === 'execa'
+        ? 'execa'
+        : npmWhich(process.cwd()).sync(cli),
       argv: shouldInstall
         ? install(['yarn', 'add', '--dev'])
         : run(rawArgs.filter((arg: string) => ![cliName].includes(arg))),
       env,
       cliName,
+      configsFiles,
     };
 
     debugLog(result);

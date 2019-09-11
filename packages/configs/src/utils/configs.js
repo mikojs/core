@@ -94,7 +94,8 @@ export class Configs {
       }
 
       this.store[key] = {
-        alias: customConfig.alias || config.alias || key,
+        alias: customConfig.alias || config.alias,
+        getCli: customConfig.getCli || config.getCli,
         install: (install: $ReadOnlyArray<string>) =>
           install
           |> config.install || emptyFunction.thatReturnsArgument

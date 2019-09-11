@@ -17,6 +17,23 @@ const debugLog = debug('configs:cliOptions');
 
 /**
  * @example
+ * fileOptions('--key', 'key', '--key')
+ *
+ * @param {string} optionKey - option key to test
+ * @param {string} arg - current argument
+ * @param {string} prevArg - prev argument
+ *
+ * @return {boolean} - test result
+ */
+const filterOptions = (optionKey: ?string, arg: string, prevArg: string) =>
+  !optionKey
+    ? false
+    : optionKey === arg ||
+      optionKey === prevArg ||
+      new RegExp(`^${optionKey}=`).test(arg);
+
+/**
+ * @example
  * cliOptions([])
  *
  * @param {Array} argv - command line
@@ -68,6 +85,7 @@ export default (
     info = false,
     configsEnv,
     configsFiles,
+    options,
   } = program.parse([...argv]);
 
   debugLog({
@@ -149,21 +167,30 @@ export default (
 
   const {
     alias: cli = cliName,
+    getCli = (newArgs: $ReadOnlyArray<string>) =>
+      npmWhich(process.cwd()).sync(cli),
     install = emptyFunction.thatReturnsArgument,
     run = emptyFunction.thatReturnsArgument,
     env = {},
   } = configs.store[cliName];
 
   try {
+    const rawArgsFiltered = rawArgs
+      .slice(2)
+      .filter(
+        (arg: string, index: number, allArgs: $ReadOnlyArray<string>) =>
+          arg !== cliName &&
+          !options.some(
+            ({ short, long }: {| short?: string, long: string |}) =>
+              filterOptions(short, arg, allArgs[index - 1]) ||
+              filterOptions(long, arg, allArgs[index - 1]),
+          ),
+      );
     const result = {
-      cli: shouldInstall
-        ? 'install'
-        : cli === 'execa'
-        ? 'execa'
-        : npmWhich(process.cwd()).sync(cli),
+      cli: shouldInstall ? 'install' : getCli([cliName, ...rawArgsFiltered]),
       argv: shouldInstall
         ? install(['yarn', 'add', '--dev'])
-        : run(rawArgs.filter((arg: string) => ![cliName].includes(arg))),
+        : run(rawArgsFiltered),
       env,
       cliName,
       configsFiles,

@@ -2,7 +2,6 @@
 // @flow
 
 import path from 'path';
-import readline from 'readline';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 import dirCommand from '@babel/cli/lib/babel/dir';
@@ -111,14 +110,15 @@ handleUnhandledRejection();
       stdio: 'inherit',
     });
   };
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
 
   chokidar.watch(path.resolve(customFile)).on('change', restart);
-  rl.on('line', (line: string) => {
-    if (line === 'rs') restart();
-    else if (line === 'exit') process.exit(0);
+  process.stdin.on('data', (data: Buffer) => {
+    const str = data
+      .toString()
+      .trim()
+      .toLowerCase();
+
+    if (str === 'rs') restart();
+    else if (str === 'exit') process.exit(0);
   });
 })();

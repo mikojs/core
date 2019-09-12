@@ -94,24 +94,28 @@ handleUnhandledRejection();
     'Use `exit` or `ctrl + c` to stop the custom server',
   );
 
+  let timeout: TimeoutID;
   /**
    * @example
    * restart()
    */
   const restart = () => {
-    logger.log(
-      'Restart the custom server',
-      'Use `rs` to restart the custom server',
-      'Use `exit` or `ctrl + c` to stop the custom server',
-    );
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      logger.log(
+        'Restart the custom server',
+        'Use `rs` to restart the custom server',
+        'Use `exit` or `ctrl + c` to stop the custom server',
+      );
 
-    subprocess.cancel();
-    subprocess = execa(path.resolve(__dirname, './server.js'), serverArgu, {
-      stdio: 'inherit',
-    });
+      subprocess.cancel();
+      subprocess = execa(path.resolve(__dirname, './server.js'), serverArgu, {
+        stdio: 'inherit',
+      });
+    }, 100);
   };
 
-  chokidar.watch(path.resolve(customFile)).on('change', restart);
+  chokidar.watch(path.resolve(opts.cliOptions.outDir)).on('change', restart);
   process.stdin.on('data', (data: Buffer) => {
     const str = data
       .toString()

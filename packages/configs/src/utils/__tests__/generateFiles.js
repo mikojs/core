@@ -40,11 +40,11 @@ describe('generate files', () => {
     expect(worker.server).toBeNull();
     expect(outputFileSync.destPaths).toEqual(
       [
+        'jest.config.js',
         'babel.config.js',
-        '.prettierrc.js',
         '.eslintrc.js',
         '.eslintignore',
-        'jest.config.js',
+        '.prettierrc.js',
       ].map((fileName: string) => path.resolve(fileName)),
     );
   });

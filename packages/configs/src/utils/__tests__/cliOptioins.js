@@ -50,22 +50,49 @@ describe('cli options', () => {
     },
   );
 
-  test('run command with configsEnv', () => {
+  test('run command with --configs-env', () => {
     expect(
-      cliOptions([...defaultArgv, 'runCmd', '--configs-env', 'react']),
+      cliOptions([
+        ...defaultArgv,
+        'runCmd',
+        '--optionA',
+        '--configs-env',
+        'react',
+        '--optionB',
+      ]),
     ).toEqual({
       cli: babelCli,
-      argv: [...defaultArgv, '--configs-env', 'react'],
+      argv: ['--optionA', '--optionB'],
       env: {},
       cliName: 'runCmd',
     });
     expect(configs.configsEnv).toEqual(['react']);
   });
 
+  test('run command with --configs-files', () => {
+    expect(
+      cliOptions([
+        ...defaultArgv,
+        'runCmd',
+        '--optionA',
+        '--configs-files=babel',
+        '--optionB',
+      ]),
+    ).toEqual({
+      cli: babelCli,
+      argv: ['--optionA', '--optionB'],
+      env: {},
+      cliName: 'runCmd',
+    });
+    expect(configs.store.runCmd.configFiles).toEqual({
+      babel: true,
+    });
+  });
+
   test.each`
     cliName     | options          | cli          | argv
     ${'runCmd'} | ${['--install']} | ${'install'} | ${['yarn', 'add', '--dev']}
-    ${'runCmd'} | ${[]}            | ${babelCli}  | ${defaultArgv}
+    ${'runCmd'} | ${[]}            | ${babelCli}  | ${[]}
   `(
     'Run $cliName successfully with $options',
     ({

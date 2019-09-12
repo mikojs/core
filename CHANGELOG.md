@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.5.7 (2019-09-12)
+
+#### :bug: Bug Fix
+
+- [#395](https://github.com/cat-org/core/pull/395) (@cat-org/server) Fix custom server update ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.5.6 (2019-09-12)
 
 #### :rocket: New Feature

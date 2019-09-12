@@ -109,10 +109,10 @@ handleUnhandledRejection();
 
         removeFiles(successCode);
       } catch (e) {
-        debugLog('Run command fail, remove files');
+        logger.log('Run command fail');
         debugLog(e);
 
-        removeFiles(e.exitCode);
+        removeFiles(e.exitCode || 1);
       }
       return;
     }

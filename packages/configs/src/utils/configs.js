@@ -111,7 +111,7 @@ export class Configs {
           ingore
           |> config.ignore || emptyFunction.thatReturnsArgument
           |> customConfig.ignore || emptyFunction.thatReturnsArgument,
-        ignoreName: customConfig.ignoreName,
+        ignoreName: customConfig.ignoreName || config.ignoreName,
         run: (argv: $ReadOnlyArray<string>) =>
           argv
           |> config.run || emptyFunction.thatReturnsArgument

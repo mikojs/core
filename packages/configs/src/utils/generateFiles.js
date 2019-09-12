@@ -13,52 +13,43 @@ import worker from './worker';
 
 const debugLog = debug('configs:generateFiles');
 
-const CONFIG_FILES = {
-  babel: 'babel.config.js',
-  eslint: '.eslintrc.js',
-  esw: '.eslintrc.js',
-  prettier: '.prettierrc.js',
-  'lint-staged': '.lintstagedrc.js',
-  jest: 'jest.config.js',
-  server: '.serverrc.js',
-};
-
-const CONFIG_IGNORE = {
-  eslint: '.eslintignore',
-  esw: '.eslintignore',
-  prettier: '.prettierignore',
-};
+type filesDataType = $ReadOnlyArray<{|
+  filePath: string,
+  content: string,
+|}>;
 
 /**
  * @example
- * findConfigFiles('cliName')
+ * findFiles('cliName')
  *
  * @param {string} cliName - cli name
  * @param {Array} customConfigFiles - custom config filenames
  *
  * @return {object} - configFiles object to generate the files
  */
-const findConfigFiles = (
+const findFiles = (
   cliName: string,
   customConfigFiles?: ?$ReadOnlyArray<string>,
-): {} => {
-  const { alias: cli = cliName, configFiles = {} } = configs.store[cliName];
+): { [string]: filesDataType } => {
+  const {
+    alias: cli = cliName,
+    configFiles = {},
+    ignore: getIgnore,
+    ignoreName,
+  } = configs.store[cliName];
+  const ignore = getIgnore?.([]) || [];
 
-  if (!configFiles[cliName]) {
-    if (!CONFIG_FILES[cli]) {
-      if (!(customConfigFiles instanceof Array))
-        throw logger.fail(
-          'Can not generate the config file, You can:',
-          chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
-          chalk`  - Run command with {cyan \`--configs-files\`} options`,
-        );
+  if (Object.keys(configFiles).length === 0)
+    throw logger.fail(
+      'Can not generate the config file, You can:',
+      chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
+      chalk`  - Run command with {cyan \`--configs-files\`} options`,
+    );
 
-      customConfigFiles.forEach((key: string) => {
-        configFiles[key] = true;
-      });
-    } else
-      configFiles[cliName] = path.resolve(configs.rootDir, CONFIG_FILES[cli]);
-  }
+  if (customConfigFiles instanceof Array)
+    customConfigFiles.forEach((key: string) => {
+      configFiles[key] = true;
+    });
 
   return (Object.keys(configFiles): $ReadOnlyArray<string>).reduce(
     (result: {}, configCliName: string): {} => {
@@ -69,12 +60,29 @@ const findConfigFiles = (
       if (typeof configPath === 'string')
         return {
           ...result,
-          [configCliName]: configPath,
+          [configCliName]: [
+            {
+              filePath: path.resolve(configs.rootDir, configPath),
+              content: `/* eslint-disable */ module.exports = require('@cat-org/configs')('${configCliName}', __filename);`,
+            },
+            ...(!ignoreName || ignore.length === 0
+              ? []
+              : [
+                  {
+                    filePath: path.resolve(
+                      configs.rootDir,
+                      path.dirname(configPath),
+                      ignoreName,
+                    ),
+                    content: ignore.join('\n'),
+                  },
+                ]),
+          ],
         };
 
       return {
         ...result,
-        ...findConfigFiles(configCliName),
+        ...findFiles(configCliName),
       };
     },
     {},
@@ -92,42 +100,24 @@ export default (
   cliName: string,
   customConfigFiles: ?$ReadOnlyArray<string>,
 ) => {
-  const configFiles = findConfigFiles(cliName, customConfigFiles);
+  const files = findFiles(cliName, customConfigFiles);
   const cache = {
     pid: process.pid,
     using: moment().format(),
   };
 
-  debugLog(`Config files: ${JSON.stringify(configFiles, null, 2)}`);
+  debugLog(`Config files: ${JSON.stringify(files, null, 2)}`);
 
-  Object.keys(configFiles).forEach((configCliName: string) => {
-    const {
-      alias: configCli = configCliName,
-      ignoreName = CONFIG_IGNORE[configCli],
-      ignore: getIgnore,
-    } = configs.store[configCliName];
-    const configPath = configFiles[configCliName];
-    const ignore = getIgnore?.([]) || [];
-
-    debugLog(`Generate config: ${configPath}`);
-    outputFileSync(
-      configPath,
-      `/* eslint-disable */ module.exports = require('@cat-org/configs')('${configCliName}', __filename);`,
+  Object.keys(files).forEach((key: string) => {
+    files[key].forEach(
+      ({ filePath, content }: $ElementType<filesDataType, number>) => {
+        debugLog(`Generate config: ${filePath}`);
+        outputFileSync(filePath, content);
+        worker.writeCache({
+          ...cache,
+          filePath,
+        });
+      },
     );
-    worker.writeCache({
-      ...cache,
-      filePath: configPath,
-    });
-
-    if (ignoreName && ignore.length !== 0) {
-      const ignorePath = path.resolve(path.dirname(configPath), ignoreName);
-
-      debugLog(`Generate ignore: ${ignoreName}`);
-      outputFileSync(ignorePath, ignore.join('\n'));
-      worker.writeCache({
-        ...cache,
-        filePath: ignorePath,
-      });
-    }
   });
 };

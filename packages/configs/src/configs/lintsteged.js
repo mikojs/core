@@ -24,6 +24,7 @@ export default {
     ],
   }),
   configFiles: {
+    'lint-staged': '.lintstagedrc.js',
     prettier: true,
     lint: true,
   },

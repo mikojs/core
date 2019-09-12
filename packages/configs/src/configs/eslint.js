@@ -47,11 +47,13 @@ export default {
     // add checking other configs
     '!.*',
   ],
+  ignoreName: '.eslintignore',
   run: (argv: $ReadOnlyArray<string>) => [...argv, '--cache', '--color'],
   env: {
     NODE_ENV: 'test',
   },
   configFiles: {
+    lint: '.eslintrc.js',
     babel: true,
     prettier: true,
   },

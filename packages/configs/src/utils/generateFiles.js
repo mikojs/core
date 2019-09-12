@@ -23,14 +23,10 @@ type filesDataType = $ReadOnlyArray<{|
  * findFiles('cliName')
  *
  * @param {string} cliName - cli name
- * @param {Array} customConfigFiles - custom config filenames
  *
- * @return {object} - configFiles object to generate the files
+ * @return {{ [string]: filesDataType }} - configFiles object to generate the files
  */
-const findFiles = (
-  cliName: string,
-  customConfigFiles?: ?$ReadOnlyArray<string>,
-): { [string]: filesDataType } => {
+const findFiles = (cliName: string): { [string]: filesDataType } => {
   const {
     alias: cli = cliName,
     configFiles = {},
@@ -45,11 +41,6 @@ const findFiles = (
       chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
       chalk`  - Run command with {cyan \`--configs-files\`} options`,
     );
-
-  if (customConfigFiles instanceof Array)
-    customConfigFiles.forEach((key: string) => {
-      configFiles[key] = true;
-    });
 
   return (Object.keys(configFiles): $ReadOnlyArray<string>).reduce(
     (result: {}, configCliName: string): {} => {
@@ -94,13 +85,9 @@ const findFiles = (
  * generateFiles('cli')
  *
  * @param {string} cliName - cli name
- * @param {Array} customConfigFiles - custom config filenames
  */
-export default (
-  cliName: string,
-  customConfigFiles: ?$ReadOnlyArray<string>,
-) => {
-  const files = findFiles(cliName, customConfigFiles);
+export default (cliName: string) => {
+  const files = findFiles(cliName);
   const cache = {
     pid: process.pid,
     using: moment().format(),

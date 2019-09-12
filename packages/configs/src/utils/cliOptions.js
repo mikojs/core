@@ -47,7 +47,6 @@ export default (
   argv: $ReadOnlyArray<string>,
   env: {},
   cliName: string,
-  configsFiles: ?$ReadOnlyArray<string>,
 |} => {
   const program = new commander.Command('configs')
     .version(version, '-v, --version')
@@ -97,7 +96,15 @@ export default (
     configsFiles,
   });
 
-  if (configsEnv) configs.configsEnv = configsEnv;
+  if (configsEnv instanceof Array) configs.configsEnv = configsEnv;
+
+  if (configsFiles instanceof Array)
+    configsFiles.forEach((key: string) => {
+      if (!configs.store[cliName].configFiles)
+        configs.store[cliName].configFiles = {};
+
+      configs.store[cliName].configFiles[key] = true;
+    });
 
   if (info) {
     if (cliName) {
@@ -193,7 +200,6 @@ export default (
         : run(rawArgsFiltered),
       env,
       cliName,
-      configsFiles,
     };
 
     debugLog(result);

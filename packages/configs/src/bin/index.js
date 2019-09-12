@@ -17,7 +17,7 @@ import generateFiles from 'utils/generateFiles';
 import worker from 'utils/worker';
 import logger from 'utils/logger';
 
-const { cli, argv, env, cliName, configsFiles } = cliOptions(process.argv);
+const { cli, argv, env, cliName } = cliOptions(process.argv);
 const debugLog = debug(`configs:bin[${cliName}]`);
 
 handleUnhandledRejection();
@@ -89,7 +89,7 @@ handleUnhandledRejection();
       try {
         // [start]
         // handle config and ignore files
-        generateFiles(cliName, configsFiles);
+        generateFiles(cliName);
 
         // run command
         logger.log(

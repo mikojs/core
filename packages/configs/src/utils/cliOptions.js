@@ -98,7 +98,7 @@ export default (
 
   if (configsEnv instanceof Array) configs.configsEnv = configsEnv;
 
-  if (configsFiles instanceof Array)
+  if (configs.store[cliName] && configsFiles instanceof Array)
     configsFiles.forEach((key: string) => {
       if (!configs.store[cliName].configFiles)
         configs.store[cliName].configFiles = {};

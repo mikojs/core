@@ -33,6 +33,12 @@ yarn configs babel -w
 
 This command is equal to `babel src -d lib --verbose -w`.
 
+```sh
+yarn configs exec custom-command argumentA argumentB --configs-files babel
+```
+
+This command will generate a `babel` config when running your `custom-command`. You can also use `--configs-files babel,jest` to generate `babel` and `jest` at the same time.
+
 #### Get the configs lint
 
 ```sh
@@ -55,6 +61,12 @@ yarn configs babel --install
 
 In this case, this will run `yarn install @babel/cli @babel/core @cat-org/babel-plugin-base --dev`.
 
+#### Get help
+
+```sh
+yarn configs -h
+```
+
 ## Write config
 
 This module use [cosmiconfig](https://github.com/davidtheclark/cosmiconfig) to find the config file. The filename which is supported by `cosmiconfig` can be used.
@@ -74,30 +86,31 @@ module.exports = {
 
   // add custom config, each field is optional
   custom: {
-    aliase: 'babel',           // run config with babel cli
-    install: install => [      // install packages
+    aliase: 'babel',             // run config with babel cli
+    getCli: () => 'path-to-cli', // cli path which is used to run the command
+    install: install => [        // install packages
       ...install,
       '@cat-org/configs',
     ],
-    config: config => {        // write the config
+    config: config => {          // write the config
       ...config,
       key: 'value',
     },
-    ignore: ignore => [        // generate ignore file
+    ignore: ignore => [          // generate ignore file
       ...ignore,
       'node_modules'
     ],
-    ignoreName: '.gitignore'   // ignore filename
-    run: argv => [             // command to run
+    ignoreName: '.gitignore'     // ignore filename
+    run: argv => [               // command to run
       ...argv,
       'src',
       '-d',
       'lib',
     ],
-    env: {                     // run command with environment
+    env: {                       // run command with environment
       NODE_ENV: 'development',
     },
-    configFiles: {             // link the config files. For example, `jest` need to run with `babel`, you need to add `babel: true`
+    configFiles: {               // link the config files. For example, `jest` need to run with `babel`, you need to add `babel: true`
       eslint: true,
     },
   },

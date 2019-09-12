@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import configs from '../index';
 
 describe('configs', () => {
@@ -20,11 +22,20 @@ describe('configs', () => {
             case 'install':
             case 'ignore':
             case 'run':
-              expect(value([]).length).not.toBe(0);
+              (configKey !== 'execa'
+                ? expect(value([])).not
+                : expect(value([]))
+              ).toHaveLength(0);
               return;
 
             case 'config':
               expect(Object.keys(value({ configsEnv: [] }))).not.toBe(0);
+              return;
+
+            case 'getCli':
+              expect(value([configKey, 'babel'])).toBe(
+                path.resolve('./node_modules/.bin/babel'),
+              );
               return;
 
             case 'env':

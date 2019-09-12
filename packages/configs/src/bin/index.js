@@ -6,6 +6,7 @@ import path from 'path';
 import execa, { type Result as resultType } from 'execa';
 import debug from 'debug';
 import isRunning from 'is-running';
+import npmWhich from 'npm-which';
 import chalk from 'chalk';
 
 import { handleUnhandledRejection } from '@cat-org/utils';
@@ -20,12 +21,6 @@ const { cli, argv, env, cliName } = cliOptions(process.argv);
 const debugLog = debug(`configs:bin[${cliName}]`);
 
 handleUnhandledRejection();
-debugLog({
-  cli,
-  argv,
-  env,
-  cliName,
-});
 
 (async () => {
   if (configs.customConfigsPath)
@@ -98,25 +93,26 @@ debugLog({
 
         // run command
         logger.log(
-          chalk`Run command: {gray ${[
-            path.basename(cli),
-            ...argv.slice(2),
-          ].join(' ')}}`,
+          chalk`Run command: {gray ${[path.basename(cli), ...argv].join(' ')}}`,
         );
 
-        const successCode = await execa(argv[0], [cli, ...argv.slice(2)], {
-          stdio: 'inherit',
-          env,
-        }).then(({ exitCode }: resultType) => exitCode);
+        const successCode = await execa(
+          npmWhich(process.cwd()).sync('node'),
+          [cli, ...argv],
+          {
+            stdio: 'inherit',
+            env,
+          },
+        ).then(({ exitCode }: resultType) => exitCode);
 
         debugLog('Run command success, remove files');
 
         removeFiles(successCode);
       } catch (e) {
-        debugLog('Run command fail, remove files');
+        logger.log('Run command fail');
         debugLog(e);
 
-        removeFiles(e.exitCode);
+        removeFiles(e.exitCode || 1);
       }
       return;
     }

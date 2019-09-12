@@ -17,6 +17,23 @@ const debugLog = debug('configs:cliOptions');
 
 /**
  * @example
+ * fileOptions('--key', 'key', '--key')
+ *
+ * @param {string} optionKey - option key to test
+ * @param {string} arg - current argument
+ * @param {string} prevArg - prev argument
+ *
+ * @return {boolean} - test result
+ */
+const filterOptions = (optionKey: ?string, arg: string, prevArg: string) =>
+  !optionKey
+    ? false
+    : optionKey === arg ||
+      optionKey === prevArg ||
+      new RegExp(`^${optionKey}=`).test(arg);
+
+/**
+ * @example
  * cliOptions([])
  *
  * @param {Array} argv - command line
@@ -41,13 +58,20 @@ export default (
   configs {green babel:lerna -w}
   configs {gray --info}
   configs {green babel:lerna} {gray --info}
-  configs {green babel} {gray --configs-env env}`,
+  configs {green babel} {gray --configs-env envA,envB}
+  configs {green execa run custom command} {gray --configs-env envA,envB --configs-files babel,lint}`,
     )
     .option('--install', 'install packages by config')
     .option('--info', 'print more info about configs')
     .option(
       '--configs-env [env]',
       'configs environment variables',
+      // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+      (value: string) => value?.split(','),
+    )
+    .option(
+      '--configs-files [fileName]',
+      'use to generate the new config files which are not defined in the cli configs',
       // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
       (value: string) => value?.split(','),
     )
@@ -59,6 +83,8 @@ export default (
     install: shouldInstall = false,
     info = false,
     configsEnv,
+    configsFiles,
+    options,
   } = program.parse([...argv]);
 
   debugLog({
@@ -67,9 +93,18 @@ export default (
     shouldInstall,
     info,
     configsEnv,
+    configsFiles,
   });
 
-  if (configsEnv) configs.configsEnv = configsEnv;
+  if (configsEnv instanceof Array) configs.configsEnv = configsEnv;
+
+  if (configsFiles instanceof Array)
+    configsFiles.forEach((key: string) => {
+      if (!configs.store[cliName].configFiles)
+        configs.store[cliName].configFiles = {};
+
+      configs.store[cliName].configFiles[key] = true;
+    });
 
   if (info) {
     if (cliName) {
@@ -139,17 +174,30 @@ export default (
 
   const {
     alias: cli = cliName,
+    getCli = (newArgs: $ReadOnlyArray<string>) =>
+      npmWhich(process.cwd()).sync(cli),
     install = emptyFunction.thatReturnsArgument,
     run = emptyFunction.thatReturnsArgument,
     env = {},
   } = configs.store[cliName];
 
   try {
+    const rawArgsFiltered = rawArgs
+      .slice(2)
+      .filter(
+        (arg: string, index: number, allArgs: $ReadOnlyArray<string>) =>
+          arg !== cliName &&
+          !options.some(
+            ({ short, long }: {| short?: string, long: string |}) =>
+              filterOptions(short, arg, allArgs[index - 1]) ||
+              filterOptions(long, arg, allArgs[index - 1]),
+          ),
+      );
     const result = {
-      cli: shouldInstall ? 'install' : npmWhich(process.cwd()).sync(cli),
+      cli: shouldInstall ? 'install' : getCli([cliName, ...rawArgsFiltered]),
       argv: shouldInstall
         ? install(['yarn', 'add', '--dev'])
-        : run(rawArgs.filter((arg: string) => ![cliName].includes(arg))),
+        : run(rawArgsFiltered),
       env,
       cliName,
     };

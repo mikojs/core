@@ -2,7 +2,8 @@
 
 import path from 'path';
 
-import getConfig from 'index';
+import getConfig from '../index';
+
 import configs from 'utils/configs';
 
 test('get config', () => {

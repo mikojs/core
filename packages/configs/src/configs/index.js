@@ -2,14 +2,18 @@
 
 import { type configsType } from '../types';
 
+import execa from './execa';
 import babel from './babel';
 import prettier from './prettier';
-import eslint from './eslint';
+import lint from './lint';
 import lintsteged from './lintsteged';
 import jest from './jest';
 import server from './server';
 
 export default ({
+  // custom command
+  execa,
+
   // babel
   babel,
   'babel:lerna': {
@@ -26,12 +30,12 @@ export default ({
   prettier,
 
   // eslint
-  lint: eslint,
+  lint,
   'lint:watch': {
-    ...eslint,
+    ...lint,
     alias: 'esw',
     run: (argv: $ReadOnlyArray<string>) => [
-      ...eslint.run(argv),
+      ...lint.run(argv),
       '-w',
       '--rule',
       'prettier/prettier: off',

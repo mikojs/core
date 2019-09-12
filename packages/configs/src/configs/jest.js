@@ -34,6 +34,7 @@ export default {
     },
   }),
   configFiles: {
+    jest: 'jest.config.js',
     babel: true,
   },
 };

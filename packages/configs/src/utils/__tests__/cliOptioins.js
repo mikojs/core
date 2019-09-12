@@ -50,12 +50,19 @@ describe('cli options', () => {
     },
   );
 
-  test('run command with configsEnv', () => {
+  test('run command with --configs-env', () => {
     expect(
-      cliOptions([...defaultArgv, 'runCmd', '--configs-env', 'react']),
+      cliOptions([
+        ...defaultArgv,
+        'runCmd',
+        '--optionA',
+        '--configs-env',
+        'react',
+        '--optionB',
+      ]),
     ).toEqual({
       cli: babelCli,
-      argv: [...defaultArgv, '--configs-env', 'react'],
+      argv: ['--optionA', '--optionB'],
       env: {},
       cliName: 'runCmd',
     });
@@ -63,9 +70,42 @@ describe('cli options', () => {
   });
 
   test.each`
+    cliName     | argv
+    ${'runCmd'} | ${[]}
+    ${'babel'}  | ${['src', '-d', 'lib', '--verbose']}
+  `(
+    'run command with --configs-files',
+    ({
+      cliName,
+      argv,
+    }: {|
+      cliName: string,
+      argv: $ReadOnlyArray<string>,
+    |}) => {
+      expect(
+        cliOptions([
+          ...defaultArgv,
+          cliName,
+          '--optionA',
+          '--configs-files=jest',
+          '--optionB',
+        ]),
+      ).toEqual({
+        cli: babelCli,
+        argv: ['--optionA', '--optionB', ...argv],
+        env: {},
+        cliName,
+      });
+      expect(configs.store.runCmd.configFiles).toEqual({
+        jest: true,
+      });
+    },
+  );
+
+  test.each`
     cliName     | options          | cli          | argv
     ${'runCmd'} | ${['--install']} | ${'install'} | ${['yarn', 'add', '--dev']}
-    ${'runCmd'} | ${[]}            | ${babelCli}  | ${defaultArgv}
+    ${'runCmd'} | ${[]}            | ${babelCli}  | ${[]}
   `(
     'Run $cliName successfully with $options',
     ({

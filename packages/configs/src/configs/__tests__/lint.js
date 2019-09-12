@@ -1,6 +1,6 @@
 // @flow
 
-import eslint from '../eslint';
+import lint from '../lint';
 
 const defaultRules = {
   'jsdoc/check-tag-names': [
@@ -40,7 +40,7 @@ const relayRules = {
   ],
 };
 
-describe('eslint', () => {
+describe('lint', () => {
   test.each`
     configsEnv   | rules
     ${[]}        | ${defaultRules}
@@ -55,7 +55,7 @@ describe('eslint', () => {
       configsEnv: $ReadOnlyArray<string>,
       rules: {},
     |}) => {
-      expect(eslint.config({ configsEnv }).rules).toEqual(rules);
+      expect(lint.config({ configsEnv }).rules).toEqual(rules);
     },
   );
 });

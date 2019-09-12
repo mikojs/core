@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 1.5.6 (2019-09-12)
+
+#### :rocket: New Feature
+
+- `configs`
+  - [#392](https://github.com/cat-org/core/pull/392) (@cat-org/configs) Can use custom command `execa` ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- Other
+  - [#394](https://github.com/cat-org/core/pull/394) (@cat-org/server) Fix terminal break ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#393](https://github.com/cat-org/core/pull/393) (@cat-org/configs) Fix cliName unknown ([@HsuTing](https://github.com/HsuTing))
+  - [#392](https://github.com/cat-org/core/pull/392) (@cat-org/configs) Can use custom command `execa` ([@HsuTing](https://github.com/HsuTing))
+  - [#390](https://github.com/cat-org/core/pull/390) (@cat-org/configs) Fix debug info with recalling run function ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.5.5 (2019-09-10)
 
 #### :rocket: New Feature

@@ -6,7 +6,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core",
   "repository": "https://github.com/cat-org/core/tree/master/website/website",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "main": "./lib/index.js",
   "scripts": {
     "dev": "configs server:lerna -w",
@@ -14,11 +14,11 @@
     "test": "SKIP_SERVER=true configs server:lerna"
   },
   "dependencies": {
-    "@cat-org/koa-base": "^1.5.3",
-    "@cat-org/koa-graphql": "^1.5.3",
-    "@cat-org/koa-react": "^1.5.4",
+    "@cat-org/koa-base": "^1.5.8",
+    "@cat-org/koa-graphql": "^1.5.8",
+    "@cat-org/koa-react": "^1.5.8",
     "@cat-org/react-dnd": "^1.5.3",
-    "@cat-org/server": "^1.5.7",
+    "@cat-org/server": "^1.5.8",
     "@cat-org/use-css": "^1.5.2",
     "@cat-org/use-less": "^1.5.3",
     "node-fetch": "^2.6.0",

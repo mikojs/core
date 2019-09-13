@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://cat-org.github.io/core/eslint-config-cat",
   "repository": "https://github.com/cat-org/core/tree/master/packages/eslint-config-cat",
-  "version": "1.5.4",
+  "version": "1.5.8",
   "main": "./lib/index.js",
   "dependencies": {
     "babel-eslint": "^10.0.3",
@@ -27,7 +27,7 @@
     "eslint": ">=6.0.0"
   },
   "devDependencies": {
-    "@cat-org/utils": "^1.5.3",
+    "@cat-org/utils": "^1.5.8",
     "babel-plugin-module-resolver": "^3.2.0",
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.4",

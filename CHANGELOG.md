@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.5.8 (2019-09-13)
+
+#### :bug: Bug Fix
+
+- `utils`
+  - [#397](https://github.com/cat-org/core/pull/397) (@cat-org/utils) Add new function to check if env variables exist ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#396](https://github.com/cat-org/core/pull/396) (@cat-org/koa-graphql) Use ctx.request, not ctx.req ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.5.7 (2019-09-12)
 
 #### :bug: Bug Fix

@@ -181,20 +181,19 @@ export default class Graphql {
       async (
         ctx: {
           ...koaContextType,
-          req: incomingMessageType & {|
+          request: incomingMessageType & {|
             body: mixed,
           |},
           res: serverResponseType & {| json?: ?(data: mixed) => void |},
         },
         next: () => Promise<void>,
       ) => {
-        ctx.req.body = ctx.request.body;
         ctx.res.statusCode = 200;
 
         await graphql({
           ...options,
           schema: this.schema,
-        })(ctx.req, ctx.res);
+        })(ctx.request, ctx.res);
       },
     ]);
 }

@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.6.0 (2019-09-15)
+
+#### :boom: Breaking Change
+
+- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-flow-typed-install`, `logger`, `utils`, `website`
+  - [#398](https://github.com/mikojs/core/pull/398) (@mikojs/core) Rename cat-org to mikojs ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.5.8 (2019-09-13)
 
 #### :bug: Bug Fix

@@ -14,7 +14,7 @@ const template = `// @flow
 import React from 'react';
 
 /** @react render the home page */
-const Home = () => <div>@cat-org/create-project</div>;
+const Home = () => <div>@mikojs/create-project</div>;
 
 export default Home;`;
 
@@ -78,7 +78,7 @@ class React extends Store {
     if (lerna) return;
 
     await this.execa(
-      'yarn add react react-dom @cat-org/koa-react',
+      'yarn add react react-dom @mikojs/koa-react',
       'yarn add --dev webpack @babel/preset-react @babel/plugin-proposal-class-properties',
     );
   };

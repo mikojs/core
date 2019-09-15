@@ -12,7 +12,7 @@ import Graphql, { type optionsType } from '../../index';
  * @example
  * runServer(options)
  *
- * @param {optionsType} options - @cat-org/koa-graphql options
+ * @param {optionsType} options - @mikojs/koa-graphql options
  *
  * @return {Promise<{ server: object, request: Function }>} - server and request function
  */

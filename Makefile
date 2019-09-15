@@ -29,7 +29,7 @@ release:
 		git add CHANGELOG.md && \
 		git commit -m "chore(root): add CHANGELOG.md"
 	@yarn lerna version
-	@open https://github.com/cat-org/core/releases
+	@open https://github.com/mikojs/core/releases
 
 clean:
 	@yarn lerna clean && rm -rf ./node_modules
@@ -50,8 +50,8 @@ define babel-build
 		--parallel \
 		--stream \
 		--include-filtered-dependencies \
-		--scope @cat-org/configs \
-		--scope @cat-org/babel-* \
+		--scope @mikojs/configs \
+		--scope @mikojs/babel-* \
 		$(2)
 	ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
 	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges

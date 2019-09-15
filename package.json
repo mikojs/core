@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@cat-org/core",
+  "name": "@mikojs/core",
   "license": "MIT",
   "workspaces": ["packages/*", "babel/*", "server/*", "components/*"],
   "scripts": {

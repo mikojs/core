@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/eslint-config-cat",
-  "description": "Eslint config fo cat-org",
+  "name": "@mikojs/eslint-config-cat",
+  "description": "Eslint config fo mikojs",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/eslint-config-cat",
-  "repository": "https://github.com/cat-org/core/tree/master/packages/eslint-config-cat",
+  "homepage": "https://mikojs.github.io/core/eslint-config-cat",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/eslint-config-cat",
   "version": "1.5.8",
   "main": "./lib/index.js",
   "dependencies": {
@@ -27,14 +27,14 @@
     "eslint": ">=6.0.0"
   },
   "devDependencies": {
-    "@cat-org/utils": "^1.5.8",
+    "@mikojs/utils": "^1.5.8",
     "babel-plugin-module-resolver": "^3.2.0",
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.4",
     "eslint": "^6.3.0",
     "fbjs": "^1.0.0"
   },
-  "keywords": ["cat-org", "eslint"],
+  "keywords": ["eslint", "mikojs"],
   "publishConfig": {
     "access": "public"
   }

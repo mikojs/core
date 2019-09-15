@@ -17,10 +17,10 @@ pkg.ctx = { projectDir: 'project dir', skipCommand: false, lerna: false };
 describe('pkg store', () => {
   describe('validate', () => {
     describe.each`
-      questionName    | success                                  | fail  | errorMessage
-      ${'homepage'}   | ${'https://cat.org'}                     | ${''} | ${'must be url, for example: https://cat.org'}
-      ${'repository'} | ${'https://github.com/cat-org/core.git'} | ${''} | ${'must be url or git ssh, for example: https://github.com/cat-org/core.git'}
-      ${'keywords'}   | ${['keyword']}                           | ${[]} | ${'can not be empty'}
+      questionName    | success                                 | fail  | errorMessage
+      ${'homepage'}   | ${'https://cat.org'}                    | ${''} | ${'must be url, for example: https://cat.org'}
+      ${'repository'} | ${'https://github.com/mikojs/core.git'} | ${''} | ${'must be url or git ssh, for example: https://github.com/mikojs/core.git'}
+      ${'keywords'}   | ${['keyword']}                          | ${[]} | ${'can not be empty'}
     `(
       '$questionName',
       ({

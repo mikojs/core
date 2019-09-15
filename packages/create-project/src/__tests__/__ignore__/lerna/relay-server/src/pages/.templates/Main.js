@@ -11,7 +11,7 @@ import {
 } from 'react-relay';
 import { type SSRCache as SSRCacheType } from 'react-relay-network-modern-ssr/node8/server';
 
-import { type mainCtxType } from '@cat-org/koa-react/lib/types';
+import { type mainCtxType } from '@mikojs/koa-react/lib/types';
 
 import { initEnvironment, createEnvironment } from 'utils/createEnvironment';
 
@@ -65,7 +65,7 @@ const Main = ({
  * @example
  * Main.getInitialProps(ctx)
  *
- * @param {mainCtxType} ctx - context from @cat-org/koa-react
+ * @param {mainCtxType} ctx - context from @mikojs/koa-react
  *
  * @return {propsType} - initial props
  */

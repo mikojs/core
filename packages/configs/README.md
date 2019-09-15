@@ -1,24 +1,24 @@
-# [@cat-org/configs][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
+# [@mikojs/configs][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
 
-[npm-image]: https://img.shields.io/npm/v/@cat-org/configs.svg
-[npm-link]: https://www.npmjs.com/package/@cat-org/configs
-[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@cat-org/configs.svg
+[npm-image]: https://img.shields.io/npm/v/@mikojs/configs.svg
+[npm-link]: https://www.npmjs.com/package/@mikojs/configs
+[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@mikojs/configs.svg
 
 <!-- badges.end -->
 
-[website]: https://cat-org.github.io/core/configs
+[website]: https://mikojs.github.io/core/configs
 
 Use to manage the multiple configs.
 
 ## Install
 
 ```sh
-yarn add @cat-org/configs --dev
+yarn add @mikojs/configs --dev
 ```
 
 ## Run command
 
-Depend on the first argument, `@cat-org/configs` will run the command, generate the config file and use the default option.
+Depend on the first argument, `@mikojs/configs` will run the command, generate the config file and use the default option.
 
 ```sh
 yarn configs babel
@@ -59,7 +59,7 @@ yarn configs babel --info
 yarn configs babel --install
 ```
 
-In this case, this will run `yarn install @babel/cli @babel/core @cat-org/babel-plugin-base --dev`.
+In this case, this will run `yarn install @babel/cli @babel/core @mikojs/babel-plugin-base --dev`.
 
 #### Get help
 
@@ -90,7 +90,7 @@ module.exports = {
     getCli: () => 'path-to-cli', // cli path which is used to run the command
     install: install => [        // install packages
       ...install,
-      '@cat-org/configs',
+      '@mikojs/configs',
     ],
     config: config => {          // write the config
       ...config,

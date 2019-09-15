@@ -10,9 +10,9 @@ import { inquirer } from 'inquirer';
 // $FlowFixMe jest mock
 import { execa } from 'execa';
 
-import { d3DirTree } from '@cat-org/utils';
-import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
-import configs from '@cat-org/configs/lib/configs';
+import { d3DirTree } from '@mikojs/utils';
+import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
+import configs from '@mikojs/configs/lib/configs';
 
 import testings, {
   type inquirerResultType,

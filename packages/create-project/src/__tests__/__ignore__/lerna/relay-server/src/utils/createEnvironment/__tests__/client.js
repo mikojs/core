@@ -5,7 +5,7 @@ import path from 'path';
 import fetch from 'node-fetch';
 import { fetchQuery, graphql } from 'react-relay';
 
-import server from '@cat-org/server/lib/defaults';
+import server from '@mikojs/server/lib/defaults';
 
 import client from '../client';
 

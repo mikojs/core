@@ -54,7 +54,7 @@ const findFiles = (cliName: string): { [string]: filesDataType } => {
           [configCliName]: [
             {
               filePath: path.resolve(configs.rootDir, configPath),
-              content: `/* eslint-disable */ module.exports = require('@cat-org/configs')('${configCliName}', __filename);`,
+              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', __filename);`,
             },
             ...(!ignoreName || ignore.length === 0
               ? []

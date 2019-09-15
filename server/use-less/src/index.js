@@ -3,15 +3,15 @@
 import { invariant, emptyFunction } from 'fbjs';
 import { type RuleSetRule as RuleSetRuleType } from 'webpack';
 
-import { type optionsType, type configType } from '@cat-org/koa-react';
+import { type optionsType, type configType } from '@mikojs/koa-react';
 
 /**
  * @example
  * useLess({})
  *
- * @param {optionsType} config - prev @cat-org/koa-react config
+ * @param {optionsType} config - prev @mikojs/koa-react config
  *
- * @return {optionsType} - @cat-org/koa-react config
+ * @return {optionsType} - @mikojs/koa-react config
  */
 export default ({
   config: configFunc = emptyFunction.thatReturnsArgument,
@@ -30,7 +30,7 @@ export default ({
 
     invariant(
       cssLoader && cssLoader.use instanceof Array,
-      'You should use `@cat-org/use-css` before using `@cat-org/use-less`',
+      'You should use `@mikojs/use-css` before using `@mikojs/use-less`',
     );
 
     cssLoader.test = /\.(css|less)$/;

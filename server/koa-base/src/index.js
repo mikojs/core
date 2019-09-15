@@ -8,7 +8,7 @@ import etag from 'koa-etag';
 import helmet from 'koa-helmet';
 import morgan from 'koa-morgan';
 
-import { mockChoice } from '@cat-org/utils';
+import { mockChoice } from '@mikojs/utils';
 
 import createLogs from './utils/createLogs';
 

@@ -6,8 +6,8 @@ import path from 'path';
 import { CLIEngine } from 'eslint';
 import { hyphenate } from 'fbjs';
 
-import { d3DirTree } from '@cat-org/utils';
-import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
+import { d3DirTree } from '@mikojs/utils';
+import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 /**
  * FIXME:

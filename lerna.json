@@ -9,7 +9,7 @@
     }
   },
   "changelog": {
-    "repo": "cat-org/core",
+    "repo": "mikojs/core",
     "cacheDir": ".changelog",
     "labels": {
       "PR: Breaking Change :boom:": ":boom: Breaking Change",

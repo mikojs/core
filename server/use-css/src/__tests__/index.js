@@ -1,6 +1,6 @@
 // @flow
 
-import { type configType } from '@cat-org/koa-react';
+import { type configType } from '@mikojs/koa-react';
 
 import useCss from '../index.js';
 

@@ -1,6 +1,6 @@
 // @flow
 
-import { mockChoice } from '@cat-org/utils';
+import { mockChoice } from '@mikojs/utils';
 
 import { type settingsType } from '../index';
 

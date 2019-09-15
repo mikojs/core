@@ -12,7 +12,7 @@ import execa, {
 } from 'execa';
 import chokidar from 'chokidar';
 
-import { handleUnhandledRejection } from '@cat-org/utils';
+import { handleUnhandledRejection } from '@mikojs/utils';
 
 import findOptionsPath from 'utils/findOptionsPath';
 import logger from 'utils/logger';

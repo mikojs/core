@@ -6,7 +6,7 @@
 
 <!-- badges.end -->
 
-[website]: http://cat-org/package-homepage
+[website]: http://mikojs/package-homepage
 
 package description
 

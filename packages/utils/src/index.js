@@ -2,4 +2,4 @@
 
 import throwMessageInIndex from './throwMessageInIndex';
 
-throwMessageInIndex('@cat-org/utils');
+throwMessageInIndex('@mikojs/utils');

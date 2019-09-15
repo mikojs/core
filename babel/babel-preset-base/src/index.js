@@ -3,14 +3,14 @@
 import { declare } from '@babel/helper-plugin-utils';
 import { emptyFunction } from 'fbjs';
 
-import { mockChoice } from '@cat-org/utils';
-import { type optionsType as transformFLowOptions } from '@cat-org/babel-plugin-transform-flow';
+import { mockChoice } from '@mikojs/utils';
+import { type optionsType as transformFLowOptions } from '@mikojs/babel-plugin-transform-flow';
 
 export default declare(
   (
     { assertVersion }: {| assertVersion: (version: number) => void |},
     options: {|
-      '@cat-org/transform-flow'?: transformFLowOptions,
+      '@mikojs/transform-flow'?: transformFLowOptions,
     |},
   ): {} => {
     assertVersion(7);
@@ -40,9 +40,9 @@ export default declare(
           emptyFunction.thatReturns([]),
           emptyFunction.thatReturns([
             [
-              '@cat-org/transform-flow',
+              '@mikojs/transform-flow',
               {
-                ...options['@cat-org/transform-flow'],
+                ...options['@mikojs/transform-flow'],
                 plugins: [
                   [
                     'module-resolver',
@@ -53,7 +53,7 @@ export default declare(
                   ],
                   // FIXME: remove when flow support optional-chaining
                   '@babel/proposal-optional-chaining',
-                  ...(options['@cat-org/transform-flow']?.plugins || []),
+                  ...(options['@mikojs/transform-flow']?.plugins || []),
                 ],
               },
             ],

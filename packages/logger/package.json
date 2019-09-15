@@ -1,21 +1,21 @@
 {
-  "name": "@cat-org/logger",
+  "name": "@mikojs/logger",
   "description": "Normalize the logger with the log name",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/logger",
-  "repository": "https://github.com/cat-org/core/tree/master/packages/logger",
+  "homepage": "https://mikojs.github.io/core/logger",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/logger",
   "version": "1.5.8",
   "main": "./lib/index.js",
   "dependencies": {
-    "@cat-org/utils": "^1.5.8",
+    "@mikojs/utils": "^1.5.8",
     "chalk": "^2.4.2",
     "fbjs": "^1.0.0"
   },
   "devDependencies": {
     "ora": "^3.4.0"
   },
-  "keywords": ["cat-org", "logger"],
+  "keywords": ["logger", "mikojs"],
   "publishConfig": {
     "access": "public"
   }

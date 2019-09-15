@@ -34,7 +34,7 @@ class Configs extends Store {
     if (lerna) return;
 
     await this.execa(
-      'yarn add --dev @cat-org/configs',
+      'yarn add --dev @mikojs/configs',
       ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
         (configName: string) => `yarn configs --install ${configName}`,
       ),

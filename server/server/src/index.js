@@ -8,7 +8,7 @@ import chokidar from 'chokidar';
 import chalk from 'chalk';
 import debug from 'debug';
 
-import { handleUnhandledRejection } from '@cat-org/utils';
+import { handleUnhandledRejection } from '@mikojs/utils';
 
 import logger from './utils/logger';
 import Endpoint from './utils/Endpoint';

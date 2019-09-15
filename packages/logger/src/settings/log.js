@@ -2,7 +2,7 @@
 
 import { emptyFunction, ExecutionEnvironment } from 'fbjs';
 
-import { mockChoice } from '@cat-org/utils';
+import { mockChoice } from '@mikojs/utils';
 
 import node from './node';
 import browser from './browser';

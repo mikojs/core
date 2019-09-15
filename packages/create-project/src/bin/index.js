@@ -6,7 +6,7 @@ import path from 'path';
 
 import chalk from 'chalk';
 
-import { handleUnhandledRejection } from '@cat-org/utils';
+import { handleUnhandledRejection } from '@mikojs/utils';
 
 import logger from 'utils/logger';
 import cliOptions from 'utils/cliOptions';

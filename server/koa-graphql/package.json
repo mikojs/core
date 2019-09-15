@@ -1,14 +1,14 @@
 {
-  "name": "@cat-org/koa-graphql",
+  "name": "@mikojs/koa-graphql",
   "description": "Collect the graphql files to build the graphql automatically",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/koa-graphql",
-  "repository": "https://github.com/cat-org/core/tree/master/server/koa-graphql",
+  "homepage": "https://mikojs.github.io/core/koa-graphql",
+  "repository": "https://github.com/mikojs/core/tree/master/server/koa-graphql",
   "version": "1.5.8",
   "main": "./lib/index.js",
   "dependencies": {
-    "@cat-org/utils": "^1.5.8",
+    "@mikojs/utils": "^1.5.8",
     "d3-hierarchy": "^1.1.8",
     "debug": "^4.1.1",
     "directory-tree": "^2.2.4",
@@ -31,7 +31,7 @@
     "koa": "^2.8.1",
     "node-fetch": "^2.6.0"
   },
-  "keywords": ["cat-org", "graphql", "koa"],
+  "keywords": ["graphql", "koa", "mikojs"],
   "publishConfig": {
     "access": "public"
   }

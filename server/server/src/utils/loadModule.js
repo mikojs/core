@@ -2,7 +2,7 @@
 
 import debug from 'debug';
 
-import { requireModule } from '@cat-org/utils';
+import { requireModule } from '@mikojs/utils';
 
 const debugLog = debug('server:loadModule');
 

@@ -1,5 +1,5 @@
 // @flow
 
-import Dnd from '@cat-org/react-dnd';
+import Dnd from '@mikojs/react-dnd';
 
 export default Dnd;

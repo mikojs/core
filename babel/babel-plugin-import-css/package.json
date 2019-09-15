@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/babel-plugin-import-css",
+  "name": "@mikojs/babel-plugin-import-css",
   "description": "Use to make the css files can be imported into `node` and `browser`.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/babel-plugin-import-css",
-  "repository": "https://github.com/cat-org/core/tree/master/babel/babel-plugin-import-css",
+  "homepage": "https://mikojs.github.io/core/babel-plugin-import-css",
+  "repository": "https://github.com/mikojs/core/tree/master/babel/babel-plugin-import-css",
   "version": "1.5.4",
   "main": "./lib/index.js",
   "dependencies": {
@@ -20,8 +20,8 @@
   "keywords": [
     "babel plugin",
     "babel-plugin-css-modules-transform",
-    "cat-org",
-    "import css"
+    "import css",
+    "mikojs"
   ],
   "publishConfig": {
     "access": "public"

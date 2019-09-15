@@ -1,29 +1,29 @@
-# [@cat-org/koa-react][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
+# [@mikojs/koa-react][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
 
-[npm-image]: https://img.shields.io/npm/v/@cat-org/koa-react.svg
-[npm-link]: https://www.npmjs.com/package/@cat-org/koa-react
-[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@cat-org/koa-react.svg
+[npm-image]: https://img.shields.io/npm/v/@mikojs/koa-react.svg
+[npm-link]: https://www.npmjs.com/package/@mikojs/koa-react
+[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@mikojs/koa-react.svg
 
 <!-- badges.end -->
 
-[website]: https://cat-org.github.io/core/koa-react
+[website]: https://mikojs.github.io/core/koa-react
 
 Collect the react files to build the pages automatically.
 
 ## Install
 
 ```sh
-yarn add koa react react-dom @cat-org/koa-react
+yarn add koa react react-dom @mikojs/koa-react
 yarn add --dev webpack
 ```
 
-## Use `@cat-org/koa-react` to server
+## Use `@mikojs/koa-react` to server
 
 1. Add the middleware to server.
 
 ```js
 import Koa from 'koa';
-import React from '@cat-org/koa-react';
+import React from '@mikojs/koa-react';
 
 const app = new Koa();
 const react = new React('./path-to-react-folder');
@@ -86,7 +86,7 @@ const react = new React('./path-to-react-folder', {
 #! /usr/bin/env node
 
 import Koa from 'koa';
-import React from '@cat-org/koa-react';
+import React from '@mikojs/koa-react';
 
 const app = new Koa();
 const react = new React('./path-to-react-folder');
@@ -115,7 +115,7 @@ BUILD_JS=true node ./server.js
 #! /usr/bin/env node
 
 import Koa from 'koa';
-import React from '@cat-org/koa-react';
+import React from '@mikojs/koa-react';
 
 const app = new Koa();
 const react = new React('./path-to-react-folder');
@@ -209,7 +209,7 @@ export default class Document extend React.PureComponent {
     return {
       head: (
         <Helmet>
-          <title>cat-org</title>
+          <title>mikojs</title>
         </Helmet>
       )
     };
@@ -258,7 +258,7 @@ export default class Main extend React.PureComponent {
     return {
       head: (
         <Helmet>
-          <title>cat-org</title>
+          <title>mikojs</title>
         </Helmet>
       )
     };

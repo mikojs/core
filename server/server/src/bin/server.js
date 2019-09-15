@@ -5,7 +5,7 @@ import commander from 'commander';
 import chalk from 'chalk';
 import debug from 'debug';
 
-import { requireModule } from '@cat-org/utils';
+import { requireModule } from '@mikojs/utils';
 
 import { version } from '../../package.json';
 

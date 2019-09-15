@@ -11,8 +11,8 @@ import { diffLines } from 'diff';
 import execa from 'execa';
 import debug from 'debug';
 
-import { normalizedQuestions } from '@cat-org/utils';
-import { type questionType } from '@cat-org/utils/lib/normalizedQuestions';
+import { normalizedQuestions } from '@mikojs/utils';
+import { type questionType } from '@mikojs/utils/lib/normalizedQuestions';
 
 import logger from 'utils/logger';
 
@@ -95,7 +95,7 @@ export default class Store {
    */
   +prompt = <-T>(...questions: $ReadOnlyArray<questionType<T>>) =>
     inquirer.prompt(
-      normalizedQuestions('@cat-org/create-project')(...questions),
+      normalizedQuestions('@mikojs/create-project')(...questions),
     );
 
   /**

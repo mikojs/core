@@ -1,12 +1,12 @@
-# [@cat-org/website][website] · <!-- badges.start -->![github-size][github-size-image]
+# [@mikojs/website][website] · <!-- badges.start -->![github-size][github-size-image]
 
-[github-size-image]: https://img.shields.io/github/repo-size/cat-org/core.svg
+[github-size-image]: https://img.shields.io/github/repo-size/mikojs/core.svg
 
 <!-- badges.end -->
 
-[website]: https://cat-org.github.io/core
+[website]: https://mikojs.github.io/core
 
-The website of `@cat-org/core` documentation.
+The website of `@mikojs/core` documentation.
 
 ## Usage
 

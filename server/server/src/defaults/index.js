@@ -33,23 +33,23 @@ export default async ({
   watch = false,
   port,
 }: contextType): Promise<http$Server> => {
-  const react = new (loadModule('@cat-org/koa-react', DefaultReact))(
+  const react = new (loadModule('@mikojs/koa-react', DefaultReact))(
     path.resolve(dir, './pages'),
     { dev, exclude: /__generated__/ }
       |> ((config: {}) =>
         loadModule(
-          '@cat-org/use-css',
+          '@mikojs/use-css',
           emptyFunction.thatReturnsArgument,
           config,
         ))
       |> ((config: {}) =>
         loadModule(
-          '@cat-org/use-less',
+          '@mikojs/use-less',
           emptyFunction.thatReturnsArgument,
           config,
         )),
   );
-  const graphql = new (loadModule('@cat-org/koa-graphql', DefaultGraphql))(
+  const graphql = new (loadModule('@mikojs/koa-graphql', DefaultGraphql))(
     path.resolve(dir, './graphql'),
   );
 
@@ -68,7 +68,7 @@ export default async ({
 
   return (
     server.init()
-    |> server.use(loadModule('@cat-org/koa-base', defaultMiddleware))
+    |> server.use(loadModule('@mikojs/koa-base', defaultMiddleware))
     |> (undefined
       |> server.start
       |> ('/graphql'

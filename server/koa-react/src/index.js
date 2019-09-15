@@ -18,7 +18,7 @@ import {
   handleUnhandledRejection,
   requireModule,
   mockChoice,
-} from '@cat-org/utils';
+} from '@mikojs/utils';
 
 import Cache, { type handlerType } from './utils/Cache';
 import getConfig from './utils/getConfig';

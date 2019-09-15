@@ -23,8 +23,8 @@ const babel = config => {
     [
       'transform-imports',
       {
-        '@cat-org/utils': {
-          transform: '@cat-org/utils/lib/${member}',
+        '@mikojs/utils': {
+          transform: '@mikojs/utils/lib/${member}',
         },
         fbjs: {
           transform: 'fbjs/lib/${member}',
@@ -59,7 +59,7 @@ const lint = {
   }),
   ignore: ignore => [
     ...ignore,
-    // ignore for @cat-org/eslint-config-cat testing
+    // ignore for @mikojs/eslint-config-cat testing
     'packages/eslint-config-cat/src/__tests__/__ignore__',
   ],
 };

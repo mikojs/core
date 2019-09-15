@@ -1,28 +1,28 @@
-# [@cat-org/koa-graphql][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
+# [@mikojs/koa-graphql][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
 
-[npm-image]: https://img.shields.io/npm/v/@cat-org/koa-graphql.svg
-[npm-link]: https://www.npmjs.com/package/@cat-org/koa-graphql
-[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@cat-org/koa-graphql.svg
+[npm-image]: https://img.shields.io/npm/v/@mikojs/koa-graphql.svg
+[npm-link]: https://www.npmjs.com/package/@mikojs/koa-graphql
+[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@mikojs/koa-graphql.svg
 
 <!-- badges.end -->
 
-[website]: https://cat-org.github.io/core/koa-graphql
+[website]: https://mikojs.github.io/core/koa-graphql
 
 Collect the graphql files to build the graphql automatically.
 
 ## Install
 
 ```sh
-yarn add koa graphql @cat-org/koa-graphql
+yarn add koa graphql @mikojs/koa-graphql
 ```
 
-## Use `@cat-org/koa-graphql` to server
+## Use `@mikojs/koa-graphql` to server
 
 1. Add the middleware to server.
 
 ```js
 import Koa from 'koa';
-import Graphql from '@cat-org/koa-graphql';
+import Graphql from '@mikojs/koa-graphql';
 
 const app = new Koa();
 const graphql = new Graphql('./path-to-graphql-foder');
@@ -131,7 +131,7 @@ app.use(graphql.middleware({ ... }));
 #! /usr/bin/env node
 
 import Koa from 'koa';
-import Graphql from '@cat-org/koa-graphql';
+import Graphql from '@mikojs/koa-graphql';
 
 const app = new Koa();
 const graphql = new Graphql('./path-to-graphql-foder');

@@ -1,19 +1,19 @@
-# [@cat-org/badges][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
+# [@mikojs/badges][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
 
-[npm-image]: https://img.shields.io/npm/v/@cat-org/badges.svg
-[npm-link]: https://www.npmjs.com/package/@cat-org/badges
-[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@cat-org/badges.svg
+[npm-image]: https://img.shields.io/npm/v/@mikojs/badges.svg
+[npm-link]: https://www.npmjs.com/package/@mikojs/badges
+[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@mikojs/badges.svg
 
 <!-- badges.end -->
 
-[website]: https://cat-org.github.io/core/badges
+[website]: https://mikojs.github.io/core/badges
 
 Use to add badges to `README.md`.
 
 ## Install
 
 ```sh
-yarn add @cat-org/badges --dev
+yarn add @mikojs/badges --dev
 ```
 
 ## Run command
@@ -25,7 +25,7 @@ yarn add @cat-org/badges --dev
 yarn badges ./README.md
 ```
 
-## Add to `@cat-org/badges` to lint-staged
+## Add to `@mikojs/badges` to lint-staged
 
 ```js
 ...

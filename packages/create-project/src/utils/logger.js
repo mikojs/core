@@ -1,5 +1,5 @@
 // @flow
 
-import logger from '@cat-org/logger';
+import logger from '@mikojs/logger';
 
-export default logger('@cat-org/create-project');
+export default logger('@mikojs/create-project');

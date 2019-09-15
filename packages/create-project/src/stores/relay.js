@@ -124,7 +124,7 @@ export default {
 
 const nodeTemplate = `// @flow
 
-import node from '@cat-org/koa-graphql/lib/schemas/node';
+import node from '@mikojs/koa-graphql/lib/schemas/node';
 
 export default node;`;
 
@@ -141,7 +141,7 @@ import {
 } from 'react-relay';
 import { type SSRCache as SSRCacheType } from 'react-relay-network-modern-ssr/node8/server';
 
-import { type mainCtxType } from '@cat-org/koa-react/lib/types';
+import { type mainCtxType } from '@mikojs/koa-react/lib/types';
 
 import { initEnvironment, createEnvironment } from 'utils/createEnvironment';
 
@@ -195,7 +195,7 @@ const Main = ({
  * @example
  * Main.getInitialProps(ctx)
  *
- * @param {mainCtxType} ctx - context from @cat-org/koa-react
+ * @param {mainCtxType} ctx - context from @mikojs/koa-react
  *
  * @return {propsType} - initial props
  */
@@ -262,7 +262,7 @@ import path from 'path';
 import fetch from 'node-fetch';
 import { fetchQuery, graphql } from 'react-relay';
 
-import server from '@cat-org/server/lib/defaults';
+import server from '@mikojs/server/lib/defaults';
 
 import client from '../client';
 

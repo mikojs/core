@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/server",
+  "name": "@mikojs/server",
   "description": "Run koa server with pipeline",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/server",
-  "repository": "https://github.com/cat-org/core/tree/master/server/server",
+  "homepage": "https://mikojs.github.io/core/server",
+  "repository": "https://github.com/mikojs/core/tree/master/server/server",
   "version": "1.5.8",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
@@ -12,8 +12,8 @@
     "@babel/cli": "^7.6.0",
     "@babel/core": "^7.6.0",
     "@babel/runtime": "^7.6.0",
-    "@cat-org/logger": "^1.5.8",
-    "@cat-org/utils": "^1.5.8",
+    "@mikojs/logger": "^1.5.8",
+    "@mikojs/utils": "^1.5.8",
     "chalk": "^2.4.2",
     "chokidar": "^3.0.2",
     "commander": "^3.0.1",
@@ -30,7 +30,7 @@
     "koa": "^2.8.1",
     "node-fetch": "^2.6.0"
   },
-  "keywords": ["babel", "cat-org", "koa", "pipeline", "server"],
+  "keywords": ["babel", "koa", "mikojs", "pipeline", "server"],
   "publishConfig": {
     "access": "public"
   }

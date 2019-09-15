@@ -1,19 +1,19 @@
-# [@cat-org/server][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
+# [@mikojs/server][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
 
-[npm-image]: https://img.shields.io/npm/v/@cat-org/server.svg
-[npm-link]: https://www.npmjs.com/package/@cat-org/server
-[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@cat-org/server.svg
+[npm-image]: https://img.shields.io/npm/v/@mikojs/server.svg
+[npm-link]: https://www.npmjs.com/package/@mikojs/server
+[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@mikojs/server.svg
 
 <!-- badges.end -->
 
-[website]: https://cat-org.github.io/core/server
+[website]: https://mikojs.github.io/core/server
 
-Run koa server with `pipeline` and `babel`. This package is just a helper. You can replace any method in `@cat-org/server` by using the custom functions.
+Run koa server with `pipeline` and `babel`. This package is just a helper. You can replace any method in `@mikojs/server` by using the custom functions.
 
 ## Install
 
 ```sh
-yarn add koa @cat-org/server
+yarn add koa @mikojs/server
 ```
 
 #### Run command
@@ -28,7 +28,7 @@ yarn server src -d lib
 If you want to use the `custom server`, you need to add a custom server file, For example:
 
 ```js
-import server form '@cat-org/server';
+import server form '@mikojs/server';
 
 export default () =>
   server.init()
@@ -49,7 +49,7 @@ yarn server ./src/server.js -o ./lib/server.js
 #### Use default server in testing
 
 ```js
-import server from '@cat-org/server/lib/defaults';
+import server from '@mikojs/server/lib/defaults';
 
 let runningServer;
 
@@ -70,7 +70,7 @@ describe('server', () => {
 ## Write the custom server
 
 ```js
-import server from '@cat-org/server';
+import server from '@mikojs/server';
 
 export default ({ src, dir, dev, watch, port }) =>
   server.init()
@@ -108,18 +108,18 @@ export default ({ src, dir, dev, watch, port }) =>
 
 ## Load plugins with default server
 
-You can add those packages in your project and `@cat-org/server` will load the default config for those modules.
+You can add those packages in your project and `@mikojs/server` will load the default config for those modules.
 
-- `@cat-org/koa-base`
-- `@cat-org/koa-graphql`
-- `@cat-org/koa-react`
-  - `@cat-org/use-css`
-  - `@cat-org/use-less`
+- `@mikojs/koa-base`
+- `@mikojs/koa-graphql`
+- `@mikojs/koa-react`
+  - `@mikojs/use-css`
+  - `@mikojs/use-less`
 
 You only need to do this:
 
 ```sh
-yarn add @cat-org/package-name
+yarn add @mikojs/package-name
 ```
 
 #### Environment variables about those plugins

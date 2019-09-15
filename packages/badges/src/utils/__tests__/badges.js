@@ -13,7 +13,7 @@ const ctx = {
   rootPath: '/rootPath',
   pkg: {
     name: 'badges',
-    homepage: 'https://cat-org.github.io/core',
+    homepage: 'https://mikojs.github.io/core',
   },
 };
 
@@ -56,7 +56,7 @@ describe('badges', () => {
       expected: $ReadOnlyArray<string>,
     |}) => {
       execa.mainFunction = () =>
-        'origin\tgit@github.com:cat-org/core.git (fetch)';
+        'origin\tgit@github.com:mikojs/core.git (fetch)';
       fs.exist = fsExist;
 
       const result = await badges('<!-- badges.start --><!-- badges.end -->', {

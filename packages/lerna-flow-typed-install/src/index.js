@@ -1,5 +1,5 @@
 // @flow
 
-import { throwMessageInIndex } from '@cat-org/utils';
+import { throwMessageInIndex } from '@mikojs/utils';
 
-throwMessageInIndex('@cat-org/lerna-flow-typed-install');
+throwMessageInIndex('@mikojs/lerna-flow-typed-install');

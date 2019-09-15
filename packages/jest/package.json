@@ -1,14 +1,14 @@
 {
-  "name": "@cat-org/jest",
+  "name": "@mikojs/jest",
   "description": "Jest setup files",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/jest",
-  "repository": "https://github.com/cat-org/core/tree/master/packages/jest",
+  "homepage": "https://mikojs.github.io/core/jest",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/jest",
   "version": "1.5.8",
   "main": "./lib/index.js",
   "dependencies": {
-    "@cat-org/utils": "^1.5.8",
+    "@mikojs/utils": "^1.5.8",
     "babel-jest": "^24.9.0",
     "enzyme": "^3.10.0",
     "fbjs": "^1.0.0"
@@ -21,7 +21,7 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
-  "keywords": ["cat-org", "jest"],
+  "keywords": ["jest", "mikojs"],
   "publishConfig": {
     "access": "public"
   }

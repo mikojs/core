@@ -1,5 +1,5 @@
 [ignore]
-# ignore for @cat-org/eslint-config-cat
+# ignore for @mikojs/eslint-config-cat
 <PROJECT_ROOT>/packages/eslint-config-cat/src/__tests__/__ignore__
 
 [include]

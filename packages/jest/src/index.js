@@ -1,5 +1,5 @@
 // @flow
 
-import { handleUnhandledRejection } from '@cat-org/utils';
+import { handleUnhandledRejection } from '@mikojs/utils';
 
 handleUnhandledRejection();

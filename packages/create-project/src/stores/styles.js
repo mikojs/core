@@ -71,12 +71,12 @@ class Styles extends Store {
     if (lerna || !this.storeUseStyles) return;
 
     await this.execa(
-      'yarn add @cat-org/use-css',
-      'yarn add --dev babel-plugin-css-modules-transform @cat-org/babel-plugin-import-css',
+      'yarn add @mikojs/use-css',
+      'yarn add --dev babel-plugin-css-modules-transform @mikojs/babel-plugin-import-css',
     );
 
     if (this.storeUseStyles === 'less')
-      await this.execa('yarn add @cat-org/use-less');
+      await this.execa('yarn add @mikojs/use-less');
   };
 }
 

@@ -4,10 +4,10 @@ import jest from '../jest';
 
 describe('jest', () => {
   test.each`
-    configsEnv   | setupFiles                     | testPathIgnorePatterns         | coveragePathIgnorePatterns
-    ${[]}        | ${[]}                          | ${[]}                          | ${[]}
-    ${['react']} | ${['@cat-org/jest/lib/react']} | ${[]}                          | ${[]}
-    ${['relay']} | ${[]}                          | ${['__tests__/__generated__']} | ${['__generated__']}
+    configsEnv   | setupFiles                    | testPathIgnorePatterns         | coveragePathIgnorePatterns
+    ${[]}        | ${[]}                         | ${[]}                          | ${[]}
+    ${['react']} | ${['@mikojs/jest/lib/react']} | ${[]}                          | ${[]}
+    ${['relay']} | ${[]}                         | ${['__tests__/__generated__']} | ${['__generated__']}
   `(
     'run with configsEnv = $configsEnv',
     ({
@@ -23,7 +23,7 @@ describe('jest', () => {
     |}) => {
       const result = jest.config({ configsEnv });
 
-      expect(result.setupFiles).toEqual(['@cat-org/jest', ...setupFiles]);
+      expect(result.setupFiles).toEqual(['@mikojs/jest', ...setupFiles]);
       expect(result.testPathIgnorePatterns).toEqual([
         '__tests__/__ignore__',
         ...testPathIgnorePatterns,

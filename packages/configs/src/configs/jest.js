@@ -4,13 +4,13 @@ export default {
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
     'jest',
-    '@cat-org/jest',
+    '@mikojs/jest',
   ],
   run: (argv: $ReadOnlyArray<string>) => [...argv, '--coverage=false'],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
     setupFiles: [
-      '@cat-org/jest',
-      ...(!configsEnv.includes('react') ? [] : ['@cat-org/jest/lib/react']),
+      '@mikojs/jest',
+      ...(!configsEnv.includes('react') ? [] : ['@mikojs/jest/lib/react']),
     ],
     testPathIgnorePatterns: [
       '__tests__/__ignore__',

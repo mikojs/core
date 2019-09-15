@@ -2,24 +2,24 @@
 
 import { emptyFunction } from 'fbjs';
 
-import { mockChoice } from '@cat-org/utils';
+import { mockChoice } from '@mikojs/utils';
 
 export default {
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
     '@babel/cli',
     '@babel/core',
-    '@cat-org/babel-preset-base',
+    '@mikojs/babel-preset-base',
   ],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
     presets: [
       ...(!configsEnv.some((env: string) => ['relay', 'server'].includes(env))
-        ? ['@cat-org/base']
+        ? ['@mikojs/base']
         : [
             [
-              '@cat-org/base',
+              '@mikojs/base',
               {
-                '@cat-org/transform-flow': {
+                '@mikojs/transform-flow': {
                   ...(!configsEnv.includes('relay')
                     ? {}
                     : {
@@ -71,7 +71,7 @@ export default {
               },
             ],
             [
-              '@cat-org/import-css',
+              '@mikojs/import-css',
               {
                 test: configsEnv.includes('less') ? /\.less$/ : /\.css$/,
               },

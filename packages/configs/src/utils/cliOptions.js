@@ -6,7 +6,7 @@ import debug from 'debug';
 import npmWhich from 'npm-which';
 import { emptyFunction } from 'fbjs';
 
-import { mockChoice } from '@cat-org/utils';
+import { mockChoice } from '@mikojs/utils';
 
 import { version } from '../../package.json';
 

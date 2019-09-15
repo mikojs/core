@@ -1,11 +1,11 @@
 // @flow
 
-import useCss from '@cat-org/use-css';
+import useCss from '@mikojs/use-css';
 
 import useLess from '../index.js';
 
 describe('use-less', () => {
-  test('use @cat-org/ues-less with @cat-org/use-css', () => {
+  test('use @mikojs/ues-less with @mikojs/use-css', () => {
     expect(
       // TODO: use pipeline
       useLess(useCss()).config(

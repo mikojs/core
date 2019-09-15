@@ -41,8 +41,8 @@ const basicUsage = {
     // pkg
     private: false,
     description: 'package description',
-    homepage: 'http://cat-org/package-homepage',
-    repository: 'https://github.com/cat-org/core.git',
+    homepage: 'http://mikojs/package-homepage',
+    repository: 'https://github.com/mikojs/core.git',
     keywords: ['keyword'],
 
     // npm

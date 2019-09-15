@@ -4,7 +4,7 @@ import ora from 'ora';
 import chalk from 'chalk';
 import { invariant } from 'fbjs';
 
-import { mockChoice } from '@cat-org/utils';
+import { mockChoice } from '@mikojs/utils';
 
 import { type settingsType } from '../index';
 

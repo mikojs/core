@@ -34,7 +34,7 @@ const cssPlugins = (extension: string) => [
     },
   ],
   [
-    '@cat-org/import-css',
+    '@mikojs/import-css',
     {
       test: extension === '.less' ? /\.less$/ : /\.css$/,
     },
@@ -43,9 +43,9 @@ const cssPlugins = (extension: string) => [
 
 const relayPresetBase = [
   [
-    '@cat-org/base',
+    '@mikojs/base',
     {
-      '@cat-org/transform-flow': {
+      '@mikojs/transform-flow': {
         ignore: /__generated__/,
       },
     },
@@ -54,9 +54,9 @@ const relayPresetBase = [
 
 const serverPresetBase = [
   [
-    '@cat-org/base',
+    '@mikojs/base',
     {
-      '@cat-org/transform-flow': {
+      '@mikojs/transform-flow': {
         plugins: [
           ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
         ],
@@ -71,13 +71,13 @@ const serverPlugins = [
 
 describe('babel', () => {
   test.each`
-    configsEnv    | presets                              | plugins
-    ${[]}         | ${['@cat-org/base']}                 | ${[]}
-    ${['react']}  | ${['@cat-org/base', '@babel/react']} | ${reactPlugins}
-    ${['css']}    | ${['@cat-org/base']}                 | ${cssPlugins('.css')}
-    ${['less']}   | ${['@cat-org/base']}                 | ${cssPlugins('.less')}
-    ${['relay']}  | ${relayPresetBase}                   | ${['relay']}
-    ${['server']} | ${serverPresetBase}                  | ${serverPlugins}
+    configsEnv    | presets                             | plugins
+    ${[]}         | ${['@mikojs/base']}                 | ${[]}
+    ${['react']}  | ${['@mikojs/base', '@babel/react']} | ${reactPlugins}
+    ${['css']}    | ${['@mikojs/base']}                 | ${cssPlugins('.css')}
+    ${['less']}   | ${['@mikojs/base']}                 | ${cssPlugins('.less')}
+    ${['relay']}  | ${relayPresetBase}                  | ${['relay']}
+    ${['server']} | ${serverPresetBase}                 | ${serverPlugins}
   `(
     'run with configsEnv = $configsEnv',
     ({

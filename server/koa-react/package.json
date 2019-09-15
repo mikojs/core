@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/koa-react",
+  "name": "@mikojs/koa-react",
   "description": "Collect the react files to build the pages automatically",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/koa-react",
-  "repository": "https://github.com/cat-org/core/tree/master/server/koa-react",
+  "homepage": "https://mikojs.github.io/core/koa-react",
+  "repository": "https://github.com/mikojs/core/tree/master/server/koa-react",
   "version": "1.5.8",
   "main": "./lib/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "run-test-server": "NODE_PORT=8000 ./lib/lib/__ignore__/run.js"
   },
   "dependencies": {
-    "@cat-org/utils": "^1.5.8",
+    "@mikojs/utils": "^1.5.8",
     "address": "^1.1.2",
     "d3-hierarchy": "^1.1.8",
     "debug": "^4.1.1",
@@ -55,8 +55,8 @@
     "webpack": "^4.39.3"
   },
   "keywords": [
-    "cat-org",
     "koa",
+    "mikojs",
     "react",
     "react-helmet",
     "react-router-dom",

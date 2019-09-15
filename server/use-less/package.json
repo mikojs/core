@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/use-less",
-  "description": "Add less config to @cat-org/koa-react",
+  "name": "@mikojs/use-less",
+  "description": "Add less config to @mikojs/koa-react",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/use-less",
-  "repository": "https://github.com/cat-org/core/tree/master/server/use-less",
+  "homepage": "https://mikojs.github.io/core/use-less",
+  "repository": "https://github.com/mikojs/core/tree/master/server/use-less",
   "version": "1.5.3",
   "main": "./lib/index.js",
   "dependencies": {
@@ -13,13 +13,13 @@
     "less-loader": "^5.0.0"
   },
   "peerDependencies": {
-    "@cat-org/koa-react": ">=1.0.0",
-    "@cat-org/use-css": ">=1.0.0"
+    "@mikojs/koa-react": ">=1.0.0",
+    "@mikojs/use-css": ">=1.0.0"
   },
   "devDependencies": {
     "webpack": "^4.39.3"
   },
-  "keywords": ["cat-org", "koa-react", "use-less"],
+  "keywords": ["koa-react", "mikojs", "use-less"],
   "publishConfig": {
     "access": "public"
   }

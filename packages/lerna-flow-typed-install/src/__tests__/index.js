@@ -1,7 +1,7 @@
 // @flow
 
-import { throwMessageInIndex } from '@cat-org/utils';
+import { throwMessageInIndex } from '@mikojs/utils';
 
-throwMessageInIndex.test('@cat-org/lerna-flow-typed-install', () =>
+throwMessageInIndex.test('@mikojs/lerna-flow-typed-install', () =>
   require('../index'),
 );

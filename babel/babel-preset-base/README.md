@@ -1,28 +1,28 @@
-# [@cat-org/babel-preset-base][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
+# [@mikojs/babel-preset-base][website] · <!-- badges.start -->[![npm][npm-image]][npm-link] ![npm-size][npm-size-image]
 
-[npm-image]: https://img.shields.io/npm/v/@cat-org/babel-preset-base.svg
-[npm-link]: https://www.npmjs.com/package/@cat-org/babel-preset-base
-[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@cat-org/babel-preset-base.svg
+[npm-image]: https://img.shields.io/npm/v/@mikojs/babel-preset-base.svg
+[npm-link]: https://www.npmjs.com/package/@mikojs/babel-preset-base
+[npm-size-image]: https://img.shields.io/bundlephobia/minzip/@mikojs/babel-preset-base.svg
 
 <!-- badges.end -->
 
-[website]: https://cat-org.github.io/core/babel-preset-base
+[website]: https://mikojs.github.io/core/babel-preset-base
 
-The base of babel plugin with cat-org.
+The base of babel plugin with mikojs.
 
 ## Install
 
 ```sh
-yarn add @cat-org/babel-preset-base --dev
+yarn add @mikojs/babel-preset-base --dev
 ```
 
-## Add `@cat-org/babel-preset-base` to babel config
+## Add `@mikojs/babel-preset-base` to babel config
 
 ```js
 ...
   presets: [
     ...
-    '@cat-org/base',
+    '@mikojs/base',
     ...
   ],
 ...
@@ -35,9 +35,9 @@ yarn add @cat-org/babel-preset-base --dev
   presets: [
     ...
     [
-      '@cat-org/base',
+      '@mikojs/base',
       {
-        '@cat-org/transform-flow': {
+        '@mikojs/transform-flow': {
           plugins: ['plugins'],
         },
       },

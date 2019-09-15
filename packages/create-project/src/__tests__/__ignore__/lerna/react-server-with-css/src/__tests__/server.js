@@ -8,7 +8,7 @@ import path from 'path';
 
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
-import server from '@cat-org/server/lib/defaults';
+import server from '@mikojs/server/lib/defaults';
 
 let runningServer: http$Server;
 

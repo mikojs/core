@@ -54,7 +54,7 @@ export default ({
     run: (argv: $ReadOnlyArray<string>) => [...argv, '--silent'],
   },
 
-  // @cat-org/server
+  // @mikojs/server
   server,
   'server:lerna': {
     ...server,

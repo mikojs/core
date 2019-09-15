@@ -8,8 +8,8 @@ describe('server', () => {
       'yarn',
       'add',
       'koa',
-      '@cat-org/server',
-      '@cat-org/koa-base',
+      '@mikojs/server',
+      '@mikojs/koa-base',
     ]);
   });
 });

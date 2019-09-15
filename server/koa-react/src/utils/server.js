@@ -21,7 +21,7 @@ import Multistream from 'multistream';
 import getStream from 'get-stream';
 import { emptyFunction } from 'fbjs';
 
-import { requireModule } from '@cat-org/utils';
+import { requireModule } from '@mikojs/utils';
 
 import type CacheType from './Cache';
 
@@ -109,7 +109,7 @@ export default (
   // [end] preload
 
   // make document scream
-  const hash = crypto.createHmac('sha256', '@cat-org/koa-react').digest('hex');
+  const hash = crypto.createHmac('sha256', '@mikojs/koa-react').digest('hex');
   const [upperDocument, lowerDocument] = renderToStaticMarkup(
     <Document {...documentInitialProps} helmet={Helmet.renderStatic()}>
       <main id="__CAT__">{hash}</main>

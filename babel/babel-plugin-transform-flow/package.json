@@ -1,10 +1,10 @@
 {
-  "name": "@cat-org/babel-plugin-transform-flow",
+  "name": "@mikojs/babel-plugin-transform-flow",
   "description": "Use to build the flow files with babel",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://cat-org.github.io/core/babel-plugin-transform-flow",
-  "repository": "https://github.com/cat-org/core/tree/master/babel/babel-plugin-transform-flow",
+  "homepage": "https://mikojs.github.io/core/babel-plugin-transform-flow",
+  "repository": "https://github.com/mikojs/core/tree/master/babel/babel-plugin-transform-flow",
   "version": "1.5.4",
   "main": "./lib/index.js",
   "dependencies": {
@@ -15,7 +15,7 @@
   "peerDependencies": {
     "@babel/core": ">=7.0.0"
   },
-  "keywords": ["babel plugin", "cat-org", "transform flow files"],
+  "keywords": ["babel plugin", "mikojs", "transform flow files"],
   "publishConfig": {
     "access": "public"
   }

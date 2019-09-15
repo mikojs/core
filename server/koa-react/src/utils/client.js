@@ -5,7 +5,7 @@ import { hydrate } from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { emptyFunction } from 'fbjs';
 
-import { mockChoice, handleUnhandledRejection } from '@cat-org/utils';
+import { mockChoice, handleUnhandledRejection } from '@mikojs/utils';
 
 import Root, { type propsType as rootPropsType } from 'components/Root';
 

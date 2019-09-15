@@ -7,7 +7,7 @@
 
 import { emptyFunction, ExecutionEnvironment } from 'fbjs';
 
-import { mockChoice } from '@cat-org/utils';
+import { mockChoice } from '@mikojs/utils';
 
 /**
  * @example

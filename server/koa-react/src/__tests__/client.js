@@ -3,7 +3,7 @@
 import path from 'path';
 import { type ComponentType } from 'react';
 
-import { requireModule } from '@cat-org/utils';
+import { requireModule } from '@mikojs/utils';
 
 import pagesTestings from './__ignore__/pagesTestings';
 

@@ -3,8 +3,8 @@
   "description": "package description",
   "license": "MIT",
   "author": "username <email>",
-  "homepage": "http://cat-org/package-homepage",
-  "repository": "https://github.com/cat-org/core.git",
+  "homepage": "http://mikojs/package-homepage",
+  "repository": "https://github.com/mikojs/core.git",
   "version": "1.0.0",
   "main": "./lib/index.js",
   "scripts": {

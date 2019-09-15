@@ -6,7 +6,7 @@ export default {
     'husky',
     'lint-staged',
     'prettier-package-json',
-    '@cat-org/badges',
+    '@mikojs/badges',
   ],
   config: () => ({
     '*.js': ['yarn configs prettier', 'yarn configs lint', 'git add'],

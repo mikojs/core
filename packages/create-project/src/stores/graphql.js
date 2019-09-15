@@ -86,7 +86,7 @@ class Graphql extends Store {
 
     if (lerna) return;
 
-    await this.execa('yarn add graphql @cat-org/koa-graphql');
+    await this.execa('yarn add graphql @mikojs/koa-graphql');
   };
 }
 

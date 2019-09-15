@@ -9,7 +9,7 @@ import isRunning from 'is-running';
 import npmWhich from 'npm-which';
 import chalk from 'chalk';
 
-import { handleUnhandledRejection } from '@cat-org/utils';
+import { handleUnhandledRejection } from '@mikojs/utils';
 
 import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';

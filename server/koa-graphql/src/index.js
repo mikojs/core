@@ -23,8 +23,8 @@ import compose from 'koa-compose';
 import bodyparser from 'koa-bodyparser';
 import debug from 'debug';
 
-import { d3DirTree, requireModule } from '@cat-org/utils';
-import { type d3DirTreeNodeType } from '@cat-org/utils/lib/d3DirTree';
+import { d3DirTree, requireModule } from '@mikojs/utils';
+import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 type buildSchemasType = {
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,

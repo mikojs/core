@@ -5,15 +5,15 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-preset-base",
   "repository": "https://github.com/mikojs/core/tree/master/babel/babel-preset-base",
-  "version": "1.5.8",
+  "version": "1.6.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-flow": "^7.0.0",
-    "@mikojs/babel-plugin-transform-flow": "^1.5.4",
-    "@mikojs/utils": "^1.5.8",
+    "@mikojs/babel-plugin-transform-flow": "^1.6.0",
+    "@mikojs/utils": "^1.6.0",
     "babel-plugin-module-resolver": "^3.2.0",
     "fbjs": "^1.0.0"
   },

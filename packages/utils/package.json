@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/utils",
   "repository": "https://github.com/mikojs/core/tree/master/packages/utils",
-  "version": "1.5.8",
+  "version": "1.6.0",
   "main": "./lib/index.js",
   "devDependencies": {
     "chalk": "^2.4.2",

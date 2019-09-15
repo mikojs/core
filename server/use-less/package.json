@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/use-less",
   "repository": "https://github.com/mikojs/core/tree/master/server/use-less",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "main": "./lib/index.js",
   "dependencies": {
     "fbjs": "^1.0.0",

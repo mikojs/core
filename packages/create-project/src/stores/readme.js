@@ -40,6 +40,7 @@ yarn install
  * @return {string} - content
  */
 const scriptsDescription = (lerna: boolean, useServer: ?boolean) => ({
+  dev: 'Run development.',
   ...(useServer
     ? {
         start: 'Run production server.',
@@ -47,7 +48,6 @@ const scriptsDescription = (lerna: boolean, useServer: ?boolean) => ({
     : {
         prod: 'Run production.',
       }),
-  dev: 'Run development.',
   test: lerna ? 'Run pre-testing.' : 'Run testing.',
 });
 

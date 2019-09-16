@@ -131,7 +131,7 @@ class Pkg extends Store {
     if (useServer) {
       this.storePkg.scripts = ({
         dev: lerna ? 'configs server:lerna -w' : 'configs server -w',
-        prod: lerna
+        start: lerna
           ? 'NODE_ENV=production configs server:lerna'
           : 'NODE_ENV=production configs server',
       }: { [string]: string });

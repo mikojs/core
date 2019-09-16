@@ -22,7 +22,7 @@ describe('configs', () => {
             case 'install':
             case 'ignore':
             case 'run':
-              (configKey !== 'execa'
+              (configKey !== 'exec'
                 ? expect(value([])).not
                 : expect(value([]))
               ).toHaveLength(0);

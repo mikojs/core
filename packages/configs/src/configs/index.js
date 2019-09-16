@@ -2,7 +2,7 @@
 
 import { type configsType } from '../types';
 
-import execa from './execa';
+import exec from './exec';
 import babel from './babel';
 import prettier from './prettier';
 import lint from './lint';
@@ -12,7 +12,7 @@ import server from './server';
 
 export default ({
   // custom command
-  execa,
+  exec,
 
   // babel
   babel,

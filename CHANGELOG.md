@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.6.1 (2019-09-16)
+
+#### :house: Internal
+
+- `configs`
+  - [#400](https://github.com/mikojs/core/pull/400) (@mikojs/configs) Rename execa to exec ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#399](https://github.com/mikojs/core/pull/399) (@mikojs/core) Add flow-typed to cache ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.6.0 (2019-09-15)
 
 #### :boom: Breaking Change

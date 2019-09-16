@@ -59,7 +59,7 @@ export default (
   configs {gray --info}
   configs {green babel:lerna} {gray --info}
   configs {green babel} {gray --configs-env envA,envB}
-  configs {green execa run custom command} {gray --configs-env envA,envB --configs-files babel,lint}`,
+  configs {green exec run custom command} {gray --configs-env envA,envB --configs-files babel,lint}`,
     )
     .option('--install', 'install packages by config')
     .option('--info', 'print more info about configs')

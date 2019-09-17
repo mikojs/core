@@ -9,7 +9,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "dev": "configs server -w",
-    "prod": "NODE_ENV=production configs server",
+    "start": "NODE_ENV=production configs server",
     "test": "SKIP_SERVER=true configs server && configs test"
   },
   "dependencies": {

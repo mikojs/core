@@ -11,4 +11,4 @@ package description
 ## Usage
 
 - `dev`: Run development.
-- `prod`: Run production.
+- `start`: Run production server.

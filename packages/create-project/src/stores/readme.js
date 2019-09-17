@@ -35,12 +35,19 @@ yarn install
  * scriptsDescription(lerna)
  *
  * @param {boolean} lerna - lerna option
+ * @param {boolean} useServer - use server or not
  *
  * @return {string} - content
  */
-const scriptsDescription = (lerna: boolean) => ({
+const scriptsDescription = (lerna: boolean, useServer: ?boolean) => ({
   dev: 'Run development.',
-  prod: 'Run production.',
+  ...(useServer
+    ? {
+        start: 'Run production server.',
+      }
+    : {
+        prod: 'Run production.',
+      }),
   test: lerna ? 'Run pre-testing.' : 'Run testing.',
 });
 
@@ -50,6 +57,7 @@ const scriptsDescription = (lerna: boolean) => ({
  *
  * @param {boolean} lerna - lerna option
  * @param {boolean} useNpm - use npm or not
+ * @param {boolean} useServer - use server or not
  * @param {Store.ctx.pkg.scripts} scripts - pkg scripts
  *
  * @return {string} - content
@@ -57,13 +65,17 @@ const scriptsDescription = (lerna: boolean) => ({
 const scriptsTemplate = (
   lerna: boolean,
   useNpm: ?boolean,
+  useServer: ?boolean,
   scripts: { [string]: string },
 ) => `
 
 ${useNpm ? '## Develop' : '## Usage'}
 
 ${Object.keys(scripts)
-  .map((key: string) => `- \`${key}\`: ${scriptsDescription(lerna)[key]}`)
+  .map(
+    (key: string) =>
+      `- \`${key}\`: ${scriptsDescription(lerna, useServer)[key]}`,
+  )
   .join('\n')}`;
 
 /**
@@ -72,7 +84,8 @@ ${Object.keys(scripts)
  *
  * @param {boolean} lerna - lerna option
  * @param {Store.ctx.pkg} pkg - pkg in store context
- * @param {boolean} useNpm - useNpm in store context
+ * @param {boolean} useNpm - use npm or not
+ * @param {boolean} useServer - use server or not
  *
  * @return {string} - content
  */
@@ -85,6 +98,7 @@ const template = (
     scripts,
   }: $NonMaybeType<$PropertyType<$PropertyType<Store, 'ctx'>, 'pkg'>>,
   useNpm: ?boolean,
+  useServer: ?boolean,
 ) => `# [${name}][website] · <!-- badges.start --><!-- badges.end -->
 
 [website]: ${homepage}
@@ -92,7 +106,7 @@ const template = (
 ${description}${lerna && !useNpm ? '' : startTemplate(useNpm, name)}${
   !scripts || Object.keys(scripts).length === 0
     ? ''
-    : scriptsTemplate(lerna, useNpm, scripts)
+    : scriptsTemplate(lerna, useNpm, useServer, scripts)
 }`;
 
 /** readme store */
@@ -103,11 +117,16 @@ class Readme extends Store {
    *
    * @param {Store.ctx} ctx - store context
    */
-  +end = async ({ lerna, pkg, useNpm }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({
+    lerna,
+    pkg,
+    useNpm,
+    useServer,
+  }: $PropertyType<Store, 'ctx'>) => {
     invariant(pkg, 'Can not run readme store without pkg in `ctx`');
 
     await this.writeFiles({
-      'README.md': template(lerna, pkg, useNpm),
+      'README.md': template(lerna, pkg, useNpm, useServer),
     });
   };
 }

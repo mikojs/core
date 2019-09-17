@@ -9,7 +9,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "dev": "configs server:lerna -w",
-    "prod": "NODE_ENV=production configs server:lerna"
+    "start": "NODE_ENV=production configs server:lerna"
   },
   "keywords": ["keyword"],
   "publishConfig": {

@@ -24,5 +24,5 @@ yarn install
 ## Usage
 
 - `dev`: Run development.
-- `prod`: Run production.
+- `start`: Run production server.
 - `test`: Run testing.

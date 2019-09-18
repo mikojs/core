@@ -4,12 +4,12 @@ export default {
   alias: 'esw',
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
-    '@mikojs/eslint-config-cat',
+    '@mikojs/eslint-config-base',
     'eslint',
     'eslint-watch',
   ],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
-    extends: '@mikojs/cat',
+    extends: '@mikojs/base',
     rules: {
       'jsdoc/check-tag-names': [
         'error',

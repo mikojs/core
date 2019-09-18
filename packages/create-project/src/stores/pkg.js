@@ -27,7 +27,7 @@ export const PKG_QUESTIONS = [
     name: 'homepage',
     validate: (val: string) =>
       isURL(val, { require_protocol: true }) ||
-      'must be url, for example: https://cat.org',
+      'must be url, for example: https://mikojs.github.io',
   },
   {
     name: 'repository',

@@ -10,15 +10,14 @@ import debug from 'debug';
 import execa from 'execa';
 
 import { handleUnhandledRejection, requireModule } from '@mikojs/utils';
-import catLogger from '@mikojs/logger';
+
+import logger from 'utils/logger';
 
 const debugLog = debug('lerna-flow-typed-install:bin');
 
 handleUnhandledRejection();
 
 (async () => {
-  const logger = catLogger('@mikojs/lerna-flow-typed-install');
-
   try {
     const { devDependencies: { 'flow-bin': flowVersion } = {} } = requireModule(
       path.resolve(

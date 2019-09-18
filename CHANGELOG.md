@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## 1.6.2 (2019-09-18)
+
+#### :boom: Breaking Change
+
+- `configs`, `create-project`, `eslint-config-base`, `eslint-config-cat`
+  - [#402](https://github.com/mikojs/core/pull/402) (@mikojs/eslint-config-base) Rename eslint-config-cat to esint-config-base ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `create-project`
+  - [#404](https://github.com/mikojs/core/pull/404) (@mikojs/create-project) Add .catrc.js when using server ([@HsuTing](https://github.com/HsuTing))
+  - [#401](https://github.com/mikojs/core/pull/401) (@mikojs/create-project) Add start script to server ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `create-project`, `lerna-flow-typed-install`
+  - [#403](https://github.com/mikojs/core/pull/403) (@mikojs/core) Remove cat, use mikojs ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.6.1 (2019-09-16)
 
 #### :house: Internal

@@ -43,7 +43,7 @@ const lint = {
   config: config => ({
     ...config,
     globals: {
-      __CAT_DATA__: true,
+      __MIKOJS_DATA__: true,
     },
     overrides: [
       {

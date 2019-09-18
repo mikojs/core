@@ -59,8 +59,8 @@ const lint = {
   }),
   ignore: ignore => [
     ...ignore,
-    // ignore for @mikojs/eslint-config-cat testing
-    'packages/eslint-config-cat/src/__tests__/__ignore__',
+    // ignore for @mikojs/eslint-config-base testing
+    'packages/eslint-config-base/src/__tests__/__ignore__',
   ],
 };
 

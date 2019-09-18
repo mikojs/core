@@ -957,29 +957,29 @@ Release.
 #### :boom: Breaking Change
 
 - `create-app`, `create-project`, `utils`
-  - [#95](https://github.com/mikojs/cat-core/pull/95) Rewrite @mikojs/create-app, and rename as @mikojs/create-project ([@HsuTing](https://github.com/HsuTing))
+  - [#95](https://github.com/mikojs/core/pull/95) Rewrite @mikojs/create-app, and rename as @mikojs/create-project ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `create-app`, `helper`, `utils`
-  - [#88](https://github.com/mikojs/cat-core/pull/88) Remove helper ([@HsuTing](https://github.com/HsuTing))
+  - [#88](https://github.com/mikojs/core/pull/88) Remove helper ([@HsuTing](https://github.com/HsuTing))
 - `create-app`
-  - [#87](https://github.com/mikojs/cat-core/pull/87) create-app@beta-1 ([@HsuTing](https://github.com/HsuTing))
+  - [#87](https://github.com/mikojs/core/pull/87) create-app@beta-1 ([@HsuTing](https://github.com/HsuTing))
 
 #### :rocket: New Feature
 
 - `lerna-create`
-  - [#94](https://github.com/mikojs/cat-core/pull/94) Remove bin in new pkg ([@HsuTing](https://github.com/HsuTing))
+  - [#94](https://github.com/mikojs/core/pull/94) Remove bin in new pkg ([@HsuTing](https://github.com/HsuTing))
 - `cli`, `lerna-create`, `logger`
-  - [#93](https://github.com/mikojs/cat-core/pull/93) Add @mikojs/lerna-create ([@HsuTing](https://github.com/HsuTing))
+  - [#93](https://github.com/mikojs/core/pull/93) Add @mikojs/lerna-create ([@HsuTing](https://github.com/HsuTing))
 - `cli`, `configs`, `create-app`, `utils`
-  - [#89](https://github.com/mikojs/cat-core/pull/89) Add @mikojs/cli ([@HsuTing](https://github.com/HsuTing))
+  - [#89](https://github.com/mikojs/core/pull/89) Add @mikojs/cli ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
 
 - `lerna-create`
-  - [#96](https://github.com/mikojs/cat-core/pull/96) @mikojs/lerna-create modify detail ([@HsuTing](https://github.com/HsuTing))
+  - [#96](https://github.com/mikojs/core/pull/96) @mikojs/lerna-create modify detail ([@HsuTing](https://github.com/HsuTing))
 - `cli`, `configs`, `create-app`
-  - [#92](https://github.com/mikojs/cat-core/pull/92) Rename configs-scripts to configs ([@HsuTing](https://github.com/HsuTing))
+  - [#92](https://github.com/mikojs/core/pull/92) Rename configs-scripts to configs ([@HsuTing](https://github.com/HsuTing))
 - `babel-plugin-transform-flow`, `configs`, `create-app`, `eslint-config-base`, `helper`
-  - [#85](https://github.com/mikojs/cat-core/pull/85) Upgrade version ([@HsuTing](https://github.com/HsuTing))
+  - [#85](https://github.com/mikojs/core/pull/85) Upgrade version ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
 
@@ -990,21 +990,21 @@ Release.
 #### :rocket: New Feature
 
 - `configs`, `create-app`
-  - [#79](https://github.com/mikojs/cat-core/pull/79) Add @mikojs/create-app@beta ([@HsuTing](https://github.com/HsuTing))
+  - [#79](https://github.com/mikojs/core/pull/79) Add @mikojs/create-app@beta ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `eslint-config-base`, `helper`, `logger`, `utils`
-  - [#82](https://github.com/mikojs/cat-core/pull/82) Support json log and remove bin core ([@HsuTing](https://github.com/HsuTing))
+  - [#82](https://github.com/mikojs/core/pull/82) Support json log and remove bin core ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
 - `configs`, `eslint-config-base`, `helper`, `logger`, `utils`
-  - [#82](https://github.com/mikojs/cat-core/pull/82) Support json log and remove bin core ([@HsuTing](https://github.com/HsuTing))
+  - [#82](https://github.com/mikojs/core/pull/82) Support json log and remove bin core ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `helper`
-  - [#81](https://github.com/mikojs/cat-core/pull/81) Fix regenerator-runtime error ([@HsuTing](https://github.com/HsuTing))
+  - [#81](https://github.com/mikojs/core/pull/81) Fix regenerator-runtime error ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
 
 - `helper`
-  - [#83](https://github.com/mikojs/cat-core/pull/83) Modify helper ([@HsuTing](https://github.com/HsuTing))
+  - [#83](https://github.com/mikojs/core/pull/83) Modify helper ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
 
@@ -1015,29 +1015,29 @@ Release.
 #### :boom: Breaking Change
 
 - `configs`, `logger`
-  - [#75](https://github.com/mikojs/cat-core/pull/75) Add ora logger ([@HsuTing](https://github.com/HsuTing))
+  - [#75](https://github.com/mikojs/core/pull/75) Add ora logger ([@HsuTing](https://github.com/HsuTing))
 
 #### :rocket: New Feature
 
 - `helper`
-  - [#72](https://github.com/mikojs/cat-core/pull/72) Add @mikojs/helper@beta.1 ([@HsuTing](https://github.com/HsuTing))
+  - [#72](https://github.com/mikojs/core/pull/72) Add @mikojs/helper@beta.1 ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `logger`
-  - [#75](https://github.com/mikojs/cat-core/pull/75) Add ora logger ([@HsuTing](https://github.com/HsuTing))
+  - [#75](https://github.com/mikojs/core/pull/75) Add ora logger ([@HsuTing](https://github.com/HsuTing))
 - `configs`
-  - [#71](https://github.com/mikojs/cat-core/pull/71) Can read pkg configs and custom configs at the same time ([@HsuTing](https://github.com/HsuTing))
+  - [#71](https://github.com/mikojs/core/pull/71) Can read pkg configs and custom configs at the same time ([@HsuTing](https://github.com/HsuTing))
 - `babel-plugin-transform-flow`, `configs`
-  - [#69](https://github.com/mikojs/cat-core/pull/69) Use execa ([@HsuTing](https://github.com/HsuTing))
+  - [#69](https://github.com/mikojs/core/pull/69) Use execa ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
 - `configs`, `logger`
-  - [#78](https://github.com/mikojs/cat-core/pull/78) Fix detail ([@HsuTing](https://github.com/HsuTing))
+  - [#78](https://github.com/mikojs/core/pull/78) Fix detail ([@HsuTing](https://github.com/HsuTing))
 - `logger`
-  - [#77](https://github.com/mikojs/cat-core/pull/77) fix ora setting in @mikojs/logger ([@HsuTing](https://github.com/HsuTing))
+  - [#77](https://github.com/mikojs/core/pull/77) fix ora setting in @mikojs/logger ([@HsuTing](https://github.com/HsuTing))
 - `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `logger`, `utils`
-  - [#73](https://github.com/mikojs/cat-core/pull/73) Fix lint-staged not checking package.json ([@HsuTing](https://github.com/HsuTing))
+  - [#73](https://github.com/mikojs/core/pull/73) Fix lint-staged not checking package.json ([@HsuTing](https://github.com/HsuTing))
 - Other
-  - [#68](https://github.com/mikojs/cat-core/pull/68) fix husky upgrade ([@HsuTing](https://github.com/HsuTing))
+  - [#68](https://github.com/mikojs/core/pull/68) fix husky upgrade ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
 
@@ -1052,34 +1052,34 @@ FIX publish error
 #### :boom: Breaking Change
 
 - `babel-plugin-transform-flow`, `configs`, `utils`
-  - [#64](https://github.com/mikojs/cat-core/pull/64) remove @mikojs/babel-transform-flow-comments ([@HsuTing](https://github.com/HsuTing))
+  - [#64](https://github.com/mikojs/core/pull/64) remove @mikojs/babel-transform-flow-comments ([@HsuTing](https://github.com/HsuTing))
 
 #### :rocket: New Feature
 
 - `configs`, `logger`, `utils`
-  - [#61](https://github.com/mikojs/cat-core/pull/61) Add @mikojs/logger ([@HsuTing](https://github.com/HsuTing))
+  - [#61](https://github.com/mikojs/core/pull/61) Add @mikojs/logger ([@HsuTing](https://github.com/HsuTing))
 - `configs`
-  - [#58](https://github.com/mikojs/cat-core/pull/58) configs-scripts read pkg configs, first ([@HsuTing](https://github.com/HsuTing))
+  - [#58](https://github.com/mikojs/core/pull/58) configs-scripts read pkg configs, first ([@HsuTing](https://github.com/HsuTing))
 - `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `utils`
-  - [#53](https://github.com/mikojs/cat-core/pull/53) coverage 100%, fix bug, upgrade packages, flow, lint ([@HsuTing](https://github.com/HsuTing))
+  - [#53](https://github.com/mikojs/core/pull/53) coverage 100%, fix bug, upgrade packages, flow, lint ([@HsuTing](https://github.com/HsuTing))
 - `babel-plugin-transform-flow`, `configs`, `utils`
-  - [#47](https://github.com/mikojs/cat-core/pull/47) Configs scripts ([@HsuTing](https://github.com/HsuTing))
+  - [#47](https://github.com/mikojs/core/pull/47) Configs scripts ([@HsuTing](https://github.com/HsuTing))
 - `utils`
-  - [#50](https://github.com/mikojs/cat-core/pull/50) feat(utils): add handleRejection to utils ([@HsuTing](https://github.com/HsuTing))
+  - [#50](https://github.com/mikojs/core/pull/50) feat(utils): add handleRejection to utils ([@HsuTing](https://github.com/HsuTing))
 - `babel-plugin-transform-flow`, `eslint-config-base`
-  - [#45](https://github.com/mikojs/cat-core/pull/45) Add prefer-destructuring to eslint-config-base ([@HsuTing](https://github.com/HsuTing))
+  - [#45](https://github.com/mikojs/core/pull/45) Add prefer-destructuring to eslint-config-base ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
 - `babel-plugin-transform-flow`, `configs`
-  - [#66](https://github.com/mikojs/cat-core/pull/66) Fix transform flow ([@HsuTing](https://github.com/HsuTing))
+  - [#66](https://github.com/mikojs/core/pull/66) Fix transform flow ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
 
 - `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `utils`
-  - [#53](https://github.com/mikojs/cat-core/pull/53) coverage 100%, fix bug, upgrade packages, flow, lint ([@HsuTing](https://github.com/HsuTing))
+  - [#53](https://github.com/mikojs/core/pull/53) coverage 100%, fix bug, upgrade packages, flow, lint ([@HsuTing](https://github.com/HsuTing))
 - Other
-  - [#48](https://github.com/mikojs/cat-core/pull/48) Link packages in the root folder ([@HsuTing](https://github.com/HsuTing))
+  - [#48](https://github.com/mikojs/core/pull/48) Link packages in the root folder ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
 
@@ -1090,26 +1090,26 @@ FIX publish error
 #### :boom: Breaking Change
 
 - `babel-plugin-transform-flow`, `utils`
-  - [#38](https://github.com/mikojs/cat-core/pull/38) Modify babel plugin transform flow ([@HsuTing](https://github.com/HsuTing))
+  - [#38](https://github.com/mikojs/core/pull/38) Modify babel plugin transform flow ([@HsuTing](https://github.com/HsuTing))
 
 #### :rocket: New Feature
 
 - `babel-plugin-transform-flow`, `utils`
-  - [#38](https://github.com/mikojs/cat-core/pull/38) Modify babel plugin transform flow ([@HsuTing](https://github.com/HsuTing))
+  - [#38](https://github.com/mikojs/core/pull/38) Modify babel plugin transform flow ([@HsuTing](https://github.com/HsuTing))
 - `eslint-config-base`
-  - [#39](https://github.com/mikojs/cat-core/pull/39) new rules in eslint-config-base ([@HsuTing](https://github.com/HsuTing))
+  - [#39](https://github.com/mikojs/core/pull/39) new rules in eslint-config-base ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
 - `eslint-config-base`
-  - [#39](https://github.com/mikojs/cat-core/pull/39) new rules in eslint-config-base ([@HsuTing](https://github.com/HsuTing))
+  - [#39](https://github.com/mikojs/core/pull/39) new rules in eslint-config-base ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
 
 - `configs`, `eslint-config-base`
-  - [#43](https://github.com/mikojs/cat-core/pull/43) Modify testing ([@HsuTing](https://github.com/HsuTing))
+  - [#43](https://github.com/mikojs/core/pull/43) Modify testing ([@HsuTing](https://github.com/HsuTing))
 - `eslint-config-base`, `utils`
-  - [#42](https://github.com/mikojs/cat-core/pull/42) Modify eslint config cat ([@HsuTing](https://github.com/HsuTing))
+  - [#42](https://github.com/mikojs/core/pull/42) Modify eslint-config-base ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
 
@@ -1120,38 +1120,38 @@ FIX publish error
 #### :rocket: New Feature
 
 - `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `utils`
-  - [#36](https://github.com/mikojs/cat-core/pull/36) add @mikojs/babel-plugin-transform-flow ([@HsuTing](https://github.com/HsuTing))
+  - [#36](https://github.com/mikojs/core/pull/36) add @mikojs/babel-plugin-transform-flow ([@HsuTing](https://github.com/HsuTing))
 - `eslint-config-base`, `utils`
-  - [#34](https://github.com/mikojs/cat-core/pull/34) Add eslint plugin prettier ([@HsuTing](https://github.com/HsuTing))
-  - [#30](https://github.com/mikojs/cat-core/pull/30) Add options to d3DirTree ([@HsuTing](https://github.com/HsuTing))
+  - [#34](https://github.com/mikojs/core/pull/34) Add eslint plugin prettier ([@HsuTing](https://github.com/HsuTing))
+  - [#30](https://github.com/mikojs/core/pull/30) Add options to d3DirTree ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `utils`
-  - [#25](https://github.com/mikojs/cat-core/pull/25) new configs ([@HsuTing](https://github.com/HsuTing))
+  - [#25](https://github.com/mikojs/core/pull/25) new configs ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `eslint-config-base`
-  - [#21](https://github.com/mikojs/cat-core/pull/21) Only check files with lint-staged ([@HsuTing](https://github.com/HsuTing))
+  - [#21](https://github.com/mikojs/core/pull/21) Only check files with lint-staged ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
 - `eslint-config-base`
-  - [#18](https://github.com/mikojs/cat-core/pull/18) remove minProperties in object-curly-newline ([@HsuTing](https://github.com/HsuTing))
+  - [#18](https://github.com/mikojs/core/pull/18) remove minProperties in object-curly-newline ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
 
 - `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `utils`
-  - [#37](https://github.com/mikojs/cat-core/pull/37) Add tests ([@HsuTing](https://github.com/HsuTing))
+  - [#37](https://github.com/mikojs/core/pull/37) Add tests ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `eslint-config-base`, `utils`
-  - [#35](https://github.com/mikojs/cat-core/pull/35) Remove modifyPackagesPkg ([@HsuTing](https://github.com/HsuTing))
-  - [#33](https://github.com/mikojs/cat-core/pull/33) enhanced flow checking ([@HsuTing](https://github.com/HsuTing))
+  - [#35](https://github.com/mikojs/core/pull/35) Remove modifyPackagesPkg ([@HsuTing](https://github.com/HsuTing))
+  - [#33](https://github.com/mikojs/core/pull/33) enhanced flow checking ([@HsuTing](https://github.com/HsuTing))
 - `eslint-config-base`
-  - [#32](https://github.com/mikojs/cat-core/pull/32) Modify code style ([@HsuTing](https://github.com/HsuTing))
+  - [#32](https://github.com/mikojs/core/pull/32) Modify code style ([@HsuTing](https://github.com/HsuTing))
 - `eslint-config-base`, `utils`
-  - [#26](https://github.com/mikojs/cat-core/pull/26) Modify copy flow files ([@HsuTing](https://github.com/HsuTing))
+  - [#26](https://github.com/mikojs/core/pull/26) Modify copy flow files ([@HsuTing](https://github.com/HsuTing))
 - Other
-  - [#31](https://github.com/mikojs/cat-core/pull/31) Move executable files to bin folder ([@HsuTing](https://github.com/HsuTing))
+  - [#31](https://github.com/mikojs/core/pull/31) Move executable files to bin folder ([@HsuTing](https://github.com/HsuTing))
 - `configs`
-  - [#29](https://github.com/mikojs/cat-core/pull/29) Modify configs and ignore files ([@HsuTing](https://github.com/HsuTing))
+  - [#29](https://github.com/mikojs/core/pull/29) Modify configs and ignore files ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `eslint-config-base`
-  - [#22](https://github.com/mikojs/cat-core/pull/22) Root check lint ([@HsuTing](https://github.com/HsuTing))
-  - [#21](https://github.com/mikojs/cat-core/pull/21) Only check files with lint-staged ([@HsuTing](https://github.com/HsuTing))
+  - [#22](https://github.com/mikojs/core/pull/22) Root check lint ([@HsuTing](https://github.com/HsuTing))
+  - [#21](https://github.com/mikojs/core/pull/21) Only check files with lint-staged ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
 
@@ -1162,7 +1162,7 @@ FIX publish error
 #### :rocket: New Feature
 
 - `eslint-config-base`
-  - [#16](https://github.com/mikojs/cat-core/pull/16) add check configs. ([@HsuTing](https://github.com/HsuTing))
+  - [#16](https://github.com/mikojs/core/pull/16) add check configs. ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
 
@@ -1173,7 +1173,7 @@ FIX publish error
 #### :rocket: New Feature
 
 - `configs`, `eslint-config-base`, `utils`
-  - [#15](https://github.com/mikojs/cat-core/pull/15) Add prettier. ([@HsuTing](https://github.com/HsuTing))
+  - [#15](https://github.com/mikojs/core/pull/15) Add prettier. ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
 

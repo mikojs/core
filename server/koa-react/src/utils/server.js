@@ -97,7 +97,7 @@ export default (
   // preload scripts
   renderToStaticMarkup(
     <Helmet>
-      <script>{`var __CAT_DATA__ = ${JSON.stringify({
+      <script>{`var __MIKOJS_DATA__ = ${JSON.stringify({
         mainInitialProps,
         pageInitialProps,
         chunkName,
@@ -112,7 +112,7 @@ export default (
   const hash = crypto.createHmac('sha256', '@mikojs/koa-react').digest('hex');
   const [upperDocument, lowerDocument] = renderToStaticMarkup(
     <Document {...documentInitialProps} helmet={Helmet.renderStatic()}>
-      <main id="__CAT__">{hash}</main>
+      <main id="__MIKOJS__">{hash}</main>
     </Document>,
   )
     .split(hash)

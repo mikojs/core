@@ -18,7 +18,7 @@ describe('pkg store', () => {
   describe('validate', () => {
     describe.each`
       questionName    | success                                 | fail  | errorMessage
-      ${'homepage'}   | ${'https://cat.org'}                    | ${''} | ${'must be url, for example: https://cat.org'}
+      ${'homepage'}   | ${'https://mikojs.github.io'}           | ${''} | ${'must be url, for example: https://mikojs.github.io'}
       ${'repository'} | ${'https://github.com/mikojs/core.git'} | ${''} | ${'must be url or git ssh, for example: https://github.com/mikojs/core.git'}
       ${'keywords'}   | ${['keyword']}                          | ${[]} | ${'can not be empty'}
     `(

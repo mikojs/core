@@ -17,7 +17,7 @@
 
 #### :boom: Breaking Change
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-flow-typed-install`, `logger`, `utils`, `website`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-flow-typed-install`, `logger`, `utils`, `website`
   - [#398](https://github.com/mikojs/core/pull/398) (@mikojs/core) Rename cat-org to mikojs ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -87,12 +87,12 @@
 
 #### :rocket: New Feature
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-flow-typed-install`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `lerna-flow-typed-install`
   - [#387](https://github.com/mikojs/core/pull/387) (@mikojs/core) Upgrade package ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-flow-typed-install`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `lerna-flow-typed-install`
   - [#387](https://github.com/mikojs/core/pull/387) (@mikojs/core) Upgrade package ([@HsuTing](https://github.com/HsuTing))
 - `configs`
   - [#386](https://github.com/mikojs/core/pull/386) (@mikojs/configs) Fix configs path error ([@HsuTing](https://github.com/HsuTing))
@@ -134,7 +134,7 @@
 
 #### :rocket: New Feature
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-flow-typed-install`, `utils`, `website`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-flow-typed-install`, `utils`, `website`
   - [#376](https://github.com/mikojs/core/pull/376) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
 - Other
   - [#370](https://github.com/mikojs/core/pull/370) (@mikojs/koa-react) Fix page bug and support to update Main ([@HsuTing](https://github.com/HsuTing))
@@ -155,7 +155,7 @@
   - [#370](https://github.com/mikojs/core/pull/370) (@mikojs/koa-react) Fix page bug and support to update Main ([@HsuTing](https://github.com/HsuTing))
   - [#366](https://github.com/mikojs/core/pull/366) chore(deps): bump eslint-utils from 1.3.1 to 1.4.2 ([@dependabot[bot]](https://github.com/apps/dependabot))
   - [#363](https://github.com/mikojs/core/pull/363) (@mikojs/core) Fix flow error ([@HsuTing](https://github.com/HsuTing))
-- `eslint-config-cat`
+- `eslint-config-base`
   - [#368](https://github.com/mikojs/core/pull/368) (@mikojs/core) Fix eslint parser error ([@HsuTing](https://github.com/HsuTing))
 - `configs`
   - [#361](https://github.com/mikojs/core/pull/361) (@mikojs/core) Fix lint and flow ([@HsuTing](https://github.com/HsuTing))
@@ -167,7 +167,7 @@
   - [#354](https://github.com/mikojs/core/pull/354) (@mikojs/core) Remove lock version ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `create-project`
   - [#369](https://github.com/mikojs/core/pull/369) (@mikojs/create-project) Add check packages ([@HsuTing](https://github.com/HsuTing))
-- `eslint-config-cat`
+- `eslint-config-base`
   - [#368](https://github.com/mikojs/core/pull/368) (@mikojs/core) Fix eslint parser error ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -204,7 +204,7 @@
 
 #### :rocket: New Feature
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-flow-typed-install`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `lerna-flow-typed-install`
   - [#347](https://github.com/mikojs/core/pull/347) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
 - Other
   - [#346](https://github.com/mikojs/core/pull/346) (@mikojs/koa-react) Make redirect to handle all routesData ([@HsuTing](https://github.com/HsuTing))
@@ -263,12 +263,12 @@
 
 #### :boom: Breaking Change
 
-- `configs`, `eslint-config-cat`
+- `configs`, `eslint-config-base`
   - [#321](https://github.com/mikojs/core/pull/321) (@mikojs/koa-graphql) Copy express graphql ([@HsuTing](https://github.com/HsuTing))
 
 #### :rocket: New Feature
 
-- `configs`, `eslint-config-cat`
+- `configs`, `eslint-config-base`
   - [#321](https://github.com/mikojs/core/pull/321) (@mikojs/koa-graphql) Copy express graphql ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
@@ -284,8 +284,8 @@
 
 #### :rocket: New Feature
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `logger`, `utils`, `website`
-  - [#320](https://github.com/mikojs/core/pull/320) (@mikojs/eslint-config-cat) Add new rules ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `logger`, `utils`, `website`
+  - [#320](https://github.com/mikojs/core/pull/320) (@mikojs/eslint-config-base) Add new rules ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
 
@@ -297,23 +297,23 @@
 
 - `create-project`
   - [#319](https://github.com/mikojs/core/pull/319) (@mikojs/create-project) Add lint staged ([@HsuTing](https://github.com/HsuTing))
-- `configs`, `eslint-config-cat`
-  - [#318](https://github.com/mikojs/core/pull/318) (@mikojs/eslint-config-cat) Remove react config ([@HsuTing](https://github.com/HsuTing))
-  - [#314](https://github.com/mikojs/core/pull/314) (@mikojs/eslint-config-cat) Add relay config ([@HsuTing](https://github.com/HsuTing))
-- `configs`, `create-project`, `eslint-config-cat`, `website`
-  - [#317](https://github.com/mikojs/core/pull/317) (@mikojs/eslint-config-cat) Fix react jsdoc ([@HsuTing](https://github.com/HsuTing))
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `logger`, `utils`
-  - [#315](https://github.com/mikojs/core/pull/315) (@mikojs/eslint-config-cat) Use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `eslint-config-base`
+  - [#318](https://github.com/mikojs/core/pull/318) (@mikojs/eslint-config-base) Remove react config ([@HsuTing](https://github.com/HsuTing))
+  - [#314](https://github.com/mikojs/core/pull/314) (@mikojs/eslint-config-base) Add relay config ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`, `eslint-config-base`, `website`
+  - [#317](https://github.com/mikojs/core/pull/317) (@mikojs/eslint-config-base) Fix react jsdoc ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `logger`, `utils`
+  - [#315](https://github.com/mikojs/core/pull/315) (@mikojs/eslint-config-base) Use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
-- `configs`, `eslint-config-cat`, `utils`
+- `configs`, `eslint-config-base`, `utils`
   - [#316](https://github.com/mikojs/core/pull/316) (@mikojs/core) Revert use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `logger`, `utils`
-  - [#315](https://github.com/mikojs/core/pull/315) (@mikojs/eslint-config-cat) Use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `logger`, `utils`
+  - [#315](https://github.com/mikojs/core/pull/315) (@mikojs/eslint-config-base) Use recommended jsdoc ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
 
@@ -333,7 +333,7 @@
 
 #### :rocket: New Feature
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-flow-typed-install`, `website`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `lerna-flow-typed-install`, `website`
   - [#306](https://github.com/mikojs/core/pull/306) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
@@ -353,7 +353,7 @@
 
 #### :house: Internal
 
-- `eslint-config-cat`
+- `eslint-config-base`
   - [#308](https://github.com/mikojs/core/pull/308) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -400,7 +400,7 @@
 
 - Other
   - [#297](https://github.com/mikojs/core/pull/297) (@mikojs/server) Modify server cli ([@HsuTing](https://github.com/HsuTing))
-- `eslint-config-cat`, `jest`
+- `eslint-config-base`, `jest`
   - [#296](https://github.com/mikojs/core/pull/296) (@mikojs/core) Modify detail ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -464,7 +464,7 @@
 
 #### :house: Internal
 
-- `create-project`, `eslint-config-cat`, `website`
+- `create-project`, `eslint-config-base`, `website`
   - [#286](https://github.com/mikojs/core/pull/286) (@mikojs/core) Update react relay network modern ssr ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `create-project`, `utils`
   - [#284](https://github.com/mikojs/core/pull/284) (@mikojs/core) Add readOnly and writeOnly to generic types ([@HsuTing](https://github.com/HsuTing))
@@ -507,7 +507,7 @@
 
 #### :memo: Documentation
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-flow-typed-install`, `logger`, `utils`, `website`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-flow-typed-install`, `logger`, `utils`, `website`
   - [#281](https://github.com/mikojs/core/pull/281) (@mikojs/core) Add README ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -538,7 +538,7 @@
 
 #### :rocket: New Feature
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-flow-typed-install`, `logger`, `website`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-flow-typed-install`, `logger`, `website`
   - [#277](https://github.com/mikojs/core/pull/277) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
 - `create-project`, `website`
   - [#275](https://github.com/mikojs/core/pull/275) (@mikojs/create-project) Add scripts to readme ([@HsuTing](https://github.com/HsuTing))
@@ -572,7 +572,7 @@
   - [#258](https://github.com/mikojs/core/pull/258) (@mikojs/koa-react, @mikojs/koa-graphql) Fix detail ([@HsuTing](https://github.com/HsuTing))
   - [#250](https://github.com/mikojs/core/pull/250) (@mikojs/server) Add exclude for **generated** ([@HsuTing](https://github.com/HsuTing))
   - [#247](https://github.com/mikojs/core/pull/247) chore(deps): bump handlebars from 4.1.0 to 4.1.2 ([@dependabot[bot]](https://github.com/apps/dependabot))
-- `eslint-config-cat`, `logger`
+- `eslint-config-base`, `logger`
   - [#254](https://github.com/mikojs/core/pull/254) (@mikojs/core) Fix prettier error ([@HsuTing](https://github.com/HsuTing))
 - `create-project`, `website`
   - [#248](https://github.com/mikojs/core/pull/248) (@mikojs/server) Fix koa-graphql, koa-react build error ([@HsuTing](https://github.com/HsuTing))
@@ -632,7 +632,7 @@
 
 #### :bug: Bug Fix
 
-- `create-project`, `eslint-config-cat`
+- `create-project`, `eslint-config-base`
   - [#221](https://github.com/mikojs/core/pull/221) (@mikojs/create-project) Fix error with configsEnv ([@HsuTing](https://github.com/HsuTing))
 - Other
   - [#220](https://github.com/mikojs/core/pull/220) (@mikojs/babel-preset-base) Fix options ([@HsuTing](https://github.com/HsuTing))
@@ -672,7 +672,7 @@
 
 - `babel-preset-base`, `badges`
   - [#212](https://github.com/mikojs/core/pull/212) (@mikojs/badges) Fix read-pkg-up upgrade error ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `babel-preset-base`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `utils`
+- `babel-plugin-transform-flow`, `babel-preset-base`, `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `utils`
   - [#207](https://github.com/mikojs/core/pull/207) (@mikojs/core, @mikojs/babel-preset-base) Add core-js version ([@HsuTing](https://github.com/HsuTing))
 - Other
   - [#200](https://github.com/mikojs/core/pull/200) (@mikojs/core) Fix lock ([@HsuTing](https://github.com/HsuTing))
@@ -684,7 +684,7 @@
 - Other
   - [#213](https://github.com/mikojs/core/pull/213) (@mikojs/babel-\*) Add babel workspace ([@HsuTing](https://github.com/HsuTing))
   - [#200](https://github.com/mikojs/core/pull/200) (@mikojs/core) Fix lock ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `babel-preset-base`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `utils`
+- `babel-plugin-transform-flow`, `babel-preset-base`, `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `utils`
   - [#207](https://github.com/mikojs/core/pull/207) (@mikojs/core, @mikojs/babel-preset-base) Add core-js version ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 2
@@ -743,12 +743,12 @@ Release.
 
 #### :bug: Bug Fix
 
-- `eslint-config-cat`
-  - [#184](https://github.com/mikojs/core/pull/184) (@mikojs/eslint-config-cat) Fix eslint-import-resolver-babel-module ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-base`
+  - [#184](https://github.com/mikojs/core/pull/184) (@mikojs/eslint-config-base) Fix eslint-import-resolver-babel-module ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
 
-- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-create`, `lerna-flow-typed-install`
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-base`, `lerna-create`, `lerna-flow-typed-install`
   - [#186](https://github.com/mikojs/core/pull/186) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -759,12 +759,12 @@ Release.
 
 #### :boom: Breaking Change
 
-- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `logger`
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `logger`
   - [#183](https://github.com/mikojs/core/pull/183) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
 
 #### :rocket: New Feature
 
-- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `logger`
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `logger`
   - [#183](https://github.com/mikojs/core/pull/183) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
@@ -819,9 +819,9 @@ Release.
   - [#167](https://github.com/mikojs/core/pull/167) (@mikojs/create-project) Modify code style ([@HsuTing](https://github.com/HsuTing))
   - [#166](https://github.com/mikojs/core/pull/166) (@mikojs/create-project) Modify detail ([@HsuTing](https://github.com/HsuTing))
   - [#159](https://github.com/mikojs/core/pull/159) (@mikojs/create-project) Use new testing ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-create`, `logger`, `utils`
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-base`, `lerna-create`, `logger`, `utils`
   - [#161](https://github.com/mikojs/core/pull/161) (@mikojs/core): Fix detail ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `logger`
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `logger`
   - [#158](https://github.com/mikojs/core/pull/158) (@mikojs/core) Upgrade package ([@HsuTing](https://github.com/HsuTing))
 - `babel-plugin-transform-flow`, `logger`
   - [#157](https://github.com/mikojs/core/pull/157) (@mikojs/babel-plugin-transform-flow, @mikojs/logger) Fix testing error ([@HsuTing](https://github.com/HsuTing))
@@ -837,7 +837,7 @@ Release.
 - Other
   - [#154](https://github.com/mikojs/core/pull/154) (@mikojs/react-middleware, @mikojs/server) Move deleteRequiredCache to server ([@HsuTing](https://github.com/HsuTing))
   - [#145](https://github.com/mikojs/core/pull/145) (@mikojs/react-middleware) Refactor code with React.lazy ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `logger`
+- `babel-plugin-transform-flow`, `configs`, `create-project`, `eslint-config-base`, `jest`, `logger`
   - [#147](https://github.com/mikojs/core/pull/147)(@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
 
 #### :rocket: New Feature
@@ -886,7 +886,7 @@ Release.
   - [#117](https://github.com/mikojs/core/pull/117) Add @mikojs/react-middleware ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `jest`
   - [#128](https://github.com/mikojs/core/pull/128) Add jest/react in @mikojs/configs ([@HsuTing](https://github.com/HsuTing))
-- `badges`, `create-project`, `eslint-config-cat`
+- `badges`, `create-project`, `eslint-config-base`
   - [#127](https://github.com/mikojs/core/pull/127) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `create-project`
   - [#121](https://github.com/mikojs/core/pull/121) Remove npm ([@HsuTing](https://github.com/HsuTing))
@@ -895,26 +895,26 @@ Release.
 
 #### :bug: Bug Fix
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-create`, `lerna-flow-typed-install`
   - [#138](https://github.com/mikojs/core/pull/138) Fix flow error ([@HsuTing](https://github.com/HsuTing))
 - Other
   - [#125](https://github.com/mikojs/core/pull/125) Fix server ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
 
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-create`, `lerna-flow-typed-install`
   - [#138](https://github.com/mikojs/core/pull/138) Fix flow error ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `badges`, `configs`, `eslint-config-cat`
+- `babel-plugin-transform-flow`, `badges`, `configs`, `eslint-config-base`
   - [#134](https://github.com/mikojs/core/pull/134) Add Exact to Object in flow ([@HsuTing](https://github.com/HsuTing))
 - `babel-plugin-transform-flow`, `create-project`
   - [#133](https://github.com/mikojs/core/pull/133) Modify flow style ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `configs`, `eslint-config-cat`, `logger`, `utils`
+- `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `logger`, `utils`
   - [#129](https://github.com/mikojs/core/pull/129) Modify code style with flow ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-create`, `lerna-flow-typed-install`, `logger`
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-base`, `lerna-create`, `lerna-flow-typed-install`, `logger`
   - [#119](https://github.com/mikojs/core/pull/119) Move @mikojs/server to server folder ([@HsuTing](https://github.com/HsuTing))
-- `badges`, `configs`, `create-project`, `eslint-config-cat`, `lerna-create`, `lerna-flow-typed-install`, `logger`, `server`, `utils`
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `lerna-create`, `lerna-flow-typed-install`, `logger`, `server`, `utils`
   - [#118](https://github.com/mikojs/core/pull/118) Upgrade pacakges ([@HsuTing](https://github.com/HsuTing))
-- `create-project`, `eslint-config-cat`, `logger`, `utils`
+- `create-project`, `eslint-config-base`, `logger`, `utils`
   - [#115](https://github.com/mikojs/core/pull/115) Modify @mikojs/logger ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -941,11 +941,11 @@ Release.
 
 #### :house: Internal
 
-- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `utils`
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-create`, `lerna-flow-typed-install`, `utils`
   - [#108](https://github.com/mikojs/core/pull/108) Minify utils ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `logger`, `utils`
+- `babel-plugin-transform-flow`, `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-create`, `logger`, `utils`
   - [#105](https://github.com/mikojs/core/pull/105) Write readme and remove slash after link ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `configs`, `create-project`, `eslint-config-cat`, `jest`, `lerna-create`, `logger`, `utils`
+- `babel-plugin-transform-flow`, `configs`, `create-project`, `eslint-config-base`, `jest`, `lerna-create`, `logger`, `utils`
   - [#103](https://github.com/mikojs/core/pull/103) Rename cat-core to core ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -978,7 +978,7 @@ Release.
   - [#96](https://github.com/mikojs/cat-core/pull/96) @mikojs/lerna-create modify detail ([@HsuTing](https://github.com/HsuTing))
 - `cli`, `configs`, `create-app`
   - [#92](https://github.com/mikojs/cat-core/pull/92) Rename configs-scripts to configs ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `configs`, `create-app`, `eslint-config-cat`, `helper`
+- `babel-plugin-transform-flow`, `configs`, `create-app`, `eslint-config-base`, `helper`
   - [#85](https://github.com/mikojs/cat-core/pull/85) Upgrade version ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -991,12 +991,12 @@ Release.
 
 - `configs`, `create-app`
   - [#79](https://github.com/mikojs/cat-core/pull/79) Add @mikojs/create-app@beta ([@HsuTing](https://github.com/HsuTing))
-- `configs`, `eslint-config-cat`, `helper`, `logger`, `utils`
+- `configs`, `eslint-config-base`, `helper`, `logger`, `utils`
   - [#82](https://github.com/mikojs/cat-core/pull/82) Support json log and remove bin core ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
-- `configs`, `eslint-config-cat`, `helper`, `logger`, `utils`
+- `configs`, `eslint-config-base`, `helper`, `logger`, `utils`
   - [#82](https://github.com/mikojs/cat-core/pull/82) Support json log and remove bin core ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `helper`
   - [#81](https://github.com/mikojs/cat-core/pull/81) Fix regenerator-runtime error ([@HsuTing](https://github.com/HsuTing))
@@ -1034,7 +1034,7 @@ Release.
   - [#78](https://github.com/mikojs/cat-core/pull/78) Fix detail ([@HsuTing](https://github.com/HsuTing))
 - `logger`
   - [#77](https://github.com/mikojs/cat-core/pull/77) fix ora setting in @mikojs/logger ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `configs`, `eslint-config-cat`, `logger`, `utils`
+- `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `logger`, `utils`
   - [#73](https://github.com/mikojs/cat-core/pull/73) Fix lint-staged not checking package.json ([@HsuTing](https://github.com/HsuTing))
 - Other
   - [#68](https://github.com/mikojs/cat-core/pull/68) fix husky upgrade ([@HsuTing](https://github.com/HsuTing))
@@ -1060,14 +1060,14 @@ FIX publish error
   - [#61](https://github.com/mikojs/cat-core/pull/61) Add @mikojs/logger ([@HsuTing](https://github.com/HsuTing))
 - `configs`
   - [#58](https://github.com/mikojs/cat-core/pull/58) configs-scripts read pkg configs, first ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `configs`, `eslint-config-cat`, `utils`
+- `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `utils`
   - [#53](https://github.com/mikojs/cat-core/pull/53) coverage 100%, fix bug, upgrade packages, flow, lint ([@HsuTing](https://github.com/HsuTing))
 - `babel-plugin-transform-flow`, `configs`, `utils`
   - [#47](https://github.com/mikojs/cat-core/pull/47) Configs scripts ([@HsuTing](https://github.com/HsuTing))
 - `utils`
   - [#50](https://github.com/mikojs/cat-core/pull/50) feat(utils): add handleRejection to utils ([@HsuTing](https://github.com/HsuTing))
-- `babel-plugin-transform-flow`, `eslint-config-cat`
-  - [#45](https://github.com/mikojs/cat-core/pull/45) Add prefer-destructuring to eslint-config-cat ([@HsuTing](https://github.com/HsuTing))
+- `babel-plugin-transform-flow`, `eslint-config-base`
+  - [#45](https://github.com/mikojs/cat-core/pull/45) Add prefer-destructuring to eslint-config-base ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
@@ -1076,7 +1076,7 @@ FIX publish error
 
 #### :house: Internal
 
-- `babel-plugin-transform-flow`, `configs`, `eslint-config-cat`, `utils`
+- `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `utils`
   - [#53](https://github.com/mikojs/cat-core/pull/53) coverage 100%, fix bug, upgrade packages, flow, lint ([@HsuTing](https://github.com/HsuTing))
 - Other
   - [#48](https://github.com/mikojs/cat-core/pull/48) Link packages in the root folder ([@HsuTing](https://github.com/HsuTing))
@@ -1096,19 +1096,19 @@ FIX publish error
 
 - `babel-plugin-transform-flow`, `utils`
   - [#38](https://github.com/mikojs/cat-core/pull/38) Modify babel plugin transform flow ([@HsuTing](https://github.com/HsuTing))
-- `eslint-config-cat`
-  - [#39](https://github.com/mikojs/cat-core/pull/39) new rules in eslint-config-cat ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-base`
+  - [#39](https://github.com/mikojs/cat-core/pull/39) new rules in eslint-config-base ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
-- `eslint-config-cat`
-  - [#39](https://github.com/mikojs/cat-core/pull/39) new rules in eslint-config-cat ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-base`
+  - [#39](https://github.com/mikojs/cat-core/pull/39) new rules in eslint-config-base ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
 
-- `configs`, `eslint-config-cat`
+- `configs`, `eslint-config-base`
   - [#43](https://github.com/mikojs/cat-core/pull/43) Modify testing ([@HsuTing](https://github.com/HsuTing))
-- `eslint-config-cat`, `utils`
+- `eslint-config-base`, `utils`
   - [#42](https://github.com/mikojs/cat-core/pull/42) Modify eslint config cat ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -1119,37 +1119,37 @@ FIX publish error
 
 #### :rocket: New Feature
 
-- `babel-plugin-transform-flow`, `configs`, `eslint-config-cat`, `utils`
+- `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `utils`
   - [#36](https://github.com/mikojs/cat-core/pull/36) add @mikojs/babel-plugin-transform-flow ([@HsuTing](https://github.com/HsuTing))
-- `eslint-config-cat`, `utils`
+- `eslint-config-base`, `utils`
   - [#34](https://github.com/mikojs/cat-core/pull/34) Add eslint plugin prettier ([@HsuTing](https://github.com/HsuTing))
   - [#30](https://github.com/mikojs/cat-core/pull/30) Add options to d3DirTree ([@HsuTing](https://github.com/HsuTing))
 - `configs`, `utils`
   - [#25](https://github.com/mikojs/cat-core/pull/25) new configs ([@HsuTing](https://github.com/HsuTing))
-- `configs`, `eslint-config-cat`
+- `configs`, `eslint-config-base`
   - [#21](https://github.com/mikojs/cat-core/pull/21) Only check files with lint-staged ([@HsuTing](https://github.com/HsuTing))
 
 #### :bug: Bug Fix
 
-- `eslint-config-cat`
+- `eslint-config-base`
   - [#18](https://github.com/mikojs/cat-core/pull/18) remove minProperties in object-curly-newline ([@HsuTing](https://github.com/HsuTing))
 
 #### :house: Internal
 
-- `babel-plugin-transform-flow`, `configs`, `eslint-config-cat`, `utils`
+- `babel-plugin-transform-flow`, `configs`, `eslint-config-base`, `utils`
   - [#37](https://github.com/mikojs/cat-core/pull/37) Add tests ([@HsuTing](https://github.com/HsuTing))
-- `configs`, `eslint-config-cat`, `utils`
+- `configs`, `eslint-config-base`, `utils`
   - [#35](https://github.com/mikojs/cat-core/pull/35) Remove modifyPackagesPkg ([@HsuTing](https://github.com/HsuTing))
   - [#33](https://github.com/mikojs/cat-core/pull/33) enhanced flow checking ([@HsuTing](https://github.com/HsuTing))
-- `eslint-config-cat`
+- `eslint-config-base`
   - [#32](https://github.com/mikojs/cat-core/pull/32) Modify code style ([@HsuTing](https://github.com/HsuTing))
-- `eslint-config-cat`, `utils`
+- `eslint-config-base`, `utils`
   - [#26](https://github.com/mikojs/cat-core/pull/26) Modify copy flow files ([@HsuTing](https://github.com/HsuTing))
 - Other
   - [#31](https://github.com/mikojs/cat-core/pull/31) Move executable files to bin folder ([@HsuTing](https://github.com/HsuTing))
 - `configs`
   - [#29](https://github.com/mikojs/cat-core/pull/29) Modify configs and ignore files ([@HsuTing](https://github.com/HsuTing))
-- `configs`, `eslint-config-cat`
+- `configs`, `eslint-config-base`
   - [#22](https://github.com/mikojs/cat-core/pull/22) Root check lint ([@HsuTing](https://github.com/HsuTing))
   - [#21](https://github.com/mikojs/cat-core/pull/21) Only check files with lint-staged ([@HsuTing](https://github.com/HsuTing))
 
@@ -1161,7 +1161,7 @@ FIX publish error
 
 #### :rocket: New Feature
 
-- `eslint-config-cat`
+- `eslint-config-base`
   - [#16](https://github.com/mikojs/cat-core/pull/16) add check configs. ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1
@@ -1172,7 +1172,7 @@ FIX publish error
 
 #### :rocket: New Feature
 
-- `configs`, `eslint-config-cat`, `utils`
+- `configs`, `eslint-config-base`, `utils`
   - [#15](https://github.com/mikojs/cat-core/pull/15) Add prettier. ([@HsuTing](https://github.com/HsuTing))
 
 #### Committers: 1

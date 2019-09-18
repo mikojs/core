@@ -32,7 +32,7 @@ describe('client', () => {
       message: string,
       chunkName: string,
     |}) => {
-      window.__CAT_DATA__ = {
+      window.__MIKOJS_DATA__ = {
         mainInitialProps: {},
         pageInitialProps: {},
         chunkName,
@@ -43,10 +43,10 @@ describe('client', () => {
   );
 
   test('work', async () => {
-    const expected = '<main id="__CAT__"><div>test</div></main>';
+    const expected = '<main id="__MIKOJS__"><div>test</div></main>';
 
     global.document.querySelector('body').innerHTML = expected;
-    window.__CAT_DATA__ = {
+    window.__MIKOJS_DATA__ = {
       mainInitialProps: {},
       pageInitialProps: {},
       chunkName: 'test',

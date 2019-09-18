@@ -20,7 +20,7 @@ import TemplateNotFound from 'templates/NotFound';
 describe('client side testing', () => {
   beforeAll(() => {
     global.document.querySelector('body').innerHTML =
-      '<main id="__CAT__"></main>';
+      '<main id="__MIKOJS__"></main>';
   });
 
   beforeEach(() => {

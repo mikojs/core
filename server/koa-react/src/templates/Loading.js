@@ -18,7 +18,7 @@ export default class Loading extends React.PureComponent<propsType> {
     super(props);
 
     this.rootDOM =
-      document.getElementById('__CAT__') ||
+      document.getElementById('__MIKOJS__') ||
       (() => {
         throw new Error('Can not find main HTMLElement');
       })();

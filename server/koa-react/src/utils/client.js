@@ -26,7 +26,11 @@ setConfig({
  * run()
  */
 const run = async () => {
-  const { mainInitialProps, pageInitialProps, chunkName } = window.__CAT_DATA__;
+  const {
+    mainInitialProps,
+    pageInitialProps,
+    chunkName,
+  } = window.__MIKOJS_DATA__;
   // preload page
   const {
     component: { loader },
@@ -55,7 +59,7 @@ const run = async () => {
         pageInitialProps={pageInitialProps}
       />
     </Router>,
-    document.getElementById('__CAT__') ||
+    document.getElementById('__MIKOJS__') ||
       (() => {
         throw new Error('Can not find main HTMLElement');
       })(),

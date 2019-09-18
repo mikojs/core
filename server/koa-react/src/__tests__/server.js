@@ -95,10 +95,10 @@ describe.each`
           [
             '<!DOCTYPE html>',
             head,
-            '<main id="__CAT__">',
+            '<main id="__MIKOJS__">',
             `<div>${main}</div>`,
             '</main>',
-            `<script data-react-helmet="true">var __CAT_DATA__ = ${JSON.stringify(
+            `<script data-react-helmet="true">var __MIKOJS_DATA__ = ${JSON.stringify(
               {
                 mainInitialProps,
                 pageInitialProps,

@@ -16,7 +16,7 @@ describe('Loading', () => {
   test('work', () => {
     const main = global.document.createElement('main');
 
-    main.setAttribute('id', '__CAT__');
+    main.setAttribute('id', '__MIKOJS__');
     global.document.querySelector('body').appendChild(main);
 
     const wrapper = mount(<Loading />);

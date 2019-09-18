@@ -23,7 +23,7 @@
     "@mikojs/babel-preset-base": "version",
     "@mikojs/badges": "version",
     "@mikojs/configs": "version",
-    "@mikojs/eslint-config-cat": "version",
+    "@mikojs/eslint-config-base": "version",
     "@mikojs/jest": "version",
     "eslint": "version",
     "eslint-watch": "version",

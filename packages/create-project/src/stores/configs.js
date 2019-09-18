@@ -43,6 +43,8 @@ class Configs extends Store {
 
     const configsEnv = [];
 
+    if (useServer) configsEnv.push('server');
+
     if (useReact) {
       configsEnv.push('react');
 

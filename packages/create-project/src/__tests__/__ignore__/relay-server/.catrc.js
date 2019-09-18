@@ -1,5 +1,5 @@
 // @flow
 
 module.exports = {
-  configsEnv: ['react', 'relay'],
+  configsEnv: ['server', 'react', 'relay'],
 };

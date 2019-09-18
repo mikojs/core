@@ -1,5 +1,5 @@
 // @flow
 
 module.exports = {
-  configsEnv: ['react', 'css'],
+  configsEnv: ['server', 'react', 'css'],
 };

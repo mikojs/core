@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/create-project",
   "repository": "https://github.com/mikojs/core/tree/master/packages/create-project",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
@@ -25,7 +25,7 @@
     "validator": "^11.1.0"
   },
   "devDependencies": {
-    "@mikojs/configs": "^1.6.1",
+    "@mikojs/configs": "^1.6.2",
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.4",
     "prettier": "^1.18.2",

@@ -1,14 +1,11 @@
-/**
- * @jest-environment node
- *
- * @flow
- */
+// @flow
 
 import React from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
+import { mount } from 'enzyme';
 
 import Dnd from '../index';
+import Renderer from '../Renderer';
 
 test('react-dnd', () => {
-  expect(renderToStaticMarkup(<Dnd />)).toMatch(/<main .*><\/main>/);
+  expect(mount(<Dnd />).find(Renderer)).toBeTruthy();
 });

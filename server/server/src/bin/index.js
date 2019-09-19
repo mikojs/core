@@ -139,12 +139,14 @@ handleUnhandledRejection();
     subprocess = execa(path.resolve(__dirname, './runServer.js'), [port], {
       stdio: 'inherit',
     });
-    logger.log(
-      'In the watch mode, you can do:',
-      '',
-      chalk`- Use {cyan rs} to restart the server`,
-      chalk`- Use {cyan exit} or {cyan ctrl + c} to stop the server`,
-      '',
-    );
+
+    if (dev && opts.cliOptions.watch)
+      logger.log(
+        'In the watch mode, you can do:',
+        '',
+        chalk`- Use {cyan rs} to restart the server`,
+        chalk`- Use {cyan exit} or {cyan ctrl + c} to stop the server`,
+        '',
+      );
   });
 })();

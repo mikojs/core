@@ -24,14 +24,15 @@ client.on('data', (data: string) => {
       client.end('restart');
     },
   });
-});
 
-process.stdin.on('data', (data: Buffer) => {
-  const str = data
-    .toString()
-    .trim()
-    .toLowerCase();
+  if (context.dev && context.watch)
+    process.stdin.on('data', (inputData: Buffer) => {
+      const str = inputData
+        .toString()
+        .trim()
+        .toLowerCase();
 
-  if (str === 'rs') client.end('restart');
-  else if (str === 'exit') client.end('exit');
+      if (str === 'rs') client.end('restart');
+      else if (str === 'exit') client.end('exit');
+    });
 });

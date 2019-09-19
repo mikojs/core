@@ -2,6 +2,7 @@
 // @flow
 
 import path from 'path';
+import net from 'net';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 import dirCommand from '@babel/cli/lib/babel/dir';
@@ -10,7 +11,8 @@ import execa, {
   type ExecaPromise as execaPromiseType,
   type ExecaError as execaErrorType,
 } from 'execa';
-import chokidar from 'chokidar';
+import getPort from 'get-port';
+import chalk from 'chalk';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 
@@ -63,6 +65,7 @@ handleUnhandledRejection();
       },
     });
 
+  const port = opts.cliOptions.watch ? await getPort() : null;
   const serverArgu = [
     customFile
       ? path.resolve(customFile)
@@ -72,6 +75,7 @@ handleUnhandledRejection();
     '--dir',
     opts.cliOptions.outDir,
     ...(opts.cliOptions.watch ? ['--watch'] : []),
+    ...(port ? ['--watch-port', port] : []),
   ];
 
   let subprocess: execaPromiseType = execa(
@@ -82,47 +86,59 @@ handleUnhandledRejection();
     },
   );
 
-  if (!customFile || !opts.cliOptions.watch) {
+  if (!port) {
     await subprocess.catch(({ exitCode }: execaErrorType) => {
       process.exit(exitCode);
     });
     return;
   }
 
-  logger.log(
-    'Use `rs` to restart the custom server',
-    'Use `exit` or `ctrl + c` to stop the custom server',
-  );
+  const server = net.createServer((socket: net.Socket) => {
+    let timeout: TimeoutID;
 
-  let timeout: TimeoutID;
-  /**
-   * @example
-   * restart()
-   */
-  const restart = () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      logger.log(
-        'Restart the custom server',
-        'Use `rs` to restart the custom server',
-        'Use `exit` or `ctrl + c` to stop the custom server',
-      );
+    socket.setEncoding('utf8');
+    socket.on('data', (data: string) => {
+      switch (data) {
+        case 'restart':
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            logger.log(
+              'Restart the server',
+              '',
+              chalk`- Use {cyan rs} to restart the server`,
+              chalk`- Use {cyan exit} or {cyan ctrl + c} to stop the server`,
+              '',
+            );
 
-      subprocess.cancel();
-      subprocess = execa(path.resolve(__dirname, './server.js'), serverArgu, {
-        stdio: 'inherit',
-      });
-    }, 100);
-  };
+            subprocess.cancel();
+            subprocess = execa(
+              path.resolve(__dirname, './server.js'),
+              serverArgu,
+              {
+                stdio: 'inherit',
+              },
+            );
+          }, 100);
+          break;
 
-  chokidar.watch(path.resolve(opts.cliOptions.outDir)).on('change', restart);
-  process.stdin.on('data', (data: Buffer) => {
-    const str = data
-      .toString()
-      .trim()
-      .toLowerCase();
+        case 'exit':
+          process.exit(0);
+          break;
 
-    if (str === 'rs') restart();
-    else if (str === 'exit') process.exit(0);
+        default:
+          throw logger.fail(`Can not use ${data} to operate the server`);
+      }
+    });
+  });
+
+  server.listen(port, undefined, undefined, () => {
+    debugLog(`Open watch server at ${port}`);
+    logger.log(
+      'In the watch mode, you can do:',
+      '',
+      chalk`- Use {cyan rs} to restart the server`,
+      chalk`- Use {cyan exit} or {cyan ctrl + c} to stop the server`,
+      '',
+    );
   });
 })();

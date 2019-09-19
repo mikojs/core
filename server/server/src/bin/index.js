@@ -7,12 +7,10 @@ import net from 'net';
 import parseArgv from '@babel/cli/lib/babel/options';
 import dirCommand from '@babel/cli/lib/babel/dir';
 import debug from 'debug';
-import execa, {
-  type ExecaPromise as execaPromiseType,
-  type ExecaError as execaErrorType,
-} from 'execa';
+import execa, { type ExecaPromise as execaPromiseType } from 'execa';
 import getPort from 'get-port';
 import chalk from 'chalk';
+import { emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 
@@ -24,6 +22,7 @@ const debugLog = debug('server:bin');
 handleUnhandledRejection();
 
 (async () => {
+  // [start] babel build
   const dev = process.env.NODE_ENV !== 'production';
   const opts = parseArgv(process.argv);
   const customFile = opts.cliOptions.outFile;
@@ -64,44 +63,37 @@ handleUnhandledRejection();
         watch: true,
       },
     });
+  // [end] babel build
 
-  const port = opts.cliOptions.watch ? await getPort() : null;
-  const serverArgu = [
-    customFile
-      ? path.resolve(customFile)
-      : path.resolve(__dirname, '../defaults'),
-    '--src',
-    opts.cliOptions.filenames[0],
-    '--dir',
-    opts.cliOptions.outDir,
-    ...(opts.cliOptions.watch ? ['--watch'] : []),
-    ...(port ? ['--watch-port', port] : []),
-  ];
-
-  let subprocess: execaPromiseType = execa(
-    path.resolve(__dirname, './server.js'),
-    serverArgu,
-    {
-      stdio: 'inherit',
-    },
-  );
-
-  if (!port) {
-    await subprocess.catch(({ exitCode }: execaErrorType) => {
-      process.exit(exitCode);
-    });
-    return;
-  }
+  const port = await getPort();
+  let subprocess: execaPromiseType;
+  debugLog(port);
 
   const server = net.createServer((socket: net.Socket) => {
     let timeout: TimeoutID;
 
     socket.setEncoding('utf8');
-    socket.on('data', (data: string) => {
+
+    socket.write(
+      JSON.stringify({
+        serverFile: customFile
+          ? path.resolve(customFile)
+          : path.resolve(__dirname, '../defaults'),
+        src: opts.cliOptions.filenames[0],
+        dir: opts.cliOptions.outDir,
+        dev,
+        watch: opts.cliOptions.watch,
+        port: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined,
+      }),
+    );
+
+    socket.on('data', async (data: string) => {
+      debug(data);
+
       switch (data) {
         case 'restart':
           clearTimeout(timeout);
-          timeout = setTimeout(() => {
+          timeout = setTimeout(async () => {
             logger.log(
               'Restart the server',
               '',
@@ -111,9 +103,12 @@ handleUnhandledRejection();
             );
 
             subprocess.cancel();
+            await subprocess.catch(emptyFunction);
+            // TODO: https://github.com/eslint/eslint/issues/11899
+            // eslint-disable-next-line require-atomic-updates
             subprocess = execa(
-              path.resolve(__dirname, './server.js'),
-              serverArgu,
+              path.resolve(__dirname, './runServer.js'),
+              [port],
               {
                 stdio: 'inherit',
               },
@@ -122,6 +117,9 @@ handleUnhandledRejection();
           break;
 
         case 'exit':
+          subprocess.cancel();
+          await subprocess.catch(emptyFunction);
+          server.close();
           process.exit(0);
           break;
 
@@ -129,10 +127,18 @@ handleUnhandledRejection();
           throw logger.fail(`Can not use ${data} to operate the server`);
       }
     });
+
+    socket.on('close', () => {
+      debugLog('client close');
+    });
   });
 
-  server.listen(port, undefined, undefined, () => {
+  server.listen(port, () => {
     debugLog(`Open watch server at ${port}`);
+
+    subprocess = execa(path.resolve(__dirname, './runServer.js'), [port], {
+      stdio: 'inherit',
+    });
     logger.log(
       'In the watch mode, you can do:',
       '',

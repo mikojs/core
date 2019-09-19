@@ -1,0 +1,37 @@
+#! /usr/bin/env node
+// @flow
+
+import net from 'net';
+
+import debug from 'debug';
+
+import { requireModule } from '@mikojs/utils';
+
+const debugLog = debug('server:bin:runServer');
+const port = parseInt(process.argv[2], 10);
+const client = net.connect({ port });
+
+debugLog(port);
+
+client.setEncoding('utf8');
+client.on('data', (data: string) => {
+  const { serverFile, ...context } = JSON.parse(data);
+
+  debugLog(context);
+  requireModule(serverFile)({
+    ...context,
+    restart: () => {
+      client.end('restart');
+    },
+  });
+});
+
+process.stdin.on('data', (data: Buffer) => {
+  const str = data
+    .toString()
+    .trim()
+    .toLowerCase();
+
+  if (str === 'rs') client.end('restart');
+  else if (str === 'exit') client.end('exit');
+});

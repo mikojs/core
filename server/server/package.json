@@ -16,7 +16,6 @@
     "@mikojs/utils": "^1.6.0",
     "chalk": "^2.4.2",
     "chokidar": "^3.0.2",
-    "commander": "^3.0.1",
     "debug": "^4.1.1",
     "execa": "^2.0.4",
     "fbjs": "^1.0.0",

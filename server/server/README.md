@@ -72,7 +72,7 @@ describe('server', () => {
 ```js
 import server from '@mikojs/server';
 
-export default ({ src, dir, dev, watch, port }) =>
+export default ({ src, dir, dev, watch, port, restart }) =>
   server.init()
   |> server.use(async (ctx, next) => {
     await next();
@@ -96,7 +96,9 @@ export default ({ src, dir, dev, watch, port }) =>
       |> server.end)
     |> server.end)
   |> server.run()
-  |> server.watch(dir, []);
+  |> (dev && watch
+    ? server.watch(dir, [restart])
+    : emptyFunction.thatReturnsArgument);
 ```
 
 - `init`: Just use to return `Koa`. You can replace by `new Koa()`.
@@ -105,6 +107,7 @@ export default ({ src, dir, dev, watch, port }) =>
 - `get`, `post`, `put`, `del`, `all`: Add method to this router.
 - `run`: Just use to return a promise with `new Koa().listen(port)`. The default of the port is 8000.
 - `watch`: Use this function to watch the changed file. This method is based on `chokidar`. You can write the same function by yourself. If you want to add the function to handle the changed file, you can add an array in the second argument.
+- `restart`: You can use this to restart the server.
 
 ## Load plugins with default server
 

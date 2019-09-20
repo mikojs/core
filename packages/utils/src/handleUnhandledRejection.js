@@ -1,6 +1,12 @@
 // @flow
 
-import { ExecutionEnvironment } from 'fbjs';
+import { typeof ExecutionEnvironment as ExecutionEnvironmentType } from 'fbjs';
+
+import requireModule from './requireModule';
+
+const ExecutionEnvironment: ExecutionEnvironmentType = requireModule(
+  'fbjs/lib/ExecutionEnvironment',
+);
 
 /**
  * @example

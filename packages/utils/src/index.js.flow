@@ -10,3 +10,5 @@ export { default as mockChoice } from './mockChoice';
 export { default as normalizedQuestions } from './normalizedQuestions';
 export { default as requireModule } from './requireModule';
 export { default as requiredEnv } from './requiredEnv';
+export { default as chainingLogger } from './chainingLogger';
+export { default as createLogger } from './createLogger';

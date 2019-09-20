@@ -51,6 +51,7 @@ define babel-build
 		--stream \
 		--include-filtered-dependencies \
 		--scope @mikojs/configs \
+		--scope @mikojs/logger \
 		--scope @mikojs/babel-* \
 		$(2)
 	ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs

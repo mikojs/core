@@ -1,7 +1,12 @@
 // @flow
 
-import dirTree from 'directory-tree';
-import * as d3 from 'd3-hierarchy';
+import typeof dirTreeType from 'directory-tree';
+import typeof * as d3Type from 'd3-hierarchy';
+
+import requireModule from './requireModule';
+
+const dirTree: dirTreeType = requireModule('directory-tree');
+const d3: d3Type = requireModule('d3-hierarchy');
 
 export type d3DirTreeNodeType = {|
   data: {|

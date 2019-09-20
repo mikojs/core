@@ -23,7 +23,6 @@ describe('createLogger', () => {
     ${'fail'}    | ${'✖'} | ${'red'}
     ${'warn'}    | ${'⚠'} | ${'yellow'}
     ${'info'}    | ${'ℹ'} | ${'blue'}
-    ${'test'}    | ${' '} | ${'gray'}
   `(
     'use $name function',
     ({
@@ -57,7 +56,7 @@ describe('createLogger', () => {
 
     global.console.log = mockLog;
     createLogger('test')
-      .log('messageA')
+      .start('messageA')
       .log('messageB');
 
     expect(mockLog).toHaveBeenCalledTimes(2);

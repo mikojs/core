@@ -67,45 +67,6 @@ describe('server', () => {
 });
 ```
 
-## Write the custom server
-
-```js
-import server from '@mikojs/server';
-
-export default ({ src, dir, dev, watch, port }) =>
-  server.init()
-  |> server.use(async (ctx, next) => {
-    await next();
-  })
-  |> ('/path'  // if this is undefined, this will not add prefix to router
-    |> server.start
-    |> ('/get'
-    |> server.get  // this will render as /path/get with get method (post, put, del, all)
-      |> server.use(async (ctx, next) => {
-        await next();
-      })
-      |> server.end)
-    |> server.use(async (ctx, next) => {
-      await next();
-    })
-    |> server.end)
-  |> (undefined
-    |> server.start
-    |> ('/get'  // this will render as /get with get method
-      |> server.get
-      |> server.end)
-    |> server.end)
-  |> server.run()
-  |> server.watch(dir, []);
-```
-
-- `init`: Just use to return `Koa`. You can replace by `new Koa()`.
-- `use`: Add middleware to the router or the server.
-- `start`, `end`: Add a new router.
-- `get`, `post`, `put`, `del`, `all`: Add method to this router.
-- `run`: Just use to return a promise with `new Koa().listen(port)`. The default of the port is 8000.
-- `watch`: Use this function to watch the changed file. This method is based on `chokidar`. You can write the same function by yourself. If you want to add the function to handle the changed file, you can add an array in the second argument.
-
 ## Load plugins with default server
 
 You can add those packages in your project and `@mikojs/server` will load the default config for those modules.
@@ -141,3 +102,57 @@ SKIP_RELAY=true yarn server src -d lib
 ```sh
 SKIP_SERVER=true yarn server src -d lib
 ```
+
+## Write the custom server
+
+```js
+import server from '@mikojs/server';
+
+// use the command like: yarn server ./src/server.js -o ./lib/server.js
+export default ({ src, dir, dev, watch, port, restart, close }) =>
+  server.init()
+  |> server.use(async (ctx, next) => {
+    await next();
+  })
+  |> ('/path'  // if this is undefined, this will not add prefix to router
+    |> server.start
+    |> ('/get'
+    |> server.get  // this will render as /path/get with get method (post, put, del, all)
+      |> server.use(async (ctx, next) => {
+        await next();
+      })
+      |> server.end)
+    |> server.use(async (ctx, next) => {
+      await next();
+    })
+    |> server.end)
+  |> (undefined
+    |> server.start
+    |> ('/get'  // this will render as /get with get method
+      |> server.get
+      |> server.end)
+    |> server.end)
+  |> server.run()
+  |> (dev && watch
+    ? server.watch(dir, [restart])
+    : emptyFunction.thatReturnsArgument);
+
+// or you can just use this: node ./lib/server.js
+// In this way, you must build the files by yourself.
+server.init()
+  |> server.use(async (ctx, next) => {
+  })
+  .
+  .
+  .
+  |> server.run()
+```
+
+- `init`: Just use to return `Koa`. You can replace by `new Koa()`.
+- `use`: Add middleware to the router or the server.
+- `start`, `end`: Add a new router.
+- `get`, `post`, `put`, `del`, `all`: Add method to this router.
+- `run`: Just use to return a promise with `new Koa().listen(port)`. The default of the port is 8000.
+- `watch`: Use this function to watch the changed file. This method is based on `chokidar`. You can write the same function by yourself. If you want to add the function to handle the changed file, you can add an array in the second argument.
+- `restart`: Use this to restart the server.
+- `close`: Use this to clsoe the server.

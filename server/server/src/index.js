@@ -23,6 +23,8 @@ export type contextType = {|
   dev?: boolean,
   watch?: boolean,
   port?: number,
+  restart?: () => void,
+  close?: () => void,
 |};
 
 const debugLog = debug('server');

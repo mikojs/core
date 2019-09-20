@@ -2,14 +2,12 @@
 
 import chalk from 'chalk';
 
-const { log } = console;
-
 /**
  * @example
  * createLogger('test')
  *
  * @param {string} name - logger name
- * @param {log} logFuncOrObject - log function or log object
+ * @param {Function} logFuncOrObject - log function or log object
  * @param {object} names - names for prefix message
  *
  * @return {object} - log function object
@@ -27,7 +25,7 @@ const createLogger = <T: {}>(
     info: chalk`{blue ℹ {bold ${name}}}`,
   },
 ) =>
-  [...Object.keys(names), ...Object.keys(logFuncOrObject)].reduce(
+  Object.keys(names).reduce(
     (
       result: { [string]: (message: string) => createLogger<T> },
       key: string,

@@ -23,7 +23,6 @@ describe('logger', () => {
     ${'fail'}    | ${'✖'} | ${'red'}
     ${'warn'}    | ${'⚠'} | ${'yellow'}
     ${'info'}    | ${'ℹ'} | ${'blue'}
-    ${'aaa'}     | ${' '} | ${'gray'}
   `(
     'use $name function',
     ({

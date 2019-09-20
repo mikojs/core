@@ -11,6 +11,8 @@ it('test d3DirTree', () => {
       .sort(),
   ).toEqual([
     '__tests__',
+    'chainingLogger.js',
+    'createLogger.js',
     'd3DirTree.js',
     'handleUnhandledRejection.js',
     'index.js',

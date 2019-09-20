@@ -10,7 +10,6 @@ import debug from 'debug';
 import execa, { type ExecaPromise as execaPromiseType } from 'execa';
 import getPort from 'get-port';
 import chalk from 'chalk';
-import { emptyFunction } from 'fbjs';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 
@@ -103,7 +102,7 @@ handleUnhandledRejection();
             );
 
             subprocess.cancel();
-            await subprocess.catch(emptyFunction);
+            await subprocess.catch(debugLog);
             // TODO: https://github.com/eslint/eslint/issues/11899
             // eslint-disable-next-line require-atomic-updates
             subprocess = execa(
@@ -118,7 +117,7 @@ handleUnhandledRejection();
 
         case 'exit':
           subprocess.cancel();
-          await subprocess.catch(emptyFunction);
+          await subprocess.catch(debugLog);
           server.close();
           process.exit(0);
           break;

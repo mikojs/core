@@ -15,9 +15,10 @@ debugLog(port);
 
 client.setEncoding('utf8');
 client.on('data', (data: string) => {
+  debugLog(data);
+
   const { serverFile, ...context } = JSON.parse(data);
 
-  debugLog(context);
   requireModule(serverFile)({
     ...context,
     restart: () => {

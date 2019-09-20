@@ -2,46 +2,42 @@
 
 import chalk from 'chalk';
 
+import logger from './logger';
+
 /**
  * @example
  * createLogger('test')
  *
  * @param {string} name - logger name
- * @param {Function} logFuncOrObject - log function or log object
- * @param {object} names - names for prefix message
+ * @param {object} logFunc - logger function object
+ * @param {object} names - logger names mapping
  *
- * @return {object} - log function object
+ * @return {object} - logger object
  */
-const createLogger = <T: {}>(
+const createLogger = (
   name: string,
-  logFuncOrObject: T,
-  names?: {
-    [string]: string,
-  } = {
-    log: chalk`{gray   {bold ${name}}}`,
-    succeed: chalk`{green ✔ {bold ${name}}}`,
-    fail: chalk`{red ✖ {bold ${name}}}`,
-    warn: chalk`{yellow ⚠ {bold ${name}}}`,
-    info: chalk`{blue ℹ {bold ${name}}}`,
+  logFunc: {} = logger,
+  names: { [string]: string } = {
+    log: chalk`{gray {bold ${name}}}`,
+    start: chalk`{gray {bold ${name}}}`,
+    succeed: chalk`{green {bold ${name}}}`,
+    fail: chalk`{red {bold ${name}}}`,
+    warn: chalk`{yellow {bold ${name}}}`,
+    info: chalk`{blue {bold ${name}}}`,
   },
-) =>
+): {
+  [string]: (message: string) => $Call<typeof createLogger, string, {}>,
+} =>
   Object.keys(names).reduce(
-    (
-      result: { [string]: (message: string) => createLogger<T> },
-      key: string,
-    ) => ({
+    (result: {}, key: string) => ({
       ...result,
-      [key]: (
-        message: string,
-      ): $Call<typeof createLogger, string, T, { [string]: string }> => {
-        const newLogger = (logFuncOrObject[key] || logFuncOrObject)(
-          `${names[key] || names.log} ${message}`,
-        );
+      [key]: (message: string): $Call<typeof createLogger, string, {}> => {
+        (logFunc[key] || logger.log)(`${names[key]} ${message}`);
 
-        return createLogger(name, newLogger || logFuncOrObject, names);
+        return createLogger(name, logFunc);
       },
     }),
-    ({}: { [string]: (message: string) => createLogger<T> }),
+    {},
   );
 
 export default createLogger;

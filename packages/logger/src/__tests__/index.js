@@ -35,14 +35,18 @@ describe('logger', () => {
       color: string,
     |}) => {
       const mockLog = jest.fn();
+      const mapName =
+        {
+          succeed: 'log',
+          fail: 'error',
+        }[name] || name;
 
-      logger('test', {
-        [name]: mockLog,
-      })[name]('message');
+      global.console[mapName] = mockLog;
+      logger('test')[name]('message');
 
       expect(mockLog).toHaveBeenCalledTimes(1);
       expect(mockLog).toHaveBeenCalledWith(
-        `{${color} ${prefix} {bold test}} message`,
+        `{${color} ${prefix} }{${color} {bold test}} message`,
       );
     },
   );
@@ -50,11 +54,17 @@ describe('logger', () => {
   test('use optional logger', () => {
     const mockLog = jest.fn();
 
-    logger('test', mockLog)
+    global.console.log = mockLog;
+    logger('test')
       .log('messageA')
       .log('messageB');
+
     expect(mockLog).toHaveBeenCalledTimes(2);
-    expect(mockLog).toHaveBeenCalledWith(`{gray   {bold test}} messageA`);
-    expect(mockLog).toHaveBeenCalledWith(`{gray   {bold test}} messageB`);
+    expect(mockLog).toHaveBeenCalledWith(
+      `{gray   }{gray {bold test}} messageA`,
+    );
+    expect(mockLog).toHaveBeenCalledWith(
+      `{gray   }{gray {bold test}} messageB`,
+    );
   });
 });

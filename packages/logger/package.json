@@ -8,12 +8,7 @@
   "version": "1.6.0",
   "main": "./lib/index.js",
   "dependencies": {
-    "@mikojs/utils": "^1.6.0",
-    "chalk": "^2.4.2",
-    "fbjs": "^1.0.0"
-  },
-  "devDependencies": {
-    "ora": "^3.4.0"
+    "chalk": "^2.4.2"
   },
   "keywords": ["logger", "mikojs"],
   "publishConfig": {

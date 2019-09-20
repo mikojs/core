@@ -24,6 +24,9 @@ client.on('data', (data: string) => {
     restart: () => {
       client.end('restart');
     },
+    close: () => {
+      client.end('close');
+    },
   });
 
   if (context.dev && context.watch)
@@ -34,6 +37,6 @@ client.on('data', (data: string) => {
         .toLowerCase();
 
       if (str === 'rs') client.end('restart');
-      else if (str === 'exit') client.end('exit');
+      else if (str === 'close') client.end('close');
     });
 });

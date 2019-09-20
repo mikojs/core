@@ -97,7 +97,7 @@ handleUnhandledRejection();
               'Restart the server',
               '',
               chalk`- Use {cyan rs} to restart the server`,
-              chalk`- Use {cyan exit} or {cyan ctrl + c} to stop the server`,
+              chalk`- Use {cyan close} or {cyan ctrl + c} to stop the server`,
               '',
             );
 
@@ -115,7 +115,7 @@ handleUnhandledRejection();
           }, 100);
           break;
 
-        case 'exit':
+        case 'close':
           subprocess.cancel();
           await subprocess.catch(debugLog);
           server.close();
@@ -127,7 +127,7 @@ handleUnhandledRejection();
       }
     });
 
-    socket.on('close', () => {
+    socket.on('close', async () => {
       debugLog('client close');
     });
   });
@@ -144,7 +144,7 @@ handleUnhandledRejection();
         'In the watch mode, you can do:',
         '',
         chalk`- Use {cyan rs} to restart the server`,
-        chalk`- Use {cyan exit} or {cyan ctrl + c} to stop the server`,
+        chalk`- Use {cyan close} or {cyan ctrl + c} to stop the server`,
         '',
       );
   });

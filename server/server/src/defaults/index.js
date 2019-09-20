@@ -32,6 +32,7 @@ export default async ({
   dev = true,
   watch = false,
   port,
+  close = emptyFunction,
 }: contextType): Promise<http$Server> => {
   const react = new (loadModule('@mikojs/koa-react', DefaultReact))(
     path.resolve(dir, './pages'),
@@ -63,7 +64,7 @@ export default async ({
 
     if (!process.env.SKIP_BUILD && !dev) await react.buildJs();
 
-    if (process.env.SKIP_SERVER) process.exit(0);
+    if (process.env.SKIP_SERVER) close();
   }
 
   return (

@@ -39,7 +39,14 @@ const createLogger = (
       [key]: (
         message: string,
       ): $Call<typeof createLogger, string, typeof chainingLogger> => {
-        (logger[key] || logger.log)(`${names[key]} ${message}`);
+        if (logger[key])
+          return createLogger(
+            name,
+            logger[key](`${names[key]} ${message}`),
+            names,
+          );
+
+        chainingLogger.log(`${names[key]} ${message}`);
 
         return createLogger(name, logger, names);
       },

@@ -1,10 +1,6 @@
 // @flow
 
-import typeof chalkType from 'chalk';
-
-import requireModule from './requireModule';
-
-const chalk: chalkType = requireModule('chalk');
+import chalk from 'chalk';
 
 export type questionType<T> = {
   name: string,

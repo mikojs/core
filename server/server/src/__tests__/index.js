@@ -33,7 +33,7 @@ describe('server', () => {
         (async () =>
           (await server.init(context))
           |> ('/test' |> server[method] |> server.end))(),
-      ).rejects.toThrow('process exit');
+      ).rejects.toThrow(`\`server.${method}\` is not under \`server.start\``);
     },
   );
 
@@ -56,6 +56,6 @@ describe('server', () => {
           |> server.start
           |> (new Endpoint('/test', 'test') |> server.end)
           |> server.end))(),
-    ).rejects.toThrow('process exit');
+    ).rejects.toThrow('can not find `test` method in `koa-router`');
   });
 });

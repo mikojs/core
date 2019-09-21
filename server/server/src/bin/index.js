@@ -11,12 +11,12 @@ import execa, { type ExecaPromise as execaPromiseType } from 'execa';
 import getPort from 'get-port';
 import chalk from 'chalk';
 
-import { handleUnhandledRejection } from '@mikojs/utils';
+import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import findOptionsPath from 'utils/findOptionsPath';
-import logger from 'utils/logger';
 
 const debugLog = debug('server:bin');
+const logger = createLogger('@mikojs/server');
 
 handleUnhandledRejection();
 
@@ -93,13 +93,14 @@ handleUnhandledRejection();
         case 'restart':
           clearTimeout(timeout);
           timeout = setTimeout(async () => {
-            logger.log(
-              'Restart the server',
-              '',
-              chalk`- Use {cyan rs} to restart the server`,
-              chalk`- Use {cyan close} or {cyan ctrl + c} to stop the server`,
-              '',
-            );
+            logger
+              .log('Restart the server')
+              .log('')
+              .log(chalk`  - Use {cyan rs} to restart the server`)
+              .log(
+                chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`,
+              )
+              .log('');
 
             subprocess.cancel();
             await subprocess.catch(debugLog);
@@ -123,7 +124,7 @@ handleUnhandledRejection();
           break;
 
         default:
-          throw logger.fail(`Can not use ${data} to operate the server`);
+          throw new Error(`Can not use ${data} to operate the server`);
       }
     });
 
@@ -140,12 +141,11 @@ handleUnhandledRejection();
     });
 
     if (dev && opts.cliOptions.watch)
-      logger.log(
-        'In the watch mode, you can do:',
-        '',
-        chalk`- Use {cyan rs} to restart the server`,
-        chalk`- Use {cyan close} or {cyan ctrl + c} to stop the server`,
-        '',
-      );
+      logger
+        .log('In the watch mode, you can do:')
+        .log('')
+        .log(chalk`  - Use {cyan rs} to restart the server`)
+        .log(chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`)
+        .log('');
   });
 })();

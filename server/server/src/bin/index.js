@@ -96,9 +96,9 @@ handleUnhandledRejection();
             logger
               .log('Restart the server')
               .log('')
-              .log(chalk`- Use {cyan rs} to restart the server`)
+              .log(chalk`  - Use {cyan rs} to restart the server`)
               .log(
-                chalk`- Use {cyan close} or {cyan ctrl + c} to stop the server`,
+                chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`,
               )
               .log('');
 
@@ -144,8 +144,8 @@ handleUnhandledRejection();
       logger
         .log('In the watch mode, you can do:')
         .log('')
-        .log(chalk`- Use {cyan rs} to restart the server`)
-        .log(chalk`- Use {cyan close} or {cyan ctrl + c} to stop the server`)
+        .log(chalk`  - Use {cyan rs} to restart the server`)
+        .log(chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`)
         .log('');
   });
 })();

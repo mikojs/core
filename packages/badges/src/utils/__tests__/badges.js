@@ -30,11 +30,15 @@ const ALL_BADGES = [
 
 describe('badges', () => {
   test('can not find git remote', async () => {
+    const mockLog = jest.fn();
+
+    global.console.error = mockLog;
     execa.mainFunction = () => {
       throw new Error('can not find git remote');
     };
 
-    await expect(badges('readme', ctx)).rejects.toThrow('process exit');
+    expect(await badges('readme', ctx)).toBeNull();
+    expect(mockLog).toHaveBeenCalled();
   });
 
   test.each`

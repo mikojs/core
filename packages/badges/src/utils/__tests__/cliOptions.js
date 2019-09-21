@@ -12,8 +12,11 @@ describe('cli options', () => {
   });
 
   test('not give readme path', () => {
-    expect(() => {
-      cliOptions(defaultArgv);
-    }).toThrow('process exit');
+    const mockLog = jest.fn();
+
+    global.console.error = mockLog;
+
+    expect(cliOptions(defaultArgv)).toEqual([]);
+    expect(mockLog).toHaveBeenCalled();
   });
 });

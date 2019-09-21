@@ -7,10 +7,10 @@ import Router from 'koa-router';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
 import debug from 'debug';
+import ora from 'ora';
 
-import { handleUnhandledRejection } from '@mikojs/utils';
+import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
-import logger from './utils/logger';
 import Endpoint from './utils/Endpoint';
 
 type routerType = Router | Endpoint | Koa;
@@ -28,6 +28,7 @@ export type contextType = {|
 |};
 
 const debugLog = debug('server');
+const logger = createLogger('@mikojs/server', ora());
 
 /**
  * @example
@@ -86,9 +87,7 @@ export default {
           router;
 
         if (!(parentRouter instanceof Router))
-          throw logger.fail(
-            `\`server.${method}\` is not under \`server.start\``,
-          );
+          throw new Error(`\`server.${method}\` is not under \`server.start\``);
 
         switch (method) {
           case 'get':
@@ -112,7 +111,7 @@ export default {
             break;
 
           default:
-            throw logger.fail(
+            throw new Error(
               `can not find \`${method}\` method in \`koa-router\``,
             );
         }

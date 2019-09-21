@@ -33,22 +33,26 @@ describe('cli options', () => {
     });
   });
 
-  test.each`
-    cliName              | expected
-    ${'notFoundCommand'} | ${'process exit'}
-    ${'runError'}        | ${'run error'}
-  `(
-    'Run fail with $cliName',
-    ({ cliName, expected }: {| cliName: string, expected: string |}) => {
-      npmWhich.throwError = cliName === 'notFoundCommand';
+  test('run command fail when command is not found', () => {
+    const mockLog = jest.fn();
 
-      expect(() => {
-        cliOptions([...defaultArgv, cliName]);
-      }).toThrow(expected);
+    npmWhich.throwError = true;
+    global.console.error = mockLog;
 
-      npmWhich.throwError = false;
-    },
-  );
+    expect(cliOptions([...defaultArgv, 'notFoundCommand'])).toBeFalsy();
+    expect(mockLog).toHaveBeenCalledTimes(1);
+    expect(mockLog).toHaveBeenCalledWith(
+      '{red ✖ }{red {bold @mikojs/configs}} Not found cli: notFoundCommand',
+    );
+
+    npmWhich.throwError = false;
+  });
+
+  test('run command fail when running command throw error', () => {
+    expect(() => {
+      cliOptions([...defaultArgv, 'runError']);
+    }).toThrow('run error');
+  });
 
   test('run command with --configs-env', () => {
     expect(
@@ -129,14 +133,28 @@ describe('cli options', () => {
   );
 
   test.each`
-    argv
-    ${['--info']}
-    ${['runCmd', '--info']}
-    ${[]}
-    ${['notFindCliName']}
-  `('Run $argv', ({ argv }: {| argv: $ReadOnlyArray<string> |}) => {
-    expect(() => {
-      cliOptions([...defaultArgv, ...argv]);
-    }).toThrow('process exit');
-  });
+    argv                    | expected | consoleName
+    ${['--info']}           | ${true}  | ${'info'}
+    ${['runCmd', '--info']} | ${true}  | ${'info'}
+    ${[]}                   | ${false} | ${'error'}
+    ${['notFindCliName']}   | ${false} | ${'error'}
+  `(
+    'Run $argv',
+    ({
+      argv,
+      expected,
+      consoleName,
+    }: {|
+      argv: $ReadOnlyArray<string>,
+      expected: boolean,
+      consoleName: string,
+    |}) => {
+      const mockLog = jest.fn();
+
+      global.console[consoleName] = mockLog;
+
+      expect(cliOptions([...defaultArgv, ...argv])).toBe(expected);
+      expect(mockLog).toHaveBeenCalled();
+    },
+  );
 });

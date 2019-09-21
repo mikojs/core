@@ -83,7 +83,7 @@ export default (
     args: [cliName],
     rawArgs,
     install: shouldInstall = false,
-    info = false,
+    info: showInfo = false,
     configsEnv,
     configsFiles,
     options,
@@ -93,7 +93,7 @@ export default (
     cliName,
     rawArgs,
     shouldInstall,
-    info,
+    showInfo,
     configsEnv,
     configsFiles,
   });
@@ -108,8 +108,8 @@ export default (
       configs.store[cliName].configFiles[key] = true;
     });
 
-  if (info) {
-    const { log } = console;
+  if (showInfo) {
+    const { info } = console;
 
     if (cliName) {
       const config = configs.store[cliName];
@@ -117,8 +117,8 @@ export default (
       logger.info(
         chalk`Here is thie information of the {cyan ${cliName}} config:`,
       );
-      log();
-      log(
+      info();
+      info(
         JSON.stringify(
           (Object.keys(config): $ReadOnlyArray<string>).reduce(
             (result: {}, key: string): {} => {
@@ -154,14 +154,14 @@ export default (
           .map((text: string) => `  ${text}`)
           .join('\n'),
       );
-      log();
+      info();
     } else {
       logger.info('Here are the all config names which you can use:');
-      log();
+      info();
       Object.keys(configs.store).forEach((key: string) => {
-        log(`  - ${key}`);
+        info(`  - ${key}`);
       });
-      log();
+      info();
     }
 
     return true;

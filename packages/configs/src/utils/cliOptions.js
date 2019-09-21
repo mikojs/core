@@ -6,14 +6,14 @@ import debug from 'debug';
 import npmWhich from 'npm-which';
 import { emptyFunction } from 'fbjs';
 
-import { mockChoice } from '@mikojs/utils';
+import { createLogger } from '@mikojs/utils';
 
 import { version } from '../../package.json';
 
-import logger from './logger';
 import configs from './configs';
 
 const debugLog = debug('configs:cliOptions');
+const logger = createLogger('@mikojs/configs');
 
 /**
  * @example
@@ -42,7 +42,7 @@ const filterOptions = (optionKey: ?string, arg: string, prevArg: string) =>
  */
 export default (
   argv: $ReadOnlyArray<string>,
-): {|
+): ?{|
   cli: string,
   argv: $ReadOnlyArray<string>,
   env: {},
@@ -107,42 +107,46 @@ export default (
     });
 
   if (info) {
+    const { log } = console;
+
     if (cliName) {
       const config = configs.store[cliName];
 
-      logger.info(
-        `Show ${cliName} config`,
-        (Object.keys(config): $ReadOnlyArray<string>).reduce(
-          (result: {}, key: string): {} => {
-            switch (key) {
-              case 'install':
-              case 'ignore':
-              case 'run':
-                return {
-                  ...result,
-                  // $FlowFixMe TODO: https://github.com/facebook/flow/issues/2645
-                  [key]: config[key]([]),
-                };
+      logger.info(`Show ${cliName} config`);
+      log(
+        JSON.stringify(
+          (Object.keys(config): $ReadOnlyArray<string>).reduce(
+            (result: {}, key: string): {} => {
+              switch (key) {
+                case 'install':
+                case 'ignore':
+                case 'run':
+                  return {
+                    ...result,
+                    // $FlowFixMe TODO: https://github.com/facebook/flow/issues/2645
+                    [key]: config[key]([]),
+                  };
 
-              case 'config':
-                return {
-                  ...result,
-                  [key]: config[key]({}),
-                };
+                case 'config':
+                  return {
+                    ...result,
+                    [key]: config[key]({}),
+                  };
 
-              default:
-                return {
-                  ...result,
-                  [key]: config[key],
-                };
-            }
-          },
-          {},
+                default:
+                  return {
+                    ...result,
+                    [key]: config[key],
+                  };
+              }
+            },
+            {},
+          ),
+          null,
+          2,
         ),
       );
     } else {
-      const { log } = console;
-
       logger.info('Show configs list');
       log();
       Object.keys(configs.store).forEach((key: string) => {
@@ -151,26 +155,22 @@ export default (
       log();
     }
 
-    mockChoice(
-      process.env.NODE_ENV === 'test',
-      () => {
-        throw new Error('process exit');
-      },
-      process.exit,
-    );
+    return null;
   }
 
-  if (!cliName)
-    throw logger.fail(
-      chalk`Should give an argument at least`,
-      chalk`Use {green \`-h\`} to get the more information`,
-    );
+  if (!cliName) {
+    logger
+      .fail(chalk`Should give an argument at least`)
+      .fail(chalk`Use {green \`-h\`} to get the more information`);
+    return null;
+  }
 
-  if (!configs.store[cliName])
-    throw logger.fail(
-      chalk`Can not find {cyan \`${cliName}\`} in configs`,
-      chalk`Use {green \`--info\`} to get the more information`,
-    );
+  if (!configs.store[cliName]) {
+    logger
+      .fail(chalk`Can not find {cyan \`${cliName}\`} in configs`)
+      .fail(chalk`Use {green \`--info\`} to get the more information`);
+    return null;
+  }
 
   const {
     alias: cli = cliName,
@@ -206,8 +206,10 @@ export default (
 
     return result;
   } catch (e) {
-    if (/not found/.test(e.message))
-      throw logger.fail(e.message.replace(/not found/, 'Not found cli'));
+    if (/not found/.test(e.message)) {
+      logger.fail(e.message.replace(/not found/, 'Not found cli'));
+      return null;
+    }
 
     throw e;
   }

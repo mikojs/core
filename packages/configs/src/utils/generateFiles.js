@@ -7,11 +7,13 @@ import debug from 'debug';
 import moment from 'moment';
 import outputFileSync from 'output-file-sync';
 
-import logger from './logger';
+import { createLogger } from '@mikojs/utils';
+
 import configs from './configs';
 import worker from './worker';
 
 const debugLog = debug('configs:generateFiles');
+const logger = createLogger('@mikojs/configs');
 
 type filesDataType = $ReadOnlyArray<{|
   filePath: string,
@@ -26,7 +28,7 @@ type filesDataType = $ReadOnlyArray<{|
  *
  * @return {{ [string]: filesDataType }} - configFiles object to generate the files
  */
-const findFiles = (cliName: string): { [string]: filesDataType } => {
+const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
   const {
     alias: cli = cliName,
     configFiles = {},
@@ -35,12 +37,15 @@ const findFiles = (cliName: string): { [string]: filesDataType } => {
   } = configs.store[cliName];
   const ignore = getIgnore?.([]) || [];
 
-  if (Object.keys(configFiles).length === 0)
-    throw logger.fail(
-      'Can not generate the config file, You can:',
-      chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
-      chalk`  - Run command with {cyan \`--configs-files\`} options`,
-    );
+  if (Object.keys(configFiles).length === 0) {
+    logger
+      .fail('Can not generate the config file, You can:')
+      .fail(
+        chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
+      )
+      .fail(chalk`  - Run command with {cyan \`--configs-files\`} options`);
+    return null;
+  }
 
   return (Object.keys(configFiles): $ReadOnlyArray<string>).reduce(
     (result: {}, configCliName: string): {} => {
@@ -85,13 +90,17 @@ const findFiles = (cliName: string): { [string]: filesDataType } => {
  * generateFiles('cli')
  *
  * @param {string} cliName - cli name
+ *
+ * @return {boolean} - generating file is successful or not
  */
-export default (cliName: string) => {
+export default (cliName: string): boolean => {
   const files = findFiles(cliName);
   const cache = {
     pid: process.pid,
     using: moment().format(),
   };
+
+  if (!files) return false;
 
   debugLog(`Config files: ${JSON.stringify(files, null, 2)}`);
 
@@ -107,4 +116,6 @@ export default (cliName: string) => {
       },
     );
   });
+
+  return true;
 };

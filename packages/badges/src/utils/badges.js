@@ -7,7 +7,7 @@ import execa from 'execa';
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
-import logger from './logger';
+import { createLogger } from '@mikojs/utils';
 
 type ctxType = {|
   rootPath: string,
@@ -30,6 +30,7 @@ type repoType = {|
 |};
 
 const debugLog = debug('badges:badges');
+const logger = createLogger('@mikojs/badges');
 const START_COMMENT = '<!-- badges.start -->';
 const END_COMMENT = '<!-- badges.end -->';
 
@@ -161,8 +162,10 @@ ${badges
 export default async (readme: string, ctx: ctxType): Promise<?string> => {
   const repo = await getRepo();
 
-  if (!repo) throw logger.fail('Can not find git remote');
-  else
+  if (!repo) {
+    logger.fail('Can not find git remote');
+    return null;
+  } else
     return readme.replace(
       new RegExp(`${START_COMMENT}(.|\n)*${END_COMMENT}`, 'g'),
       `${START_COMMENT}${getBadges(ctx, repo)}${END_COMMENT}`,

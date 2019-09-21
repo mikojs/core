@@ -4,11 +4,12 @@ import commander from 'commander';
 import chalk from 'chalk';
 import debug from 'debug';
 
+import { createLogger } from '@mikojs/utils';
+
 import { version } from '../../package.json';
 
-import logger from './logger';
-
 const debugLog = debug('badges:cliOptions');
+const logger = createLogger('@mikojs/badges');
 
 /**
  * @example
@@ -30,11 +31,12 @@ export default (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
 
   const { args } = program.parse([...argv]);
 
-  if (args.length === 0)
-    throw logger.fail(
-      chalk`Must give {green readme path}`,
-      chalk`Use {green \`--help\`} to get the more information`,
-    );
+  if (args.length === 0) {
+    logger
+      .fail(chalk`Must give {green readme path}`)
+      .fail(chalk`Use {green \`--help\`} to get the more information`);
+    return [];
+  }
 
   debugLog(args);
 

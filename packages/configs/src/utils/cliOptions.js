@@ -42,12 +42,14 @@ const filterOptions = (optionKey: ?string, arg: string, prevArg: string) =>
  */
 export default (
   argv: $ReadOnlyArray<string>,
-): ?{|
-  cli: string,
-  argv: $ReadOnlyArray<string>,
-  env: {},
-  cliName: string,
-|} => {
+):
+  | boolean
+  | {|
+      cli: string,
+      argv: $ReadOnlyArray<string>,
+      env: {},
+      cliName: string,
+    |} => {
   const program = new commander.Command('configs')
     .version(version, '-v, --version')
     .arguments('[command type, arguments...]')
@@ -112,7 +114,10 @@ export default (
     if (cliName) {
       const config = configs.store[cliName];
 
-      logger.info(`Show ${cliName} config`);
+      logger.info(
+        chalk`Here is thie information of the {cyan ${cliName}} config:`,
+      );
+      log();
       log(
         JSON.stringify(
           (Object.keys(config): $ReadOnlyArray<string>).reduce(
@@ -144,10 +149,14 @@ export default (
           ),
           null,
           2,
-        ),
+        )
+          .split(/\n/)
+          .map((text: string) => `  ${text}`)
+          .join('\n'),
       );
+      log();
     } else {
-      logger.info('Show configs list');
+      logger.info('Here are the all config names which you can use:');
       log();
       Object.keys(configs.store).forEach((key: string) => {
         log(`  - ${key}`);
@@ -155,21 +164,21 @@ export default (
       log();
     }
 
-    return null;
+    return true;
   }
 
   if (!cliName) {
     logger
       .fail(chalk`Should give an argument at least`)
       .fail(chalk`Use {green \`-h\`} to get the more information`);
-    return null;
+    return false;
   }
 
   if (!configs.store[cliName]) {
     logger
       .fail(chalk`Can not find {cyan \`${cliName}\`} in configs`)
       .fail(chalk`Use {green \`--info\`} to get the more information`);
-    return null;
+    return false;
   }
 
   const {
@@ -208,7 +217,7 @@ export default (
   } catch (e) {
     if (/not found/.test(e.message)) {
       logger.fail(e.message.replace(/not found/, 'Not found cli'));
-      return null;
+      return false;
     }
 
     throw e;

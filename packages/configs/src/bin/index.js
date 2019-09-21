@@ -23,7 +23,10 @@ handleUnhandledRejection();
 (async () => {
   const options = cliOptions(process.argv);
 
-  if (!options) return;
+  if (typeof options === 'boolean') {
+    if (!options) process.exit(1);
+    return;
+  }
 
   const { cli, argv, env, cliName } = options;
   const debugLog = debug(`configs:bin[${cliName}]`);
@@ -94,7 +97,10 @@ handleUnhandledRejection();
       try {
         // [start]
         // handle config and ignore files
-        if (!generateFiles(cliName)) return;
+        if (!generateFiles(cliName)) {
+          removeFiles(1);
+          return;
+        }
 
         // run command
         logger.log(

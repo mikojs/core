@@ -6,14 +6,14 @@ import debug from 'debug';
 import npmWhich from 'npm-which';
 import { emptyFunction } from 'fbjs';
 
-import { mockChoice } from '@mikojs/utils';
+import { createLogger } from '@mikojs/utils';
 
 import { version } from '../../package.json';
 
-import logger from './logger';
 import configs from './configs';
 
 const debugLog = debug('configs:cliOptions');
+const logger = createLogger('@mikojs/configs');
 
 /**
  * @example
@@ -42,12 +42,14 @@ const filterOptions = (optionKey: ?string, arg: string, prevArg: string) =>
  */
 export default (
   argv: $ReadOnlyArray<string>,
-): {|
-  cli: string,
-  argv: $ReadOnlyArray<string>,
-  env: {},
-  cliName: string,
-|} => {
+):
+  | boolean
+  | {|
+      cli: string,
+      argv: $ReadOnlyArray<string>,
+      env: {},
+      cliName: string,
+    |} => {
   const program = new commander.Command('configs')
     .version(version, '-v, --version')
     .arguments('[command type, arguments...]')
@@ -81,7 +83,7 @@ export default (
     args: [cliName],
     rawArgs,
     install: shouldInstall = false,
-    info = false,
+    info: showInfo = false,
     configsEnv,
     configsFiles,
     options,
@@ -91,7 +93,7 @@ export default (
     cliName,
     rawArgs,
     shouldInstall,
-    info,
+    showInfo,
     configsEnv,
     configsFiles,
   });
@@ -106,71 +108,78 @@ export default (
       configs.store[cliName].configFiles[key] = true;
     });
 
-  if (info) {
+  if (showInfo) {
+    const { info } = console;
+
     if (cliName) {
       const config = configs.store[cliName];
 
       logger.info(
-        `Show ${cliName} config`,
-        (Object.keys(config): $ReadOnlyArray<string>).reduce(
-          (result: {}, key: string): {} => {
-            switch (key) {
-              case 'install':
-              case 'ignore':
-              case 'run':
-                return {
-                  ...result,
-                  // $FlowFixMe TODO: https://github.com/facebook/flow/issues/2645
-                  [key]: config[key]([]),
-                };
-
-              case 'config':
-                return {
-                  ...result,
-                  [key]: config[key]({}),
-                };
-
-              default:
-                return {
-                  ...result,
-                  [key]: config[key],
-                };
-            }
-          },
-          {},
-        ),
+        chalk`Here is thie information of the {cyan ${cliName}} config:`,
       );
-    } else {
-      const { log } = console;
+      info();
+      info(
+        JSON.stringify(
+          (Object.keys(config): $ReadOnlyArray<string>).reduce(
+            (result: {}, key: string): {} => {
+              switch (key) {
+                case 'install':
+                case 'ignore':
+                case 'run':
+                  return {
+                    ...result,
+                    // $FlowFixMe TODO: https://github.com/facebook/flow/issues/2645
+                    [key]: config[key]([]),
+                  };
 
-      logger.info('Show configs list');
-      log();
+                case 'config':
+                  return {
+                    ...result,
+                    [key]: config[key]({}),
+                  };
+
+                default:
+                  return {
+                    ...result,
+                    [key]: config[key],
+                  };
+              }
+            },
+            {},
+          ),
+          null,
+          2,
+        )
+          .split(/\n/)
+          .map((text: string) => `  ${text}`)
+          .join('\n'),
+      );
+      info();
+    } else {
+      logger.info('Here are the all config names which you can use:');
+      info();
       Object.keys(configs.store).forEach((key: string) => {
-        log(`  - ${key}`);
+        info(`  - ${key}`);
       });
-      log();
+      info();
     }
 
-    mockChoice(
-      process.env.NODE_ENV === 'test',
-      () => {
-        throw new Error('process exit');
-      },
-      process.exit,
-    );
+    return true;
   }
 
-  if (!cliName)
-    throw logger.fail(
-      chalk`Should give an argument at least`,
-      chalk`Use {green \`-h\`} to get the more information`,
-    );
+  if (!cliName) {
+    logger
+      .fail(chalk`Should give an argument at least`)
+      .fail(chalk`Use {green \`-h\`} to get the more information`);
+    return false;
+  }
 
-  if (!configs.store[cliName])
-    throw logger.fail(
-      chalk`Can not find {cyan \`${cliName}\`} in configs`,
-      chalk`Use {green \`--info\`} to get the more information`,
-    );
+  if (!configs.store[cliName]) {
+    logger
+      .fail(chalk`Can not find {cyan \`${cliName}\`} in configs`)
+      .fail(chalk`Use {green \`--info\`} to get the more information`);
+    return false;
+  }
 
   const {
     alias: cli = cliName,
@@ -206,8 +215,10 @@ export default (
 
     return result;
   } catch (e) {
-    if (/not found/.test(e.message))
-      throw logger.fail(e.message.replace(/not found/, 'Not found cli'));
+    if (/not found/.test(e.message)) {
+      logger.fail(e.message.replace(/not found/, 'Not found cli'));
+      return false;
+    }
 
     throw e;
   }

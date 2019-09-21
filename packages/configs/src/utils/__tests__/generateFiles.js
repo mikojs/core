@@ -29,9 +29,7 @@ describe('generate files', () => {
   });
 
   test('error', () => {
-    expect(() => {
-      generateFiles('notFindCli');
-    }).toThrow('process exit');
+    expect(generateFiles('notFindCli')).toBeFalsy();
   });
 
   test('generate', () => {

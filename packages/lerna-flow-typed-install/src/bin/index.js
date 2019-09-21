@@ -9,11 +9,14 @@ import npmWhich from 'npm-which';
 import debug from 'debug';
 import execa from 'execa';
 
-import { handleUnhandledRejection, requireModule } from '@mikojs/utils';
-
-import logger from 'utils/logger';
+import {
+  handleUnhandledRejection,
+  requireModule,
+  createLogger,
+} from '@mikojs/utils';
 
 const debugLog = debug('lerna-flow-typed-install:bin');
+const logger = createLogger('@mikojs/lerna-flow-typed-install');
 
 handleUnhandledRejection();
 
@@ -26,11 +29,14 @@ handleUnhandledRejection();
       ),
     );
 
-    if (!flowVersion)
-      throw logger.fail(
-        chalk`Can not find {red flow version} in the project`,
-        chalk`Install {red flow} before using {green lerna-flow-typed-install}`,
-      );
+    if (!flowVersion) {
+      logger
+        .fail(chalk`Can not find {red flow version} in the project`)
+        .fail(
+          chalk`Install {red flow} before using {green lerna-flow-typed-install}`,
+        );
+      process.exit(1);
+    }
 
     const nodeModulesPath = path.resolve('./node_modules');
 
@@ -50,6 +56,7 @@ handleUnhandledRejection();
     );
   } catch (e) {
     debugLog(e);
-    throw logger.fail(chalk`Can not find {red lerna} in the project`);
+    logger.fail(chalk`Can not find {red lerna} in the project`);
+    process.exit(1);
   }
 })();

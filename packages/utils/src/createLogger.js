@@ -1,11 +1,8 @@
 // @flow
 
-import typeof chalkType from 'chalk';
+import chalk from 'chalk';
 
-import requireModule from './requireModule';
 import chainingLogger from './chainingLogger';
-
-const chalk: chalkType = requireModule('chalk');
 
 /**
  * @example

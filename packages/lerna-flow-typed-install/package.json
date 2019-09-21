@@ -10,7 +10,6 @@
   "bin": "./lib/bin/index.js",
   "dependencies": {
     "@babel/runtime": "^7.6.0",
-    "@mikojs/logger": "^1.6.0",
     "@mikojs/utils": "^1.6.0",
     "chalk": "^2.4.2",
     "debug": "^4.1.1",

@@ -132,7 +132,7 @@ describe('worker', () => {
         pid: 1,
         using: moment().format(),
       });
-    }).toThrow('process exit');
+    }).toThrow('`filePath` can not be undefined in `worker.writeCache`');
   });
 
   test('error when try to use client remove cache', () => {
@@ -141,7 +141,7 @@ describe('worker', () => {
         pid: 1,
         using: false,
       });
-    }).toThrow('process exit');
+    }).toThrow('`client server` can not remove cache');
   });
 
   afterAll(async () => {

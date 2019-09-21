@@ -9,25 +9,33 @@ import isRunning from 'is-running';
 import npmWhich from 'npm-which';
 import chalk from 'chalk';
 
-import { handleUnhandledRejection } from '@mikojs/utils';
+import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';
 import generateFiles from 'utils/generateFiles';
 import worker from 'utils/worker';
-import logger from 'utils/logger';
 
-const { cli, argv, env, cliName } = cliOptions(process.argv);
-const debugLog = debug(`configs:bin[${cliName}]`);
+const logger = createLogger('@mikojs/configs');
 
 handleUnhandledRejection();
 
 (async () => {
-  if (configs.customConfigsPath)
-    logger.info(
-      'Using external configuration',
-      `Location: ${configs.customConfigsPath}`,
-    );
+  const options = cliOptions(process.argv);
+
+  if (typeof options === 'boolean') {
+    if (!options) process.exit(1);
+    return;
+  }
+
+  const { cli, argv, env, cliName } = options;
+  const debugLog = debug(`configs:bin[${cliName}]`);
+  const { customConfigsPath } = configs;
+
+  if (customConfigsPath)
+    logger
+      .info('Using external configuration')
+      .info(`Location: ${customConfigsPath}`);
 
   switch (cli) {
     case 'install':
@@ -89,7 +97,10 @@ handleUnhandledRejection();
       try {
         // [start]
         // handle config and ignore files
-        generateFiles(cliName);
+        if (!generateFiles(cliName)) {
+          removeFiles(1);
+          return;
+        }
 
         // run command
         logger.log(

@@ -7,8 +7,6 @@ import moment from 'moment';
 import rimraf from 'rimraf';
 import debug from 'debug';
 
-import logger from './logger';
-
 const debugLog = debug('configs:worker');
 
 export type cacheType = {|
@@ -108,7 +106,9 @@ export class Worker {
       }
 
       if (!filePath)
-        throw logger.fail('filePath can not be undefined in worker.writeCache');
+        throw new Error(
+          '`filePath` can not be undefined in `worker.writeCache`',
+        );
       else {
         if (!this.cache[filePath]) this.cache[filePath] = { pids: [] };
         if (pid) this.cache[filePath].pids.push(pid);
@@ -120,7 +120,7 @@ export class Worker {
       return null;
     }
 
-    if (!using) throw logger.fail('client can not remove cache');
+    if (!using) throw new Error('`client server` can not remove cache');
 
     const client = net.connect({ port: this.port });
 

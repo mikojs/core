@@ -32,7 +32,12 @@ export default memoizeOne(
           } catch (e) {
             debug('create-project:getUser')(e);
             throw new Error(
-              `Run \`git ${args.join(' ')}\` before creating project`,
+              `Run \`git ${args
+                .join(' ')
+                .replace(
+                  /--get/,
+                  '--global',
+                )} <${name}>\` before creating project`,
             );
           }
         },

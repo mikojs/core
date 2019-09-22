@@ -44,7 +44,7 @@ export default (
   } = program.parse([...argv]);
 
   if (!projectDir) {
-    logger.fail(chalk`{red \`project directory\`} is required.`);
+    logger.fail(chalk`{red \`project directory\`} is required`);
     return null;
   }
 

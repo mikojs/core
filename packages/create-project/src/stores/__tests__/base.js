@@ -34,6 +34,9 @@ describe('base', () => {
       stderr: string,
       expected: $ReadOnlyArray<string>,
     |}) => {
+      const mockLog = jest.fn();
+
+      global.console.info = mockLog;
       base.ctx = { ...ctx, projectDir: 'project dir', skipCommand: false };
       execa.cmds = [];
       execa.mainFunction = (cmd: string) => {
@@ -53,6 +56,13 @@ describe('base', () => {
         }),
       ).toBeUndefined();
       expect(execa.cmds).toEqual([...expected]);
+      expect(mockLog).toHaveBeenCalledTimes(execa.cmds.length);
+
+      execa.cmds.forEach((cmd: string) => {
+        expect(mockLog).toHaveBeenCalledWith(
+          `{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
+        );
+      });
     },
   );
 });

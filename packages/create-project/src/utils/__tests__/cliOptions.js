@@ -16,8 +16,14 @@ describe('cli options', () => {
   });
 
   test('no project directory', () => {
-    expect(() => {
-      cliOptions(defaultArgv);
-    }).toThrow('process exit');
+    const mockLog = jest.fn();
+
+    global.console.error = mockLog;
+
+    expect(cliOptions(defaultArgv)).toBeNull();
+    expect(mockLog).toHaveBeenCalledTimes(1);
+    expect(mockLog).toHaveBeenCalledWith(
+      '{red ✖ }{red {bold @mikojs/create-project}} {red `project directory`} is required',
+    );
   });
 });

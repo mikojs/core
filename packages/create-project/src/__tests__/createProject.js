@@ -78,10 +78,9 @@ describe('create project', () => {
         ...context,
       });
 
-      const mockLogLength = execa.cmds.filter((cmd: string) => !/git/.test(cmd))
-        .length;
-
-      expect(mockLog).toHaveBeenCalledTimes(mockLogLength);
+      expect(mockLog).toHaveBeenCalledTimes(
+        execa.cmds.filter((cmd: string) => !/git/.test(cmd)).length,
+      );
 
       const pkgInstalled = execa.cmds.reduce(
         (
@@ -91,7 +90,7 @@ describe('create project', () => {
           devDependencies: {},
           dependencies: {},
         |} => {
-          if (mockLogLength !== 0 && !/git/.test(cmd))
+          if (!/git/.test(cmd))
             expect(mockLog).toHaveBeenCalledWith(
               `{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
             );

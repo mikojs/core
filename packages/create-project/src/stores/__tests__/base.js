@@ -2,6 +2,7 @@
 
 // $FlowFixMe jest mock
 import { execa } from 'execa';
+import chalk from 'chalk';
 
 import { version } from '../../../package.json';
 
@@ -60,7 +61,7 @@ describe('base', () => {
 
       execa.cmds.forEach((cmd: string) => {
         expect(mockLog).toHaveBeenCalledWith(
-          `{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
+          chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
         );
       });
     },

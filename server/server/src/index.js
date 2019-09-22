@@ -8,8 +8,13 @@ import chokidar from 'chokidar';
 import chalk from 'chalk';
 import debug from 'debug';
 import ora from 'ora';
+import { emptyFunction } from 'fbjs';
 
-import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
+import {
+  handleUnhandledRejection,
+  mockChoice,
+  createLogger,
+} from '@mikojs/utils';
 
 import Endpoint from './utils/Endpoint';
 
@@ -157,7 +162,12 @@ export default {
   },
 
   init: (): Koa => {
-    logger.start('Server start');
+    mockChoice(
+      process.env.NODE_ENV === 'test',
+      emptyFunction,
+      logger.start,
+      'Server start',
+    );
 
     return new Koa();
   },
@@ -165,7 +175,10 @@ export default {
   run: (port?: number = 8000) => (app: Koa): Promise<http$Server> =>
     new Promise(resolve => {
       const server = app.listen(port, () => {
-        logger.succeed(
+        mockChoice(
+          process.env.NODE_ENV === 'test',
+          emptyFunction,
+          logger.succeed,
           chalk`Running server at port: {gray {bold ${port.toString()}}}`,
         );
 

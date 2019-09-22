@@ -4,6 +4,7 @@ import path from 'path';
 
 import { npmWhich } from 'npm-which';
 import { emptyFunction } from 'fbjs';
+import chalk from 'chalk';
 
 import cliOptions from '../cliOptions';
 import configs from '../configs';
@@ -42,7 +43,7 @@ describe('cli options', () => {
     expect(cliOptions([...defaultArgv, 'notFoundCommand'])).toBeFalsy();
     expect(mockLog).toHaveBeenCalledTimes(1);
     expect(mockLog).toHaveBeenCalledWith(
-      '{red ✖ }{red {bold @mikojs/configs}} Not found cli: notFoundCommand',
+      chalk`{red ✖ }{red {bold @mikojs/configs}} Not found cli: notFoundCommand`,
     );
 
     npmWhich.throwError = false;

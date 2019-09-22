@@ -45,6 +45,7 @@ describe('client side testing', () => {
       const Root = requireModule(path.resolve(__dirname, '../components/Root'));
 
       const { mount } = enzyme;
+      const mockLog = jest.fn();
 
       enzyme.configure({ adapter: new Adapter() });
 
@@ -66,6 +67,8 @@ describe('client side testing', () => {
         }
       })();
 
+      global.console.error = mockLog;
+
       expect(
         mount(
           <Router initialEntries={[urlPath]}>
@@ -86,6 +89,10 @@ describe('client side testing', () => {
       ).toBe(
         `<div>${main.replace(/<!-- -->/g, '').replace(/&quot;/g, '"')}</div>`,
       );
+      (/error/.test(urlPath)
+        ? expect(mockLog)
+        : expect(mockLog).not
+      ).toHaveBeenCalled();
     },
   );
 });

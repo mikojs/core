@@ -8,9 +8,14 @@ import Loading from '../Loading';
 
 describe('Loading', () => {
   test('Can not find main HTMLElement', () => {
+    const mockLog = jest.fn();
+
+    global.console.error = mockLog;
+
     expect(() => {
       mount(<Loading />);
     }).toThrow('Can not find main HTMLElement');
+    expect(mockLog).toHaveBeenCalled();
   });
 
   test('work', () => {

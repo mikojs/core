@@ -26,6 +26,7 @@ describe.each`
 `(
   'koa react with dev = $dev, useStatic = $useStatic',
   ({ dev, useStatic }: {| dev: boolean, useStatic: boolean |}) => {
+    const mockLog = jest.fn();
     const publicPath = dev ? '/assets' : '/public/js';
     const isStatic = !dev && useStatic;
     const request = !isStatic
@@ -51,6 +52,7 @@ describe.each`
         };
 
     beforeAll(async () => {
+      global.console.log = mockLog;
       webpack.stats = {
         hasErrors: () => false,
         toJson: () => ({
@@ -116,6 +118,11 @@ describe.each`
         );
       },
     );
+
+    if (!dev)
+      test('build js had shown the information', () => {
+        expect(mockLog).toHaveBeenCalledTimes(2);
+      });
 
     test('handle commons not found', async () => {
       const result = await request(`${domain}${publicPath}/commons.js`);

@@ -9,6 +9,7 @@ import { outputFileSync } from 'output-file-sync';
 import { inquirer } from 'inquirer';
 // $FlowFixMe jest mock
 import { execa } from 'execa';
+import chalk from 'chalk';
 
 import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
@@ -92,7 +93,7 @@ describe('create project', () => {
         |} => {
           if (!/git/.test(cmd))
             expect(mockLog).toHaveBeenCalledWith(
-              `{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
+              chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
             );
 
           if (/yarn add --dev/.test(cmd))

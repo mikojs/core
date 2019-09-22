@@ -2,6 +2,8 @@
 
 import path from 'path';
 
+import chalk from 'chalk';
+
 import cliOptions from '../cliOptions';
 
 const defaultArgv = ['node', 'create-project'];
@@ -23,7 +25,7 @@ describe('cli options', () => {
     expect(cliOptions(defaultArgv)).toBeNull();
     expect(mockLog).toHaveBeenCalledTimes(1);
     expect(mockLog).toHaveBeenCalledWith(
-      '{red ✖ }{red {bold @mikojs/create-project}} {red `project directory`} is required',
+      chalk`{red ✖ }{red {bold @mikojs/create-project}} {red \`project directory\`} is required`,
     );
   });
 });

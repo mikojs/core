@@ -4,6 +4,7 @@ import path from 'path';
 
 import { outputFileSync } from 'output-file-sync';
 import { emptyFunction } from 'fbjs';
+import chalk from 'chalk';
 
 import generateFiles from '../generateFiles';
 import configs from '../configs';
@@ -29,7 +30,15 @@ describe('generate files', () => {
   });
 
   test('error', () => {
+    const mockLog = jest.fn();
+
+    global.console.error = mockLog;
+
     expect(generateFiles('notFindCli')).toBeFalsy();
+    expect(mockLog).toHaveBeenCalledTimes(5);
+    expect(mockLog).toHaveBeenCalledWith(
+      chalk`{red ✖ }{red {bold @mikojs/configs}} Can not generate the config file, You can:`,
+    );
   });
 
   test('generate', () => {

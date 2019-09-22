@@ -29,9 +29,13 @@ describe('react', () => {
   });
 
   test('not find urls file path', async () => {
+    const mockLog = jest.fn();
+
     react.store.urlsFilePath = null;
+    global.console.warn = mockLog;
 
     expect(await react.buildStatic()).toBeUndefined();
+    expect(mockLog).toHaveBeenCalledTimes(8);
   });
 
   test('not find module in buildStatic', async () => {

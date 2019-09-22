@@ -66,6 +66,9 @@ describe('store', () => {
   });
 
   test('store with execa error', async () => {
+    const mockLog = jest.fn();
+
+    global.console.info = mockLog;
     example.ctx = {
       projectDir: 'project dir',
       skipCommand: false,
@@ -76,7 +79,11 @@ describe('store', () => {
     };
 
     await expect(example.execa('command error')).rejects.toThrow(
-      'process exit',
+      'Run command: `command error` fail',
+    );
+    expect(mockLog).toHaveBeenCalledTimes(1);
+    expect(mockLog).toHaveBeenCalledWith(
+      '{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green command error}',
     );
   });
 });

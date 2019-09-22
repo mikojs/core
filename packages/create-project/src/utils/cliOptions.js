@@ -6,12 +6,14 @@ import commander from 'commander';
 import chalk from 'chalk';
 import debug from 'debug';
 
+import { createLogger } from '@mikojs/utils';
+
 import { version } from '../../package.json';
 
-import logger from './logger';
 import type StoresType from 'stores';
 
 const debugLog = debug('create-project:cliOptions');
+const logger = createLogger('@mikojs/create-project');
 
 /**
  * @example
@@ -23,7 +25,7 @@ const debugLog = debug('create-project:cliOptions');
  */
 export default (
   argv: $ReadOnlyArray<string>,
-): $PropertyType<StoresType, 'ctx'> => {
+): ?$PropertyType<StoresType, 'ctx'> => {
   const program = new commander.Command('create-project')
     .version(version, '-v, --version')
     .arguments('<project directory>')
@@ -41,8 +43,10 @@ export default (
     lerna = false,
   } = program.parse([...argv]);
 
-  if (!projectDir)
-    throw logger.fail(chalk`{red \`project directory\`} is required.`);
+  if (!projectDir) {
+    logger.fail(chalk`{red \`project directory\`} is required`);
+    return null;
+  }
 
   const cliOptions = {
     projectDir: path.resolve(projectDir),

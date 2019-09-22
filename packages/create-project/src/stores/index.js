@@ -11,10 +11,8 @@ import { diffLines } from 'diff';
 import execa from 'execa';
 import debug from 'debug';
 
-import { normalizedQuestions } from '@mikojs/utils';
+import { normalizedQuestions, createLogger } from '@mikojs/utils';
 import { type questionType } from '@mikojs/utils/lib/normalizedQuestions';
-
-import logger from 'utils/logger';
 
 type pkgType = {
   [string]: string,
@@ -49,6 +47,7 @@ type ctxType = {|
 |};
 
 const debugLog = debug('create-project:store');
+const logger = createLogger('@mikojs/create-project');
 
 /** default store */
 export default class Store {
@@ -221,7 +220,7 @@ export default class Store {
         });
       } catch (e) {
         debugLog(e);
-        throw logger.fail(chalk`Run command: {red ${command}} fail`);
+        throw new Error(`Run command: \`${command}\` fail`);
       }
     }
   };

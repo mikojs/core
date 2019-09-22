@@ -6,16 +6,23 @@ import path from 'path';
 
 import chalk from 'chalk';
 
-import { handleUnhandledRejection } from '@mikojs/utils';
+import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
-import logger from 'utils/logger';
 import cliOptions from 'utils/cliOptions';
 import base from 'stores/base';
 
 handleUnhandledRejection();
 
+const logger = createLogger('@mikojs/create-project');
+
 (async () => {
   const ctx = cliOptions(process.argv);
+
+  if (!ctx) {
+    process.exit(1);
+    return;
+  }
+
   const { projectDir } = ctx;
 
   if (!fs.existsSync(projectDir)) fs.mkdirSync(projectDir);

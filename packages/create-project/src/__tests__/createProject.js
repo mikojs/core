@@ -63,10 +63,13 @@ describe('create project', () => {
       inquirerResult: inquirerResultType,
       context?: contextType,
     ) => {
+      const mockLog = jest.fn();
+
       outputFileSync.destPaths = [];
       outputFileSync.contents = [];
       execa.cmds = [];
       inquirer.result = inquirerResult;
+      global.console.info = mockLog;
 
       await base.init({
         projectDir,
@@ -74,6 +77,10 @@ describe('create project', () => {
         lerna: false,
         ...context,
       });
+
+      expect(mockLog).toHaveBeenCalledTimes(
+        execa.cmds.filter((cmd: string) => !/git/.test(cmd)).length,
+      );
 
       const pkgInstalled = execa.cmds.reduce(
         (
@@ -83,6 +90,11 @@ describe('create project', () => {
           devDependencies: {},
           dependencies: {},
         |} => {
+          if (!/git/.test(cmd))
+            expect(mockLog).toHaveBeenCalledWith(
+              `{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
+            );
+
           if (/yarn add --dev/.test(cmd))
             return {
               ...result,

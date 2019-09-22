@@ -53,12 +53,13 @@ describe('store', () => {
     },
   );
 
-  test('store with --skip-command', async () => {
+  test('run command with --skip-command', async () => {
     execa.cmds = [];
     example.ctx = {
       projectDir: 'project dir',
       skipCommand: true,
       lerna: false,
+      verbose: true,
     };
 
     await example.execa('command skip');
@@ -66,25 +67,68 @@ describe('store', () => {
     expect(execa.cmds).toHaveLength(0);
   });
 
-  test('store with execa error', async () => {
+  test('run command with verbose = false', async () => {
     const mockLog = jest.fn();
 
-    global.console.info = mockLog;
+    global.console.log = mockLog;
     example.ctx = {
       projectDir: 'project dir',
       skipCommand: false,
       lerna: false,
-    };
-    execa.mainFunction = () => {
-      throw new Error('command error');
+      verbose: false,
     };
 
-    await expect(example.execa('command error')).rejects.toThrow(
-      'Run command: `command error` fail',
-    );
-    expect(mockLog).toHaveBeenCalledTimes(1);
+    await example.execa('babel');
+
+    expect(mockLog).toHaveBeenCalledTimes(2);
     expect(mockLog).toHaveBeenCalledWith(
-      chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green command error}`,
+      chalk`{gray   }{gray {bold @mikojs/create-project}} Run command: {green babel}`,
+    );
+    expect(mockLog).toHaveBeenCalledWith(
+      chalk`{green ✔ }{green {bold @mikojs/create-project}} Run command: {green babel}`,
     );
   });
+
+  test.each`
+    verbose
+    ${true}
+    ${false}
+  `(
+    'run command with execa error and verbose = $verbose',
+    async ({ verbose }: {| verbose: boolean |}) => {
+      const mockLog = jest.fn();
+
+      global.console.info = mockLog;
+      global.console.log = mockLog;
+      global.console.error = mockLog;
+      example.ctx = {
+        projectDir: 'project dir',
+        skipCommand: false,
+        lerna: false,
+        verbose,
+      };
+      execa.mainFunction = () => {
+        throw new Error('command error');
+      };
+
+      await expect(example.execa('command error')).rejects.toThrow(
+        'Run command: `command error` fail',
+      );
+
+      if (verbose) {
+        expect(mockLog).toHaveBeenCalledTimes(1);
+        expect(mockLog).toHaveBeenCalledWith(
+          chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green command error}`,
+        );
+      } else {
+        expect(mockLog).toHaveBeenCalledTimes(2);
+        expect(mockLog).toHaveBeenCalledWith(
+          chalk`{gray   }{gray {bold @mikojs/create-project}} Run command: {green command error}`,
+        );
+        expect(mockLog).toHaveBeenCalledWith(
+          chalk`{red ✖ }{red {bold @mikojs/create-project}} Run command: {green command error}`,
+        );
+      }
+    },
+  );
 });

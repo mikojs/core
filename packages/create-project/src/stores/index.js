@@ -10,6 +10,7 @@ import inquirer from 'inquirer';
 import { diffLines } from 'diff';
 import execa from 'execa';
 import debug from 'debug';
+import ora from 'ora';
 
 import { normalizedQuestions, createLogger } from '@mikojs/utils';
 import { type questionType } from '@mikojs/utils/lib/normalizedQuestions';
@@ -38,6 +39,7 @@ type ctxType = {|
   projectDir: string,
   skipCommand: boolean,
   lerna: boolean,
+  verbose: boolean,
   useServer?: boolean,
   useReact?: boolean,
   useGraphql?: boolean,
@@ -47,7 +49,7 @@ type ctxType = {|
 |};
 
 const debugLog = debug('create-project:store');
-const logger = createLogger('@mikojs/create-project');
+const logger = createLogger('@mikojs/create-project', ora());
 
 /** default store */
 export default class Store {
@@ -199,7 +201,7 @@ export default class Store {
    * @param {Array} commands - commands array
    */
   +execa = async (...commands: $ReadOnlyArray<string>) => {
-    const { projectDir, skipCommand } = this.ctx;
+    const { projectDir, skipCommand, verbose } = this.ctx;
 
     if (skipCommand) return;
 
@@ -213,12 +215,22 @@ export default class Store {
               .split(/ /)
               .map((text: string) => (text === '$message' ? message[0] : text));
 
-        logger.info(chalk`Run command: {green ${command}}`);
-        await execa(cmd[0], cmd.slice(1), {
-          cwd: projectDir,
-          stdio: 'inherit',
-        });
+        if (verbose) {
+          logger.info(chalk`Run command: {green ${command}}`);
+          await execa(cmd[0], cmd.slice(1), {
+            cwd: projectDir,
+            stdio: 'inherit',
+          });
+        } else {
+          logger.start(chalk`Run command: {green ${command}}`);
+          await execa(cmd[0], cmd.slice(1), {
+            cwd: projectDir,
+          });
+          logger.succeed(chalk`Run command: {green ${command}}`);
+        }
       } catch (e) {
+        if (!verbose) logger.fail(chalk`Run command: {green ${command}}`);
+
         debugLog(e);
         throw new Error(`Run command: \`${command}\` fail`);
       }

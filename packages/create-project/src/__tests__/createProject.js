@@ -76,6 +76,7 @@ describe('create project', () => {
         projectDir,
         skipCommand: false,
         lerna: false,
+        verbose: true,
         ...context,
       });
 

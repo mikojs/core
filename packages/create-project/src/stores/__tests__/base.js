@@ -38,7 +38,12 @@ describe('base', () => {
       const mockLog = jest.fn();
 
       global.console.info = mockLog;
-      base.ctx = { ...ctx, projectDir: 'project dir', skipCommand: false };
+      base.ctx = {
+        ...ctx,
+        projectDir: 'project dir',
+        skipCommand: false,
+        verbose: true,
+      };
       execa.cmds = [];
       execa.mainFunction = (cmd: string) => {
         if (cmd !== 'git status') return;
@@ -54,6 +59,7 @@ describe('base', () => {
         await base.end({
           ...ctx,
           projectDir: 'project dir',
+          verbose: true,
         }),
       ).toBeUndefined();
       expect(execa.cmds).toEqual([...expected]);

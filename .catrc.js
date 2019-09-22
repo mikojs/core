@@ -50,6 +50,7 @@ const lint = {
         files: [
           'packages/create-project/src/__tests__/__ignore__/lerna/**',
           'packages/create-project/src/__tests__/__ignore__/lerna/**/.templates/**',
+          '__mocks__/ora.js',
         ],
         rules: {
           'import/no-extraneous-dependencies': 'off',

@@ -14,6 +14,7 @@ describe('cli options', () => {
       projectDir: path.resolve('projectDir'),
       skipCommand: false,
       lerna: false,
+      verbose: false,
     });
   });
 

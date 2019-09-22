@@ -59,6 +59,7 @@ describe('store', () => {
       projectDir: 'project dir',
       skipCommand: true,
       lerna: false,
+      verbose: true,
     };
 
     await example.execa('command skip');
@@ -74,6 +75,7 @@ describe('store', () => {
       projectDir: 'project dir',
       skipCommand: false,
       lerna: false,
+      verbose: true,
     };
     execa.mainFunction = () => {
       throw new Error('command error');

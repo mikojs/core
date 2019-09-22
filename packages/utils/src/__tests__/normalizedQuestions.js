@@ -1,5 +1,7 @@
 // @flow
 
+import chalk from 'chalk';
+
 import normalizedQuestions, { defaultValidate } from '../normalizedQuestions';
 
 it('normalized questions', () => {
@@ -11,8 +13,8 @@ it('normalized questions', () => {
     name: 'name',
     message: 'name',
     validate: defaultValidate,
-    prefix: '{bold {gray • test}}',
-    suffix: '{green  ➜}',
+    prefix: chalk`{bold {gray • test}}`,
+    suffix: chalk`{green  ➜}`,
   });
 });
 

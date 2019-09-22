@@ -6,6 +6,7 @@ import { outputFileSync } from 'output-file-sync';
 import { inquirer } from 'inquirer';
 // $FlowFixMe jest mock
 import { execa } from 'execa';
+import chalk from 'chalk';
 
 import Store from '../index';
 
@@ -43,8 +44,8 @@ describe('store', () => {
 
       if (inquirerResult.action === 'diff') {
         expect(mockLog).toHaveBeenCalledWith(' test;\n');
-        expect(mockLog).toHaveBeenCalledWith('{red -removed;\n}');
-        expect(mockLog).toHaveBeenCalledWith('{green +added;}');
+        expect(mockLog).toHaveBeenCalledWith(chalk`{red -removed;\n}`);
+        expect(mockLog).toHaveBeenCalledWith(chalk`{green +added;}`);
       } else expect(mockLog).not.toHaveBeenCalled();
 
       expect(outputFileSync.destPaths).toHaveLength(length);
@@ -83,7 +84,7 @@ describe('store', () => {
     );
     expect(mockLog).toHaveBeenCalledTimes(1);
     expect(mockLog).toHaveBeenCalledWith(
-      '{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green command error}',
+      chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green command error}`,
     );
   });
 });

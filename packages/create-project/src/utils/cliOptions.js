@@ -35,12 +35,14 @@ export default (
   create-project {green <project directory>}`,
     )
     .option('--lerna', 'create package in the lerna-managed repo')
-    .option('--skip-command', 'skip running commands');
+    .option('--skip-command', 'skip running commands')
+    .option('--verbose', 'log everything');
 
   const {
     args: [projectDir],
     skipCommand = false,
     lerna = false,
+    verbose = false,
   } = program.parse([...argv]);
 
   if (!projectDir) {
@@ -52,6 +54,7 @@ export default (
     projectDir: path.resolve(projectDir),
     skipCommand,
     lerna,
+    verbose,
   };
 
   debugLog(cliOptions);

@@ -120,19 +120,24 @@ handleUnhandledRejection();
 
     socket.on('data', async (data: string) => {
       debug(data);
+      clearTimeout(timeout);
 
       switch (data) {
-        case 'restart':
-          clearTimeout(timeout);
-          timeout = setTimeout(async () => {
+        case 'watching':
+          timeout = setTimeout(() => {
             logger
-              .info('Restart the server')
               .info('')
-              .info(chalk`  - Use {cyan rs} to restart the server`)
+              .info(chalk`Use {cyan rs} to restart the server`)
               .info(
-                chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`,
+                chalk`Use {cyan close} or {cyan ctrl + c} to stop the server`,
               )
               .info('');
+          }, 100);
+          break;
+
+        case 'restart':
+          timeout = setTimeout(async () => {
+            logger.info('Restarting the server');
 
             subprocess.cancel();
             await subprocess.catch(debugLog);
@@ -145,6 +150,17 @@ handleUnhandledRejection();
                 stdio: 'inherit',
               },
             );
+          }, 100);
+          break;
+
+        case 'error':
+          timeout = setTimeout(() => {
+            logger
+              .info(chalk`Catch some error, please fix those error`)
+              .info(chalk`Use {cyan rs} to restart the server`)
+              .info(
+                chalk`Use {cyan close} or {cyan ctrl + c} to stop the server`,
+              );
           }, 100);
           break;
 
@@ -172,13 +188,5 @@ handleUnhandledRejection();
     subprocess = execa(path.resolve(__dirname, './runServer.js'), [port], {
       stdio: 'inherit',
     });
-
-    if (dev && opts.cliOptions.watch)
-      logger
-        .info('In the watch mode, you can do:')
-        .info('')
-        .info(chalk`  - Use {cyan rs} to restart the server`)
-        .info(chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`)
-        .info('');
   });
 })();

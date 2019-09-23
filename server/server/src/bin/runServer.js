@@ -18,8 +18,9 @@ client.on('data', async (data: string) => {
   debugLog(data);
 
   const { serverFile, ...context } = JSON.parse(data);
+  const isWatching = context.dev && context.watch;
 
-  if (context.dev && context.watch)
+  if (isWatching)
     process.stdin.on('data', (inputData: Buffer) => {
       const str = inputData
         .toString()
@@ -40,7 +41,10 @@ client.on('data', async (data: string) => {
         client.end('close');
       },
     });
+
+    if (isWatching) client.write('watching');
   } catch (e) {
     debugLog(e);
+    client.write('error');
   }
 });

@@ -6,7 +6,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core",
   "repository": "https://github.com/mikojs/core/tree/master/website/website",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "main": "./lib/index.js",
   "scripts": {
     "dev": "configs server:lerna -w",
@@ -14,11 +14,11 @@
     "test": "SKIP_SERVER=true configs server:lerna"
   },
   "dependencies": {
-    "@mikojs/koa-base": "^1.6.0",
-    "@mikojs/koa-graphql": "^1.6.0",
-    "@mikojs/koa-react": "^1.6.2",
-    "@mikojs/react-dnd": "^1.6.0",
-    "@mikojs/server": "^1.6.0",
+    "@mikojs/koa-base": "^1.7.0",
+    "@mikojs/koa-graphql": "^1.7.0",
+    "@mikojs/koa-react": "^1.7.0",
+    "@mikojs/react-dnd": "^1.7.0",
+    "@mikojs/server": "^1.7.0",
     "@mikojs/use-css": "^1.6.0",
     "@mikojs/use-less": "^1.6.0",
     "node-fetch": "^2.6.0",

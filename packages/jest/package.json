@@ -5,10 +5,10 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/jest",
   "repository": "https://github.com/mikojs/core/tree/master/packages/jest",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "main": "./lib/index.js",
   "dependencies": {
-    "@mikojs/utils": "^1.6.0",
+    "@mikojs/utils": "^1.7.0",
     "babel-jest": "^24.9.0",
     "enzyme": "^3.10.0",
     "fbjs": "^1.0.0"

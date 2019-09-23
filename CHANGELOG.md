@@ -1,5 +1,48 @@
 # CHANGELOG
 
+## 1.7.0 (2019-09-23)
+
+#### :boom: Breaking Change
+
+- `logger`
+  - [#420](https://github.com/mikojs/core/pull/420) (@mikojs/logger) Remove packages ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#406](https://github.com/mikojs/core/pull/406) (@mikojs/server) Add restart function to context ([@HsuTing](https://github.com/HsuTing))
+  - [#405](https://github.com/mikojs/core/pull/405) (@mikojs/react-dnd) Rewrite react dnd ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `website`
+  - [#424](https://github.com/mikojs/core/pull/424) (@mikojs/server) Add babel information ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#422](https://github.com/mikojs/core/pull/422) (@mikojs/create-project) Add verbose option ([@HsuTing](https://github.com/HsuTing))
+  - [#419](https://github.com/mikojs/core/pull/419) (@mikojs/create-project) Remove @mikojs/logger, use new createLogger ([@HsuTing](https://github.com/HsuTing))
+- `badges`
+  - [#418](https://github.com/mikojs/core/pull/418) (@mikojs/badges) Remove @mikojs/logger, use new createLogger ([@HsuTing](https://github.com/HsuTing))
+- `lerna-flow-typed-install`
+  - [#416](https://github.com/mikojs/core/pull/416) (@mikojs/lerna-flow-typed-install) Remove @mikojs/logger, use new createLogger ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#415](https://github.com/mikojs/core/pull/415) (@mikojs/server) Remove @mikojs/logger, use new createLogger ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#411](https://github.com/mikojs/core/pull/411) (@mikojs/configs) Remove @mikojs/logger, use new createLogger ([@HsuTing](https://github.com/HsuTing))
+- `utils`
+  - [#410](https://github.com/mikojs/core/pull/410) (@mikojs/utils) Add new logger ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `utils`
+  - [#414](https://github.com/mikojs/core/pull/414) (@mikojs/utils) Remove requireModule ([@HsuTing](https://github.com/HsuTing))
+  - [#413](https://github.com/mikojs/core/pull/413) (@mikojs/utils) Fix logger error with ora ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `configs`, `create-project`, `utils`
+  - [#421](https://github.com/mikojs/core/pull/421) (@mikojs/core) Modify testing with console ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.6.2 (2019-09-18)
 
 #### :boom: Breaking Change

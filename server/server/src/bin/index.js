@@ -6,7 +6,10 @@ import net from 'net';
 
 import parseArgv from '@babel/cli/lib/babel/options';
 import debug from 'debug';
-import execa, { type ExecaPromise as execaPromiseType } from 'execa';
+import execa, {
+  type ExecaPromise as execaPromiseType,
+  type ExecaError as execaErrorType,
+} from 'execa';
 import getPort from 'get-port';
 import chalk from 'chalk';
 import transformer from 'strong-log-transformer';
@@ -57,6 +60,7 @@ handleUnhandledRejection();
       }),
     ],
   );
+
   babelSubprocess.stdout
     .pipe(transformer({ tag: chalk`{gray   {bold @mikojs/server}}` }))
     .pipe(process.stdout);
@@ -64,7 +68,10 @@ handleUnhandledRejection();
     .pipe(transformer({ tag: chalk`{red ✖ {bold @mikojs/server}}` }))
     .pipe(process.stderr);
 
-  await babelSubprocess;
+  await babelSubprocess.catch((e: execaErrorType) => {
+    if (dev && opts.cliOptions.watch) debugLog(e);
+    else process.exit(e.exitCode || 1);
+  });
 
   if (dev && opts.cliOptions.watch) {
     // TODO: https://github.com/eslint/eslint/issues/11899
@@ -79,6 +86,7 @@ handleUnhandledRejection();
         },
       }),
     ]);
+
     babelSubprocess.stdout
       .pipe(transformer({ tag: chalk`{gray   {bold @mikojs/server}}` }))
       .pipe(process.stdout);

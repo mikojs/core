@@ -94,13 +94,13 @@ handleUnhandledRejection();
           clearTimeout(timeout);
           timeout = setTimeout(async () => {
             logger
-              .log('Restart the server')
-              .log('')
-              .log(chalk`  - Use {cyan rs} to restart the server`)
-              .log(
+              .info('Restart the server')
+              .info('')
+              .info(chalk`  - Use {cyan rs} to restart the server`)
+              .info(
                 chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`,
               )
-              .log('');
+              .info('');
 
             subprocess.cancel();
             await subprocess.catch(debugLog);
@@ -142,10 +142,10 @@ handleUnhandledRejection();
 
     if (dev && opts.cliOptions.watch)
       logger
-        .log('In the watch mode, you can do:')
-        .log('')
-        .log(chalk`  - Use {cyan rs} to restart the server`)
-        .log(chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`)
-        .log('');
+        .info('In the watch mode, you can do:')
+        .info('')
+        .info(chalk`  - Use {cyan rs} to restart the server`)
+        .info(chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`)
+        .info('');
   });
 })();

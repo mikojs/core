@@ -62,10 +62,10 @@ handleUnhandledRejection();
   );
 
   babelSubprocess.stdout
-    .pipe(transformer({ tag: chalk`{gray   {bold @mikojs/server}}` }))
+    .pipe(transformer({ tag: chalk`{gray   {bold @mikojs/server} [babel]}` }))
     .pipe(process.stdout);
   babelSubprocess.stderr
-    .pipe(transformer({ tag: chalk`{red ✖ {bold @mikojs/server}}` }))
+    .pipe(transformer({ tag: chalk`{red ✖ {bold @mikojs/server} [babel]}` }))
     .pipe(process.stderr);
 
   await babelSubprocess.catch((e: execaErrorType) => {
@@ -88,10 +88,10 @@ handleUnhandledRejection();
     ]);
 
     babelSubprocess.stdout
-      .pipe(transformer({ tag: chalk`{gray   {bold @mikojs/server}}` }))
+      .pipe(transformer({ tag: chalk`{gray   {bold @mikojs/server} [babel]}` }))
       .pipe(process.stdout);
     babelSubprocess.stderr
-      .pipe(transformer({ tag: chalk`{red ✖ {bold @mikojs/server}}` }))
+      .pipe(transformer({ tag: chalk`{red ✖ {bold @mikojs/server} [babel]}` }))
       .pipe(process.stderr);
   }
   // [end] babel build
@@ -142,9 +142,16 @@ handleUnhandledRejection();
               path.resolve(__dirname, './runServer.js'),
               [port],
               {
-                stdio: 'inherit',
+                stdin: 'inherit',
               },
             );
+
+            subprocess.stdout
+              .pipe(transformer({ tag: chalk`{gray   {bold @mikojs/server}}` }))
+              .pipe(process.stdout);
+            subprocess.stderr
+              .pipe(transformer({ tag: chalk`{red ✖ {bold @mikojs/server}}` }))
+              .pipe(process.stderr);
           }, 100);
           break;
 
@@ -170,8 +177,15 @@ handleUnhandledRejection();
     debugLog(`Open watch server at ${port}`);
 
     subprocess = execa(path.resolve(__dirname, './runServer.js'), [port], {
-      stdio: 'inherit',
+      stdin: 'inherit',
     });
+
+    subprocess.stdout
+      .pipe(transformer({ tag: chalk`{gray   {bold @mikojs/server}}` }))
+      .pipe(process.stdout);
+    subprocess.stderr
+      .pipe(transformer({ tag: chalk`{red ✖ {bold @mikojs/server}}` }))
+      .pipe(process.stderr);
 
     if (dev && opts.cliOptions.watch)
       logger

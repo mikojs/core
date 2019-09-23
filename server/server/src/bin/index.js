@@ -5,11 +5,14 @@ import path from 'path';
 import net from 'net';
 
 import parseArgv from '@babel/cli/lib/babel/options';
-import dirCommand from '@babel/cli/lib/babel/dir';
 import debug from 'debug';
-import execa, { type ExecaPromise as execaPromiseType } from 'execa';
+import execa, {
+  type ExecaPromise as execaPromiseType,
+  type ExecaError as execaErrorType,
+} from 'execa';
 import getPort from 'get-port';
 import chalk from 'chalk';
+import transformer from 'strong-log-transformer';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
@@ -45,23 +48,52 @@ handleUnhandledRejection();
 
   debugLog(opts);
 
-  await dirCommand({
-    ...opts,
-    cliOptions: {
-      ...opts.cliOptions,
-      watch: false,
-    },
+  let babelSubprocess: execaPromiseType = execa(
+    path.resolve(__dirname, './runBabel.js'),
+    [
+      JSON.stringify({
+        ...opts,
+        cliOptions: {
+          ...opts.cliOptions,
+          watch: false,
+        },
+      }),
+    ],
+  );
+
+  babelSubprocess.stdout
+    .pipe(transformer({ tag: chalk`{gray   {bold @mikojs/server} [babel]}` }))
+    .pipe(process.stdout);
+  babelSubprocess.stderr
+    .pipe(transformer({ tag: chalk`{red ✖ {bold @mikojs/server} [babel]}` }))
+    .pipe(process.stderr);
+
+  await babelSubprocess.catch((e: execaErrorType) => {
+    if (dev && opts.cliOptions.watch) debugLog(e);
+    else process.exit(e.exitCode || 1);
   });
 
-  if (dev && opts.cliOptions.watch)
-    dirCommand({
-      ...opts,
-      cliOptions: {
-        ...opts.cliOptions,
-        skipInitialBuild: true,
-        watch: true,
-      },
-    });
+  if (dev && opts.cliOptions.watch) {
+    // TODO: https://github.com/eslint/eslint/issues/11899
+    // eslint-disable-next-line require-atomic-updates
+    babelSubprocess = execa(path.resolve(__dirname, './runBabel.js'), [
+      JSON.stringify({
+        ...opts,
+        cliOptions: {
+          ...opts.cliOptions,
+          skipInitialBuild: true,
+          watch: true,
+        },
+      }),
+    ]);
+
+    babelSubprocess.stdout
+      .pipe(transformer({ tag: chalk`{gray   {bold @mikojs/server} [babel]}` }))
+      .pipe(process.stdout);
+    babelSubprocess.stderr
+      .pipe(transformer({ tag: chalk`{red ✖ {bold @mikojs/server} [babel]}` }))
+      .pipe(process.stderr);
+  }
   // [end] babel build
 
   const port = await getPort();
@@ -88,19 +120,24 @@ handleUnhandledRejection();
 
     socket.on('data', async (data: string) => {
       debug(data);
+      clearTimeout(timeout);
 
       switch (data) {
-        case 'restart':
-          clearTimeout(timeout);
-          timeout = setTimeout(async () => {
+        case 'watching':
+          timeout = setTimeout(() => {
             logger
-              .log('Restart the server')
-              .log('')
-              .log(chalk`  - Use {cyan rs} to restart the server`)
-              .log(
-                chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`,
+              .info('')
+              .info(chalk`Use {cyan rs} to restart the server`)
+              .info(
+                chalk`Use {cyan close} or {cyan ctrl + c} to stop the server`,
               )
-              .log('');
+              .info('');
+          }, 100);
+          break;
+
+        case 'restart':
+          timeout = setTimeout(async () => {
+            logger.info('Restarting the server');
 
             subprocess.cancel();
             await subprocess.catch(debugLog);
@@ -116,11 +153,23 @@ handleUnhandledRejection();
           }, 100);
           break;
 
+        case 'error':
+          timeout = setTimeout(() => {
+            logger
+              .info(chalk`Catch some error, please fix those error`)
+              .info(chalk`Use {cyan rs} to restart the server`)
+              .info(
+                chalk`Use {cyan close} or {cyan ctrl + c} to stop the server`,
+              );
+          }, 100);
+          break;
+
         case 'close':
           subprocess.cancel();
+          babelSubprocess.cancel();
           await subprocess.catch(debugLog);
+          await babelSubprocess.catch(debugLog);
           server.close();
-          process.exit(0);
           break;
 
         default:
@@ -139,13 +188,5 @@ handleUnhandledRejection();
     subprocess = execa(path.resolve(__dirname, './runServer.js'), [port], {
       stdio: 'inherit',
     });
-
-    if (dev && opts.cliOptions.watch)
-      logger
-        .log('In the watch mode, you can do:')
-        .log('')
-        .log(chalk`  - Use {cyan rs} to restart the server`)
-        .log(chalk`  - Use {cyan close} or {cyan ctrl + c} to stop the server`)
-        .log('');
   });
 })();

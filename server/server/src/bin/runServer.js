@@ -14,22 +14,13 @@ const client = net.connect({ port });
 debugLog(port);
 
 client.setEncoding('utf8');
-client.on('data', (data: string) => {
+client.on('data', async (data: string) => {
   debugLog(data);
 
   const { serverFile, ...context } = JSON.parse(data);
+  const isWatching = context.dev && context.watch;
 
-  requireModule(serverFile)({
-    ...context,
-    restart: () => {
-      client.end('restart');
-    },
-    close: () => {
-      client.end('close');
-    },
-  });
-
-  if (context.dev && context.watch)
+  if (isWatching)
     process.stdin.on('data', (inputData: Buffer) => {
       const str = inputData
         .toString()
@@ -39,4 +30,21 @@ client.on('data', (data: string) => {
       if (str === 'rs') client.end('restart');
       else if (str === 'close') client.end('close');
     });
+
+  try {
+    await requireModule(serverFile)({
+      ...context,
+      restart: () => {
+        client.end('restart');
+      },
+      close: () => {
+        client.end('close');
+      },
+    });
+
+    if (isWatching) client.write('watching');
+  } catch (e) {
+    debugLog(e);
+    client.write('error');
+  }
 });

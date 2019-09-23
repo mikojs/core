@@ -74,6 +74,8 @@ handleUnhandledRejection();
   });
 
   if (dev && opts.cliOptions.watch) {
+    // TODO: https://github.com/eslint/eslint/issues/11899
+    // eslint-disable-next-line require-atomic-updates
     babelSubprocess = execa(path.resolve(__dirname, './runBabel.js'), [
       JSON.stringify({
         ...opts,
@@ -148,9 +150,10 @@ handleUnhandledRejection();
 
         case 'close':
           subprocess.cancel();
+          babelSubprocess.cancel();
           await subprocess.catch(debugLog);
+          await babelSubprocess.catch(debugLog);
           server.close();
-          process.exit(0);
           break;
 
         default:

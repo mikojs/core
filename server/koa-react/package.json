@@ -30,13 +30,13 @@
     "output-file-sync": "^2.0.1",
     "progress-bar-webpack-plugin": "^1.12.1",
     "react-helmet": "^5.2.1",
-    "react-hot-loader": "^4.12.12",
+    "react-hot-loader": "^4.12.14",
     "react-is": "^16.9.0",
     "react-loading": "^2.0.3",
     "react-router": "^5.0.1",
     "react-router-config": "^5.0.1",
     "react-router-dom": "^5.0.1",
-    "terser-webpack-plugin": "^2.0.1"
+    "terser-webpack-plugin": "^2.1.0"
   },
   "peerDependencies": {
     "koa": ">=2.0.0",
@@ -52,7 +52,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "webpack": "^4.39.3"
+    "webpack": "^4.40.2"
   },
   "keywords": [
     "koa",

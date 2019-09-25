@@ -17,6 +17,7 @@
     "@mikojs/koa-base": "^1.7.1",
     "@mikojs/koa-graphql": "^1.7.1",
     "@mikojs/koa-react": "^1.7.1",
+    "@mikojs/react-cms": "^1.0.0",
     "@mikojs/server": "^1.7.1",
     "@mikojs/use-css": "^1.6.0",
     "@mikojs/use-less": "^1.6.0",

@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "name": "@mikojs/react-cms",
+  "description": "Use to build the website with the react components",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/react-dnd",
+  "repository": "https://github.com/mikojs/core/tree/master/components/react-cms",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "keywords": ["mikojs", "react", "react-cms"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

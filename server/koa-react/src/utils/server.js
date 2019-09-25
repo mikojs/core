@@ -18,7 +18,6 @@ import {
 import { StaticRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Multistream from 'multistream';
-import getStream from 'get-stream';
 import { emptyFunction } from 'fbjs';
 
 import { requireModule } from '@mikojs/utils';
@@ -110,25 +109,28 @@ export default (
 
   // make document scream
   const hash = crypto.createHmac('sha256', '@mikojs/koa-react').digest('hex');
-  const [upperDocument, lowerDocument] = renderToStaticMarkup(
+  const [
+    [upperDocumentStream],
+    [lowerDocumentStream, lowerDocument],
+  ] = renderToStaticMarkup(
     <Document {...documentInitialProps} helmet={Helmet.renderStatic()}>
       <main id="__MIKOJS__">{hash}</main>
     </Document>,
   )
     .split(hash)
-    .map((docmentText: string): ReadableType => {
+    .map((docmentText: string): [ReadableType, string] => {
       const docmentStream = new stream.Readable();
 
       docmentStream.push(docmentText);
       docmentStream.push(null);
 
-      return docmentStream;
+      return [docmentStream, docmentText];
     });
 
   // render page
   ctx.res.write('<!DOCTYPE html>');
   new Multistream([
-    upperDocument,
+    upperDocumentStream,
     renderToNodeStream(
       <Router location={ctx.url} context={{}}>
         <Root
@@ -142,13 +144,13 @@ export default (
         />
       </Router>,
     ),
-    lowerDocument,
+    lowerDocumentStream,
   ])
     .on('error', async (error: Error) => {
       ctx.res.end(
         `${renderToString(
           <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
-        )}${await getStream(lowerDocument)}`,
+        )}${lowerDocument}`,
       );
     })
     .pipe(ctx.res);

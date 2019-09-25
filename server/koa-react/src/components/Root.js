@@ -1,5 +1,7 @@
 // @flow
 
+// $FlowFixMe TODO: https://github.com/flow-typed/flow-typed/pull/3570, move after fbjs
+import { useLocation } from 'react-router-dom';
 import React, {
   useState,
   useEffect,
@@ -8,7 +10,6 @@ import React, {
   type Node as NodeType,
 } from 'react';
 import { ExecutionEnvironment } from 'fbjs';
-import { withRouter, type Location as locationType } from 'react-router-dom';
 
 import { type errorPropsType } from '../types';
 
@@ -33,7 +34,6 @@ export type propsType = {|
   InitialPage: ComponentType<*>,
   mainInitialProps: {},
   pageInitialProps: {},
-  location: locationType,
 |};
 
 let isMounted: boolean = false;
@@ -47,9 +47,9 @@ const Root = ({
   InitialPage,
   mainInitialProps,
   pageInitialProps,
-  location: { pathname, search },
 }: propsType): NodeType => {
   const isServer = !ExecutionEnvironment.canUseEventListeners;
+  const { pathname, search } = useLocation();
   const ctx = isServer
     ? {}
     : {
@@ -106,6 +106,4 @@ const Root = ({
   );
 };
 
-export default React.memo<$Diff<propsType, {| location: mixed |}>>(
-  withRouter(Root),
-);
+export default React.memo<propsType>(Root);

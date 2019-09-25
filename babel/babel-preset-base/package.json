@@ -10,7 +10,7 @@
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
-    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-env": "^7.6.2",
     "@babel/preset-flow": "^7.0.0",
     "@mikojs/babel-plugin-transform-flow": "^1.6.0",
     "@mikojs/utils": "^1.7.1",

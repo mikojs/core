@@ -17,7 +17,6 @@
     "@mikojs/koa-base": "^1.7.1",
     "@mikojs/koa-graphql": "^1.7.1",
     "@mikojs/koa-react": "^1.7.1",
-    "@mikojs/react-dnd": "^1.7.0",
     "@mikojs/server": "^1.7.1",
     "@mikojs/use-css": "^1.6.0",
     "@mikojs/use-less": "^1.6.0",
@@ -25,10 +24,10 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-is": "^16.9.0",
-    "react-relay": "^5.0.0",
-    "react-relay-network-modern": "^4.0.4",
+    "react-relay": "^6.0.0",
+    "react-relay-network-modern": "^4.1.0",
     "react-relay-network-modern-ssr": "^1.2.4",
-    "relay-runtime": "^5.0.0",
+    "relay-runtime": "^6.0.0",
     "whatwg-fetch": "^3.0.0"
   },
   "keywords": ["website"]

@@ -70,7 +70,7 @@ describe('Root', () => {
           await act(async () => {
             Simulate.click(
               // $FlowFixMe
-              ReactDOM.findDOMNode(wrapper.find(Link).instance()),
+              ReactDOM.findDOMNode(wrapper.find('a').instance()),
               { button: 0 },
             );
           });

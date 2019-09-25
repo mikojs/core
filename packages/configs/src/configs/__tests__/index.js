@@ -22,9 +22,10 @@ describe('configs', () => {
             case 'install':
             case 'ignore':
             case 'run':
-              (configKey !== 'exec'
-                ? expect(value([])).not
-                : expect(value([]))
+              (configKey === 'exec' ||
+              (configKey === 'flow-typed:lerna' && key === 'run')
+                ? expect(value([]))
+                : expect(value([])).not
               ).toHaveLength(0);
               return;
 

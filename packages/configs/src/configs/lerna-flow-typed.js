@@ -14,6 +14,8 @@ export default {
     'flow-typed',
   ],
   run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
+    if (!argv.includes('install')) return [...argv];
+
     const { devDependencies: { 'flow-bin': flowVersion } = {} } = requireModule(
       path.resolve(
         npmWhich(process.cwd()).sync('lerna'),
@@ -26,7 +28,7 @@ export default {
       throw new Error('Can not find `flow version` in the project');
     if (!fs.existsSync(nodeModulesPath)) fs.mkdirSync(nodeModulesPath);
 
-    return [...argv, 'install', '-f', flowVersion.replace(/\^/, '')];
+    return [...argv, '-f', flowVersion.replace(/\^/, '')];
   },
   configFiles: {
     emptyConfig: path.resolve(__dirname, './emptyConfig.js'),

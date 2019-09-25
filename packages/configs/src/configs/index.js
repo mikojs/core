@@ -9,6 +9,7 @@ import lint from './lint';
 import lintsteged from './lintsteged';
 import jest from './jest';
 import server from './server';
+import lernaFlowTypedInstall from './lerna-flow-typed-install';
 
 export default ({
   // custom command
@@ -53,6 +54,9 @@ export default ({
     alias: 'jest',
     run: (argv: $ReadOnlyArray<string>) => [...argv, '--silent'],
   },
+
+  // lerna flow-typed install
+  'lerna-flow-typed-install': lernaFlowTypedInstall,
 
   // @mikojs/server
   server,

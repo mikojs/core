@@ -26,7 +26,6 @@
     "babel-plugin-transform-imports": "^2.0.0",
     "eslint": "^6.4.0",
     "eslint-watch": "^6.0.1",
-    "fbjs": "^1.0.0",
     "flow-bin": "^0.108.0",
     "flow-typed": "^2.6.1",
     "graphql": "^14.5.7",

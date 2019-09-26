@@ -4,19 +4,17 @@ import React from 'react';
 import { DndProvider } from 'react-dnd-cjs';
 import HTML5Backend from 'react-dnd-html5-backend-cjs';
 
-import EventsProvider from './EventsProvider';
+import useDnd from './hooks/useDnd';
 
 /* eslint-disable */
-const Example = () => <div>test</div>;
+const Example = ({ id }) => <div {...useDnd(id)}>test</div>;
 /* eslint-enable */
 
 /** @react use to control the all main components */
 const Cms = () => (
   <DndProvider backend={HTML5Backend}>
-    <EventsProvider>
-      <Example />
-      <Example />
-    </EventsProvider>
+    <Example id="1" />
+    <Example id="2" />
   </DndProvider>
 );
 

@@ -114,6 +114,13 @@ export default (
     if (cliName) {
       const config = configs.store[cliName];
 
+      if (!config) {
+        logger
+          .fail(chalk`Can not find {cyan \`${cliName}\`} in configs`)
+          .fail(chalk`Use {green \`--info\`} to get the more information`);
+        return false;
+      }
+
       logger.info(
         chalk`Here is thie information of the {cyan ${cliName}} config:`,
       );

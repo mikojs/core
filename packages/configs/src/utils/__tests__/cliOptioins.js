@@ -134,11 +134,12 @@ describe('cli options', () => {
   );
 
   test.each`
-    argv                    | expected | consoleName
-    ${['--info']}           | ${true}  | ${'info'}
-    ${['runCmd', '--info']} | ${true}  | ${'info'}
-    ${[]}                   | ${false} | ${'error'}
-    ${['notFindCliName']}   | ${false} | ${'error'}
+    argv                            | expected | consoleName
+    ${['--info']}                   | ${true}  | ${'info'}
+    ${['runCmd', '--info']}         | ${true}  | ${'info'}
+    ${['notFindCliName', '--info']} | ${false} | ${'error'}
+    ${[]}                           | ${false} | ${'error'}
+    ${['notFindCliName']}           | ${false} | ${'error'}
   `(
     'Run $argv',
     ({

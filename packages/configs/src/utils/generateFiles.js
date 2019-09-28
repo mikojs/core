@@ -61,7 +61,7 @@ const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
           [configCliName]: [
             {
               filePath: path.resolve(configs.rootDir, configPath),
-              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', __filename);`,
+              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', ${worker.port}, __filename);`,
             },
             ...(!ignoreName || ignore.length === 0
               ? []
@@ -111,7 +111,7 @@ export default (cliName: string): boolean => {
       ({ filePath, content }: $ElementType<filesDataType, number>) => {
         debugLog(`Generate config: ${filePath}`);
         outputFileSync(filePath, content);
-        worker.writeCache({
+        worker.send({
           ...cache,
           filePath,
         });

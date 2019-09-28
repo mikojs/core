@@ -20,14 +20,20 @@ const debugLog = debug('configs:config');
  * config('cli', '/file-path')
  *
  * @param {string} cliName - cli name
+ * @param {boolean} port - the port of the config server
  * @param {string} filePath - file path
  *
  * @return {object} - cli config
  */
-export default (cliName: string, filePath: string): {} => {
+export default (cliName: string, port: number, filePath: string): {} => {
   debugLog(`cliName: ${cliName}`);
   debugLog(`filePath: ${filePath}`);
-  worker.writeCache({ filePath, using: moment().format() });
+
+  worker.init(port, false);
+  worker.send({ pid: process.pid, using: moment().format(), filePath });
+  process.on('exit', () => {
+    worker.send({ pid: process.pid, using: false });
+  });
 
   return (
     {}

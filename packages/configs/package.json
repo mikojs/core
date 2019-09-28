@@ -17,14 +17,12 @@
     "debug": "^4.1.1",
     "execa": "^2.0.4",
     "fbjs": "^1.0.0",
+    "get-port": "^5.0.0",
     "is-running": "^2.1.0",
     "moment": "^2.24.0",
     "npm-which": "^3.0.1",
     "output-file-sync": "^2.0.1",
     "rimraf": "^3.0.0"
-  },
-  "devDependencies": {
-    "get-port": "^5.0.0"
   },
   "keywords": ["configs", "mikojs"],
   "publishConfig": {

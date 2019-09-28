@@ -8,7 +8,6 @@ import chalk from 'chalk';
 
 import generateFiles from '../generateFiles';
 import configs from '../configs';
-import worker from '../worker';
 
 describe('generate files', () => {
   beforeAll(() => {
@@ -44,7 +43,6 @@ describe('generate files', () => {
   test('generate', () => {
     generateFiles('jest');
 
-    expect(worker.server).toBeNull();
     expect(outputFileSync.destPaths).toEqual(
       [
         'jest.config.js',

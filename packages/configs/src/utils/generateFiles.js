@@ -4,7 +4,6 @@ import path from 'path';
 
 import chalk from 'chalk';
 import debug from 'debug';
-import moment from 'moment';
 import outputFileSync from 'output-file-sync';
 
 import { createLogger } from '@mikojs/utils';
@@ -97,10 +96,6 @@ const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
  */
 export default (cliName: string): boolean => {
   const files = findFiles(cliName);
-  const cache = {
-    pid: process.pid,
-    using: moment().format(),
-  };
 
   if (!files) return false;
 
@@ -111,10 +106,6 @@ export default (cliName: string): boolean => {
       ({ filePath, content }: $ElementType<filesDataType, number>) => {
         debugLog(`Generate config: ${filePath}`);
         outputFileSync(filePath, content);
-        worker.send({
-          ...cache,
-          filePath,
-        });
       },
     );
   });

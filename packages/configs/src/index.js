@@ -6,7 +6,6 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
-import moment from 'moment';
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
@@ -30,9 +29,9 @@ export default (cliName: string, port: number, filePath: string): {} => {
   debugLog(`filePath: ${filePath}`);
 
   worker.init(port, false);
-  worker.send({ pid: process.pid, using: moment().format(), filePath });
+  worker.send({ pid: process.pid, filePath });
   process.on('exit', () => {
-    worker.send({ pid: process.pid, using: false });
+    worker.send({ pid: process.pid, isFinished: true });
   });
 
   return (

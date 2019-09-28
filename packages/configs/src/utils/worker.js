@@ -10,55 +10,63 @@ import debug from 'debug';
 const debugLog = debug('configs:worker');
 
 export type cacheType = {|
-  filePath?: string,
-  pid?: number,
-  using: string | false,
+  pid: number,
+  filePath: string | false,
 |};
 
 /** Use to control file */
 export class Worker {
-  /**
-   * @example
-   * new Worker();
-   *
-   * @param {number} port - port of server
-   */
-  constructor(port?: number = 8050) {
-    this.port = port;
-  }
+  port: number = -1;
+
+  isServer: boolean = false;
 
   +cache = {};
 
-  server = null;
-
-  +port = 8050;
-
   /**
    * @example
-   * worker.init()
+   * worker.init(8000, true)
    *
-   * @return {Promise<net.Server>} - a server or null
+   * @param {number} port - the port of the server
+   * @param {boolean} isServer - determine if this work is a server
    */
-  +init = async (): Promise<net.Server | null> => {
-    this.server = await new Promise(resolve => {
-      const server = net.createServer((socket: net.Socket) => {
-        socket.setEncoding('utf8');
-        socket.on('data', (data: string) => {
-          this.writeCache(JSON.parse(data));
-        });
-      });
+  +init = (port: number, isServer: boolean) => {
+    this.port = port;
+    this.isServer = isServer;
 
-      server.on('error', (err: mixed) => {
-        resolve(null);
-      });
+    if (!isServer) return;
 
-      server.listen(this.port, undefined, undefined, () => {
-        debugLog(`Open server at ${this.port}`);
-        resolve(server);
+    const server = net.createServer((socket: net.Socket) => {
+      socket.setEncoding('utf8');
+      socket.on('data', (data: string) => {
+        debugLog(data);
+        this.writeCache(JSON.parse(data));
       });
     });
 
-    return this.server;
+    server.on('error', (err: mixed) => {
+      debugLog(err);
+    });
+
+    server.listen(port, () => {
+      debugLog(`Open server at ${port}`);
+    });
+  };
+
+  /**
+   * @example
+   * worker.send({})
+   *
+   * @param {cacheType} data - cache
+   */
+  +send = (data: cacheType) => {
+    debugLog(`write: ${JSON.stringify(data, null, 2)}`);
+
+    if (this.isServer) {
+      this.writeCache(data);
+      return;
+    }
+
+    net.connect({ port: this.port }).end(JSON.stringify(data));
   };
 
   /**
@@ -66,67 +74,40 @@ export class Worker {
    * worker.writeCache({})
    *
    * @param {cacheType} data - cache
-   *
-   * @return {net.Socket} - a client socket or null
    */
-  +writeCache = (data: cacheType): ?net.Socket => {
-    const { filePath, pid, using } = data;
+  +writeCache = ({ pid, filePath }: cacheType) => {
+    if (filePath) {
+      if (!this.cache[filePath]) this.cache[filePath] = { pids: [] };
+      if (pid) this.cache[filePath].pids.push(pid);
 
-    if (this.server) {
-      debugLog(`Write cache: ${JSON.stringify(data, null, 2)}`);
-
-      if (!using && !filePath) {
-        Object.keys(this.cache).forEach((cacheFilePath: string) => {
-          this.cache[cacheFilePath].pids = this.cache[
-            cacheFilePath
-          ].pids.filter((cachePid: number) => pid !== cachePid);
-
-          if (
-            this.cache[cacheFilePath].pids.length === 0 &&
-            fs.existsSync(cacheFilePath)
-          ) {
-            /**
-             * Avoid main process have child_process, but main process exit before child_process done.
-             * For example, run `jest` with `--coverage`.
-             * Building coverage will do after jest close
-             */
-            if (
-              moment().diff(this.cache[cacheFilePath].using, 'seconds') > 0.5
-            ) {
-              delete this.cache[cacheFilePath];
-              rimraf.sync(cacheFilePath);
-              debugLog(`Remove file: ${cacheFilePath}`);
-            }
-          }
-        });
-
-        debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
-
-        return null;
-      }
-
-      if (!filePath)
-        throw new Error(
-          '`filePath` can not be undefined in `worker.writeCache`',
-        );
-      else {
-        if (!this.cache[filePath]) this.cache[filePath] = { pids: [] };
-        if (pid) this.cache[filePath].pids.push(pid);
-
-        this.cache[filePath].using = using;
-        debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
-      }
-
-      return null;
+      this.cache[filePath].using = moment().format();
+      debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
+      return;
     }
 
-    if (!using) throw new Error('`client server` can not remove cache');
+    Object.keys(this.cache).forEach((cacheFilePath: string) => {
+      this.cache[cacheFilePath].pids = this.cache[cacheFilePath].pids.filter(
+        (cachePid: number) => pid !== cachePid,
+      );
 
-    const client = net.connect({ port: this.port });
+      if (
+        this.cache[cacheFilePath].pids.length === 0 &&
+        fs.existsSync(cacheFilePath)
+      ) {
+        /**
+         * Avoid main process have child_process, but main process exit before child_process done.
+         * For example, run `jest` with `--coverage`.
+         * Building coverage will do after jest close
+         */
+        if (moment().diff(this.cache[cacheFilePath].using, 'seconds') > 0.5) {
+          delete this.cache[cacheFilePath];
+          rimraf.sync(cacheFilePath);
+          debugLog(`Remove file: ${cacheFilePath}`);
+        }
+      }
+    });
 
-    client.end(JSON.stringify(data));
-
-    return client;
+    debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
   };
 }
 

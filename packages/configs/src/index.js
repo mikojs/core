@@ -31,7 +31,7 @@ export default (cliName: string, port: number, filePath: string): {} => {
   worker.init(port, false);
   worker.send({ pid: process.pid, filePath });
   process.on('exit', () => {
-    worker.send({ pid: process.pid, isFinished: true });
+    worker.send({ pid: process.pid, filePath: false });
   });
 
   return (

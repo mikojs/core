@@ -7,7 +7,7 @@ import moment from 'moment';
 import rimraf from 'rimraf';
 import debug from 'debug';
 
-const debugLog = debug('configs:server');
+const debugLog = debug('configs:Server');
 
 export type cacheType = {|
   pid: number,
@@ -16,25 +16,15 @@ export type cacheType = {|
 
 /** Use to control file */
 export default class Server {
-  port: number = -1;
-
-  isServer: boolean = false;
-
   +cache = {};
 
   /**
    * @example
-   * server.init(8000, true)
+   * new Server(8000)
    *
    * @param {number} port - the port of the server
-   * @param {boolean} isServer - determine if this work is a server
    */
-  +init = (port: number, isServer: boolean) => {
-    this.port = port;
-    this.isServer = isServer;
-
-    if (!isServer) return;
-
+  constructor(port: number) {
     const server = net.createServer((socket: net.Socket) => {
       socket.setEncoding('utf8');
       socket.on('data', (data: string) => {
@@ -50,24 +40,7 @@ export default class Server {
     server.listen(port, () => {
       debugLog(`Open server at ${port}`);
     });
-  };
-
-  /**
-   * @example
-   * server.send({})
-   *
-   * @param {cacheType} data - cache
-   */
-  +send = (data: cacheType) => {
-    debugLog(`write: ${JSON.stringify(data, null, 2)}`);
-
-    if (this.isServer) {
-      this.writeCache(data);
-      return;
-    }
-
-    net.connect({ port: this.port }).end(JSON.stringify(data));
-  };
+  }
 
   /**
    * @example

@@ -7,7 +7,7 @@ import moment from 'moment';
 import rimraf from 'rimraf';
 import debug from 'debug';
 
-const debugLog = debug('configs:worker');
+const debugLog = debug('configs:server');
 
 export type cacheType = {|
   pid: number,
@@ -15,7 +15,7 @@ export type cacheType = {|
 |};
 
 /** Use to control file */
-export class Worker {
+export class Server {
   port: number = -1;
 
   isServer: boolean = false;
@@ -24,7 +24,7 @@ export class Worker {
 
   /**
    * @example
-   * worker.init(8000, true)
+   * server.init(8000, true)
    *
    * @param {number} port - the port of the server
    * @param {boolean} isServer - determine if this work is a server
@@ -54,7 +54,7 @@ export class Worker {
 
   /**
    * @example
-   * worker.send({})
+   * server.send({})
    *
    * @param {cacheType} data - cache
    */
@@ -71,7 +71,7 @@ export class Worker {
 
   /**
    * @example
-   * worker.writeCache({})
+   * server.writeCache({})
    *
    * @param {cacheType} data - cache
    */
@@ -111,4 +111,4 @@ export class Worker {
   };
 }
 
-export default new Worker();
+export default new Server();

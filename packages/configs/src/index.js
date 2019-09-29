@@ -6,11 +6,12 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
+import net from 'net';
+
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
 import configs from 'utils/configs';
-import worker from 'utils/worker';
 
 const debugLog = debug('configs:config');
 
@@ -28,10 +29,9 @@ export default (cliName: string, port: number, filePath: string): {} => {
   debugLog(`cliName: ${cliName}`);
   debugLog(`filePath: ${filePath}`);
 
-  worker.init(port, false);
-  worker.send({ pid: process.pid, filePath });
+  net.connect({ port }).end({ pid: process.pid, filePath });
   process.on('exit', () => {
-    worker.send({ pid: process.pid, filePath: false });
+    net.connect({ port }).end({ pid: process.pid, filePath: false });
   });
 
   return (

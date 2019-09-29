@@ -9,7 +9,6 @@ import outputFileSync from 'output-file-sync';
 import { createLogger } from '@mikojs/utils';
 
 import configs from './configs';
-import worker from './worker';
 
 const debugLog = debug('configs:generateFiles');
 const logger = createLogger('@mikojs/configs');
@@ -24,10 +23,14 @@ type filesDataType = $ReadOnlyArray<{|
  * findFiles('cliName')
  *
  * @param {string} cliName - cli name
+ * @param {number} port - the port is used to connect the server
  *
  * @return {{ [string]: filesDataType }} - configFiles object to generate the files
  */
-const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
+const findFiles = (
+  cliName: string,
+  port: number,
+): ?{ [string]: filesDataType } => {
   const {
     alias: cli = cliName,
     configFiles = {},
@@ -60,7 +63,7 @@ const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
           [configCliName]: [
             {
               filePath: path.resolve(configs.rootDir, configPath),
-              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', ${worker.port}, __filename);`,
+              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', ${port}, __filename);`,
             },
             ...(!ignoreName || ignore.length === 0
               ? []
@@ -79,7 +82,7 @@ const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
 
       return {
         ...result,
-        ...findFiles(configCliName),
+        ...findFiles(configCliName, port),
       };
     },
     {},
@@ -91,11 +94,12 @@ const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
  * generateFiles('cli')
  *
  * @param {string} cliName - cli name
+ * @param {number} port - the port is used to connect the server
  *
  * @return {boolean} - generating file is successful or not
  */
-export default (cliName: string): boolean => {
-  const files = findFiles(cliName);
+export default (cliName: string, port: number): boolean => {
+  const files = findFiles(cliName, port);
 
   if (!files) return false;
 

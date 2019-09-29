@@ -33,7 +33,7 @@ describe('generate files', () => {
 
     global.console.error = mockLog;
 
-    expect(generateFiles('notFindCli')).toBeFalsy();
+    expect(generateFiles('notFindCli', 8000)).toBeFalsy();
     expect(mockLog).toHaveBeenCalledTimes(5);
     expect(mockLog).toHaveBeenCalledWith(
       chalk`{red ✖ }{red {bold @mikojs/configs}} Can not generate the config file, You can:`,
@@ -41,7 +41,7 @@ describe('generate files', () => {
   });
 
   test('generate', () => {
-    generateFiles('jest');
+    generateFiles('jest', 8000);
 
     expect(outputFileSync.destPaths).toEqual(
       [

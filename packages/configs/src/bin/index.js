@@ -7,6 +7,7 @@ import execa from 'execa';
 import debug from 'debug';
 import npmWhich from 'npm-which';
 import getPort from 'get-port';
+import findProcess from 'find-process';
 import chalk from 'chalk';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
@@ -45,11 +46,28 @@ handleUnhandledRejection();
 
     default: {
       try {
-        // TODO server.init(await getPort(), true);
+        const [existServer] = await findProcess(
+          'name',
+          '@mikojs/configs',
+          true,
+        );
+
+        debugLog(existServer);
+
+        const port = existServer
+          ? existServer.cmd.split(/ /).slice(-1)[0]
+          : await getPort();
+
+        debugLog(port);
+
+        if (!existServer)
+          execa(path.resolve(__dirname, './runServer.js'), [port], {
+            detached: true,
+          });
 
         // [start]
         // handle config and ignore files
-        if (!generateFiles(cliName, await getPort())) {
+        if (!generateFiles(cliName, port)) {
           process.exit(1);
           return;
         }

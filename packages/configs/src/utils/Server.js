@@ -15,7 +15,7 @@ export type cacheType = {|
 |};
 
 /** Use to control file */
-export class Server {
+export default class Server {
   port: number = -1;
 
   isServer: boolean = false;
@@ -110,5 +110,3 @@ export class Server {
     debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
   };
 }
-
-export default new Server();

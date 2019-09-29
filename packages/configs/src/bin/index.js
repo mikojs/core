@@ -14,7 +14,6 @@ import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';
 import generateFiles from 'utils/generateFiles';
-import server from 'utils/server';
 
 const logger = createLogger('@mikojs/configs');
 
@@ -46,7 +45,7 @@ handleUnhandledRejection();
 
     default: {
       try {
-        server.init(await getPort(), true);
+        // TODO server.init(await getPort(), true);
 
         // [start]
         // handle config and ignore files

@@ -29,6 +29,7 @@ export default class Server {
   constructor(port: number) {
     this.server = net.createServer((socket: net.Socket) => {
       socket.setEncoding('utf8');
+      socket.write(JSON.stringify(this.cache));
       socket.on('data', (data: string) => {
         debugLog(data);
         this.writeCache(JSON.parse(data));

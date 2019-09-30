@@ -29,9 +29,11 @@ export default (cliName: string, port: number, filePath: string): {} => {
   debugLog(`cliName: ${cliName}`);
   debugLog(`filePath: ${filePath}`);
 
-  net.connect({ port }).end({ pid: process.pid, filePath });
+  net.connect({ port }).end(JSON.stringify({ pid: process.pid, filePath }));
   process.on('exit', () => {
-    net.connect({ port }).end({ pid: process.pid, filePath: false });
+    net
+      .connect({ port })
+      .end(JSON.stringify({ pid: process.pid, filePath: false }));
   });
 
   return (

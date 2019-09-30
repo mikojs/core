@@ -46,11 +46,8 @@ handleUnhandledRejection();
 
     default: {
       try {
-        const [existServer] = await findProcess(
-          'name',
-          '@mikojs/configs',
-          true,
-        );
+        const runServerFilePath = path.resolve(__dirname, './runServer.js');
+        const [existServer] = await findProcess('name', runServerFilePath);
 
         debugLog(existServer);
 
@@ -61,7 +58,7 @@ handleUnhandledRejection();
         debugLog(port);
 
         if (!existServer)
-          execa(path.resolve(__dirname, './runServer.js'), [port], {
+          execa(runServerFilePath, [port], {
             detached: true,
           });
 

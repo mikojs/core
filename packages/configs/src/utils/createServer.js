@@ -9,11 +9,6 @@ import debug from 'debug';
 
 const debugLog = debug('configs:Server');
 
-export type cacheType = {|
-  pid: number,
-  filePath: string,
-|};
-
 /**
  * @example
  * new createServer(8000)
@@ -21,8 +16,8 @@ export type cacheType = {|
  * @param {number} port - the port of the server
  */
 export default (port: number) => {
-  let timer: IntervalID;
   const cache = {};
+  let timer: IntervalID;
 
   const server = net.createServer((socket: net.Socket) => {
     socket.setEncoding('utf8');
@@ -38,23 +33,29 @@ export default (port: number) => {
       clearInterval(timer);
 
       timer = setInterval(() => {
-        Object.keys(cache).forEach((cacheFilePath: string) => {
-          cache[cacheFilePath].pids = cache[cacheFilePath].pids.filter(
-            isRunning,
-          );
+        const hasWorkingPids = Object.keys(cache).reduce(
+          (result: boolean, cacheFilePath: string): boolean => {
+            const newPids = cache[cacheFilePath].pids.filter(isRunning);
 
-          if (cache[cacheFilePath].pids.length === 0) {
-            if (fs.existsSync(cacheFilePath)) rimraf.sync(cacheFilePath);
+            if (newPids.length !== cache[cacheFilePath].pids.length)
+              debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
 
-            delete cache[cacheFilePath];
+            cache[cacheFilePath].pids = newPids;
 
-            debugLog(`Remove file: ${cacheFilePath}`);
-            debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
-          }
-        });
+            return result || newPids.length !== 0;
+          },
+          false,
+        );
 
-        if (Object.keys(cache).length === 0)
+        if (!hasWorkingPids)
           server.close(() => {
+            Object.keys(cache).forEach((cacheFilePath: string) => {
+              if (fs.existsSync(cacheFilePath)) {
+                rimraf.sync(cacheFilePath);
+                debugLog(`Remove existing file: ${cacheFilePath}`);
+              }
+            });
+
             clearInterval(timer);
             debugLog('Close server');
           });

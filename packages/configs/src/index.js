@@ -38,7 +38,7 @@ export default (
   net
     .connect({ port })
     .end(JSON.stringify({ pid: process.pid, filePath }), () => {
-      debugLog(`has sent ${filePath} to the server`);
+      debugLog(`${filePath} has been sent to the server`);
     });
 
   if (ignoreFilePath)
@@ -47,7 +47,7 @@ export default (
       .end(
         JSON.stringify({ pid: process.pid, filePath: ignoreFilePath }),
         () => {
-          debugLog(`has sent ${ignoreFilePath} to the server`);
+          debugLog(`${ignoreFilePath} has been sent to the server`);
         },
       );
 

@@ -1,5 +1,6 @@
 // @flow
 
+import net from 'net';
 import path from 'path';
 
 import chalk from 'chalk';
@@ -118,6 +119,11 @@ export default (cliName: string, port: number): boolean => {
       ({ filePath, content }: $ElementType<filesDataType, number>) => {
         debugLog(`Generate config: ${filePath}`);
         outputFileSync(filePath, content);
+        net
+          .connect({ port })
+          .end(JSON.stringify({ pid: process.pid, filePath }), () => {
+            debugLog(`${filePath}(generateFile) has been sent to the server`);
+          });
       },
     );
   });

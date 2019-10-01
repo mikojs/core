@@ -54,13 +54,17 @@ export default (port: number) => {
         );
 
         if (!hasWorkingPids)
-          server.close(() => {
-            Object.keys(cache).forEach((cacheFilePath: string) => {
-              if (fs.existsSync(cacheFilePath)) {
-                rimraf.sync(cacheFilePath);
-                debugLog(`Remove existing file: ${cacheFilePath}`);
-              }
-            });
+          server.close(async () => {
+            await Promise.all(
+              Object.keys(cache).map(async (cacheFilePath: string) => {
+                if (fs.existsSync(cacheFilePath)) {
+                  await new Promise(resolve => {
+                    rimraf(cacheFilePath, resolve);
+                  });
+                  debugLog(`Remove existing file: ${cacheFilePath}`);
+                }
+              }),
+            );
 
             clearInterval(timer);
             debugLog('Close server');

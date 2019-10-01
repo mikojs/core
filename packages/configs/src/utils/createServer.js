@@ -26,8 +26,8 @@ export default (port: number) => {
 
       const { pid, filePath } = JSON.parse(data);
 
-      if (!cache[filePath]) cache[filePath] = { pids: [] };
-      if (pid) cache[filePath].pids.push(pid);
+      if (!cache[filePath]) cache[filePath] = [];
+      if (pid) cache[filePath].push(pid);
 
       debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
       clearInterval(timer);
@@ -35,12 +35,18 @@ export default (port: number) => {
       timer = setInterval(() => {
         const hasWorkingPids = Object.keys(cache).reduce(
           (result: boolean, cacheFilePath: string): boolean => {
-            const newPids = cache[cacheFilePath].pids.filter(isRunning);
+            const newPids = cache[cacheFilePath].filter(isRunning);
 
-            if (newPids.length !== cache[cacheFilePath].pids.length)
-              debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
+            if (newPids.length !== cache[cacheFilePath].length)
+              debugLog(
+                `Cache: ${JSON.stringify(
+                  { ...cache, [cacheFilePath]: newPids },
+                  null,
+                  2,
+                )}`,
+              );
 
-            cache[cacheFilePath].pids = newPids;
+            cache[cacheFilePath] = newPids;
 
             return result || newPids.length !== 0;
           },

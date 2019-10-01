@@ -28,8 +28,8 @@ export default (port: number) => {
       const { pid, filePath } = JSON.parse(data);
 
       if (!cache[filePath]) cache[filePath] = [];
-      if (pid) cache[filePath].push(pid);
 
+      cache[filePath].push(pid);
       debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
       clearInterval(timer);
 

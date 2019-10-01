@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 // @flow
 
-import Server from 'utils/Server';
+import createServer from 'utils/createServer';
 
-(() => new Server(parseInt(process.argv[2], 10)))();
+createServer(parseInt(process.argv[2], 10));

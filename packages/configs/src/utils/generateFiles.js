@@ -57,28 +57,36 @@ const findFiles = (
 
       if (!configPath) return result;
 
-      if (typeof configPath === 'string')
+      if (typeof configPath === 'string') {
+        const ignoreFilePath =
+          !ignoreName || ignore.length === 0
+            ? undefined
+            : path.resolve(
+                configs.rootDir,
+                path.dirname(configPath),
+                ignoreName,
+              );
+
         return {
           ...result,
           [configCliName]: [
             {
               filePath: path.resolve(configs.rootDir, configPath),
-              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', ${port}, __filename);`,
+              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', ${port}, __filename, ${
+                !ignoreFilePath ? 'undefined' : `'${ignoreFilePath}'`
+              });`,
             },
-            ...(!ignoreName || ignore.length === 0
+            ...(!ignoreFilePath
               ? []
               : [
                   {
-                    filePath: path.resolve(
-                      configs.rootDir,
-                      path.dirname(configPath),
-                      ignoreName,
-                    ),
+                    filePath: ignoreFilePath,
                     content: ignore.join('\n'),
                   },
                 ]),
           ],
         };
+      }
 
       return {
         ...result,

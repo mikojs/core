@@ -22,10 +22,16 @@ const debugLog = debug('configs:config');
  * @param {string} cliName - cli name
  * @param {boolean} port - the port of the config server
  * @param {string} filePath - file path
+ * @param {string} ignoreFilePath - ignore file path
  *
  * @return {object} - cli config
  */
-export default (cliName: string, port: number, filePath: string): {} => {
+export default (
+  cliName: string,
+  port: number,
+  filePath: string,
+  ignoreFilePath?: string,
+): {} => {
   debugLog(`cliName: ${cliName}`);
   debugLog(`filePath: ${filePath}`);
 
@@ -34,6 +40,16 @@ export default (cliName: string, port: number, filePath: string): {} => {
     .end(JSON.stringify({ pid: process.pid, filePath }), () => {
       debugLog(`has sent ${cliName} message to the server`);
     });
+
+  if (ignoreFilePath)
+    net
+      .connect({ port })
+      .end(
+        JSON.stringify({ pid: process.pid, filePath: ignoreFilePath }),
+        () => {
+          debugLog(`has sent ${cliName} message to the server`);
+        },
+      );
 
   return (
     {}

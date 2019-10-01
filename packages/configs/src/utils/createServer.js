@@ -76,7 +76,7 @@ export default (port: number) => {
 
           checkedTimes += 1;
         }
-      }, 500);
+      }, 100);
     });
   });
 

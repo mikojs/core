@@ -18,6 +18,7 @@ const debugLog = debug('configs:Server');
 export default (port: number) => {
   const cache = {};
   let timer: IntervalID;
+  let checkedTimes: number;
 
   const server = net.createServer((socket: net.Socket) => {
     socket.setEncoding('utf8');
@@ -32,6 +33,7 @@ export default (port: number) => {
       debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
       clearInterval(timer);
 
+      checkedTimes = 0;
       timer = setInterval(() => {
         const hasWorkingPids = Object.keys(cache).reduce(
           (result: boolean, cacheFilePath: string): boolean => {
@@ -53,22 +55,27 @@ export default (port: number) => {
           false,
         );
 
-        if (!hasWorkingPids)
-          server.close(async () => {
-            await Promise.all(
-              Object.keys(cache).map(async (cacheFilePath: string) => {
-                if (fs.existsSync(cacheFilePath)) {
-                  await new Promise(resolve => {
-                    rimraf(cacheFilePath, resolve);
-                  });
-                  debugLog(`Remove existing file: ${cacheFilePath}`);
-                }
-              }),
-            );
+        if (!hasWorkingPids) {
+          if (checkedTimes >= 10)
+            server.close(async () => {
+              await Promise.all(
+                Object.keys(cache).map(async (cacheFilePath: string) => {
+                  if (fs.existsSync(cacheFilePath)) {
+                    await new Promise(resolve => {
+                      rimraf(cacheFilePath, resolve);
+                    });
+                    debugLog(`Remove existing file: ${cacheFilePath}`);
+                  }
+                }),
+              );
 
-            clearInterval(timer);
-            debugLog('Close server');
-          });
+              clearInterval(timer);
+              debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
+              debugLog('Close server');
+            });
+
+          checkedTimes += 1;
+        }
       }, 500);
     });
   });

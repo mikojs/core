@@ -11,11 +11,13 @@ const debugLog = debug('configs:Server');
 
 export type cacheType = {|
   pid: number,
-  filePath: string | false,
+  filePath: string,
 |};
 
 /** Use to control file */
 export default class Server {
+  timer: IntervalID;
+
   +server: net.Server;
 
   +cache = {};
@@ -52,34 +54,33 @@ export default class Server {
    * @param {cacheType} data - cache
    */
   +writeCache = ({ pid, filePath }: cacheType) => {
-    if (filePath) {
-      if (!this.cache[filePath]) this.cache[filePath] = { pids: [] };
-      if (pid) this.cache[filePath].pids.push(pid);
-
-      debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
-      return;
-    }
-
-    Object.keys(this.cache).forEach((cacheFilePath: string) => {
-      this.cache[cacheFilePath].pids = this.cache[cacheFilePath].pids.filter(
-        (cachePid: number) => pid !== cachePid && isRunning(cachePid),
-      );
-
-      if (
-        this.cache[cacheFilePath].pids.length === 0 &&
-        fs.existsSync(cacheFilePath)
-      ) {
-        rimraf.sync(cacheFilePath);
-        delete this.cache[cacheFilePath];
-        debugLog(`Remove file: ${cacheFilePath}`);
-
-        if (Object.keys(this.cache).length === 0)
-          this.server.close(() => {
-            debugLog('Close server');
-          });
-      }
-    });
+    if (!this.cache[filePath]) this.cache[filePath] = { pids: [] };
+    if (pid) this.cache[filePath].pids.push(pid);
 
     debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
+    clearInterval(this.timer);
+
+    this.timer = setInterval(() => {
+      Object.keys(this.cache).forEach((cacheFilePath: string) => {
+        this.cache[cacheFilePath].pids = this.cache[cacheFilePath].pids.filter(
+          isRunning,
+        );
+
+        if (this.cache[cacheFilePath].pids.length === 0) {
+          if (fs.existsSync(cacheFilePath)) rimraf.sync(cacheFilePath);
+
+          delete this.cache[cacheFilePath];
+
+          debugLog(`Remove file: ${cacheFilePath}`);
+          debugLog(`Cache: ${JSON.stringify(this.cache, null, 2)}`);
+        }
+      });
+
+      if (Object.keys(this.cache).length === 0)
+        this.server.close(() => {
+          clearInterval(this.timer);
+          debugLog('Close server');
+        });
+    }, 500);
   };
 }

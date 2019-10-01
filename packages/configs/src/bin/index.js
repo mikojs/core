@@ -14,6 +14,7 @@ import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';
+import isServerRunning from 'utils/isServerRunning';
 import generateFiles from 'utils/generateFiles';
 
 const logger = createLogger('@mikojs/configs');
@@ -57,10 +58,12 @@ handleUnhandledRejection();
 
         debugLog(port);
 
-        if (!existServer)
+        if (!existServer) {
           execa(runServerFilePath, [port], {
             detached: true,
           });
+          await isServerRunning(port);
+        }
 
         // [start]
         // handle config and ignore files

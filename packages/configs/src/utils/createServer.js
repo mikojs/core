@@ -56,16 +56,16 @@ export default (port: number) => {
         );
 
         if (!hasWorkingPids) {
-          if (checkedTimes >= 10)
+          if (checkedTimes >= 5)
             server.close(async () => {
               await Promise.all(
                 Object.keys(cache).map(async (cacheFilePath: string) => {
-                  if (fs.existsSync(cacheFilePath)) {
-                    await new Promise(resolve => {
-                      rimraf(cacheFilePath, resolve);
-                    });
-                    debugLog(`Remove existing file: ${cacheFilePath}`);
-                  }
+                  if (!fs.existsSync(cacheFilePath)) return;
+
+                  await new Promise(resolve => {
+                    rimraf(cacheFilePath, resolve);
+                  });
+                  debugLog(`Remove existing file: ${cacheFilePath}`);
                 }),
               );
 

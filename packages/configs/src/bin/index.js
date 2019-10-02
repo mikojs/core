@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 // @flow
 
+import type net from 'net';
 import path from 'path';
 
 import execa from 'execa';
@@ -14,7 +15,7 @@ import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';
-import isServerRunning from 'utils/isServerRunning';
+import sendToServer from 'utils/sendToServer';
 import generateFiles from 'utils/generateFiles';
 
 const logger = createLogger('@mikojs/configs');
@@ -62,7 +63,13 @@ handleUnhandledRejection();
           execa(runServerFilePath, [port], {
             detached: true,
           });
-          await isServerRunning(port);
+          await new Promise(resolve =>
+            sendToServer(port).once('connect', (client: net.Socket) => {
+              debugLog('connect');
+              client.destroy();
+              resolve();
+            }),
+          );
         }
 
         // [start]

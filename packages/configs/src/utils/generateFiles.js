@@ -1,6 +1,5 @@
 // @flow
 
-import net from 'net';
 import path from 'path';
 
 import chalk from 'chalk';
@@ -10,6 +9,7 @@ import outputFileSync from 'output-file-sync';
 import { createLogger } from '@mikojs/utils';
 
 import configs from './configs';
+import sendToServer from './sendToServer';
 
 const debugLog = debug('configs:generateFiles');
 const logger = createLogger('@mikojs/configs');
@@ -26,7 +26,7 @@ type filesDataType = $ReadOnlyArray<{|
  * @param {string} cliName - cli name
  * @param {number} port - the port is used to connect the server
  *
- * @return {{ [string]: filesDataType }} - configFiles object to generate the files
+ * @return {object} - configFiles object to generate the files
  */
 const findFiles = (
   cliName: string,
@@ -119,11 +119,12 @@ export default (cliName: string, port: number): boolean => {
       ({ filePath, content }: $ElementType<filesDataType, number>) => {
         debugLog(`Generate config: ${filePath}`);
         outputFileSync(filePath, content);
-        net
-          .connect({ port })
-          .end(JSON.stringify({ pid: process.pid, filePath }), () => {
+        sendToServer(port).end(
+          JSON.stringify({ pid: process.pid, filePath }),
+          () => {
             debugLog(`${filePath}(generateFile) has been sent to the server`);
-          });
+          },
+        );
       },
     );
   });

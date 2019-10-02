@@ -6,12 +6,11 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
-import net from 'net';
-
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
-import configs from 'utils/configs';
+import configs from './utils/configs';
+import sendToServer from './utils/sendToServer';
 
 const debugLog = debug('configs:config');
 
@@ -35,21 +34,17 @@ export default (
   debugLog(`cliName: ${cliName}`);
   debugLog(`filePath: ${filePath}`);
 
-  net
-    .connect({ port })
-    .end(JSON.stringify({ pid: process.pid, filePath }), () => {
-      debugLog(`${filePath} has been sent to the server`);
-    });
+  sendToServer(port).end(JSON.stringify({ pid: process.pid, filePath }), () => {
+    debugLog(`${filePath} has been sent to the server`);
+  });
 
   if (ignoreFilePath)
-    net
-      .connect({ port })
-      .end(
-        JSON.stringify({ pid: process.pid, filePath: ignoreFilePath }),
-        () => {
-          debugLog(`${ignoreFilePath} has been sent to the server`);
-        },
-      );
+    sendToServer(port).end(
+      JSON.stringify({ pid: process.pid, filePath: ignoreFilePath }),
+      () => {
+        debugLog(`${ignoreFilePath} has been sent to the server`);
+      },
+    );
 
   return (
     {}

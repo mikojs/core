@@ -58,7 +58,7 @@ export default (port: number) => {
         );
 
         if (!hasWorkingPids) {
-          if (checkedTimes >= 20)
+          if (checkedTimes >= 50)
             server.close(() => {
               clearInterval(timer);
               debugLog('Close server');

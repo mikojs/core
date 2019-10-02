@@ -33,6 +33,8 @@ export default (port: number) => {
       debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
       clearInterval(timer);
 
+      let isRemoving: boolean = false;
+
       checkedTimes = 0;
       timer = setInterval(() => {
         const hasWorkingPids = Object.keys(cache).reduce(
@@ -56,25 +58,30 @@ export default (port: number) => {
         );
 
         if (!hasWorkingPids) {
-          if (checkedTimes >= 5)
-            server.close(async () => {
-              await Promise.all(
-                Object.keys(cache).map(async (cacheFilePath: string) => {
-                  if (!fs.existsSync(cacheFilePath)) return;
-
-                  await new Promise(resolve => {
-                    rimraf(cacheFilePath, resolve);
-                  });
-                  debugLog(`Remove existing file: ${cacheFilePath}`);
-                }),
-              );
-
+          if (checkedTimes >= 20)
+            server.close(() => {
               clearInterval(timer);
-              debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
               debugLog('Close server');
             });
+          else if (checkedTimes >= 5 && Object.keys(cache).length !== 0) {
+            if (!isRemoving) {
+              const [removeFilePath] = Object.keys(cache);
 
-          checkedTimes += 1;
+              if (!fs.existsSync(removeFilePath)) {
+                delete cache[removeFilePath];
+                return;
+              }
+
+              isRemoving = true;
+              rimraf(removeFilePath, () => {
+                isRemoving = false;
+
+                delete cache[removeFilePath];
+                debugLog(`Remove existing file: ${removeFilePath}`);
+                debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
+              });
+            }
+          } else checkedTimes += 1;
         }
       }, 100);
     });

@@ -1,5 +1,7 @@
 // @flow
 
+// $FlowFixMe jest mock
+import { net } from 'net';
 import path from 'path';
 
 import { outputFileSync } from 'output-file-sync';
@@ -8,6 +10,8 @@ import chalk from 'chalk';
 
 import generateFiles from '../generateFiles';
 import configs from '../configs';
+
+jest.mock('net');
 
 describe('generate files', () => {
   beforeAll(() => {
@@ -43,6 +47,10 @@ describe('generate files', () => {
   test('generate', () => {
     generateFiles('jest', 8000);
 
+    const [, callback] = net.callback.mock.calls.find(
+      ([type]: [string]) => type !== 'error',
+    );
+
     expect(outputFileSync.destPaths).toEqual(
       [
         'jest.config.js',
@@ -52,5 +60,6 @@ describe('generate files', () => {
         '.prettierrc.js',
       ].map((fileName: string) => path.resolve(fileName)),
     );
+    expect(callback()).toBeUndefined();
   });
 });

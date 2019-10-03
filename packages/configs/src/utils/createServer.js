@@ -38,7 +38,7 @@ export default (port: number) => {
 
         let isRemoving: boolean = false;
 
-        checkedTimes = 0;
+        checkedTimes = 1;
         timer = setInterval(() => {
           const hasWorkingPids = Object.keys(cache).reduce(
             (result: boolean, cacheFilePath: string): boolean => {
@@ -72,6 +72,8 @@ export default (port: number) => {
 
                 if (!fs.existsSync(removeFilePath)) {
                   delete cache[removeFilePath];
+                  debugLog(`File does not exist: ${removeFilePath}`);
+                  debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
                   return;
                 }
 

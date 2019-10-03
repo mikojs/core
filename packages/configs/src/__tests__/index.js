@@ -1,30 +1,43 @@
 // @flow
 
-import net from 'net';
+// $FlowFixMe jest mock
+import { net } from 'net';
 import path from 'path';
-import getPort from 'get-port';
 
 import getConfig from '../index';
 
 import configs from 'utils/configs';
 
-test('get config', async () => {
-  const port = await getPort();
-  const server = net.createServer((socket: net.Socket) => {
-    socket.on('data', () => {
-      server.close();
+jest.mock('net');
+
+describe('configs', () => {
+  beforeAll(() => {
+    configs.handleCustomConfigs({
+      config: {
+        getConfig: {},
+      },
+      filepath: path.resolve(process.cwd(), './.catrc.js'),
     });
   });
 
-  configs.handleCustomConfigs({
-    config: {
-      getConfig: {},
-    },
-    filepath: path.resolve(process.cwd(), './.catrc.js'),
+  beforeEach(() => {
+    net.callback.mockClear();
   });
-  server.listen(port);
 
-  expect(getConfig('getConfig', port, path.resolve('jest.config.js'))).toEqual(
-    {},
+  test.each`
+    filePath      | ignorePath
+    ${'filePath'} | ${undefined}
+    ${'filePath'} | ${'ignorePath'}
+  `(
+    'get config with filePath = $filePath and ignorePath = $ignorePath',
+    ({ filePath, ignorePath }: {| filePath: string, ignorePath: string |}) => {
+      expect(getConfig('getConfig', 8000, filePath, ignorePath)).toEqual({});
+
+      net.callback.mock.calls.forEach(
+        ([type, callback]: [string, () => void]) => {
+          if (type !== 'error') expect(callback()).toBeUndefined();
+        },
+      );
+    },
   );
 });

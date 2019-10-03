@@ -38,7 +38,7 @@ const sendToServer = (
     client.on('error', (err: mixed) => {
       debugLog(err);
 
-      if (times >= 50) throw new Error('Can not connect the server');
+      if (times >= 50) throw new Error('Can not connect to the server');
 
       setTimeout(() => {
         sendToServer(port, times + 1)[eventName](data, () => callback(client));
@@ -46,7 +46,7 @@ const sendToServer = (
     });
 
     if (eventName === 'once') client.once(data, () => callback(client));
-    else if (eventName === 'end') client.end(data, () => callback(client));
+    if (eventName === 'end') client.end(data, () => callback(client));
   };
 
   return {

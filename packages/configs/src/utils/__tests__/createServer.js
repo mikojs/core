@@ -137,10 +137,6 @@ describe('create server', () => {
       fs.exist = false;
       jest.advanceTimersByTime(TIME_TO_CHECK);
 
-      rimraf.mock.calls.forEach(([, callback]: [string, () => void]) => {
-        callback();
-      });
-
       expect(debug).toHaveBeenCalledTimes(2);
       expect(debug).toHaveBeenCalledWith(
         `Cache: ${JSON.stringify({}, null, 2)}`,

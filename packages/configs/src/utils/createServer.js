@@ -9,6 +9,10 @@ import debug from 'debug';
 
 const debugLog = debug('configs:Server');
 
+export const TIME_TO_CLOSE_SERVER = 5000;
+export const TIME_TO_REMOVE_FILES = 500;
+export const TIME_TO_CHECK = 100;
+
 /**
  * @example
  * new createServer(8000)
@@ -61,34 +65,45 @@ export default (port: number) => {
           );
 
           if (!hasWorkingPids) {
-            if (checkedTimes >= 50)
-              server.close(() => {
-                clearInterval(timer);
-                debugLog('Close server');
-              });
-            else if (checkedTimes >= 5 && Object.keys(cache).length !== 0) {
+            if (
+              checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK &&
+              Object.keys(cache).length !== 0
+            ) {
               if (!isRemoving) {
                 const [removeFilePath] = Object.keys(cache);
 
-                if (!fs.existsSync(removeFilePath)) {
+                /**
+                 * @example
+                 * removeCache();
+                 */
+                const removeCache = () => {
                   delete cache[removeFilePath];
-                  debugLog(`File does not exist: ${removeFilePath}`);
                   debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
+
+                  if (Object.keys(cache).length === 0) checkedTimes = 0;
+                };
+
+                if (!fs.existsSync(removeFilePath)) {
+                  debugLog(`File does not exist: ${removeFilePath}`);
+                  removeCache();
                   return;
                 }
 
                 isRemoving = true;
                 rimraf(removeFilePath, () => {
                   isRemoving = false;
-
-                  delete cache[removeFilePath];
                   debugLog(`Remove existing file: ${removeFilePath}`);
-                  debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
+                  removeCache();
                 });
               }
-            } else checkedTimes += 1;
+            } else if (checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK)
+              server.close(() => {
+                clearInterval(timer);
+                debugLog('Close server');
+              });
+            else checkedTimes += 1;
           }
-        }, 100);
+        }, TIME_TO_CHECK);
       } catch (err) {
         debugLog(err);
       }

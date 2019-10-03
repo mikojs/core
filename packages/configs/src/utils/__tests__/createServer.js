@@ -9,7 +9,11 @@ import { debug } from 'debug';
 import { isRunning } from 'is-running';
 import rimraf from 'rimraf';
 
-import createServer from '../createServer';
+import createServer, {
+  TIME_TO_CLOSE_SERVER,
+  TIME_TO_REMOVE_FILES,
+  TIME_TO_CHECK,
+} from '../createServer';
 
 jest.mock('fs');
 jest.mock('net');
@@ -92,14 +96,14 @@ describe('create server', () => {
     });
 
     test('check running pid and keep the files exist', () => {
-      jest.advanceTimersByTime(100);
+      jest.advanceTimersByTime(TIME_TO_CHECK);
 
       expect(debug).toHaveBeenCalledTimes(0);
     });
 
     test('pid is close', () => {
       isRunning.running = false;
-      jest.advanceTimersByTime(500);
+      jest.advanceTimersByTime(TIME_TO_REMOVE_FILES);
 
       expect(debug).toHaveBeenCalledTimes(2);
       expect(debug).toHaveBeenCalledWith(
@@ -114,7 +118,7 @@ describe('create server', () => {
       );
 
       debug.mockClear();
-      jest.advanceTimersByTime(100);
+      jest.advanceTimersByTime(TIME_TO_CHECK);
 
       expect(debug).toHaveBeenCalledTimes(0);
 
@@ -131,7 +135,7 @@ describe('create server', () => {
     test('pid1 is close, but file does not exist', () => {
       isRunning.running = false;
       fs.exist = false;
-      jest.advanceTimersByTime(100);
+      jest.advanceTimersByTime(TIME_TO_CHECK);
 
       rimraf.mock.calls.forEach(([, callback]: [string, () => void]) => {
         callback();
@@ -144,7 +148,7 @@ describe('create server', () => {
     });
 
     test('close the server after the all pids is close', () => {
-      jest.advanceTimersByTime(4600);
+      jest.advanceTimersByTime(TIME_TO_CLOSE_SERVER);
 
       const [, closeCallback] = net.callback.mock.calls.find(
         ([type]: [string]) => type === 'close',

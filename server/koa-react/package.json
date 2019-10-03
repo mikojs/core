@@ -35,7 +35,7 @@
     "react-router": "^5.1.0",
     "react-router-config": "^5.1.0",
     "react-router-dom": "^5.1.0",
-    "terser-webpack-plugin": "^2.1.0"
+    "terser-webpack-plugin": "^2.1.2"
   },
   "peerDependencies": {
     "koa": ">=2.0.0",

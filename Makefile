@@ -18,7 +18,7 @@ babel-changed:
 ifeq ($(shell printenv CI), true)
 	@echo "Skip babel build"
 else
-	@$(call babel-build, $(WATCH), --parallel --since $(BRANCH))
+	@$(call babel-build, $(WATCH), --since $(BRANCH))
 endif
 
 release:
@@ -58,6 +58,7 @@ define babel-build
 	ln -snf $(ROOT)/server/server/lib/bin/index.js ./node_modules/.bin/server
 	yarn lerna exec \
 		"configs babel:lerna $(1)" \
+		--parallel \
 		--stream \
 		$(2)
 endef

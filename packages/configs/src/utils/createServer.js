@@ -6,8 +6,7 @@ import net from 'net';
 import rimraf from 'rimraf';
 import isRunning from 'is-running';
 import debug from 'debug';
-
-const debugLog = debug('configs:Server');
+import { emptyFunction } from 'fbjs';
 
 export const TIME_TO_CLOSE_SERVER = 5000;
 export const TIME_TO_REMOVE_FILES = 500;
@@ -18,8 +17,14 @@ export const TIME_TO_CHECK = 100;
  * new createServer(8000)
  *
  * @param {number} port - the port of the server
+ * @param {Function} debugLog - debug log function
+ * @param {Function} callback - close callback function
  */
-export default (port: number) => {
+export default (
+  port: number,
+  debugLog?: (message: string) => void = debug('configs:Server'),
+  callback?: () => void = emptyFunction,
+) => {
   const cache = {};
   let timer: IntervalID;
   let checkedTimes: number;
@@ -100,6 +105,7 @@ export default (port: number) => {
               server.close(() => {
                 clearInterval(timer);
                 debugLog('Close server');
+                callback();
               });
             else checkedTimes += 1;
           }
@@ -110,8 +116,8 @@ export default (port: number) => {
     });
   });
 
-  server.on('error', (err: mixed) => {
-    debugLog(err);
+  server.on('error', (err: Error) => {
+    debugLog(err.message);
   });
 
   server.listen(port, () => {

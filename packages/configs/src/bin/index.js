@@ -49,7 +49,10 @@ handleUnhandledRejection();
     default: {
       try {
         const runServerFilePath = path.resolve(__dirname, './runServer.js');
-        const [existServer] = await findProcess('name', runServerFilePath);
+        const [existServer] = (await findProcess(
+          'name',
+          runServerFilePath,
+        )).slice(-1);
 
         debugLog(existServer);
 

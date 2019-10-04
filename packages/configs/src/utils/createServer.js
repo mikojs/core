@@ -5,8 +5,13 @@ import net from 'net';
 
 import rimraf from 'rimraf';
 import isRunning from 'is-running';
-import debug from 'debug';
-import { emptyFunction } from 'fbjs';
+
+import sendToServer from './sendToServer';
+
+export type serverArguType = {|
+  type: 'listen' | 'close',
+  cache: {},
+|};
 
 export const TIME_TO_CLOSE_SERVER = 5000;
 export const TIME_TO_REMOVE_FILES = 500;
@@ -22,12 +27,13 @@ export const TIME_TO_CHECK = 100;
  */
 export default (
   port: number,
-  debugLog?: (message: string) => void = debug('configs:Server'),
-  callback?: () => void = emptyFunction,
+  debugLog: (message: string) => void,
+  callback: (argu: serverArguType) => Promise<number>,
 ) => {
   const cache = {};
   let timer: IntervalID;
   let checkedTimes: number;
+  let mainPort: number = port;
 
   const server = net.createServer((socket: net.Socket) => {
     socket.setEncoding('utf8');
@@ -38,6 +44,13 @@ export default (
         const { pid, filePath } = JSON.parse(data);
 
         if (!pid || !filePath) return;
+
+        if (mainPort !== port) {
+          sendToServer(mainPort).end(JSON.stringify({ pid, filePath }), () => {
+            debugLog(`${filePath} has been sent to the main server`);
+          });
+          return;
+        }
 
         if (!cache[filePath]) cache[filePath] = [];
 
@@ -94,6 +107,8 @@ export default (
                   return;
                 }
 
+                if (mainPort !== port) return;
+
                 isRemoving = true;
                 rimraf(removeFilePath, () => {
                   isRemoving = false;
@@ -105,7 +120,7 @@ export default (
               server.close(() => {
                 clearInterval(timer);
                 debugLog('Close server');
-                callback();
+                callback({ type: 'close', cache });
               });
             else checkedTimes += 1;
           }
@@ -120,7 +135,18 @@ export default (
     debugLog(err.message);
   });
 
-  server.listen(port, () => {
+  server.listen(port, async () => {
+    mainPort = await callback({ type: 'listen', cache });
+
+    if (mainPort !== port)
+      Object.keys(cache).forEach((filePath: string) => {
+        cache[filePath].forEach((pid: string) => {
+          sendToServer(mainPort).end(JSON.stringify({ pid, filePath }), () => {
+            debugLog(`${filePath} has been sent to the main server`);
+          });
+        });
+      });
+
     debugLog(`Open server at ${port}`);
   });
 };

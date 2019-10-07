@@ -6,7 +6,9 @@ class Net {
 
   +main = {
     connect: () => ({
-      end: this.callback,
+      end: (data: string, endCallback: () => void) => {
+        this.callback('end', endCallback);
+      },
       on: this.callback,
       once: this.callback,
     }),
@@ -18,7 +20,9 @@ class Net {
 
       return {
         on: this.callback,
-        listen: this.callback,
+        listen: (port: number, listenCallback: () => void) => {
+          this.callback('listen', listenCallback);
+        },
         close: (closeCallback: () => void) => {
           this.callback('close', closeCallback);
         },

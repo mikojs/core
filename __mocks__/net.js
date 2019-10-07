@@ -9,8 +9,10 @@ class Net {
       end: (data: string, endCallback: () => void) => {
         this.callback('end', endCallback);
       },
+      once: (data: string, onceCallback: () => void) => {
+        this.callback('once', onceCallback);
+      },
       on: this.callback,
-      once: this.callback,
     }),
     createServer: (callback: ({}) => void): {} => {
       callback({

@@ -25,12 +25,11 @@ describe('send to server', () => {
       sendToServer(8000)[eventName]('test', mockFn);
       net.callback.mock.calls.forEach(
         ([type, callback]: [string, () => void]) => {
-          if (type !== 'error') expect(callback()).toBeUndefined();
+          if (type === eventName) expect(callback()).toBeUndefined();
         },
       );
 
       expect(mockFn).toHaveBeenCalledTimes(1);
-      expect(mockFn).toHaveBeenCalledWith(net.main.connect());
     },
   );
 

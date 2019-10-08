@@ -3,6 +3,9 @@
 import path from 'path';
 
 import findProcess from 'find-process';
+import debug from 'debug';
+
+const debugLog = debug('configs:findMainServer');
 
 /**
  * @example
@@ -18,6 +21,8 @@ export default async (): Promise<?{|
     'name',
     path.resolve(__dirname, '../bin/runServer.js'),
   );
+
+  debugLog(mainProcess);
 
   if (!mainProcess) return null;
 

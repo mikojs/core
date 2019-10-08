@@ -10,17 +10,19 @@ import findProcess from 'find-process';
  *
  * @return {object} - the pid and the port of the main server
  */
-export default async (): Promise<{|
+export default async (): Promise<?{|
   pid: number,
   port: number,
 |}> => {
-  const [{ pid, cmd }] = (await findProcess(
+  const [mainProcess] = (await findProcess(
     'name',
     path.resolve(__dirname, '../bin/createServer.js'),
   )).slice(-1);
 
+  if (!mainProcess) return null;
+
   return {
-    pid,
-    port: cmd.split(/ /).slice(-1)[0],
+    pid: mainProcess.pid,
+    port: mainProcess.cmd.split(/ /).slice(-1)[0],
   };
 };

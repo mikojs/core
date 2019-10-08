@@ -23,6 +23,7 @@ export default async (): Promise<?{|
   );
 
   debugLog(mainProcess);
+  debugLog(process.pid);
 
   if (!mainProcess) return null;
 

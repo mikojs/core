@@ -73,7 +73,7 @@ export default async (
 
         clearInterval(timer);
         checkedTimes = 1;
-        timer = setInterval(() => {
+        timer = setInterval(async () => {
           const hasWorkingPids = Object.keys(cache).reduce(
             (result: boolean, cacheFilePath: string): boolean => {
               const newPids = cache[cacheFilePath].filter(isRunning);
@@ -119,8 +119,12 @@ export default async (
                   return;
                 }
 
-                if (!mainServer?.isMain) return;
+                const currentMainServer = await findMainServer();
 
+                if (!currentMainServer?.isMain) return;
+
+                // TODO: https://github.com/eslint/eslint/issues/11899
+                // eslint-disable-next-line require-atomic-updates
                 isRemoving = true;
                 rimraf(removeFilePath, () => {
                   isRemoving = false;

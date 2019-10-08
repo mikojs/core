@@ -114,12 +114,9 @@ export default (cliName: string): boolean => {
       ({ filePath, content }: $ElementType<filesDataType, number>) => {
         debugLog(`Generate config: ${filePath}`);
         outputFileSync(filePath, content);
-        sendToServer().end(
-          JSON.stringify({ pid: process.pid, filePath }),
-          () => {
-            debugLog(`${filePath}(generateFile) has been sent to the server`);
-          },
-        );
+        sendToServer.end(JSON.stringify({ pid: process.pid, filePath }), () => {
+          debugLog(`${filePath}(generateFile) has been sent to the server`);
+        });
       },
     );
   });

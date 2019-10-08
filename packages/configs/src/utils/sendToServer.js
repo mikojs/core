@@ -7,14 +7,7 @@ import debug from 'debug';
 import findMainServer from './findMainServer';
 
 const debugLog = debug('configs:sendToServer');
-
-/**
- * @example
- * sendToServer().once('data')
- *
- * @return {object} - object like net.connect()
- */
-const sendToServer = (): {
+const sendToServer = ((): {
   [string]: (
     data: string,
     callback: (client: net.Socket) => void,
@@ -40,7 +33,7 @@ const sendToServer = (): {
 
     client.on('error', (err: mixed) => {
       debugLog(err);
-      setTimeout(sendToServer()[eventName], 10, data, () => callback(client));
+      setTimeout(sendToServer[eventName], 10, data, () => callback(client));
     });
 
     if (eventName === 'once') client.once(data, () => callback(client));
@@ -51,6 +44,6 @@ const sendToServer = (): {
     once: addErrorEvent('once'),
     end: addErrorEvent('end'),
   };
-};
+})();
 
 export default sendToServer;

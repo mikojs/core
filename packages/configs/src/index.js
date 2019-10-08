@@ -32,12 +32,12 @@ export default (
   debugLog(`cliName: ${cliName}`);
   debugLog(`filePath: ${filePath}`);
 
-  sendToServer().end(JSON.stringify({ pid: process.pid, filePath }), () => {
+  sendToServer.end(JSON.stringify({ pid: process.pid, filePath }), () => {
     debugLog(`${filePath} has been sent to the server`);
   });
 
   if (ignoreFilePath)
-    sendToServer().end(
+    sendToServer.end(
       JSON.stringify({ pid: process.pid, filePath: ignoreFilePath }),
       () => {
         debugLog(`${ignoreFilePath} has been sent to the server`);

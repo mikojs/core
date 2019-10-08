@@ -58,7 +58,7 @@ handleUnhandledRejection();
             detached: true,
           });
           await new Promise(resolve =>
-            sendToServer().once('connect', (client: net.Socket) => {
+            sendToServer.once('connect', (client: net.Socket) => {
               debugLog('connect');
               client.destroy();
               resolve();

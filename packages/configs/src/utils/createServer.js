@@ -42,7 +42,7 @@ export default async (
         if (!pid || !filePath) return;
 
         if (!mainServer?.isMain) {
-          sendToServer().end(JSON.stringify({ pid, filePath }), () => {
+          sendToServer.end(JSON.stringify({ pid, filePath }), () => {
             debugLog(`${filePath} has been sent to the main server`);
           });
           return;
@@ -139,7 +139,7 @@ export default async (
           cache[filePath].map(
             (pid: string) =>
               new Promise(resolve => {
-                sendToServer().end(JSON.stringify({ pid, filePath }), () => {
+                sendToServer.end(JSON.stringify({ pid, filePath }), () => {
                   debugLog(`${filePath} has been sent to the main server`);
                   resolve();
                 });

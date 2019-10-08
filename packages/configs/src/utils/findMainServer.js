@@ -22,7 +22,7 @@ export default async (): Promise<?{|
   if (!mainProcess) return null;
 
   return {
-    pid: mainProcess.pid,
+    isMain: mainProcess.pid === process.pid,
     port: mainProcess.cmd.split(/ /).slice(-1)[0],
   };
 };

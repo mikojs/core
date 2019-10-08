@@ -16,7 +16,7 @@ export default async (): Promise<?{|
 |}> => {
   const [mainProcess] = await findProcess(
     'name',
-    path.resolve(__dirname, '../bin/createServer.js'),
+    path.resolve(__dirname, '../bin/runServer.js'),
   );
 
   if (!mainProcess) return null;

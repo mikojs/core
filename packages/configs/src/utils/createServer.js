@@ -27,35 +27,51 @@ export default async (
   callback?: () => void,
 ) => {
   const cache = {};
-  const mainServer = await findMainServer();
   let timer: IntervalID;
   let checkedTimes: number;
 
   const server = net.createServer((socket: net.Socket) => {
     socket.setEncoding('utf8');
-    socket.on('data', (data: string) => {
+    socket.on('data', async (data: string) => {
       debugLog(data);
 
       try {
+        const mainServer = await findMainServer();
         const { pid, filePath } = JSON.parse(data);
 
         if (!pid || !filePath) return;
-
-        if (mainServer && !mainServer.isMain) {
-          sendToServer.end(JSON.stringify({ pid, filePath }), () => {
-            debugLog(`${filePath} has been sent to the main server`);
-          });
-          return;
-        }
 
         if (!cache[filePath]) cache[filePath] = [];
 
         cache[filePath].push(pid);
         debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
-        clearInterval(timer);
+
+        if (mainServer && !mainServer.isMain) {
+          Object.keys(cache).forEach(async (cacheFilePath: string) => {
+            await Promise.all(
+              cache[cacheFilePath].map(
+                (cachePid: string) =>
+                  new Promise(resolve => {
+                    sendToServer.end(
+                      JSON.stringify({ cachePid, cacheFilePath }),
+                      () => {
+                        debugLog(
+                          `${cacheFilePath} has been sent to the main server`,
+                        );
+                        resolve();
+                      },
+                    );
+                  }),
+              ),
+            );
+            delete cache[cacheFilePath];
+          });
+          return;
+        }
 
         let isRemoving: boolean = false;
 
+        clearInterval(timer);
         checkedTimes = 1;
         timer = setInterval(() => {
           const hasWorkingPids = Object.keys(cache).reduce(
@@ -133,22 +149,6 @@ export default async (
   });
 
   server.listen(port, () => {
-    if (mainServer && !mainServer.isMain)
-      Object.keys(cache).forEach(async (filePath: string) => {
-        await Promise.all(
-          cache[filePath].map(
-            (pid: string) =>
-              new Promise(resolve => {
-                sendToServer.end(JSON.stringify({ pid, filePath }), () => {
-                  debugLog(`${filePath} has been sent to the main server`);
-                  resolve();
-                });
-              }),
-          ),
-        );
-        delete cache[filePath];
-      });
-
     debugLog(`Open server at ${port}`);
   });
 };

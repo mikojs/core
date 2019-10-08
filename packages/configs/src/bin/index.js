@@ -49,12 +49,9 @@ handleUnhandledRejection();
     default: {
       try {
         const mainServer = await findMainServer();
-
-        debugLog(mainServer);
-
         const port = mainServer ? mainServer.port : await getPort();
 
-        debugLog(port);
+        debugLog({ mainServer, port });
 
         if (!mainServer) {
           execa(path.resolve(__dirname, './runServer.js'), [port], {

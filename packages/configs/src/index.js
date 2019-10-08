@@ -19,7 +19,6 @@ const debugLog = debug('configs:config');
  * config('cli', '/file-path')
  *
  * @param {string} cliName - cli name
- * @param {boolean} port - the port of the config server
  * @param {string} filePath - file path
  * @param {string} ignoreFilePath - ignore file path
  *
@@ -27,19 +26,18 @@ const debugLog = debug('configs:config');
  */
 export default (
   cliName: string,
-  port: number,
   filePath: string,
   ignoreFilePath?: string,
 ): {} => {
   debugLog(`cliName: ${cliName}`);
   debugLog(`filePath: ${filePath}`);
 
-  sendToServer(port).end(JSON.stringify({ pid: process.pid, filePath }), () => {
+  sendToServer().end(JSON.stringify({ pid: process.pid, filePath }), () => {
     debugLog(`${filePath} has been sent to the server`);
   });
 
   if (ignoreFilePath)
-    sendToServer(port).end(
+    sendToServer().end(
       JSON.stringify({ pid: process.pid, filePath: ignoreFilePath }),
       () => {
         debugLog(`${ignoreFilePath} has been sent to the server`);

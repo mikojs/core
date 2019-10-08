@@ -21,6 +21,5 @@ class Webpack {
 export const webpack = new Webpack();
 
 webpack.main.EnvironmentPlugin = class EnvironmentPlugin {};
-webpack.main.ProgressPlugin = class ProgressPlugin {};
 
 export default webpack.main;

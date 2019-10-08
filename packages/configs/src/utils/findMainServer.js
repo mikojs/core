@@ -14,10 +14,10 @@ export default async (): Promise<?{|
   pid: number,
   port: number,
 |}> => {
-  const [mainProcess] = (await findProcess(
+  const [mainProcess] = await findProcess(
     'name',
     path.resolve(__dirname, '../bin/createServer.js'),
-  )).slice(-1);
+  );
 
   if (!mainProcess) return null;
 

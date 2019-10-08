@@ -15,7 +15,10 @@ const debugLog = debug('configs:sendToServer');
  * @return {object} - object like net.connect()
  */
 const sendToServer = (): {
-  [string]: (data: string, callback: (client: net.Socket) => void) => void,
+  [string]: (
+    data: string,
+    callback: (client: net.Socket) => void,
+  ) => Promise<void>,
 } => {
   /**
    * @example
@@ -33,7 +36,7 @@ const sendToServer = (): {
 
     if (!mainServer) return;
 
-    const client = net.connect({ port: mainServer.port });
+    const client = net.connect({ port: parseInt(mainServer.port, 10) });
 
     client.on('error', (err: mixed) => {
       debugLog(err);

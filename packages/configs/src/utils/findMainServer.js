@@ -11,8 +11,8 @@ import findProcess from 'find-process';
  * @return {object} - the pid and the port of the main server
  */
 export default async (): Promise<?{|
-  pid: number,
-  port: number,
+  isMain: boolean,
+  port: string,
 |}> => {
   const [mainProcess] = await findProcess(
     'name',

@@ -1,20 +1,22 @@
 #! /usr/bin/env node
 // @flow
 
+import type net from 'net';
 import path from 'path';
 
-import execa, { type Result as resultType } from 'execa';
+import execa from 'execa';
 import debug from 'debug';
-import isRunning from 'is-running';
 import npmWhich from 'npm-which';
+import getPort from 'get-port';
+import findProcess from 'find-process';
 import chalk from 'chalk';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';
+import sendToServer from 'utils/sendToServer';
 import generateFiles from 'utils/generateFiles';
-import worker from 'utils/worker';
 
 const logger = createLogger('@mikojs/configs');
 
@@ -45,60 +47,38 @@ handleUnhandledRejection();
       return;
 
     default: {
-      const server = await worker.init();
-
-      /**
-       * @example
-       * removeFiles(0);
-       *
-       * @param {number} exitCode - process exit code
-       */
-      const removeFiles = (exitCode: number) => {
-        if (!server) {
-          process.exit(exitCode);
-          return;
-        }
-
-        worker.writeCache({
-          pid: process.pid,
-          using: false,
-        });
-
-        debug('configs:remove:cache')(JSON.stringify(worker.cache, null, 2));
-
-        Object.keys(worker.cache).forEach((key: string) => {
-          /* eslint-disable flowtype/no-unused-expressions */
-          // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-          worker.cache[key]?.pids.forEach((pid: number) => {
-            /* eslint-enable flowtype/no-unused-expressions */
-            if (!isRunning(pid))
-              worker.writeCache({
-                pid,
-                using: false,
-              });
-          });
-        });
-
-        if (Object.keys(worker.cache).length !== 0) {
-          setTimeout(removeFiles, 500, exitCode);
-          return;
-        }
-
-        server.close(() => {
-          process.exit(exitCode);
-        });
-      };
-
-      // caught interrupt signal to remove files
-      process.on('SIGINT', () => {
-        removeFiles(0);
-      });
-
       try {
+        const runServerFilePath = path.resolve(__dirname, './runServer.js');
+        const [existServer] = (await findProcess(
+          'name',
+          runServerFilePath,
+        )).slice(-1);
+
+        debugLog(existServer);
+
+        const port = existServer
+          ? existServer.cmd.split(/ /).slice(-1)[0]
+          : await getPort();
+
+        debugLog(port);
+
+        if (!existServer) {
+          execa(runServerFilePath, [port], {
+            detached: true,
+          });
+          await new Promise(resolve =>
+            sendToServer(port).once('connect', (client: net.Socket) => {
+              debugLog('connect');
+              client.destroy();
+              resolve();
+            }),
+          );
+        }
+
         // [start]
         // handle config and ignore files
-        if (!generateFiles(cliName)) {
-          removeFiles(1);
+        if (!generateFiles(cliName, port)) {
+          process.exit(1);
           return;
         }
 
@@ -107,23 +87,22 @@ handleUnhandledRejection();
           chalk`Run command: {gray ${[path.basename(cli), ...argv].join(' ')}}`,
         );
 
-        const successCode = await execa(
+        const { exitCode } = await execa(
           npmWhich(process.cwd()).sync('node'),
           [cli, ...argv],
           {
             stdio: 'inherit',
             env,
           },
-        ).then(({ exitCode }: resultType) => exitCode);
+        );
 
-        debugLog('Run command success, remove files');
-
-        removeFiles(successCode);
+        debugLog(exitCode);
+        process.exit(exitCode);
       } catch (e) {
         logger.log('Run command fail');
         debugLog(e);
 
-        removeFiles(e.exitCode || 1);
+        process.exit(e.exitCode || 1);
       }
       return;
     }

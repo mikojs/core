@@ -4,13 +4,12 @@ import path from 'path';
 
 import chalk from 'chalk';
 import debug from 'debug';
-import moment from 'moment';
 import outputFileSync from 'output-file-sync';
 
 import { createLogger } from '@mikojs/utils';
 
 import configs from './configs';
-import worker from './worker';
+import sendToServer from './sendToServer';
 
 const debugLog = debug('configs:generateFiles');
 const logger = createLogger('@mikojs/configs');
@@ -25,10 +24,14 @@ type filesDataType = $ReadOnlyArray<{|
  * findFiles('cliName')
  *
  * @param {string} cliName - cli name
+ * @param {number} port - the port is used to connect the server
  *
- * @return {{ [string]: filesDataType }} - configFiles object to generate the files
+ * @return {object} - configFiles object to generate the files
  */
-const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
+const findFiles = (
+  cliName: string,
+  port: number,
+): ?{ [string]: filesDataType } => {
   const {
     alias: cli = cliName,
     configFiles = {},
@@ -55,32 +58,40 @@ const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
 
       if (!configPath) return result;
 
-      if (typeof configPath === 'string')
+      if (typeof configPath === 'string') {
+        const ignoreFilePath =
+          !ignoreName || ignore.length === 0
+            ? undefined
+            : path.resolve(
+                configs.rootDir,
+                path.dirname(configPath),
+                ignoreName,
+              );
+
         return {
           ...result,
           [configCliName]: [
             {
               filePath: path.resolve(configs.rootDir, configPath),
-              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', __filename);`,
+              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', ${port}, __filename, ${
+                !ignoreFilePath ? 'undefined' : `'${ignoreFilePath}'`
+              });`,
             },
-            ...(!ignoreName || ignore.length === 0
+            ...(!ignoreFilePath
               ? []
               : [
                   {
-                    filePath: path.resolve(
-                      configs.rootDir,
-                      path.dirname(configPath),
-                      ignoreName,
-                    ),
+                    filePath: ignoreFilePath,
                     content: ignore.join('\n'),
                   },
                 ]),
           ],
         };
+      }
 
       return {
         ...result,
-        ...findFiles(configCliName),
+        ...findFiles(configCliName, port),
       };
     },
     {},
@@ -92,15 +103,12 @@ const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
  * generateFiles('cli')
  *
  * @param {string} cliName - cli name
+ * @param {number} port - the port is used to connect the server
  *
  * @return {boolean} - generating file is successful or not
  */
-export default (cliName: string): boolean => {
-  const files = findFiles(cliName);
-  const cache = {
-    pid: process.pid,
-    using: moment().format(),
-  };
+export default (cliName: string, port: number): boolean => {
+  const files = findFiles(cliName, port);
 
   if (!files) return false;
 
@@ -111,10 +119,12 @@ export default (cliName: string): boolean => {
       ({ filePath, content }: $ElementType<filesDataType, number>) => {
         debugLog(`Generate config: ${filePath}`);
         outputFileSync(filePath, content);
-        worker.writeCache({
-          ...cache,
-          filePath,
-        });
+        sendToServer(port).end(
+          JSON.stringify({ pid: process.pid, filePath }),
+          () => {
+            debugLog(`${filePath}(generateFile) has been sent to the server`);
+          },
+        );
       },
     );
   });

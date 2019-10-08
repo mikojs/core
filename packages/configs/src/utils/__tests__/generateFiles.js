@@ -1,5 +1,7 @@
 // @flow
 
+// $FlowFixMe jest mock
+import { net } from 'net';
 import path from 'path';
 
 import { outputFileSync } from 'output-file-sync';
@@ -8,7 +10,8 @@ import chalk from 'chalk';
 
 import generateFiles from '../generateFiles';
 import configs from '../configs';
-import worker from '../worker';
+
+jest.mock('net');
 
 describe('generate files', () => {
   beforeAll(() => {
@@ -34,7 +37,7 @@ describe('generate files', () => {
 
     global.console.error = mockLog;
 
-    expect(generateFiles('notFindCli')).toBeFalsy();
+    expect(generateFiles('notFindCli', 8000)).toBeFalsy();
     expect(mockLog).toHaveBeenCalledTimes(5);
     expect(mockLog).toHaveBeenCalledWith(
       chalk`{red ✖ }{red {bold @mikojs/configs}} Can not generate the config file, You can:`,
@@ -42,9 +45,12 @@ describe('generate files', () => {
   });
 
   test('generate', () => {
-    generateFiles('jest');
+    generateFiles('jest', 8000);
 
-    expect(worker.server).toBeNull();
+    const [, callback] = net.callback.mock.calls.find(
+      ([type]: [string]) => type !== 'error',
+    );
+
     expect(outputFileSync.destPaths).toEqual(
       [
         'jest.config.js',
@@ -54,5 +60,6 @@ describe('generate files', () => {
         '.prettierrc.js',
       ].map((fileName: string) => path.resolve(fileName)),
     );
+    expect(callback()).toBeUndefined();
   });
 });

@@ -6,12 +6,11 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
-import moment from 'moment';
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
-import configs from 'utils/configs';
-import worker from 'utils/worker';
+import configs from './utils/configs';
+import sendToServer from './utils/sendToServer';
 
 const debugLog = debug('configs:config');
 
@@ -20,14 +19,32 @@ const debugLog = debug('configs:config');
  * config('cli', '/file-path')
  *
  * @param {string} cliName - cli name
+ * @param {boolean} port - the port of the config server
  * @param {string} filePath - file path
+ * @param {string} ignoreFilePath - ignore file path
  *
  * @return {object} - cli config
  */
-export default (cliName: string, filePath: string): {} => {
+export default (
+  cliName: string,
+  port: number,
+  filePath: string,
+  ignoreFilePath?: string,
+): {} => {
   debugLog(`cliName: ${cliName}`);
   debugLog(`filePath: ${filePath}`);
-  worker.writeCache({ filePath, using: moment().format() });
+
+  sendToServer(port).end(JSON.stringify({ pid: process.pid, filePath }), () => {
+    debugLog(`${filePath} has been sent to the server`);
+  });
+
+  if (ignoreFilePath)
+    sendToServer(port).end(
+      JSON.stringify({ pid: process.pid, filePath: ignoreFilePath }),
+      () => {
+        debugLog(`${ignoreFilePath} has been sent to the server`);
+      },
+    );
 
   return (
     {}

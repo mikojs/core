@@ -7,7 +7,7 @@ import debug from 'debug';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 
-import createServer, { type serverArguType } from 'utils/createServer';
+import createServer from 'utils/createServer';
 
 const debugLog = !process.env.CONFIG_SERVER_DEBUG
   ? debug('configs:runServer')
@@ -42,13 +42,4 @@ const debugLog = !process.env.CONFIG_SERVER_DEBUG
     })();
 
 handleUnhandledRejection();
-createServer(
-  parseInt(process.argv[2], 10),
-  debugLog,
-  ({ type, cache }: serverArguType) => {
-    if (type !== 'close') return;
-
-    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-    debugLog.close?.(); // eslint-disable-line flowtype/no-unused-expressions
-  },
-);
+createServer(parseInt(process.argv[2], 10), debugLog, debugLog.close);

@@ -7,11 +7,7 @@ import rimraf from 'rimraf';
 import isRunning from 'is-running';
 
 import sendToServer from './sendToServer';
-
-export type serverArguType = {|
-  type: 'listen' | 'close',
-  cache: {},
-|};
+import findMainServer from './findMainServer';
 
 export const TIME_TO_CLOSE_SERVER = 5000;
 export const TIME_TO_REMOVE_FILES = 500;
@@ -25,15 +21,15 @@ export const TIME_TO_CHECK = 100;
  * @param {Function} debugLog - debug log function
  * @param {Function} callback - close callback function
  */
-export default (
+export default async (
   port: number,
   debugLog: (message: string) => void,
-  callback: (argu: serverArguType) => Promise<number>,
+  callback?: () => void,
 ) => {
   const cache = {};
+  const mainServer = await findMainServer();
   let timer: IntervalID;
   let checkedTimes: number;
-  let mainPort: number = port;
 
   const server = net.createServer((socket: net.Socket) => {
     socket.setEncoding('utf8');
@@ -45,8 +41,8 @@ export default (
 
         if (!pid || !filePath) return;
 
-        if (mainPort !== port) {
-          sendToServer(mainPort).end(JSON.stringify({ pid, filePath }), () => {
+        if (!mainServer?.isMain) {
+          sendToServer().end(JSON.stringify({ pid, filePath }), () => {
             debugLog(`${filePath} has been sent to the main server`);
           });
           return;
@@ -107,7 +103,7 @@ export default (
                   return;
                 }
 
-                if (mainPort !== port) return;
+                if (!mainServer?.isMain) return;
 
                 isRemoving = true;
                 rimraf(removeFilePath, () => {
@@ -120,7 +116,8 @@ export default (
               server.close(() => {
                 clearInterval(timer);
                 debugLog('Close server');
-                callback({ type: 'close', cache });
+                // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+                callback?.(); // eslint-disable-line flowtype/no-unused-expressions
               });
             else checkedTimes += 1;
           }
@@ -135,16 +132,21 @@ export default (
     debugLog(err.message);
   });
 
-  server.listen(port, async () => {
-    mainPort = await callback({ type: 'listen', cache });
-
-    if (mainPort !== port)
-      Object.keys(cache).forEach((filePath: string) => {
-        cache[filePath].forEach((pid: string) => {
-          sendToServer(mainPort).end(JSON.stringify({ pid, filePath }), () => {
-            debugLog(`${filePath} has been sent to the main server`);
-          });
-        });
+  server.listen(port, () => {
+    if (!mainServer?.isMain)
+      Object.keys(cache).forEach(async (filePath: string) => {
+        await Promise.all(
+          cache[filePath].map(
+            (pid: string) =>
+              new Promise(resolve => {
+                sendToServer().end(JSON.stringify({ pid, filePath }), () => {
+                  debugLog(`${filePath} has been sent to the main server`);
+                  resolve();
+                });
+              }),
+          ),
+        );
+        delete cache[filePath];
       });
 
     debugLog(`Open server at ${port}`);

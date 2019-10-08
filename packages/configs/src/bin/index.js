@@ -8,13 +8,13 @@ import execa from 'execa';
 import debug from 'debug';
 import npmWhich from 'npm-which';
 import getPort from 'get-port';
-import findProcess from 'find-process';
 import chalk from 'chalk';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';
+import findMainServer from 'utils/findMainServer';
 import sendToServer from 'utils/sendToServer';
 import generateFiles from 'utils/generateFiles';
 
@@ -48,26 +48,20 @@ handleUnhandledRejection();
 
     default: {
       try {
-        const runServerFilePath = path.resolve(__dirname, './runServer.js');
-        const [existServer] = (await findProcess(
-          'name',
-          runServerFilePath,
-        )).slice(-1);
+        const mainServer = await findMainServer();
 
-        debugLog(existServer);
+        debugLog(mainServer);
 
-        const port = existServer
-          ? existServer.cmd.split(/ /).slice(-1)[0]
-          : await getPort();
+        const port = mainServer ? mainServer.port : await getPort();
 
         debugLog(port);
 
-        if (!existServer) {
-          execa(runServerFilePath, [port], {
+        if (!mainServer) {
+          execa(path.resolve(__dirname, './runServer.js'), [port], {
             detached: true,
           });
           await new Promise(resolve =>
-            sendToServer(port).once('connect', (client: net.Socket) => {
+            sendToServer().once('connect', (client: net.Socket) => {
               debugLog('connect');
               client.destroy();
               resolve();
@@ -77,7 +71,7 @@ handleUnhandledRejection();
 
         // [start]
         // handle config and ignore files
-        if (!generateFiles(cliName, port)) {
+        if (!generateFiles(cliName)) {
           process.exit(1);
           return;
         }

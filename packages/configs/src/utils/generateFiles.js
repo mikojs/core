@@ -24,14 +24,10 @@ type filesDataType = $ReadOnlyArray<{|
  * findFiles('cliName')
  *
  * @param {string} cliName - cli name
- * @param {number} port - the port is used to connect the server
  *
  * @return {object} - configFiles object to generate the files
  */
-const findFiles = (
-  cliName: string,
-  port: number,
-): ?{ [string]: filesDataType } => {
+const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
   const {
     alias: cli = cliName,
     configFiles = {},
@@ -73,7 +69,7 @@ const findFiles = (
           [configCliName]: [
             {
               filePath: path.resolve(configs.rootDir, configPath),
-              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', ${port}, __filename, ${
+              content: `/* eslint-disable */ module.exports = require('@mikojs/configs')('${configCliName}', __filename, ${
                 !ignoreFilePath ? 'undefined' : `'${ignoreFilePath}'`
               });`,
             },
@@ -91,7 +87,7 @@ const findFiles = (
 
       return {
         ...result,
-        ...findFiles(configCliName, port),
+        ...findFiles(configCliName),
       };
     },
     {},
@@ -103,12 +99,11 @@ const findFiles = (
  * generateFiles('cli')
  *
  * @param {string} cliName - cli name
- * @param {number} port - the port is used to connect the server
  *
  * @return {boolean} - generating file is successful or not
  */
-export default (cliName: string, port: number): boolean => {
-  const files = findFiles(cliName, port);
+export default (cliName: string): boolean => {
+  const files = findFiles(cliName);
 
   if (!files) return false;
 
@@ -119,7 +114,7 @@ export default (cliName: string, port: number): boolean => {
       ({ filePath, content }: $ElementType<filesDataType, number>) => {
         debugLog(`Generate config: ${filePath}`);
         outputFileSync(filePath, content);
-        sendToServer(port).end(
+        sendToServer().end(
           JSON.stringify({ pid: process.pid, filePath }),
           () => {
             debugLog(`${filePath}(generateFile) has been sent to the server`);

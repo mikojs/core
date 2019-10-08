@@ -29,8 +29,7 @@ export default (
   filePath: string,
   ignoreFilePath?: string,
 ): {} => {
-  debugLog(`cliName: ${cliName}`);
-  debugLog(`filePath: ${filePath}`);
+  debugLog({ cliName, filePath, ignoreFilePath });
 
   sendToServer.end(JSON.stringify({ pid: process.pid, filePath }), () => {
     debugLog(`${filePath} has been sent to the server`);

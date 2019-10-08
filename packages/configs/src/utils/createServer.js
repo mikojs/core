@@ -15,7 +15,7 @@ export const TIME_TO_CHECK = 100;
 
 /**
  * @example
- * new createServer(8000)
+ * new createServer(8000, debugLog, () => {})
  *
  * @param {number} port - the port of the server
  * @param {Function} debugLog - debug log function
@@ -41,7 +41,7 @@ export default async (
 
         if (!pid || !filePath) return;
 
-        if (!mainServer?.isMain) {
+        if (mainServer && !mainServer.isMain) {
           sendToServer.end(JSON.stringify({ pid, filePath }), () => {
             debugLog(`${filePath} has been sent to the main server`);
           });
@@ -133,7 +133,7 @@ export default async (
   });
 
   server.listen(port, () => {
-    if (!mainServer?.isMain)
+    if (mainServer && !mainServer.isMain)
       Object.keys(cache).forEach(async (filePath: string) => {
         await Promise.all(
           cache[filePath].map(

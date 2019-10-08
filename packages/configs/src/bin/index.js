@@ -49,7 +49,7 @@ handleUnhandledRejection();
     default: {
       try {
         const mainServer = await findMainServer();
-        const port = mainServer ? mainServer.port : await getPort();
+        const port = mainServer?.port || await getPort();
 
         debugLog({ mainServer, port });
 

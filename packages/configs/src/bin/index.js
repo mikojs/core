@@ -47,9 +47,19 @@ handleUnhandledRejection();
       return;
 
     default: {
+      const debugPort = !process.env.DEBUG_PORT
+        ? -1
+        : parseInt(process.env.DEBUG_PORT, 10);
+
+      if (
+        process.env.DEBUG_PORT &&
+        (await getPort({ port: debugPort })) === debugPort
+      )
+        throw new Error('Can not find the debug server');
+
       try {
         const mainServer = await findMainServer();
-        const port = mainServer?.port || await getPort();
+        const port = mainServer?.port || (await getPort());
 
         debugLog({ mainServer, port });
 
@@ -78,14 +88,13 @@ handleUnhandledRejection();
           chalk`Run command: {gray ${[path.basename(cli), ...argv].join(' ')}}`,
         );
 
-        await execa(
-          npmWhich(process.cwd()).sync('node'),
-          [cli, ...argv],
-          {
-            stdio: 'inherit',
-            env,
-          },
-        );
+        await execa(npmWhich(process.cwd()).sync('node'), [cli, ...argv], {
+          stdio: 'inherit',
+          env,
+        });
+
+        // FIXME
+        process.exit(0);
       } catch (e) {
         logger.log('Run command fail');
         debugLog(e);

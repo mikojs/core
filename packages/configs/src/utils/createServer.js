@@ -17,17 +17,12 @@ export const TIME_TO_CHECK = 100;
 
 /**
  * @example
- * new createServer(8000, debugLog, () => {})
+ * new createServer(8000, debugLog)
  *
  * @param {number} port - the port of the server
  * @param {Function} debugLog - debug log function
- * @param {Function} callback - close callback function
  */
-export default async (
-  port: number,
-  debugLog: (message: mixed) => void,
-  callback?: () => void,
-) => {
+export default async (port: number, debugLog: (message: mixed) => void) => {
   const cache = {};
   let timer: IntervalID;
   let checkedTimes: number;
@@ -133,8 +128,6 @@ export default async (
               server.close(() => {
                 clearInterval(timer);
                 debugLog('Close server');
-                // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-                callback?.(); // eslint-disable-line flowtype/no-unused-expressions
               });
             else checkedTimes += 1;
           }

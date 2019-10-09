@@ -2,9 +2,11 @@
 
 import fs from 'fs';
 import net from 'net';
+import path from 'path';
 
 import rimraf from 'rimraf';
 import isRunning from 'is-running';
+import findProcess from 'find-process';
 
 import sendToServer from './sendToServer';
 import findMainServer from './findMainServer';
@@ -58,6 +60,10 @@ export default async (
 
         checkedTimes = 1;
         timer = setInterval(async () => {
+          const allProcess = (await findProcess(
+            'name',
+            path.resolve(__dirname, '../bin/runServer.js'),
+          )).slice(1);
           const hasWorkingPids = Object.keys(cache).reduce(
             (result: boolean, cacheFilePath: string): boolean => {
               const newPids = cache[cacheFilePath].filter(isRunning);
@@ -116,7 +122,10 @@ export default async (
                   removeCache();
                 });
               }
-            } else if (checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK)
+            } else if (
+              allProcess.length === 0 &&
+              checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK
+            )
               server.close(() => {
                 clearInterval(timer);
                 debugLog('Close server');

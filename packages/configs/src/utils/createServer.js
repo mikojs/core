@@ -25,7 +25,7 @@ export const TIME_TO_CHECK = 100;
  */
 export default async (
   port: number,
-  debugLog: (message: string) => void,
+  debugLog: (message: mixed) => void,
   callback?: () => void,
 ) => {
   const cache = {};
@@ -81,10 +81,13 @@ export default async (
           );
 
           if (!hasWorkingPids) {
-            const allProcess = (await findProcess(
-              'name',
-              path.resolve(__dirname, '../bin/runServer.js'),
-            )).slice(1);
+            const currentMainServer = await findMainServer();
+            const allProcess = !currentMainServer?.isMain
+              ? []
+              : (await findProcess(
+                  'name',
+                  path.resolve(__dirname, '../bin/runServer.js'),
+                )).slice(1);
 
             debugLog(allProcess);
 
@@ -111,8 +114,6 @@ export default async (
                   removeCache();
                   return;
                 }
-
-                const currentMainServer = await findMainServer();
 
                 if (!currentMainServer?.isMain) return;
 

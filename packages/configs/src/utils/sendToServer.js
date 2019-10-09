@@ -7,24 +7,8 @@ import debug from 'debug';
 import findMainServer from './findMainServer';
 
 const debugLog = debug('configs:sendToServer');
-const sendToServer = ((): {
-  [string]: (
-    data: string,
-    callback: (client: net.Socket) => void,
-  ) => Promise<void>,
-} => {
-  /**
-   * @example
-   * addErrorEvent('once')
-   *
-   * @param {string} eventName - event name
-   *
-   * @return {Function} - event function
-   */
-  const addErrorEvent = (eventName: 'once' | 'end') => async (
-    data: string,
-    callback: (client: net.Socket) => void,
-  ) => {
+const sendToServer = {
+  end: async (data: string, callback: (client: net.Socket) => void) => {
     const mainServer = await findMainServer();
 
     if (!mainServer) return;
@@ -33,17 +17,11 @@ const sendToServer = ((): {
 
     client.on('error', (err: mixed) => {
       debugLog(err);
-      setTimeout(sendToServer[eventName], 10, data, () => callback(client));
+      setTimeout(sendToServer.end, 10, data, () => callback(client));
     });
 
-    if (eventName === 'once') client.once(data, () => callback(client));
-    if (eventName === 'end') client.end(data, () => callback(client));
-  };
-
-  return {
-    once: addErrorEvent('once'),
-    end: addErrorEvent('end'),
-  };
-})();
+    client.end(data, () => callback(client));
+  },
+};
 
 export default sendToServer;

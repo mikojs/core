@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 // @flow
 
-import type net from 'net';
 import path from 'path';
 
 import execa from 'execa';
@@ -66,11 +65,11 @@ handleUnhandledRejection();
         if (!mainServer) {
           execa(path.resolve(__dirname, './runServer.js'), [port], {
             detached: true,
-          });
+            stdio: 'ignore',
+          }).unref();
           await new Promise(resolve =>
-            sendToServer.once('connect', (client: net.Socket) => {
+            sendToServer.end('{}', () => {
               debugLog('connect');
-              client.destroy();
               resolve();
             }),
           );

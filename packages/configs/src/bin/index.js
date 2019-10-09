@@ -92,13 +92,9 @@ handleUnhandledRejection();
           stdio: 'inherit',
           env,
         });
-
-        // FIXME
-        process.exit(0);
       } catch (e) {
         logger.log('Run command fail');
         debugLog(e);
-
         process.exit(e.exitCode || 1);
       }
       return;

@@ -157,6 +157,6 @@ export default async (
         });
       });
 
-    debugLog(`Open server at ${port}`);
+    debugLog(`(${process.pid}) Open server at ${port}`);
   });
 };

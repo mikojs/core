@@ -78,7 +78,7 @@ handleUnhandledRejection();
           chalk`Run command: {gray ${[path.basename(cli), ...argv].join(' ')}}`,
         );
 
-        const { exitCode } = await execa(
+        await execa(
           npmWhich(process.cwd()).sync('node'),
           [cli, ...argv],
           {
@@ -86,9 +86,6 @@ handleUnhandledRejection();
             env,
           },
         );
-
-        debugLog(exitCode);
-        process.exit(exitCode);
       } catch (e) {
         logger.log('Run command fail');
         debugLog(e);

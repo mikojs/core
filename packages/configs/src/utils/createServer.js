@@ -41,6 +41,13 @@ export default async (
 
         if (!pid || !filePath) return;
 
+        if (!mainServer?.isMain) {
+          sendToServer.end(JSON.stringify({ pid, filePath }), () => {
+            debugLog(`${filePath} has been sent to the main server`);
+          });
+          return;
+        }
+
         if (!cache[filePath]) cache[filePath] = [];
 
         cache[filePath].push(pid);
@@ -51,28 +58,6 @@ export default async (
 
         checkedTimes = 1;
         timer = setInterval(async () => {
-          if (mainServer && !mainServer.isMain) {
-            Object.keys(cache).forEach(async (cacheFilePath: string) => {
-              await Promise.all(
-                cache[cacheFilePath].map(
-                  (cachePid: string) =>
-                    new Promise(resolve => {
-                      sendToServer.end(
-                        JSON.stringify({ cachePid, cacheFilePath }),
-                        () => {
-                          debugLog(
-                            `${cacheFilePath} has been sent to the main server`,
-                          );
-                          resolve();
-                        },
-                      );
-                    }),
-                ),
-              );
-              delete cache[cacheFilePath];
-            });
-          }
-
           const hasWorkingPids = Object.keys(cache).reduce(
             (result: boolean, cacheFilePath: string): boolean => {
               const newPids = cache[cacheFilePath].filter(isRunning);
@@ -151,7 +136,18 @@ export default async (
     debugLog(err.message);
   });
 
-  server.listen(port, () => {
+  server.listen(port, async () => {
+    const mainServer = await findMainServer();
+
+    if (!mainServer?.isMain)
+      Object.keys(cache).forEach((filePath: string) => {
+        cache[filePath].forEach((pid: string) => {
+          sendToServer.end(JSON.stringify({ pid, filePath }), () => {
+            debugLog(`${filePath} has been sent to the main server`);
+          });
+        });
+      });
+
     debugLog(`Open server at ${port}`);
   });
 };

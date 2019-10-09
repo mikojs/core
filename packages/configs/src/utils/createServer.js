@@ -22,7 +22,10 @@ export const TIME_TO_CHECK = 100;
  * @param {number} port - the port of the server
  * @param {Function} debugLog - debug log function
  */
-export default async (port: number, debugLog: (message: mixed) => void) => {
+export default async (
+  port: number,
+  debugLog: (message: mixed) => Promise<void>,
+) => {
   const cache = {};
   let timer: IntervalID;
   let checkedTimes: number;

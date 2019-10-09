@@ -45,35 +45,34 @@ export default async (
 
         cache[filePath].push(pid);
         debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
-
-        if (mainServer && !mainServer.isMain) {
-          Object.keys(cache).forEach(async (cacheFilePath: string) => {
-            await Promise.all(
-              cache[cacheFilePath].map(
-                (cachePid: string) =>
-                  new Promise(resolve => {
-                    sendToServer.end(
-                      JSON.stringify({ cachePid, cacheFilePath }),
-                      () => {
-                        debugLog(
-                          `${cacheFilePath} has been sent to the main server`,
-                        );
-                        resolve();
-                      },
-                    );
-                  }),
-              ),
-            );
-            delete cache[cacheFilePath];
-          });
-          return;
-        }
+        clearInterval(timer);
 
         let isRemoving: boolean = false;
 
-        clearInterval(timer);
         checkedTimes = 1;
         timer = setInterval(async () => {
+          if (mainServer && !mainServer.isMain) {
+            Object.keys(cache).forEach(async (cacheFilePath: string) => {
+              await Promise.all(
+                cache[cacheFilePath].map(
+                  (cachePid: string) =>
+                    new Promise(resolve => {
+                      sendToServer.end(
+                        JSON.stringify({ cachePid, cacheFilePath }),
+                        () => {
+                          debugLog(
+                            `${cacheFilePath} has been sent to the main server`,
+                          );
+                          resolve();
+                        },
+                      );
+                    }),
+                ),
+              );
+              delete cache[cacheFilePath];
+            });
+          }
+
           const hasWorkingPids = Object.keys(cache).reduce(
             (result: boolean, cacheFilePath: string): boolean => {
               const newPids = cache[cacheFilePath].filter(isRunning);

@@ -1,5 +1,3 @@
-// @flow
-
 // $FlowFixMe jest mock
 import { fs } from 'fs';
 // $FlowFixMe jest mock

@@ -1,5 +1,3 @@
-// @flow
-
 // $FlowFixMe jest mock
 import { net } from 'net';
 

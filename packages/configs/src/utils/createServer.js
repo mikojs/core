@@ -60,10 +60,6 @@ export default async (
 
         checkedTimes = 1;
         timer = setInterval(async () => {
-          const allProcess = (await findProcess(
-            'name',
-            path.resolve(__dirname, '../bin/runServer.js'),
-          )).slice(1);
           const hasWorkingPids = Object.keys(cache).reduce(
             (result: boolean, cacheFilePath: string): boolean => {
               const newPids = cache[cacheFilePath].filter(isRunning);
@@ -85,6 +81,13 @@ export default async (
           );
 
           if (!hasWorkingPids) {
+            const allProcess = (await findProcess(
+              'name',
+              path.resolve(__dirname, '../bin/runServer.js'),
+            )).slice(1);
+
+            debugLog(allProcess);
+
             if (
               checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK &&
               Object.keys(cache).length !== 0

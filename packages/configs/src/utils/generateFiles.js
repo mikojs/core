@@ -102,24 +102,35 @@ const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
  *
  * @return {boolean} - generating file is successful or not
  */
-export default (cliName: string): boolean => {
+export default async (cliName: string): Promise<boolean> => {
   const files = findFiles(cliName);
 
   if (!files) return false;
 
   debugLog(`Config files: ${JSON.stringify(files, null, 2)}`);
 
-  Object.keys(files).forEach((key: string) => {
-    files[key].forEach(
-      ({ filePath, content }: $ElementType<filesDataType, number>) => {
-        debugLog(`Generate config: ${filePath}`);
-        outputFileSync(filePath, content);
-        sendToServer.end(JSON.stringify({ pid: process.pid, filePath }), () => {
-          debugLog(`${filePath}(generateFile) has been sent to the server`);
-        });
-      },
-    );
-  });
+  await Promise.all(
+    Object.keys(files).map((key: string) =>
+      Promise.all(
+        files[key].map(
+          ({ filePath, content }: $ElementType<filesDataType, number>) =>
+            new Promise(resolve => {
+              debugLog(`Generate config: ${filePath}`);
+              sendToServer.end(
+                JSON.stringify({ pid: process.pid, filePath }),
+                () => {
+                  outputFileSync(filePath, content);
+                  debugLog(
+                    `${filePath}(generateFile) has been sent to the server`,
+                  );
+                  resolve();
+                },
+              );
+            }),
+        ),
+      ),
+    ),
+  );
 
   return true;
 };

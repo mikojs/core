@@ -6,6 +6,7 @@ import findProcess from 'find-process';
 import debug from 'debug';
 
 const debugLog = debug('configs:findMainServer');
+let cachePid: number;
 
 /**
  * @example
@@ -22,10 +23,13 @@ export default async (): Promise<?{|
     path.resolve(__dirname, '../bin/runServer.js'),
   );
 
-  debugLog(mainProcess);
-  debugLog(process.pid);
-
   if (!mainProcess) return null;
+
+  if (mainProcess.pid !== cachePid) {
+    cachePid = mainProcess.pid;
+    debugLog(mainProcess);
+    debugLog(process.pid);
+  }
 
   return {
     isMain: mainProcess.pid === process.pid,

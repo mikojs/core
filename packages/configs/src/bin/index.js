@@ -77,7 +77,7 @@ handleUnhandledRejection();
 
         // [start]
         // handle config and ignore files
-        if (!generateFiles(cliName)) {
+        if (!(await generateFiles(cliName))) {
           process.exit(1);
           return;
         }

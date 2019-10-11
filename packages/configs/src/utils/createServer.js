@@ -87,7 +87,7 @@ export default async (
                   path.resolve(__dirname, '../bin/runServer.js'),
                 )).slice(1);
 
-            debugLog(allProcess);
+            debugLog({ allProcess, checkedTimes });
 
             if (
               checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK &&
@@ -126,13 +126,13 @@ export default async (
               }
             } else if (
               allProcess.length === 0 &&
-              checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK
-            )
+              checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK
+            ) {
+              clearInterval(timer);
               server.close(() => {
-                clearInterval(timer);
                 debugLog('Close server');
               });
-            else checkedTimes += 1;
+            } else checkedTimes += 1;
           }
         }, TIME_TO_CHECK);
       } catch (err) {

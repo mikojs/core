@@ -10,7 +10,7 @@ const debugLog = debug('configs:sendToServer');
 
 /**
  * @example
- * sendToServer({}, () => {})
+ * sendToServer('{}', () => {})
  *
  * @param {string} data - the data which will be sent to the server
  * @param {Function} callback - callback function

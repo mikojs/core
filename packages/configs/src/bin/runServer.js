@@ -17,18 +17,14 @@ const debugLog = !process.env.DEBUG_PORT
   ? debug('configs:runServer')
   : async (data: mixed) => {
       const mainServer = await findMainServer();
-      const prefix = `(${mainServer?.isMain ? 'isMain' : 'notMain'}) ${
+      const prefix = `(${mainServer?.isMain ? 'main' : 'other'}) ${
         process.pid
       } --> `;
+      const client = net.connect({ port: debugPort });
 
-      if (typeof data === 'number')
-        net.connect({ port: debugPort }).end(`${prefix}${data.toString()}`);
-      else if (typeof data === 'string')
-        net.connect({ port: debugPort }).end(`${prefix}${data}`);
-      else
-        net
-          .connect({ port: debugPort })
-          .end(`${prefix}${JSON.stringify(data, null, 2) || ''}`);
+      if (typeof data === 'number') client.end(`${prefix}${data.toString()}`);
+      else if (typeof data === 'string') client.end(`${prefix}${data}`);
+      else client.end(`${prefix}${JSON.stringify(data, null, 2) || ''}`);
     };
 
 handleUnhandledRejection();

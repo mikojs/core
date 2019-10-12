@@ -17,10 +17,7 @@ const debugLog = debug('configs:sendToServer');
  */
 const sendToServer = async (data: string, callback: () => void) => {
   const mainServer = await findMainServer();
-
-  if (!mainServer) return;
-
-  const client = net.connect({ port: parseInt(mainServer.port, 10) });
+  const client = net.connect({ port: parseInt(mainServer?.port || -1, 10) });
 
   client.on('error', (err: mixed) => {
     debugLog(err);

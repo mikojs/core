@@ -35,10 +35,11 @@ export default async (
       debugLog(data);
 
       try {
-        const mainServer = await findMainServer();
         const { pid, filePath } = JSON.parse(data);
 
         if (!pid || !filePath) return;
+
+        const mainServer = await findMainServer();
 
         if (!mainServer?.isMain) {
           sendToServer(JSON.stringify({ pid, filePath }), () => {

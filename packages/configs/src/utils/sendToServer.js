@@ -15,10 +15,7 @@ const debugLog = debug('configs:sendToServer');
  * @param {string} data - the data which will be sent to the server
  * @param {Function} callback - callback function
  */
-const sendToServer = async (
-  data: string,
-  callback: (client: net.Socket) => void,
-) => {
+const sendToServer = async (data: string, callback: () => void) => {
   const mainServer = await findMainServer();
 
   if (!mainServer) return;
@@ -27,10 +24,10 @@ const sendToServer = async (
 
   client.on('error', (err: mixed) => {
     debugLog(err);
-    setTimeout(sendToServer, 10, data, () => callback(client));
+    setTimeout(sendToServer, 10, data, callback);
   });
 
-  client.end(data, () => callback(client));
+  client.end(data, callback);
 };
 
 export default sendToServer;

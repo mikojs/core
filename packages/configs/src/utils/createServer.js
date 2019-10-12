@@ -8,7 +8,6 @@ import rimraf from 'rimraf';
 import isRunning from 'is-running';
 import findProcess from 'find-process';
 
-import sendToServer from './sendToServer';
 import findMainServer from './findMainServer';
 
 export const TIME_TO_CLOSE_SERVER = 5000;
@@ -26,6 +25,10 @@ export default async (
   port: number,
   debugLog: (message: mixed) => Promise<void>,
 ) => {
+  const mainServer = await findMainServer();
+
+  if (!mainServer?.isMain) return;
+
   const cache = {};
   let timer: TimeoutID;
 
@@ -38,15 +41,6 @@ export default async (
         const { pid, filePath } = JSON.parse(data);
 
         if (!pid || !filePath) return;
-
-        const mainServer = await findMainServer();
-
-        if (!mainServer?.isMain) {
-          sendToServer(JSON.stringify({ pid, filePath }), () => {
-            debugLog(`${filePath} has been sent to the main server`);
-          });
-          return;
-        }
 
         if (!cache[filePath]) cache[filePath] = [];
 
@@ -94,15 +88,11 @@ export default async (
 
             /**
              * @example
-             * nextEvent(true);
-             *
-             * @param {boolean} shouldRemoveFile - should remove file or not
+             * nextEvent()
              */
-            const nextEvent = (shouldRemoveFile: boolean) => {
-              if (shouldRemoveFile) {
-                delete cache[removeFilePath];
-                debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
-              }
+            const nextEvent = () => {
+              delete cache[removeFilePath];
+              debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
 
               timer = setTimeout(
                 checking,
@@ -113,32 +103,22 @@ export default async (
 
             if (!fs.existsSync(removeFilePath)) {
               debugLog(`File does not exist: ${removeFilePath}`);
-              nextEvent(true);
-              return;
-            }
-
-            const currentMainServer = await findMainServer();
-
-            if (!currentMainServer?.isMain) {
-              nextEvent(false);
+              nextEvent();
               return;
             }
 
             rimraf(removeFilePath, () => {
               debugLog(`Remove existing file: ${removeFilePath}`);
-              nextEvent(true);
+              nextEvent();
             });
             return;
           }
 
           if (checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK) {
-            const currentMainServer = await findMainServer();
-            const allProcess = !currentMainServer?.isMain
-              ? []
-              : (await findProcess(
-                  'name',
-                  path.resolve(__dirname, '../bin/runServer.js'),
-                )).slice(1);
+            const allProcess = (await findProcess(
+              'name',
+              path.resolve(__dirname, '../bin/runServer.js'),
+            )).slice(1);
 
             if (allProcess.length === 0) {
               clearTimeout(timer);
@@ -167,18 +147,7 @@ export default async (
     debugLog(err.message);
   });
 
-  server.listen(port, async () => {
-    const mainServer = await findMainServer();
-
-    if (!mainServer?.isMain)
-      Object.keys(cache).forEach((filePath: string) => {
-        cache[filePath].forEach((pid: string) => {
-          sendToServer(JSON.stringify({ pid, filePath }), () => {
-            debugLog(`${filePath} has been sent to the main server`);
-          });
-        });
-      });
-
+  server.listen(port, () => {
     debugLog(`(${process.pid}) Open server at ${port}`);
   });
 };

@@ -41,7 +41,7 @@ export default async (
         if (!pid || !filePath) return;
 
         if (!mainServer?.isMain) {
-          sendToServer.end(JSON.stringify({ pid, filePath }), () => {
+          sendToServer(JSON.stringify({ pid, filePath }), () => {
             debugLog(`${filePath} has been sent to the main server`);
           });
           return;
@@ -172,7 +172,7 @@ export default async (
     if (!mainServer?.isMain)
       Object.keys(cache).forEach((filePath: string) => {
         cache[filePath].forEach((pid: string) => {
-          sendToServer.end(JSON.stringify({ pid, filePath }), () => {
+          sendToServer(JSON.stringify({ pid, filePath }), () => {
             debugLog(`${filePath} has been sent to the main server`);
           });
         });

@@ -7,21 +7,30 @@ import debug from 'debug';
 import findMainServer from './findMainServer';
 
 const debugLog = debug('configs:sendToServer');
-const sendToServer = {
-  end: async (data: string, callback: (client: net.Socket) => void) => {
-    const mainServer = await findMainServer();
 
-    if (!mainServer) return;
+/**
+ * @example
+ * sendToServer({}, () => {})
+ *
+ * @param {string} data - the data which will be sent to the server
+ * @param {Function} callback - callback function
+ */
+const sendToServer = async (
+  data: string,
+  callback: (client: net.Socket) => void,
+) => {
+  const mainServer = await findMainServer();
 
-    const client = net.connect({ port: parseInt(mainServer.port, 10) });
+  if (!mainServer) return;
 
-    client.on('error', (err: mixed) => {
-      debugLog(err);
-      setTimeout(sendToServer.end, 10, data, () => callback(client));
-    });
+  const client = net.connect({ port: parseInt(mainServer.port, 10) });
 
-    client.end(data, () => callback(client));
-  },
+  client.on('error', (err: mixed) => {
+    debugLog(err);
+    setTimeout(sendToServer, 10, data, () => callback(client));
+  });
+
+  client.end(data, () => callback(client));
 };
 
 export default sendToServer;

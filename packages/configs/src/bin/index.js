@@ -68,7 +68,7 @@ handleUnhandledRejection();
             stdio: 'ignore',
           }).unref();
           await new Promise(resolve =>
-            sendToServer.end('{}', () => {
+            sendToServer('{}', () => {
               debugLog('connect');
               resolve();
             }),

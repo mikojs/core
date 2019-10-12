@@ -116,7 +116,7 @@ export default async (cliName: string): Promise<boolean> => {
           ({ filePath, content }: $ElementType<filesDataType, number>) =>
             new Promise(resolve => {
               debugLog(`Generate config: ${filePath}`);
-              sendToServer.end(
+              sendToServer(
                 JSON.stringify({ pid: process.pid, filePath }),
                 () => {
                   outputFileSync(filePath, content);

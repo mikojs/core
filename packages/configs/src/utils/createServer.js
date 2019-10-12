@@ -27,8 +27,7 @@ export default async (
   debugLog: (message: mixed) => Promise<void>,
 ) => {
   const cache = {};
-  let timer: IntervalID;
-  let checkedTimes: number;
+  let timer: TimeoutID;
 
   const server = net.createServer((socket: net.Socket) => {
     socket.setEncoding('utf8');
@@ -52,12 +51,15 @@ export default async (
 
         cache[filePath].push(pid);
         debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
-        clearInterval(timer);
+        clearTimeout(timer);
 
-        let isRemoving: boolean = false;
-
-        checkedTimes = 1;
-        timer = setInterval(async () => {
+        /**
+         * @example
+         * checking(0)
+         *
+         * @param {number} checkedTimes - checked times
+         */
+        const checking = async (checkedTimes: number) => {
           const hasWorkingPids = Object.keys(cache).reduce(
             (result: boolean, cacheFilePath: string): boolean => {
               const newPids = cache[cacheFilePath].filter(isRunning);
@@ -78,7 +80,57 @@ export default async (
             false,
           );
 
-          if (!hasWorkingPids) {
+          if (hasWorkingPids) {
+            timer = setTimeout(checking, TIME_TO_CHECK, 0);
+            return;
+          }
+
+          if (
+            checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK &&
+            Object.keys(cache).length !== 0
+          ) {
+            const [removeFilePath] = Object.keys(cache);
+
+            /**
+             * @example
+             * nextEvent(true);
+             *
+             * @param {boolean} shouldRemoveFile - should remove file or not
+             */
+            const nextEvent = (shouldRemoveFile: boolean) => {
+              if (shouldRemoveFile) {
+                delete cache[removeFilePath];
+                debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
+              }
+
+              timer = setTimeout(
+                checking,
+                TIME_TO_CHECK,
+                Object.keys(cache).length === 0 ? 0 : checkedTimes,
+              );
+            };
+
+            if (!fs.existsSync(removeFilePath)) {
+              debugLog(`File does not exist: ${removeFilePath}`);
+              nextEvent(true);
+              return;
+            }
+
+            const currentMainServer = await findMainServer();
+
+            if (!currentMainServer?.isMain) {
+              nextEvent(false);
+              return;
+            }
+
+            rimraf(removeFilePath, () => {
+              debugLog(`Remove existing file: ${removeFilePath}`);
+              nextEvent(true);
+            });
+            return;
+          }
+
+          if (checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK) {
             const currentMainServer = await findMainServer();
             const allProcess = !currentMainServer?.isMain
               ? []
@@ -87,54 +139,23 @@ export default async (
                   path.resolve(__dirname, '../bin/runServer.js'),
                 )).slice(1);
 
-            debugLog({ allProcess, checkedTimes });
-
-            if (
-              checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK &&
-              Object.keys(cache).length !== 0
-            ) {
-              if (!isRemoving) {
-                const [removeFilePath] = Object.keys(cache);
-
-                /**
-                 * @example
-                 * removeCache();
-                 */
-                const removeCache = () => {
-                  delete cache[removeFilePath];
-                  debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
-
-                  if (Object.keys(cache).length === 0) checkedTimes = 0;
-                };
-
-                if (!fs.existsSync(removeFilePath)) {
-                  debugLog(`File does not exist: ${removeFilePath}`);
-                  removeCache();
-                  return;
-                }
-
-                if (!currentMainServer?.isMain) return;
-
-                // TODO: https://github.com/eslint/eslint/issues/11899
-                // eslint-disable-next-line require-atomic-updates
-                isRemoving = true;
-                rimraf(removeFilePath, () => {
-                  isRemoving = false;
-                  debugLog(`Remove existing file: ${removeFilePath}`);
-                  removeCache();
-                });
-              }
-            } else if (
-              allProcess.length === 0 &&
-              checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK
-            ) {
-              clearInterval(timer);
+            if (allProcess.length === 0) {
+              clearTimeout(timer);
               server.close(() => {
                 debugLog('Close server');
               });
-            } else checkedTimes += 1;
+              return;
+            }
+
+            debugLog(allProcess);
+            timer = setTimeout(checking, TIME_TO_CHECK, checkedTimes);
+            return;
           }
-        }, TIME_TO_CHECK);
+
+          timer = setTimeout(checking, TIME_TO_CHECK, checkedTimes + 1);
+        };
+
+        checking(0);
       } catch (err) {
         debugLog(err);
       }

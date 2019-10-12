@@ -8,8 +8,6 @@ import rimraf from 'rimraf';
 import isRunning from 'is-running';
 import findProcess from 'find-process';
 
-import findMainServer from './findMainServer';
-
 export const TIME_TO_CLOSE_SERVER = 5000;
 export const TIME_TO_REMOVE_FILES = 500;
 export const TIME_TO_CHECK = 100;
@@ -21,14 +19,7 @@ export const TIME_TO_CHECK = 100;
  * @param {number} port - the port of the server
  * @param {Function} debugLog - debug log function
  */
-export default async (
-  port: number,
-  debugLog: (message: mixed) => Promise<void>,
-) => {
-  const mainServer = await findMainServer();
-
-  if (!mainServer?.isMain) return;
-
+export default (port: number, debugLog: (message: mixed) => Promise<void>) => {
   const cache = {};
   let timer: TimeoutID;
 

@@ -28,4 +28,11 @@ const debugLog = !process.env.DEBUG_PORT
     };
 
 handleUnhandledRejection();
-createServer(parseInt(process.argv[2], 10), debugLog);
+
+(async () => {
+  const mainServer = await findMainServer();
+
+  if (!mainServer?.isMain) return;
+
+  createServer(parseInt(process.argv[2], 10), debugLog);
+})();

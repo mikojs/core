@@ -2,11 +2,9 @@
 
 import fs from 'fs';
 import net from 'net';
-import path from 'path';
 
 import rimraf from 'rimraf';
 import isRunning from 'is-running';
-import findProcess from 'find-process';
 
 export const TIME_TO_CHECK = 100;
 export const TIME_TO_REMOVE_FILES = 500;
@@ -25,7 +23,7 @@ export default (port: number, debugLog: (message: mixed) => Promise<void>) => {
 
   const server = net.createServer((socket: net.Socket) => {
     socket.setEncoding('utf8');
-    socket.on('data', async (data: string) => {
+    socket.on('data', (data: string) => {
       debugLog(data);
 
       try {
@@ -45,7 +43,7 @@ export default (port: number, debugLog: (message: mixed) => Promise<void>) => {
          *
          * @param {number} checkedTimes - checked times
          */
-        const checking = async (checkedTimes: number) => {
+        const checking = (checkedTimes: number) => {
           const hasWorkingPids = Object.keys(cache).reduce(
             (result: boolean, cacheFilePath: string): boolean => {
               const newPids = cache[cacheFilePath].filter(isRunning);
@@ -106,21 +104,10 @@ export default (port: number, debugLog: (message: mixed) => Promise<void>) => {
           }
 
           if (checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK) {
-            const allProcesses = (await findProcess(
-              'name',
-              path.resolve(__dirname, '../bin/runServer.js'),
-            )).slice(1);
-
-            if (allProcesses.length === 0) {
-              clearTimeout(timer);
-              server.close(() => {
-                debugLog('Close server');
-              });
-              return;
-            }
-
-            debugLog(allProcesses);
-            timer = setTimeout(checking, TIME_TO_CHECK, checkedTimes);
+            clearTimeout(timer);
+            server.close(() => {
+              debugLog('Close server');
+            });
             return;
           }
 

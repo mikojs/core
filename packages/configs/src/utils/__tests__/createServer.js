@@ -9,8 +9,9 @@ import { isRunning } from 'is-running';
 import rimraf from 'rimraf';
 
 import createServer, {
-  TIME_TO_REMOVE_FILES,
   TIME_TO_CHECK,
+  TIME_TO_REMOVE_FILES,
+  TIME_TO_CLOSE_SERVER,
 } from '../createServer';
 
 const port = 8000;
@@ -22,8 +23,8 @@ jest.mock('fs');
 jest.mock('net');
 
 describe('create server', () => {
-  beforeAll(async () => {
-    await createServer(port, debugLog);
+  beforeAll(() => {
+    createServer(port, debugLog);
 
     [, dataCallback] = net.callback.mock.calls.find(
       ([type]: [string]) => type === 'data',
@@ -149,6 +150,19 @@ describe('create server', () => {
       expect(debugLog).toHaveBeenCalledWith(
         `Cache: ${JSON.stringify({}, null, 2)}`,
       );
+    });
+
+    test('close the server after the all processes are close', () => {
+      jest.advanceTimersByTime(TIME_TO_CHECK + TIME_TO_CLOSE_SERVER);
+
+      const [, closeCallback] = net.callback.mock.calls.find(
+        ([type]: [string]) => type === 'close',
+      );
+
+      closeCallback();
+
+      expect(debugLog).toHaveBeenCalledTimes(1);
+      expect(debugLog).toHaveBeenCalledWith('Close server');
     });
   });
 });

@@ -8,9 +8,9 @@ import rimraf from 'rimraf';
 import isRunning from 'is-running';
 import findProcess from 'find-process';
 
-export const TIME_TO_CLOSE_SERVER = 5000;
-export const TIME_TO_REMOVE_FILES = 500;
 export const TIME_TO_CHECK = 100;
+export const TIME_TO_REMOVE_FILES = 500;
+export const TIME_TO_CLOSE_SERVER = 5000;
 
 /**
  * @example
@@ -106,12 +106,12 @@ export default (port: number, debugLog: (message: mixed) => Promise<void>) => {
           }
 
           if (checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK) {
-            const allProcess = (await findProcess(
+            const allProcesses = (await findProcess(
               'name',
               path.resolve(__dirname, '../bin/runServer.js'),
             )).slice(1);
 
-            if (allProcess.length === 0) {
+            if (allProcesses.length === 0) {
               clearTimeout(timer);
               server.close(() => {
                 debugLog('Close server');
@@ -119,7 +119,7 @@ export default (port: number, debugLog: (message: mixed) => Promise<void>) => {
               return;
             }
 
-            debugLog(allProcess);
+            debugLog(allProcesses);
             timer = setTimeout(checking, TIME_TO_CHECK, checkedTimes);
             return;
           }

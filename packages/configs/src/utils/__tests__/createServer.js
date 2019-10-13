@@ -82,7 +82,8 @@ describe('create server', () => {
       data                                      | expected
       ${{}}                                     | ${{}}
       ${{ pid: 'pid', filePath: 'filePath' }}   | ${{ filePath: ['pid'] }}
-      ${{ pid: 'pid1', filePath: 'filePath1' }} | ${{ filePath: ['pid'], filePath1: ['pid1'] }}
+      ${{ pid: 'pid', filePath: 'filePath' }}   | ${{ filePath: ['pid', 'pid'] }}
+      ${{ pid: 'pid1', filePath: 'filePath1' }} | ${{ filePath: ['pid', 'pid'], filePath1: ['pid1'] }}
     `(
       'give the $data to the server',
       ({

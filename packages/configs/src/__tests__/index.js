@@ -1,14 +1,17 @@
 // @flow
 
-// $FlowFixMe jest mock
-import { net } from 'net';
 import path from 'path';
 
 import getConfig from '../index';
 
 import configs from 'utils/configs';
 
-jest.mock('net');
+jest.mock(
+  '../utils/sendToServer',
+  () => (data: mixed, callback: () => void) => {
+    callback();
+  },
+);
 
 describe('configs', () => {
   beforeAll(() => {
@@ -20,10 +23,6 @@ describe('configs', () => {
     });
   });
 
-  beforeEach(() => {
-    net.callback.mockClear();
-  });
-
   test.each`
     filePath      | ignorePath
     ${'filePath'} | ${undefined}
@@ -31,13 +30,7 @@ describe('configs', () => {
   `(
     'get config with filePath = $filePath and ignorePath = $ignorePath',
     ({ filePath, ignorePath }: {| filePath: string, ignorePath: string |}) => {
-      expect(getConfig('getConfig', 8000, filePath, ignorePath)).toEqual({});
-
-      net.callback.mock.calls.forEach(
-        ([type, callback]: [string, () => void]) => {
-          if (type !== 'error') expect(callback()).toBeUndefined();
-        },
-      );
+      expect(getConfig('getConfig', filePath, ignorePath)).toEqual({});
     },
   );
 });

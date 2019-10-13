@@ -1,7 +1,5 @@
 // @flow
 
-// $FlowFixMe jest mock
-import { net } from 'net';
 import path from 'path';
 
 import { outputFileSync } from 'output-file-sync';
@@ -11,7 +9,9 @@ import chalk from 'chalk';
 import generateFiles from '../generateFiles';
 import configs from '../configs';
 
-jest.mock('net');
+jest.mock('../sendToServer', () => (data: mixed, callback: () => void) => {
+  callback();
+});
 
 describe('generate files', () => {
   beforeAll(() => {
@@ -32,25 +32,20 @@ describe('generate files', () => {
     outputFileSync.destPaths = [];
   });
 
-  test('error', () => {
+  test('error', async () => {
     const mockLog = jest.fn();
 
     global.console.error = mockLog;
 
-    expect(generateFiles('notFindCli', 8000)).toBeFalsy();
+    expect(await generateFiles('notFindCli')).toBeFalsy();
     expect(mockLog).toHaveBeenCalledTimes(5);
     expect(mockLog).toHaveBeenCalledWith(
       chalk`{red ✖ }{red {bold @mikojs/configs}} Can not generate the config file, You can:`,
     );
   });
 
-  test('generate', () => {
-    generateFiles('jest', 8000);
-
-    const [, callback] = net.callback.mock.calls.find(
-      ([type]: [string]) => type !== 'error',
-    );
-
+  test('generate', async () => {
+    expect(await generateFiles('jest')).toBeTruthy();
     expect(outputFileSync.destPaths).toEqual(
       [
         'jest.config.js',
@@ -60,6 +55,5 @@ describe('generate files', () => {
         '.prettierrc.js',
       ].map((fileName: string) => path.resolve(fileName)),
     );
-    expect(callback()).toBeUndefined();
   });
 });

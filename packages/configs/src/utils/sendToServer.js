@@ -4,55 +4,27 @@ import net from 'net';
 
 import debug from 'debug';
 
+import findMainServer from './findMainServer';
+
 const debugLog = debug('configs:sendToServer');
 
 /**
  * @example
- * sendToServer(8000).once('data')
+ * sendToServer('{}', () => {})
  *
- * @param {number} port - the port of the config server
- * @param {number} times - use to avoid timeout
- *
- * @return {object} - object like net.connect()
+ * @param {string} data - the data which will be sent to the server
+ * @param {Function} callback - callback function
  */
-const sendToServer = (
-  port: number,
-  times: number = 0,
-): {
-  [string]: (data: string, callback: (client: net.Socket) => void) => void,
-} => {
-  /**
-   * @example
-   * addErrorEvent('once')
-   *
-   * @param {string} eventName - event name
-   *
-   * @return {Function} - event function
-   */
-  const addErrorEvent = (eventName: 'once' | 'end') => (
-    data: string,
-    callback: (client: net.Socket) => void,
-  ) => {
-    const client = net.connect({ port });
+const sendToServer = async (data: string, callback: () => void) => {
+  const mainServer = await findMainServer();
+  const client = net.connect({ port: parseInt(mainServer?.port || -1, 10) });
 
-    client.on('error', (err: mixed) => {
-      debugLog(err);
+  client.on('error', (err: mixed) => {
+    debugLog(err);
+    setTimeout(sendToServer, 10, data, callback);
+  });
 
-      if (times >= 50) throw new Error('Can not connect to the server');
-
-      setTimeout(() => {
-        sendToServer(port, times + 1)[eventName](data, () => callback(client));
-      }, 10);
-    });
-
-    if (eventName === 'once') client.once(data, () => callback(client));
-    if (eventName === 'end') client.end(data, () => callback(client));
-  };
-
-  return {
-    once: addErrorEvent('once'),
-    end: addErrorEvent('end'),
-  };
+  client.end(data, callback);
 };
 
 export default sendToServer;

@@ -6,34 +6,20 @@ import net from 'net';
 import rimraf from 'rimraf';
 import isRunning from 'is-running';
 
-import sendToServer from './sendToServer';
-
-export type serverArguType = {|
-  type: 'listen' | 'close',
-  cache: {},
-|};
-
-export const TIME_TO_CLOSE_SERVER = 5000;
-export const TIME_TO_REMOVE_FILES = 500;
 export const TIME_TO_CHECK = 100;
+export const TIME_TO_REMOVE_FILES = 500;
+export const TIME_TO_CLOSE_SERVER = 5000;
 
 /**
  * @example
- * new createServer(8000)
+ * new createServer(8000, debugLog)
  *
  * @param {number} port - the port of the server
  * @param {Function} debugLog - debug log function
- * @param {Function} callback - close callback function
  */
-export default (
-  port: number,
-  debugLog: (message: string) => void,
-  callback: (argu: serverArguType) => Promise<number>,
-) => {
+export default (port: number, debugLog: (message: mixed) => Promise<void>) => {
   const cache = {};
-  let timer: IntervalID;
-  let checkedTimes: number;
-  let mainPort: number = port;
+  let timer: TimeoutID;
 
   const server = net.createServer((socket: net.Socket) => {
     socket.setEncoding('utf8');
@@ -45,23 +31,19 @@ export default (
 
         if (!pid || !filePath) return;
 
-        if (mainPort !== port) {
-          sendToServer(mainPort).end(JSON.stringify({ pid, filePath }), () => {
-            debugLog(`${filePath} has been sent to the main server`);
-          });
-          return;
-        }
-
         if (!cache[filePath]) cache[filePath] = [];
 
         cache[filePath].push(pid);
         debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
-        clearInterval(timer);
+        clearTimeout(timer);
 
-        let isRemoving: boolean = false;
-
-        checkedTimes = 1;
-        timer = setInterval(() => {
+        /**
+         * @example
+         * checking(0)
+         *
+         * @param {number} checkedTimes - checked times
+         */
+        const checking = (checkedTimes: number) => {
           const hasWorkingPids = Object.keys(cache).reduce(
             (result: boolean, cacheFilePath: string): boolean => {
               const newPids = cache[cacheFilePath].filter(isRunning);
@@ -82,49 +64,57 @@ export default (
             false,
           );
 
-          if (!hasWorkingPids) {
-            if (
-              checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK &&
-              Object.keys(cache).length !== 0
-            ) {
-              if (!isRemoving) {
-                const [removeFilePath] = Object.keys(cache);
-
-                /**
-                 * @example
-                 * removeCache();
-                 */
-                const removeCache = () => {
-                  delete cache[removeFilePath];
-                  debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
-
-                  if (Object.keys(cache).length === 0) checkedTimes = 0;
-                };
-
-                if (!fs.existsSync(removeFilePath)) {
-                  debugLog(`File does not exist: ${removeFilePath}`);
-                  removeCache();
-                  return;
-                }
-
-                if (mainPort !== port) return;
-
-                isRemoving = true;
-                rimraf(removeFilePath, () => {
-                  isRemoving = false;
-                  debugLog(`Remove existing file: ${removeFilePath}`);
-                  removeCache();
-                });
-              }
-            } else if (checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK)
-              server.close(() => {
-                clearInterval(timer);
-                debugLog('Close server');
-                callback({ type: 'close', cache });
-              });
-            else checkedTimes += 1;
+          if (hasWorkingPids) {
+            timer = setTimeout(checking, TIME_TO_CHECK, 0);
+            return;
           }
-        }, TIME_TO_CHECK);
+
+          if (
+            checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK &&
+            Object.keys(cache).length !== 0
+          ) {
+            const [removeFilePath] = Object.keys(cache);
+
+            /**
+             * @example
+             * nextEvent()
+             */
+            const nextEvent = () => {
+              delete cache[removeFilePath];
+              debugLog(`Cache: ${JSON.stringify(cache, null, 2)}`);
+
+              timer = setTimeout(
+                checking,
+                TIME_TO_CHECK,
+                Object.keys(cache).length === 0 ? 0 : checkedTimes,
+              );
+            };
+
+            if (!fs.existsSync(removeFilePath)) {
+              debugLog(`File does not exist: ${removeFilePath}`);
+              nextEvent();
+              return;
+            }
+
+            rimraf(removeFilePath, () => {
+              debugLog(`Remove existing file: ${removeFilePath}`);
+              nextEvent();
+            });
+            return;
+          }
+
+          if (checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK) {
+            clearTimeout(timer);
+            server.close(() => {
+              debugLog('Close server');
+            });
+            return;
+          }
+
+          timer = setTimeout(checking, TIME_TO_CHECK, checkedTimes + 1);
+        };
+
+        checking(0);
       } catch (err) {
         debugLog(err);
       }
@@ -135,18 +125,7 @@ export default (
     debugLog(err.message);
   });
 
-  server.listen(port, async () => {
-    mainPort = await callback({ type: 'listen', cache });
-
-    if (mainPort !== port)
-      Object.keys(cache).forEach((filePath: string) => {
-        cache[filePath].forEach((pid: string) => {
-          sendToServer(mainPort).end(JSON.stringify({ pid, filePath }), () => {
-            debugLog(`${filePath} has been sent to the main server`);
-          });
-        });
-      });
-
-    debugLog(`Open server at ${port}`);
+  server.listen(port, () => {
+    debugLog(`(${process.pid}) Open server at ${port}`);
   });
 };

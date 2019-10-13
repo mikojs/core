@@ -9,17 +9,20 @@
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
+import { handleUnhandledRejection } from '@mikojs/utils';
+
 import configs from './utils/configs';
 import sendToServer from './utils/sendToServer';
 
 const debugLog = debug('configs:config');
+
+handleUnhandledRejection();
 
 /**
  * @example
  * config('cli', '/file-path')
  *
  * @param {string} cliName - cli name
- * @param {boolean} port - the port of the config server
  * @param {string} filePath - file path
  * @param {string} ignoreFilePath - ignore file path
  *
@@ -27,19 +30,17 @@ const debugLog = debug('configs:config');
  */
 export default (
   cliName: string,
-  port: number,
   filePath: string,
   ignoreFilePath?: string,
 ): {} => {
-  debugLog(`cliName: ${cliName}`);
-  debugLog(`filePath: ${filePath}`);
+  debugLog({ cliName, filePath, ignoreFilePath });
 
-  sendToServer(port).end(JSON.stringify({ pid: process.pid, filePath }), () => {
+  sendToServer(JSON.stringify({ pid: process.pid, filePath }), () => {
     debugLog(`${filePath} has been sent to the server`);
   });
 
   if (ignoreFilePath)
-    sendToServer(port).end(
+    sendToServer(
       JSON.stringify({ pid: process.pid, filePath: ignoreFilePath }),
       () => {
         debugLog(`${ignoreFilePath} has been sent to the server`);

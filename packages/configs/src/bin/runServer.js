@@ -1,70 +1,38 @@
 #! /usr/bin/env node
 // @flow
 
-import fs from 'fs';
+import net from 'net';
 
-import findProcess from 'find-process';
 import debug from 'debug';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 
-import createServer, { type serverArguType } from 'utils/createServer';
+import createServer from 'utils/createServer';
+import findMainServer from 'utils/findMainServer';
 
-const port = parseInt(process.argv[2], 10);
-const debugLog = !process.env.CONFIG_SERVER_DEBUG
+const debugPort = !process.env.DEBUG_PORT
+  ? -1
+  : parseInt(process.env.DEBUG_PORT, 10);
+const debugLog = !process.env.DEBUG_PORT
   ? debug('configs:runServer')
-  : ((): ((data: mixed) => void) & {
-      close: () => void,
-    } => {
-      const fsStream = fs.createWriteStream('config-server-debug');
+  : async (data: mixed) => {
+      const mainServer = await findMainServer();
+      const prefix = `(${mainServer?.isMain ? 'main' : 'other'}) ${
+        process.pid
+      } --> `;
+      const client = net.connect({ port: debugPort });
 
-      /**
-       * @example
-       * log('message')
-       *
-       * @param {string} data - the data is used to be logged
-       */
-      const log = (data: mixed) => {
-        if (typeof data === 'number') fsStream.write(data.toString());
-        else if (typeof data === 'string') fsStream.write(data);
-        else fsStream.write(JSON.stringify(data, null, 2) || '');
-
-        fsStream.write('\n\n');
-      };
-
-      /**
-       * @example
-       * log.close()
-       */
-      log.close = () => {
-        fsStream.close();
-      };
-
-      return log;
-    })();
+      if (typeof data === 'number') client.end(`${prefix}${data.toString()}`);
+      else if (typeof data === 'string') client.end(`${prefix}${data}`);
+      else client.end(`${prefix}${JSON.stringify(data, null, 2) || ''}`);
+    };
 
 handleUnhandledRejection();
-createServer(
-  port,
-  debugLog,
-  async ({ type, cache }: serverArguType): Promise<number> => {
-    if (type === 'close') {
-      // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-      debugLog.close?.(); // eslint-disable-line flowtype/no-unused-expressions
-      return port;
-    }
 
-    const [existServer] = (await findProcess('name', __filename)).slice(-1);
+(async () => {
+  const mainServer = await findMainServer();
 
-    debugLog(existServer);
-    debugLog(process.pid);
+  if (!mainServer?.isMain) return;
 
-    if (existServer.pid === process.pid) return port;
-
-    const [existServerPort] = existServer.cmd.split(/ /).slice(-1);
-
-    debugLog(existServerPort);
-
-    return existServerPort;
-  },
-);
+  createServer(parseInt(process.argv[2], 10), debugLog);
+})();

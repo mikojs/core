@@ -1,20 +1,19 @@
 #! /usr/bin/env node
 // @flow
 
-import type net from 'net';
 import path from 'path';
 
 import execa from 'execa';
 import debug from 'debug';
 import npmWhich from 'npm-which';
 import getPort from 'get-port';
-import findProcess from 'find-process';
 import chalk from 'chalk';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';
+import findMainServer from 'utils/findMainServer';
 import sendToServer from 'utils/sendToServer';
 import generateFiles from 'utils/generateFiles';
 
@@ -47,29 +46,30 @@ handleUnhandledRejection();
       return;
 
     default: {
+      const debugPort = !process.env.DEBUG_PORT
+        ? -1
+        : parseInt(process.env.DEBUG_PORT, 10);
+
+      if (
+        process.env.DEBUG_PORT &&
+        (await getPort({ port: debugPort })) === debugPort
+      )
+        throw new Error('Can not find the debug server');
+
       try {
-        const runServerFilePath = path.resolve(__dirname, './runServer.js');
-        const [existServer] = (await findProcess(
-          'name',
-          runServerFilePath,
-        )).slice(-1);
+        const mainServer = await findMainServer();
+        const port = mainServer?.port || (await getPort());
 
-        debugLog(existServer);
+        debugLog({ mainServer, port });
 
-        const port = existServer
-          ? existServer.cmd.split(/ /).slice(-1)[0]
-          : await getPort();
-
-        debugLog(port);
-
-        if (!existServer) {
-          execa(runServerFilePath, [port], {
+        if (!mainServer) {
+          execa(path.resolve(__dirname, './runServer.js'), [port], {
             detached: true,
-          });
+            stdio: 'ignore',
+          }).unref();
           await new Promise(resolve =>
-            sendToServer(port).once('connect', (client: net.Socket) => {
+            sendToServer('{}', () => {
               debugLog('connect');
-              client.destroy();
               resolve();
             }),
           );
@@ -77,7 +77,7 @@ handleUnhandledRejection();
 
         // [start]
         // handle config and ignore files
-        if (!generateFiles(cliName, port)) {
+        if (!(await generateFiles(cliName))) {
           process.exit(1);
           return;
         }
@@ -87,21 +87,13 @@ handleUnhandledRejection();
           chalk`Run command: {gray ${[path.basename(cli), ...argv].join(' ')}}`,
         );
 
-        const { exitCode } = await execa(
-          npmWhich(process.cwd()).sync('node'),
-          [cli, ...argv],
-          {
-            stdio: 'inherit',
-            env,
-          },
-        );
-
-        debugLog(exitCode);
-        process.exit(exitCode);
+        await execa(npmWhich(process.cwd()).sync('node'), [cli, ...argv], {
+          stdio: 'inherit',
+          env,
+        });
       } catch (e) {
         logger.log('Run command fail');
         debugLog(e);
-
         process.exit(e.exitCode || 1);
       }
       return;

@@ -9,10 +9,14 @@
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
+import { handleUnhandledRejection } from '@mikojs/utils';
+
 import configs from './utils/configs';
 import sendToServer from './utils/sendToServer';
 
 const debugLog = debug('configs:config');
+
+handleUnhandledRejection();
 
 /**
  * @example

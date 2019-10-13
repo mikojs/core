@@ -9,6 +9,7 @@ describe('find main server', () => {
     result                                 | expected
     ${[]}                                  | ${null}
     ${[{ pid: process.pid, cmd: '8000' }]} | ${{ isMain: true, port: '8000' }}
+    ${[{ pid: process.pid, cmd: '8000' }]} | ${{ isMain: true, port: '8000' }}
     ${[{ pid: -1, cmd: '8000' }]}          | ${{ isMain: false, port: '8000' }}
   `(
     'find main server with process = $result',
@@ -20,6 +21,7 @@ describe('find main server', () => {
       expected: ?{| isMain: boolean, port: string |},
     |}) => {
       findProcess.result = result;
+
       expect(await findMainServer()).toEqual(expected);
     },
   );

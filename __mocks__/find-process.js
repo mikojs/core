@@ -2,20 +2,18 @@
 
 /** mock find-process */
 class FindProcess {
-  +result = [
-    {
-      pid: process.pid,
-      cmd: '',
-    },
-  ];
+  +result = null;
 
   /**
    * @example
-   * findProcess.main()
+   * findProcess.main('name', 'cmd')
+   *
+   * @param {Array} argu - the arguments of find-process
    *
    * @return {Array} - the result of the mock find-process
    */
-  +main = () => this.result;
+  +main = async (...argu: $ReadOnlyArray<mixed>) =>
+    this.result || (await jest.requireActual('find-process')(...argu));
 }
 
 export const findProcess = new FindProcess();

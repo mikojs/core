@@ -17,18 +17,9 @@ describe('send to server', () => {
     const mockCallback = jest.fn();
 
     await sendToServer('test', mockCallback);
-
-    const [, errorCallback] = net.callback.mock.calls.find(
-      ([type]: [string]) => type === 'error',
-    );
-
-    errorCallback('error');
+    net.find('error')[1]('error');
     jest.runAllTimers();
 
-    const [, endCallback] = net.callback.mock.calls.find(
-      ([type]: [string]) => type === 'end',
-    );
-
-    expect(endCallback).toBe(mockCallback);
+    expect(net.find('end')[1]).toBe(mockCallback);
   });
 });

@@ -4,6 +4,19 @@
 class Net {
   +callback = jest.fn<[string, () => void], void>();
 
+  /**
+   * @example
+   * net.find('end')
+   *
+   * @param {string} kind - the kind of the callback
+   *
+   * @return {Array} - the mock of the callback
+   */
+  +find = (kind: string) =>
+    this.callback.mock.calls.find(
+      ([type]: [string, () => void]) => type === kind,
+    );
+
   +main = {
     connect: () => ({
       end: (data: string, endCallback: () => void) => {

@@ -25,10 +25,7 @@ jest.mock('net');
 describe('create server', () => {
   beforeAll(() => {
     createServer(port, debugLog);
-
-    [, dataCallback] = net.callback.mock.calls.find(
-      ([type]: [string]) => type === 'data',
-    );
+    [, dataCallback] = net.find('data');
   });
 
   beforeEach(() => {
@@ -50,11 +47,7 @@ describe('create server', () => {
       argu?: mixed,
       expected: string,
     |}) => {
-      const [, callback] = net.callback.mock.calls.find(
-        ([type]: [string]) => type === eventName,
-      );
-
-      callback(argu);
+      net.find(eventName)[1](argu);
 
       expect(debugLog).toHaveBeenCalledTimes(1);
       expect(debugLog).toHaveBeenCalledWith(expected);
@@ -155,12 +148,7 @@ describe('create server', () => {
 
     test('close the server after the all processes are close', () => {
       jest.advanceTimersByTime(TIME_TO_CHECK + TIME_TO_CLOSE_SERVER);
-
-      const [, closeCallback] = net.callback.mock.calls.find(
-        ([type]: [string]) => type === 'close',
-      );
-
-      closeCallback();
+      net.find('close')[1]();
 
       expect(debugLog).toHaveBeenCalledTimes(1);
       expect(debugLog).toHaveBeenCalledWith('Close server');

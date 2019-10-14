@@ -22,7 +22,14 @@ describe('find main server', () => {
     |}) => {
       findProcess.result = result;
 
-      expect(await findMainServer()).toEqual(expected);
+      expect(await findMainServer()).toEqual(
+        !expected
+          ? expected
+          : {
+              ...expected,
+              allProcesses: result,
+            },
+      );
     },
   );
 });

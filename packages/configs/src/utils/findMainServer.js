@@ -15,13 +15,15 @@ let cachePid: number;
  * @return {object} - the pid and the port of the main server
  */
 export default async (): Promise<?{|
+  allProcesses: $Call<findProcess, string, string>,
   isMain: boolean,
   port: string,
 |}> => {
-  const [mainProcess] = await findProcess(
+  const allProcesses = await findProcess(
     'name',
     path.resolve(__dirname, '../bin/runServer.js'),
   );
+  const [mainProcess] = allProcesses;
 
   if (!mainProcess) return null;
 
@@ -32,6 +34,7 @@ export default async (): Promise<?{|
   }
 
   return {
+    allProcesses,
     isMain: mainProcess.pid === process.pid,
     port: mainProcess.cmd.split(/ /).slice(-1)[0],
   };

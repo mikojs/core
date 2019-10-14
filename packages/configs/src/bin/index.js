@@ -8,6 +8,7 @@ import debug from 'debug';
 import npmWhich from 'npm-which';
 import getPort from 'get-port';
 import chalk from 'chalk';
+import rimraf from 'rimraf';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
@@ -15,6 +16,7 @@ import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';
 import findMainServer from 'utils/findMainServer';
 import sendToServer from 'utils/sendToServer';
+import findFiles, { type filesDataType } from 'utils/findFiles';
 import generateFiles from 'utils/generateFiles';
 
 const logger = createLogger('@mikojs/configs');
@@ -44,6 +46,33 @@ handleUnhandledRejection();
         stdio: 'inherit',
       });
       return;
+
+    case 'remove': {
+      const files = findFiles(cliName);
+      const mainServer = await findMainServer();
+
+      if (files)
+        await Promise.all(
+          Object.keys(files).map((key: string) =>
+            Promise.all(
+              files[key].map(
+                ({ filePath }: $ElementType<filesDataType, number>) =>
+                  new Promise(resolve => {
+                    rimraf(filePath, resolve);
+                  }),
+              ),
+            ),
+          ),
+        );
+
+      if (mainServer)
+        mainServer.allProcesses.forEach(({ pid }: { pid: number }) =>
+          process.kill(pid),
+        );
+
+      logger.succeed('The files and the servers are removed');
+      return;
+    }
 
     default: {
       const debugPort = !process.env.DEBUG_PORT

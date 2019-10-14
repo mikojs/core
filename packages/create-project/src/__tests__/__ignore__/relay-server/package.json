@@ -17,6 +17,7 @@
     "@mikojs/koa-graphql": "version",
     "@mikojs/koa-react": "version",
     "@mikojs/server": "version",
+    "fbjs": "version",
     "graphql": "version",
     "koa": "version",
     "node-fetch": "version",

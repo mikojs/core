@@ -16,6 +16,7 @@
     "@mikojs/koa-base": "version",
     "@mikojs/koa-graphql": "version",
     "@mikojs/server": "version",
+    "fbjs": "version",
     "graphql": "version",
     "koa": "version"
   },

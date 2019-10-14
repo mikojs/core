@@ -17,6 +17,7 @@
     "@mikojs/koa-react": "version",
     "@mikojs/server": "version",
     "@mikojs/use-css": "version",
+    "fbjs": "version",
     "koa": "version",
     "react": "version",
     "react-dom": "version"

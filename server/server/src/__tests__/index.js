@@ -10,6 +10,9 @@ import { chokidar } from 'chokidar';
 
 import server from '../index';
 
+import testServer from './__ignore__/testServer';
+import fetchServer from './__ignore__/fetchServer';
+
 import Endpoint from 'utils/Endpoint';
 
 const context = {
@@ -17,6 +20,7 @@ const context = {
   dir: 'lib',
   babelOptions: false,
 };
+let runningServer: http$Server;
 
 describe('server', () => {
   test.each`
@@ -37,6 +41,17 @@ describe('server', () => {
     },
   );
 
+  test('can not find `test` method in `koa-router`', async () => {
+    await expect(
+      (async () =>
+        (await server.init(context))
+        |> (undefined
+          |> server.start
+          |> (new Endpoint('/test', 'test') |> server.end)
+          |> server.end))(),
+    ).rejects.toThrow('can not find `test` method in `koa-router`');
+  });
+
   test('server.watch work', async () => {
     const mockRouter = jest.fn();
 
@@ -48,14 +63,42 @@ describe('server', () => {
     chokidar.watchCallback('add', 'test');
   });
 
-  test('can not find `test` method in `koa-router`', async () => {
-    await expect(
-      (async () =>
-        (await server.init(context))
-        |> (undefined
-          |> server.start
-          |> (new Endpoint('/test', 'test') |> server.end)
-          |> server.end))(),
-    ).rejects.toThrow('can not find `test` method in `koa-router`');
+  describe('running server', () => {
+    beforeAll(async () => {
+      runningServer = await testServer();
+    });
+
+    test.each`
+      method    | expected
+      ${'get'}  | ${['entry router', 'test', 'get']}
+      ${'post'} | ${['entry router', 'test', 'post']}
+      ${'put'}  | ${['entry router', 'test', 'put']}
+      ${'del'}  | ${''}
+      ${'all'}  | ${['entry router', 'test', 'all']}
+    `(
+      '$method',
+      async ({
+        method,
+        expected,
+      }: {|
+        method: string,
+        expected: $ReadOnlyArray<string> | string,
+      |}) => {
+        expect(
+          await fetchServer(
+            `/test/${method}`,
+            method === 'all' ? 'get' : method,
+          ),
+        ).toEqual(expected);
+      },
+    );
+
+    test('not find method', async () => {
+      expect(await fetchServer('/')).toEqual(['entry router']);
+    });
+
+    afterAll(() => {
+      runningServer.close();
+    });
   });
 });

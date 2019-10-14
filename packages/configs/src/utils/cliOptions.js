@@ -60,6 +60,7 @@ export default (
   configs {green babel:lerna -w}
   configs {gray --info}
   configs {green babel:lerna} {gray --info}
+  configs {green babel:lerna} {gray --install}
   configs {green babel:lerna} {gray --remove}
   configs {green babel} {gray --configs-env envA,envB}
   configs {green exec run custom command} {gray --configs-env envA,envB --configs-files babel,lint}`,
@@ -187,7 +188,7 @@ export default (
 
   if (shouldInstall && shouldRemove) {
     logger.fail(
-      chalk`Should not use {red \`--install\`} and {red \`remove\`} at the same time.`,
+      chalk`Should not use {red \`--install\`} and {red \`--remove\`} at the same time.`,
     );
     return false;
   }

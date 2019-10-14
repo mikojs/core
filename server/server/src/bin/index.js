@@ -103,7 +103,6 @@ handleUnhandledRejection();
     let timeout: TimeoutID;
 
     socket.setEncoding('utf8');
-
     socket.write(
       JSON.stringify({
         serverFile: serverFilePath
@@ -176,7 +175,7 @@ handleUnhandledRejection();
       }
     });
 
-    socket.on('close', async () => {
+    socket.on('close', () => {
       debugLog('client close');
     });
   });

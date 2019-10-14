@@ -27,10 +27,9 @@ handleUnhandledRejection();
   // [start] babel build
   const dev = process.env.NODE_ENV !== 'production';
   const opts = parseArgv(process.argv);
-  const customFile = opts.cliOptions.outFile;
+  const serverFilePath = opts.cliOptions.outFile;
 
-  if (customFile) {
-    logger.info('Run the custom server');
+  if (serverFilePath) {
     debugLog(opts);
 
     const { src, dir } = findOptionsPath(
@@ -107,9 +106,9 @@ handleUnhandledRejection();
 
     socket.write(
       JSON.stringify({
-        serverFile: customFile
-          ? path.resolve(customFile)
-          : path.resolve(__dirname, '../defaults'),
+        serverFile: serverFilePath
+          ? path.resolve(serverFilePath)
+          : path.resolve(opts.cliOptions.outDir, './server.js'),
         src: opts.cliOptions.filenames[0],
         dir: opts.cliOptions.outDir,
         dev,

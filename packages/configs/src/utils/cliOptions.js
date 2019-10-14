@@ -60,11 +60,13 @@ export default (
   configs {green babel:lerna -w}
   configs {gray --info}
   configs {green babel:lerna} {gray --info}
+  configs {green babel:lerna} {gray --remove}
   configs {green babel} {gray --configs-env envA,envB}
   configs {green exec run custom command} {gray --configs-env envA,envB --configs-files babel,lint}`,
     )
     .option('--install', 'install packages by config')
     .option('--info', 'print more info about configs')
+    .option('--remove', 'use to remove the generated files and the server')
     .option(
       '--configs-env [env]',
       'configs environment variables',
@@ -83,6 +85,7 @@ export default (
     args: [cliName],
     rawArgs,
     install: shouldInstall = false,
+    remove: shouldRemove = false,
     info: showInfo = false,
     configsEnv,
     configsFiles,
@@ -93,6 +96,7 @@ export default (
     cliName,
     rawArgs,
     shouldInstall,
+    shouldRemove,
     showInfo,
     configsEnv,
     configsFiles,
@@ -181,6 +185,13 @@ export default (
     return false;
   }
 
+  if (shouldInstall && shouldRemove) {
+    logger.fail(
+      chalk`Should not use {red \`--install\`} and {red \`remove\`} at the same time.`,
+    );
+    return false;
+  }
+
   if (!configs.store[cliName]) {
     logger
       .fail(chalk`Can not find {cyan \`${cliName}\`} in configs`)
@@ -210,13 +221,22 @@ export default (
           ),
       );
     const result = {
-      cli: shouldInstall ? 'install' : getCli([cliName, ...rawArgsFiltered]),
-      argv: shouldInstall
-        ? install(['yarn', 'add', '--dev'])
-        : run(rawArgsFiltered),
+      cli: 'default',
+      argv: ['default'],
       env,
       cliName,
     };
+
+    if (shouldInstall) {
+      result.cli = 'install';
+      result.argv = install(['yarn', 'add', '--dev']);
+    } else if (shouldRemove) {
+      result.cli = 'remove';
+      result.argv = [];
+    } else {
+      result.cli = getCli([cliName, ...rawArgsFiltered]);
+      result.argv = run(rawArgsFiltered);
+    }
 
     debugLog(result);
 

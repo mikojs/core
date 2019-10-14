@@ -45,6 +45,9 @@ handleUnhandledRejection();
       });
       return;
 
+    case 'remove':
+      return;
+
     default: {
       const debugPort = !process.env.DEBUG_PORT
         ? -1

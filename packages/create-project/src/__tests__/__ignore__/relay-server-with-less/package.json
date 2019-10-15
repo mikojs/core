@@ -1,0 +1,72 @@
+{
+  "name": "package-name",
+  "description": "package description",
+  "license": "MIT",
+  "author": "username <email>",
+  "homepage": "http://mikojs/package-homepage",
+  "repository": "https://github.com/mikojs/core.git",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "scripts": {
+    "dev": "configs server -w",
+    "start": "NODE_ENV=production configs server",
+    "test": "SKIP_SERVER=true configs server && configs test"
+  },
+  "dependencies": {
+    "@mikojs/koa-base": "version",
+    "@mikojs/koa-graphql": "version",
+    "@mikojs/koa-react": "version",
+    "@mikojs/server": "version",
+    "@mikojs/use-css": "version",
+    "@mikojs/use-less": "version",
+    "graphql": "version",
+    "koa": "version",
+    "node-fetch": "version",
+    "react": "version",
+    "react-dom": "version",
+    "react-is": "version",
+    "react-relay": "version",
+    "react-relay-network-modern": "version",
+    "react-relay-network-modern-ssr": "version",
+    "relay-runtime": "version",
+    "whatwg-fetch": "version"
+  },
+  "devDependencies": {
+    "@babel/cli": "version",
+    "@babel/core": "version",
+    "@babel/plugin-proposal-class-properties": "version",
+    "@babel/preset-react": "version",
+    "@mikojs/babel-plugin-import-css": "version",
+    "@mikojs/babel-preset-base": "version",
+    "@mikojs/badges": "version",
+    "@mikojs/configs": "version",
+    "@mikojs/eslint-config-base": "version",
+    "@mikojs/jest": "version",
+    "babel-plugin-css-modules-transform": "version",
+    "babel-plugin-relay": "version",
+    "enzyme": "version",
+    "enzyme-adapter-react-16": "version",
+    "eslint": "version",
+    "eslint-watch": "version",
+    "flow-bin": "version",
+    "flow-typed": "version",
+    "husky": "version",
+    "jest": "version",
+    "lint-staged": "version",
+    "node-fetch": "version",
+    "prettier": "version",
+    "prettier-package-json": "version",
+    "webpack": "version"
+  },
+  "keywords": ["keyword"],
+  "engines": {
+    "node": ">= node version",
+    "npm": ">= npm version",
+    "yarn": ">= yarn version"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "configs lint-staged && yarn flow"
+    }
+  }
+}

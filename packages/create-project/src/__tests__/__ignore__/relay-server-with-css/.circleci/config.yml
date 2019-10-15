@@ -1,0 +1,49 @@
+version: 2
+defaults: &defaults
+  docker:
+    - image: node:latest
+  working_directory: ~/repo
+
+restore-cache: &restore-cache
+  keys:
+    - dependencies-{{ checksum "yarn.lock" }}
+    - dependencies-
+
+save-cache: &save-cache
+  paths:
+    - node_modules
+    - flow-typed/npm
+    - ~/.flow-typed
+  key: dependencies-{{ checksum "yarn.lock" }}
+
+install: &install
+  name: Install packages
+  command: yarn install
+
+jobs:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore-cache
+      - run: *install
+      - save_cache: *save-cache
+
+      - run:
+          name: Check code style
+          command: |
+            yarn flow-typed install
+            yarn configs lint .
+            yarn flow
+
+      - run:
+          name: Test
+          command: yarn test -i
+      - store_artifacts:
+          path: coverage
+
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - test

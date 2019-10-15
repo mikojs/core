@@ -51,7 +51,7 @@ export default {
 
     return [...argv, '-f', flowVersion.replace(/\^/, '')];
   },
-  configFiles: {
+  configsFiles: {
     emptyConfig: path.resolve(__dirname, './emptyConfig.js'),
   },
 };

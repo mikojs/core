@@ -40,7 +40,7 @@ describe('configs', () => {
               return;
 
             case 'env':
-            case 'configFiles':
+            case 'configsFiles':
               expect(Object.keys(value)).not.toBe(0);
               return;
 

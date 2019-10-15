@@ -23,7 +23,7 @@ export default {
       'git add',
     ],
   }),
-  configFiles: {
+  configsFiles: {
     'lint-staged': '.lintstagedrc.js',
     prettier: true,
     lint: true,

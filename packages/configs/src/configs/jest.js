@@ -33,7 +33,7 @@ export default {
       },
     },
   }),
-  configFiles: {
+  configsFiles: {
     jest: 'jest.config.js',
     babel: true,
   },

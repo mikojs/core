@@ -13,12 +13,12 @@ import chalk from 'chalk';
 
 import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
-import configs from '@mikojs/configs/lib/configs';
 
 import testings, {
   type inquirerResultType,
   type contextType,
 } from './__ignore__/testings';
+import getPkgInstalled from './__ignore__/getPkgInstalled';
 
 import base from 'stores/base';
 import pkg from 'stores/pkg';
@@ -28,12 +28,7 @@ const storePkg = {
   version: '1.0.0',
   main: './lib/index.js',
 };
-const PASS_COMMANDS = [
-  'git config --get user.name',
-  'git config --get user.email',
-  'yarn flow-typed install',
-  'git status',
-];
+const mockLog = jest.fn();
 
 describe('create project', () => {
   beforeEach(() => {
@@ -46,7 +41,7 @@ describe('create project', () => {
     });
   });
 
-  test('check testing cases', () => {
+  test('check the amount of the testing cases', () => {
     expect(
       testings
         .slice(0, testings.length / 2)
@@ -56,135 +51,54 @@ describe('create project', () => {
     );
   });
 
-  test.each(testings)(
+  describe.each(testings)(
     '%s',
-    async (
+    (
       name: string,
       projectDir: string,
       inquirerResult: inquirerResultType,
       context?: contextType,
     ) => {
-      const mockLog = jest.fn();
+      beforeEach(async () => {
+        mockLog.mockClear();
+        outputFileSync.destPaths = [];
+        outputFileSync.contents = [];
+        execa.cmds = [];
+        inquirer.result = inquirerResult;
+        global.console.info = mockLog;
 
-      outputFileSync.destPaths = [];
-      outputFileSync.contents = [];
-      execa.cmds = [];
-      inquirer.result = inquirerResult;
-      global.console.info = mockLog;
-
-      await base.init({
-        projectDir,
-        skipCommand: false,
-        lerna: false,
-        verbose: true,
-        ...context,
+        await base.init({
+          projectDir,
+          skipCommand: false,
+          lerna: false,
+          verbose: true,
+          ...context,
+        });
       });
 
-      expect(mockLog).toHaveBeenCalledTimes(
-        execa.cmds.filter((cmd: string) => !/git/.test(cmd)).length,
-      );
+      test('check the commands', () => {
+        const cmds = execa.cmds.filter((cmd: string) => !/git/.test(cmd));
 
-      const pkgInstalled = execa.cmds.reduce(
-        (
-          result: {| devDependencies: {}, dependencies: {} |},
-          cmd: string,
-        ): {|
-          devDependencies: {},
-          dependencies: {},
-        |} => {
-          if (!/git/.test(cmd))
-            expect(mockLog).toHaveBeenCalledWith(
-              chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
-            );
+        expect(mockLog).toHaveBeenCalledTimes(cmds.length);
+        cmds.forEach((cmd: string) => {
+          expect(mockLog).toHaveBeenCalledWith(
+            chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
+          );
+        });
+      });
 
-          if (/yarn add --dev/.test(cmd))
-            return {
-              ...result,
-              devDependencies: cmd
-                .replace(/yarn add --dev /, '')
-                .split(/ /)
-                .reduce(
-                  (devDependencies: {}, pkgName: string) => ({
-                    ...devDependencies,
-                    [pkgName]: 'version',
-                  }),
-                  result.devDependencies,
-                ),
-            };
+      describe('check the files', () => {
+        const checkFiles = d3DirTree(projectDir, {
+          exclude: /.*\.swp/,
+        }).leaves();
 
-          if (/yarn add/.test(cmd))
-            return {
-              ...result,
-              dependencies: cmd
-                .replace(/yarn add /, '')
-                .split(/ /)
-                .reduce(
-                  (dependencies: {}, pkgName: string) => ({
-                    ...dependencies,
-                    [pkgName]: 'version',
-                  }),
-                  result.dependencies,
-                ),
-            };
+        test('check the amount of the checking files', () => {
+          expect(checkFiles.length).toBe(outputFileSync.contents.length);
+        });
 
-          if (/yarn configs --install/.test(cmd)) {
-            const configType = cmd.replace(/yarn configs --install /, '');
-            const configPackages =
-              // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-              configs[configType]?.install?.(['--dev']) ||
-              (() => {
-                throw new Error(`Can not find config type: ${configType}`);
-              })();
-            const isDevDependencies = configPackages[0] === '--dev';
-
-            return {
-              ...result,
-              devDependencies: !isDevDependencies
-                ? result.devDependencies
-                : configPackages.slice(1).reduce(
-                    (devDependencies: {}, pkgName: string) => ({
-                      ...devDependencies,
-                      [pkgName]: 'version',
-                    }),
-                    result.devDependencies,
-                  ),
-              dependencies: isDevDependencies
-                ? result.dependencies
-                : configPackages.reduce(
-                    (dependencies: {}, pkgName: string) => ({
-                      ...dependencies,
-                      [pkgName]: 'version',
-                    }),
-                    result.dependencies,
-                  ),
-            };
-          }
-
-          if (!PASS_COMMANDS.includes(cmd))
-            throw new Error(`Find not expect command: ${cmd}`);
-
-          return result;
-        },
-        {
-          devDependencies: {},
-          dependencies: {},
-        },
-      );
-
-      if (Object.keys(pkgInstalled.devDependencies).length === 0)
-        delete pkgInstalled.devDependencies;
-
-      if (Object.keys(pkgInstalled.dependencies).length === 0)
-        delete pkgInstalled.dependencies;
-
-      expect(
-        d3DirTree(projectDir, { exclude: /.*\.swp/ })
-          .leaves()
-          .reduce(
-            (
-              result: number,
-              { data: { path: filePath, extension } }: d3DirTreeNodeType,
-            ): number => {
+        checkFiles.forEach(
+          ({ data: { path: filePath, extension } }: d3DirTreeNodeType) => {
+            test(`check \`${path.relative(projectDir, filePath)}\``, () => {
               const content = (
                 outputFileSync.contents.find(
                   (_: string, contentIndex: number) =>
@@ -205,7 +119,7 @@ describe('create project', () => {
                 case '.json':
                   const jsonContent = {
                     ...JSON.parse(content),
-                    ...pkgInstalled,
+                    ...getPkgInstalled(execa.cmds),
                   };
 
                   expect(
@@ -232,12 +146,10 @@ describe('create project', () => {
                   expect(content).toBe(expected);
                   break;
               }
-
-              return result - 1;
-            },
-            outputFileSync.contents.length,
-          ),
-      ).toBe(0);
+            });
+          },
+        );
+      });
     },
   );
 });

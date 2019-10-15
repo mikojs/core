@@ -68,10 +68,9 @@ const lint = {
 const jest = {
   config: ({ collectCoverageFrom, ...config }) => ({
     ...config,
-    collectCoverageFrom: [
-      ...collectCoverageFrom,
-      '!**/packages/jest/**',
-      '!**/express-graphql/**',
+    collectCoverageFrom: [...collectCoverageFrom, '!**/packages/jest/**'],
+    forceCoverageMatch: [
+      '**/packages/create-project/src/__tests__/__ignore__/**/*.js',
     ],
   }),
   configFiles: {

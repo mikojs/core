@@ -95,7 +95,7 @@ export default {
     'lib',
     '--verbose',
   ],
-  configFiles: {
+  configsFiles: {
     babel: 'babel.config.js',
   },
 };

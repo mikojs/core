@@ -101,7 +101,7 @@ describe('cli options', () => {
         env: {},
         cliName,
       });
-      expect(configs.store.runCmd.configFiles).toEqual({
+      expect(configs.store.runCmd.configsFiles).toEqual({
         jest: true,
       });
     },

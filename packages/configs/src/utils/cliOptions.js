@@ -107,10 +107,10 @@ export default (
 
   if (configs.store[cliName] && configsFiles instanceof Array)
     configsFiles.forEach((key: string) => {
-      if (!configs.store[cliName].configFiles)
-        configs.store[cliName].configFiles = {};
+      if (!configs.store[cliName].configsFiles)
+        configs.store[cliName].configsFiles = {};
 
-      configs.store[cliName].configFiles[key] = true;
+      configs.store[cliName].configsFiles[key] = true;
     });
 
   if (showInfo) {

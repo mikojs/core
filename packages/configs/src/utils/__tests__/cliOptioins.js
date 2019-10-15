@@ -108,10 +108,10 @@ describe('cli options', () => {
   );
 
   test.each`
-    cliName     | options          | cli          | argv
-    ${'runCmd'} | ${['--install']} | ${'install'} | ${['yarn', 'add', '--dev']}
-    ${'runCmd'} | ${['--remove']}  | ${'remove'}  | ${[]}
-    ${'runCmd'} | ${[]}            | ${babelCli}  | ${[]}
+    cliName     | options                  | cli          | argv
+    ${'runCmd'} | ${['--configs-install']} | ${'install'} | ${['yarn', 'add', '--dev']}
+    ${'runCmd'} | ${['--configs-remove']}  | ${'remove'}  | ${[]}
+    ${'runCmd'} | ${[]}                    | ${babelCli}  | ${[]}
   `(
     'Run $cliName successfully with $options',
     ({
@@ -135,13 +135,13 @@ describe('cli options', () => {
   );
 
   test.each`
-    argv                                   | expected | consoleName
-    ${['--info']}                          | ${true}  | ${'info'}
-    ${['runCmd', '--info']}                | ${true}  | ${'info'}
-    ${['notFindCliName', '--info']}        | ${false} | ${'error'}
-    ${[]}                                  | ${false} | ${'error'}
-    ${['notFindCliName']}                  | ${false} | ${'error'}
-    ${['runCmd', '--install', '--remove']} | ${false} | ${'error'}
+    argv                                                   | expected | consoleName
+    ${['--configs-info']}                                  | ${true}  | ${'info'}
+    ${['runCmd', '--configs-info']}                        | ${true}  | ${'info'}
+    ${['notFindCliName', '--configs-info']}                | ${false} | ${'error'}
+    ${[]}                                                  | ${false} | ${'error'}
+    ${['notFindCliName']}                                  | ${false} | ${'error'}
+    ${['runCmd', '--configs-install', '--configs-remove']} | ${false} | ${'error'}
   `(
     'Run $argv',
     ({

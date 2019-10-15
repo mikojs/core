@@ -58,16 +58,19 @@ export default (
       chalk`Example:
   configs {green babel -w}
   configs {green babel:lerna -w}
-  configs {gray --info}
-  configs {green babel:lerna} {gray --info}
-  configs {green babel:lerna} {gray --install}
-  configs {green babel:lerna} {gray --remove}
+  configs {gray --configs-info}
+  configs {green babel:lerna} {gray --configs-info}
+  configs {green babel:lerna} {gray --configs-install}
+  configs {green babel:lerna} {gray --configs-remove}
   configs {green babel} {gray --configs-env envA,envB}
   configs {green exec run custom command} {gray --configs-env envA,envB --configs-files babel,lint}`,
     )
-    .option('--install', 'install packages by config')
-    .option('--info', 'print more info about configs')
-    .option('--remove', 'use to remove the generated files and the server')
+    .option('--configs-install', 'install packages by config')
+    .option('--configs-info', 'print more info about configs')
+    .option(
+      '--configs-remove',
+      'use to remove the generated files and the server',
+    )
     .option(
       '--configs-env [env]',
       'configs environment variables',
@@ -85,9 +88,9 @@ export default (
   const {
     args: [cliName],
     rawArgs,
-    install: shouldInstall = false,
-    remove: shouldRemove = false,
-    info: showInfo = false,
+    configsInstall: shouldInstall = false,
+    configsRemove: shouldRemove = false,
+    configsInfo: showInfo = false,
     configsEnv,
     configsFiles,
     options,

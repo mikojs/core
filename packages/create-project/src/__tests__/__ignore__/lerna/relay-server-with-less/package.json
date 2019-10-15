@@ -1,0 +1,19 @@
+{
+  "name": "package-name",
+  "description": "package description",
+  "license": "MIT",
+  "author": "username <email>",
+  "homepage": "http://mikojs/package-homepage",
+  "repository": "https://github.com/mikojs/core.git",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "scripts": {
+    "dev": "configs server:lerna -w",
+    "start": "NODE_ENV=production configs server:lerna",
+    "test": "SKIP_SERVER=true configs server:lerna"
+  },
+  "keywords": ["keyword"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -73,7 +73,7 @@ const jest = {
       '**/packages/create-project/src/__tests__/__ignore__/**/*.js',
     ],
   }),
-  configFiles: {
+  configsFiles: {
     lint: true,
   },
 };

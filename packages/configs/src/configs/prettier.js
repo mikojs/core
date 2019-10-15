@@ -8,7 +8,7 @@ export default {
   }),
   ignoreName: '.prettierignore',
   run: (argv: $ReadOnlyArray<string>) => [...argv, '--write'],
-  configFiles: {
+  configsFiles: {
     prettier: '.prettierrc.js',
   },
 };

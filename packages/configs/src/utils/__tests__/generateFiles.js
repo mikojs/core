@@ -19,7 +19,7 @@ describe('generate files', () => {
       config: {
         notFindCli: emptyFunction.thatReturnsArgument,
         jest: {
-          configFiles: {
+          configsFiles: {
             'babel:lerna': false,
           },
         },

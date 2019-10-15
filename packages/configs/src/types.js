@@ -13,7 +13,7 @@ export type objConfigType = {|
   ignoreName?: string,
   run?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
   env?: {},
-  configFiles?: {},
+  configsFiles?: {},
 |};
 
 export type configType = funcConfigType | objConfigType;

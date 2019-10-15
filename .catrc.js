@@ -74,7 +74,7 @@ const jest = {
       '!**/express-graphql/**',
     ],
   }),
-  configFiles: {
+  configsFiles: {
     lint: true,
   },
 };

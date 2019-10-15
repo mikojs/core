@@ -14,7 +14,7 @@ export default {
     'lib',
     '--verbose',
   ],
-  configFiles: {
+  configsFiles: {
     babel: true,
   },
 };

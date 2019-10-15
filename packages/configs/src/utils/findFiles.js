@@ -21,32 +21,32 @@ export type filesDataType = $ReadOnlyArray<{|
  *
  * @param {string} cliName - cli name
  *
- * @return {object} - configFiles object to generate the files
+ * @return {object} - configsFiles object to generate the files
  */
 const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
   const {
     alias: cli = cliName,
-    configFiles = {},
+    configsFiles = {},
     ignore: getIgnore,
     ignoreName,
   } = configs.store[cliName];
   const ignore = getIgnore?.([]) || [];
 
-  if (Object.keys(configFiles).length === 0) {
+  if (Object.keys(configsFiles).length === 0) {
     logger
       .fail('Can not generate the config file, You can:')
       .fail('')
       .fail(
-        chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configFiles.${cli}\`}`,
+        chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configsFiles.${cli}\`}`,
       )
       .fail(chalk`  - Run command with {cyan \`--configs-files\`} options`)
       .fail('');
     return null;
   }
 
-  return (Object.keys(configFiles): $ReadOnlyArray<string>).reduce(
+  return (Object.keys(configsFiles): $ReadOnlyArray<string>).reduce(
     (result: {}, configCliName: string): {} => {
-      const configPath = configFiles[configCliName];
+      const configPath = configsFiles[configCliName];
 
       if (!configPath) return result;
 

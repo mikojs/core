@@ -14,7 +14,7 @@ jest.mock('node-fetch', () =>
   })),
 );
 
-const react = new React(path.resolve(__dirname, './__ignore__/page'), {
+const react = new React(path.resolve(__dirname, './__ignore__/pages'), {
   dev: false,
   exclude: /exclude/,
 });

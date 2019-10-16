@@ -57,7 +57,7 @@ export default async (
     config: configFunc,
     basename: '/custom',
   });
-  const pageReact = new React(path.resolve(__dirname, './page'), {
+  const pageReact = new React(path.resolve(__dirname, './pages'), {
     dev,
     config: configFunc,
   });

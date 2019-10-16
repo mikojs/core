@@ -34,7 +34,7 @@ export default (cmds: $ReadOnlyArray<string>): resultType => {
             .replace(/yarn add (--dev )?/, '')
             .split(/ /)
             .reduce(
-              (newResult: ?{}, pkgName: string) => ({
+              (newResult: ?$Values<resultType>, pkgName: string) => ({
                 ...newResult,
                 [pkgName]: 'version',
               }),

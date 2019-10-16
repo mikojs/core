@@ -2,10 +2,10 @@
 
 import configs from '@mikojs/configs/lib/configs';
 
-type resultType = {|
-  dependencies: { [string]: string },
-  devDependencies: { [string]: string },
-|};
+type resultType = {
+  dependencies?: { [string]: string },
+  devDependencies?: { [string]: string },
+};
 
 const PASS_COMMANDS = [
   'git config --get user.name',
@@ -34,7 +34,7 @@ export default (cmds: $ReadOnlyArray<string>): resultType => {
             .replace(/yarn add (--dev )?/, '')
             .split(/ /)
             .reduce(
-              (newResult: {}, pkgName: string) => ({
+              (newResult: ?{}, pkgName: string) => ({
                 ...newResult,
                 [pkgName]: 'version',
               }),
@@ -55,23 +55,32 @@ export default (cmds: $ReadOnlyArray<string>): resultType => {
 
         return {
           ...result,
-          devDependencies: !isDevDependencies
-            ? result.devDependencies
-            : configPackages.slice(1).reduce(
-                (devDependencies: {}, pkgName: string) => ({
-                  ...devDependencies,
-                  [pkgName]: 'version',
-                }),
-                result.devDependencies,
-              ),
           dependencies: isDevDependencies
             ? result.dependencies
             : configPackages.reduce(
-                (dependencies: {}, pkgName: string) => ({
+                (
+                  dependencies: ?$PropertyType<resultType, 'dependencies'>,
+                  pkgName: string,
+                ) => ({
                   ...dependencies,
                   [pkgName]: 'version',
                 }),
-                result.dependencies,
+                result?.dependencies,
+              ),
+          devDependencies: !isDevDependencies
+            ? result.devDependencies
+            : configPackages.slice(1).reduce(
+                (
+                  devDependencies: ?$PropertyType<
+                    resultType,
+                    'devDependencies',
+                  >,
+                  pkgName: string,
+                ) => ({
+                  ...devDependencies,
+                  [pkgName]: 'version',
+                }),
+                result?.devDependencies,
               ),
         };
       }
@@ -81,17 +90,8 @@ export default (cmds: $ReadOnlyArray<string>): resultType => {
 
       return result;
     },
-    {
-      devDependencies: {},
-      dependencies: {},
-    },
+    {},
   );
-
-  if (Object.keys(pkgInstalled.devDependencies).length === 0)
-    delete pkgInstalled.devDependencies;
-
-  if (Object.keys(pkgInstalled.dependencies).length === 0)
-    delete pkgInstalled.dependencies;
 
   return pkgInstalled;
 };

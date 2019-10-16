@@ -4,6 +4,7 @@ import { isMemo } from 'react-is';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
 import { type Context as contextType } from 'koa';
+import { invariant } from 'fbjs';
 
 import { type propsType as rootPropsType } from './Root';
 
@@ -19,8 +20,8 @@ import { type propsType as rootPropsType } from './Root';
  * @return {rootPropsType['InitialPage' | 'mainInitialProps' | 'pageInitialProps']} - the data for rendering page
  */
 export default async (
-  Main: $PropertyType<rootPropsType, 'Main'>,
-  routesData: $PropertyType<rootPropsType, 'routesData'>,
+  Main: $PropertyType<rootPropsType<>, 'Main'>,
+  routesData: $PropertyType<rootPropsType<>, 'routesData'>,
   ctx:
     | contextType
     | {
@@ -28,19 +29,21 @@ export default async (
       },
   isServer: boolean,
 ): Promise<{|
-  Page: $PropertyType<rootPropsType, 'InitialPage'>,
-  mainProps: $PropertyType<rootPropsType, 'mainInitialProps'>,
-  pageProps: $PropertyType<rootPropsType, 'pageInitialProps'>,
+  Page: $PropertyType<rootPropsType<>, 'InitialPage'>,
+  mainProps: $PropertyType<rootPropsType<>, 'mainInitialProps'>,
+  pageProps: $PropertyType<rootPropsType<>, 'pageInitialProps'>,
   chunkName: string,
 |}> => {
-  const [
-    {
-      route: {
-        component: { loader, chunkName },
-      },
-      match,
+  const [matchRoute] = matchRoutes(routesData, ctx.path);
+
+  invariant(matchRoute, 'Can not find the match route');
+
+  const {
+    route: {
+      component: { loader, chunkName },
     },
-  ] = matchRoutes(routesData, ctx.path);
+    match,
+  } = matchRoute;
   const { default: Page } = await loader();
   const { head: pageHead, ...pageProps } =
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.

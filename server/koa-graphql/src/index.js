@@ -7,8 +7,12 @@ import {
 import path from 'path';
 
 import { type Context as koaContextType } from 'koa';
-import { printSchema, type GraphQLSchema as GraphQLSchemaType } from 'graphql';
-import graphql, {
+import {
+  graphql,
+  printSchema,
+  type GraphQLSchema as GraphQLSchemaType,
+} from 'graphql';
+import graphqlHTTP, {
   type OptionsData as expressGraphqlOptionsType,
 } from 'express-graphql';
 import {
@@ -190,10 +194,20 @@ export default class Graphql {
       ) => {
         ctx.res.statusCode = 200;
 
-        await graphql({
+        await graphqlHTTP({
           ...options,
           schema: this.schema,
         })(ctx.request, ctx.res);
       },
     ]);
+
+  /**
+   * @example
+   * graphql.query('{ version }')
+   *
+   * @param {string} query - query string
+   *
+   * @return {object} - the result of the data
+   */
+  +query = (query: string) => graphql(this.schema, query);
 }

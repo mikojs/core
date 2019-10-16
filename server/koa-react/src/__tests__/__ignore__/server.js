@@ -57,7 +57,7 @@ export default async (
     config: configFunc,
     basename: '/custom',
   });
-  const pageReact = new React(path.resolve(__dirname, './page'), {
+  const pagesReact = new React(path.resolve(__dirname, './pages'), {
     dev,
     config: configFunc,
   });
@@ -69,20 +69,20 @@ export default async (
         : require('output-file-sync');
 
     await customReact.buildJs();
-    await pageReact.buildJs();
+    await pagesReact.buildJs();
 
     outputFileSync(
       customReact.store.urlsFilePath,
       JSON.stringify(customReact.store.urls),
     );
     outputFileSync(
-      pageReact.store.urlsFilePath,
-      JSON.stringify(pageReact.store.urls),
+      pagesReact.store.urlsFilePath,
+      JSON.stringify(pagesReact.store.urls),
     );
   }
 
   app.use(await customReact.middleware());
-  app.use(await pageReact.middleware());
+  app.use(await pagesReact.middleware());
 
   return {
     domain: `http://localhost:${port}`,
@@ -95,7 +95,7 @@ export default async (
             baseUrl: `http://localhost:${port}`,
             folderPath,
           });
-          await pageReact.buildStatic({
+          await pagesReact.buildStatic({
             baseUrl: `http://localhost:${port}`,
             folderPath,
             urlParamsRedirect: (route: string) =>

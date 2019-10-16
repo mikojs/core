@@ -49,7 +49,7 @@ define babel-build
 		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
 		--parallel \
 		--stream \
-		--include-filtered-dependencies \
+		--include-dependencies \
 		--scope @mikojs/configs \
 		--scope @mikojs/babel-* \
 		$(2)

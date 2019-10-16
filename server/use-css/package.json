@@ -16,7 +16,7 @@
     "@mikojs/koa-react": ">=1.0.0"
   },
   "devDependencies": {
-    "webpack": "^4.41.0"
+    "webpack": "^4.41.2"
   },
   "keywords": ["koa-react", "mikojs", "use-css"],
   "publishConfig": {

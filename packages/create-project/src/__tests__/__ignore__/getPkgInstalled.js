@@ -52,36 +52,20 @@ export default (cmds: $ReadOnlyArray<string>): resultType => {
             throw new Error(`Can not find config type: ${configType}`);
           })();
         const isDevDependencies = configPackages[0] === '--dev';
+        const key = isDevDependencies ? 'devDependencies' : 'dependencies';
 
         return {
           ...result,
-          dependencies: isDevDependencies
-            ? result.dependencies
-            : configPackages.reduce(
-                (
-                  dependencies: ?$PropertyType<resultType, 'dependencies'>,
-                  pkgName: string,
-                ) => ({
-                  ...dependencies,
-                  [pkgName]: 'version',
-                }),
-                result?.dependencies,
-              ),
-          devDependencies: !isDevDependencies
-            ? result.devDependencies
-            : configPackages.slice(1).reduce(
-                (
-                  devDependencies: ?$PropertyType<
-                    resultType,
-                    'devDependencies',
-                  >,
-                  pkgName: string,
-                ) => ({
-                  ...devDependencies,
-                  [pkgName]: 'version',
-                }),
-                result?.devDependencies,
-              ),
+          [key]: (!isDevDependencies
+            ? configPackages
+            : configPackages.slice(1)
+          ).reduce(
+            (newResult: ?$Values<resultType>, pkgName: string) => ({
+              ...newResult,
+              [pkgName]: 'version',
+            }),
+            result[key],
+          ),
         };
       }
 

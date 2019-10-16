@@ -28,6 +28,8 @@ import buildStatic, {
 } from './utils/buildStatic';
 import server from './utils/server';
 
+import { type wrapperType } from './components/testRender';
+
 // TODO: use koa-webpack type
 export type configType = {
   config: WebpackOptionsType,
@@ -248,5 +250,29 @@ export default class React {
         : require('koa-mount')(publicPath, require('koa-static')(urlsPath)),
       server(basename, cache, urls),
     ]);
+  };
+
+  /**
+   * @example
+   * await react.render({})
+   *
+   * @param {string} to - the link to render the first page
+   * @param {object} props - the props to render the component
+   *
+   * @return {wrapperType} - testing wrapper component
+   */
+  +render = (to: string, props?: {}): wrapperType => {
+    const { cache } = this.store;
+
+    return requireModule(path.resolve(__dirname, './components/testRender'))(
+      {
+        Main: requireModule(cache.main),
+        Loading: requireModule(cache.loading),
+        Error: requireModule(cache.error),
+        routesData: cache.routesData,
+        ...props,
+      },
+      to,
+    );
   };
 }

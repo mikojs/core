@@ -17,14 +17,14 @@ export type wrapperType = reactWrapperType<typeof Router>;
  * @param {propsType} props - the props to render the component
  * @param {string} to - the link to render the first page
  *
- * @return {reactWrapperType} - test wrapper component
+ * @return {reactWrapperType} - testing wrapper component
  */
 export default async (
   props: propsType<{}, { to?: string }>,
   to?: string,
 ): Promise<wrapperType> => {
   const wrapper = mount<typeof Router>(
-    <Router>
+    <Router initialEntries={[to === '/' ? 'initialUrl' : '/']}>
       <Root
         {...props}
         {...(!to

@@ -17,16 +17,9 @@ import TemplateLoading from 'templates/Loading';
 import TemplateError from 'templates/Error';
 import TemplateNotFound from 'templates/NotFound';
 
+import testRender from 'components/testRender';
+
 describe('client side testing', () => {
-  beforeAll(() => {
-    global.document.querySelector('body').innerHTML =
-      '<main id="__MIKOJS__"></main>';
-  });
-
-  beforeEach(() => {
-    jest.resetModules();
-  });
-
   test.each(pagesTestings)(
     'get %s',
     async (
@@ -34,55 +27,36 @@ describe('client side testing', () => {
       chunkName: string,
       head: string,
       main: string,
-      pageInitialProps: {},
+      pageInitialProps: { to?: string },
       mainInitialProps: {},
     ) => {
-      const React = require('react');
-      const { MemoryRouter: Router } = require('react-router-dom');
-      const enzyme = require('enzyme');
-      const Adapter = require('enzyme-adapter-react-16');
-
-      const Root = requireModule(path.resolve(__dirname, '../components/Root'));
-
-      const { mount } = enzyme;
       const mockLog = jest.fn();
-
-      enzyme.configure({ adapter: new Adapter() });
-
       const isCustom = /custom/.test(urlPath);
-      const Main = isCustom ? CustomMain : TemplateMain;
-      const Loading = isCustom ? CustomLoading : TemplateLoading;
-      const ErrorComponent = isCustom ? CustomError : TemplateError;
-      const InitialPage = ((): ComponentType<*> => {
-        try {
-          return requireModule(
-            path.resolve(
-              __dirname,
-              './__ignore__',
-              chunkName.replace(/pages\//, isCustom ? '' : 'page/'),
-            ),
-          );
-        } catch (e) {
-          return isCustom ? CustomNotFound : TemplateNotFound;
-        }
-      })();
 
       global.console.error = mockLog;
 
       expect(
-        mount(
-          <Router initialEntries={[urlPath]}>
-            <Root
-              Main={Main}
-              Loading={Loading}
-              Error={ErrorComponent}
-              routesData={[]}
-              InitialPage={InitialPage}
-              mainInitialProps={mainInitialProps}
-              pageInitialProps={pageInitialProps}
-            />
-          </Router>,
-        )
+        (await testRender({
+          Main: isCustom ? CustomMain : TemplateMain,
+          Loading: isCustom ? CustomLoading : TemplateLoading,
+          Error: isCustom ? CustomError : TemplateError,
+          routesData: [],
+          InitialPage: ((): ComponentType<*> => {
+            try {
+              return requireModule(
+                path.resolve(
+                  __dirname,
+                  './__ignore__',
+                  chunkName.replace(/pages\//, isCustom ? '' : 'page/'),
+                ),
+              );
+            } catch (e) {
+              return isCustom ? CustomNotFound : TemplateNotFound;
+            }
+          })(),
+          mainInitialProps,
+          pageInitialProps,
+        }))
           .html()
           .replace(/ style="[\w;:,()\-.%# ]*"/g, '')
           .replace(/<p> .*(<br>)?<\/p>/g, '<p></p>'),

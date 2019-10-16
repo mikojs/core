@@ -59,7 +59,7 @@ describe('client side testing', () => {
             path.resolve(
               __dirname,
               './__ignore__',
-              chunkName.replace(/pages\//, isCustom ? '' : 'page/'),
+              chunkName.replace(/pages\//, isCustom ? '' : 'pages/'),
             ),
           );
         } catch (e) {

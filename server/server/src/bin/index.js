@@ -14,7 +14,13 @@ import getPort from 'get-port';
 import chalk from 'chalk';
 import transformer from 'strong-log-transformer';
 
-import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
+import {
+  handleUnhandledRejection,
+  createLogger,
+  requireModule,
+} from '@mikojs/utils';
+
+import { type contextType } from '../index';
 
 import findOptionsPath from 'utils/findOptionsPath';
 
@@ -97,9 +103,33 @@ handleUnhandledRejection();
   // [end] babel build
 
   const port = await getPort();
-  let subprocess: execaPromiseType;
+  const serverFile = customFile
+    ? path.resolve(customFile)
+    : path.resolve(__dirname, '../defaults');
+  const context: contextType = {
+    src: opts.cliOptions.filenames[0],
+    dir: opts.cliOptions.outDir,
+    dev,
+    watch: opts.cliOptions.watch,
+    port: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined,
+  };
   debugLog(port);
 
+  if (!dev || !opts.cliOptions.watch) {
+    await new Promise(resolve =>
+      requireModule(serverFile)(
+        ({
+          ...context,
+          close: () => {
+            process.exit(0);
+          },
+        }: contextType),
+      ),
+    );
+    return;
+  }
+
+  let subprocess: execaPromiseType;
   const server = net.createServer((socket: net.Socket) => {
     let timeout: TimeoutID;
 
@@ -107,14 +137,8 @@ handleUnhandledRejection();
 
     socket.write(
       JSON.stringify({
-        serverFile: customFile
-          ? path.resolve(customFile)
-          : path.resolve(__dirname, '../defaults'),
-        src: opts.cliOptions.filenames[0],
-        dir: opts.cliOptions.outDir,
-        dev,
-        watch: opts.cliOptions.watch,
-        port: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined,
+        ...context,
+        serverFile,
       }),
     );
 

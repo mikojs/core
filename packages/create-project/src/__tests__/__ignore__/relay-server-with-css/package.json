@@ -47,6 +47,8 @@
     "enzyme-adapter-react-16": "version",
     "eslint": "version",
     "eslint-watch": "version",
+    "fbjs": "version",
+    "fetch-mock": "version",
     "flow-bin": "version",
     "flow-typed": "version",
     "husky": "version",
@@ -55,6 +57,7 @@
     "node-fetch": "version",
     "prettier": "version",
     "prettier-package-json": "version",
+    "relay-test-utils": "version",
     "webpack": "version"
   },
   "keywords": ["keyword"],

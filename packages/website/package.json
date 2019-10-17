@@ -10,7 +10,8 @@
   "main": "./lib/index.js",
   "scripts": {
     "dev": "configs server:lerna -w",
-    "start": "NODE_ENV=production configs server:lerna"
+    "start": "NODE_ENV=production configs server:lerna",
+    "test": "SKIP_SERVER=true configs server:lerna"
   },
   "dependencies": {
     "@mikojs/koa-base": "^1.7.1",

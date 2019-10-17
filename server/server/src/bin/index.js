@@ -121,7 +121,9 @@ handleUnhandledRejection();
         ({
           ...context,
           close: () => {
+            // FIXME remove after removing default server
             process.exit(0);
+            resolve();
           },
         }: contextType),
       ),

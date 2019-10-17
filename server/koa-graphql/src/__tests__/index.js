@@ -122,7 +122,9 @@ type User {
     'additional schema with $info',
     async ({ option }: {| option: typeof additionalSchema |}) => {
       expect(
-        await new Graphql(graphqlFolder, option).query(requestQuery),
+        await new Graphql(graphqlFolder, option).query({
+          source: requestQuery,
+        }),
       ).toEqual(requestResult);
     },
   );
@@ -137,11 +139,13 @@ type User {
     async ({ filePath, isEqual }: {| filePath: string, isEqual: boolean |}) => {
       const graphql = new Graphql(graphqlFolder, additionalSchema);
 
-      expect(await graphql.query(requestQuery)).toEqual(requestResult);
+      expect(await graphql.query({ source: requestQuery })).toEqual(
+        requestResult,
+      );
 
       graphql.update(path.resolve(__dirname, filePath));
 
-      const result = await graphql.query(requestQuery);
+      const result = await graphql.query({ source: requestQuery });
 
       (isEqual ? expect(result) : expect(result).not).toEqual({
         data: {

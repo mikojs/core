@@ -11,6 +11,7 @@ import {
   graphql,
   printSchema,
   type GraphQLSchema as GraphQLSchemaType,
+  type GraphQLArgs as GraphQLArgsType,
 } from 'graphql';
 import graphqlHTTP, {
   type OptionsData as expressGraphqlOptionsType,
@@ -205,9 +206,13 @@ export default class Graphql {
    * @example
    * graphql.query('{ version }')
    *
-   * @param {string} query - query string
+   * @param {GraphQLArgsType} graphQLArgs - the argument for query
    *
    * @return {object} - the result of the data
    */
-  +query = (query: string) => graphql(this.schema, query);
+  +query = (graphQLArgs: $Diff<GraphQLArgsType, { schema: mixed }>) =>
+    graphql({
+      ...graphQLArgs,
+      schema: this.schema,
+    });
 }

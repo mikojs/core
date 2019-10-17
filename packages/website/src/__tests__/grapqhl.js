@@ -10,12 +10,12 @@ const graphql = new Graphql(path.resolve(__dirname, '../graphql'));
 
 describe('graphql', () => {
   test.each`
-    query            | data
+    source           | data
     ${'{ version }'} | ${{ version }}
   `(
-    'query $query',
-    async ({ query, data }: {| query: string, data: mixed |}) => {
-      expect(await graphql.query(query)).toEqual({ data });
+    'query $source',
+    async ({ source, data }: {| source: string, data: mixed |}) => {
+      expect(await graphql.query({ source })).toEqual({ data });
     },
   );
 });

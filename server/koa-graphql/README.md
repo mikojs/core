@@ -151,3 +151,20 @@ const graphql = new Graphql('./path-to-graphql-foder');
 ```sh
 RELAY_COMPILER=true node ./server.js
 ```
+
+#### Use in the unit testing
+
+```js
+import Graphql from '@mikojs/koa-graphql';
+
+const graphql = new Graphql('./path-to-graphql-foder');
+
+test('test', async () => {
+  expect(await graphql.query({
+    source: '{ version }',
+    ...
+  })).toEqual({ ... });
+});
+```
+
+This function use `graphql` to query, you can see [here](https://github.com/graphql/graphql-js#using-graphqljs) to lerna the more information.

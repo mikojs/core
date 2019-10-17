@@ -5,7 +5,7 @@ import { act } from 'react-dom/test-utils';
 
 import client from '../client';
 
-jest.mock('../../templates/routesData', () => [
+jest.mock('templates/routesData', () => [
   {
     exact: true,
     path: ['*'],

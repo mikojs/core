@@ -298,3 +298,20 @@ const Loading = () => <div>...</div>;
 
 export default Loading;
 ```
+
+#### Use in the unit testing
+
+```js
+import React from '@mikojs/koa-react';
+
+const react = new React('./path-to-react-folder');
+
+test('test', async () => {
+  expect((await react.render('/')).contains('<div />')).toBeTruthy();
+
+  // or add root props
+  expect((await react.render('/', rootProps)).contains('<div />')).toBeTruthy();
+});
+```
+
+You can see [rootProps](./src/components/Root.js) to lerna the more information.

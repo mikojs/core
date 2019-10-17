@@ -7,6 +7,8 @@ import debug from 'debug';
 
 import { requireModule } from '@mikojs/utils';
 
+import { type contextType } from '../index';
+
 const debugLog = debug('server:bin:runServer');
 const port = parseInt(process.argv[2], 10);
 const client = net.connect({ port });
@@ -32,15 +34,17 @@ client.on('data', async (data: string) => {
     });
 
   try {
-    await requireModule(serverFile)({
-      ...context,
-      restart: () => {
-        client.end('restart');
-      },
-      close: () => {
-        client.end('close');
-      },
-    });
+    await requireModule(serverFile)(
+      ({
+        ...context,
+        restart: () => {
+          client.end('restart');
+        },
+        close: () => {
+          client.end('close');
+        },
+      }: contextType),
+    );
 
     if (isWatching) client.write('watching');
   } catch (e) {

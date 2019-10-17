@@ -38,7 +38,7 @@ const run = async () => {
     routesData.find(
       ({
         component: { chunkName: componentChunkName },
-      }: $ElementType<$PropertyType<rootPropsType, 'routesData'>, number>) =>
+      }: $ElementType<$PropertyType<rootPropsType<>, 'routesData'>, number>) =>
         chunkName === componentChunkName,
     ) ||
     (() => {

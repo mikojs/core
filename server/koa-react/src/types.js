@@ -19,7 +19,7 @@ type ctxType<T = {}> = {|
   isServer: boolean,
 |};
 
-export type routesDataType = $PropertyType<rootPropsType, 'routesData'>;
+export type routesDataType = $PropertyType<rootPropsType<>, 'routesData'>;
 
 export type mainCtxType<P = {}, T = {}, C = ComponentType<P>> = ctxType<T> & {|
   Component: C,

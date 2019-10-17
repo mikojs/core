@@ -8,7 +8,7 @@ import defaults from '../index';
 
 let runningServer: http$Server;
 
-jest.mock('../../utils/loadModule', () => <A, B>(a: A, b: B): B => b);
+jest.mock('utils/loadModule', () => <A, B>(a: A, b: B): B => b);
 
 describe.each`
   dev          | watch

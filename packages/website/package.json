@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "fbjs": "^1.0.0",
+    "fetch-mock": "^7.5.1",
     "relay-test-utils": "^6.0.0"
   },
   "keywords": ["website"]

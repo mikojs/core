@@ -376,11 +376,9 @@ describe('pages', () => {
         Loading: emptyFunction.thatReturnsNull,
       });
 
-      createEnvironment().mock.resolveMostRecentOperation(
-        () => ({
-          data,
-        }),
-      );
+      createEnvironment().mock.resolveMostRecentOperation(() => ({
+        data,
+      }));
       wrapper.update();
 
       expect(wrapper.html()).toBe(html);

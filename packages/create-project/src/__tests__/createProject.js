@@ -11,7 +11,7 @@ import { inquirer } from 'inquirer';
 import { execa } from 'execa';
 import chalk from 'chalk';
 
-import { d3DirTree } from '@mikojs/utils';
+import { d3DirTree, requireModule } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import testings, {
@@ -149,6 +149,18 @@ describe('create project', () => {
             });
           },
         );
+
+        describe('check the testing files', () => {
+          checkFiles
+            .filter(({ data: { path: filePath } }: d3DirTreeNodeType) =>
+              /__tests__/.test(path.relative(projectDir, filePath)),
+            )
+            .forEach(({ data: { path: filePath } }: d3DirTreeNodeType) => {
+              describe(`Run \`${path.relative(projectDir, filePath)}\``, () => {
+                requireModule(filePath);
+              });
+            });
+        });
       });
     },
   );

@@ -8,9 +8,6 @@
   "version": "1.7.1",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
-  "scripts": {
-    "test": "make test"
-  },
   "dependencies": {
     "@babel/runtime": "^7.6.3",
     "@mikojs/utils": "^1.7.1",

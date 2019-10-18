@@ -418,7 +418,7 @@ class Relay extends Store {
 
     await this.execa(
       'yarn add react-is react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
-      'yarn add --dev babel-plugin-relay fbjs fetch-mock relay-test-utils',
+      'yarn add --dev babel-plugin-relay fetch-mock relay-test-utils',
     );
   };
 }

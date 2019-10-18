@@ -25,44 +25,19 @@ import { emptyFunction } from 'fbjs';
 
 import React from '@mikojs/koa-react';
 
-import { version } from '../../package.json';
-
-import { createEnvironment } from 'utils/createEnvironment';
-
 const react = new React(path.resolve(__dirname, '../pages'));
-
-jest.mock('utils/createEnvironment', (): {|
-  createEnvironment: () => mixed,
-|} => {
-  const { createMockEnvironment } = jest.requireActual('relay-test-utils');
-  const environment = createMockEnvironment();
-
-  return {
-    createEnvironment: () => environment,
-  };
-});
 
 describe('pages', () => {
   test.each\`
-    url    | data           | html
-    \${'/'} | \${{ version }} | \${\`<div>\${JSON.stringify({ version })}</div>\`}
-  \`(
-    'page $url',
-    async ({ url, data, html }: {| url: string, data: {}, html: string |}) => {
-      const wrapper = await react.render(url, {
+    url    | html
+    \${'/'} | \${'<div>@mikojs/create-project</div>'}
+  \`('page $url', async ({ url, html }: {| url: string, html: string |}) => {
+    expect(
+      (await react.render(url, {
         Loading: emptyFunction.thatReturnsNull,
-      });
-
-      createEnvironment(undefined, 'key').mock.resolveMostRecentOperation(
-        () => ({
-          data,
-        }),
-      );
-      wrapper.update();
-
-      expect(wrapper.html()).toBe(html);
-    },
-  );
+      })).html(),
+    ).toBe(html);
+  });
 });`;
 
 /** react store */
@@ -127,7 +102,7 @@ class React extends Store {
 
     await this.execa(
       'yarn add react react-dom @mikojs/koa-react',
-      'yarn add --dev webpack @babel/preset-react @babel/plugin-proposal-class-properties enzyme enzyme-adapter-react-16',
+      'yarn add --dev webpack @babel/preset-react @babel/plugin-proposal-class-properties enzyme enzyme-adapter-react-16 fbjs',
     );
   };
 }

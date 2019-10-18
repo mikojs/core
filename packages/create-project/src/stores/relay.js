@@ -17,12 +17,13 @@ export const {
     relaySSR: RelaySSRType,
     environment: EnvironmentType,
   },
-  createEnvironment: (relayData?: SSRCacheType, key: string) => EnvironmentType,
+  createEnvironment: (
+    relayData?: SSRCacheType,
+    key?: string,
+  ) => EnvironmentType,
 } = !process.env.BROWSER
-  ? /* istanbul ignore next */
-    require('./server').default || require('./server')
-  : /* istanbul ignore next */
-    require('./client').default || require('./client');`;
+  ? require('./server').default || require('./server')
+  : require('./client').default || require('./client');`;
 
 const clientTemplate = `// @flow
 
@@ -105,7 +106,7 @@ export default {
       }),
     };
   },
-  createEnvironment: (relayData?: SSRCacheType, key: string): Environment => {
+  createEnvironment: (relayData?: SSRCacheType, key?: string): Environment => {
     const source = new RecordSource();
     const store = new Store(source);
 
@@ -121,6 +122,90 @@ export default {
     });
   },
 };`;
+
+const createEnvironmentTestTemplate = `// @flow
+
+import { fetchQuery, graphql } from 'react-relay';
+import { type SSRCache as SSRCacheType } from 'react-relay-network-modern-ssr/node8/server';
+
+import { version } from '../../../../package.json';
+
+const query = graphql\`
+  query Tests_clientQuery {
+    version
+  }
+\`;
+let relayData: SSRCacheType;
+
+describe('create environment', () => {
+  describe('client', () => {
+    beforeAll(() => {
+      jest.resetModules();
+      process.env.BROWSER = 'true';
+    });
+
+    test.each\`
+      info
+      \${'first'}
+      \${'second'}
+    \`('create environment in the $info time', async () => {
+      const { createEnvironment } = require('../index');
+      const fetchMock = require('fetch-mock');
+
+      fetchMock.reset();
+      fetchMock.mock('*', { data: { version } });
+
+      expect(await fetchQuery(createEnvironment(), query)).toEqual({
+        version,
+      });
+    });
+  });
+
+  describe('server', () => {
+    beforeAll(() => {
+      jest.resetModules();
+      delete process.env.BROWSER;
+    });
+
+    test('initialize environment before rendering component', async () => {
+      const { initEnvironment } = require('../index');
+      const fetchMock = require('fetch-mock');
+
+      fetchMock.reset();
+      fetchMock.mock('*', { data: { version } });
+
+      if (!initEnvironment)
+        throw new Error('Can not get initEnvironment from \`createEnvironment\`');
+
+      const { relaySSR, environment } = initEnvironment();
+
+      expect(await fetchQuery(environment, query)).toEqual({ version });
+
+      relayData = await relaySSR.getCache();
+    });
+
+    test('mock query when rendering component', async () => {
+      const { createEnvironment } = require('../index');
+      const fetchMock = require('fetch-mock');
+
+      fetchMock.reset();
+      fetchMock.mock('*', { data: { version } });
+
+      expect(
+        await fetchQuery(
+          createEnvironment(
+            relayData,
+            JSON.stringify({
+              queryID: query?.()?.params.name,
+              variables: {},
+            }),
+          ),
+          query,
+        ),
+      ).toEqual({ version });
+    });
+  });
+});`;
 
 const nodeTemplate = `// @flow
 
@@ -255,50 +340,52 @@ Home.query = graphql\`
 
 export default React.memo<propsType>(Home);`;
 
-const clientTestTemplate = `// @flow
+const pagesTestTemplate = `// @flow
 
 import path from 'path';
 
-import fetch from 'node-fetch';
-import { fetchQuery, graphql } from 'react-relay';
+import { emptyFunction } from 'fbjs';
 
-import server from '@mikojs/server/lib/defaults';
+import React from '@mikojs/koa-react';
 
-import client from '../client';
+import { version } from '../../package.json';
 
-const { createEnvironment } = client;
-const query = graphql\`
-  query clientQuery {
-    version
-  }
-\`;
-let runningServer: http$Server;
+import { createEnvironment } from 'utils/createEnvironment';
 
-global.fetch = fetch;
+const react = new React(path.resolve(__dirname, '../pages'));
 
-describe('client', () => {
-  beforeAll(async () => {
-    runningServer = await server({
-      src: path.resolve(__dirname, '../../..'),
-      dir: path.resolve(__dirname, '../../..'),
-    });
-  });
+jest.mock('utils/createEnvironment', (): {|
+  createEnvironment: () => mixed,
+|} => {
+  const { createMockEnvironment } = jest.requireActual('relay-test-utils');
+  const environment = createMockEnvironment();
 
-  test('create environment in the first time', async () => {
-    const environment = createEnvironment();
+  return {
+    createEnvironment: () => environment,
+  };
+});
 
-    expect(await fetchQuery(environment, query)).not.toBeUndefined();
-  });
+describe('pages', () => {
+  test.each\`
+    url    | data           | html
+    \${'/'} | \${{ version }} | \${\`<div>\${JSON.stringify({ version })}</div>\`}
+  \`(
+    'page $url',
+    async ({ url, data, html }: {| url: string, data: {}, html: string |}) => {
+      const wrapper = await react.render(url, {
+        Loading: emptyFunction.thatReturnsNull,
+      });
 
-  test('create environment in the second time', async () => {
-    const environment = createEnvironment();
+      createEnvironment(undefined, 'key').mock.resolveMostRecentOperation(
+        () => ({
+          data,
+        }),
+      );
+      wrapper.update();
 
-    expect(await fetchQuery(environment, query)).not.toBeUndefined();
-  });
-
-  afterAll(() => {
-    runningServer.close();
-  });
+      expect(wrapper.html()).toBe(html);
+    },
+  );
 });`;
 
 /** relay store */
@@ -320,17 +407,18 @@ class Relay extends Store {
       'src/utils/createEnvironment/index.js': template,
       'src/utils/createEnvironment/client.js': clientTemplate,
       'src/utils/createEnvironment/server.js': serverTemplate,
-      'src/utils/createEnvironment/__tests__/client.js': clientTestTemplate,
+      'src/utils/createEnvironment/__tests__/index.js': createEnvironmentTestTemplate,
       'src/graphql/node.js': nodeTemplate,
       'src/pages/.templates/Main.js': mainTemplate,
       'src/pages/index.js': pageTemplate,
+      'src/__tests__/pages.js': pagesTestTemplate,
     });
 
     if (lerna) return;
 
     await this.execa(
       'yarn add react-is react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
-      'yarn add --dev babel-plugin-relay',
+      'yarn add --dev babel-plugin-relay fbjs fetch-mock relay-test-utils',
     );
   };
 }

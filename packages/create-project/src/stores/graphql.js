@@ -5,7 +5,6 @@ import { emptyFunction } from 'fbjs';
 
 import react from './react';
 import relay from './relay';
-import jest from './jest';
 import configs from './configs';
 import gitignore from './gitignore';
 import Store from './index';
@@ -27,9 +26,31 @@ export default {
   },
 };`;
 
+const testTemplate = `// @flow
+
+import path from 'path';
+
+import Graphql from '@mikojs/koa-graphql';
+
+import { version } from '../../package.json';
+
+const graphql = new Graphql(path.resolve(__dirname, '../graphql'));
+
+describe('graphql', () => {
+  test.each\`
+    source           | data
+    \${'{ version }'} | \${{ version }}
+  \`(
+    'query $source',
+    async ({ source, data }: {| source: string, data: mixed |}) => {
+      expect(await graphql.query({ source })).toEqual({ data });
+    },
+  );
+});`;
+
 /** graphql store */
 class Graphql extends Store {
-  +subStores = [react, relay, jest, configs, gitignore];
+  +subStores = [react, relay, configs, gitignore];
 
   storeUseGraphql = false;
 
@@ -82,6 +103,7 @@ class Graphql extends Store {
 
     await this.writeFiles({
       'src/graphql/index.js': template,
+      'src/__tests__/graphql.js': testTemplate,
     });
 
     if (lerna) return;

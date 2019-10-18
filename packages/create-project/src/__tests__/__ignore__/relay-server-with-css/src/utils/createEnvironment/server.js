@@ -36,7 +36,7 @@ export default {
       }),
     };
   },
-  createEnvironment: (relayData?: SSRCacheType, key: string): Environment => {
+  createEnvironment: (relayData?: SSRCacheType, key?: string): Environment => {
     const source = new RecordSource();
     const store = new Store(source);
 

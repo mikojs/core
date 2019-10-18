@@ -89,7 +89,7 @@ describe('create project', () => {
 
       describe('check the files', () => {
         const checkFiles = d3DirTree(projectDir, {
-          exclude: /.*\.swp/,
+          exclude: [/.*\.swp/, /__generated__/],
         }).leaves();
 
         test('check the amount of the checking files', () => {

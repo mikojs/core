@@ -34,11 +34,9 @@ describe('pages', () => {
         Loading: emptyFunction.thatReturnsNull,
       });
 
-      createEnvironment(undefined, 'key').mock.resolveMostRecentOperation(
-        () => ({
-          data,
-        }),
-      );
+      createEnvironment().mock.resolveMostRecentOperation(() => ({
+        data,
+      }));
       wrapper.update();
 
       expect(wrapper.html()).toBe(html);

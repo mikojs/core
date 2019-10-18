@@ -376,7 +376,7 @@ describe('pages', () => {
         Loading: emptyFunction.thatReturnsNull,
       });
 
-      createEnvironment(undefined, 'key').mock.resolveMostRecentOperation(
+      createEnvironment().mock.resolveMostRecentOperation(
         () => ({
           data,
         }),

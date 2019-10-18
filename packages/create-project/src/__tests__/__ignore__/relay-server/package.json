@@ -51,7 +51,6 @@
     "husky": "version",
     "jest": "version",
     "lint-staged": "version",
-    "node-fetch": "version",
     "prettier": "version",
     "prettier-package-json": "version",
     "relay-test-utils": "version",

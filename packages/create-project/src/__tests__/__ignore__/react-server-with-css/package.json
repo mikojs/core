@@ -37,13 +37,11 @@
     "enzyme-adapter-react-16": "version",
     "eslint": "version",
     "eslint-watch": "version",
-    "fbjs": "version",
     "flow-bin": "version",
     "flow-typed": "version",
     "husky": "version",
     "jest": "version",
     "lint-staged": "version",
-    "node-fetch": "version",
     "prettier": "version",
     "prettier-package-json": "version",
     "webpack": "version"

@@ -15,10 +15,7 @@ import { type mainCtxType } from '@mikojs/koa-react/lib/types';
 import { initEnvironment, createEnvironment } from 'utils/createEnvironment';
 
 type pageComponentType = ComponentType<*> & {|
-  query?: GraphQLTaggedNodeType,
-  type: {
-    query?: GraphQLTaggedNodeType,
-  },
+  query: GraphQLTaggedNodeType,
 |};
 
 type propsType = {|

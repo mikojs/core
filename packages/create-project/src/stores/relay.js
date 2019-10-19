@@ -216,7 +216,6 @@ export default node;`;
 const mainTemplate = `// @flow
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
-import { isMemo } from 'react-is';
 import {
   QueryRenderer,
   fetchQuery,
@@ -251,11 +250,11 @@ const Main = ({
   Component,
   children,
 }: propsType): NodeType => {
-  const { query } = (!isMemo(Component) ? Component : Component.type) || {};
   const environment = createEnvironment(
     relayData,
     JSON.stringify({
-      queryID: query?.()?.params.name,
+      // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+      queryID: Component.query?.()?.params.name,
       variables,
     }),
   );
@@ -295,12 +294,10 @@ Main.getInitialProps = async ({
   pageComponentType,
 >): Promise<$Diff<propsType, { Component: mixed, children: mixed }>> => {
   try {
-    const { query } = (!isMemo(Component) ? Component : Component.type) || {};
-
-    if (initEnvironment && query) {
+    if (initEnvironment && Component.query) {
       const { environment, relaySSR } = initEnvironment();
 
-      await fetchQuery(environment, query, variables);
+      await fetchQuery(environment, Component.query, variables);
 
       return {
         variables,
@@ -415,7 +412,7 @@ class Relay extends Store {
     if (lerna) return;
 
     await this.execa(
-      'yarn add react-is react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
+      'yarn add react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
       'yarn add --dev babel-plugin-relay fetch-mock relay-test-utils',
     );
   };

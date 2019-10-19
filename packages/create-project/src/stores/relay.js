@@ -262,7 +262,7 @@ const Main = ({
   return (
     <QueryRenderer
       environment={environment}
-      query={query}
+      query={Component.query}
       variables={variables}
       render={({ error, props }: ReadyStateType): NodeType => {
         if (error) return <div>{error.message}</div>;

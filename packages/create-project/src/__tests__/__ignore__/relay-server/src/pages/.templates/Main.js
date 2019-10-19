@@ -1,7 +1,6 @@
 // @flow
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
-import { isMemo } from 'react-is';
 import {
   QueryRenderer,
   fetchQuery,
@@ -36,11 +35,11 @@ const Main = ({
   Component,
   children,
 }: propsType): NodeType => {
-  const { query } = (!isMemo(Component) ? Component : Component.type) || {};
   const environment = createEnvironment(
     relayData,
     JSON.stringify({
-      queryID: query?.()?.params.name,
+      // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+      queryID: Component.query?.()?.params.name,
       variables,
     }),
   );
@@ -48,7 +47,7 @@ const Main = ({
   return (
     <QueryRenderer
       environment={environment}
-      query={query}
+      query={Component.query}
       variables={variables}
       render={({ error, props }: ReadyStateType): NodeType => {
         if (error) return <div>{error.message}</div>;
@@ -80,12 +79,10 @@ Main.getInitialProps = async ({
   pageComponentType,
 >): Promise<$Diff<propsType, { Component: mixed, children: mixed }>> => {
   try {
-    const { query } = (!isMemo(Component) ? Component : Component.type) || {};
-
-    if (initEnvironment && query) {
+    if (initEnvironment && Component.query) {
       const { environment, relaySSR } = initEnvironment();
 
-      await fetchQuery(environment, query, variables);
+      await fetchQuery(environment, Component.query, variables);
 
       return {
         variables,

@@ -1,7 +1,6 @@
 // @flow
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
-import { isMemo } from 'react-is';
 
 import { type mainCtxType } from '../../../../types';
 
@@ -34,7 +33,7 @@ Main.getInitialProps = ({
   pageProps,
 }: mainCtxType<{}, {}, ComponentType<{}> & { type: { name: string } }>) => ({
   value: 'test data',
-  name: (!isMemo(Component) ? Component : Component.type).name,
+  name: Component.name,
   pageProps,
 });
 

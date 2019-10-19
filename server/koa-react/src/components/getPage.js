@@ -1,12 +1,13 @@
 // @flow
 
-import { isMemo } from 'react-is';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
 import { type Context as contextType } from 'koa';
 import { invariant } from 'fbjs';
 
 import { type propsType as rootPropsType } from './Root';
+
+import getStatic from 'utils/getStatic';
 
 /**
  * @example
@@ -47,17 +48,17 @@ export default async (
   const { default: Page } = await loader();
   const { head: pageHead, ...pageProps } =
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-    (await (!isMemo(Page) ? Page : Page.type).getInitialProps?.({
+    (await getStatic(Page).getInitialProps?.({
       ctx,
       isServer,
       match,
     })) || {};
   const { head: mainHead, ...mainProps } =
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-    (await (!isMemo(Main) ? Main : Main.type).getInitialProps?.({
+    (await getStatic(Main).getInitialProps?.({
       ctx,
       isServer,
-      Component: Page,
+      Component: getStatic(Page),
       pageProps,
     })) || {};
 

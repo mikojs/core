@@ -9,7 +9,6 @@ import {
   type Middleware as koaMiddlewareType,
 } from 'koa';
 import React from 'react';
-import { isMemo } from 'react-is';
 import {
   renderToStaticMarkup,
   renderToString,
@@ -22,6 +21,7 @@ import { emptyFunction } from 'fbjs';
 
 import { requireModule } from '@mikojs/utils';
 
+import getStatic from './getStatic';
 import type CacheType from './Cache';
 
 import Root from 'components/Root';
@@ -73,7 +73,7 @@ export default (
   // preload Document, Main, Page
   const { head: documentHead, ...documentInitialProps } =
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-    (await (!isMemo(Document) ? Document : Document.type).getInitialProps?.({
+    (await getStatic(Document).getInitialProps?.({
       ctx,
       isServer: true,
     })) || {};

@@ -23,7 +23,6 @@
     "node-fetch": "version",
     "react": "version",
     "react-dom": "version",
-    "react-is": "version",
     "react-relay": "version",
     "react-relay-network-modern": "version",
     "react-relay-network-modern-ssr": "version",

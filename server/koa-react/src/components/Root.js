@@ -16,6 +16,8 @@ import { type errorPropsType } from '../types';
 import ErrorCatch from './ErrorCatch';
 import getPage from './getPage';
 
+import getStatic from 'utils/getStatic';
+
 export type propsType<M = {}, P = {}> = {|
   Main: ComponentType<*>,
   Loading: ComponentType<{||}>,
@@ -92,7 +94,7 @@ const Root = <M, P>({
 
   return (
     <ErrorCatch Error={Error}>
-      <Main {...mainProps} Component={Page}>
+      <Main {...mainProps} Component={getStatic(Page)}>
         {<-V: { key: string }>(props?: V) =>
           prevCtx.originalUrl !== ctx.originalUrl ? (
             <Loading />

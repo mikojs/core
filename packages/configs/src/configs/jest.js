@@ -17,7 +17,11 @@ export default {
       ...(!configsEnv.includes('relay') ? [] : ['__tests__/__generated__']),
     ],
     collectCoverage: true,
-    collectCoverageFrom: ['**/src/**/*.js', '!**/bin/*.js'],
+    collectCoverageFrom: [
+      '**/src/**/*.js',
+      '**/src/**/.*/**/*.js',
+      '!**/bin/*.js',
+    ],
     coveragePathIgnorePatterns: [
       '__tests__/__ignore__',
       ...(!configsEnv.includes('relay') ? [] : ['__generated__']),

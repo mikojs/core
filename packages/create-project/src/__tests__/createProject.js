@@ -115,6 +115,11 @@ describe('create project', () => {
                 .readFileSync(filePath, { encoding: 'utf-8' })
                 .replace(/\n$/, '');
 
+              if (/__tests__\/__ignore__\/.*\/__tests__/.test(filePath))
+                expect(
+                  fs.existsSync(filePath.replace(/__ignore__/, 'testFiles')),
+                ).toBeTruthy();
+
               switch (extension) {
                 case '.json':
                   const jsonContent = {

@@ -47,11 +47,7 @@ const lint = {
     },
     overrides: [
       {
-        files: [
-          'packages/create-project/src/__tests__/__ignore__/lerna/**',
-          'packages/create-project/src/__tests__/__ignore__/lerna/**/.templates/**',
-          '__mocks__/**',
-        ],
+        files: ['__mocks__/**'],
         rules: {
           'import/no-extraneous-dependencies': 'off',
         },

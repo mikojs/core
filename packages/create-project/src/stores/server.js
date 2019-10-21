@@ -40,6 +40,16 @@ class Server extends Store {
 
     ctx.useServer = this.storeUseServer;
   };
+
+  /**
+   * @example
+   * server.end(ctx)
+   */
+  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
+    if (lerna) return;
+
+    await this.execa('yarn add --dev get-port');
+  };
 }
 
 export default new Server();

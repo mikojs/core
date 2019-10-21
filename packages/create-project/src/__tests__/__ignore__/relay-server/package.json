@@ -47,6 +47,7 @@
     "fetch-mock": "version",
     "flow-bin": "version",
     "flow-typed": "version",
+    "get-port": "version",
     "husky": "version",
     "jest": "version",
     "lint-staged": "version",

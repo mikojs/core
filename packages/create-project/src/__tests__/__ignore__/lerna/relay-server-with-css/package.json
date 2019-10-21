@@ -12,6 +12,29 @@
     "start": "NODE_ENV=production configs server:lerna",
     "test": "SKIP_SERVER=true configs server:lerna"
   },
+  "dependencies": {
+    "@mikojs/koa-base": "version",
+    "@mikojs/koa-graphql": "version",
+    "@mikojs/koa-react": "version",
+    "@mikojs/server": "version",
+    "@mikojs/use-css": "version",
+    "graphql": "version",
+    "koa": "version",
+    "node-fetch": "version",
+    "react": "version",
+    "react-dom": "version",
+    "react-relay": "version",
+    "react-relay-network-modern": "version",
+    "react-relay-network-modern-ssr": "version",
+    "relay-runtime": "version",
+    "whatwg-fetch": "version"
+  },
+  "devDependencies": {
+    "@mikojs/jest": "version",
+    "fbjs": "version",
+    "fetch-mock": "version",
+    "relay-test-utils": "version"
+  },
   "keywords": ["keyword"],
   "publishConfig": {
     "access": "public"

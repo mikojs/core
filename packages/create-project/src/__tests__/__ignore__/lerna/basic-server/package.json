@@ -11,6 +11,11 @@
     "dev": "configs server:lerna -w",
     "start": "NODE_ENV=production configs server:lerna"
   },
+  "dependencies": {
+    "@mikojs/koa-base": "version",
+    "@mikojs/server": "version",
+    "koa": "version"
+  },
   "keywords": ["keyword"],
   "publishConfig": {
     "access": "public"

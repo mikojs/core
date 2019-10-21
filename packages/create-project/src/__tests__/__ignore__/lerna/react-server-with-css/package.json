@@ -11,6 +11,18 @@
     "dev": "configs server:lerna -w",
     "start": "NODE_ENV=production configs server:lerna"
   },
+  "dependencies": {
+    "@mikojs/koa-base": "version",
+    "@mikojs/koa-react": "version",
+    "@mikojs/server": "version",
+    "@mikojs/use-css": "version",
+    "koa": "version",
+    "react": "version",
+    "react-dom": "version"
+  },
+  "devDependencies": {
+    "fbjs": "version"
+  },
   "keywords": ["keyword"],
   "publishConfig": {
     "access": "public"

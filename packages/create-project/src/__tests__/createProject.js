@@ -90,68 +90,73 @@ describe('create project', () => {
       describe('check the files', () => {
         const checkFiles = d3DirTree(projectDir, {
           exclude: [/.*\.swp/, /__generated__/],
-        }).leaves();
+        })
+          .leaves()
+          .map(({ data: { path: filePath, extension } }: d3DirTreeNodeType) => [
+            path.relative(projectDir, filePath),
+            filePath,
+            extension,
+          ]);
 
         test('check the amount of the checking files', () => {
           expect(checkFiles.length).toBe(outputFileSync.contents.length);
         });
 
-        checkFiles.forEach(
-          ({ data: { path: filePath, extension } }: d3DirTreeNodeType) => {
-            test(`check \`${path.relative(projectDir, filePath)}\``, () => {
-              const content = (
-                outputFileSync.contents.find(
-                  (_: string, contentIndex: number) =>
-                    filePath === outputFileSync.destPaths[contentIndex],
-                ) ||
-                (() => {
-                  throw new Error(`Can not find ${filePath}`);
-                })()
-              )
-                .replace(/git config --get user.name/g, 'username')
-                .replace(/git config --get user.email/g, 'email')
-                .replace(path.basename(projectDir), 'package-name');
-              const expected = fs
-                .readFileSync(filePath, { encoding: 'utf-8' })
-                .replace(/\n$/, '');
+        test.each(checkFiles)(
+          'check `%s`',
+          (info: string, filePath: string, extension: string) => {
+            const content = (
+              outputFileSync.contents.find(
+                (_: string, contentIndex: number) =>
+                  filePath === outputFileSync.destPaths[contentIndex],
+              ) ||
+              (() => {
+                throw new Error(`Can not find ${filePath}`);
+              })()
+            )
+              .replace(/git config --get user.name/g, 'username')
+              .replace(/git config --get user.email/g, 'email')
+              .replace(path.basename(projectDir), 'package-name');
+            const expected = fs
+              .readFileSync(filePath, { encoding: 'utf-8' })
+              .replace(/\n$/, '');
 
-              if (/__tests__\/__ignore__\/.*\/__tests__/.test(filePath))
+            if (/__tests__\/__ignore__\/.*\/__tests__/.test(filePath))
+              expect(
+                fs.existsSync(filePath.replace(/__ignore__/, 'testFiles')),
+              ).toBeTruthy();
+
+            switch (extension) {
+              case '.json':
+                const jsonContent = {
+                  ...JSON.parse(content),
+                  ...getPkgInstalled(execa.cmds),
+                };
+
                 expect(
-                  fs.existsSync(filePath.replace(/__ignore__/, 'testFiles')),
-                ).toBeTruthy();
+                  prettier
+                    .format(format(jsonContent), {
+                      singleQuote: true,
+                      trailingComma: 'all',
+                      parser: 'json',
+                    })
+                    .replace(/\n$/, ''),
+                ).toBe(expected);
+                break;
 
-              switch (extension) {
-                case '.json':
-                  const jsonContent = {
-                    ...JSON.parse(content),
-                    ...getPkgInstalled(execa.cmds),
-                  };
+              case '.md':
+                expect(content).toBe(
+                  expected.replace(
+                    /<!-- badges.start -->(.|\n)*<!-- badges.end -->/,
+                    '<!-- badges.start --><!-- badges.end -->',
+                  ),
+                );
+                break;
 
-                  expect(
-                    prettier
-                      .format(format(jsonContent), {
-                        singleQuote: true,
-                        trailingComma: 'all',
-                        parser: 'json',
-                      })
-                      .replace(/\n$/, ''),
-                  ).toBe(expected);
-                  break;
-
-                case '.md':
-                  expect(content).toBe(
-                    expected.replace(
-                      /<!-- badges.start -->(.|\n)*<!-- badges.end -->/,
-                      '<!-- badges.start --><!-- badges.end -->',
-                    ),
-                  );
-                  break;
-
-                default:
-                  expect(content).toBe(expected);
-                  break;
-              }
-            });
+              default:
+                expect(content).toBe(expected);
+                break;
+            }
           },
         );
       });

@@ -41,6 +41,15 @@ const props = {
   mainInitialProps: {},
   pageInitialProps: {},
 };
+const MOCK_FUNCS = {
+  'Main.getInitialProps': Main.getInitialProps,
+  mainRender: mainRender,
+  'PageA.getInitialProps': PageA.getInitialProps,
+  pageARender: pageARender,
+  'PageB.getInitialProps': PageB.getInitialProps,
+  pageBRender: pageBRender,
+  loadingRender: loadingRender,
+};
 let wrapper: wrapperType;
 
 describe('Root', () => {
@@ -81,35 +90,22 @@ describe('Root', () => {
         expect(wrapper.contains(<Page />)).toBeTruthy();
       });
 
-      [
-        Main.getInitialProps,
-        mainRender,
-        PageA.getInitialProps,
-        pageARender,
-        PageB.getInitialProps,
-        pageBRender,
-        loadingRender,
-      ].forEach(
-        (mockFn: JestMockFn<$ReadOnlyArray<void>, void>, index: number) => {
-          const expectedTime = expectedTimes[index];
+      test.each([
+        ['Main.getInitialProps'],
+        ['mainRender'],
+        ['PageA.getInitialProps'],
+        ['pageARender'],
+        ['PageB.getInitialProps'],
+        ['pageBRender'],
+        ['loadingRender'],
+      ])('%s', (mockFnName: string) => {
+        const mockFn = MOCK_FUNCS[mockFnName];
+        const expectedTime =
+          expectedTimes[Object.keys(MOCK_FUNCS).indexOf(mockFnName)];
 
-          test(
-            [
-              'Main.getInitialProps',
-              'mainRender',
-              'PageA.getInitialProps',
-              'pageARender',
-              'PageB.getInitialProps',
-              'pageBRender',
-              'loadingRender',
-            ][index],
-            () => {
-              if (expectedTime === 0) expect(mockFn).not.toHaveBeenCalled();
-              else expect(mockFn).toHaveBeenCalledTimes(expectedTime);
-            },
-          );
-        },
-      );
+        if (expectedTime === 0) expect(mockFn).not.toHaveBeenCalled();
+        else expect(mockFn).toHaveBeenCalledTimes(expectedTime);
+      });
     },
   );
 

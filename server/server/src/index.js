@@ -25,11 +25,11 @@ type watchFuncType = (filePath: string) => void;
 export type contextType = {|
   src: string,
   dir: string,
-  dev?: boolean,
-  watch?: boolean,
+  dev: boolean,
+  watch: boolean,
   port?: number,
-  restart?: () => void,
-  close?: () => void,
+  restart: () => void,
+  close: () => void,
 |};
 
 const debugLog = debug('server');

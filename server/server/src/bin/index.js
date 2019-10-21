@@ -105,7 +105,7 @@ handleUnhandledRejection();
   const serverFile = serverFilePath
     ? path.resolve(serverFilePath)
     : path.resolve(opts.cliOptions.outDir, './server.js');
-  const context: contextType = {
+  const context: $Diff<contextType, {| restart: mixed, close: mixed |}> = {
     src: opts.cliOptions.filenames[0],
     dir: opts.cliOptions.outDir,
     dev,
@@ -115,15 +115,14 @@ handleUnhandledRejection();
   debugLog(port);
 
   if (!dev || !opts.cliOptions.watch) {
-    await new Promise(resolve =>
+    await new Promise((resolve, reject) =>
       requireModule(serverFile)(
         ({
           ...context,
-          close: () => {
-            // FIXME remove after removing default server
-            process.exit(0);
-            resolve();
+          restart: () => {
+            reject(new Error('Do not use restart in the production mode'));
           },
+          close: resolve,
         }: contextType),
       ),
     );

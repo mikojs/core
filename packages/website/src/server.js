@@ -35,9 +35,10 @@ export default async ({
   const react = new React(path.resolve(dir, './pages'), { dev });
 
   if (process.env.NODE_ENV !== 'test') {
-    await graphql.relay(['--src', src]);
+    await graphql.relay(['--src', src, '--exclude', '**/server.js']);
 
-    if (dev && watch) graphql.relay(['--src', src, '--watch']);
+    if (dev && watch)
+      graphql.relay(['--src', src, '--watch', '--exclude', '**/server.js']);
 
     if (process.env.SKIP_SERVER) {
       close();

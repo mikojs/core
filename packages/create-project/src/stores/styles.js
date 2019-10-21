@@ -68,15 +68,20 @@ class Styles extends Store {
    * @param {Store.ctx} ctx - store context
    */
   +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
-    if (lerna || !this.storeUseStyles) return;
+    if (!this.storeUseStyles) return;
 
     await this.execa(
-      'yarn add @mikojs/use-css',
-      'yarn add --dev babel-plugin-css-modules-transform @mikojs/babel-plugin-import-css',
+      `yarn add ${[
+        '@mikojs/use-css',
+        ...(this.storeUseStyles !== 'less' ? [] : ['@mikojs/use-less']),
+      ].join(' ')}`,
     );
 
-    if (this.storeUseStyles === 'less')
-      await this.execa('yarn add @mikojs/use-less');
+    if (lerna) return;
+
+    await this.execa(
+      'yarn add --dev babel-plugin-css-modules-transform @mikojs/babel-plugin-import-css',
+    );
   };
 }
 

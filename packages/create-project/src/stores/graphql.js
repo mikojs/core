@@ -105,9 +105,6 @@ class Graphql extends Store {
       'src/graphql/index.js': template,
       'src/__tests__/graphql.js': testTemplate,
     });
-
-    if (lerna) return;
-
     await this.execa('yarn add graphql @mikojs/koa-graphql');
   };
 }

@@ -98,11 +98,20 @@ class React extends Store {
         'src/__tests__/pages.js': testTemplate,
       });
 
-    if (lerna) return;
-
     await this.execa(
       'yarn add react react-dom @mikojs/koa-react',
-      'yarn add --dev webpack @babel/preset-react @babel/plugin-proposal-class-properties enzyme enzyme-adapter-react-16 fbjs',
+      `yarn add --dev ${[
+        ...(lerna
+          ? []
+          : [
+              'webpack',
+              '@babel/preset-react',
+              '@babel/plugin-proposal-class-properties',
+              'enzyme',
+              'enzyme-adapter-react-16',
+            ]),
+        'fbjs',
+      ].join(' ')}`,
     );
   };
 }

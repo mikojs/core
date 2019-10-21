@@ -501,11 +501,14 @@ class Relay extends Store {
       'src/__tests__/pages.js': pagesTestTemplate,
     });
 
-    if (lerna) return;
-
     await this.execa(
       'yarn add react-relay react-relay-network-modern react-relay-network-modern-ssr relay-runtime node-fetch whatwg-fetch',
-      'yarn add --dev @mikojs/jest babel-plugin-relay fetch-mock relay-test-utils',
+      `yarn add --dev ${[
+        ...(lerna ? [] : ['babel-plugin-relay']),
+        '@mikojs/jest',
+        'fetch-mock',
+        'relay-test-utils',
+      ].join(' ')}`,
     );
   };
 }

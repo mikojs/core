@@ -31,7 +31,10 @@ class Configs extends Store {
     useGraphql,
     useStyles,
   }: $PropertyType<Store, 'ctx'>) => {
-    if (lerna) return;
+    if (lerna) {
+      if (useServer) await this.execa('yarn configs --install server');
+      return;
+    }
 
     await this.execa(
       'yarn add --dev @mikojs/configs',

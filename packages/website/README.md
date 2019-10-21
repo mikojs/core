@@ -11,5 +11,5 @@ The website of `@mikojs/core` documentation.
 ## Usage
 
 - `dev`: Run development.
-- `prod`: Run production.
+- `start`: Run production server.
 - `test`: Run pre-testing.

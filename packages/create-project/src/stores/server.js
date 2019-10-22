@@ -45,10 +45,14 @@ class Server extends Store {
    * @example
    * server.end(ctx)
    */
-  +end = async ({ lerna }: $PropertyType<Store, 'ctx'>) => {
+  +end = async ({
+    lerna,
+    useReact,
+    useGraphql,
+  }: $PropertyType<Store, 'ctx'>) => {
     if (lerna) return;
 
-    await this.execa('yarn add --dev get-port');
+    await this.execa('yarn add fbjs', 'yarn add --dev get-port');
   };
 }
 

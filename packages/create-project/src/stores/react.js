@@ -102,7 +102,7 @@ class React extends Store {
 
     await this.execa(
       'yarn add react react-dom @mikojs/koa-react',
-      'yarn add --dev webpack @babel/preset-react @babel/plugin-proposal-class-properties enzyme enzyme-adapter-react-16 fbjs',
+      'yarn add --dev webpack @babel/preset-react @babel/plugin-proposal-class-properties enzyme enzyme-adapter-react-16',
     );
   };
 }

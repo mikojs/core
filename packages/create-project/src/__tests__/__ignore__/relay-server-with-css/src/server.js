@@ -38,16 +38,14 @@ export default async ({
     { dev, exclude: /__generated__/ } |> useCss,
   );
 
-  if (process.env.NODE_ENV !== 'test') {
-    await graphql.relay(['--src', src, '--exclude', '**/server.js']);
+  await graphql.relay(['--src', src, '--exclude', '**/server.js']);
 
-    if (dev && watch)
-      graphql.relay(['--src', src, '--watch', '--exclude', '**/server.js']);
+  if (dev && watch)
+    graphql.relay(['--src', src, '--watch', '--exclude', '**/server.js']);
 
-    if (process.env.SKIP_SERVER) {
-      close();
-      return null;
-    }
+  if (process.env.SKIP_SERVER) {
+    close();
+    return null;
   }
 
   return (

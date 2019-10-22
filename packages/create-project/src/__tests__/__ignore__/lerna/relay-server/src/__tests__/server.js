@@ -27,27 +27,22 @@ jest.mock(
 
 describe('server', () => {
   test.each`
-    dev      | watch    | NODE_ENV         | SKIP_SERVER
-    ${true}  | ${true}  | ${'development'} | ${true}
-    ${true}  | ${false} | ${'development'} | ${false}
-    ${false} | ${true}  | ${'test'}        | ${true}
-    ${false} | ${false} | ${'test'}        | ${false}
-    ${true}  | ${true}  | ${'test'}        | ${false}
+    dev      | watch    | SKIP_SERVER
+    ${true}  | ${true}  | ${false}
+    ${true}  | ${false} | ${true}
+    ${false} | ${true}  | ${false}
+    ${false} | ${false} | ${true}
   `(
-    'Running server with dev = $dev, watch = $watch, NODE_ENV = $NODE_ENV, SKIP_SERVER = $SKIP_SERVER',
+    'Running server with dev = $dev, watch = $watch, SKIP_SERVER = $SKIP_SERVER',
     async ({
       dev,
       watch,
-      NODE_ENV,
       SKIP_SERVER,
     }: {|
       dev: boolean,
       watch: boolean,
-      NODE_ENV: string,
       SKIP_SERVER: boolean,
     |}) => {
-      process.env.NODE_ENV = NODE_ENV;
-
       if (SKIP_SERVER) process.env.SKIP_SERVER = SKIP_SERVER.toString();
       else delete process.env.SKIP_SERVER;
 
@@ -61,12 +56,12 @@ describe('server', () => {
         close: jest.fn(),
       });
 
-      (!SKIP_SERVER || NODE_ENV === 'test'
+      (!SKIP_SERVER
         ? expect(runningServer).not
         : expect(runningServer)
       ).toBeNull();
 
-      if (!SKIP_SERVER || NODE_ENV == 'test') runningServer.close();
+      if (!SKIP_SERVER) runningServer.close();
     },
   );
 });

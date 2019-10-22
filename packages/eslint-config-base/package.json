@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/eslint-config-base",
   "repository": "https://github.com/mikojs/core/tree/master/packages/eslint-config-base",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "main": "./lib/index.js",
   "dependencies": {
     "babel-eslint": "^10.0.3",

@@ -6,7 +6,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/react-dnd",
   "repository": "https://github.com/mikojs/core/tree/master/components/react-cms",
-  "version": "1.0.0",
+  "version": "1.8.0",
   "main": "./lib/index.js",
   "peerDependencies": {
     "react": ">=16.0.0",

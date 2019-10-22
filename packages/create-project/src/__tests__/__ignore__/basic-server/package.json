@@ -15,6 +15,7 @@
   "dependencies": {
     "@mikojs/koa-base": "version",
     "@mikojs/server": "version",
+    "fbjs": "version",
     "koa": "version"
   },
   "devDependencies": {

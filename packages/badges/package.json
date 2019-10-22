@@ -14,7 +14,7 @@
     "chalk": "^2.4.2",
     "commander": "^3.0.2",
     "debug": "^4.1.1",
-    "execa": "^3.1.0",
+    "execa": "^3.2.0",
     "fbjs": "^1.0.0",
     "output-file-sync": "^2.0.1",
     "read-pkg-up": "^7.0.0"

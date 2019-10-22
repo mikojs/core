@@ -18,6 +18,7 @@
     "@mikojs/server": "version",
     "@mikojs/use-css": "version",
     "@mikojs/use-less": "version",
+    "fbjs": "version",
     "koa": "version",
     "react": "version",
     "react-dom": "version"
@@ -38,9 +39,9 @@
     "enzyme-adapter-react-16": "version",
     "eslint": "version",
     "eslint-watch": "version",
-    "fbjs": "version",
     "flow-bin": "version",
     "flow-typed": "version",
+    "get-port": "version",
     "husky": "version",
     "jest": "version",
     "lint-staged": "version",

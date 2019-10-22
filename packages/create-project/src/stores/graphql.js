@@ -5,8 +5,6 @@ import { emptyFunction } from 'fbjs';
 
 import react from './react';
 import relay from './relay';
-import configs from './configs';
-import gitignore from './gitignore';
 import Store from './index';
 
 const template = `// @flow
@@ -50,7 +48,7 @@ describe('graphql', () => {
 
 /** graphql store */
 class Graphql extends Store {
-  +subStores = [react, relay, configs, gitignore];
+  +subStores = [react, relay];
 
   storeUseGraphql = false;
 

@@ -33,10 +33,9 @@ handleUnhandledRejection();
   // [start] babel build
   const dev = process.env.NODE_ENV !== 'production';
   const opts = parseArgv(process.argv);
-  const customFile = opts.cliOptions.outFile;
+  const serverFilePath = opts.cliOptions.outFile;
 
-  if (customFile) {
-    logger.info('Run the custom server');
+  if (serverFilePath) {
     debugLog(opts);
 
     const { src, dir } = findOptionsPath(
@@ -103,10 +102,10 @@ handleUnhandledRejection();
   // [end] babel build
 
   const port = await getPort();
-  const serverFile = customFile
-    ? path.resolve(customFile)
-    : path.resolve(__dirname, '../defaults');
-  const context: contextType = {
+  const serverFile = serverFilePath
+    ? path.resolve(serverFilePath)
+    : path.resolve(opts.cliOptions.outDir, './server.js');
+  const context: $Diff<contextType, {| restart: mixed, close: mixed |}> = {
     src: opts.cliOptions.filenames[0],
     dir: opts.cliOptions.outDir,
     dev,
@@ -116,15 +115,14 @@ handleUnhandledRejection();
   debugLog(port);
 
   if (!dev || !opts.cliOptions.watch) {
-    await new Promise(resolve =>
+    await new Promise((resolve, reject) =>
       requireModule(serverFile)(
         ({
           ...context,
-          close: () => {
-            // FIXME remove after removing default server
-            process.exit(0);
-            resolve();
+          restart: () => {
+            reject(new Error('Do not use restart in the production mode'));
           },
+          close: resolve,
         }: contextType),
       ),
     );
@@ -203,7 +201,7 @@ handleUnhandledRejection();
       }
     });
 
-    socket.on('close', async () => {
+    socket.on('close', () => {
       debugLog('client close');
     });
   });

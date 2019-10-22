@@ -2,14 +2,10 @@
 
 import memoizeOne from 'memoize-one';
 
-import flow from './flow';
-import configs from './configs';
 import Store from './index';
 
 /** styles store */
 class Styles extends Store {
-  +subStores = [configs, flow];
-
   storeUseStyles = false;
 
   /**

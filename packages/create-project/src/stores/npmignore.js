@@ -3,8 +3,6 @@
 import memoizeOne from 'memoize-one';
 import { emptyFunction } from 'fbjs';
 
-import readme from './readme';
-import circleci from './circleci';
 import Store from './index';
 
 /**
@@ -45,8 +43,6 @@ __mocks__
 
 /** npmignore store */
 class Npmignore extends Store {
-  +subStores = [readme, circleci];
-
   storeUseNpm = false;
 
   /**

@@ -16,6 +16,7 @@
     "@mikojs/koa-base": "version",
     "@mikojs/koa-graphql": "version",
     "@mikojs/server": "version",
+    "fbjs": "version",
     "graphql": "version",
     "koa": "version"
   },
@@ -31,6 +32,7 @@
     "eslint-watch": "version",
     "flow-bin": "version",
     "flow-typed": "version",
+    "get-port": "version",
     "husky": "version",
     "jest": "version",
     "lint-staged": "version",

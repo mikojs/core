@@ -19,13 +19,7 @@ import base from '@mikojs/koa-base';
  *
  * @return {object} - http server
  */
-export default async ({
-  dir,
-  dev,
-  watch,
-  port,
-  restart,
-}: contextType): Promise<http$Server> =>
+export default ({ dir, dev, watch, port, restart }: contextType) =>
   server.init()
   |> server.use(base)
   |> server.run(port)

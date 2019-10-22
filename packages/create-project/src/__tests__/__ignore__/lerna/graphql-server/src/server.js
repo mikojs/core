@@ -23,13 +23,11 @@ import Graphql from '@mikojs/koa-graphql';
  * @return {object} - http server
  */
 export default async ({
-  src,
   dir,
   dev,
   watch,
   port,
-  close,
-}: contextType): Promise<?http$Server> => {
+}: contextType): Promise<http$Server> => {
   const graphql = new Graphql(path.resolve(dir, './graphql'));
 
   return (

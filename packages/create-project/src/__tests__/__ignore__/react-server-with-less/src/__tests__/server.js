@@ -16,9 +16,11 @@ jest.mock(
 
 describe('server', () => {
   test.each`
-    dev     | watch
-    ${true} | ${true}
-    ${true} | ${false}
+    dev      | watch
+    ${true}  | ${true}
+    ${true}  | ${false}
+    ${false} | ${true}
+    ${false} | ${false}
   `(
     'Running server with dev = $dev, watch = $watch',
     async ({ dev, watch }: {| dev: boolean, watch: boolean |}) => {

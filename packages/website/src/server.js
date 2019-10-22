@@ -14,6 +14,8 @@ import server, { type contextType } from '@mikojs/server';
 import base from '@mikojs/koa-base';
 import Graphql from '@mikojs/koa-graphql';
 import React from '@mikojs/koa-react';
+import useCss from '@mikojs/use-css';
+import useLess from '@mikojs/use-less';
 
 /**
  * @example
@@ -32,7 +34,10 @@ export default async ({
   close,
 }: contextType): Promise<?http$Server> => {
   const graphql = new Graphql(path.resolve(dir, './graphql'));
-  const react = new React(path.resolve(dir, './pages'), { dev });
+  const react = new React(
+    path.resolve(dir, './pages'),
+    { dev, exclude: /__generated__/ } |> useCss |> useLess,
+  );
 
   if (process.env.NODE_ENV !== 'test') {
     await graphql.relay(['--src', src, '--exclude', '**/server.js']);

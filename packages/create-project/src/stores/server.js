@@ -124,16 +124,14 @@ export default async ({${[
     ? null
     : `
 
-  if (process.env.NODE_ENV !== 'test') {
-    await graphql.relay(['--src', src, '--exclude', '**/server.js']);
+  await graphql.relay(['--src', src, '--exclude', '**/server.js']);
 
-    if (dev && watch)
-      graphql.relay(['--src', src, '--watch', '--exclude', '**/server.js']);
+  if (dev && watch)
+    graphql.relay(['--src', src, '--watch', '--exclude', '**/server.js']);
 
-    if (process.env.SKIP_SERVER) {
-      close();
-      return null;
-    }
+  if (process.env.SKIP_SERVER) {
+    close();
+    return null;
   }`,
 ]
   .filter(Boolean)
@@ -262,19 +260,14 @@ jest.mock(
 
 describe('server', () => {
   test.each\`
-    dev      | watch${!useRelay ? '' : '    | NODE_ENV         | SKIP_SERVER'}
-    \${true}  | \${true}${!useRelay ? '' : "  | ${'development'} | ${true}"}
-    \${true}  | \${false}${!useRelay ? '' : " | ${'development'} | ${false}"}
-    \${false} | \${true}${!useRelay ? '' : "  | ${'test'}        | ${true}"}
-    \${false} | \${false}${
-      !useRelay
-        ? ''
-        : ` | \${'test'}        | \${false}
-    \${true}  | \${true}  | \${'test'}        | \${false}`
-    }
+    dev      | watch${!useRelay ? '' : '    | SKIP_SERVER'}
+    \${true}  | \${true}${!useRelay ? '' : '  | ${false}'}
+    \${true}  | \${false}${!useRelay ? '' : ' | ${true}'}
+    \${false} | \${true}${!useRelay ? '' : '  | ${false}'}
+    \${false} | \${false}${!useRelay ? '' : ' | ${true}'}
   \`(
     'Running server with dev = $dev, watch = $watch${
-      !useRelay ? '' : ', NODE_ENV = $NODE_ENV, SKIP_SERVER = $SKIP_SERVER'
+      !useRelay ? '' : ', SKIP_SERVER = $SKIP_SERVER'
     }',
     async ${
       !useRelay
@@ -282,20 +275,16 @@ describe('server', () => {
         : `({
       dev,
       watch,
-      NODE_ENV,
       SKIP_SERVER,
     }: {|
       dev: boolean,
       watch: boolean,
-      NODE_ENV: string,
       SKIP_SERVER: boolean,
     |})`
     } => {${
   !useRelay
     ? ''
     : `
-      process.env.NODE_ENV = NODE_ENV;
-
       if (SKIP_SERVER) process.env.SKIP_SERVER = SKIP_SERVER.toString();
       else delete process.env.SKIP_SERVER;
 `
@@ -313,15 +302,13 @@ describe('server', () => {
       ${
         !useRelay
           ? 'expect(runningServer).not.toBeNull();'
-          : `(!SKIP_SERVER || NODE_ENV === 'test'
+          : `(!SKIP_SERVER
         ? expect(runningServer).not
         : expect(runningServer)
       ).toBeNull();`
       }
 
-      ${
-        !useRelay ? '' : "if (!SKIP_SERVER || NODE_ENV == 'test') "
-      }runningServer.close();
+      ${!useRelay ? '' : 'if (!SKIP_SERVER) '}runningServer.close();
     },
   );
 });`;

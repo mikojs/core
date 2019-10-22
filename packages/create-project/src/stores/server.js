@@ -113,12 +113,9 @@ export default async ({${[
     : `
   const react = new React(
     path.resolve(dir, './pages'),
-    { dev, exclude: /__generated__/ }${[
-      !['css', 'less'].includes(useStyles) ? null : ' |> useCss',
-      useStyles !== 'less' ? null : ' |> useLess',
-    ]
-      .filter(Boolean)
-      .join('')},
+    { dev, exclude: /__generated__/ } |> useCss${
+      useStyles !== 'less' ? '' : ' |> useLess'
+    },
   );`,
   !useRelay
     ? null

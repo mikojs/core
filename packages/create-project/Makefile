@@ -1,4 +1,4 @@
-TEST_FILE="new (require('@mikojs/koa-graphql'))(require('path').resolve(__dirname, './lib/graphql')).relay(['--src', require('path').resolve(__dirname, './src')]);"
+TEST_FILE="new (require('@mikojs/koa-graphql'))(require('path').resolve(__dirname, './lib/graphql')).relay(['--src', require('path').resolve(__dirname, './src'), '--exclude', '**/server.js']);"
 LIST=relay-server relay-server-with-css relay-server-with-less lerna/relay-server lerna/relay-server-with-css lerna/relay-server-with-less
 
 test:

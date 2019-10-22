@@ -1,5 +1,59 @@
 # CHANGELOG
 
+## 1.8.0 (2019-10-22)
+
+#### :boom: Breaking Change
+
+- `create-project`, `website`
+  - [#453](https://github.com/mikojs/core/pull/453) (@mikojs/server) Remove default server ([@HsuTing](https://github.com/HsuTing))
+  - [#450](https://github.com/mikojs/core/pull/450) (@mikojs/core) Remove react-is ([@HsuTing](https://github.com/HsuTing))
+  - [#448](https://github.com/mikojs/core/pull/448) (@mikojs/create-project) Rewrite server testing ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `website`
+  - [#447](https://github.com/mikojs/core/pull/447) (@mikojs/core) Rename page and upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#432](https://github.com/mikojs/core/pull/432) (@mikojs/configs) Rewrite configs server ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `lerna-flow-typed-install`
+  - [#426](https://github.com/mikojs/core/pull/426) (@mikojs/lerna-flow-typed-install) Remove @mikojs/lerna-flow-typed-install, use @mikojs/configs ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `website`
+  - [#455](https://github.com/mikojs/core/pull/455) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `website`
+  - [#446](https://github.com/mikojs/core/pull/446) (@mikojs/core) Rewrite testing ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#441](https://github.com/mikojs/core/pull/441) (@mikojs/configs) Add clean option ([@HsuTing](https://github.com/HsuTing))
+- `website`
+  - [#427](https://github.com/mikojs/core/pull/427) (@mikojs/react-cms) Add new package ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `configs`
+  - [#437](https://github.com/mikojs/core/pull/437) (@mikojs/configs) Just only one server exist ([@HsuTing](https://github.com/HsuTing))
+  - [#429](https://github.com/mikojs/core/pull/429) (@mikojs/configs) Fix not found command --info error ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `configs`, `create-project`, `website`
+  - [#452](https://github.com/mikojs/core/pull/452) (@mikojs/create-project) Add website checking ([@HsuTing](https://github.com/HsuTing))
+  - [#449](https://github.com/mikojs/core/pull/449) (@mikojs/create-project) Add more testing ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `website`
+  - [#448](https://github.com/mikojs/core/pull/448) (@mikojs/create-project) Rewrite server testing ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `website`
+  - [#446](https://github.com/mikojs/core/pull/446) (@mikojs/core) Rewrite testing ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#443](https://github.com/mikojs/core/pull/443) (@mikojs/create-project) Simplify the testings ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#444](https://github.com/mikojs/core/pull/444) (@mikojs/configs) Rename variables ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#428](https://github.com/mikojs/core/pull/428) (@mikojs/core) Remove fbjs in core ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `lerna-flow-typed-install`, `website`
+  - [#425](https://github.com/mikojs/core/pull/425) (@mikojs/react-dnd) Remove package ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.7.0 (2019-09-23)
 
 #### :boom: Breaking Change

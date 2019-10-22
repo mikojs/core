@@ -6,12 +6,11 @@ import { emptyFunction } from 'fbjs';
 import react from './react';
 import pkg from './pkg';
 import graphql from './graphql';
-import configs from './configs';
 import Store from './index';
 
 /** server store */
 class Server extends Store {
-  +subStores = [react, graphql, pkg, configs];
+  +subStores = [react, graphql, pkg];
 
   storeUseServer = false;
 

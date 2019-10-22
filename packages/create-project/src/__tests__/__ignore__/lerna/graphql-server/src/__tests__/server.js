@@ -8,7 +8,6 @@ jest.mock(
   '@mikojs/koa-graphql',
   () =>
     class MockGraphql {
-      relay = jest.fn();
       middleware = () => async (ctx: mixed, next: () => Promise<void>) => {
         await next();
       };
@@ -17,30 +16,12 @@ jest.mock(
 
 describe('server', () => {
   test.each`
-    dev      | watch    | NODE_ENV         | SKIP_SERVER
-    ${true}  | ${true}  | ${'development'} | ${true}
-    ${true}  | ${false} | ${'development'} | ${false}
-    ${false} | ${true}  | ${'test'}        | ${true}
-    ${false} | ${false} | ${'test'}        | ${false}
-    ${true}  | ${true}  | ${'test'}        | ${false}
+    dev     | watch
+    ${true} | ${true}
+    ${true} | ${false}
   `(
-    'Running server with dev = $dev, watch = $watch, NODE_ENV = $NODE_ENV, SKIP_SERVER = $SKIP_SERVER',
-    async ({
-      dev,
-      watch,
-      NODE_ENV,
-      SKIP_SERVER,
-    }: {|
-      dev: boolean,
-      watch: boolean,
-      NODE_ENV: string,
-      SKIP_SERVER: boolean,
-    |}) => {
-      process.env.NODE_ENV = NODE_ENV;
-
-      if (SKIP_SERVER) process.env.SKIP_SERVER = SKIP_SERVER.toString();
-      else delete process.env.SKIP_SERVER;
-
+    'Running server with dev = $dev, watch = $watch',
+    async ({ dev, watch }: {| dev: boolean, watch: boolean |}) => {
       const runningServer = await server({
         src: __dirname,
         dir: __dirname,
@@ -51,12 +32,9 @@ describe('server', () => {
         close: jest.fn(),
       });
 
-      (!SKIP_SERVER || NODE_ENV === 'test'
-        ? expect(runningServer).not
-        : expect(runningServer)
-      ).toBeNull();
+      expect(runningServer).not.toBeNull();
 
-      if (!SKIP_SERVER || NODE_ENV == 'test') runningServer.close();
+      runningServer.close();
     },
   );
 });

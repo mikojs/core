@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
-import { emptyFunction } from 'fbjs';
+import { emptyFunction, invariant } from 'fbjs';
 import outputFileSync from 'output-file-sync';
 import inquirer from 'inquirer';
 import { diffLines } from 'diff';
@@ -81,9 +81,27 @@ export default class Store {
       subStores: this.subStores,
     });
 
-    for (const store of this.subStores) stores.push(...(await store.run(ctx)));
+    for (const store of this.subStores)
+      stores.push(...(await this.validateSubStore(store).run(ctx)));
 
     return [...this.subStores, ...stores];
+  };
+
+  /**
+   * @example
+   * store.validateSubStore(store)
+   *
+   * @param {Store} store - checking store
+   *
+   * @return {Store} - if this store hav start, return store back
+   */
+  +validateSubStore = (store: Store): Store => {
+    invariant(
+      store.start,
+      `Only \`${store.constructor.name}\` have \`start\` can be the subStore`,
+    );
+
+    return store;
   };
 
   /**

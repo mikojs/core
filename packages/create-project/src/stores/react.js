@@ -4,8 +4,6 @@ import memoizeOne from 'memoize-one';
 
 import relay from './relay';
 import styles from './styles';
-import configs from './configs';
-import gitignore from './gitignore';
 import Store from './index';
 
 const template = `// @flow
@@ -42,7 +40,7 @@ describe('pages', () => {
 
 /** react store */
 class React extends Store {
-  +subStores = [relay, styles, configs, gitignore];
+  +subStores = [relay, styles];
 
   storeUseReact = false;
 

@@ -32,18 +32,6 @@ export default async ({
 }: contextType): Promise<?http$Server> => {
   const graphql = new Graphql(path.resolve(dir, './graphql'));
 
-  if (process.env.NODE_ENV !== 'test') {
-    await graphql.relay(['--src', src, '--exclude', '**/server.js']);
-
-    if (dev && watch)
-      graphql.relay(['--src', src, '--watch', '--exclude', '**/server.js']);
-
-    if (process.env.SKIP_SERVER) {
-      close();
-      return null;
-    }
-  }
-
   return (
     server.init()
     |> server.use(base)

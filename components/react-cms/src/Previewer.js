@@ -5,6 +5,7 @@ import { DndContext } from 'react-dnd-cjs';
 import { FrameContext } from 'react-frame-component';
 
 import useDnd from './hooks/useDnd';
+import styles from './styles/previewer';
 
 type propsType = {|
   children?: NodeType,
@@ -19,7 +20,7 @@ const Previewer = ({ children }: propsType): NodeType => {
     dragDropManager.getBackend().addEventListeners(window);
   }, []);
 
-  return <main {...useDnd('previewer')}>{children}</main>;
+  return <main {...useDnd('previewer', { style: styles })}>{children}</main>;
 };
 
 export default React.memo<propsType>(Previewer);

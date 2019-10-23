@@ -1,7 +1,13 @@
 // @flow
 
-import { useRef } from 'react';
-import { useDrag, useDrop, type monitorType } from 'react-dnd-cjs';
+import { useRef, useMemo } from 'react';
+import {
+  useDrag,
+  useDrop,
+  useDragLayer,
+  type monitorType,
+} from 'react-dnd-cjs';
+import { getElementPosition } from 'fbjs';
 
 const CAN_DROP_KIND = ['component'];
 
@@ -17,13 +23,14 @@ const CAN_DROP_KIND = ['component'];
  */
 export default (
   id: string,
-  props?: {
-    ref?: mixed,
-    style?: {},
-  },
+  props?: {},
   kind?: $ElementType<typeof CAN_DROP_KIND, number> = CAN_DROP_KIND[0],
 ): {} => {
-  const newProps = { ...props, ref: useRef(null) };
+  const newProps: {
+    ...typeof props,
+    ref: $Call<typeof useRef, null | mixed>,
+    style?: {},
+  } = { ...props, ref: useRef(null) };
   const [{ isDragging }, connectDrag] = useDrag({
     item: { id, type: kind },
     collect: (monitor: monitorType) => ({
@@ -42,9 +49,33 @@ export default (
     },
     */
   });
+  const { isOneOfItemDragging } = useDragLayer((monitor: monitorType) => ({
+    isOneOfItemDragging: monitor.isDragging(),
+  }));
+  const { width, height } = useMemo(
+    () =>
+      !newProps.ref.current
+        ? { width: 0, height: 0 }
+        : getElementPosition(newProps.ref.current),
+    [isOneOfItemDragging, newProps.ref.current !== null],
+  );
 
   connectDrag(newProps.ref);
   connectDrop(newProps.ref);
+
+  if (!isDragging && isOneOfItemDragging) {
+    if (width === 0)
+      newProps.style = {
+        ...newProps.style,
+        width: '100%',
+      };
+
+    if (height === 0)
+      newProps.style = {
+        ...newProps.style,
+        height: '100%',
+      };
+  }
 
   if (isDragging)
     newProps.style = {

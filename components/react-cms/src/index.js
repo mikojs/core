@@ -5,6 +5,7 @@ import { DndProvider } from 'react-dnd-cjs';
 import HTML5Backend from 'react-dnd-html5-backend-cjs';
 import Frame from 'react-frame-component';
 
+import Previewer from './Previewer';
 import useDnd from './hooks/useDnd';
 import * as styles from './styles';
 
@@ -29,7 +30,9 @@ const Cms = () => (
             href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
           />
         }
-      />
+      >
+        <Previewer />
+      </Frame>
     </div>
   </DndProvider>
 );

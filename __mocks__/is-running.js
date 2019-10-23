@@ -1,5 +1,17 @@
 // @flow
 
-import { emptyFunction } from 'fbjs';
+/** mock is-running */
+class IsRunning {
+  +running = false;
 
-export default emptyFunction.thatReturnsTrue;
+  /**
+   * @example
+   * isRunning.main()
+   *
+   * @return {boolean} - if pid is running
+   */
+  +main = () => this.running;
+}
+
+export const isRunning = new IsRunning();
+export default isRunning.main;

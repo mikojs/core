@@ -42,7 +42,7 @@ This command will generate a `babel` config when running your `custom-command`. 
 #### Get the configs lint
 
 ```sh
-yarn configs --info
+yarn configs --configs-info
 ```
 
 #### Get the information about the config
@@ -50,16 +50,24 @@ yarn configs --info
 By this option, you can get the detail of this config.
 
 ```sh
-yarn configs babel --info
+yarn configs babel --configs-info
 ```
 
 #### Download the packages from the config
 
 ```sh
-yarn configs babel --install
+yarn configs babel --configs-install
 ```
 
 In this case, this will run `yarn install @babel/cli @babel/core @mikojs/babel-plugin-base --dev`.
+
+#### Clean the files
+
+If `@mikojs/configs` has crashed, you want to remove the files. You can use:
+
+```sh
+yarn configs babel --configs-remove
+```
 
 #### Get help
 
@@ -110,7 +118,7 @@ module.exports = {
     env: {                       // run command with environment
       NODE_ENV: 'development',
     },
-    configFiles: {               // link the config files. For example, `jest` need to run with `babel`, you need to add `babel: true`
+    configsFiles: {              // link the config files. For example, `jest` need to run with `babel`, you need to add `babel: true`
       eslint: true,
     },
   },

@@ -5,21 +5,21 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/koa-graphql",
   "repository": "https://github.com/mikojs/core/tree/master/server/koa-graphql",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@mikojs/utils": "^1.7.1",
     "d3-hierarchy": "^1.1.8",
     "debug": "^4.1.1",
     "directory-tree": "^2.2.4",
-    "execa": "^2.0.4",
+    "execa": "^3.2.0",
     "express-graphql": "^0.9.0",
     "find-cache-dir": "^3.0.0",
     "graphql-tools": "^4.0.5",
     "koa-bodyparser": "^4.2.1",
     "koa-compose": "^4.1.0",
     "output-file-sync": "^2.0.1",
-    "relay-compiler": "^6.0.0"
+    "relay-compiler": "^7.0.0"
   },
   "peerDependencies": {
     "graphql": ">=14.0.0",
@@ -27,8 +27,8 @@
   },
   "devDependencies": {
     "get-port": "^5.0.0",
-    "graphql": "^14.5.7",
-    "koa": "^2.8.1",
+    "graphql": "^14.5.8",
+    "koa": "^2.10.0",
     "node-fetch": "^2.6.0"
   },
   "keywords": ["graphql", "koa", "mikojs"],

@@ -14,7 +14,13 @@ import getPort from 'get-port';
 import chalk from 'chalk';
 import transformer from 'strong-log-transformer';
 
-import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
+import {
+  handleUnhandledRejection,
+  createLogger,
+  requireModule,
+} from '@mikojs/utils';
+
+import { type contextType } from '../index';
 
 import findOptionsPath from 'utils/findOptionsPath';
 
@@ -27,10 +33,9 @@ handleUnhandledRejection();
   // [start] babel build
   const dev = process.env.NODE_ENV !== 'production';
   const opts = parseArgv(process.argv);
-  const customFile = opts.cliOptions.outFile;
+  const serverFilePath = opts.cliOptions.outFile;
 
-  if (customFile) {
-    logger.info('Run the custom server');
+  if (serverFilePath) {
     debugLog(opts);
 
     const { src, dir } = findOptionsPath(
@@ -97,9 +102,34 @@ handleUnhandledRejection();
   // [end] babel build
 
   const port = await getPort();
-  let subprocess: execaPromiseType;
+  const serverFile = serverFilePath
+    ? path.resolve(serverFilePath)
+    : path.resolve(opts.cliOptions.outDir, './server.js');
+  const context: $Diff<contextType, {| restart: mixed, close: mixed |}> = {
+    src: opts.cliOptions.filenames[0],
+    dir: opts.cliOptions.outDir,
+    dev,
+    watch: opts.cliOptions.watch,
+    port: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined,
+  };
   debugLog(port);
 
+  if (!dev || !opts.cliOptions.watch) {
+    await new Promise((resolve, reject) =>
+      requireModule(serverFile)(
+        ({
+          ...context,
+          restart: () => {
+            reject(new Error('Do not use restart in the production mode'));
+          },
+          close: resolve,
+        }: contextType),
+      ),
+    );
+    return;
+  }
+
+  let subprocess: execaPromiseType;
   const server = net.createServer((socket: net.Socket) => {
     let timeout: TimeoutID;
 
@@ -107,14 +137,8 @@ handleUnhandledRejection();
 
     socket.write(
       JSON.stringify({
-        serverFile: customFile
-          ? path.resolve(customFile)
-          : path.resolve(__dirname, '../defaults'),
-        src: opts.cliOptions.filenames[0],
-        dir: opts.cliOptions.outDir,
-        dev,
-        watch: opts.cliOptions.watch,
-        port: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined,
+        ...context,
+        serverFile,
       }),
     );
 
@@ -177,7 +201,7 @@ handleUnhandledRejection();
       }
     });
 
-    socket.on('close', async () => {
+    socket.on('close', () => {
       debugLog('client close');
     });
   });

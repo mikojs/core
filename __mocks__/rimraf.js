@@ -1,3 +1,3 @@
 // @flow
 
-export default jest.genMockFromModule('rimraf');
+export default jest.fn<$ReadOnlyArray<void>, void>();

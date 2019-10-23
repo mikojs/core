@@ -6,14 +6,17 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
-import moment from 'moment';
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
-import configs from 'utils/configs';
-import worker from 'utils/worker';
+import { handleUnhandledRejection } from '@mikojs/utils';
+
+import configs from './utils/configs';
+import sendToServer from './utils/sendToServer';
 
 const debugLog = debug('configs:config');
+
+handleUnhandledRejection();
 
 /**
  * @example
@@ -21,13 +24,28 @@ const debugLog = debug('configs:config');
  *
  * @param {string} cliName - cli name
  * @param {string} filePath - file path
+ * @param {string} ignoreFilePath - ignore file path
  *
  * @return {object} - cli config
  */
-export default (cliName: string, filePath: string): {} => {
-  debugLog(`cliName: ${cliName}`);
-  debugLog(`filePath: ${filePath}`);
-  worker.writeCache({ filePath, using: moment().format() });
+export default (
+  cliName: string,
+  filePath: string,
+  ignoreFilePath?: string,
+): {} => {
+  debugLog({ cliName, filePath, ignoreFilePath });
+
+  sendToServer(JSON.stringify({ pid: process.pid, filePath }), () => {
+    debugLog(`${filePath} has been sent to the server`);
+  });
+
+  if (ignoreFilePath)
+    sendToServer(
+      JSON.stringify({ pid: process.pid, filePath: ignoreFilePath }),
+      () => {
+        debugLog(`${ignoreFilePath} has been sent to the server`);
+      },
+    );
 
   return (
     {}

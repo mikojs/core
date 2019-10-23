@@ -5,19 +5,21 @@ import path from 'path';
 import configs from '../index';
 
 describe('configs', () => {
-  Object.keys(configs).forEach((configKey: string) => {
-    const config = configs[configKey];
+  describe.each(Object.keys(configs).map((key: string) => [key]))(
+    '%s',
+    (configKey: string) => {
+      const config = configs[configKey];
 
-    describe(configKey, () => {
-      Object.keys(config).forEach((key: string) => {
-        const value = config[key];
+      test.each(Object.keys(config).map((key: string) => [key]))(
+        '%s',
+        (key: string) => {
+          const value = config[key];
 
-        test(key, () => {
           switch (key) {
             case 'alias':
             case 'ignoreName':
               expect(value).toBeTruthy();
-              return;
+              break;
 
             case 'install':
             case 'ignore':
@@ -27,29 +29,29 @@ describe('configs', () => {
                 ? expect(value([]))
                 : expect(value([])).not
               ).toHaveLength(0);
-              return;
+              break;
 
             case 'config':
               expect(Object.keys(value({ configsEnv: [] }))).not.toBe(0);
-              return;
+              break;
 
             case 'getCli':
               expect(value([configKey, 'babel'])).toBe(
                 path.resolve('./node_modules/.bin/babel'),
               );
-              return;
+              break;
 
             case 'env':
-            case 'configFiles':
+            case 'configsFiles':
               expect(Object.keys(value)).not.toBe(0);
-              return;
+              break;
 
             default:
               expect(value).toBeUndefined();
-              return;
+              break;
           }
-        });
-      });
-    });
-  });
+        },
+      );
+    },
+  );
 });

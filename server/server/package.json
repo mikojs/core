@@ -5,29 +5,29 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/server",
   "repository": "https://github.com/mikojs/core/tree/master/server/server",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/cli": "^7.6.2",
-    "@babel/core": "^7.6.2",
-    "@babel/runtime": "^7.6.2",
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/runtime": "^7.6.3",
     "@mikojs/utils": "^1.7.1",
     "chalk": "^2.4.2",
-    "chokidar": "^3.1.1",
+    "chokidar": "^3.2.2",
     "debug": "^4.1.1",
-    "execa": "^2.0.4",
+    "execa": "^3.2.0",
     "fbjs": "^1.0.0",
     "get-port": "^5.0.0",
     "koa-router": "^7.4.0",
-    "ora": "^4.0.1",
+    "ora": "^4.0.2",
     "strong-log-transformer": "^2.1.0"
   },
   "peerDependencies": {
     "koa": ">=2.0.0"
   },
   "devDependencies": {
-    "koa": "^2.8.1",
+    "koa": "^2.10.0",
     "node-fetch": "^2.6.0"
   },
   "keywords": ["babel", "koa", "mikojs", "pipeline", "server"],

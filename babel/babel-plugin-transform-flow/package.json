@@ -5,10 +5,10 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-plugin-transform-flow",
   "repository": "https://github.com/mikojs/core/tree/master/babel/babel-plugin-transform-flow",
-  "version": "1.6.0",
+  "version": "1.8.0",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/core": "^7.6.2",
+    "@babel/core": "^7.6.4",
     "@babel/helper-plugin-utils": "^7.0.0",
     "output-file-sync": "^2.0.1"
   },

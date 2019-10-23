@@ -3,18 +3,21 @@
 
 import path from 'path';
 
-import execa, { type Result as resultType } from 'execa';
+import execa from 'execa';
 import debug from 'debug';
-import isRunning from 'is-running';
 import npmWhich from 'npm-which';
+import getPort from 'get-port';
 import chalk from 'chalk';
+import rimraf from 'rimraf';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import configs from 'utils/configs';
 import cliOptions from 'utils/cliOptions';
+import findMainServer from 'utils/findMainServer';
+import sendToServer from 'utils/sendToServer';
+import findFiles, { type filesDataType } from 'utils/findFiles';
 import generateFiles from 'utils/generateFiles';
-import worker from 'utils/worker';
 
 const logger = createLogger('@mikojs/configs');
 
@@ -44,61 +47,67 @@ handleUnhandledRejection();
       });
       return;
 
+    case 'remove': {
+      const files = findFiles(cliName);
+      const mainServer = await findMainServer();
+
+      if (files)
+        await Promise.all(
+          Object.keys(files).map((key: string) =>
+            Promise.all(
+              files[key].map(
+                ({ filePath }: $ElementType<filesDataType, number>) =>
+                  new Promise(resolve => {
+                    rimraf(filePath, resolve);
+                  }),
+              ),
+            ),
+          ),
+        );
+
+      if (mainServer)
+        mainServer.allProcesses.forEach(({ pid }: { pid: number }) =>
+          process.kill(pid),
+        );
+
+      logger.succeed('The files and the servers are removed');
+      return;
+    }
+
     default: {
-      const server = await worker.init();
+      const debugPort = !process.env.DEBUG_PORT
+        ? -1
+        : parseInt(process.env.DEBUG_PORT, 10);
 
-      /**
-       * @example
-       * removeFiles(0);
-       *
-       * @param {number} exitCode - process exit code
-       */
-      const removeFiles = (exitCode: number) => {
-        if (!server) {
-          process.exit(exitCode);
-          return;
-        }
-
-        worker.writeCache({
-          pid: process.pid,
-          using: false,
-        });
-
-        debug('configs:remove:cache')(JSON.stringify(worker.cache, null, 2));
-
-        Object.keys(worker.cache).forEach((key: string) => {
-          /* eslint-disable flowtype/no-unused-expressions */
-          // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-          worker.cache[key]?.pids.forEach((pid: number) => {
-            /* eslint-enable flowtype/no-unused-expressions */
-            if (!isRunning(pid))
-              worker.writeCache({
-                pid,
-                using: false,
-              });
-          });
-        });
-
-        if (Object.keys(worker.cache).length !== 0) {
-          setTimeout(removeFiles, 500, exitCode);
-          return;
-        }
-
-        server.close(() => {
-          process.exit(exitCode);
-        });
-      };
-
-      // caught interrupt signal to remove files
-      process.on('SIGINT', () => {
-        removeFiles(0);
-      });
+      if (
+        process.env.DEBUG_PORT &&
+        (await getPort({ port: debugPort })) === debugPort
+      )
+        throw new Error('Can not find the debug server');
 
       try {
+        const mainServer = await findMainServer();
+        const port = mainServer?.port || (await getPort());
+
+        debugLog({ mainServer, port });
+
+        if (!mainServer) {
+          execa(path.resolve(__dirname, './runServer.js'), [port], {
+            detached: true,
+            stdio: 'ignore',
+          }).unref();
+          await new Promise(resolve =>
+            sendToServer('{}', () => {
+              debugLog('connect');
+              resolve();
+            }),
+          );
+        }
+
         // [start]
         // handle config and ignore files
-        if (!generateFiles(cliName)) {
-          removeFiles(1);
+        if (!(await generateFiles(cliName))) {
+          process.exit(1);
           return;
         }
 
@@ -107,23 +116,14 @@ handleUnhandledRejection();
           chalk`Run command: {gray ${[path.basename(cli), ...argv].join(' ')}}`,
         );
 
-        const successCode = await execa(
-          npmWhich(process.cwd()).sync('node'),
-          [cli, ...argv],
-          {
-            stdio: 'inherit',
-            env,
-          },
-        ).then(({ exitCode }: resultType) => exitCode);
-
-        debugLog('Run command success, remove files');
-
-        removeFiles(successCode);
+        await execa(npmWhich(process.cwd()).sync('node'), [cli, ...argv], {
+          stdio: 'inherit',
+          env,
+        });
       } catch (e) {
         logger.log('Run command fail');
         debugLog(e);
-
-        removeFiles(e.exitCode || 1);
+        process.exit(e.exitCode || 1);
       }
       return;
     }

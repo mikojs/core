@@ -24,7 +24,7 @@ const logger = createLogger('@mikojs/badges');
 
   await Promise.all(
     files.map(async (cwd: string) => {
-      const { path: pkgPath, package: pkg } = await readPkgUp({
+      const { path: pkgPath, packageJson: pkg } = await readPkgUp({
         cwd: path.resolve(cwd),
       });
 

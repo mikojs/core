@@ -50,7 +50,7 @@ const lint = {
         files: [
           'packages/create-project/src/__tests__/__ignore__/lerna/**',
           'packages/create-project/src/__tests__/__ignore__/lerna/**/.templates/**',
-          '__mocks__/ora.js',
+          '__mocks__/**',
         ],
         rules: {
           'import/no-extraneous-dependencies': 'off',
@@ -66,15 +66,34 @@ const lint = {
 };
 
 const jest = {
-  config: ({ collectCoverageFrom, ...config }) => ({
-    ...config,
-    collectCoverageFrom: [
-      ...collectCoverageFrom,
-      '!**/packages/jest/**',
-      '!**/express-graphql/**',
-    ],
-  }),
-  configFiles: {
+  config: ({ collectCoverageFrom, ...config }) => {
+    const path = require('path');
+
+    // eslint-disable-next-line import/no-extraneous-dependencies
+    const d3DirTree = require('@mikojs/utils/lib/d3DirTree');
+
+    return {
+      ...config,
+      collectCoverageFrom: [...collectCoverageFrom, '!**/packages/jest/**'],
+      forceCoverageMatch: d3DirTree(
+        path.resolve(
+          __dirname,
+          './packages/create-project/src/__tests__/__ignore__',
+        ),
+        {
+          exclude: [
+            /__generated__/,
+            /__tests__\/__ignore__\/.*\/__tests__/,
+            /__tests__\/__ignore__\/[a-zA-Z]*.js$/,
+          ],
+          extensions: /\.js$/,
+        },
+      )
+        .leaves()
+        .map(({ data: { path: filePath } }) => filePath),
+    };
+  },
+  configsFiles: {
     lint: true,
   },
 };

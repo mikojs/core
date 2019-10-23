@@ -7,7 +7,7 @@ import { type errorPropsType } from '../types';
 import { type propsType as rootPropsType } from './Root';
 
 type propsType = {|
-  Error: $PropertyType<rootPropsType, 'Error'>,
+  Error: $PropertyType<rootPropsType<>, 'Error'>,
   children: NodeType,
 |};
 

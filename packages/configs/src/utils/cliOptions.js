@@ -58,13 +58,19 @@ export default (
       chalk`Example:
   configs {green babel -w}
   configs {green babel:lerna -w}
-  configs {gray --info}
-  configs {green babel:lerna} {gray --info}
+  configs {gray --configs-info}
+  configs {green babel:lerna} {gray --configs-info}
+  configs {green babel:lerna} {gray --configs-install}
+  configs {green babel:lerna} {gray --configs-remove}
   configs {green babel} {gray --configs-env envA,envB}
   configs {green exec run custom command} {gray --configs-env envA,envB --configs-files babel,lint}`,
     )
-    .option('--install', 'install packages by config')
-    .option('--info', 'print more info about configs')
+    .option('--configs-install', 'install packages by config')
+    .option('--configs-info', 'print more info about configs')
+    .option(
+      '--configs-remove',
+      'use to remove the generated files and the server',
+    )
     .option(
       '--configs-env [env]',
       'configs environment variables',
@@ -82,8 +88,9 @@ export default (
   const {
     args: [cliName],
     rawArgs,
-    install: shouldInstall = false,
-    info: showInfo = false,
+    configsInstall: shouldInstall = false,
+    configsRemove: shouldRemove = false,
+    configsInfo: showInfo = false,
     configsEnv,
     configsFiles,
     options,
@@ -93,6 +100,7 @@ export default (
     cliName,
     rawArgs,
     shouldInstall,
+    shouldRemove,
     showInfo,
     configsEnv,
     configsFiles,
@@ -102,10 +110,10 @@ export default (
 
   if (configs.store[cliName] && configsFiles instanceof Array)
     configsFiles.forEach((key: string) => {
-      if (!configs.store[cliName].configFiles)
-        configs.store[cliName].configFiles = {};
+      if (!configs.store[cliName].configsFiles)
+        configs.store[cliName].configsFiles = {};
 
-      configs.store[cliName].configFiles[key] = true;
+      configs.store[cliName].configsFiles[key] = true;
     });
 
   if (showInfo) {
@@ -113,6 +121,13 @@ export default (
 
     if (cliName) {
       const config = configs.store[cliName];
+
+      if (!config) {
+        logger
+          .fail(chalk`Can not find {cyan \`${cliName}\`} in configs`)
+          .fail(chalk`Use {green \`--info\`} to get the more information`);
+        return false;
+      }
 
       logger.info(
         chalk`Here is thie information of the {cyan ${cliName}} config:`,
@@ -174,6 +189,13 @@ export default (
     return false;
   }
 
+  if (shouldInstall && shouldRemove) {
+    logger.fail(
+      chalk`Should not use {red \`--install\`} and {red \`--remove\`} at the same time.`,
+    );
+    return false;
+  }
+
   if (!configs.store[cliName]) {
     logger
       .fail(chalk`Can not find {cyan \`${cliName}\`} in configs`)
@@ -203,13 +225,22 @@ export default (
           ),
       );
     const result = {
-      cli: shouldInstall ? 'install' : getCli([cliName, ...rawArgsFiltered]),
-      argv: shouldInstall
-        ? install(['yarn', 'add', '--dev'])
-        : run(rawArgsFiltered),
+      cli: 'default',
+      argv: ['default'],
       env,
       cliName,
     };
+
+    if (shouldInstall) {
+      result.cli = 'install';
+      result.argv = install(['yarn', 'add', '--dev']);
+    } else if (shouldRemove) {
+      result.cli = 'remove';
+      result.argv = [];
+    } else {
+      result.cli = getCli([cliName, ...rawArgsFiltered]);
+      result.argv = run(rawArgsFiltered);
+    }
 
     debugLog(result);
 

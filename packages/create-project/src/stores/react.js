@@ -4,9 +4,6 @@ import memoizeOne from 'memoize-one';
 
 import relay from './relay';
 import styles from './styles';
-import jest from './jest';
-import configs from './configs';
-import gitignore from './gitignore';
 import Store from './index';
 
 const template = `// @flow
@@ -18,9 +15,32 @@ const Home = () => <div>@mikojs/create-project</div>;
 
 export default Home;`;
 
+const testTemplate = `// @flow
+
+import path from 'path';
+
+import { emptyFunction } from 'fbjs';
+
+import React from '@mikojs/koa-react';
+
+const react = new React(path.resolve(__dirname, '../pages'));
+
+describe('pages', () => {
+  test.each\`
+    url    | html
+    \${'/'} | \${'<div>@mikojs/create-project</div>'}
+  \`('page $url', async ({ url, html }: {| url: string, html: string |}) => {
+    expect(
+      (await react.render(url, {
+        Loading: emptyFunction.thatReturnsNull,
+      })).html(),
+    ).toBe(html);
+  });
+});`;
+
 /** react store */
 class React extends Store {
-  +subStores = [relay, styles, jest, configs, gitignore];
+  +subStores = [relay, styles];
 
   storeUseReact = false;
 
@@ -73,13 +93,14 @@ class React extends Store {
     if (!useGraphql)
       await this.writeFiles({
         'src/pages/index.js': template,
+        'src/__tests__/pages.js': testTemplate,
       });
 
     if (lerna) return;
 
     await this.execa(
       'yarn add react react-dom @mikojs/koa-react',
-      'yarn add --dev webpack @babel/preset-react @babel/plugin-proposal-class-properties',
+      'yarn add --dev webpack @babel/preset-react @babel/plugin-proposal-class-properties enzyme enzyme-adapter-react-16',
     );
   };
 }

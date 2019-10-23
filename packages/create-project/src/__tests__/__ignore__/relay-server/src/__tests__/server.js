@@ -1,63 +1,67 @@
-/**
- * @jest-environment node
- *
- * @flow
- */
+// @flow
 
-import path from 'path';
+import getPort from 'get-port';
 
-import fetch, { type Response as ResponseType } from 'node-fetch';
+import server from '../server';
 
-import server from '@mikojs/server/lib/defaults';
+jest.mock(
+  '@mikojs/koa-graphql',
+  () =>
+    class MockGraphql {
+      relay = jest.fn();
+      middleware = () => async (ctx: mixed, next: () => Promise<void>) => {
+        await next();
+      };
+    },
+);
 
-import { version } from '../../package.json';
-
-let runningServer: http$Server;
+jest.mock(
+  '@mikojs/koa-react',
+  () =>
+    class MockReact {
+      middleware = () => async (ctx: mixed, next: () => Promise<void>) => {
+        await next();
+      };
+    },
+);
 
 describe('server', () => {
-  beforeAll(async () => {
-    runningServer = await server({
-      src: path.resolve(__dirname, '..'),
-      dir: path.resolve(__dirname, '..'),
-    });
-  });
+  test.each`
+    dev      | watch    | SKIP_SERVER
+    ${true}  | ${true}  | ${false}
+    ${true}  | ${false} | ${true}
+    ${false} | ${true}  | ${false}
+    ${false} | ${false} | ${true}
+  `(
+    'Running server with dev = $dev, watch = $watch, SKIP_SERVER = $SKIP_SERVER',
+    async ({
+      dev,
+      watch,
+      SKIP_SERVER,
+    }: {|
+      dev: boolean,
+      watch: boolean,
+      SKIP_SERVER: boolean,
+    |}) => {
+      if (SKIP_SERVER) process.env.SKIP_SERVER = SKIP_SERVER.toString();
+      else delete process.env.SKIP_SERVER;
 
-  describe('pages', () => {
-    test('/', async () => {
-      expect(
-        await fetch('http://localhost:8000').then((res: ResponseType) =>
-          res.text(),
-        ),
-      ).not.toBe('Not Found');
-    });
-  });
-
-  describe('graphql', () => {
-    test('version', async () => {
-      expect(
-        await fetch('http://localhost:8000/graphql', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            query: `
-  {
-    version
-  }
-`,
-          }),
-        }).then((res: ResponseType) => res.json()),
-      ).toEqual({
-        data: {
-          version,
-        },
+      const runningServer = await server({
+        src: __dirname,
+        dir: __dirname,
+        dev,
+        watch,
+        port: await getPort(),
+        restart: jest.fn(),
+        close: jest.fn(),
       });
-    });
-  });
 
-  afterAll(() => {
-    runningServer.close();
-  });
+      (!SKIP_SERVER
+        ? expect(runningServer).not
+        : expect(runningServer)
+      ).toBeNull();
+
+      if (!SKIP_SERVER) runningServer.close();
+    },
+  );
 });

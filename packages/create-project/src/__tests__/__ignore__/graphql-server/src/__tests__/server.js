@@ -1,53 +1,42 @@
-/**
- * @jest-environment node
- *
- * @flow
- */
+// @flow
 
-import path from 'path';
+import getPort from 'get-port';
 
-import fetch, { type Response as ResponseType } from 'node-fetch';
+import server from '../server';
 
-import server from '@mikojs/server/lib/defaults';
-
-import { version } from '../../package.json';
-
-let runningServer: http$Server;
+jest.mock(
+  '@mikojs/koa-graphql',
+  () =>
+    class MockGraphql {
+      middleware = () => async (ctx: mixed, next: () => Promise<void>) => {
+        await next();
+      };
+    },
+);
 
 describe('server', () => {
-  beforeAll(async () => {
-    runningServer = await server({
-      src: path.resolve(__dirname, '..'),
-      dir: path.resolve(__dirname, '..'),
-    });
-  });
-
-  describe('graphql', () => {
-    test('version', async () => {
-      expect(
-        await fetch('http://localhost:8000/graphql', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            query: `
-  {
-    version
-  }
-`,
-          }),
-        }).then((res: ResponseType) => res.json()),
-      ).toEqual({
-        data: {
-          version,
-        },
+  test.each`
+    dev      | watch
+    ${true}  | ${true}
+    ${true}  | ${false}
+    ${false} | ${true}
+    ${false} | ${false}
+  `(
+    'Running server with dev = $dev, watch = $watch',
+    async ({ dev, watch }: {| dev: boolean, watch: boolean |}) => {
+      const runningServer = await server({
+        src: __dirname,
+        dir: __dirname,
+        dev,
+        watch,
+        port: await getPort(),
+        restart: jest.fn(),
+        close: jest.fn(),
       });
-    });
-  });
 
-  afterAll(() => {
-    runningServer.close();
-  });
+      expect(runningServer).not.toBeNull();
+
+      runningServer.close();
+    },
+  );
 });

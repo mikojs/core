@@ -6,8 +6,6 @@ import memoizeOne from 'memoize-one';
 import { isURL } from 'validator';
 import { emptyFunction } from 'fbjs';
 
-import license from './license';
-import readme from './readme';
 import Store from './index';
 
 import getEngines from 'utils/getEngines';
@@ -48,8 +46,6 @@ export const PKG_QUESTIONS = [
 
 /** store pkg */
 class Pkg extends Store {
-  +subStores = [license, readme];
-
   +storePkg: $NonMaybeType<
     $PropertyType<$PropertyType<Store, 'ctx'>, 'pkg'>,
   > = {

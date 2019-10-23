@@ -1,6 +1,7 @@
 // @flow
 
 import execa from 'execa';
+import { emptyFunction } from 'fbjs';
 
 import { version } from '../../package.json';
 
@@ -28,6 +29,8 @@ class Base extends Store {
     readme,
     circleci,
   ];
+
+  +validateSubStore = emptyFunction.thatReturnsArgument;
 
   /**
    * @example

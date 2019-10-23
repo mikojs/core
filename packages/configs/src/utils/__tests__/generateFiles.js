@@ -8,7 +8,10 @@ import chalk from 'chalk';
 
 import generateFiles from '../generateFiles';
 import configs from '../configs';
-import worker from '../worker';
+
+jest.mock('../sendToServer', () => (data: mixed, callback: () => void) => {
+  callback();
+});
 
 describe('generate files', () => {
   beforeAll(() => {
@@ -16,7 +19,7 @@ describe('generate files', () => {
       config: {
         notFindCli: emptyFunction.thatReturnsArgument,
         jest: {
-          configFiles: {
+          configsFiles: {
             'babel:lerna': false,
           },
         },
@@ -29,22 +32,20 @@ describe('generate files', () => {
     outputFileSync.destPaths = [];
   });
 
-  test('error', () => {
+  test('error', async () => {
     const mockLog = jest.fn();
 
     global.console.error = mockLog;
 
-    expect(generateFiles('notFindCli')).toBeFalsy();
+    expect(await generateFiles('notFindCli')).toBeFalsy();
     expect(mockLog).toHaveBeenCalledTimes(5);
     expect(mockLog).toHaveBeenCalledWith(
       chalk`{red ✖ }{red {bold @mikojs/configs}} Can not generate the config file, You can:`,
     );
   });
 
-  test('generate', () => {
-    generateFiles('jest');
-
-    expect(worker.server).toBeNull();
+  test('generate', async () => {
+    expect(await generateFiles('jest')).toBeTruthy();
     expect(outputFileSync.destPaths).toEqual(
       [
         'jest.config.js',

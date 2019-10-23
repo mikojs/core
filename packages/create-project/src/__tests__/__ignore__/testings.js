@@ -134,6 +134,28 @@ const relayServer = {
   },
 };
 
+const relayServerWithCss = {
+  name: 'relay-server-with-css',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useGraphql: true,
+    useStyles: 'css',
+  },
+};
+
+const relayServerWithLess = {
+  name: 'relay-server-with-less',
+  inquirerResult: {
+    ...basicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useGraphql: true,
+    useStyles: 'less',
+  },
+};
+
 // with --lerna
 const lernaBasicUsage = {
   name: 'lerna/basic-usage',
@@ -239,6 +261,34 @@ const lernaRelayServer = {
   },
 };
 
+const lernaRelayServerWithCss = {
+  name: 'lerna/relay-server-with-css',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useGraphql: true,
+    useStyles: 'css',
+  },
+  context: {
+    lerna: true,
+  },
+};
+
+const lernaRelayServerWithLess = {
+  name: 'lerna/relay-server-with-less',
+  inquirerResult: {
+    ...lernaBasicUsage.inquirerResult,
+    useServer: true,
+    useReact: true,
+    useGraphql: true,
+    useStyles: 'less',
+  },
+  context: {
+    lerna: true,
+  },
+};
+
 export default [
   basicUsage,
   privatePkg,
@@ -249,6 +299,8 @@ export default [
   reactServerWithLess,
   graphqlServer,
   relayServer,
+  relayServerWithCss,
+  relayServerWithLess,
 
   lernaBasicUsage,
   lernaPrivatePkg,
@@ -259,6 +311,8 @@ export default [
   lernaReactServerWithLess,
   lernaGraphqlServer,
   lernaRelayServer,
+  lernaRelayServerWithCss,
+  lernaRelayServerWithLess,
 ].reduce(
   (
     result: $ReadOnlyArray<[string, string, inquirerResultType, contextType]>,

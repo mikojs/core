@@ -16,7 +16,9 @@ import { type errorPropsType } from '../types';
 import ErrorCatch from './ErrorCatch';
 import getPage from './getPage';
 
-export type propsType = {|
+import getStatic from 'utils/getStatic';
+
+export type propsType<M = {}, P = {}> = {|
   Main: ComponentType<*>,
   Loading: ComponentType<{||}>,
   Error: ComponentType<errorPropsType>,
@@ -32,14 +34,12 @@ export type propsType = {|
     |},
   |}>,
   InitialPage: ComponentType<*>,
-  mainInitialProps: {},
-  pageInitialProps: {},
+  mainInitialProps: M,
+  pageInitialProps: P,
 |};
 
-let isMounted: boolean = false;
-
 /** @react use to control page */
-const Root = ({
+const Root = <M, P>({
   Main,
   Loading,
   Error,
@@ -47,7 +47,7 @@ const Root = ({
   InitialPage,
   mainInitialProps,
   pageInitialProps,
-}: propsType): NodeType => {
+}: propsType<M, P>): NodeType => {
   const isServer = !ExecutionEnvironment.canUseEventListeners;
   const { pathname, search } = useLocation();
   const ctx = isServer
@@ -68,13 +68,14 @@ const Root = ({
     pageProps: pageInitialProps,
   });
   const prevCtxRef = useRef(ctx);
+  const isMountedRef = useRef(false);
 
   useEffect((): (() => void) => {
     let cancel: boolean = false;
 
     prevCtxRef.current = ctx;
 
-    if (!isServer && isMounted)
+    if (!isServer && isMountedRef.current)
       (async () => {
         const newPageData = await getPage(Main, routesData, ctx, isServer);
 
@@ -83,7 +84,7 @@ const Root = ({
         updatePage(newPageData);
       })();
 
-    if (!isMounted) isMounted = true;
+    if (!isMountedRef.current) isMountedRef.current = true;
 
     return () => {
       cancel = true;
@@ -93,8 +94,8 @@ const Root = ({
 
   return (
     <ErrorCatch Error={Error}>
-      <Main {...mainProps} Component={Page}>
-        {<-P: { key: string }>(props?: P) =>
+      <Main {...mainProps} Component={getStatic(Page)}>
+        {<-V: { key: string }>(props?: V) =>
           prevCtx.originalUrl !== ctx.originalUrl ? (
             <Loading />
           ) : (
@@ -106,4 +107,4 @@ const Root = ({
   );
 };
 
-export default React.memo<propsType>(Root);
+export default React.memo<propsType<>>(Root);

@@ -120,9 +120,9 @@ export class Configs {
           ...config.env,
           ...customConfig.env,
         },
-        configFiles: {
-          ...config.configFiles,
-          ...customConfig.configFiles,
+        configsFiles: {
+          ...config.configsFiles,
+          ...customConfig.configsFiles,
         },
       };
     });

@@ -52,7 +52,7 @@ export default {
   env: {
     NODE_ENV: 'test',
   },
-  configFiles: {
+  configsFiles: {
     lint: '.eslintrc.js',
     babel: true,
     prettier: true,

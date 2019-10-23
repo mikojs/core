@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/use-css",
   "repository": "https://github.com/mikojs/core/tree/master/server/use-css",
-  "version": "1.6.0",
+  "version": "1.8.0",
   "main": "./lib/index.js",
   "dependencies": {
     "css-loader": "^3.2.0",
@@ -16,7 +16,7 @@
     "@mikojs/koa-react": ">=1.0.0"
   },
   "devDependencies": {
-    "webpack": "^4.41.0"
+    "webpack": "^4.41.2"
   },
   "keywords": ["koa-react", "mikojs", "use-css"],
   "publishConfig": {

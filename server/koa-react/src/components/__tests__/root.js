@@ -3,51 +3,60 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { act, Simulate } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
-import { MemoryRouter as Router, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { emptyFunction } from 'fbjs';
 
-import Root from '../Root';
+import testRender, { type wrapperType } from '../testRender';
 
 import Main, { mainRender } from './__ignore__/Main';
 import Loading, { loadingRender } from './__ignore__/Loading';
 import PageA, { pageARender } from './__ignore__/PageA';
 import PageB, { pageBRender } from './__ignore__/PageB';
 
-const wrapper = mount(
-  <Router>
-    <Root
-      Main={Main}
-      Loading={Loading}
-      Error={emptyFunction.thatReturnsNull}
-      routesData={[
-        {
-          exact: true,
-          path: ['/pageA'],
-          component: {
-            filePath: '/pageA',
-            chunkName: '/pageA',
-            loader: async () => ({ default: PageA }),
-          },
-        },
-        {
-          exact: true,
-          path: ['/pageB'],
-          component: {
-            filePath: '/pageB',
-            chunkName: '/pageB',
-            loader: async () => ({ default: PageB }),
-          },
-        },
-      ]}
-      InitialPage={PageA}
-      mainInitialProps={{}}
-      pageInitialProps={{}}
-    />
-  </Router>,
-);
+const props = {
+  Main,
+  Loading,
+  Error: emptyFunction.thatReturnsNull,
+  routesData: [
+    {
+      exact: true,
+      path: ['/pageA'],
+      component: {
+        filePath: '/pageA',
+        chunkName: '/pageA',
+        loader: async () => ({ default: PageA }),
+      },
+    },
+    {
+      exact: true,
+      path: ['/pageB'],
+      component: {
+        filePath: '/pageB',
+        chunkName: '/pageB',
+        loader: async () => ({ default: PageB }),
+      },
+    },
+  ],
+  InitialPage: PageA,
+  mainInitialProps: {},
+  pageInitialProps: {},
+};
+const MOCK_FUNCS = {
+  'Main.getInitialProps': Main.getInitialProps,
+  mainRender: mainRender,
+  'PageA.getInitialProps': PageA.getInitialProps,
+  pageARender: pageARender,
+  'PageB.getInitialProps': PageB.getInitialProps,
+  pageBRender: pageBRender,
+  loadingRender: loadingRender,
+};
+let wrapper: wrapperType;
 
 describe('Root', () => {
+  beforeAll(async () => {
+    wrapper = await testRender(props);
+  });
+
   describe.each`
     info              | expectedTimes            | Page
     ${'first mount'}  | ${[0, 1, 0, 1, 0, 0, 0]} | ${PageA}
@@ -81,35 +90,22 @@ describe('Root', () => {
         expect(wrapper.contains(<Page />)).toBeTruthy();
       });
 
-      [
-        Main.getInitialProps,
-        mainRender,
-        PageA.getInitialProps,
-        pageARender,
-        PageB.getInitialProps,
-        pageBRender,
-        loadingRender,
-      ].forEach(
-        (mockFn: JestMockFn<$ReadOnlyArray<void>, void>, index: number) => {
-          const expectedTime = expectedTimes[index];
+      test.each([
+        ['Main.getInitialProps'],
+        ['mainRender'],
+        ['PageA.getInitialProps'],
+        ['pageARender'],
+        ['PageB.getInitialProps'],
+        ['pageBRender'],
+        ['loadingRender'],
+      ])('%s', (mockFnName: string) => {
+        const mockFn = MOCK_FUNCS[mockFnName];
+        const expectedTime =
+          expectedTimes[Object.keys(MOCK_FUNCS).indexOf(mockFnName)];
 
-          test(
-            [
-              'Main.getInitialProps',
-              'mainRender',
-              'PageA.getInitialProps',
-              'pageARender',
-              'PageB.getInitialProps',
-              'pageBRender',
-              'loadingRender',
-            ][index],
-            () => {
-              if (expectedTime === 0) expect(mockFn).not.toHaveBeenCalled();
-              else expect(mockFn).toHaveBeenCalledTimes(expectedTime);
-            },
-          );
-        },
-      );
+        if (expectedTime === 0) expect(mockFn).not.toHaveBeenCalled();
+        else expect(mockFn).toHaveBeenCalledTimes(expectedTime);
+      });
     },
   );
 
@@ -125,5 +121,11 @@ describe('Root', () => {
     wrapper.unmount();
 
     expect(mainRender).toHaveBeenCalledTimes(1);
+  });
+
+  test('test render go to the pageA by link', async () => {
+    expect(
+      (await testRender(props, '/pageA')).contains(<PageA />),
+    ).toBeTruthy();
   });
 });

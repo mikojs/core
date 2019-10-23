@@ -1,36 +1,42 @@
-/**
- * @jest-environment node
- *
- * @flow
- */
+// @flow
 
-import path from 'path';
+import getPort from 'get-port';
 
-import fetch, { type Response as ResponseType } from 'node-fetch';
+import server from '../server';
 
-import server from '@mikojs/server/lib/defaults';
-
-let runningServer: http$Server;
+jest.mock(
+  '@mikojs/koa-react',
+  () =>
+    class MockReact {
+      middleware = () => async (ctx: mixed, next: () => Promise<void>) => {
+        await next();
+      };
+    },
+);
 
 describe('server', () => {
-  beforeAll(async () => {
-    runningServer = await server({
-      src: path.resolve(__dirname, '..'),
-      dir: path.resolve(__dirname, '..'),
-    });
-  });
+  test.each`
+    dev      | watch
+    ${true}  | ${true}
+    ${true}  | ${false}
+    ${false} | ${true}
+    ${false} | ${false}
+  `(
+    'Running server with dev = $dev, watch = $watch',
+    async ({ dev, watch }: {| dev: boolean, watch: boolean |}) => {
+      const runningServer = await server({
+        src: __dirname,
+        dir: __dirname,
+        dev,
+        watch,
+        port: await getPort(),
+        restart: jest.fn(),
+        close: jest.fn(),
+      });
 
-  describe('pages', () => {
-    test('/', async () => {
-      expect(
-        await fetch('http://localhost:8000').then((res: ResponseType) =>
-          res.text(),
-        ),
-      ).not.toBe('Not Found');
-    });
-  });
+      expect(runningServer).not.toBeNull();
 
-  afterAll(() => {
-    runningServer.close();
-  });
+      runningServer.close();
+    },
+  );
 });

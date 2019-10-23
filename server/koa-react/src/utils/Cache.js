@@ -14,8 +14,8 @@ import { type propsType as rootPropsType } from 'components/Root';
 import NotFound from 'templates/NotFound';
 
 export type handlerType = (
-  routesData: $PropertyType<rootPropsType, 'routesData'>,
-) => $PropertyType<rootPropsType, 'routesData'>;
+  routesData: $PropertyType<rootPropsType<>, 'routesData'>,
+) => $PropertyType<rootPropsType<>, 'routesData'>;
 
 type fileType =
   | 'document'
@@ -47,7 +47,7 @@ export default class Cache {
     basename: ?string,
     exclude: ?RegExp,
   |};
-  routesData: $PropertyType<rootPropsType, 'routesData'>;
+  routesData: $PropertyType<rootPropsType<>, 'routesData'>;
   document: string;
   main: string;
   loading: string;
@@ -260,7 +260,7 @@ export default class Cache {
           path: routePath,
           component: { filePath, chunkName },
         }: $ElementType<
-          $PropertyType<rootPropsType, 'routesData'>,
+          $PropertyType<rootPropsType<>, 'routesData'>,
           number,
         >): string =>
           `{ ${[
@@ -334,7 +334,7 @@ export default class Cache {
               ({
                 component: { chunkName: routeChunkName },
               }: $ElementType<
-                $PropertyType<rootPropsType, 'routesData'>,
+                $PropertyType<rootPropsType<>, 'routesData'>,
                 number,
               >) => routeChunkName !== chunkName,
             ),

@@ -5,26 +5,24 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/configs",
   "repository": "https://github.com/mikojs/core/tree/master/packages/configs",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.6.2",
+    "@babel/runtime": "^7.6.3",
     "@mikojs/utils": "^1.7.1",
     "chalk": "^2.4.2",
-    "commander": "^3.0.1",
+    "commander": "^3.0.2",
     "cosmiconfig": "^5.2.1",
     "debug": "^4.1.1",
-    "execa": "^2.0.4",
+    "execa": "^3.2.0",
     "fbjs": "^1.0.0",
+    "find-process": "^1.4.2",
+    "get-port": "^5.0.0",
     "is-running": "^2.1.0",
-    "moment": "^2.24.0",
     "npm-which": "^3.0.1",
     "output-file-sync": "^2.0.1",
     "rimraf": "^3.0.0"
-  },
-  "devDependencies": {
-    "get-port": "^5.0.0"
   },
   "keywords": ["configs", "mikojs"],
   "publishConfig": {

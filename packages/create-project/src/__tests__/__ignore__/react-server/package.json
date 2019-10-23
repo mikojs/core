@@ -16,6 +16,7 @@
     "@mikojs/koa-base": "version",
     "@mikojs/koa-react": "version",
     "@mikojs/server": "version",
+    "fbjs": "version",
     "koa": "version",
     "react": "version",
     "react-dom": "version"
@@ -36,10 +37,10 @@
     "eslint-watch": "version",
     "flow-bin": "version",
     "flow-typed": "version",
+    "get-port": "version",
     "husky": "version",
     "jest": "version",
     "lint-staged": "version",
-    "node-fetch": "version",
     "prettier": "version",
     "prettier-package-json": "version",
     "webpack": "version"

@@ -6,13 +6,31 @@ import getConfig from '../index';
 
 import configs from 'utils/configs';
 
-test('get config', () => {
-  configs.handleCustomConfigs({
-    config: {
-      getConfig: {},
-    },
-    filepath: path.resolve(process.cwd(), './.catrc.js'),
+jest.mock(
+  '../utils/sendToServer',
+  () => (data: mixed, callback: () => void) => {
+    callback();
+  },
+);
+
+describe('configs', () => {
+  beforeAll(() => {
+    configs.handleCustomConfigs({
+      config: {
+        getConfig: {},
+      },
+      filepath: path.resolve(process.cwd(), './.catrc.js'),
+    });
   });
 
-  expect(getConfig('getConfig', path.resolve('jest.config.js'))).toEqual({});
+  test.each`
+    filePath      | ignorePath
+    ${'filePath'} | ${undefined}
+    ${'filePath'} | ${'ignorePath'}
+  `(
+    'get config with filePath = $filePath and ignorePath = $ignorePath',
+    ({ filePath, ignorePath }: {| filePath: string, ignorePath: string |}) => {
+      expect(getConfig('getConfig', filePath, ignorePath)).toEqual({});
+    },
+  );
 });

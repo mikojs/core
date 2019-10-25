@@ -17,6 +17,7 @@ describe('use dnd', () => {
     useDrag.mockReset();
     useDrop.mockReset();
     useDragLayer.mockReset();
+    getElementPosition.mockReset();
   });
 
   test.each`

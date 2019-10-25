@@ -8,7 +8,7 @@ import {
   useDragLayer,
   type monitorType,
 } from 'react-dnd-cjs';
-import { emptyFunction } from 'fbjs';
+import { emptyFunction, getElementPosition } from 'fbjs';
 
 import useDnd from '../useDnd';
 
@@ -20,43 +20,62 @@ describe('use dnd', () => {
   });
 
   test.each`
-    isDragging | isOver   | isOneOfItemDragging | style
-    ${false}   | ${false} | ${false}            | ${undefined}
-    ${true}    | ${false} | ${true}             | ${{ opacity: 0.1 }}
-    ${false}   | ${true}  | ${true}             | ${{ width: '100%', height: '100%', borderBottom: '1px solid red' }}
+    isDragging | isOver   | isOneOfItemDragging | elementStyle                   | style
+    ${false}   | ${false} | ${false}            | ${{ width: 100, height: 100 }} | ${undefined}
+    ${true}    | ${false} | ${true}             | ${{ width: 100, height: 100 }} | ${{ opacity: 0.1 }}
+    ${false}   | ${true}  | ${true}             | ${{ width: 100, height: 100 }} | ${{ borderBottom: '1px solid red' }}
+    ${false}   | ${true}  | ${true}             | ${{ width: 0, height: 0 }}     | ${{ width: '100%', height: '100%', borderBottom: '1px solid red' }}
   `(
     'use dnd with isDragging = $isDragging, isOver = $isOver, isOneOfItemDragging = $isOneOfItemDragging',
     ({
       isDragging,
       isOver,
       isOneOfItemDragging,
+      elementStyle,
       style,
     }: {|
       isDragging: boolean,
       isOver: boolean,
       isOneOfItemDragging: boolean,
+      elementStyle: { width: number, height: number },
       style?: {},
     |}) => {
       /** @react use to test useDnd */
       const Root = () => <div {...useDnd('id')} />;
 
-      useDrag.mockReturnValueOnce([{ isDragging }, emptyFunction]);
-      useDrop.mockReturnValueOnce([{ isOver }, emptyFunction]);
-      useDragLayer.mockReturnValueOnce({ isOneOfItemDragging });
+      useDrag.mockReturnValue([{ isDragging }, emptyFunction]);
+      useDrop.mockReturnValue([{ isOver }, emptyFunction]);
+      useDragLayer.mockReturnValue({ isOneOfItemDragging });
+      getElementPosition.mockReturnValue(elementStyle);
 
-      expect(mount(<Root />).contains(<div style={style} />)).toBeTruthy();
+      const wrapper = mount(<Root />);
+
+      if (!isDragging && isOneOfItemDragging)
+        expect(
+          wrapper.contains(
+            <div style={{ ...style, width: '100%', height: '100%' }} />,
+          ),
+        ).toBeTruthy();
+      else expect(wrapper.contains(<div style={style} />)).toBeTruthy();
 
       useDrag.mock.calls.forEach(
         (option: [{ collect: (monitor: monitorType) => void }]) => {
           option[0].collect({ isDragging: jest.fn() });
         },
       );
-
       useDrop.mock.calls.forEach(
         (option: [{ collect: (monitor: monitorType) => void }]) => {
           option[0].collect({ isOver: jest.fn() });
         },
       );
+      useDragLayer.mock.calls.forEach(
+        (option: [(monitor: monitorType) => void]) => {
+          option[0]({ isDragging: jest.fn() });
+        },
+      );
+      wrapper.setProps({ key: 'value' });
+
+      expect(wrapper.contains(<div style={style} />)).toBeTruthy();
     },
   );
 });

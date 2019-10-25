@@ -10815,18 +10815,6 @@ react-dnd-html5-backend-cjs@^9.4.0:
   dependencies:
     dnd-core-cjs "^9.4.0"
 
-react-dnd-test-backend-cjs@^9.4.0:
-  version "9.4.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-test-backend-cjs/-/react-dnd-test-backend-cjs-9.4.0.tgz#6e6f1f6e2dc08d1b7d896a2f3a7ef22b58caf79b"
-  integrity sha512-XHYiWP6EKCZia3kGpXOGmP2lV6ia7XKF5P4oh7Gz71cuAKKKXrwHuEreJdvOuoeZFv9lkhR4bbA7jNqjATFGVg==
-  dependencies:
-    dnd-core-cjs "^9.4.0"
-
-react-dnd-test-utils-cjs@^9.4.0:
-  version "9.4.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-test-utils-cjs/-/react-dnd-test-utils-cjs-9.4.0.tgz#3479d2d5e4d8ae65036ef55a6c5e155365800759"
-  integrity sha512-PW8wehUuneczYfkyiFG/PP6HPEVBx0xFzFkyukIozYm0xV1rW4uI5ixvW4VM3Kqvluhnh+3a4Ht5g4Q5xlzwoA==
-
 react-dom@^16.10.2:
   version "16.10.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.10.2.tgz#4840bce5409176bc3a1f2bd8cb10b92db452fda6"

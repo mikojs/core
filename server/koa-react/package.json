@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.15.1",
     "get-port": "^5.0.0",
     "koa": "^2.10.0",
     "prop-types": "^15.7.2",

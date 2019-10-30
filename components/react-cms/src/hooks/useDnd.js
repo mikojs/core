@@ -13,8 +13,13 @@ import SourceContext from '../SourceContext';
 
 import { type itemType } from './useSource';
 
+const CAN_DRAG_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
+  'component',
+];
+
 const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
   'component',
+  'previewer',
 ];
 
 /**
@@ -50,6 +55,9 @@ export default (
     collect: (monitor: monitorType) => ({
       isOver: monitor.isOver(),
     }),
+    hover: (current: itemType) => {
+      if (current.id !== item.id) updateSource('hover', current, item);
+    },
     drop: (current: itemType, monitor: monitorType) => {
       if (current.id !== item.id && monitor.isOver({ shallow: true }))
         updateSource('drop', current, item);
@@ -66,8 +74,9 @@ export default (
     [isOneOfItemDragging, newProps.ref.current !== null],
   );
 
-  connectDrag(newProps.ref);
-  connectDrop(newProps.ref);
+  if (CAN_DRAG_KIND.includes(item.type)) connectDrag(newProps.ref);
+
+  if (CAN_DROP_KIND.includes(item.type)) connectDrop(newProps.ref);
 
   if (!isDragging && isOneOfItemDragging) {
     if (width === 0)

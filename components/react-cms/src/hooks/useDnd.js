@@ -1,6 +1,6 @@
 // @flow
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useContext } from 'react';
 import {
   useDrag,
   useDrop,
@@ -9,7 +9,18 @@ import {
 } from 'react-dnd-cjs';
 import { getElementPosition } from 'fbjs';
 
-const CAN_DROP_KIND = ['component'];
+import SourceContext from '../SourceContext';
+
+import { type itemType } from './useSource';
+
+const CAN_DRAG_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
+  'component',
+];
+
+const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
+  'component',
+  'previewer',
+];
 
 /**
  * @example
@@ -24,15 +35,17 @@ const CAN_DROP_KIND = ['component'];
 export default (
   id: string,
   props?: {},
-  kind?: $ElementType<typeof CAN_DROP_KIND, number> = CAN_DROP_KIND[0],
+  kind?: $PropertyType<itemType, 'type'> = CAN_DROP_KIND[0],
 ): {} => {
+  const { updateSource } = useContext(SourceContext);
+  const item = { id, type: kind };
   const newProps: {
     ...typeof props,
     ref: $Call<typeof useRef, null | mixed>,
     style?: {},
   } = { ...props, ref: useRef(null) };
   const [{ isDragging }, connectDrag] = useDrag({
-    item: { id, type: kind },
+    item,
     collect: (monitor: monitorType) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -42,12 +55,13 @@ export default (
     collect: (monitor: monitorType) => ({
       isOver: monitor.isOver(),
     }),
-    /*
-    drop: (current: itemType, monitor: monitorType) => {
-      if (current.id !== id && monitor.isOver({ shallow: true }))
-        emptyFunction('drop', current);
+    hover: (current: itemType) => {
+      if (current.id !== item.id) updateSource('hover', current, item);
     },
-    */
+    drop: (current: itemType, monitor: monitorType) => {
+      if (current.id !== item.id && monitor.isOver({ shallow: true }))
+        updateSource('drop', current, item);
+    },
   });
   const { isOneOfItemDragging } = useDragLayer((monitor: monitorType) => ({
     isOneOfItemDragging: monitor.isDragging(),
@@ -60,7 +74,8 @@ export default (
     [isOneOfItemDragging, newProps.ref.current !== null],
   );
 
-  connectDrag(newProps.ref);
+  if (CAN_DRAG_KIND.includes(item.type)) connectDrag(newProps.ref);
+
   connectDrop(newProps.ref);
 
   if (!isDragging && isOneOfItemDragging) {

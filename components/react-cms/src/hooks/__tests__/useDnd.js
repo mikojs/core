@@ -11,6 +11,7 @@ import {
 import { emptyFunction, getElementPosition } from 'fbjs';
 
 import useDnd from '../useDnd';
+import { type itemType } from '../useSource';
 
 describe('use dnd', () => {
   beforeEach(() => {
@@ -65,8 +66,26 @@ describe('use dnd', () => {
         },
       );
       useDrop.mock.calls.forEach(
-        (option: [{ collect: (monitor: monitorType) => void }]) => {
+        (
+          option: [
+            {
+              collect: (monitor: monitorType) => void,
+              hover: (current: itemType) => void,
+              drop: (current: itemType, monitor: monitorType) => void,
+            },
+          ],
+        ) => {
           option[0].collect({ isOver: jest.fn() });
+          option[0].hover({ id: 'id', type: 'component' });
+          option[0].drop(
+            { id: 'id', type: 'component' },
+            { isOver: () => false },
+          );
+          option[0].hover({ id: 'new-id', type: 'component' });
+          option[0].drop(
+            { id: 'new-id', type: 'component' },
+            { isOver: () => true },
+          );
         },
       );
       useDragLayer.mock.calls.forEach(

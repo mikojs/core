@@ -76,7 +76,7 @@ export default (
 
   if (CAN_DRAG_KIND.includes(item.type)) connectDrag(newProps.ref);
 
-  if (CAN_DROP_KIND.includes(item.type)) connectDrop(newProps.ref);
+  connectDrop(newProps.ref);
 
   if (!isDragging && isOneOfItemDragging) {
     if (width === 0)

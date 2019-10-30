@@ -11,7 +11,7 @@ import { getElementPosition } from 'fbjs';
 
 import { SourceContext, type itemType } from '../SourceProvider';
 
-const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'kind'>> = [
+const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
   'component',
 ];
 
@@ -28,16 +28,17 @@ const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'kind'>> = [
 export default (
   id: string,
   props?: {},
-  kind?: $PropertyType<itemType, 'kind'> = CAN_DROP_KIND[0],
+  kind?: $PropertyType<itemType, 'type'> = CAN_DROP_KIND[0],
 ): {} => {
   const { updateSource } = useContext(SourceContext);
+  const item = { id, type: kind };
   const newProps: {
     ...typeof props,
     ref: $Call<typeof useRef, null | mixed>,
     style?: {},
   } = { ...props, ref: useRef(null) };
   const [{ isDragging }, connectDrag] = useDrag({
-    item: { id, type: kind },
+    item,
     collect: (monitor: monitorType) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -48,8 +49,8 @@ export default (
       isOver: monitor.isOver(),
     }),
     drop: (current: itemType, monitor: monitorType) => {
-      if (current.id !== id && monitor.isOver({ shallow: true }))
-        updateSource('TODO', current);
+      if (current.id !== item.id && monitor.isOver({ shallow: true }))
+        updateSource('drop', current, item);
     },
   });
   const { isOneOfItemDragging } = useDragLayer((monitor: monitorType) => ({

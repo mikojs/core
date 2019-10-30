@@ -5,19 +5,23 @@ import { emptyFunction } from 'fbjs';
 
 export type itemType = {|
   id: string,
-  kind: 'component',
+  type: 'component',
 |};
 
 type actionType = {|
   type: 'TODO',
   current: itemType,
+  target: itemType,
 |};
+
+type updateSourceOptionType = 'drop' | 'hover';
 
 type contextType = {|
   source: $ReadOnlyArray<{}>,
   updateSource: (
-    type: $PropertyType<actionType, 'type'>,
+    type: updateSourceOptionType,
     current: $PropertyType<actionType, 'current'>,
+    target: $PropertyType<actionType, 'target'>,
   ) => void,
 |};
 
@@ -33,7 +37,7 @@ export const SourceContext = React.createContext<contextType>({
 
 /**
  * @example
- * sourceReducer(prevState, { type: 'add', current: { id: 'id', kind: 'component' } });
+ * sourceReducer(prevState, { type: 'add', current: { id: 'id', kind: 'component' } })
  *
  * @param {contextType.source} state - prevState of the source data
  * @param {actionType} action - action to trigger the reducer
@@ -42,13 +46,29 @@ export const SourceContext = React.createContext<contextType>({
  */
 const sourceReducer = (
   state: $PropertyType<contextType, 'source'>,
-  { type, current }: actionType,
+  { type, current, target }: actionType,
 ): $PropertyType<contextType, 'source'> => {
   switch (type) {
     default:
       throw new Error(`Can not find the ${type}`);
   }
 };
+
+/**
+ * @example
+ * getUpdateType('drop', { id: 'id', kind: 'component' }, { id: 'id', kind: 'component' })
+ *
+ * @param {updateSourceOptionType} type - the type of updating the source
+ * @param {actionType.current} current - the current item
+ * @param {actionType.target} target - the target item
+ *
+ * @return {actionType.type} - the type of updating the source
+ */
+const getUpdateType = (
+  type: updateSourceOptionType,
+  current: $PropertyType<actionType, 'current'>,
+  target: $PropertyType<actionType, 'target'>,
+) => 'TODO';
 
 /** @react Provide the source data and the methods to handle the source data */
 const SourceProvider = ({ children, initialSource }: propsType): NodeType => {
@@ -59,9 +79,15 @@ const SourceProvider = ({ children, initialSource }: propsType): NodeType => {
       value={{
         source,
         updateSource: (
-          type: $PropertyType<actionType, 'type'>,
+          type: updateSourceOptionType,
           current: $PropertyType<actionType, 'current'>,
-        ) => sourceDispatch({ type, current }),
+          target: $PropertyType<actionType, 'target'>,
+        ) =>
+          sourceDispatch({
+            type: getUpdateType(type, current, target),
+            current,
+            target,
+          }),
       }}
     >
       {children}

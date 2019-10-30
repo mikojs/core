@@ -13,12 +13,12 @@ type updateSourceOptionType = 'drop' | 'hover';
 
 /**
  * @example
- * sourceReducer(prevState, { type: 'add', current: { id: 'id', kind: 'component' } })
+ * sourceReducer(prevState, { type: 'add', current: current, target: target } })
  *
- * @param {sourceType} state - prevState of the source data
- * @param {object} action - action to trigger the reducer
+ * @param {sourceType} state - the prevState of the source data
+ * @param {object} action - the action data to trigger the reducer
  *
- * @return {sourceType} - new state of the source data
+ * @return {sourceType} - the new state of the source data
  */
 const sourceReducer = (
   state: sourceType,

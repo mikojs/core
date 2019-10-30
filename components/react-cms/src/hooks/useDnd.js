@@ -9,7 +9,9 @@ import {
 } from 'react-dnd-cjs';
 import { getElementPosition } from 'fbjs';
 
-import { SourceContext, type itemType } from '../SourceProvider';
+import SourceContext from '../SourceContext';
+
+import { type itemType } from './useSource';
 
 const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
   'component',

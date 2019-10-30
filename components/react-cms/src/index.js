@@ -5,8 +5,9 @@ import { DndProvider } from 'react-dnd-cjs';
 import HTML5Backend from 'react-dnd-html5-backend-cjs';
 import Frame from 'react-frame-component';
 
-import SourceProvider from './SourceProvider';
+import SourceContext from './SourceContext';
 import Previewer from './Previewer';
+import useSource from './hooks/useSource';
 import useDnd from './hooks/useDnd';
 import * as styles from './styles';
 
@@ -17,12 +18,10 @@ const Example = ({ id }) => <div {...useDnd(id)}>test</div>;
 /** @react use to control the all main components */
 const Cms = () => (
   <DndProvider backend={HTML5Backend}>
-    <SourceProvider
-      initialSource={
-        [
-          /** TODO */
-        ]
-      }
+    <SourceContext.Provider
+      value={useSource([
+        /** TODO */
+      ])}
     >
       <div style={styles.root}>
         <div>
@@ -42,7 +41,7 @@ const Cms = () => (
           <Previewer />
         </Frame>
       </div>
-    </SourceProvider>
+    </SourceContext.Provider>
   </DndProvider>
 );
 

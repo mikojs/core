@@ -1,6 +1,6 @@
 // @flow
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useContext } from 'react';
 import {
   useDrag,
   useDrop,
@@ -9,7 +9,11 @@ import {
 } from 'react-dnd-cjs';
 import { getElementPosition } from 'fbjs';
 
-const CAN_DROP_KIND = ['component'];
+import { SourceContext, type itemType } from '../SourceProvider';
+
+const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'kind'>> = [
+  'component',
+];
 
 /**
  * @example
@@ -24,8 +28,9 @@ const CAN_DROP_KIND = ['component'];
 export default (
   id: string,
   props?: {},
-  kind?: $ElementType<typeof CAN_DROP_KIND, number> = CAN_DROP_KIND[0],
+  kind?: $PropertyType<itemType, 'kind'> = CAN_DROP_KIND[0],
 ): {} => {
+  const { updateSource } = useContext(SourceContext);
   const newProps: {
     ...typeof props,
     ref: $Call<typeof useRef, null | mixed>,
@@ -42,12 +47,10 @@ export default (
     collect: (monitor: monitorType) => ({
       isOver: monitor.isOver(),
     }),
-    /*
     drop: (current: itemType, monitor: monitorType) => {
       if (current.id !== id && monitor.isOver({ shallow: true }))
-        emptyFunction('drop', current);
+        updateSource('TODO', current);
     },
-    */
   });
   const { isOneOfItemDragging } = useDragLayer((monitor: monitorType) => ({
     isOneOfItemDragging: monitor.isDragging(),

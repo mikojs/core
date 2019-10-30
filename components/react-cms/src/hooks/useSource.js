@@ -34,7 +34,7 @@ const sourceReducer = (
 ): sourceType => {
   switch (type) {
     default:
-      throw new Error(`Can not find the ${type}`);
+      return state;
   }
 };
 

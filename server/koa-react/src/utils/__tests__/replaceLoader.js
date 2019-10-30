@@ -17,12 +17,12 @@ describe('replace loader', () => {
   test('replace type error', () => {
     expect(() => {
       replaceLoader.bind({ query: '' })('test');
-    }).toThrowError('Replace type error');
+    }).toThrow('Replace type error');
   });
 
   test('not replace anything', () => {
     expect(() => {
       replaceLoader.bind({ query: { type: 'react-hot-loader' } })('test');
-    }).toThrowError('Replace failed: react-hot-loader');
+    }).toThrow('Replace failed: react-hot-loader');
   });
 });

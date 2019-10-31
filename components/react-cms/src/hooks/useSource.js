@@ -20,6 +20,11 @@ export type sourceType = $ReadOnlyArray<{|
   props?: {},
 |}>;
 
+type stateType = {|
+  previewId: false | string,
+  source: sourceType,
+|};
+
 type actionType =
   | 'none'
   | 'add-preview-component'
@@ -38,7 +43,7 @@ type updateSourceOptionType = 'drop' | 'hover';
  * @return {sourceType} - the new state of the source data
  */
 const sourceReducer = (
-  state: sourceType,
+  { previewId, source }: stateType,
   {
     type,
     current,
@@ -48,21 +53,39 @@ const sourceReducer = (
     current: itemType,
     target: itemType,
   |},
-): sourceType => {
+): stateType => {
   switch (type) {
     case 'add-preview-component':
-      return state;
+      return {
+        previewId,
+        source,
+      };
 
     case 'add-component':
-      return state;
+      return {
+        previewId: false,
+        source: source.map(
+          ({ id, kind, ...data }: $ElementType<sourceType, number>) => ({
+            ...data,
+            id,
+            kind: id !== previewId ? kind : 'drag-and-drop',
+          }),
+        ),
+      };
 
     case 'remove-component':
-      return state.filter(
-        ({ id }: $ElementType<sourceType, number>) => id !== current.id,
-      );
+      return {
+        previewId,
+        source: source.filter(
+          ({ id }: $ElementType<sourceType, number>) => id !== current.id,
+        ),
+      };
 
     default:
-      return state;
+      return {
+        previewId,
+        source,
+      };
   }
 };
 
@@ -114,7 +137,10 @@ export default (
     target: itemType,
   ) => void,
 |} => {
-  const [source, sourceDispatch] = useReducer(sourceReducer, initialSource);
+  const [{ source }, sourceDispatch] = useReducer(sourceReducer, {
+    previewId: false,
+    source: initialSource,
+  });
 
   return {
     source,

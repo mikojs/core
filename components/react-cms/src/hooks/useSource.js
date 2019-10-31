@@ -135,9 +135,9 @@ const getUpdateType = (
 
   if (type === 'hover') return 'add-preview-component';
 
-  if (target.type === 'only-drop-to-add') return 'add-component';
+  if (target.type === 'only-drop-to-remove') return 'remove-component';
 
-  return 'remove-component';
+  return 'add-component';
 };
 
 /**

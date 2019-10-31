@@ -76,11 +76,14 @@ describe('use dnd', () => {
           ],
         ) => {
           option[0].collect({ isOver: jest.fn() });
-          option[0].hover({ id: 'id', type: 'none' });
-          option[0].drop({ id: 'id', type: 'none' }, { isOver: () => false });
-          option[0].hover({ id: 'new-id', type: 'none' });
+          option[0].hover({ id: 'id', type: 'drag-and-drop' });
           option[0].drop(
-            { id: 'new-id', type: 'none' },
+            { id: 'id', type: 'drag-and-drop' },
+            { isOver: () => false },
+          );
+          option[0].hover({ id: 'new-id', type: 'drag-and-drop' });
+          option[0].drop(
+            { id: 'new-id', type: 'drag-and-drop' },
             { isOver: () => true },
           );
         },

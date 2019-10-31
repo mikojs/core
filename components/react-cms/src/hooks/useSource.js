@@ -24,6 +24,8 @@ export type sourceType = $ReadOnlyArray<{|
   component: $PropertyType<itemType, 'component'>,
 |}>;
 
+export type updateSourceOptionType = 'drop' | 'hover';
+
 type stateType = {|
   previewId: false | string,
   source: sourceType,
@@ -34,8 +36,6 @@ type actionType =
   | 'add-preview-component'
   | 'add-component'
   | 'remove-component';
-
-type updateSourceOptionType = 'drop' | 'hover';
 
 /**
  * @example

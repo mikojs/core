@@ -77,25 +77,20 @@ describe('use dnd', () => {
             },
           ],
         ) => {
-          option[0].collect({ isOver: jest.fn() });
-          option[0].hover({
+          const monitor = {
             id: 'id',
             type: 'drag-and-drop',
             component: { type: 'div' },
-          });
-          option[0].drop(
-            { id: 'id', type: 'drag-and-drop', component: { type: 'div' } },
-            { isOver: () => false },
-          );
+          };
+
+          option[0].collect({ isOver: jest.fn() });
+          option[0].hover(monitor);
+          option[0].drop(monitor, { isOver: () => false });
           option[0].hover({
+            ...monitor,
             id: 'new-id',
-            type: 'drag-and-drop',
-            component: { type: 'div' },
           });
-          option[0].drop(
-            { id: 'new-id', type: 'drag-and-drop', component: { type: 'div' } },
-            { isOver: () => true },
-          );
+          option[0].drop({ ...monitor, id: 'new-id' }, { isOver: () => true });
         },
       );
       useDragLayer.mock.calls.forEach(

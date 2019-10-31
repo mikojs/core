@@ -1,6 +1,7 @@
 // @flow
 
 import { useReducer, type ComponentType } from 'react';
+import uuid from 'uuid/v4';
 
 export type itemType = {|
   id: string,
@@ -55,11 +56,31 @@ const sourceReducer = (
   |},
 ): stateType => {
   switch (type) {
-    case 'add-preview-component':
+    case 'add-preview-component': {
+      if (!previewId) {
+        const id = uuid();
+
+        return {
+          previewId: id,
+          source: [
+            ...source,
+            // TODO: preview component
+          ],
+        };
+      }
+
+      const newSource = [...source];
+      const preview = newSource.find(
+        ({ id }: $ElementType<sourceType, number>) => id === current.id,
+      );
+
+      if (preview) preview.parentId = target.id;
+
       return {
         previewId,
-        source,
+        source: newSource,
       };
+    }
 
     case 'add-component':
       return {

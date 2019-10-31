@@ -26,7 +26,7 @@ const CAN_DROP_TYPE: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
 
 /**
  * @example
- * useDnd({}, 'id')
+ * useDnd('id', 'drag-and-drop', { type: 'div' })
  *
  * @param {string} id - the id of the component
  * @param {itemType.type} type - the type of the component

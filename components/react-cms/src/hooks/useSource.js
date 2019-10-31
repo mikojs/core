@@ -39,10 +39,10 @@ type actionType =
  * @example
  * sourceReducer(prevState, { type: 'add', current: current, target: target } })
  *
- * @param {sourceType} state - the prevState of the source data
+ * @param {stateType} state - the prevState of the source data
  * @param {object} action - the action data to trigger the reducer
  *
- * @return {sourceType} - the new state of the source data
+ * @return {stateType} - the new state of the source data
  */
 const sourceReducer = (
   { previewId, source }: stateType,

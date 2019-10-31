@@ -6,8 +6,19 @@ export type sourceType = $ReadOnlyArray<{}>;
 
 export type itemType = {|
   id: string,
-  type: 'none' | 'only-drag' | 'only-drop' | 'drag-and-drop',
+  type:
+    | 'none'
+    | 'only-drag'
+    | 'only-drop-to-add'
+    | 'only-drop-to-remove'
+    | 'drag-and-drop',
 |};
+
+type actionType =
+  | 'none'
+  | 'add-preview-component'
+  | 'add-component'
+  | 'remove-component';
 
 type updateSourceOptionType = 'drop' | 'hover';
 
@@ -27,7 +38,7 @@ const sourceReducer = (
     current,
     target,
   }: {|
-    type: 'TODO',
+    type: actionType,
     current: itemType,
     target: itemType,
   |},
@@ -46,13 +57,27 @@ const sourceReducer = (
  * @param {itemType} current - the current item
  * @param {itemType} target - the target item
  *
- * @return {string} - the type of updating the source
+ * @return {actionType} - the type of updating the source
  */
 const getUpdateType = (
   type: updateSourceOptionType,
   current: itemType,
   target: itemType,
-) => 'TODO';
+): actionType => {
+  if (
+    ['only-drop-to-add', 'only-drop-to-remove', 'none'].includes(
+      current.type,
+    ) ||
+    ['only-drag', 'none'].includes(target.type)
+  )
+    return 'none';
+
+  if (type === 'hover') return 'add-preview-component';
+
+  if (target.type === 'only-drop-to-add') return 'add-component';
+
+  return 'remove-component';
+};
 
 /**
  * @example

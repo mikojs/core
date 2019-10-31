@@ -19,7 +19,8 @@ const CAN_DRAG_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
 ];
 
 const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
-  'only-drop',
+  'only-drop-to-add',
+  'only-drop-to-remove',
   'drag-and-drop',
 ];
 

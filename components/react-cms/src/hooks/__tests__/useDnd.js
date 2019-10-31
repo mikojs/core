@@ -43,7 +43,12 @@ describe('use dnd', () => {
       style?: {},
     |}) => {
       /** @react use to test useDnd */
-      const Root = () => <div {...useDnd('id')} />;
+      const Root = () => (
+        <>
+          <div {...useDnd('id', 'drag-and-drop', { type: Root })} />
+          <div {...useDnd('id', 'none', { type: Root })} />
+        </>
+      );
 
       useDrag.mockReturnValue([{ isDragging }, emptyFunction]);
       useDrop.mockReturnValue([{ isOver }, emptyFunction]);
@@ -75,17 +80,20 @@ describe('use dnd', () => {
             },
           ],
         ) => {
+          const monitor = {
+            id: 'id',
+            type: 'drag-and-drop',
+            component: { type: 'div' },
+          };
+
           option[0].collect({ isOver: jest.fn() });
-          option[0].hover({ id: 'id', type: 'component' });
-          option[0].drop(
-            { id: 'id', type: 'component' },
-            { isOver: () => false },
-          );
-          option[0].hover({ id: 'new-id', type: 'component' });
-          option[0].drop(
-            { id: 'new-id', type: 'component' },
-            { isOver: () => true },
-          );
+          option[0].hover(monitor);
+          option[0].drop(monitor, { isOver: () => false });
+          option[0].hover({
+            ...monitor,
+            id: 'new-id',
+          });
+          option[0].drop({ ...monitor, id: 'new-id' }, { isOver: () => true });
         },
       );
       useDragLayer.mock.calls.forEach(

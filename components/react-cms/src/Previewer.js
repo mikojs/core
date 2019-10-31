@@ -22,7 +22,12 @@ const Previewer = ({ children }: propsType): NodeType => {
   }, []);
 
   return (
-    <main {...useDnd('previewer', { style: styles }, 'previewer')}>
+    <main
+      {...useDnd('previewer', 'only-drop-to-add', {
+        type: Previewer,
+        props: { style: styles },
+      })}
+    >
       {children}
     </main>
   );

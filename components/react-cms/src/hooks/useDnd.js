@@ -13,12 +13,12 @@ import SourceContext from '../SourceContext';
 
 import { type itemType } from './useSource';
 
-const CAN_DRAG_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
+const CAN_DRAG_TYPE: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
   'only-drag',
   'drag-and-drop',
 ];
 
-const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
+const CAN_DROP_TYPE: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
   'only-drop-to-add',
   'only-drop-to-remove',
   'drag-and-drop',
@@ -29,18 +29,18 @@ const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
  * useDnd({}, 'id')
  *
  * @param {string} id - the id of the component
- * @param {itemType.kind} kind - the kind of the component
+ * @param {itemType.type} type - the type of the component
  * @param {itemType.component} component - the component to add the source
  *
  * @return {object} - the new props of the component has been injected
  */
 export default (
   id: string,
-  kind: $PropertyType<itemType, 'type'>,
+  type: $PropertyType<itemType, 'type'>,
   component: $PropertyType<itemType, 'component'>,
 ): {} => {
   const { updateSource } = useContext(SourceContext);
-  const item = { id, type: kind, component };
+  const item = { id, type, component };
   const newProps: {
     ...$PropertyType<typeof component, 'props'>,
     ref: $Call<typeof useRef, null | mixed>,
@@ -53,7 +53,7 @@ export default (
     }),
   });
   const [{ isOver }, connectDrop] = useDrop({
-    accept: CAN_DROP_KIND,
+    accept: CAN_DROP_TYPE,
     collect: (monitor: monitorType) => ({
       isOver: monitor.isOver(),
     }),
@@ -76,9 +76,9 @@ export default (
     [isOneOfItemDragging, newProps.ref.current !== null],
   );
 
-  if (CAN_DRAG_KIND.includes(item.type)) connectDrag(newProps.ref);
+  if (CAN_DRAG_TYPE.includes(item.type)) connectDrag(newProps.ref);
 
-  if (CAN_DROP_KIND.includes(item.type)) connectDrop(newProps.ref);
+  if (CAN_DROP_TYPE.includes(item.type)) connectDrop(newProps.ref);
 
   if (!isDragging && isOneOfItemDragging) {
     if (width === 0)

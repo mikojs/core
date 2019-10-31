@@ -18,10 +18,8 @@ export type itemType = {|
 |};
 
 export type sourceType = $ReadOnlyArray<{|
-  id: string,
+  ...itemType,
   parentId: string | null,
-  kind: $PropertyType<itemType, 'type'>,
-  component: $PropertyType<itemType, 'component'>,
 |}>;
 
 export type updateSourceOptionType = 'drop' | 'hover';
@@ -70,7 +68,7 @@ const sourceReducer = (
             {
               id,
               parentId: target.id,
-              kind: 'only-drop-to-add',
+              type: 'only-drop-to-add',
               component: current.component,
             },
           ],
@@ -94,10 +92,14 @@ const sourceReducer = (
       return {
         previewId: false,
         source: source.map(
-          ({ id, kind, ...data }: $ElementType<sourceType, number>) => ({
+          ({
+            id,
+            type: currentType,
+            ...data
+          }: $ElementType<sourceType, number>) => ({
             ...data,
             id,
-            kind: id !== previewId ? kind : 'drag-and-drop',
+            type: id !== previewId ? currentType : 'drag-and-drop',
           }),
         ),
       };

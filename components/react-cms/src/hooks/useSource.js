@@ -11,14 +11,17 @@ export type itemType = {|
     | 'only-drop-to-add'
     | 'only-drop-to-remove'
     | 'drag-and-drop',
+  component: {|
+    type: string | ComponentType<*>,
+    props?: {},
+  |},
 |};
 
 export type sourceType = $ReadOnlyArray<{|
   id: string,
   parentId: string | null,
   kind: $PropertyType<itemType, 'type'>,
-  type: string | ComponentType<*>,
-  props?: {},
+  component: $PropertyType<itemType, 'component'>,
 |}>;
 
 type stateType = {|
@@ -64,7 +67,12 @@ const sourceReducer = (
           previewId: id,
           source: [
             ...source,
-            // TODO: preview component
+            {
+              id,
+              parentId: target.id,
+              kind: 'only-drop-to-add',
+              component: current.component,
+            },
           ],
         };
       }

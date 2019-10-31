@@ -43,7 +43,9 @@ describe('use dnd', () => {
       style?: {},
     |}) => {
       /** @react use to test useDnd */
-      const Root = () => <div {...useDnd('id', 'drag-and-drop')} />;
+      const Root = () => (
+        <div {...useDnd('id', 'drag-and-drop', { type: Root })} />
+      );
 
       useDrag.mockReturnValue([{ isDragging }, emptyFunction]);
       useDrop.mockReturnValue([{ isOver }, emptyFunction]);
@@ -76,14 +78,22 @@ describe('use dnd', () => {
           ],
         ) => {
           option[0].collect({ isOver: jest.fn() });
-          option[0].hover({ id: 'id', type: 'drag-and-drop' });
+          option[0].hover({
+            id: 'id',
+            type: 'drag-and-drop',
+            component: { type: 'div' },
+          });
           option[0].drop(
-            { id: 'id', type: 'drag-and-drop' },
+            { id: 'id', type: 'drag-and-drop', component: { type: 'div' } },
             { isOver: () => false },
           );
-          option[0].hover({ id: 'new-id', type: 'drag-and-drop' });
+          option[0].hover({
+            id: 'new-id',
+            type: 'drag-and-drop',
+            component: { type: 'div' },
+          });
           option[0].drop(
-            { id: 'new-id', type: 'drag-and-drop' },
+            { id: 'new-id', type: 'drag-and-drop', component: { type: 'div' } },
             { isOver: () => true },
           );
         },

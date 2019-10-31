@@ -29,23 +29,23 @@ const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
  * useDnd({}, 'id')
  *
  * @param {string} id - the id of the component
- * @param {string} kind - the kind of the component
- * @param {object} props - the props of the component
+ * @param {itemType.kind} kind - the kind of the component
+ * @param {itemType.component} component - the component to add the source
  *
  * @return {object} - the new props of the component has been injected
  */
 export default (
   id: string,
   kind: $PropertyType<itemType, 'type'>,
-  props?: {},
+  component: $PropertyType<itemType, 'component'>,
 ): {} => {
   const { updateSource } = useContext(SourceContext);
-  const item = { id, type: kind };
+  const item = { id, type: kind, component };
   const newProps: {
-    ...typeof props,
+    ...$PropertyType<typeof component, 'props'>,
     ref: $Call<typeof useRef, null | mixed>,
     style?: {},
-  } = { ...props, ref: useRef(null) };
+  } = { ...component.props, ref: useRef(null) };
   const [{ isDragging }, connectDrag] = useDrag({
     item,
     collect: (monitor: monitorType) => ({

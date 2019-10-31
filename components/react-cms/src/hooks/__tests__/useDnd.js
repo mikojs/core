@@ -44,7 +44,10 @@ describe('use dnd', () => {
     |}) => {
       /** @react use to test useDnd */
       const Root = () => (
-        <div {...useDnd('id', 'drag-and-drop', { type: Root })} />
+        <>
+          <div {...useDnd('id', 'drag-and-drop', { type: Root })} />
+          <div {...useDnd('id', 'none', { type: Root })} />
+        </>
       );
 
       useDrag.mockReturnValue([{ isDragging }, emptyFunction]);

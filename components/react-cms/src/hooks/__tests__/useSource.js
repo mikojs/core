@@ -40,20 +40,24 @@ describe('use source', () => {
   });
 
   test.each`
-    optionType | targetType               | expected
-    ${'hover'} | ${'none'}                | ${[]}
-    ${'hover'} | ${'drag-and-drop'}       | ${[{ ...defaultExpected, kind: 'only-drop-to-add' }]}
-    ${'hover'} | ${'drag-and-drop'}       | ${[{ ...defaultExpected, kind: 'only-drop-to-add' }]}
-    ${'drop'}  | ${'drag-and-drop'}       | ${[{ ...defaultExpected, kind: 'drag-and-drop' }]}
-    ${'drop'}  | ${'only-drop-to-remove'} | ${[]}
+    optionType | currentId      | targetType               | expected
+    ${'hover'} | ${null}        | ${'none'}                | ${[]}
+    ${'hover'} | ${null}        | ${'drag-and-drop'}       | ${[{ ...defaultExpected, kind: 'only-drop-to-add' }]}
+    ${'hover'} | ${null}        | ${'drag-and-drop'}       | ${[{ ...defaultExpected, kind: 'only-drop-to-add' }]}
+    ${'hover'} | ${'not-found'} | ${'drag-and-drop'}       | ${[{ ...defaultExpected, kind: 'only-drop-to-add' }]}
+    ${'drop'}  | ${null}        | ${'drag-and-drop'}       | ${[{ ...defaultExpected, kind: 'drag-and-drop' }]}
+    ${'drop'}  | ${null}        | ${'drag-and-drop'}       | ${[{ ...defaultExpected, kind: 'drag-and-drop' }]}
+    ${'drop'}  | ${null}        | ${'only-drop-to-remove'} | ${[]}
   `(
     'updateSource with optionType = $optionType, currentType = $currentType, targetType = $targetType',
     ({
       optionType,
+      currentId,
       targetType,
       expected,
     }: {|
       optionType: updateSourceOptionType,
+      currentId: string,
       targetType: $PropertyType<itemType, 'type'>,
       expected: sourceType,
     |}) => {
@@ -62,7 +66,7 @@ describe('use source', () => {
         sourceRef.current // eslint-disable-line flowtype/no-unused-expressions
           ?.updateSource(
             optionType,
-            { id: 'current', type: 'drag-and-drop', component },
+            { id: currentId || 'current', type: 'drag-and-drop', component },
             { id: 'target', type: targetType, component },
           );
       });

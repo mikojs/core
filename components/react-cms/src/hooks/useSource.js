@@ -1,8 +1,6 @@
 // @flow
 
-import { useReducer } from 'react';
-
-export type sourceType = $ReadOnlyArray<{}>;
+import { useReducer, type ComponentType } from 'react';
 
 export type itemType = {|
   id: string,
@@ -13,6 +11,14 @@ export type itemType = {|
     | 'only-drop-to-remove'
     | 'drag-and-drop',
 |};
+
+export type sourceType = $ReadOnlyArray<{|
+  id: string,
+  parentId: string | null,
+  kind: $PropertyType<itemType, 'type'>,
+  type: string | ComponentType<*>,
+  props?: {},
+|}>;
 
 type actionType =
   | 'none'
@@ -44,6 +50,17 @@ const sourceReducer = (
   |},
 ): sourceType => {
   switch (type) {
+    case 'add-preview-component':
+      return state;
+
+    case 'add-component':
+      return state;
+
+    case 'remove-component':
+      return state.filter(
+        ({ id }: $ElementType<sourceType, number>) => id !== current.id,
+      );
+
     default:
       return state;
   }

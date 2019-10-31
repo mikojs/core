@@ -43,7 +43,7 @@ describe('use dnd', () => {
       style?: {},
     |}) => {
       /** @react use to test useDnd */
-      const Root = () => <div {...useDnd('id')} />;
+      const Root = () => <div {...useDnd('id', 'drag-and-drop')} />;
 
       useDrag.mockReturnValue([{ isDragging }, emptyFunction]);
       useDrop.mockReturnValue([{ isOver }, emptyFunction]);

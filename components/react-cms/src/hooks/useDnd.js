@@ -29,15 +29,15 @@ const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
  * useDnd({}, 'id')
  *
  * @param {string} id - the id of the component
- * @param {object} props - the props of the component
  * @param {string} kind - the kind of the component
+ * @param {object} props - the props of the component
  *
  * @return {object} - the new props of the component has been injected
  */
 export default (
   id: string,
+  kind: $PropertyType<itemType, 'type'>,
   props?: {},
-  kind?: $PropertyType<itemType, 'type'> = 'drag-and-drop',
 ): {} => {
   const { updateSource } = useContext(SourceContext);
   const item = { id, type: kind };

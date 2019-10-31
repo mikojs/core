@@ -14,7 +14,7 @@ import useDnd from './hooks/useDnd';
 import * as styles from './styles';
 
 /* eslint-disable */
-const Example = ({ id }) => <div {...useDnd(id)}>test</div>;
+const Example = ({ id }) => <div {...useDnd(id, 'drag-and-drop')}>test</div>;
 /* eslint-enable */
 
 /** @react use to control the all main components */

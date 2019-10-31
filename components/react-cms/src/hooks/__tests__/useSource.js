@@ -37,8 +37,8 @@ describe('use source', () => {
       sourceRef.current // eslint-disable-line flowtype/no-unused-expressions
         ?.updateSource(
           'hover',
-          { id: 'current', type: 'component' },
-          { id: 'target', type: 'component' },
+          { id: 'current', type: 'none' },
+          { id: 'target', type: 'none' },
         );
     });
 

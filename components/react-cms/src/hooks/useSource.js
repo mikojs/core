@@ -6,7 +6,7 @@ export type sourceType = $ReadOnlyArray<{}>;
 
 export type itemType = {|
   id: string,
-  type: 'component' | 'previewer',
+  type: 'none' | 'only-drag' | 'only-drop' | 'drag-and-drop',
 |};
 
 type updateSourceOptionType = 'drop' | 'hover';

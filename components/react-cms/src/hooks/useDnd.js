@@ -14,12 +14,13 @@ import SourceContext from '../SourceContext';
 import { type itemType } from './useSource';
 
 const CAN_DRAG_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
-  'component',
+  'only-drag',
+  'drag-and-drop',
 ];
 
 const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
-  'component',
-  'previewer',
+  'only-drop',
+  'drag-and-drop',
 ];
 
 /**
@@ -35,7 +36,7 @@ const CAN_DROP_KIND: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
 export default (
   id: string,
   props?: {},
-  kind?: $PropertyType<itemType, 'type'> = CAN_DROP_KIND[0],
+  kind?: $PropertyType<itemType, 'type'> = 'drag-and-drop',
 ): {} => {
   const { updateSource } = useContext(SourceContext);
   const item = { id, type: kind };
@@ -76,7 +77,7 @@ export default (
 
   if (CAN_DRAG_KIND.includes(item.type)) connectDrag(newProps.ref);
 
-  connectDrop(newProps.ref);
+  if (CAN_DROP_KIND.includes(item.type)) connectDrop(newProps.ref);
 
   if (!isDragging && isOneOfItemDragging) {
     if (width === 0)

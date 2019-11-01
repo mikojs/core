@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { type Node as NodeType } from 'react';
 
 import { type sourceType } from './hooks/useSource';
 import useDnd from './hooks/useDnd';
@@ -19,12 +19,16 @@ const Renderer = React.memo<propsType>(
       id,
       data: {
         type,
-        component: { type: componentType, props },
+        component: { type: componentType, props, hook },
       },
       children,
     },
-  }: propsType) =>
-    React.createElement(componentType, {
+  }: propsType): NodeType => {
+    // FIXME: https://github.com/gajus/eslint-plugin-flowtype/issues/434
+    // eslint-disable-next-line flowtype/no-unused-expressions
+    hook?.();
+
+    return React.createElement(componentType, {
       ...props,
       ...useDnd(id, type, {
         type: componentType,
@@ -35,7 +39,8 @@ const Renderer = React.memo<propsType>(
           <Renderer key={child.id} source={child} />
         ),
       ),
-    }),
+    });
+  },
 );
 
 Renderer.displayName = 'Memo(Renderer)';

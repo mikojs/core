@@ -14,6 +14,7 @@ export type itemType = {|
   component: {|
     type: string | ComponentType<*>,
     props?: {},
+    hook?: () => void,
   |},
 |};
 

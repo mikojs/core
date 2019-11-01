@@ -1,9 +1,9 @@
 // @flow
 
-import React from 'react';
-import { DndProvider } from 'react-dnd-cjs';
+import React, { useContext, useEffect } from 'react';
+import { DndContext, DndProvider } from 'react-dnd-cjs';
 import HTML5Backend from 'react-dnd-html5-backend-cjs';
-import Frame from 'react-frame-component';
+import Frame, { FrameContext } from 'react-frame-component';
 
 import SourceContext from './SourceContext';
 import Previewer from './Previewer';
@@ -19,14 +19,30 @@ const Example = ({ id }) => (
 );
 /* eslint-enable */
 
+const main = {
+  id: 'main',
+  parentId: null,
+  type: 'only-drop-to-add',
+  component: {
+    type: 'main',
+    props: {
+      style: styles.main,
+    },
+    hook: () => {
+      const { dragDropManager } = useContext(DndContext);
+      const { window } = useContext(FrameContext);
+
+      useEffect(() => {
+        dragDropManager.getBackend().addEventListeners(window);
+      }, []);
+    },
+  },
+};
+
 /** @react use to control the all main components */
 const Cms = () => (
   <DndProvider backend={HTML5Backend}>
-    <SourceContext.Provider
-      value={useSource([
-        /** TODO */
-      ])}
-    >
+    <SourceContext.Provider value={useSource([main])}>
       <div style={styles.root}>
         <div>
           <Example id="1" />

@@ -25,16 +25,17 @@ const main = {
   type: 'only-drop-to-add',
   component: {
     type: 'main',
-    props: {
-      style: styles.main,
-    },
-    hook: () => {
+    props: (): {} => {
       const { dragDropManager } = useContext(DndContext);
       const { window } = useContext(FrameContext);
 
       useEffect(() => {
         dragDropManager.getBackend().addEventListeners(window);
       }, []);
+
+      return {
+        style: styles.main,
+      };
     },
   },
 };

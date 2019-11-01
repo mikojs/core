@@ -42,10 +42,14 @@ export default (
   const { updateSource } = useContext(SourceContext);
   const item = { id, type, component };
   const newProps: {
-    ...$PropertyType<typeof component, 'props'>,
     ref: $Call<typeof useRef, null | mixed>,
     style?: {},
-  } = { ...component.props, ref: useRef(null) };
+  } = {
+    ...(typeof component.props === 'function'
+      ? component.props()
+      : component.props),
+    ref: useRef(null),
+  };
   const [{ isDragging }, connectDrag] = !CAN_DRAG_TYPE.includes(type)
     ? [{ isDragging: false }, emptyFunction]
     : useDrag({

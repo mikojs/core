@@ -22,12 +22,12 @@ const Renderer = React.memo<propsType>(
     },
   }: propsType) =>
     React.createElement(component.type, {
-      ...useDnd(id, type, component),
       children: (children || []).map(
         (child: $PropertyType<propsType, 'source'>) => (
           <Renderer key={child.id} source={child} />
         ),
       ),
+      ...useDnd(id, type, component),
     }),
 );
 

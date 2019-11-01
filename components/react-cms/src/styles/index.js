@@ -11,3 +11,8 @@ export const iframe = {
   height: '100%',
   border: '0px',
 };
+
+export const main = {
+  width: '100vw',
+  height: '100vh',
+};

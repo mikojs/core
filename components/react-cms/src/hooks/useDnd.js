@@ -7,7 +7,7 @@ import {
   useDragLayer,
   type monitorType,
 } from 'react-dnd-cjs';
-import { getElementPosition } from 'fbjs';
+import { emptyFunction, getElementPosition } from 'fbjs';
 
 import SourceContext from '../SourceContext';
 
@@ -42,29 +42,37 @@ export default (
   const { updateSource } = useContext(SourceContext);
   const item = { id, type, component };
   const newProps: {
-    ...$PropertyType<typeof component, 'props'>,
     ref: $Call<typeof useRef, null | mixed>,
     style?: {},
-  } = { ...component.props, ref: useRef(null) };
-  const [{ isDragging }, connectDrag] = useDrag({
-    item,
-    collect: (monitor: monitorType) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
-  const [{ isOver }, connectDrop] = useDrop({
-    accept: CAN_DROP_TYPE,
-    collect: (monitor: monitorType) => ({
-      isOver: monitor.isOver(),
-    }),
-    hover: (current: itemType) => {
-      if (current.id !== item.id) updateSource('hover', current, item);
-    },
-    drop: (current: itemType, monitor: monitorType) => {
-      if (current.id !== item.id && monitor.isOver({ shallow: true }))
-        updateSource('drop', current, item);
-    },
-  });
+  } = {
+    ...(typeof component.props === 'function'
+      ? component.props()
+      : component.props),
+    ref: useRef(null),
+  };
+  const [{ isDragging }, connectDrag] = !CAN_DRAG_TYPE.includes(type)
+    ? [{ isDragging: false }, emptyFunction]
+    : useDrag({
+        item,
+        collect: (monitor: monitorType) => ({
+          isDragging: monitor.isDragging(),
+        }),
+      });
+  const [{ isOver }, connectDrop] = !CAN_DROP_TYPE.includes(type)
+    ? [{ isOver: false }, emptyFunction]
+    : useDrop({
+        accept: CAN_DRAG_TYPE,
+        collect: (monitor: monitorType) => ({
+          isOver: monitor.isOver(),
+        }),
+        hover: (current: itemType) => {
+          if (current.id !== item.id) updateSource('hover', current, item);
+        },
+        drop: (current: itemType, monitor: monitorType) => {
+          if (current.id !== item.id && monitor.isOver({ shallow: true }))
+            updateSource('drop', current, item);
+        },
+      });
   const { isOneOfItemDragging } = useDragLayer((monitor: monitorType) => ({
     isOneOfItemDragging: monitor.isDragging(),
   }));

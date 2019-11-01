@@ -1,36 +1,22 @@
 // @flow
 
-import React, { useContext, useEffect, type Node as NodeType } from 'react';
-import { DndContext } from 'react-dnd-cjs';
-import { FrameContext } from 'react-frame-component';
+import React, { useMemo, useContext, type Node as NodeType } from 'react';
+import * as d3 from 'd3-hierarchy';
 
-import useDnd from './hooks/useDnd';
+import SourceContext from './SourceContext';
+import Renderer from './Renderer';
 
-import styles from './styles/previewer';
+const parse = d3
+  .stratify()
+  .id(({ id }: {| id: string |}) => id)
+  .parentId(({ parentId }: {| parentId: string |}) => parentId);
 
-type propsType = {|
-  children?: NodeType,
-|};
+/** @react Use to render the main preview */
+const Previewer = (): NodeType => {
+  const { source } = useContext(SourceContext);
+  const data = useMemo(() => parse(source), [source]);
 
-/** @react render the Previewer Container */
-const Previewer = ({ children }: propsType): NodeType => {
-  const { dragDropManager } = useContext(DndContext);
-  const { window } = useContext(FrameContext);
-
-  useEffect(() => {
-    dragDropManager.getBackend().addEventListeners(window);
-  }, []);
-
-  return (
-    <main
-      {...useDnd('previewer', 'only-drop-to-add', {
-        type: Previewer,
-        props: { style: styles },
-      })}
-    >
-      {children}
-    </main>
-  );
+  return <Renderer source={data} />;
 };
 
-export default React.memo<propsType>(Previewer);
+export default React.memo<{||}>(Previewer);

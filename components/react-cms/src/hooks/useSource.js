@@ -13,7 +13,7 @@ export type itemType = {|
     | 'drag-and-drop',
   component: {|
     type: string | ComponentType<*>,
-    props?: {},
+    props?: {} | (() => {}),
   |},
 |};
 

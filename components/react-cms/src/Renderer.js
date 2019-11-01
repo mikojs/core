@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React from 'react';
 
 import { type sourceType } from './hooks/useSource';
 import useDnd from './hooks/useDnd';
@@ -17,18 +17,12 @@ const Renderer = React.memo<propsType>(
   ({
     source: {
       id,
-      data: {
-        type,
-        component: { type: componentType, props },
-      },
+      data: { type, component },
       children,
     },
-  }: propsType): NodeType =>
-    React.createElement(componentType, {
-      ...useDnd(id, type, {
-        type: componentType,
-        props,
-      }),
+  }: propsType) =>
+    React.createElement(component.type, {
+      ...useDnd(id, type, component),
       children: (children || []).map(
         (child: $PropertyType<propsType, 'source'>) => (
           <Renderer key={child.id} source={child} />

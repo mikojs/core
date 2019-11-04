@@ -34,7 +34,7 @@ const CAN_DROP_TYPE: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
  *
  * @return {object} - the new props of the component has been injected
  */
-export default (
+const useDnd = (
   id: string,
   type: $PropertyType<itemType, 'type'>,
   component: $PropertyType<itemType, 'component'>,
@@ -115,3 +115,5 @@ export default (
 
   return newProps;
 };
+
+export default useDnd;

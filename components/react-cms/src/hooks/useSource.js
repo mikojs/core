@@ -158,7 +158,7 @@ const getUpdateType = (
  *
  * @return {object} - the source data and the methods to modify the source
  */
-export default (
+const useSource = (
   initialSource: sourceType,
 ): {|
   source: sourceType,
@@ -187,3 +187,5 @@ export default (
       }),
   };
 };
+
+export default useSource;

@@ -7,7 +7,7 @@ import {
   useDragLayer,
   type monitorType,
 } from 'react-dnd-cjs';
-import { emptyFunction, getElementPosition } from 'fbjs';
+import { getElementPosition } from 'fbjs';
 
 import SourceContext from '../SourceContext';
 
@@ -42,30 +42,26 @@ const useDnd = (item: itemType): {} => {
     ...(item.getProps?.() || {}),
     ref: useRef(null),
   };
-  const [{ isDragging }, connectDrag] = !CAN_DRAG_TYPE.includes(item.type)
-    ? [{ isDragging: false }, emptyFunction]
-    : useDrag({
-        item,
-        collect: (monitor: monitorType) => ({
-          isDragging: monitor.isDragging(),
-        }),
-      });
-  const [{ isOver }, connectDrop] = !CAN_DROP_TYPE.includes(item.type)
-    ? [{ isOver: false }, emptyFunction]
-    : useDrop({
-        accept: CAN_DRAG_TYPE,
-        collect: (monitor: monitorType) => ({
-          isOver: monitor.isOver(),
-        }),
-        hover: (current: itemType) => {
-          if (current.id !== item.id)
-            updateSource({ type: 'hover', current, target: item });
-        },
-        drop: (current: itemType, monitor: monitorType) => {
-          if (current.id !== item.id && monitor.isOver({ shallow: true }))
-            updateSource({ type: 'drop', current, target: item });
-        },
-      });
+  const [{ isDragging }, connectDrag] = useDrag({
+    item,
+    collect: (monitor: monitorType) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  const [{ isOver }, connectDrop] = useDrop({
+    accept: CAN_DRAG_TYPE,
+    collect: (monitor: monitorType) => ({
+      isOver: monitor.isOver(),
+    }),
+    hover: (current: itemType) => {
+      if (current.id !== item.id)
+        updateSource({ type: 'hover', current, target: item });
+    },
+    drop: (current: itemType, monitor: monitorType) => {
+      if (current.id !== item.id && monitor.isOver({ shallow: true }))
+        updateSource({ type: 'drop', current, target: item });
+    },
+  });
   const { isOneOfItemDragging } = useDragLayer((monitor: monitorType) => ({
     isOneOfItemDragging: monitor.isDragging(),
   }));

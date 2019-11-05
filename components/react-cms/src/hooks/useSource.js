@@ -22,18 +22,42 @@ export type sourceType = $ReadOnlyArray<{|
   parentId: string | null,
 |}>;
 
-export type updateSourceOptionType = 'drop' | 'hover';
+export type actionType = 'drop' | 'hover';
 
 type stateType = {|
   previewId: false | string,
   source: sourceType,
 |};
 
-type actionType =
-  | 'none'
-  | 'add-preview-component'
-  | 'add-component'
-  | 'remove-component';
+/**
+ * @example
+ * getUpdateType('drop', current, target)
+ *
+ * @param {actionType} type - the originial type of updating the source
+ * @param {itemType} current - the current item
+ * @param {itemType} target - the target item
+ *
+ * @return {string} - the type of updating the source
+ */
+const getUpdateType = (
+  type: actionType,
+  current: itemType,
+  target: itemType,
+): 'none' | 'add-preview-component' | 'add-component' | 'remove-component' => {
+  if (
+    ['only-drop-to-add', 'only-drop-to-remove', 'none'].includes(
+      current.type,
+    ) ||
+    ['only-drag', 'none'].includes(target.type)
+  )
+    return 'none';
+
+  if (type === 'hover') return 'add-preview-component';
+
+  if (target.type === 'only-drop-to-remove') return 'remove-component';
+
+  return 'add-component';
+};
 
 /**
  * @example
@@ -56,7 +80,7 @@ const sourceReducer = (
     target: itemType,
   |},
 ): stateType => {
-  switch (type) {
+  switch (getUpdateType(type, current, target)) {
     case 'add-preview-component': {
       if (!previewId) {
         const id = uuid();
@@ -122,36 +146,6 @@ const sourceReducer = (
 
 /**
  * @example
- * getUpdateType('drop', current, target)
- *
- * @param {updateSourceOptionType} type - the originial type of updating the source
- * @param {itemType} current - the current item
- * @param {itemType} target - the target item
- *
- * @return {actionType} - the type of updating the source
- */
-const getUpdateType = (
-  type: updateSourceOptionType,
-  current: itemType,
-  target: itemType,
-): actionType => {
-  if (
-    ['only-drop-to-add', 'only-drop-to-remove', 'none'].includes(
-      current.type,
-    ) ||
-    ['only-drag', 'none'].includes(target.type)
-  )
-    return 'none';
-
-  if (type === 'hover') return 'add-preview-component';
-
-  if (target.type === 'only-drop-to-remove') return 'remove-component';
-
-  return 'add-component';
-};
-
-/**
- * @example
  * useSource([])
  *
  * @param {sourceType} initialSource - the initial source
@@ -162,29 +156,17 @@ const useSource = (
   initialSource: sourceType,
 ): {|
   source: sourceType,
-  updateSource: (
-    type: updateSourceOptionType,
+  updateSource: (action: {|
+    type: actionType,
     current: itemType,
     target: itemType,
-  ) => void,
+  |}) => void,
 |} => {
   const [{ source }, sourceDispatch] = useReducer(sourceReducer, {
     previewId: false,
     source: initialSource,
   });
-  const updateSource = useMemo(
-    () =>
-      memoizeOne(
-        (type: updateSourceOptionType, current: itemType, target: itemType) =>
-          sourceDispatch({
-            type: getUpdateType(type, current, target),
-            current,
-            target,
-          }),
-        areEqual,
-      ),
-    [],
-  );
+  const updateSource = useMemo(() => memoizeOne(sourceDispatch, areEqual), []);
 
   return {
     source,

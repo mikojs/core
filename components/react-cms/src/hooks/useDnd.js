@@ -58,11 +58,12 @@ const useDnd = (item: itemType): {} => {
           isOver: monitor.isOver(),
         }),
         hover: (current: itemType) => {
-          if (current.id !== item.id) updateSource('hover', current, item);
+          if (current.id !== item.id)
+            updateSource({ type: 'hover', current, target: item });
         },
         drop: (current: itemType, monitor: monitorType) => {
           if (current.id !== item.id && monitor.isOver({ shallow: true }))
-            updateSource('drop', current, item);
+            updateSource({ type: 'drop', current, target: item });
         },
       });
   const { isOneOfItemDragging } = useDragLayer((monitor: monitorType) => ({

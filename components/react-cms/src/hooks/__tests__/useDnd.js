@@ -45,8 +45,10 @@ describe('use dnd', () => {
       /** @react use to test useDnd */
       const Root = () => (
         <>
-          <div {...useDnd('id', 'drag-and-drop', { type: Root })} />
-          <div {...useDnd('id', 'none', { type: Root })} />
+          <div
+            {...useDnd({ id: 'id', type: 'drag-and-drop', component: Root })}
+          />
+          <div {...useDnd({ id: 'id', type: 'none', component: Root })} />
         </>
       );
 
@@ -83,7 +85,7 @@ describe('use dnd', () => {
           const monitor = {
             id: 'id',
             type: 'drag-and-drop',
-            component: { type: 'div' },
+            component: 'div',
           };
 
           option[0].collect({ isOver: jest.fn() });

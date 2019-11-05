@@ -16,20 +16,16 @@ test('Previewer', () => {
               id: 'main',
               parentId: null,
               type: 'drag-and-drop',
-              component: {
-                type: 'div',
-              },
+              component: 'div',
             },
             {
               id: 'child id',
               parentId: 'main',
               type: 'drag-and-drop',
-              component: {
-                type: 'div',
-                props: {
-                  children: 'test',
-                },
-              },
+              component: 'div',
+              getProps: () => ({
+                children: 'test',
+              }),
             },
           ],
           updateSource: jest.fn(),

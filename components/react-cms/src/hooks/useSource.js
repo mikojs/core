@@ -13,10 +13,8 @@ export type itemType = {|
     | 'only-drop-to-add'
     | 'only-drop-to-remove'
     | 'drag-and-drop',
-  component: {|
-    type: string | ComponentType<*>,
-    props?: {} | (() => {}),
-  |},
+  component: string | ComponentType<*>,
+  getProps?: () => {},
 |};
 
 export type sourceType = $ReadOnlyArray<{|
@@ -68,10 +66,10 @@ const sourceReducer = (
           source: [
             ...source,
             {
+              ...current,
               id,
               parentId: target.id,
               type: 'only-drop-to-add',
-              component: current.component,
             },
           ],
         };

@@ -17,17 +17,17 @@ const Renderer = React.memo<propsType>(
   ({
     source: {
       id,
-      data: { type, component },
+      data: { type, component, getProps },
       children,
     },
   }: propsType) =>
-    React.createElement(component.type, {
+    React.createElement(component, {
       children: (children || []).map(
         (child: $PropertyType<propsType, 'source'>) => (
           <Renderer key={child.id} source={child} />
         ),
       ),
-      ...useDnd(id, type, component),
+      ...useDnd({ id, type, component, getProps }),
     }),
 );
 

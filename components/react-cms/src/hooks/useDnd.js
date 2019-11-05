@@ -26,31 +26,23 @@ const CAN_DROP_TYPE: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
 
 /**
  * @example
- * useDnd('id', 'drag-and-drop', { type: 'div' })
+ * useDnd({ id: 'id', type: 'drag-and-drop', component: 'div' })
  *
- * @param {string} id - the id of the component
- * @param {itemType.type} type - the type of the component
- * @param {itemType.component} component - the component to add the source
+ * @param {itemType} item - the item for dnd
  *
  * @return {object} - the new props of the component has been injected
  */
-const useDnd = (
-  id: string,
-  type: $PropertyType<itemType, 'type'>,
-  component: $PropertyType<itemType, 'component'>,
-): {} => {
+const useDnd = (item: itemType): {} => {
   const { updateSource } = useContext(SourceContext);
-  const item = { id, type, component };
   const newProps: {
     ref: $Call<typeof useRef, null | mixed>,
     style?: {},
   } = {
-    ...(typeof component.props === 'function'
-      ? component.props()
-      : component.props),
+    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+    ...(item.getProps?.() || {}),
     ref: useRef(null),
   };
-  const [{ isDragging }, connectDrag] = !CAN_DRAG_TYPE.includes(type)
+  const [{ isDragging }, connectDrag] = !CAN_DRAG_TYPE.includes(item.type)
     ? [{ isDragging: false }, emptyFunction]
     : useDrag({
         item,
@@ -58,7 +50,7 @@ const useDnd = (
           isDragging: monitor.isDragging(),
         }),
       });
-  const [{ isOver }, connectDrop] = !CAN_DROP_TYPE.includes(type)
+  const [{ isOver }, connectDrop] = !CAN_DROP_TYPE.includes(item.type)
     ? [{ isOver: false }, emptyFunction]
     : useDrop({
         accept: CAN_DRAG_TYPE,

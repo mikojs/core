@@ -13,8 +13,7 @@ import useSource, {
 jest.mock('uuid/v4', () => () => 'current');
 
 const sourceRef = React.createRef<$Call<typeof useSource, sourceType>>();
-const component = { type: 'div' };
-const defaultExpected = { id: 'current', parentId: 'target', component };
+const defaultExpected = { id: 'current', parentId: 'target', component: 'div' };
 
 describe('use source', () => {
   beforeAll(() => {
@@ -66,8 +65,12 @@ describe('use source', () => {
         sourceRef.current // eslint-disable-line flowtype/no-unused-expressions
           ?.updateSource(
             optionType,
-            { id: currentId || 'current', type: 'drag-and-drop', component },
-            { id: 'target', type: targetType, component },
+            {
+              id: currentId || 'current',
+              type: 'drag-and-drop',
+              component: 'div',
+            },
+            { id: 'target', type: targetType, component: 'div' },
           );
       });
 

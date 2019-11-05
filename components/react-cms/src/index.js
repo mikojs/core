@@ -22,8 +22,12 @@ const Example = React.forwardRef((props, forwardedRef) => (
 
 const Manager = React.memo(() => (
   <div>
-    <Example {...useDnd('1', 'drag-and-drop', { type: Example })} />
-    <Example {...useDnd('2', 'drag-and-drop', { type: Example })} />
+    <Example
+      {...useDnd({ id: '1', type: 'drag-and-drop', component: Example })}
+    />
+    <Example
+      {...useDnd({ id: '2', type: 'drag-and-drop', component: Example })}
+    />
   </div>
 ));
 /* eslint-enable */
@@ -32,20 +36,18 @@ const main = {
   id: 'main',
   parentId: null,
   type: 'only-drop-to-add',
-  component: {
-    type: 'main',
-    props: (): {} => {
-      const { dragDropManager } = useContext(DndContext);
-      const { window } = useContext(FrameContext);
+  component: 'main',
+  getProps: (): {} => {
+    const { dragDropManager } = useContext(DndContext);
+    const { window } = useContext(FrameContext);
 
-      useEffect(() => {
-        dragDropManager.getBackend().addEventListeners(window);
-      }, []);
+    useEffect(() => {
+      dragDropManager.getBackend().addEventListeners(window);
+    }, []);
 
-      return {
-        style: styles.main,
-      };
-    },
+    return {
+      style: styles.main,
+    };
   },
 };
 

@@ -1,6 +1,8 @@
 // @flow
 
-import { useReducer, type ComponentType } from 'react';
+import { useMemo, useReducer, type ComponentType } from 'react';
+import memoizeOne from 'memoize-one';
+import { areEqual } from 'fbjs';
 import uuid from 'uuid/v4';
 
 export type itemType = {|
@@ -172,19 +174,23 @@ const useSource = (
     previewId: false,
     source: initialSource,
   });
+  const updateSource = useMemo(
+    () =>
+      memoizeOne(
+        (type: updateSourceOptionType, current: itemType, target: itemType) =>
+          sourceDispatch({
+            type: getUpdateType(type, current, target),
+            current,
+            target,
+          }),
+        areEqual,
+      ),
+    [],
+  );
 
   return {
     source,
-    updateSource: (
-      type: updateSourceOptionType,
-      current: itemType,
-      target: itemType,
-    ) =>
-      sourceDispatch({
-        type: getUpdateType(type, current, target),
-        current,
-        target,
-      }),
+    updateSource,
   };
 };
 

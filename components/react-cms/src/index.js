@@ -14,9 +14,18 @@ import useDnd from './hooks/useDnd';
 import * as styles from './styles';
 
 /* eslint-disable */
-const Example = ({ id }) => (
-  <div {...useDnd(id, 'drag-and-drop', { type: Example })}>test</div>
-);
+const Example = React.forwardRef((props, forwardedRef) => (
+  <div {...props} ref={forwardedRef}>
+    test
+  </div>
+));
+
+const Manager = React.memo(() => (
+  <div>
+    <Example {...useDnd('1', 'drag-and-drop', { type: Example })} />
+    <Example {...useDnd('2', 'drag-and-drop', { type: Example })} />
+  </div>
+));
 /* eslint-enable */
 
 const main = {
@@ -45,10 +54,7 @@ const Cms = () => (
   <DndProvider backend={HTML5Backend}>
     <SourceContext.Provider value={useSource([main])}>
       <div style={styles.root}>
-        <div>
-          <Example id="1" />
-          <Example id="2" />
-        </div>
+        <Manager />
 
         <Frame
           style={styles.iframe}

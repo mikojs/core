@@ -93,7 +93,7 @@ const sourceReducer = (
               ...current,
               id,
               parentId: target.id,
-              type: 'only-drop-to-add',
+              type: 'none',
             },
           ],
         };

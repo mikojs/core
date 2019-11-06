@@ -53,8 +53,8 @@ const useDnd = (item: itemType): {} => {
     collect: (monitor: monitorType) => ({
       isOver: monitor.isOver(),
     }),
-    hover: (current: itemType) => {
-      if (current.id !== item.id)
+    hover: (current: itemType, monitor: monitorType) => {
+      if (current.id !== item.id && monitor.isOver({ shallow: true }))
         updateSource({ type: 'hover', current, target: item });
     },
     drop: (current: itemType, monitor: monitorType) => {

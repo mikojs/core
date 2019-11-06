@@ -41,9 +41,9 @@ describe('use source', () => {
   test.each`
     type       | currentId      | targetType               | expected
     ${'hover'} | ${null}        | ${'none'}                | ${[]}
-    ${'hover'} | ${null}        | ${'drag-and-drop'}       | ${[{ ...defaultExpected, type: 'only-drop-to-add' }]}
-    ${'hover'} | ${null}        | ${'drag-and-drop'}       | ${[{ ...defaultExpected, type: 'only-drop-to-add' }]}
-    ${'hover'} | ${'not-found'} | ${'drag-and-drop'}       | ${[{ ...defaultExpected, type: 'only-drop-to-add' }]}
+    ${'hover'} | ${null}        | ${'drag-and-drop'}       | ${[{ ...defaultExpected, type: 'none' }]}
+    ${'hover'} | ${null}        | ${'drag-and-drop'}       | ${[{ ...defaultExpected, type: 'none' }]}
+    ${'hover'} | ${'not-found'} | ${'drag-and-drop'}       | ${[{ ...defaultExpected, type: 'none' }]}
     ${'drop'}  | ${null}        | ${'drag-and-drop'}       | ${[{ ...defaultExpected, type: 'drag-and-drop' }]}
     ${'drop'}  | ${null}        | ${'drag-and-drop'}       | ${[{ ...defaultExpected, type: 'drag-and-drop' }]}
     ${'drop'}  | ${null}        | ${'only-drop-to-remove'} | ${[]}

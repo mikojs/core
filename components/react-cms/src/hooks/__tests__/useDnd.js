@@ -77,7 +77,7 @@ describe('use dnd', () => {
           option: [
             {
               collect: (monitor: monitorType) => void,
-              hover: (current: itemType) => void,
+              hover: (current: itemType, monitor: monitorType) => void,
               drop: (current: itemType, monitor: monitorType) => void,
             },
           ],
@@ -89,12 +89,15 @@ describe('use dnd', () => {
           };
 
           option[0].collect({ isOver: jest.fn() });
-          option[0].hover(monitor);
+          option[0].hover(monitor, { isOver: () => false });
           option[0].drop(monitor, { isOver: () => false });
-          option[0].hover({
-            ...monitor,
-            id: 'new-id',
-          });
+          option[0].hover(
+            {
+              ...monitor,
+              id: 'new-id',
+            },
+            { isOver: () => true },
+          );
           option[0].drop({ ...monitor, id: 'new-id' }, { isOver: () => true });
         },
       );

@@ -45,8 +45,10 @@ describe('use dnd', () => {
       /** @react use to test useDnd */
       const Root = () => (
         <>
-          <div {...useDnd('id', 'drag-and-drop', { type: Root })} />
-          <div {...useDnd('id', 'none', { type: Root })} />
+          <div
+            {...useDnd({ id: 'id', type: 'drag-and-drop', component: Root })}
+          />
+          <div {...useDnd({ id: 'id', type: 'none', component: Root })} />
         </>
       );
 
@@ -75,7 +77,7 @@ describe('use dnd', () => {
           option: [
             {
               collect: (monitor: monitorType) => void,
-              hover: (current: itemType) => void,
+              hover: (current: itemType, monitor: monitorType) => void,
               drop: (current: itemType, monitor: monitorType) => void,
             },
           ],
@@ -83,16 +85,19 @@ describe('use dnd', () => {
           const monitor = {
             id: 'id',
             type: 'drag-and-drop',
-            component: { type: 'div' },
+            component: 'div',
           };
 
           option[0].collect({ isOver: jest.fn() });
-          option[0].hover(monitor);
+          option[0].hover(monitor, { isOver: () => false });
           option[0].drop(monitor, { isOver: () => false });
-          option[0].hover({
-            ...monitor,
-            id: 'new-id',
-          });
+          option[0].hover(
+            {
+              ...monitor,
+              id: 'new-id',
+            },
+            { isOver: () => true },
+          );
           option[0].drop({ ...monitor, id: 'new-id' }, { isOver: () => true });
         },
       );

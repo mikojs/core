@@ -7,7 +7,7 @@ import {
   useDragLayer,
   type monitorType,
 } from 'react-dnd-cjs';
-import { emptyFunction, getElementPosition } from 'fbjs';
+import { getElementPosition } from 'fbjs';
 
 import SourceContext from '../SourceContext';
 
@@ -26,53 +26,42 @@ const CAN_DROP_TYPE: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
 
 /**
  * @example
- * useDnd('id', 'drag-and-drop', { type: 'div' })
+ * useDnd({ id: 'id', type: 'drag-and-drop', component: 'div' })
  *
- * @param {string} id - the id of the component
- * @param {itemType.type} type - the type of the component
- * @param {itemType.component} component - the component to add the source
+ * @param {itemType} item - the item for dnd
  *
  * @return {object} - the new props of the component has been injected
  */
-export default (
-  id: string,
-  type: $PropertyType<itemType, 'type'>,
-  component: $PropertyType<itemType, 'component'>,
-): {} => {
+const useDnd = (item: itemType): {} => {
   const { updateSource } = useContext(SourceContext);
-  const item = { id, type, component };
   const newProps: {
     ref: $Call<typeof useRef, null | mixed>,
     style?: {},
   } = {
-    ...(typeof component.props === 'function'
-      ? component.props()
-      : component.props),
+    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+    ...(item.getProps?.() || {}),
     ref: useRef(null),
   };
-  const [{ isDragging }, connectDrag] = !CAN_DRAG_TYPE.includes(type)
-    ? [{ isDragging: false }, emptyFunction]
-    : useDrag({
-        item,
-        collect: (monitor: monitorType) => ({
-          isDragging: monitor.isDragging(),
-        }),
-      });
-  const [{ isOver }, connectDrop] = !CAN_DROP_TYPE.includes(type)
-    ? [{ isOver: false }, emptyFunction]
-    : useDrop({
-        accept: CAN_DRAG_TYPE,
-        collect: (monitor: monitorType) => ({
-          isOver: monitor.isOver(),
-        }),
-        hover: (current: itemType) => {
-          if (current.id !== item.id) updateSource('hover', current, item);
-        },
-        drop: (current: itemType, monitor: monitorType) => {
-          if (current.id !== item.id && monitor.isOver({ shallow: true }))
-            updateSource('drop', current, item);
-        },
-      });
+  const [{ isDragging }, connectDrag] = useDrag({
+    item,
+    collect: (monitor: monitorType) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  const [{ isOver }, connectDrop] = useDrop({
+    accept: CAN_DRAG_TYPE,
+    collect: (monitor: monitorType) => ({
+      isOver: monitor.isOver(),
+    }),
+    hover: (current: itemType, monitor: monitorType) => {
+      if (current.id !== item.id && monitor.isOver({ shallow: true }))
+        updateSource({ type: 'hover', current, target: item });
+    },
+    drop: (current: itemType, monitor: monitorType) => {
+      if (current.id !== item.id && monitor.isOver({ shallow: true }))
+        updateSource({ type: 'drop', current, target: item });
+    },
+  });
   const { isOneOfItemDragging } = useDragLayer((monitor: monitorType) => ({
     isOneOfItemDragging: monitor.isDragging(),
   }));
@@ -115,3 +104,5 @@ export default (
 
   return newProps;
 };
+
+export default useDnd;

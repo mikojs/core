@@ -14,29 +14,40 @@ import useDnd from './hooks/useDnd';
 import * as styles from './styles';
 
 /* eslint-disable */
-const Example = ({ id }) => (
-  <div {...useDnd(id, 'drag-and-drop', { type: Example })}>test</div>
-);
+const Example = React.forwardRef((props, forwardedRef) => (
+  <div {...props} ref={forwardedRef}>
+    test
+  </div>
+));
+
+const Manager = React.memo(() => (
+  <div>
+    <Example
+      {...useDnd({ id: '1', type: 'drag-and-drop', component: Example })}
+    />
+    <Example
+      {...useDnd({ id: '2', type: 'drag-and-drop', component: Example })}
+    />
+  </div>
+));
 /* eslint-enable */
 
 const main = {
   id: 'main',
   parentId: null,
   type: 'only-drop-to-add',
-  component: {
-    type: 'main',
-    props: (): {} => {
-      const { dragDropManager } = useContext(DndContext);
-      const { window } = useContext(FrameContext);
+  component: 'main',
+  getProps: (): {} => {
+    const { dragDropManager } = useContext(DndContext);
+    const { window } = useContext(FrameContext);
 
-      useEffect(() => {
-        dragDropManager.getBackend().addEventListeners(window);
-      }, []);
+    useEffect(() => {
+      dragDropManager.getBackend().addEventListeners(window);
+    }, []);
 
-      return {
-        style: styles.main,
-      };
-    },
+    return {
+      style: styles.main,
+    };
   },
 };
 
@@ -45,10 +56,7 @@ const Cms = () => (
   <DndProvider backend={HTML5Backend}>
     <SourceContext.Provider value={useSource([main])}>
       <div style={styles.root}>
-        <div>
-          <Example id="1" />
-          <Example id="2" />
-        </div>
+        <Manager />
 
         <Frame
           style={styles.iframe}

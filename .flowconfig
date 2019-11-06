@@ -12,9 +12,13 @@
 [options]
 module.file_ext=.js
 module.file_ext=.less
-module.system.node.resolve_dirname=node_modules
-module.system.node.resolve_dirname=./src
-module.system.node.resolve_dirname=./packages/create-project/src/__tests__/__ignore__/relay-server/src
+module.system.node.allow_root_relative=true
+module.system.node.root_relative_dirname=./packages/create-project/src/__tests__/__ignore__/relay-server/src
+module.system.node.root_relative_dirname=./packages/create-project/src/__tests__/__ignore__/relay-server-with-css/src
+module.system.node.root_relative_dirname=./packages/create-project/src/__tests__/__ignore__/relay-server-with-less/src
+module.system.node.root_relative_dirname=./packages/create-project/src/__tests__/__ignore__/lerna/relay-server/src
+module.system.node.root_relative_dirname=./packages/create-project/src/__tests__/__ignore__/lerna/relay-server-with-css/src
+module.system.node.root_relative_dirname=./packages/create-project/src/__tests__/__ignore__/lerna/relay-server-with-less/src
 esproposal.optional_chaining=enable
 esproposal.decorators=ignore
 experimental.const_params=true

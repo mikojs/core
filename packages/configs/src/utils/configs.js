@@ -8,7 +8,7 @@
 
 import path from 'path';
 
-import cosmiconfig from 'cosmiconfig';
+import { cosmiconfigSync } from 'cosmiconfig';
 import { emptyFunction, filterObject } from 'fbjs';
 import debug from 'debug';
 
@@ -137,6 +137,6 @@ configs.handleCustomConfigs({
   config: defaultConfigs,
   filepath: __dirname,
 });
-configs.handleCustomConfigs(cosmiconfig('cat').searchSync());
+configs.handleCustomConfigs(cosmiconfigSync('cat').search());
 
 export default configs;

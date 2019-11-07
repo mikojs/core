@@ -12,7 +12,7 @@
     "test": "make test"
   },
   "dependencies": {
-    "@babel/runtime": "^7.7.1",
+    "@babel/runtime": "^7.7.2",
     "@mikojs/utils": "^1.7.1",
     "chalk": "^2.4.2",
     "commander": "^4.0.0",

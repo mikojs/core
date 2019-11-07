@@ -29,7 +29,7 @@
     "output-file-sync": "^2.0.1",
     "progress-bar-webpack-plugin": "^1.12.1",
     "react-helmet": "^5.2.1",
-    "react-hot-loader": "^4.12.15",
+    "react-hot-loader": "^4.12.16",
     "react-is": "^16.11.0",
     "react-loading": "^2.0.3",
     "react-router": "^5.1.2",

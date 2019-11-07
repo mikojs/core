@@ -9,12 +9,12 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/cli": "^7.6.4",
-    "@babel/core": "^7.6.4",
-    "@babel/runtime": "^7.6.3",
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.0",
+    "@babel/runtime": "^7.7.1",
     "@mikojs/utils": "^1.7.1",
     "chalk": "^2.4.2",
-    "chokidar": "^3.2.2",
+    "chokidar": "^3.3.0",
     "debug": "^4.1.1",
     "execa": "^3.2.0",
     "fbjs": "^1.0.0",
@@ -27,7 +27,7 @@
     "koa": ">=2.0.0"
   },
   "devDependencies": {
-    "koa": "^2.10.0",
+    "koa": "^2.11.0",
     "node-fetch": "^2.6.0"
   },
   "keywords": ["babel", "koa", "mikojs", "pipeline", "server"],

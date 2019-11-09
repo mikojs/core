@@ -13,7 +13,7 @@
     "@babel/core": "^7.7.2",
     "@babel/runtime": "^7.7.2",
     "@mikojs/utils": "^1.7.1",
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "chokidar": "^3.3.0",
     "debug": "^4.1.1",
     "execa": "^3.2.0",

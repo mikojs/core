@@ -31,7 +31,7 @@ describe.each`
     const isStatic = !dev && useStatic;
     const request = !isStatic
       ? fetch
-      : (url: string): {| status: 200, text: () => string |} => {
+      : (url: string): ({| status: 200, text: () => string |}) => {
           const filePath = url
             .replace(
               domain,

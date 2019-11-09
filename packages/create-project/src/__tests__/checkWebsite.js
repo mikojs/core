@@ -13,7 +13,7 @@ const testFolder = path.resolve(
   './__ignore__/lerna/relay-server-with-less',
 );
 const websiteFiles = d3DirTree(websiteFolder, {
-  exclude: [/.*\.swp/, /lib/, /node_modules/],
+  exclude: [/.*\.swp/, /\.DS_Store/, /lib/, /node_modules/],
 })
   .leaves()
   .map(({ data: { path: filePath } }: d3DirTreeNodeType) => [

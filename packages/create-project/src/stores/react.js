@@ -31,9 +31,11 @@ describe('pages', () => {
     \${'/'} | \${'<div>@mikojs/create-project</div>'}
   \`('page $url', async ({ url, html }: {| url: string, html: string |}) => {
     expect(
-      (await react.render(url, {
-        Loading: emptyFunction.thatReturnsNull,
-      })).html(),
+      (
+        await react.render(url, {
+          Loading: emptyFunction.thatReturnsNull,
+        })
+      ).html(),
     ).toBe(html);
   });
 });`;
@@ -53,12 +55,14 @@ class React extends Store {
       useServer: $PropertyType<$PropertyType<Store, 'ctx'>, 'useServer'>,
     ) => {
       if (useServer)
-        this.storeUseReact = (await this.prompt({
-          name: 'useReact',
-          message: 'use react or not',
-          type: 'confirm',
-          default: false,
-        })).useReact;
+        this.storeUseReact = (
+          await this.prompt({
+            name: 'useReact',
+            message: 'use react or not',
+            type: 'confirm',
+            default: false,
+          })
+        ).useReact;
       else this.storeUseReact = false;
 
       this.debug(this.storeUseReact);

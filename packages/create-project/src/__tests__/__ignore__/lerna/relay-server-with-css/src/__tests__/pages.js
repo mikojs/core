@@ -14,9 +14,9 @@ describe('pages', () => {
   describe('client', () => {
     beforeAll(() => {
       jest.resetModules();
-      jest.mock('utils/createEnvironment', (): {|
+      jest.mock('utils/createEnvironment', (): ({|
         createEnvironment: () => mixed,
-      |} => {
+      |}) => {
         const { createMockEnvironment } = jest.requireActual(
           'relay-test-utils',
         );
@@ -83,10 +83,10 @@ describe('pages', () => {
           .mockResolvedValueOnce('Success')
           .mockRejectedValueOnce(Promise.resolve(new Error('Error'))),
       }));
-      jest.mock('utils/createEnvironment', (): {|
+      jest.mock('utils/createEnvironment', (): ({|
         initEnvironment: () => {},
         createEnvironment: () => mixed,
-      |} => {
+      |}) => {
         const { createMockEnvironment } = jest.requireActual(
           'relay-test-utils',
         );

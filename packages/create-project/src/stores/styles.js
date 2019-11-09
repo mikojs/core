@@ -17,24 +17,26 @@ class Styles extends Store {
       useReact: $PropertyType<$PropertyType<Store, 'ctx'>, 'useReact'>,
     ) => {
       if (useReact)
-        this.storeUseStyles = (await this.prompt({
-          name: 'useStyles',
-          message: 'use styles',
-          type: 'list',
-          default: 0,
-          choices: [
-            {
-              name: 'less',
-            },
-            {
-              name: 'css',
-            },
-            {
-              name: 'not use',
-              value: false,
-            },
-          ],
-        })).useStyles;
+        this.storeUseStyles = (
+          await this.prompt({
+            name: 'useStyles',
+            message: 'use styles',
+            type: 'list',
+            default: 0,
+            choices: [
+              {
+                name: 'less',
+              },
+              {
+                name: 'css',
+              },
+              {
+                name: 'not use',
+                value: false,
+              },
+            ],
+          })
+        ).useStyles;
       else this.storeUseStyles = false;
 
       this.debug(this.storeUseStyles);

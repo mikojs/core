@@ -50,12 +50,14 @@ class Npmignore extends Store {
    * npmignore.checkNpm()
    */
   +checkNpm = memoizeOne(async () => {
-    this.storeUseNpm = (await this.prompt({
-      name: 'useNpm',
-      message: 'use npm or not',
-      type: 'confirm',
-      default: false,
-    })).useNpm;
+    this.storeUseNpm = (
+      await this.prompt({
+        name: 'useNpm',
+        message: 'use npm or not',
+        type: 'confirm',
+        default: false,
+      })
+    ).useNpm;
     this.debug(this.storeUseNpm);
   }, emptyFunction.thatReturnsTrue);
 

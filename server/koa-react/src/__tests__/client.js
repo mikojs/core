@@ -18,14 +18,16 @@ describe('client side testing', () => {
       global.console.error = mockLog;
 
       expect(
-        (await new React(
-          isCustom
-            ? path.resolve(__dirname, './__ignore__/custom')
-            : path.resolve(__dirname, './__ignore__/pages'),
-          {
-            basename: isCustom ? '/custom' : undefined,
-          },
-        ).render(urlPath, { Loading: emptyFunction.thatReturnsNull }))
+        (
+          await new React(
+            isCustom
+              ? path.resolve(__dirname, './__ignore__/custom')
+              : path.resolve(__dirname, './__ignore__/pages'),
+            {
+              basename: isCustom ? '/custom' : undefined,
+            },
+          ).render(urlPath, { Loading: emptyFunction.thatReturnsNull })
+        )
           .html()
           .replace(/ style="[\w;:,()\-.%# ]*"/g, '')
           .replace(/<p> .*(<br>)?<\/p>/g, '<p></p>'),

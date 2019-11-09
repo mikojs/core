@@ -25,11 +25,11 @@ const createLogger = (
     warn: chalk`{yellow {bold ${name}}}`,
     info: chalk`{blue {bold ${name}}}`,
   },
-): {
+): ({
   [string]: (
     message: string,
   ) => $Call<typeof createLogger, string, typeof chainingLogger>,
-} =>
+}) =>
   Object.keys(names).reduce(
     (result: {}, key: string) => ({
       ...result,

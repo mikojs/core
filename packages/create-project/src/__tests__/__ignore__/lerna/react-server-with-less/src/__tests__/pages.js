@@ -14,9 +14,11 @@ describe('pages', () => {
     ${'/'} | ${'<div>@mikojs/create-project</div>'}
   `('page $url', async ({ url, html }: {| url: string, html: string |}) => {
     expect(
-      (await react.render(url, {
-        Loading: emptyFunction.thatReturnsNull,
-      })).html(),
+      (
+        await react.render(url, {
+          Loading: emptyFunction.thatReturnsNull,
+        })
+      ).html(),
     ).toBe(html);
   });
 });

@@ -23,7 +23,8 @@ export default async (
       method: 'del',
     }).then((res: ResponseType) => res.text());
 
-  return fetch(`http://localhost:8000${path}`, { ...options, method }).then(
-    (res: ResponseType) => res.json(),
-  );
+  return fetch(`http://localhost:8000${path}`, {
+    ...options,
+    method,
+  }).then((res: ResponseType) => res.json());
 };

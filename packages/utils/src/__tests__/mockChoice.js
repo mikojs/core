@@ -8,6 +8,10 @@ describe.each`
   ${false}
 `('mock choice', ({ result }: {| result: boolean |}) => {
   test(`type: ${result.toString()}`, () => {
-    mockChoice(result, () => true, () => false);
+    mockChoice(
+      result,
+      () => true,
+      () => false,
+    );
   });
 });

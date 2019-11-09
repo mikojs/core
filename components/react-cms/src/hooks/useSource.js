@@ -154,14 +154,14 @@ const sourceReducer = (
  */
 const useSource = (
   initialSource: sourceType,
-): {|
+): ({|
   source: sourceType,
   updateSource: (action: {|
     type: actionType,
     current: itemType,
     target: itemType,
   |}) => void,
-|} => {
+|}) => {
   const [{ source }, sourceDispatch] = useReducer(sourceReducer, {
     previewId: false,
     source: initialSource,

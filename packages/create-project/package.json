@@ -14,7 +14,7 @@
   "dependencies": {
     "@babel/runtime": "^7.7.2",
     "@mikojs/utils": "^1.7.1",
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "commander": "^4.0.0",
     "debug": "^4.1.1",
     "diff": "^4.0.1",
@@ -31,7 +31,7 @@
     "@mikojs/configs": "^1.8.0",
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.4",
-    "prettier": "^1.18.2",
+    "prettier": "^1.19.1",
     "prettier-package-json": "^2.1.0"
   },
   "keywords": [

@@ -61,12 +61,14 @@ class Graphql extends Store {
       useServer: $PropertyType<$PropertyType<Store, 'ctx'>, 'useServer'>,
     ) => {
       if (useServer)
-        this.storeUseGraphql = (await this.prompt({
-          name: 'useGraphql',
-          message: 'use graphql or not',
-          type: 'confirm',
-          default: false,
-        })).useGraphql;
+        this.storeUseGraphql = (
+          await this.prompt({
+            name: 'useGraphql',
+            message: 'use graphql or not',
+            type: 'confirm',
+            default: false,
+          })
+        ).useGraphql;
       else this.storeUseGraphql = false;
 
       this.debug(this.storeUseGraphql);

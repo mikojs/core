@@ -53,12 +53,14 @@ class React extends Store {
       useServer: $PropertyType<$PropertyType<Store, 'ctx'>, 'useServer'>,
     ) => {
       if (useServer)
-        this.storeUseReact = (await this.prompt({
-          name: 'useReact',
-          message: 'use react or not',
-          type: 'confirm',
-          default: false,
-        })).useReact;
+        this.storeUseReact = (
+          await this.prompt({
+            name: 'useReact',
+            message: 'use react or not',
+            type: 'confirm',
+            default: false,
+          })
+        ).useReact;
       else this.storeUseReact = false;
 
       this.debug(this.storeUseReact);

@@ -321,12 +321,14 @@ class Server extends Store {
    * server.checkServer()
    */
   +checkServer = memoizeOne(async () => {
-    this.storeUseServer = (await this.prompt({
-      name: 'useServer',
-      message: 'use server or not',
-      type: 'confirm',
-      default: false,
-    })).useServer;
+    this.storeUseServer = (
+      await this.prompt({
+        name: 'useServer',
+        message: 'use server or not',
+        type: 'confirm',
+        default: false,
+      })
+    ).useServer;
     this.debug(this.storeUseServer);
   }, emptyFunction.thatReturnsTrue);
 

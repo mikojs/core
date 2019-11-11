@@ -33,7 +33,8 @@
     "d3-hierarchy": "^1.1.8",
     "directory-tree": "^2.2.4",
     "eslint": "^6.6.0",
-    "fbjs": "^1.0.0"
+    "fbjs": "^1.0.0",
+    "react": "^16.11.0"
   },
   "keywords": ["eslint", "mikojs"],
   "publishConfig": {

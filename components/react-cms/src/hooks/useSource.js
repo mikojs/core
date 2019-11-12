@@ -101,7 +101,7 @@ const sourceReducer = (
 
       const newSource = [...source];
       const preview = newSource.find(
-        ({ id }: $ElementType<sourceType, number>) => id === current.id,
+        ({ id }: $ElementType<sourceType, number>) => id === previewId,
       );
 
       if (preview) preview.parentId = target.id;

@@ -10,7 +10,7 @@ import { FrameContext } from 'react-frame-component';
  *
  * @return {object} - the props of the main
  */
-export default (): {} => {
+const useMainProps = (): {} => {
   const { dragDropManager } = useContext(DndContext);
   const { window } = useContext(FrameContext);
 
@@ -25,3 +25,5 @@ export default (): {} => {
     },
   };
 };
+
+export default useMainProps;

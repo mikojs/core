@@ -23,12 +23,8 @@ const Example = React.forwardRef((props, forwardedRef) => (
 
 const Manager = React.memo(() => (
   <div>
-    <Example
-      {...useDnd({ id: '1', type: 'drag-and-drop', component: Example })}
-    />
-    <Example
-      {...useDnd({ id: '2', type: 'drag-and-drop', component: Example })}
-    />
+    <Example {...useDnd({ id: '1', type: 'only-drag', component: Example })} />
+    <Example {...useDnd({ id: '2', type: 'only-drag', component: Example })} />
   </div>
 ));
 /* eslint-enable */

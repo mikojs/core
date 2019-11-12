@@ -96,6 +96,8 @@ describe('eslint', () => {
   test('check amount of rules', () => {
     const testRules = Object.keys(configs?.rules || {})
       .filter((ruleName: string): boolean => {
+        if (configs?.rules?.[ruleName] === 'warn') return false;
+
         switch (ruleName) {
           case 'arrow-parens':
             return !ruleIds.includes('flowtype/require-parameter-type');

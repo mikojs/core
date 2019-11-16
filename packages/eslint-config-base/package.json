@@ -34,7 +34,7 @@
     "directory-tree": "^2.2.4",
     "eslint": "^6.6.0",
     "fbjs": "^1.0.0",
-    "react": "^16.11.0"
+    "react": "^16.12.0"
   },
   "keywords": ["eslint", "mikojs"],
   "publishConfig": {

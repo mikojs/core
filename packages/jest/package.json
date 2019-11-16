@@ -18,8 +18,8 @@
   },
   "devDependencies": {
     "enzyme-adapter-react-16": "^1.15.1",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0"
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
   },
   "keywords": ["jest", "mikojs"],
   "publishConfig": {

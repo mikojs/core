@@ -50,14 +50,14 @@ export default function(source: string): string {
       if (/module\.exports/.test(source))
         newSource = `${source.replace(/module\.exports/g, `var ${key}`)}
 
-if (require('react-is').isMemo(${key}))
+if (require('@mikojs/koa-react/lib/utils/getStatic').isMemo(${key}))
   require('hoist-non-react-statics')(${key}, ${key}.type);
 
 module.exports = require('react-hot-loader/root').hot(${key});`;
       else if (/exports\["default"\]/.test(source))
         newSource = `${source.replace(/exports\["default"\]/g, `var ${key}`)}
 
-if (require('react-is').isMemo(${key}))
+if (require('@mikojs/koa-react/lib/utils/getStatic').isMemo(${key}))
   require('hoist-non-react-statics')(${key}, ${key}.type);
 
 exports["default"] = require('react-hot-loader/root').hot(${key});`;

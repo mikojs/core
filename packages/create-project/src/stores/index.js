@@ -159,20 +159,26 @@ export default class Store {
       case 'diff':
         const { log } = console;
 
-        diffLines(fs.readFileSync(filePath, 'utf-8'), content).forEach(
-          ({
-            value,
-            added,
-            removed,
-          }: {|
-            value: string,
-            added: ?boolean,
-            removed: ?boolean,
-          |}) => {
-            if (added) log(chalk`{green +${value}}`);
-            else if (removed) log(chalk`{red -${value}}`);
-            else log(` ${value}`);
-          },
+        log(
+          diffLines(fs.readFileSync(filePath, 'utf-8'), content).reduce(
+            (
+              result: string,
+              {
+                value,
+                added,
+                removed,
+              }: {|
+                value: string,
+                added: ?boolean,
+                removed: ?boolean,
+              |},
+            ): string => {
+              if (added) return chalk`${result}{green ${value}}`;
+              else if (removed) return chalk`${result}{red ${value}}`;
+              return `${result}${value}`;
+            },
+            '',
+          ),
         );
 
         const { overwrite } = await this.prompt({

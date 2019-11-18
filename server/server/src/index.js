@@ -33,7 +33,7 @@ export type contextType = {|
 |};
 
 const debugLog = debug('server');
-const logger = createLogger('@mikojs/server', ora());
+const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
 
 /**
  * @example

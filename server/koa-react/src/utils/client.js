@@ -3,6 +3,7 @@
 import React from 'react';
 import { hydrate } from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { setConfig } from 'react-hot-loader';
 import { emptyFunction } from 'fbjs';
 
 import { mockChoice, handleUnhandledRejection } from '@mikojs/utils';
@@ -13,8 +14,6 @@ import Main from 'templates/Main';
 import Loading from 'templates/Loading';
 import ErrorComponent from 'templates/Error';
 import routesData from 'templates/routesData';
-
-const setConfig = /** setConfig */ emptyFunction;
 
 handleUnhandledRejection();
 setConfig({

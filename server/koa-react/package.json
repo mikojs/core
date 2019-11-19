@@ -12,6 +12,7 @@
     "run-test-server": "NODE_PORT=8000 ./lib/lib/__ignore__/run.js"
   },
   "dependencies": {
+    "@hot-loader/react-dom": "^16.11.0",
     "@mikojs/utils": "^1.7.1",
     "address": "^1.1.2",
     "d3-hierarchy": "^1.1.8",

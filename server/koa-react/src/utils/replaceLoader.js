@@ -1,7 +1,5 @@
 // @flow
 
-import crypto from 'crypto';
-
 import debug from 'debug';
 import { invariant } from 'fbjs';
 import { getOptions } from 'loader-utils';
@@ -33,36 +31,6 @@ export default function(source: string): string {
         `"${cacheDir}/$2"`,
       );
       break;
-
-    case 'set-config':
-      newSource = source.replace(
-        /\/\*\* setConfig \*\//,
-        `require('react-hot-loader').setConfig || `,
-      );
-      break;
-
-    case 'react-hot-loader': {
-      const key = `_replace_${crypto
-        .createHmac('sha256', source)
-        .digest('hex')
-        .slice(0, 5)}`;
-
-      if (/module\.exports/.test(source))
-        newSource = `${source.replace(/module\.exports/g, `var ${key}`)}
-
-if (require('@mikojs/koa-react/lib/utils/getStatic').isMemo(${key}))
-  require('hoist-non-react-statics')(${key}, ${key}.type);
-
-module.exports = require('react-hot-loader/root').hot(${key});`;
-      else if (/exports\["default"\]/.test(source))
-        newSource = `${source.replace(/exports\["default"\]/g, `var ${key}`)}
-
-if (require('@mikojs/koa-react/lib/utils/getStatic').isMemo(${key}))
-  require('hoist-non-react-statics')(${key}, ${key}.type);
-
-exports["default"] = require('react-hot-loader/root').hot(${key});`;
-      break;
-    }
 
     default:
       throw new Error('Replace type error');

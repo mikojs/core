@@ -9,7 +9,6 @@ import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 import type CacheType from './Cache';
 
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
-const ROOT_PATH = path.resolve(__dirname, './Root.js');
 
 /**
  * @example
@@ -34,10 +33,13 @@ export default (
   devtool: dev ? 'eval' : false,
   entry: !basename
     ? {
-        client: [CLIENT_PATH],
+        client: ['react-hot-loader/patch', CLIENT_PATH],
       }
     : {
-        [`${basename.replace(/^\//, '')}/client`]: [CLIENT_PATH],
+        [`${basename.replace(/^\//, '')}/client`]: [
+          'react-hot-loader/patch',
+          CLIENT_PATH,
+        ],
       },
   output: {
     path: dev ? undefined : path.resolve('./public/js'),
@@ -87,32 +89,11 @@ export default (
           cacheDir: cache.cacheDir(),
         },
       },
-      ...(!dev
-        ? []
-        : [
-            {
-              test: /\.jsx?$/,
-              include: [CLIENT_PATH],
-              loader: path.resolve(__dirname, './replaceLoader.js'),
-              options: {
-                type: 'set-config',
-              },
-            },
-            {
-              test: /\.jsx?$/,
-              include: [folderPath, ROOT_PATH],
-              exclude,
-              loader: path.resolve(__dirname, './replaceLoader.js'),
-              options: {
-                type: 'react-hot-loader',
-              },
-            },
-            {
-              test: /\.jsx?$/,
-              include: /node_modules/,
-              use: ['react-hot-loader/webpack'],
-            },
-          ]),
     ],
+  },
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
   },
 });

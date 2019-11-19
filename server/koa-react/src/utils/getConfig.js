@@ -9,6 +9,7 @@ import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 import type CacheType from './Cache';
 
 const CLIENT_PATH = path.resolve(__dirname, './client.js');
+const ROOT_PATH = path.resolve(__dirname, './Root.js');
 
 /**
  * @example
@@ -87,6 +88,15 @@ export default (
         options: {
           type: 'routers',
           cacheDir: cache.cacheDir(),
+        },
+      },
+      {
+        test: /\.jsx?$/,
+        include: [CLIENT_PATH, ROOT_PATH, folderPath],
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+          plugins: ['react-hot-loader/babel'],
         },
       },
     ],

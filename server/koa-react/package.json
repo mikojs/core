@@ -15,6 +15,7 @@
     "@hot-loader/react-dom": "^16.11.0",
     "@mikojs/utils": "^1.7.1",
     "address": "^1.1.2",
+    "babel-loader": "^8.0.6",
     "d3-hierarchy": "^1.1.8",
     "debug": "^4.1.1",
     "directory-tree": "^2.2.4",

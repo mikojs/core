@@ -81,18 +81,17 @@ export default (
   ],
   module: {
     rules: [
+      // TODO: add babel to replace cache.cacheDir()
       {
         test: /\.jsx?$/,
-        include: [CLIENT_PATH],
-        loader: path.resolve(__dirname, './replaceLoader.js'),
+        include: [CLIENT_PATH, ROOT_PATH],
+        loader: 'babel-loader',
         options: {
-          type: 'routers',
-          cacheDir: cache.cacheDir(),
+          plugins: ['react-hot-loader/babel'],
         },
       },
       {
         test: /\.jsx?$/,
-        include: [CLIENT_PATH, ROOT_PATH, folderPath],
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {

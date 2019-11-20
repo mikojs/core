@@ -8,7 +8,6 @@ import React, {
   type Node as NodeType,
 } from 'react';
 import { useLocation } from 'react-router-dom';
-import { hot } from 'react-hot-loader/root';
 import { ExecutionEnvironment } from 'fbjs';
 
 import { type errorPropsType } from '../types';
@@ -107,4 +106,4 @@ const Root = <M, P>({
   );
 };
 
-export default hot(React.memo<propsType<>>(Root));
+export default React.memo<propsType<>>(Root);

@@ -84,6 +84,8 @@ export default (
       {
         test: /\.jsx?$/,
         include: [CLIENT_PATH, ROOT_PATH, folderPath],
+        // TODO: add @mikojs/use-relay to handle exclude relay generated folder
+        exclude: /__generated__/,
         loader: 'babel-loader',
         options: {
           plugins: [

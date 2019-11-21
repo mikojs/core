@@ -88,7 +88,7 @@ export default (
         options: {
           plugins: [
             [
-              path.resolve('./babel.js'),
+              path.resolve(__dirname, './babel.js'),
               {
                 cacheDir: cache.cacheDir,
               },

@@ -14,6 +14,45 @@ export default declare(
   ): {} => {
     assertVersion(7);
 
+    /**
+     * @example
+     * isAddedHotLoader(node)
+     *
+     * @param {nodePathType} node - node from babel
+     *
+     * @return {boolean} - if hot loader is added or not
+     */
+    const isAddedHotLoader = (node: nodePathType) =>
+      t.isCallExpression(node) &&
+      t.isMemberExpression(node.callee) &&
+      t.isCallExpression(node.callee.object) &&
+      t.isIdentifier(node.callee.property, { name: 'hot' }) &&
+      t.isIdentifier(node.callee.object.callee, {
+        name: 'require',
+      }) &&
+      t.isStringLiteral(node.callee.object.arguments[0], {
+        value: 'react-hot-loader/root',
+      });
+
+    /**
+     * @example
+     * addHotLoader(node)
+     *
+     * @param {nodePathType} node - node from babel
+     *
+     * @return {nodePathType} - new node to add hot loader
+     */
+    const addHotLoader = (node: nodePathType) =>
+      t.callExpression(
+        t.memberExpression(
+          t.callExpression(t.identifier('require'), [
+            t.stringLiteral('react-hot-loader/root'),
+          ]),
+          t.identifier('hot'),
+        ),
+        [node],
+      );
+
     return {
       visitor: {
         Identifier: (
@@ -67,35 +106,13 @@ export default declare(
 
               const rootNode = path.parentPath.parentPath.node;
 
-              if (
-                t.isCallExpression(rootNode.right) &&
-                t.isMemberExpression(rootNode.right.callee) &&
-                t.isCallExpression(rootNode.right.callee.object) &&
-                t.isIdentifier(rootNode.right.callee.property, {
-                  name: 'hot',
-                }) &&
-                t.isIdentifier(rootNode.right.callee.object.callee, {
-                  name: 'require',
-                }) &&
-                t.isStringLiteral(rootNode.right.callee.object.arguments[0], {
-                  value: 'react-hot-loader/root',
-                })
-              )
-                return;
+              if (isAddedHotLoader(rootNode.right)) return;
 
               path.parentPath.parentPath.replaceWith(
                 t.assignmentExpression(
                   '=',
                   rootNode.left,
-                  t.callExpression(
-                    t.memberExpression(
-                      t.callExpression(t.identifier('require'), [
-                        t.stringLiteral('react-hot-loader/root'),
-                      ]),
-                      t.identifier('hot'),
-                    ),
-                    [rootNode.right],
-                  ),
+                  addHotLoader(rootNode.right),
                 ),
               );
               return;
@@ -107,32 +124,10 @@ export default declare(
         ExportDefaultDeclaration: (path: nodePathType) => {
           const rootNode = path.node.declaration;
 
-          if (
-            t.isCallExpression(rootNode) &&
-            t.isMemberExpression(rootNode.callee) &&
-            t.isCallExpression(rootNode.callee.object) &&
-            t.isIdentifier(rootNode.callee.property, { name: 'hot' }) &&
-            t.isIdentifier(rootNode.callee.object.callee, {
-              name: 'require',
-            }) &&
-            t.isStringLiteral(rootNode.callee.object.arguments[0], {
-              value: 'react-hot-loader/root',
-            })
-          )
-            return;
+          if (isAddedHotLoader(rootNode)) return;
 
           path.replaceWith(
-            t.exportDefaultDeclaration(
-              t.callExpression(
-                t.memberExpression(
-                  t.callExpression(t.identifier('require'), [
-                    t.stringLiteral('react-hot-loader/root'),
-                  ]),
-                  t.identifier('hot'),
-                ),
-                [path.node.declaration],
-              ),
-            ),
+            t.exportDefaultDeclaration(addHotLoader(path.node.declaration)),
           );
         },
       },

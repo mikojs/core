@@ -1,32 +1,38 @@
 // @flow
 
+import path from 'path';
+
 import { transformSync } from '@babel/core';
 import { emptyFunction } from 'fbjs';
 
 import babel from '../babel';
 
-test('babel', () => {
-  expect(
-    transformSync(
-      `var _Main = _interopRequireDefault(require("../../templates/Main"));
+import testings from './__ignore__/testings';
 
-var _Loading = _interopRequireDefault(require("../../templates/Loading"));
-
-var _Error = _interopRequireDefault(require("../../templates/Error"));
-
-var _routesData = _interopRequireDefault(require("../../templates/routesData"));`,
-      {
-        filename: __filename,
-        plugins: [
-          [
-            babel,
-            {
-              cacheDir: emptyFunction.thatReturnsArgument,
-            },
+describe('babel', () => {
+  test.each(testings)(
+    `%s`,
+    (
+      content: string,
+      expected: string,
+      cacheDir: (
+        filename: string,
+      ) => string = emptyFunction.thatReturnsArgument,
+    ) => {
+      expect(
+        transformSync(content, {
+          filename: path.resolve(__dirname, './__ignore__/testings.js'),
+          plugins: [
+            [
+              babel,
+              {
+                cacheDir,
+              },
+            ],
           ],
-        ],
-        babelrc: false,
-      },
-    ).code,
-  ).toBeTruthy();
+          babelrc: false,
+        }).code,
+      ).toBe(expected);
+    },
+  );
 });

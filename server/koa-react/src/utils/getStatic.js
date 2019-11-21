@@ -2,6 +2,12 @@
 
 import { type ComponentType } from 'react';
 import { Memo } from 'react-is';
+import hoistNonReactStatics from 'hoist-non-react-statics';
+
+type memoComponentType = ComponentType<*> & {|
+  type: ComponentType<*>,
+  $$typeof: string,
+|};
 
 /**
  * After `react-is@>=16.12`, `isMemo` is used to check the component which is created by react.createElement.
@@ -9,12 +15,30 @@ import { Memo } from 'react-is';
  * @example
  * isMemo(Component)
  *
- * @param {ComponentType} Component - component type
+ * @param {memoComponentType} Component - component type
  *
  * @return {boolean} - is the memo component
  */
-export const isMemo = (Component: ComponentType<*> & {| $$typeof: string |}) =>
-  Component?.$$typeof === Memo;
+const isMemo = (Component: memoComponentType) => Component?.$$typeof === Memo;
+
+/**
+ * @example
+ * hoistNonReactStaticsHotExported(Component, false)
+ *
+ * @param {memoComponentType} Component - component type
+ * @param {boolean} isDev - is dev or not
+ *
+ * @return {memoComponentType} - component which has been hoisted
+ */
+export const hoistNonReactStaticsHotExported = (
+  Component: memoComponentType,
+  isDev: boolean,
+): memoComponentType => {
+  if (isMemo(Component) && isDev)
+    hoistNonReactStatics(Component, Component.type);
+
+  return Component;
+};
 
 /**
  * @example
@@ -26,4 +50,4 @@ export const isMemo = (Component: ComponentType<*> & {| $$typeof: string |}) =>
  */
 export default (Component: ComponentType<*>) =>
   // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/8145
-  !isMemo(Component) ? Component : Component.type;
+  !isMemo(Component) ? Component : Component.type || Component;

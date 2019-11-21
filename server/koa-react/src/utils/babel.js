@@ -50,7 +50,30 @@ export default declare(
           ]),
           t.identifier('hot'),
         ),
-        [node],
+        [
+          t.callExpression(
+            t.memberExpression(
+              t.callExpression(t.identifier('require'), [
+                t.stringLiteral('@mikojs/koa-react/lib/utils/getStatic'),
+              ]),
+              t.identifier('hoistNonReactStaticsHotExported'),
+            ),
+            [
+              node,
+              t.binaryExpression(
+                '!==',
+                t.memberExpression(
+                  t.memberExpression(
+                    t.identifier('process'),
+                    t.identifier('env'),
+                  ),
+                  t.identifier('NODE_ENV'),
+                ),
+                t.stringLiteral('production'),
+              ),
+            ],
+          ),
+        ],
       );
 
     return {

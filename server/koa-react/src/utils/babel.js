@@ -75,9 +75,17 @@ export default declare(
           ),
         ],
       );
+    let isReact: boolean = false;
 
     return {
+      pre: () => {
+        isReact = false;
+      },
       visitor: {
+        ImportDeclaration: (path: nodePathType) => {
+          if (t.isStringLiteral(path.node.source, { value: 'react' }))
+            isReact = true;
+        },
         Identifier: (
           path: nodePathType,
           {
@@ -93,6 +101,17 @@ export default declare(
           switch (path.node.name) {
             case 'require': {
               if (!t.isCallExpression(path.parentPath.node)) return;
+
+              if (
+                t.isStringLiteral(path.parentPath.node.arguments[0], {
+                  value: 'react',
+                })
+              ) {
+                isReact = true;
+                return;
+              }
+
+              if (!isReact) return;
 
               const templateFolder = nodePath.resolve(
                 __dirname,
@@ -119,6 +138,7 @@ export default declare(
 
             case 'module':
               if (
+                !isReact ||
                 !t.isMemberExpression(path.parentPath.node) ||
                 !t.isIdentifier(path.parentPath.node.property, {
                   name: 'exports',
@@ -147,7 +167,7 @@ export default declare(
         ExportDefaultDeclaration: (path: nodePathType) => {
           const rootNode = path.node.declaration;
 
-          if (isAddedHotLoader(rootNode)) return;
+          if (!isReact || isAddedHotLoader(rootNode)) return;
 
           path.replaceWith(
             t.exportDefaultDeclaration(addHotLoader(path.node.declaration)),

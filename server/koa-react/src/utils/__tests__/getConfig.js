@@ -14,14 +14,16 @@ jest.mock(
     },
 );
 
-test('routes data is smaller then 2', async () => {
-  expect(
-    getConfig(
-      false,
-      '/',
-      undefined,
-      undefined,
-      new Cache('/folderPath', emptyFunction.thatReturnsArgument),
-    ).optimization.splitChunks.cacheGroups.commons.minChunks,
-  ).toBe(2);
+describe('get config', () => {
+  test('routes data is smaller then 2', () => {
+    expect(
+      getConfig(
+        false,
+        '/',
+        undefined,
+        undefined,
+        new Cache('/folderPath', emptyFunction.thatReturnsArgument),
+      ).optimization.splitChunks.cacheGroups.commons.minChunks,
+    ).toBe(2);
+  });
 });

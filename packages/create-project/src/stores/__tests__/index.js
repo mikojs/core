@@ -42,11 +42,13 @@ describe('store', () => {
 
       await example.conflictFile(filePath, content);
 
-      if (inquirerResult.action === 'diff') {
-        expect(mockLog).toHaveBeenCalledWith(' test;\n');
-        expect(mockLog).toHaveBeenCalledWith(chalk`{red -removed;\n}`);
-        expect(mockLog).toHaveBeenCalledWith(chalk`{green +added;}`);
-      } else expect(mockLog).not.toHaveBeenCalled();
+      if (inquirerResult.action === 'diff')
+        expect(mockLog).toHaveBeenCalledWith(
+          `test;
+${chalk`{red removed;
+}${chalk`{green added;}`}`}`,
+        );
+      else expect(mockLog).not.toHaveBeenCalled();
 
       expect(outputFileSync.destPaths).toHaveLength(length);
       expect(outputFileSync.contents).toHaveLength(length);

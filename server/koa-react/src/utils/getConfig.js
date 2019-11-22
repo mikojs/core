@@ -34,10 +34,13 @@ export default (
   devtool: dev ? 'eval' : false,
   entry: !basename
     ? {
-        client: [CLIENT_PATH],
+        client: ['react-hot-loader/patch', CLIENT_PATH],
       }
     : {
-        [`${basename.replace(/^\//, '')}/client`]: [CLIENT_PATH],
+        [`${basename.replace(/^\//, '')}/client`]: [
+          'react-hot-loader/patch',
+          CLIENT_PATH,
+        ],
       },
   output: {
     path: dev ? undefined : path.resolve('./public/js'),
@@ -80,39 +83,33 @@ export default (
     rules: [
       {
         test: /\.jsx?$/,
-        include: [CLIENT_PATH],
-        loader: path.resolve(__dirname, './replaceLoader.js'),
+        include: [CLIENT_PATH, ROOT_PATH, folderPath],
+        loader: 'babel-loader',
         options: {
-          type: 'routers',
-          cacheDir: cache.cacheDir(),
+          plugins: [
+            [
+              path.resolve(__dirname, './babel.js'),
+              {
+                cacheDir: cache.cacheDir,
+              },
+            ],
+            'react-hot-loader/babel',
+          ],
         },
       },
-      ...(!dev
-        ? []
-        : [
-            {
-              test: /\.jsx?$/,
-              include: [CLIENT_PATH],
-              loader: path.resolve(__dirname, './replaceLoader.js'),
-              options: {
-                type: 'set-config',
-              },
-            },
-            {
-              test: /\.jsx?$/,
-              include: [folderPath, ROOT_PATH],
-              exclude,
-              loader: path.resolve(__dirname, './replaceLoader.js'),
-              options: {
-                type: 'react-hot-loader',
-              },
-            },
-            {
-              test: /\.jsx?$/,
-              include: /node_modules/,
-              use: ['react-hot-loader/webpack'],
-            },
-          ]),
+      {
+        test: /\.jsx?$/,
+        exclude: [/node_modules/, folderPath],
+        loader: 'babel-loader',
+        options: {
+          plugins: ['react-hot-loader/babel'],
+        },
+      },
     ],
+  },
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
   },
 });

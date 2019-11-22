@@ -1,33 +1,34 @@
 // @flow
 
-import React, { useContext, useEffect } from 'react';
-import { DndContext, DndProvider } from 'react-dnd-cjs';
+import React, { type Node as NodeType } from 'react';
+import { DndProvider } from 'react-dnd-cjs';
 import HTML5Backend from 'react-dnd-html5-backend-cjs';
-import Frame, { FrameContext } from 'react-frame-component';
+import Frame from 'react-frame-component';
 
 import SourceContext from './SourceContext';
 import Previewer from './Previewer';
 
 import useSource from './hooks/useSource';
 import useDnd from './hooks/useDnd';
+import useMainProps from './hooks/useMainProps';
 
 import * as styles from './styles';
 
 /* eslint-disable */
-const Example = React.forwardRef((props, forwardedRef) => (
-  <div {...props} ref={forwardedRef}>
-    test
-  </div>
-));
+const Example = React.forwardRef(
+  ({ children, ...props }: { children?: NodeType }, forwardedRef) => (
+    <div {...props} ref={forwardedRef}>
+      {/* istanbul ignore next */ React.Children.count(children) === 0
+        ? 'test'
+        : children}
+    </div>
+  ),
+);
 
 const Manager = React.memo(() => (
   <div>
-    <Example
-      {...useDnd({ id: '1', type: 'drag-and-drop', component: Example })}
-    />
-    <Example
-      {...useDnd({ id: '2', type: 'drag-and-drop', component: Example })}
-    />
+    <Example {...useDnd({ id: '1', type: 'only-drag', component: Example })} />
+    <Example {...useDnd({ id: '2', type: 'only-drag', component: Example })} />
   </div>
 ));
 /* eslint-enable */
@@ -37,18 +38,7 @@ const main = {
   parentId: null,
   type: 'only-drop-to-add',
   component: 'main',
-  getProps: (): {} => {
-    const { dragDropManager } = useContext(DndContext);
-    const { window } = useContext(FrameContext);
-
-    useEffect(() => {
-      dragDropManager.getBackend().addEventListeners(window);
-    }, []);
-
-    return {
-      style: styles.main,
-    };
-  },
+  getProps: useMainProps,
 };
 
 /** @react use to control the all main components */

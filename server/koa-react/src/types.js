@@ -28,9 +28,9 @@ export type mainCtxType<P = {}, T = {}, C = ComponentType<P>> = ctxType<T> & {|
 
 export type errorPropsType = {|
   error: Error,
-  errorInfo: {|
+  errorInfo: {
     componentStack: string,
-  |},
+  },
 |};
 
 export type pageCtxType<T = {}> = ctxType<T> & {|

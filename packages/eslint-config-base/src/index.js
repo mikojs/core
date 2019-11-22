@@ -3,10 +3,12 @@
 import importConfig from './configs/import';
 import flowtypeConfig from './configs/flowtype';
 import jsdocConfig from './configs/jsdoc';
+import reactHooks from './configs/reactHooks';
 import extendsConfig from './configs/extendsConfigs';
 
 type configType = {
-  extends: $ReadOnlyArray<string>,
+  extends?: $ReadOnlyArray<string>,
+  plugins?: $ReadOnlyArray<string>,
   parser?: 'babel-eslint',
   env?: {|
     jest: true,
@@ -44,6 +46,7 @@ export default [
   importConfig,
   flowtypeConfig,
   jsdocConfig,
+  reactHooks,
   extendsConfig,
 ].reduce(
   (newConfig: configType, otherConfig: configType) =>
@@ -51,9 +54,10 @@ export default [
       (config: configType, key: string): configType => {
         switch (key) {
           case 'extends':
+          case 'plugins':
             return {
               ...config,
-              [key]: [...newConfig[key], ...otherConfig[key]],
+              [key]: [...(newConfig[key] || []), ...(otherConfig[key] || [])],
             };
 
           case 'settings':

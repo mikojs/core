@@ -15,21 +15,21 @@
     "@babel/runtime": "^7.7.2",
     "@mikojs/utils": "^1.7.1",
     "chalk": "^3.0.0",
-    "commander": "^4.0.0",
+    "commander": "^4.0.1",
     "debug": "^4.1.1",
     "diff": "^4.0.1",
-    "envinfo": "^7.4.0",
-    "execa": "^3.2.0",
+    "envinfo": "^7.5.0",
+    "execa": "^3.3.0",
     "fbjs": "^1.0.0",
     "inquirer": "^7.0.0",
     "memoize-one": "^5.1.1",
-    "ora": "^4.0.2",
+    "ora": "^4.0.3",
     "output-file-sync": "^2.0.1",
-    "validator": "^12.0.0"
+    "validator": "^12.1.0"
   },
   "devDependencies": {
     "@mikojs/configs": "^1.8.0",
-    "d3-hierarchy": "^1.1.8",
+    "d3-hierarchy": "^1.1.9",
     "directory-tree": "^2.2.4",
     "prettier": "^1.19.1",
     "prettier-package-json": "^2.1.0"

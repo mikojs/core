@@ -34,7 +34,9 @@ export const hoistNonReactStaticsHotExported = (
   Component: memoComponentType,
   isDev: boolean,
 ): memoComponentType => {
+  // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/8145
   if (isMemo(Component) && isDev)
+    // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/8145
     hoistNonReactStatics(Component, Component.type);
 
   return Component;

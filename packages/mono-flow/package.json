@@ -1,0 +1,14 @@
+{
+  "name": "@mikojs/mono-flow",
+  "description": "Using flow-bin in the mono repo",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/mono-flow",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/mono-flow",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "keywords": ["flow-bin", "mono"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

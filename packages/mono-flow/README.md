@@ -13,5 +13,5 @@ Using `flow-bin` in the mono repo.
 ## Install
 
 ```sh
-yarn add flow-bin mono-flow
+yarn add flow-bin @mikojs/mono-flow
 ```

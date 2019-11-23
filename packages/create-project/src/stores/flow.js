@@ -13,8 +13,6 @@ import Store from './index';
 const template = (
   useStyles: $PropertyType<$PropertyType<Store, 'ctx'>, 'useStyles'>,
 ) => `[ignore]
-# just for findup
-.*/node_modules/findup/test/.*
 
 [include]
 

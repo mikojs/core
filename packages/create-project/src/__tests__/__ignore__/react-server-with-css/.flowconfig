@@ -1,6 +1,4 @@
 [ignore]
-# just for findup
-.*/node_modules/findup/test/.*
 
 [include]
 

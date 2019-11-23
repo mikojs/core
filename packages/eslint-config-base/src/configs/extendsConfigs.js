@@ -1,9 +1,10 @@
 // @flow
 
 /**
- * extends eslint-config-fbjs, eslint-config-google
+ * extends eslint-config-fbjs, eslint-config-google, eslint-config-prettier
  * repo: https://github.com/facebook/fbjs/tree/master/packages/eslint-config-fbjs
  *       https://github.com/google/eslint-config-google
+ *       https://github.com/prettier/eslint-config-prettier
  */
 
 export default {

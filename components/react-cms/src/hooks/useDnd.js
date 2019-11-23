@@ -77,6 +77,12 @@ const useDnd = (item: itemType): {} => {
 
   if (CAN_DROP_TYPE.includes(item.type)) connectDrop(newProps.ref);
 
+  if (item.type === 'none')
+    newProps.style = {
+      ...newProps.style,
+      opacity: 0.5,
+    };
+
   if (!isDragging && isOneOfItemDragging) {
     if (width === 0)
       newProps.style = {

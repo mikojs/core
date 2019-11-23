@@ -1,53 +1,98 @@
 // @flow
 
+import path from 'path';
+
 export default [
   [
-    'routers',
-    '"templates/Main"."templates/Loading"."templates/Error"."templates/routesData"',
-    '/cache-dir',
-    '"/cache-dir/Main"."/cache-dir/Loading"."/cache-dir/Error"."/cache-dir/routesData"',
+    `import React from 'react';
+
+import Main from '../../../templates/Main';
+import Loading from '../../../templates/Loading';
+import Error from '../../../templates/Error';
+import routesData from '../../../templates/routesData';`,
+    `"use strict";
+
+var _react = _interopRequireDefault(require("react"));
+
+var _Main = _interopRequireDefault(require("Main"));
+
+var _Loading = _interopRequireDefault(require("Loading"));
+
+var _Error = _interopRequireDefault(require("Error"));
+
+var _routesData = _interopRequireDefault(require("routesData"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }`,
   ],
   [
-    'set-config',
-    '/** setConfig */',
-    undefined,
-    "require('react-hot-loader').setConfig || ",
+    `import React from 'react';
+
+export default Root;`,
+    `"use strict";
+
+require("core-js/modules/es6.object.define-property");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _default = require("react-hot-loader/root").hot(require("@mikojs/koa-react/lib/utils/getStatic").hoistNonReactStaticsHotExported(Root, process.env.NODE_ENV !== "production"));
+
+exports["default"] = _default;
+module.exports = exports.default;`,
   ],
   [
-    'react-hot-loader',
-    'module.exports = module;',
-    undefined,
-    `var _replace_fd5c1 = module;
+    `import React from 'react';
 
-if (require('react-is').isMemo(_replace_fd5c1))
-  require('hoist-non-react-statics')(_replace_fd5c1, _replace_fd5c1.type);
+module.exports = Root;`,
+    `"use strict";
 
-module.exports = require('react-hot-loader/root').hot(_replace_fd5c1);`,
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+module.exports = require("react-hot-loader/root").hot(require("@mikojs/koa-react/lib/utils/getStatic").hoistNonReactStaticsHotExported(Root, process.env.NODE_ENV !== "production"));`,
   ],
   [
-    'react-hot-loader',
-    'exports["default"] = module;',
-    undefined,
-    `var _replace_41d81 = module;
+    `import Main from '../../../templates/Main';
 
-if (require('react-is').isMemo(_replace_41d81))
-  require('hoist-non-react-statics')(_replace_41d81, _replace_41d81.type);
+delete require.cache['test'];`,
+    `"use strict";
 
-exports["default"] = require('react-hot-loader/root').hot(_replace_41d81);`,
+var _Main = _interopRequireDefault(require("../../../templates/Main"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+delete require.cache['test'];`,
   ],
   [
-    'react-hot-loader',
-    `exports["default"] = module;
+    `import React from 'react';
 
-exports.test = () => {};`,
-    undefined,
-    `var _replace_293fa = module;
+module.exports;`,
+    `"use strict";
 
-exports.test = () => {};
+var _react = _interopRequireDefault(require("react"));
 
-if (require('react-is').isMemo(_replace_293fa))
-  require('hoist-non-react-statics')(_replace_293fa, _replace_293fa.type);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-exports["default"] = require('react-hot-loader/root').hot(_replace_293fa);`,
+module.exports;`,
+  ],
+  [
+    `import React from 'react';
+import Main from '../../../templates/Main';`,
+    `"use strict";
+
+var _react = _interopRequireDefault(require("react"));
+
+var _Main = _interopRequireDefault(require("../../../templates/Main"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }`,
+    (filename: string) =>
+      path.resolve(__dirname, '../../../templates', filename),
   ],
 ];

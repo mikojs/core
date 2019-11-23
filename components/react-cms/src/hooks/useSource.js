@@ -2,7 +2,7 @@
 
 import { useMemo, useReducer, type ComponentType } from 'react';
 import memoizeOne from 'memoize-one';
-import { areEqual } from 'fbjs';
+import { areEqual, invariant } from 'fbjs';
 import uuid from 'uuid/v4';
 
 export type itemType = {|
@@ -101,10 +101,11 @@ const sourceReducer = (
 
       const newSource = [...source];
       const preview = newSource.find(
-        ({ id }: $ElementType<sourceType, number>) => id === current.id,
+        ({ id }: $ElementType<sourceType, number>) => id === previewId,
       );
 
-      if (preview) preview.parentId = target.id;
+      invariant(preview, `Can not find preview by ${previewId}`);
+      preview.parentId = target.id;
 
       return {
         previewId,

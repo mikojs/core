@@ -37,15 +37,11 @@ export default declare(
             t.callExpression(path.node, [
               t.conditionalExpression(
                 t.memberExpression(
-                  // eslint-disable-next-line new-cap
-                  t.Identifier('globalThis'),
-                  // eslint-disable-next-line new-cap
-                  t.Identifier('window'),
+                  t.identifier('globalThis'),
+                  t.identifier('window'),
                 ),
-                // eslint-disable-next-line new-cap
-                t.StringLiteral(path.parentPath.node.arguments[0].value),
-                // eslint-disable-next-line new-cap
-                t.StringLiteral(
+                t.stringLiteral(path.parentPath.node.arguments[0].value),
+                t.stringLiteral(
                   nodePath.relative(
                     nodePath.dirname(filename),
                     nodePath.resolve(__dirname, './emptyCssFile.js'),

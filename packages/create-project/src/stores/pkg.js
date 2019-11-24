@@ -1,10 +1,13 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
 import memoizeOne from 'memoize-one';
 import { isURL } from 'validator';
 import { emptyFunction } from 'fbjs';
+
+import { requireModule } from '@mikojs/utils';
 
 import Store from './index';
 
@@ -19,25 +22,37 @@ import getUser from 'utils/getUser';
  *
  * @return {Array} - the pkg questions
  */
-export const getPkgQuestions = (projectDir: string) => [
+export const getPkgQuestions = (
+  projectDir: string,
+  {
+    name,
+    private: isPrivate,
+    description,
+    homepage,
+    repository,
+    keywords,
+  }: $NonMaybeType<$PropertyType<$PropertyType<Store, 'ctx'>, 'pkg'>>,
+) => [
   {
     name: 'name',
-    default: path.basename(projectDir),
+    default: name || path.basename(projectDir),
   },
   {
     name: 'private',
     message: 'is private or not',
     type: 'confirm',
-    default: false,
+    default: isPrivate || false,
   },
   {
     name: 'description',
+    default: description,
   },
   {
     name: 'homepage',
     validate: (val: string) =>
       isURL(val, { require_protocol: true }) ||
       'must be url, for example: https://mikojs.github.io',
+    default: homepage,
   },
   {
     name: 'repository',
@@ -45,6 +60,7 @@ export const getPkgQuestions = (projectDir: string) => [
       isURL(val, { require_protocol: true }) ||
       /^git@.*:.*\.git$/.test(val) ||
       'must be url or git ssh, for example: https://github.com/mikojs/core.git',
+    default: repository,
   },
   {
     name: 'keywords',
@@ -53,6 +69,8 @@ export const getPkgQuestions = (projectDir: string) => [
       val.split(/\s*,\s*/g).filter((d: string) => d !== ''),
     validate: (val: $ReadOnlyArray<string>) =>
       val.length !== 0 || 'can not be empty',
+    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+    default: keywords?.join(','),
   },
 ];
 
@@ -74,12 +92,16 @@ class Pkg extends Store {
    */
   +defaultInfo = memoizeOne(
     async ({ projectDir, lerna }: $PropertyType<Store, 'ctx'>) => {
+      const pkgPath = path.resolve(projectDir, './package.json');
+
       const [username, email] = await getUser();
       const questionResult = await this.prompt<$ReadOnlyArray<string>>(
-        ...getPkgQuestions(projectDir),
+        ...getPkgQuestions(
+          projectDir,
+          fs.existsSync(pkgPath) ? requireModule(pkgPath) : {},
+        ),
       );
 
-      this.storePkg.name = path.basename(projectDir);
       this.storePkg.author = `${username} <${email}>`;
 
       if (!lerna) {
@@ -92,6 +114,7 @@ class Pkg extends Store {
       }
 
       ([
+        'name',
         'private',
         'description',
         'homepage',

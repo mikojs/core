@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/koa-react",
-  "description": "Collect the react files to build the pages automatically",
+  "description": "Collect the react files to build the pages automatically.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/koa-react",

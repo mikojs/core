@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/create-project",
-  "description": "Creating project for mikojs",
+  "description": "Creating project for mikojs.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/create-project",

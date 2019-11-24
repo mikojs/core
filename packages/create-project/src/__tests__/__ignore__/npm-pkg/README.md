@@ -20,7 +20,7 @@ package description
 ## Install
 
 ```sh
-yarn add npm-pkg
+yarn add package-name
 ```
 
 ## Develop

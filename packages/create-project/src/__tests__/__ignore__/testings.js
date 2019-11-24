@@ -39,6 +39,7 @@ const basicUsage = {
     action: 'overwrite',
 
     // pkg
+    name: 'package-name',
     private: false,
     description: 'package description',
     homepage: 'http://mikojs/package-homepage',

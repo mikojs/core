@@ -9,7 +9,7 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.7.2",
+    "@babel/runtime": "^7.7.4",
     "@mikojs/utils": "^1.7.1",
     "chalk": "^3.0.0",
     "commander": "^4.0.1",

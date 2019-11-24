@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/utils",
-  "description": "Util tools for mikojs",
+  "description": "Util tools for mikojs.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/utils",

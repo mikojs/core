@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/koa-base",
-  "description": "The base of koa middleware with mikojs",
+  "description": "The base of koa middleware with mikojs.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/koa-base",

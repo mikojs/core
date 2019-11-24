@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/babel-preset-base",
-  "description": "The base of babel plugin with mikojs",
+  "description": "The base of babel plugin with mikojs.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-preset-base",

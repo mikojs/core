@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/eslint-config-base",
-  "description": "Eslint config fo mikojs",
+  "description": "Eslint config fo mikojs.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/eslint-config-base",

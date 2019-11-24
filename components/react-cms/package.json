@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@mikojs/react-cms",
-  "description": "Use to build the website with the react components",
+  "description": "Use to build the website with the react components.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/react-dnd",

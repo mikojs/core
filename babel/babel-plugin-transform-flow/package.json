@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/babel-plugin-transform-flow",
-  "description": "Use to build the flow files with babel",
+  "description": "Use to build the flow files with babel.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-plugin-transform-flow",

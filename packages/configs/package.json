@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/configs",
-  "description": "Use to manage the multiple configs",
+  "description": "Use to manage the multiple configs.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/configs",

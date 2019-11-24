@@ -48,8 +48,8 @@
     "webpack": ">=4.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/traverse": "^7.7.2",
+    "@babel/core": "^7.7.4",
+    "@babel/traverse": "^7.7.4",
     "enzyme": "^3.10.0",
     "get-port": "^5.0.0",
     "koa": "^2.11.0",

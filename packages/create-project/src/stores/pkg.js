@@ -93,7 +93,6 @@ class Pkg extends Store {
   +defaultInfo = memoizeOne(
     async ({ projectDir, lerna }: $PropertyType<Store, 'ctx'>) => {
       const pkgPath = path.resolve(projectDir, './package.json');
-
       const [username, email] = await getUser();
       const questionResult = await this.prompt<$ReadOnlyArray<string>>(
         ...getPkgQuestions(

@@ -1,6 +1,6 @@
 // @flow
 
-import pkg, { PKG_QUESTIONS } from '../pkg';
+import pkg, { getPkgQuestions } from '../pkg';
 
 /**
  * @example
@@ -12,14 +12,18 @@ const notFind = (argu: string) => {
   throw new Error('not find');
 };
 
-pkg.ctx = {
-  projectDir: 'project dir',
-  skipCommand: false,
-  lerna: false,
-  verbose: true,
-};
-
 describe('pkg store', () => {
+  test('can not find the previous package.json', async () => {
+    expect(
+      await pkg.defaultInfo({
+        projectDir: 'projectDir',
+        lerna: false,
+        skipCommand: false,
+        verbose: false,
+      }),
+    ).toBeUndefined();
+  });
+
   describe('validate', () => {
     describe.each`
       questionName    | success                                 | fail  | errorMessage
@@ -44,7 +48,7 @@ describe('pkg store', () => {
         }: {
           validate?: (string & $ReadOnlyArray<string>) => true | string,
         } =
-          PKG_QUESTIONS.find(
+          getPkgQuestions('/', {}).find(
             ({ name }: { name: string }) => name === questionName,
           ) || {};
 
@@ -66,7 +70,7 @@ describe('pkg store', () => {
       }: {
         filter?: string => $ReadOnlyArray<string>,
       } =
-        PKG_QUESTIONS.find(
+        getPkgQuestions('/', {}).find(
           ({ name }: { name: string }) => name === 'keywords',
         ) || {};
 

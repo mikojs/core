@@ -11,7 +11,19 @@ import Store from './index';
 import getEngines from 'utils/getEngines';
 import getUser from 'utils/getUser';
 
-export const PKG_QUESTIONS = [
+/**
+ * @example
+ * getPkgQuestions('/project-dir')
+ *
+ * @param {string} projectDir - the project dir
+ *
+ * @return {Array} - the pkg questions
+ */
+export const getPkgQuestions = (projectDir: string) => [
+  {
+    name: 'name',
+    default: path.basename(projectDir),
+  },
   {
     name: 'private',
     message: 'is private or not',
@@ -64,7 +76,7 @@ class Pkg extends Store {
     async ({ projectDir, lerna }: $PropertyType<Store, 'ctx'>) => {
       const [username, email] = await getUser();
       const questionResult = await this.prompt<$ReadOnlyArray<string>>(
-        ...PKG_QUESTIONS,
+        ...getPkgQuestions(projectDir),
       );
 
       this.storePkg.name = path.basename(projectDir);

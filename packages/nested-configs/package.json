@@ -1,0 +1,17 @@
+{
+  "name": "@mikojs/nested-configs",
+  "description": "Find the all configs and run the command with the folders of the configs.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/nested-configs",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/nested-configs",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@mikojs/utils": "^1.7.1"
+  },
+  "keywords": ["nested configs"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

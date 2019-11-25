@@ -28,9 +28,8 @@ const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
     alias: cli = cliName,
     configsFiles = {},
     ignore: getIgnore,
-    ignoreName,
   } = configs.store[cliName];
-  const ignore = getIgnore?.([]) || [];
+  const { name: ignoreName, ignore = [] } = getIgnore?.() || {};
 
   if (Object.keys(configsFiles).length === 0) {
     logger

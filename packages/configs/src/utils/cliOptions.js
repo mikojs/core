@@ -139,7 +139,6 @@ export default (
             (result: {}, key: string): {} => {
               switch (key) {
                 case 'install':
-                case 'ignore':
                 case 'run':
                   return {
                     ...result,
@@ -151,6 +150,12 @@ export default (
                   return {
                     ...result,
                     [key]: config[key]({}),
+                  };
+
+                case 'ignore':
+                  return {
+                    ...result,
+                    [key]: config[key](),
                   };
 
                 default:

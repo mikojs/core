@@ -26,24 +26,23 @@ const logger = createLogger('@mikojs/create-project');
 export default (
   argv: $ReadOnlyArray<string>,
 ): ?$PropertyType<StoresType, 'ctx'> => {
-  const program = new commander.Command('create-project')
-    .version(version, '-v, --version')
-    .arguments('<project directory>')
-    .usage(chalk`{green <project directory>}`)
-    .description(
-      chalk`Example:
-  create-project {green <project directory>}`,
-    )
-    .option('--lerna', 'create package in the lerna-managed repo')
-    .option('--skip-command', 'skip running commands')
-    .option('--verbose', 'log everything');
-
   const {
     args: [projectDir],
-    skipCommand = false,
-    lerna = false,
-    verbose = false,
-  } = program.parse([...argv]);
+    lerna,
+    skipCommand,
+    verbose,
+  } = new commander.Command('create-project')
+    .version(version, '-v, --version')
+    .arguments('<project-directory>')
+    .usage(chalk`{green <project-directory>}`)
+    .description(
+      chalk`Example:
+  create-project {green <project-directory>}`,
+    )
+    .option('--lerna', 'create package in the lerna-managed repo', false)
+    .option('--skip-command', 'skip running commands', false)
+    .option('--verbose', 'log everything', false)
+    .parse([...argv]);
 
   if (!projectDir) {
     logger.fail(chalk`{red \`project directory\`} is required`);

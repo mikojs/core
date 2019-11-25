@@ -17,12 +17,17 @@ describe('configs', () => {
 
           switch (key) {
             case 'alias':
-            case 'ignoreName':
               expect(value).toBeTruthy();
               break;
 
-            case 'install':
             case 'ignore':
+              (['prettier', 'lint', 'lint:watch'].includes(configKey)
+                ? expect(value().name).not
+                : expect(value())
+              ).toBeUndefined();
+              break;
+
+            case 'install':
             case 'run':
               (configKey === 'exec' ||
               (configKey === 'flow-typed:lerna' && key === 'run')

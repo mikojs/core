@@ -63,7 +63,7 @@ describe('configs', () => {
   `('$testName', ({ configName }: {| configName: string |}) => {
     expect(configs.store[configName].install([])).toEqual([]);
     expect(configs.store[configName].config({})).toEqual({});
-    expect(configs.store[configName].ignore([])).toEqual([]);
+    expect(configs.store[configName].ignore()).toBeUndefined();
     expect(configs.store[configName].run([])).toEqual([]);
   });
 });

@@ -58,11 +58,14 @@ const lint = {
       },
     ],
   }),
-  ignore: ignore => [
+  ignore: ignore => ({
     ...ignore,
-    // ignore for @mikojs/eslint-config-base testing
-    'packages/eslint-config-base/src/__tests__/__ignore__',
-  ],
+    ignore: [
+      ...ignore.ignore,
+      // ignore for @mikojs/eslint-config-base testing
+      'packages/eslint-config-base/src/__tests__/__ignore__',
+    ],
+  }),
 };
 
 const jest = {

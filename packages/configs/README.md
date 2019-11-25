@@ -94,31 +94,35 @@ module.exports = {
 
   // add custom config, each field is optional
   custom: {
-    aliase: 'babel',             // run config with babel cli
-    getCli: () => 'path-to-cli', // cli path which is used to run the command
-    install: install => [        // install packages
+    alias: 'babel',               // run config with babel cli
+    // or
+    alias: argv => 'path-to-cli', // cli path which is used to run the command
+
+    install: install => [         // install packages
       ...install,
       '@mikojs/configs',
     ],
-    config: config => {          // write the config
+    config: config => {           // write the config
       ...config,
       key: 'value',
     },
-    ignore: ignore => [          // generate ignore file
-      ...ignore,
-      'node_modules'
-    ],
-    ignoreName: '.gitignore'     // ignore filename
-    run: argv => [               // command to run
+    ignore: ignore => {           // generate ignore file
+      name: '.gitignore',
+      ignore: [
+        ...ignore.ignore,
+        'node_modules',
+      ],
+    },
+    run: argv => [                // command to run
       ...argv,
       'src',
       '-d',
       'lib',
     ],
-    env: {                       // run command with environment
+    env: {                        // run command with environment
       NODE_ENV: 'development',
     },
-    configsFiles: {              // link the config files. For example, `jest` need to run with `babel`, you need to add `babel: true`
+    configsFiles: {               // link the config files. For example, `jest` need to run with `babel`, you need to add `babel: true`
       eslint: true,
     },
   },

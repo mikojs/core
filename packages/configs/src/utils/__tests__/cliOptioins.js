@@ -24,9 +24,12 @@ describe('cli options', () => {
           },
         },
         runCmd: {
-          alias: 'babel',
+          alias: () => babelCli,
           install: emptyFunction.thatReturnsArgument,
           config: emptyFunction.thatReturnsArgument,
+          ignore: () => ({
+            name: 'ignore',
+          }),
           run: emptyFunction.thatReturnsArgument,
         },
       },

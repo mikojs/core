@@ -2,4 +2,4 @@
 
 import { throwMessageInIndex } from '@mikojs/utils';
 
-throwMessageInIndex('@mikojs/nested-configs');
+throwMessageInIndex('@mikojs/nested-flow');

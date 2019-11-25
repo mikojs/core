@@ -1,10 +1,10 @@
 {
-  "name": "@mikojs/nested-configs",
+  "name": "@mikojs/nested-flow",
   "description": "Find the all configs and run the command with the folders of the configs.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://mikojs.github.io/core/nested-configs",
-  "repository": "https://github.com/mikojs/core/tree/master/packages/nested-configs",
+  "homepage": "https://mikojs.github.io/core/nested-flow",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/nested-flow",
   "version": "1.0.0",
   "main": "./lib/index.js",
   "dependencies": {

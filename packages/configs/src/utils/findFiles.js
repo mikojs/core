@@ -36,7 +36,9 @@ const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
       .fail('Can not generate the config file, You can:')
       .fail('')
       .fail(
-        chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configsFiles.${cli}\`}`,
+        chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configsFiles.${
+          typeof cli === 'function' ? '<key>' : cli
+        }\`}`,
       )
       .fail(chalk`  - Run command with {cyan \`--configs-files\`} options`)
       .fail('');

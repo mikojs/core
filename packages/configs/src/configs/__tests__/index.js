@@ -17,12 +17,21 @@ describe('configs', () => {
 
           switch (key) {
             case 'alias':
-            case 'ignoreName':
-              expect(value).toBeTruthy();
+              if (typeof value !== 'function') expect(value).toBeTruthy();
+              else
+                expect(value([configKey, 'babel'])).toBe(
+                  path.resolve('./node_modules/.bin/babel'),
+                );
+              break;
+
+            case 'ignore':
+              (['prettier', 'lint', 'lint:watch'].includes(configKey)
+                ? expect(value().name).not
+                : expect(value())
+              ).toBeUndefined();
               break;
 
             case 'install':
-            case 'ignore':
             case 'run':
               (configKey === 'exec' ||
               (configKey === 'flow-typed:lerna' && key === 'run')
@@ -33,12 +42,6 @@ describe('configs', () => {
 
             case 'config':
               expect(Object.keys(value({ configsEnv: [] }))).not.toBe(0);
-              break;
-
-            case 'getCli':
-              expect(value([configKey, 'babel'])).toBe(
-                path.resolve('./node_modules/.bin/babel'),
-              );
               break;
 
             case 'env':

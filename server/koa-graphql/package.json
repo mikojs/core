@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/koa-graphql",
-  "description": "Collect the graphql files to build the graphql automatically",
+  "description": "Collect the graphql files to build the graphql automatically.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/koa-graphql",

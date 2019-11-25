@@ -6,7 +6,9 @@ export default {
     singleQuote: true,
     trailingComma: 'all',
   }),
-  ignoreName: '.prettierignore',
+  ignore: () => ({
+    name: '.prettierignore',
+  }),
   run: (argv: $ReadOnlyArray<string>) => [...argv, '--write'],
   configsFiles: {
     prettier: '.prettierrc.js',

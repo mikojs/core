@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/server",
-  "description": "Run koa server with pipeline",
+  "description": "Run koa server with pipeline.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/server",

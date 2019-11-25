@@ -31,23 +31,25 @@ export default {
           }),
     },
   }),
-  ignore: () => [
-    // node
-    'node_modules',
+  ignore: () => ({
+    name: '.eslintignore',
+    ignore: [
+      // node
+      'node_modules',
 
-    // babel
-    'lib',
+      // babel
+      'lib',
 
-    // flow
-    'flow-typed/npm',
+      // flow
+      'flow-typed/npm',
 
-    // jest
-    'coverage',
+      // jest
+      'coverage',
 
-    // add checking other configs
-    '!.*',
-  ],
-  ignoreName: '.eslintignore',
+      // add checking other configs
+      '!.*',
+    ],
+  }),
   run: (argv: $ReadOnlyArray<string>) => [...argv, '--cache', '--color'],
   env: {
     NODE_ENV: 'test',

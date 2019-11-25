@@ -95,7 +95,6 @@ export class Configs {
 
       this.store[key] = {
         alias: customConfig.alias || config.alias,
-        getCli: customConfig.getCli || config.getCli,
         install: (install: $ReadOnlyArray<string>) =>
           install
           |> config.install || emptyFunction.thatReturnsArgument
@@ -107,11 +106,13 @@ export class Configs {
           |> this.addConfigsEnv
           |> customConfig.config || emptyFunction.thatReturnsArgument
           |> this.removeConfigsEnv,
-        ignore: (ingore: $ReadOnlyArray<string>) =>
-          ingore
+        ignore: (ignore?: {|
+          name?: string,
+          ignore?: $ReadOnlyArray<string>,
+        |}) =>
+          ignore
           |> config.ignore || emptyFunction.thatReturnsArgument
           |> customConfig.ignore || emptyFunction.thatReturnsArgument,
-        ignoreName: customConfig.ignoreName || config.ignoreName,
         run: (argv: $ReadOnlyArray<string>) =>
           argv
           |> config.run || emptyFunction.thatReturnsArgument

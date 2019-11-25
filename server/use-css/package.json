@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/use-css",
-  "description": "Add css config to @mikojs/koa-react",
+  "description": "Add css config to @mikojs/koa-react.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/use-css",

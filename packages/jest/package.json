@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/jest",
-  "description": "Jest setup files",
+  "description": "Jest setup files.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/jest",

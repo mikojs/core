@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@mikojs/website",
-  "description": "The website of @mikojs/core documentation",
+  "description": "The website of @mikojs/core documentation.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core",

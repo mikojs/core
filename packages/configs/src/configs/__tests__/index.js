@@ -17,7 +17,11 @@ describe('configs', () => {
 
           switch (key) {
             case 'alias':
-              expect(value).toBeTruthy();
+              if (typeof value !== 'function') expect(value).toBeTruthy();
+              else
+                expect(value([configKey, 'babel'])).toBe(
+                  path.resolve('./node_modules/.bin/babel'),
+                );
               break;
 
             case 'ignore':
@@ -38,12 +42,6 @@ describe('configs', () => {
 
             case 'config':
               expect(Object.keys(value({ configsEnv: [] }))).not.toBe(0);
-              break;
-
-            case 'getCli':
-              expect(value([configKey, 'babel'])).toBe(
-                path.resolve('./node_modules/.bin/babel'),
-              );
               break;
 
             case 'env':

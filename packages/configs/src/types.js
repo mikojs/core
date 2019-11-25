@@ -5,8 +5,7 @@ export type funcConfigType = (config: {
 }) => {};
 
 export type objConfigType = {|
-  alias?: string,
-  getCli?: (argv: $ReadOnlyArray<string>) => string,
+  alias?: string | ((argv: $ReadOnlyArray<string>) => string),
   install?: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
   config?: funcConfigType,
   ignore?: (ignore?: {|

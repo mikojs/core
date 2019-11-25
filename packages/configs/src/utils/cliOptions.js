@@ -210,8 +210,6 @@ export default (
 
   const {
     alias: cli = cliName,
-    getCli = (newArgs: $ReadOnlyArray<string>) =>
-      npmWhich(process.cwd()).sync(cli),
     install = emptyFunction.thatReturnsArgument,
     run = emptyFunction.thatReturnsArgument,
     env = {},
@@ -243,7 +241,10 @@ export default (
       result.cli = 'remove';
       result.argv = [];
     } else {
-      result.cli = getCli([cliName, ...rawArgsFiltered]);
+      result.cli =
+        typeof cli !== 'function'
+          ? npmWhich(process.cwd()).sync(cli)
+          : cli([cliName, ...rawArgsFiltered]);
       result.argv = run(rawArgsFiltered);
     }
 

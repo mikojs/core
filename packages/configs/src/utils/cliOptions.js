@@ -12,6 +12,15 @@ import { version } from '../../package.json';
 
 import configs from './configs';
 
+type optionType =
+  | boolean
+  | {|
+      cli: string,
+      argv: $ReadOnlyArray<string>,
+      env: {},
+      cliName: string,
+    |};
+
 const debugLog = debug('configs:cliOptions');
 const logger = createLogger('@mikojs/configs');
 
@@ -141,23 +150,91 @@ const filterOptions = (optionKey: ?string, arg: string, prevArg: string) =>
 
 /**
  * @example
+ * getOptions({ cliName: 'cliName', ... })
+ *
+ * @param {object} options - the options from the commander
+ *
+ * @return {optionType} - cli options
+ */
+const getOptions = ({
+  cliName,
+  configsEnv,
+  configsFiles,
+  rawArgs,
+  options,
+}: {|
+  cliName: string,
+  configsEnv?: $ReadOnlyArray<string>,
+  configsFiles?: $ReadOnlyArray<string>,
+  rawArgs: $ReadOnlyArray<string>,
+  options: $ReadOnlyArray<{|
+    short?: string,
+    long: string,
+  |}>,
+|}): optionType => {
+  if (!validateCliName(cliName)) return false;
+
+  if (configsEnv instanceof Array) configs.configsEnv = configsEnv;
+
+  if (configs.store[cliName] && configsFiles instanceof Array)
+    configsFiles.forEach((key: string) => {
+      if (!configs.store[cliName].configsFiles)
+        configs.store[cliName].configsFiles = {};
+
+      configs.store[cliName].configsFiles[key] = true;
+    });
+
+  const {
+    alias: cli = cliName,
+    run = emptyFunction.thatReturnsArgument,
+    env = {},
+  } = configs.store[cliName];
+  const rawArgsFiltered = rawArgs
+    .slice(2)
+    .filter(
+      (arg: string, index: number, allArgs: $ReadOnlyArray<string>) =>
+        arg !== cliName &&
+        !options.some(
+          ({ short, long }: {| short?: string, long: string |}) =>
+            filterOptions(short, arg, allArgs[index - 1]) ||
+            filterOptions(long, arg, allArgs[index - 1]),
+        ),
+    );
+
+  debugLog({ rawArgsFiltered });
+
+  try {
+    const result = {
+      cli:
+        typeof cli !== 'function'
+          ? npmWhich(process.cwd()).sync(cli)
+          : cli([cliName, ...rawArgsFiltered]),
+      argv: run(rawArgsFiltered),
+      env,
+      cliName,
+    };
+
+    debugLog(result);
+
+    return result;
+  } catch (e) {
+    if (!/not found/.test(e.message)) throw e;
+
+    logger.fail(e.message.replace(/not found/, 'Not found cli'));
+
+    return false;
+  }
+};
+
+/**
+ * @example
  * cliOptions([])
  *
  * @param {Array} argv - command line
  *
- * @return {Promise} - cli options
+ * @return {optionType} - cli options
  */
-export default async (
-  argv: $ReadOnlyArray<string>,
-): Promise<
-  | boolean
-  | {|
-      cli: string,
-      argv: $ReadOnlyArray<string>,
-      env: {},
-      cliName: string,
-    |},
-> =>
+export default async (argv: $ReadOnlyArray<string>): Promise<optionType> =>
   new Promise((resolve, reject) => {
     const program = new commander.Command('configs')
       .version(version, '-v, --version')
@@ -190,12 +267,7 @@ export default async (
         (
           cliName: string,
           _: mixed,
-          {
-            configsEnv,
-            configsFiles,
-            rawArgs,
-            options,
-          }: {|
+          options: {|
             configsEnv?: $ReadOnlyArray<string>,
             configsFiles?: $ReadOnlyArray<string>,
             rawArgs: $ReadOnlyArray<string>,
@@ -205,56 +277,7 @@ export default async (
             |}>,
           |},
         ) => {
-          if (!validateCliName(cliName)) resolve(false);
-          else {
-            if (configsEnv instanceof Array) configs.configsEnv = configsEnv;
-
-            if (configs.store[cliName] && configsFiles instanceof Array)
-              configsFiles.forEach((key: string) => {
-                if (!configs.store[cliName].configsFiles)
-                  configs.store[cliName].configsFiles = {};
-
-                configs.store[cliName].configsFiles[key] = true;
-              });
-
-            const {
-              alias: cli = cliName,
-              run = emptyFunction.thatReturnsArgument,
-              env = {},
-            } = configs.store[cliName];
-            const rawArgsFiltered = rawArgs
-              .slice(2)
-              .filter(
-                (arg: string, index: number, allArgs: $ReadOnlyArray<string>) =>
-                  arg !== cliName &&
-                  !options.some(
-                    ({ short, long }: {| short?: string, long: string |}) =>
-                      filterOptions(short, arg, allArgs[index - 1]) ||
-                      filterOptions(long, arg, allArgs[index - 1]),
-                  ),
-              );
-
-            try {
-              const result = {
-                cli:
-                  typeof cli !== 'function'
-                    ? npmWhich(process.cwd()).sync(cli)
-                    : cli([cliName, ...rawArgsFiltered]),
-                argv: run(rawArgsFiltered),
-                env,
-                cliName,
-              };
-
-              debugLog(result);
-              resolve(result);
-            } catch (e) {
-              if (!/not found/.test(e.message)) reject(e);
-              else {
-                logger.fail(e.message.replace(/not found/, 'Not found cli'));
-                resolve(false);
-              }
-            }
-          }
+          resolve(getOptions({ ...options, cliName }));
         },
       );
 

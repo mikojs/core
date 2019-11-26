@@ -36,9 +36,9 @@ class Configs extends Store {
     await this.execa(
       'yarn add --dev @mikojs/configs',
       ...['babel', 'prettier', 'lint', 'lint-staged', 'jest'].map(
-        (configName: string) => `yarn configs --install ${configName}`,
+        (configName: string) => `yarn configs install ${configName}`,
       ),
-      ...(!useServer ? [] : ['yarn configs --install server']),
+      ...(!useServer ? [] : ['yarn configs install server']),
     );
 
     const configsEnv = [];

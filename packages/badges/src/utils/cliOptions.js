@@ -20,16 +20,15 @@ const logger = createLogger('@mikojs/badges');
  * @return {Array<string>} - cli options
  */
 export default (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
-  const program = new commander.Command('badges')
+  const { args } = new commander.Command('badges')
     .version(version, '-v, --version')
-    .arguments('[readme path]')
-    .usage(chalk`{green [readme path]}`)
+    .arguments('[readme-path...]')
+    .usage(chalk`{green [readme-path...]}`)
     .description(
       chalk`Example:
-  badges {green readme path}`,
-    );
-
-  const { args } = program.parse([...argv]);
+  badges {green readme-path}`,
+    )
+    .parse([...argv]);
 
   if (args.length === 0) {
     logger

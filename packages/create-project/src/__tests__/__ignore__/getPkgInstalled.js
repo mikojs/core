@@ -43,8 +43,8 @@ export default (cmds: $ReadOnlyArray<string>): resultType => {
         };
       }
 
-      if (/yarn configs --install/.test(cmd)) {
-        const configType = cmd.replace(/yarn configs --install /, '');
+      if (/yarn configs install/.test(cmd)) {
+        const configType = cmd.replace(/yarn configs install /, '');
         const configPackages =
           // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
           configs[configType]?.install?.(['--dev']) ||

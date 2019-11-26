@@ -32,17 +32,24 @@ describe('generate files', () => {
     outputFileSync.destPaths = [];
   });
 
-  test('error', async () => {
-    const mockLog = jest.fn();
+  test.each`
+    cliName
+    ${'notFindCli'}
+    ${'exec'}
+  `(
+    'error with cliName = $cliName',
+    async ({ cliName }: {| cliName: string |}) => {
+      const mockLog = jest.fn();
 
-    global.console.error = mockLog;
+      global.console.error = mockLog;
 
-    expect(await generateFiles('notFindCli')).toBeFalsy();
-    expect(mockLog).toHaveBeenCalledTimes(5);
-    expect(mockLog).toHaveBeenCalledWith(
-      chalk`{red ✖ }{red {bold @mikojs/configs}} Can not generate the config file, You can:`,
-    );
-  });
+      expect(await generateFiles(cliName)).toBeFalsy();
+      expect(mockLog).toHaveBeenCalledTimes(5);
+      expect(mockLog).toHaveBeenCalledWith(
+        chalk`{red ✖ }{red {bold @mikojs/configs}} Can not generate the config file, You can:`,
+      );
+    },
+  );
 
   test('generate', async () => {
     expect(await generateFiles('jest')).toBeTruthy();

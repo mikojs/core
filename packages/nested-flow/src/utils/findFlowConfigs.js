@@ -15,16 +15,14 @@ const logger = createLogger('@mikojs/nest-configs');
  * @example
  * findFlowConfigs()
  *
- * @param {RegExp} exclude - the pattern is used to test the folder
+ * @param {string} cwd - the root folder
  *
  * @return {Array} - the path array of the nested .flowconfig
  */
-export default (
-  exclude?: $ReadOnlyArray<RegExp> = [/node_module/, /\.git/, /lib/],
-): $ReadOnlyArray<string> =>
-  d3DirTree(process.cwd(), {
+export default (cwd?: string = process.cwd()): $ReadOnlyArray<string> =>
+  d3DirTree(cwd, {
     extensions: /^$/,
-    exclude,
+    exclude: [/node_module/, /\.git/, /lib/],
   })
     .leaves()
     .filter(({ data: { name } }: d3DirTreeNodeType) => name === '.flowconfig')

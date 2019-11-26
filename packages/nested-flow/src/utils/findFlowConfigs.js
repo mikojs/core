@@ -4,10 +4,12 @@ import fs from 'fs';
 import path from 'path';
 
 import ini from 'ini';
-import { warning } from 'fbjs';
+import chalk from 'chalk';
 
-import { d3DirTree } from '@mikojs/utils';
+import { d3DirTree, createLogger } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
+
+const logger = createLogger('@mikojs/nest-configs');
 
 /**
  * @example
@@ -44,13 +46,17 @@ export default (
         );
 
       childConfigs.forEach((key: string) => {
-        warning(
-          Object.keys(config.ignore).includes(key),
-          `You should add \`${key}\` in the \`${path.relative(
-            process.cwd(),
-            filePath,
-          )}\`. The root config should ignore the folder which has the .flowconfig.`,
-        );
+        if (!Object.keys(config.ignore).includes(key))
+          logger
+            .warn(
+              chalk`You should add {red ${key}} in the {green ${path.relative(
+                process.cwd(),
+                filePath,
+              )}}`,
+            )
+            .warn(
+              'The root config should ignore the folder which has the .flowconfig',
+            );
       });
 
       return filePath;

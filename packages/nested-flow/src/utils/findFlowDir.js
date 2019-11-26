@@ -13,7 +13,7 @@ const logger = createLogger('@mikojs/nest-configs');
 
 /**
  * @example
- * findFlowConfigs()
+ * findFlowDir()
  *
  * @param {string} cwd - the root folder
  *
@@ -57,5 +57,5 @@ export default (cwd?: string = process.cwd()): $ReadOnlyArray<string> =>
             );
       });
 
-      return filePath;
+      return path.dirname(filePath);
     });

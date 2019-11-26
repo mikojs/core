@@ -2,13 +2,7 @@
 
 import path from 'path';
 
-import chalk from 'chalk';
-
-import { createLogger } from '@mikojs/utils';
-
 import configs from './configs';
-
-const logger = createLogger('@mikojs/configs');
 
 export type filesDataType = $ReadOnlyArray<{|
   filePath: string,
@@ -24,26 +18,10 @@ export type filesDataType = $ReadOnlyArray<{|
  * @return {object} - configsFiles object to generate the files
  */
 const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
-  const {
-    alias: cli = cliName,
-    configsFiles = {},
-    ignore: getIgnore,
-  } = configs.store[cliName];
+  const { configsFiles = {}, ignore: getIgnore } = configs.store[cliName];
   const { name: ignoreName, ignore = [] } = getIgnore?.() || {};
 
-  if (Object.keys(configsFiles).length === 0) {
-    logger
-      .fail('Can not generate the config file, You can:')
-      .fail('')
-      .fail(
-        chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configsFiles.${
-          typeof cli === 'function' ? '<key>' : cli
-        }\`}`,
-      )
-      .fail(chalk`  - Run command with {cyan \`--configs-files\`} options`)
-      .fail('');
-    return null;
-  }
+  if (Object.keys(configsFiles).length === 0) return null;
 
   return (Object.keys(configsFiles): $ReadOnlyArray<string>).reduce(
     (result: {}, configCliName: string): {} => {

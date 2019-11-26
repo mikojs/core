@@ -42,7 +42,7 @@ This command will generate a `babel` config when running your `custom-command`. 
 #### Get the configs lint
 
 ```sh
-yarn configs --configs-info
+yarn configs info
 ```
 
 #### Get the information about the config
@@ -50,23 +50,23 @@ yarn configs --configs-info
 By this option, you can get the detail of this config.
 
 ```sh
-yarn configs babel --configs-info
+yarn configs info babel
 ```
 
 #### Download the packages from the config
 
 ```sh
-yarn configs babel --configs-install
+yarn configs install babel
 ```
 
-In this case, this will run `yarn install @babel/cli @babel/core @mikojs/babel-plugin-base --dev`.
+In this case, this will run `yarn install @babel/cli @babel/core ... --dev`.
 
 #### Clean the files
 
 If `@mikojs/configs` has crashed, you want to remove the files. You can use:
 
 ```sh
-yarn configs babel --configs-remove
+yarn configs remove babel
 ```
 
 #### Get help

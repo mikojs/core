@@ -37,13 +37,13 @@ describe('cli options', () => {
     });
   });
 
-  test('run command fail when command is not found', () => {
+  test('run command fail when command is not found', async () => {
     const mockLog = jest.fn();
 
     npmWhich.throwError = true;
     global.console.error = mockLog;
 
-    expect(cliOptions([...defaultArgv, 'notFoundCommand'])).toBeFalsy();
+    expect(await cliOptions([...defaultArgv, 'notFoundCommand'])).toBeFalsy();
     expect(mockLog).toHaveBeenCalledTimes(1);
     expect(mockLog).toHaveBeenCalledWith(
       chalk`{red ✖ }{red {bold @mikojs/configs}} Not found cli: notFoundCommand`,
@@ -52,15 +52,15 @@ describe('cli options', () => {
     npmWhich.throwError = false;
   });
 
-  test('run command fail when running command throw error', () => {
-    expect(() => {
-      cliOptions([...defaultArgv, 'runError']);
-    }).toThrow('run error');
+  test('run command fail when running command throw error', async () => {
+    await expect(cliOptions([...defaultArgv, 'runError'])).rejects.toThrow(
+      'run error',
+    );
   });
 
-  test('run command with --configs-env', () => {
+  test('run command with --configs-env', async () => {
     expect(
-      cliOptions([
+      await cliOptions([
         ...defaultArgv,
         'runCmd',
         '--optionA',
@@ -83,7 +83,7 @@ describe('cli options', () => {
     ${'babel'}  | ${['src', '-d', 'lib', '--verbose']}
   `(
     'run command with --configs-files',
-    ({
+    async ({
       cliName,
       argv,
     }: {|
@@ -91,7 +91,7 @@ describe('cli options', () => {
       argv: $ReadOnlyArray<string>,
     |}) => {
       expect(
-        cliOptions([
+        await cliOptions([
           ...defaultArgv,
           cliName,
           '--optionA',
@@ -111,24 +111,22 @@ describe('cli options', () => {
   );
 
   test.each`
-    cliName     | options                  | cli          | argv
-    ${'runCmd'} | ${['--configs-install']} | ${'install'} | ${['yarn', 'add', '--dev']}
-    ${'runCmd'} | ${['--configs-remove']}  | ${'remove'}  | ${[]}
-    ${'runCmd'} | ${[]}                    | ${babelCli}  | ${[]}
+    cli          | cliName              | argv
+    ${'install'} | ${'runCmd'}          | ${['yarn', 'add', '--dev']}
+    ${'install'} | ${'notFoundCommand'} | ${['yarn', 'add', '--dev']}
+    ${'remove'}  | ${'runCmd'}          | ${[]}
   `(
-    'Run $cliName successfully with $options',
-    ({
-      cliName,
-      options,
+    'Run $cli',
+    async ({
       cli,
+      cliName,
       argv,
     }: {|
-      cliName: string,
-      options: $ReadOnlyArray<string>,
       cli: string,
+      cliName: string,
       argv: $ReadOnlyArray<string>,
     |}) => {
-      expect(cliOptions([...defaultArgv, cliName, ...options])).toEqual({
+      expect(await cliOptions([...defaultArgv, cli, cliName])).toEqual({
         cli,
         argv,
         env: {},
@@ -138,16 +136,17 @@ describe('cli options', () => {
   );
 
   test.each`
-    argv                                                   | expected | consoleName
-    ${['--configs-info']}                                  | ${true}  | ${'info'}
-    ${['runCmd', '--configs-info']}                        | ${true}  | ${'info'}
-    ${['notFindCliName', '--configs-info']}                | ${false} | ${'error'}
-    ${[]}                                                  | ${false} | ${'error'}
-    ${['notFindCliName']}                                  | ${false} | ${'error'}
-    ${['runCmd', '--configs-install', '--configs-remove']} | ${false} | ${'error'}
+    argv                             | expected | consoleName
+    ${['info']}                      | ${true}  | ${'info'}
+    ${['info', 'runCmd']}            | ${true}  | ${'info'}
+    ${['info', 'notFindCliName']}    | ${false} | ${'error'}
+    ${['install', 'notFindCliName']} | ${false} | ${'error'}
+    ${['remove', 'notFindCliName']}  | ${false} | ${'error'}
+    ${[]}                            | ${false} | ${'error'}
+    ${['notFindCliName']}            | ${false} | ${'error'}
   `(
     'Run $argv',
-    ({
+    async ({
       argv,
       expected,
       consoleName,
@@ -160,7 +159,7 @@ describe('cli options', () => {
 
       global.console[consoleName] = mockLog;
 
-      expect(cliOptions([...defaultArgv, ...argv])).toBe(expected);
+      expect(await cliOptions([...defaultArgv, ...argv])).toBe(expected);
       expect(mockLog).toHaveBeenCalled();
     },
   );

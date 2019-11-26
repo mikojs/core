@@ -24,7 +24,7 @@ const logger = createLogger('@mikojs/configs');
 handleUnhandledRejection();
 
 (async () => {
-  const options = cliOptions(process.argv);
+  const options = await cliOptions(process.argv);
 
   if (typeof options === 'boolean') {
     if (!options) process.exit(1);

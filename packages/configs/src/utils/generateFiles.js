@@ -1,11 +1,16 @@
 // @flow
 
 import debug from 'debug';
+import chalk from 'chalk';
 import outputFileSync from 'output-file-sync';
 
+import { createLogger } from '@mikojs/utils';
+
 import findFiles, { type filesDataType } from './findFiles';
+import configs from './configs';
 import sendToServer from './sendToServer';
 
+const logger = createLogger('@mikojs/configs');
 const debugLog = debug('configs:generateFiles');
 
 /**
@@ -19,7 +24,21 @@ const debugLog = debug('configs:generateFiles');
 export default async (cliName: string): Promise<boolean> => {
   const files = findFiles(cliName);
 
-  if (!files) return false;
+  if (!files) {
+    const { alias: cli = cliName } = configs.store[cliName];
+
+    logger
+      .fail('Can not generate the config file, You can:')
+      .fail('')
+      .fail(
+        chalk`  - Add the path of the config in {cyan \`configs.${cliName}.configsFiles.${
+          typeof cli === 'function' ? '<key>' : cli
+        }\`}`,
+      )
+      .fail(chalk`  - Run command with {cyan \`--configs-files\`} options`)
+      .fail('');
+    return false;
+  }
 
   debugLog(`Config files: ${JSON.stringify(files, null, 2)}`);
 

@@ -13,15 +13,24 @@ const debugLog = debug('nested-flow:message:flow');
  * @return {object} - flow message object
  */
 export default (): ({|
-  keys: $ReadOnlyArray<string>,
+  keys: $ReadOnlyArray<$ReadOnlyArray<string>>,
+  overwriteArgv: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
   handle: (message: string, folder: string) => void,
   message: () => void,
 |}) => {
   const { log } = console;
   const output = [];
+  let isShowAllErrors: boolean = true;
 
   return {
-    keys: ['flow'],
+    keys: [['flow'], ['flow', 'status']],
+    overwriteArgv: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
+      if (argv.includes('--show-all-errors')) return argv;
+
+      isShowAllErrors = false;
+
+      return [...argv, '--show-all-errors'];
+    },
     handle: (message: string, folder: string) => {
       const newOutput = message
         .replace(
@@ -36,9 +45,13 @@ export default (): ({|
       output.push(...newOutput);
     },
     message: () => {
-      log(['', ...output.slice(0, 50)].join('Error'));
+      debugLog(isShowAllErrors);
+
       log(
-        output.length > 50
+        ['', ...(isShowAllErrors ? output : output.slice(0, 50))].join('Error'),
+      );
+      log(
+        !isShowAllErrors && output.length > 50
           ? `
 ...${output.length - 50} more errors (only 50 out of ${
               output.length

@@ -2,6 +2,7 @@
 // @flow
 
 import execa from 'execa';
+import { areEqual } from 'fbjs';
 import debug from 'debug';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
@@ -17,16 +18,18 @@ const debugLog = debug('nested-flow:bin');
 
 (async () => {
   const { argv, filteredArgv } = await cliOptions(process.argv);
-  const { handle, message } =
-    [flowCommand()].find(
-      ({ keys }: { keys: $ReadOnlyArray<string> }) =>
-        keys.length === filteredArgv.length &&
-        keys.every((key: string) => filteredArgv.includes(key)),
+  const { overwriteArgv, handle, message } =
+    [
+      flowCommand(),
+    ].find(({ keys }: { keys: $ReadOnlyArray<$ReadOnlyArray<string>> }) =>
+      keys.some((key: $ReadOnlyArray<string>) => areEqual(key, filteredArgv)),
     ) || {};
+  const newArgv = overwriteArgv?.(argv) || argv;
 
   debugLog({
     argv,
     filteredArgv,
+    newArgv,
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
     handle: handle?.toString(),
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
@@ -36,7 +39,7 @@ const debugLog = debug('nested-flow:bin');
   for (const folder of findFlowDir()) {
     try {
       debugLog(folder);
-      await execa(argv[0], argv.slice(1), {
+      await execa(newArgv[0], newArgv.slice(1), {
         cwd: folder,
       });
     } catch (e) {

@@ -7,6 +7,8 @@ import debug from 'debug';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 
+import { type commandType } from '../types';
+
 import cliOptions from 'utils/cliOptions';
 import findFlowDir from 'utils/findFlowDir';
 
@@ -18,38 +20,34 @@ const debugLog = debug('nested-flow:bin');
 
 (async () => {
   const { argv, filteredArgv } = await cliOptions(process.argv);
-  const { overwriteArgv, handle, message } =
-    [
-      flowCommand(),
-    ].find(({ keys }: { keys: $ReadOnlyArray<$ReadOnlyArray<string>> }) =>
+  const command =
+    [flowCommand()].find(({ keys }: commandType) =>
       keys.some((key: $ReadOnlyArray<string>) => areEqual(key, filteredArgv)),
-    ) || {};
-  const newArgv = overwriteArgv?.(argv) || argv;
+    ) ||
+    (() => {
+      throw new Error(`${argv.join(' ')} is not yet supported.`);
+    })();
+  // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+  const newArgv = command.overwriteArgv?.(argv) || argv;
 
-  debugLog({
-    argv,
-    filteredArgv,
-    newArgv,
-    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-    handle: handle?.toString(),
-    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-    message: message?.toString(),
-  });
+  debugLog(command);
 
   for (const folder of findFlowDir()) {
     try {
       debugLog(folder);
-      await execa(newArgv[0], newArgv.slice(1), {
+
+      const { stdout } = await execa(newArgv[0], newArgv.slice(1), {
         cwd: folder,
       });
+
+      // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+      command.success?.(stdout, folder); // eslint-disable-line flowtype/no-unused-expressions
     } catch (e) {
-      // FIXME
-      // eslint-disable-next-line flowtype/no-unused-expressions
-      handle?.(e.stdout, folder);
+      // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+      command.fail?.(e.stdout, folder); // eslint-disable-line flowtype/no-unused-expressions
     }
   }
 
-  // FIXME
-  // eslint-disable-next-line flowtype/no-unused-expressions
-  message?.();
+  // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+  command.end?.(); // eslint-disable-line flowtype/no-unused-expressions
 })();

@@ -4,20 +4,17 @@ import path from 'path';
 
 import debug from 'debug';
 
+import { type commandType } from '../types';
+
 const debugLog = debug('nested-flow:message:flow');
 
 /**
  * @example
  * flow()
  *
- * @return {object} - flow message object
+ * @return {commandType} - flow command object
  */
-export default (): ({|
-  keys: $ReadOnlyArray<$ReadOnlyArray<string>>,
-  overwriteArgv: (argv: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-  handle: (message: string, folder: string) => void,
-  message: () => void,
-|}) => {
+export default (): commandType => {
   const { log } = console;
   const output = [];
   let isShowAllErrors: boolean = true;
@@ -31,7 +28,7 @@ export default (): ({|
 
       return [...argv, '--show-all-errors'];
     },
-    handle: (message: string, folder: string) => {
+    fail: (message: string, folder: string) => {
       const newOutput = message
         .replace(
           /Error ([-]+) /g,
@@ -44,8 +41,13 @@ export default (): ({|
       debugLog(newOutput);
       output.push(...newOutput);
     },
-    message: () => {
+    end: () => {
       debugLog(isShowAllErrors);
+
+      if (output.length === 0) {
+        log('No errors!');
+        return;
+      }
 
       log(
         ['', ...(isShowAllErrors ? output : output.slice(0, 50))].join('Error'),

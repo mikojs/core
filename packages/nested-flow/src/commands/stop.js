@@ -4,12 +4,11 @@ import { type commandType } from '../types';
 
 /**
  * @example
- * flowStop()
+ * stop()
  *
- * @return {commandType} - flow stop command object
+ * @return {commandType} - stop command object
  */
 export default (): commandType => ({
-  keys: [['flow', 'stop']],
   options: {
     stdio: 'inherit',
   },

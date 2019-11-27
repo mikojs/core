@@ -6,13 +6,13 @@ import debug from 'debug';
 
 import { type commandType } from '../types';
 
-const debugLog = debug('nested-flow:message:flow');
+const debugLog = debug('nested-flow:message:status');
 
 /**
  * @example
- * flow()
+ * statu()
  *
- * @return {commandType} - flow command object
+ * @return {commandType} - status command object
  */
 export default (): commandType => {
   const { log } = console;
@@ -20,7 +20,6 @@ export default (): commandType => {
   let isShowAllErrors: boolean = true;
 
   return {
-    keys: [['flow'], ['flow', 'status']],
     overwriteArgv: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
       if (argv.includes('--show-all-errors')) return argv;
 

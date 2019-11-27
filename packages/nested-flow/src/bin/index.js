@@ -2,19 +2,15 @@
 // @flow
 
 import execa from 'execa';
-import { areEqual } from 'fbjs';
 import debug from 'debug';
 import chalk from 'chalk';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 
-import { type commandType } from '../types';
-
 import cliOptions from 'utils/cliOptions';
 import findFlowDir from 'utils/findFlowDir';
 
-import flowCommand from 'command/flow';
-import flowStopCommand from 'command/flowStop';
+import commands from 'commands';
 
 handleUnhandledRejection();
 
@@ -23,9 +19,7 @@ const debugLog = debug('nested-flow:bin');
 (async () => {
   const { argv, filteredArgv } = await cliOptions(process.argv);
   const command =
-    [flowCommand(), flowStopCommand()].find(({ keys }: commandType) =>
-      keys.some((key: $ReadOnlyArray<string>) => areEqual(key, filteredArgv)),
-    ) ||
+    commands[filteredArgv.join('-')] ||
     (() => {
       throw new Error(chalk`{red ${argv.join(' ')}} is not yet supported.`);
     })();

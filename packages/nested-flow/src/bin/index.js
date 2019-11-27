@@ -9,7 +9,7 @@ import { handleUnhandledRejection } from '@mikojs/utils';
 import cliOptions from 'utils/cliOptions';
 import findFlowDir from 'utils/findFlowDir';
 
-import flowMessage from 'message/flow';
+import flowCommand from 'command/flow';
 
 handleUnhandledRejection();
 
@@ -18,7 +18,7 @@ const debugLog = debug('nested-flow:bin');
 (async () => {
   const { argv, filteredArgv } = await cliOptions(process.argv);
   const { handle, message } =
-    [flowMessage()].find(
+    [flowCommand()].find(
       ({ keys }: { keys: $ReadOnlyArray<string> }) =>
         keys.length === filteredArgv.length &&
         keys.every((key: string) => filteredArgv.includes(key)),

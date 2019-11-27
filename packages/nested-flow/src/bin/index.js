@@ -14,6 +14,7 @@ import cliOptions from 'utils/cliOptions';
 import findFlowDir from 'utils/findFlowDir';
 
 import flowCommand from 'command/flow';
+import flowStopCommand from 'command/flowStop';
 
 handleUnhandledRejection();
 
@@ -22,7 +23,7 @@ const debugLog = debug('nested-flow:bin');
 (async () => {
   const { argv, filteredArgv } = await cliOptions(process.argv);
   const command =
-    [flowCommand()].find(({ keys }: commandType) =>
+    [flowCommand(), flowStopCommand()].find(({ keys }: commandType) =>
       keys.some((key: $ReadOnlyArray<string>) => areEqual(key, filteredArgv)),
     ) ||
     (() => {
@@ -38,6 +39,7 @@ const debugLog = debug('nested-flow:bin');
       debugLog(folder);
 
       const { stdout } = await execa(newArgv[0], newArgv.slice(1), {
+        ...command.options,
         cwd: folder,
       });
 

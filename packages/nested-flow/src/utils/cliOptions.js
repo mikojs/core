@@ -2,6 +2,7 @@
 
 import commander from 'commander';
 import chalk from 'chalk';
+import { areEqual } from 'fbjs';
 
 import { version } from '../../package.json';
 
@@ -52,4 +53,6 @@ export default (
 
     if (argv.length === 2) resolve(['flow']);
     else program.parse([...argv]);
-  });
+  }).then((prevArgv: $ReadOnlyArray<string>) =>
+    areEqual(prevArgv, ['flow']) ? ['flow', '--show-all-errors'] : prevArgv,
+  );

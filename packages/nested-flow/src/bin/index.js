@@ -16,16 +16,17 @@ handleUnhandledRejection();
 const debugLog = debug('nested-flow:bin');
 
 (async () => {
-  const argv = await cliOptions(process.argv);
+  const { argv, filteredArgv } = await cliOptions(process.argv);
   const { handle, message } =
     [flowMessage()].find(
       ({ keys }: { keys: $ReadOnlyArray<string> }) =>
-        keys.length === argv.length &&
-        keys.every((key: string) => argv.includes(key)),
+        keys.length === filteredArgv.length &&
+        keys.every((key: string) => filteredArgv.includes(key)),
     ) || {};
 
-  debugLog(argv);
   debugLog({
+    argv,
+    filteredArgv,
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
     handle: handle?.toString(),
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.

@@ -4,23 +4,29 @@ import cliOptions from '../cliOptions';
 
 describe('cli options', () => {
   test.each`
-    argv                         | type
-    ${[]}                        | ${'flow'}
-    ${['stop']}                  | ${'flow'}
-    ${['flow-typed', 'isntall']} | ${'flow-typed'}
+    argv                                          | expected
+    ${[]}                                         | ${['flow']}
+    ${['--show-all-errors']}                      | ${['flow', '--show-all-errors']}
+    ${['status']}                                 | ${['flow', 'status']}
+    ${['status', '--show-all-errors']}            | ${['flow', 'status', '--show-all-errors']}
+    ${['flow-typed', 'install']}                  | ${['flow-typed', 'install']}
+    ${['flow-typed', 'install', '-f', 'version']} | ${['flow-typed', 'install', '-f', 'version']}
   `(
     'Run $argv',
     async ({
       argv,
-      type,
+      expected,
     }: {|
       argv: $ReadOnlyArray<string>,
-      type: string,
+      expected: $ReadOnlyArray<string>,
     |}) => {
-      expect(await cliOptions(['node', 'nested-flow', ...argv])).toEqual([
-        type,
-        ...argv.filter((key: string) => key !== 'flow-typed'),
-      ]);
+      expect(await cliOptions(['node', 'nested-flow', ...argv])).toEqual({
+        argv: expected,
+        filteredArgv: expected.filter(
+          (key: string) =>
+            !['--show-all-errors', '-f', 'version'].includes(key),
+        ),
+      });
     },
   );
 });

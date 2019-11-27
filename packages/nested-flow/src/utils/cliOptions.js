@@ -2,7 +2,6 @@
 
 import commander from 'commander';
 import chalk from 'chalk';
-import { areEqual } from 'fbjs';
 
 import { version } from '../../package.json';
 
@@ -16,7 +15,10 @@ import { version } from '../../package.json';
  */
 export default (
   argv: $ReadOnlyArray<string>,
-): Promise<$ReadOnlyArray<string>> =>
+): Promise<{|
+  argv: $ReadOnlyArray<string>,
+  filteredArgv: $ReadOnlyArray<string>,
+|}> =>
   new Promise(resolve => {
     const program = new commander.Command('nested-flow')
       .version(version, '-v, --version')
@@ -29,8 +31,20 @@ export default (
       )
       .allowUnknownOption()
       .action(
-        (_: mixed, { rawArgs }: {| rawArgs: $ReadOnlyArray<string> |}) => {
-          resolve(['flow', ...rawArgs.slice(2)]);
+        (
+          _: mixed,
+          {
+            args: [args],
+            rawArgs,
+          }: {|
+            args: [$ReadOnlyArray<string>],
+            rawArgs: $ReadOnlyArray<string>,
+          |},
+        ) => {
+          resolve({
+            argv: ['flow', ...rawArgs.slice(2)],
+            filteredArgv: ['flow', ...args],
+          });
         },
       );
 
@@ -44,15 +58,32 @@ export default (
         (
           _: mixed,
           {
-            parent: { rawArgs },
-          }: {| parent: {| rawArgs: $ReadOnlyArray<string> |} |},
+            parent: {
+              args: [args],
+              rawArgs,
+            },
+          }: {|
+            parent: {|
+              args: [$ReadOnlyArray<string>],
+              rawArgs: $ReadOnlyArray<string>,
+            |},
+          |},
         ) => {
-          resolve(rawArgs.slice(2));
+          resolve({
+            argv: rawArgs.slice(2),
+            filteredArgv: ['flow-typed', ...args],
+          });
         },
       );
 
-    if (argv.length === 2) resolve(['flow']);
-    else program.parse([...argv]);
-  }).then((prevArgv: $ReadOnlyArray<string>) =>
-    areEqual(prevArgv, ['flow']) ? ['flow', '--show-all-errors'] : prevArgv,
-  );
+    if (argv.length === 2) resolve({ argv: ['flow'], filteredArgv: ['flow'] });
+    else {
+      const { args, rawArgs } = program.parse([...argv]);
+
+      if (args.length === 0)
+        resolve({
+          argv: ['flow', ...rawArgs.slice(2)],
+          filteredArgv: ['flow', ...args],
+        });
+    }
+  });

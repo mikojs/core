@@ -21,7 +21,7 @@ export default (): ({|
   const output = [];
 
   return {
-    keys: ['flow', '--show-all-errors'],
+    keys: ['flow'],
     handle: (message: string, folder: string) => {
       const newOutput = message
         .replace(
@@ -36,18 +36,16 @@ export default (): ({|
       output.push(...newOutput);
     },
     message: () => {
-      /*
-        .replace(
-          /\n\n... [0-9]+ more errors \(only [0-9]+ out of [0-9]+ errors displayed\)\n/g,
-          '',
-        )
-        .replace(
-          /To see all errors, re-run Flow with --show-all-errors\n/g,
-          '',
-        )
-        */
+      log(['', ...output.slice(0, 50)].join('Error'));
       log(
-        `${['', ...output].join('Error')}\n\nFound ${output.length} errors\n`,
+        output.length > 50
+          ? `
+...${output.length - 50} more errors (only 50 out of ${
+              output.length
+            } errors displayed)
+To see all errors, re-run Flow with --show-all-errors
+`
+          : `\nFound ${output.length} errors\n`,
       );
     },
   };

@@ -1,15 +1,20 @@
 // @flow
 
-import { type commandType } from '../types';
+import execa from 'execa';
 
 /**
  * @example
- * stop()
+ * command(['flow', 'stop'], '/folder')
  *
- * @return {commandType} - stop command object
+ * @param {Array} argv - argv array
+ * @param {string} cwd - the folder where command runs
  */
-export default (): commandType => ({
-  options: {
+export default async (argv: $ReadOnlyArray<string>, cwd: string) => {
+  const { log } = console;
+
+  await execa(argv[0], argv.slice(1), {
+    cwd,
     stdio: 'inherit',
-  },
-});
+  });
+  log();
+};

@@ -41,12 +41,12 @@ export default (): commandType => {
       debugLog(newOutput);
       output.push(...newOutput);
     },
-    end: () => {
+    end: (): number => {
       debugLog(isShowAllErrors);
 
       if (output.length === 0) {
         log('No errors!');
-        return;
+        return 0;
       }
 
       log(
@@ -62,6 +62,7 @@ To see all errors, re-run Flow with --show-all-errors
 `
           : `\nFound ${output.length} errors\n`,
       );
+      return 1;
     },
   };
 };

@@ -4,6 +4,7 @@
 import execa from 'execa';
 import { areEqual } from 'fbjs';
 import debug from 'debug';
+import chalk from 'chalk';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 
@@ -25,7 +26,7 @@ const debugLog = debug('nested-flow:bin');
       keys.some((key: $ReadOnlyArray<string>) => areEqual(key, filteredArgv)),
     ) ||
     (() => {
-      throw new Error(`${argv.join(' ')} is not yet supported.`);
+      throw new Error(chalk`{red ${argv.join(' ')}} is not yet supported.`);
     })();
   // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
   const newArgv = command.overwriteArgv?.(argv) || argv;
@@ -49,5 +50,5 @@ const debugLog = debug('nested-flow:bin');
   }
 
   // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-  command.end?.(); // eslint-disable-line flowtype/no-unused-expressions
+  process.exit(command.end?.() || 0);
 })();

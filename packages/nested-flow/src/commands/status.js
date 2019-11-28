@@ -1,32 +1,75 @@
 // @flow
 
-import path from 'path';
+import { Writable } from 'stream';
+import readline from 'readline';
 
+import execa from 'execa';
 import debug from 'debug';
 
-import { type commandType } from '../types';
-
-const debugLog = debug('nested-flow:message:status');
+const debugLog = debug('nested-flow:commands:status');
+const spinner = ['\\', '|', '/', '-'];
 
 /**
  * @example
- * statu()
+ * status(['flow'], '/folder')
  *
- * @return {commandType} - status command object
+ * @param {Array} argv - argv array
+ * @param {string} cwd - the folder where command runs
  */
+export default async (argv: $ReadOnlyArray<string>, cwd: string) => {
+  const isShowAllErrors = argv.includes('--show-all-errors');
+  const subprocess = execa(
+    argv[0],
+    [...argv.slice(1), ...(isShowAllErrors ? [] : ['--show-all-errors'])],
+    { cwd },
+  );
+  let spinnerIndex: number = 0;
+  let startingServer: boolean = false;
+
+  const transform = new Writable({
+    write: (chunk: Buffer | string, encoding: string, callback: () => void) => {
+      const output = chunk.toString().replace(/\n$/, '');
+
+      if (
+        /Please wait/.test(output) ||
+        /Started a new flow server/.test(output)
+      ) {
+        readline.clearLine(process.stdout, 0);
+        readline.cursorTo(process.stdout, 0);
+        process.stdout.write(`${output}: ${spinner[spinnerIndex]}`);
+        spinnerIndex =
+          spinner.length - 1 === spinnerIndex ? 0 : spinnerIndex + 1;
+        startingServer = true;
+      } else {
+        if (startingServer) {
+          readline.clearLine(process.stdout, 0);
+          readline.cursorTo(process.stdout, 0);
+          startingServer = false;
+        }
+
+        const { log } = console;
+
+        log(output);
+      }
+
+      callback();
+    },
+  });
+
+  debugLog({ isShowAllErrors });
+  subprocess.stdout.pipe(transform);
+  subprocess.stderr.pipe(transform);
+
+  await subprocess;
+};
+
+/*
 export default (): commandType => {
   const { log } = console;
   const output = [];
   let isShowAllErrors: boolean = true;
 
   return {
-    overwriteArgv: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
-      if (argv.includes('--show-all-errors')) return argv;
-
-      isShowAllErrors = false;
-
-      return [...argv, '--show-all-errors'];
-    },
     fail: (message: string, folder: string) => {
       const newOutput = message
         .replace(
@@ -65,3 +108,4 @@ To see all errors, re-run Flow with --show-all-errors
     },
   };
 };
+ */

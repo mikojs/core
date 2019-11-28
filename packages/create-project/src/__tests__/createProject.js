@@ -5,7 +5,7 @@ import path from 'path';
 
 import prettier from 'prettier';
 import { format } from 'prettier-package-json';
-import { outputFileSync } from 'output-file-sync';
+import outputFileSync from 'output-file-sync';
 import { inquirer } from 'inquirer';
 // $FlowFixMe jest mock
 import { execa } from 'execa';
@@ -60,9 +60,8 @@ describe('create project', () => {
       context?: contextType,
     ) => {
       beforeEach(async () => {
-        mockLog.mockClear();
-        outputFileSync.destPaths = [];
-        outputFileSync.contents = [];
+        mockLog.mockReset();
+        outputFileSync.mockReset();
         execa.cmds = [];
         inquirer.result = inquirerResult;
         global.console.info = mockLog;
@@ -99,16 +98,15 @@ describe('create project', () => {
           ]);
 
         test('check the amount of the checking files', () => {
-          expect(checkFiles.length).toBe(outputFileSync.contents.length);
+          expect(checkFiles.length).toBe(outputFileSync.mock.calls.length);
         });
 
         test.each(checkFiles)(
           'check `%s`',
           (info: string, filePath: string, extension: string) => {
             const content = (
-              outputFileSync.contents.find(
-                (_: string, contentIndex: number) =>
-                  filePath === outputFileSync.destPaths[contentIndex],
+              outputFileSync.mock.calls.find(
+                ([outputFilePath]: [string]) => filePath === outputFilePath,
               ) ||
               (() => {
                 throw new Error(`Can not find ${filePath}`);

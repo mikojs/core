@@ -9,7 +9,7 @@ import path from 'path';
 import fetch from 'node-fetch';
 // $FlowFixMe jest mock
 import { webpack } from 'webpack';
-import { outputFileSync } from 'output-file-sync';
+import outputFileSync from 'output-file-sync';
 
 import runningServer from './__ignore__/server';
 import pagesTestings from './__ignore__/pagesTestings';
@@ -38,16 +38,16 @@ describe.each`
               path.resolve(__dirname, '../../node_modules/test-static'),
             )
             .replace(/\/(\?.*)?$/, '');
-          const index = outputFileSync.destPaths.findIndex(
-            (destPath: string) =>
-              destPath.replace(/\/index.html$/, '') === filePath,
+          const data = outputFileSync.mock.calls.find(
+            ([outputFilePath]: [string]) =>
+              outputFilePath.replace(/\/index.html$/, '') === filePath,
           );
 
-          if (index === -1) throw new Error(`can not found ${url}`);
+          if (!data) throw new Error(`can not found ${url}`);
 
           return {
             status: 200,
-            text: () => outputFileSync.contents[index],
+            text: () => data[1],
           };
         };
 
@@ -61,8 +61,7 @@ describe.each`
           },
         }),
       };
-      outputFileSync.destPaths = [];
-      outputFileSync.contents = [];
+      outputFileSync.mockReset();
 
       const { server: newServer, domain: newDomain } = await runningServer(
         dev,

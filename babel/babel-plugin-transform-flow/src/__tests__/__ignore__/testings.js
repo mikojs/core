@@ -16,8 +16,7 @@ export default [
     'basic usage',
     options,
     `// @flow`,
-    path.resolve('./lib/filename.js.flow'),
-    `// @flow`,
+    [path.resolve('./lib/filename.js.flow'), `// @flow`],
     'src/filename.js -> lib/filename.js.flow',
   ],
   [
@@ -34,8 +33,7 @@ export default [
       ],
     },
     `// @flow`,
-    false,
-    false,
+    [],
     false,
   ],
   [
@@ -52,8 +50,7 @@ export default [
       ],
     },
     `// @flow`,
-    path.resolve('./lib/filename.js.flow'),
-    `// @flow`,
+    [path.resolve('./lib/filename.js.flow'), `// @flow`],
     false,
   ],
   [
@@ -80,8 +77,9 @@ export default [
     },
     `// @flow
 class a {};`,
-    path.resolve('./lib/filename.js.flow'),
-    `"use strict";
+    [
+      path.resolve('./lib/filename.js.flow'),
+      `"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -91,6 +89,7 @@ var a = function a() {
 };
 
 ;`,
+    ],
     'src/filename.js -> lib/filename.js.flow',
   ],
   [
@@ -115,13 +114,15 @@ var a = function a() {
 'test'
   |> a
   |> b`,
-    path.resolve('./lib/filename.js.flow'),
-    `var _ref, _test;
+    [
+      path.resolve('./lib/filename.js.flow'),
+      `var _ref, _test;
 
 /**
  * @flow
  */
 _ref = (_test = 'test', a(_test)), b(_ref);`,
+    ],
     'src/filename.js -> lib/filename.js.flow',
   ],
   [
@@ -131,10 +132,12 @@ _ref = (_test = 'test', a(_test)), b(_ref);`,
       filename: path.resolve(__dirname, './flow.js'),
     },
     `// @flow`,
-    path.resolve(__dirname, './flow.js.flow'),
-    `// @flow
+    [
+      path.resolve(__dirname, './flow.js.flow'),
+      `// @flow
 export type flowType = string;
 `,
+    ],
     `${path.relative(
       process.cwd(),
       path.resolve(__dirname, './flow.js'),

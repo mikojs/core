@@ -2,7 +2,7 @@
 
 import path from 'path';
 
-import { outputFileSync } from 'output-file-sync';
+import outputFileSync from 'output-file-sync';
 import { inquirer } from 'inquirer';
 // $FlowFixMe jest mock
 import { execa } from 'execa';
@@ -19,6 +19,10 @@ const content = `test;
 added;`;
 
 describe('store', () => {
+  beforeEach(() => {
+    outputFileSync.mockReset();
+  });
+
   test.each`
     inquirerResult                          | length
     ${{ action: 'skip', overwrite: false }} | ${0}
@@ -36,8 +40,6 @@ describe('store', () => {
       const mockLog = jest.fn();
 
       global.console.log = mockLog;
-      outputFileSync.destPaths = [];
-      outputFileSync.contents = [];
       inquirer.result = inquirerResult;
 
       await example.conflictFile(filePath, content);
@@ -50,8 +52,7 @@ ${chalk`{red removed;
         );
       else expect(mockLog).not.toHaveBeenCalled();
 
-      expect(outputFileSync.destPaths).toHaveLength(length);
-      expect(outputFileSync.contents).toHaveLength(length);
+      expect(outputFileSync.mock.calls).toHaveLength(length);
     },
   );
 

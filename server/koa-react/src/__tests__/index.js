@@ -2,7 +2,7 @@
 
 import path from 'path';
 
-import { outputFileSync } from 'output-file-sync';
+import outputFileSync from 'output-file-sync';
 
 import React from '../index';
 
@@ -22,6 +22,7 @@ const react = new React(path.resolve(__dirname, './__ignore__/pages'), {
 describe('react', () => {
   beforeEach(() => {
     jest.resetModules();
+    outputFileSync.mockReset();
   });
 
   test('can not found folder', () => {
@@ -67,17 +68,12 @@ describe('react', () => {
 
   test.each(updateTestings)(
     'udpate cache with %s',
-    async (
-      filePath: string,
-      destPaths: $ReadOnlyArray<string>,
-      contents: $ReadOnlyArray<string>,
-    ) => {
-      outputFileSync.destPaths = [];
-      outputFileSync.contents = [];
+    async (filePath: string, expected: $ReadOnlyArray<[string, string]>) => {
       react.update(filePath);
 
-      expect(outputFileSync.destPaths).toEqual(destPaths);
-      expect(outputFileSync.contents).toEqual(contents);
+      expect(outputFileSync.mock.calls).toEqual(
+        expected.length === 0 ? [] : [expected],
+      );
     },
   );
 });

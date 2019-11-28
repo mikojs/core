@@ -1,25 +1,7 @@
 // @flow
 
-/** mock webpack */
-class Webpack {
-  stats = {};
+const webpack = jest.fn();
 
-  err = null;
+webpack.EnvironmentPlugin = class EnvironmentPlugin {};
 
-  /**
-   * @example
-   * webpack.main({}, () => {})
-   *
-   * @param {object} config - webpack config
-   * @param {Function} callback - trigger callback after rendering
-   */
-  +main = (config: {||}, callback: (err: ?Error, stats: {}) => {}) => {
-    callback(this.err, this.stats);
-  };
-}
-
-export const webpack = new Webpack();
-
-webpack.main.EnvironmentPlugin = class EnvironmentPlugin {};
-
-export default webpack.main;
+export default webpack;

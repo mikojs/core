@@ -2,7 +2,7 @@
 
 import path from 'path';
 
-import { npmWhich } from 'npm-which';
+import npmWhich from 'npm-which';
 import { emptyFunction } from 'fbjs';
 import chalk from 'chalk';
 
@@ -10,7 +10,7 @@ import cliOptions from '../cliOptions';
 import configs from '../configs';
 
 const defaultArgv = ['node', 'configs'];
-const babelCli = npmWhich.main().sync('babel');
+const babelCli = npmWhich(process.cwd()).sync('babel');
 
 describe('cli options', () => {
   beforeAll(() => {
@@ -40,7 +40,6 @@ describe('cli options', () => {
   test('run command fail when command is not found', async () => {
     const mockLog = jest.fn();
 
-    npmWhich.throwError = true;
     global.console.error = mockLog;
 
     expect(await cliOptions([...defaultArgv, 'notFoundCommand'])).toBeFalsy();
@@ -48,8 +47,6 @@ describe('cli options', () => {
     expect(mockLog).toHaveBeenCalledWith(
       chalk`{red ✖ }{red {bold @mikojs/configs}} Not found cli: notFoundCommand`,
     );
-
-    npmWhich.throwError = false;
   });
 
   test('run command fail when running command throw error', async () => {

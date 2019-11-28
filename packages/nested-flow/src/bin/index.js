@@ -9,7 +9,8 @@ import { handleUnhandledRejection } from '@mikojs/utils';
 import cliOptions from 'utils/cliOptions';
 import findFlowDir from 'utils/findFlowDir';
 
-import commands from 'commands';
+import statusCommand from 'commands/status';
+import stopCommand from 'commands/stop';
 
 handleUnhandledRejection();
 
@@ -21,7 +22,11 @@ const debugLog = debug('nested-flow:bin');
   debugLog({ argv, filteredArgv });
 
   const command =
-    commands[filteredArgv.join('-')] ||
+    {
+      flow: statusCommand,
+      'flow-status': statusCommand,
+      'flow-stop': stopCommand,
+    }[filteredArgv.join('-')] ||
     (() => {
       throw new Error(chalk`{red ${argv.join(' ')}} is not yet supported.`);
     })();

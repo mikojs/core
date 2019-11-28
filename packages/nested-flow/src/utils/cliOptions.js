@@ -11,7 +11,7 @@ import { version } from '../../package.json';
  *
  * @param {Array} argv - command line
  *
- * @return {Array} - cli options
+ * @return {object} - cli options
  */
 export default (
   argv: $ReadOnlyArray<string>,

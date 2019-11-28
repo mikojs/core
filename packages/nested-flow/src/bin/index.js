@@ -25,9 +25,17 @@ const debugLog = debug('nested-flow:bin');
     (() => {
       throw new Error(chalk`{red ${argv.join(' ')}} is not yet supported.`);
     })();
+  let hasError: boolean = false;
 
   for (const folderPath of findFlowDir()) {
     debugLog(folderPath);
-    await command(argv, folderPath);
+    try {
+      await command(argv, folderPath);
+    } catch (e) {
+      debugLog(e);
+      hasError = true;
+    }
   }
+
+  if (hasError) process.exit(1);
 })();

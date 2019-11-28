@@ -20,7 +20,12 @@ export default async (argv: $ReadOnlyArray<string>, cwd: string) => {
   const isShowAllErrors = argv.includes('--show-all-errors');
   const subprocess = execa(
     argv[0],
-    [...argv.slice(1), ...(isShowAllErrors ? [] : ['--show-all-errors'])],
+    [
+      ...argv.slice(1),
+      ...(isShowAllErrors ? [] : ['--show-all-errors']),
+      '--color',
+      'always',
+    ],
     { cwd },
   );
   let spinnerIndex: number = 0;
@@ -40,7 +45,7 @@ export default async (argv: $ReadOnlyArray<string>, cwd: string) => {
         spinnerIndex =
           spinner.length - 1 === spinnerIndex ? 0 : spinnerIndex + 1;
         startingServer = true;
-      } else {
+      } else if (!/No errors!/.test(output)) {
         if (startingServer) {
           readline.clearLine(process.stdout, 0);
           readline.cursorTo(process.stdout, 0);

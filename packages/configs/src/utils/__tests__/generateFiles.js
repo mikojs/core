@@ -29,7 +29,7 @@ describe('generate files', () => {
   });
 
   beforeEach(() => {
-    outputFileSync.mockReset();
+    outputFileSync.mockClear();
   });
 
   test.each`

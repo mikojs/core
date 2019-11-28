@@ -7,7 +7,7 @@ import testings from './__ignore__/testings';
 
 describe('babel-plugin-transform-flow', () => {
   beforeEach(() => {
-    outputFileSync.mockReset();
+    outputFileSync.mockClear();
   });
 
   test.each(testings)(

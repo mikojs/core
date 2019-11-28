@@ -20,7 +20,7 @@ added;`;
 
 describe('store', () => {
   beforeEach(() => {
-    outputFileSync.mockReset();
+    outputFileSync.mockClear();
   });
 
   test.each`

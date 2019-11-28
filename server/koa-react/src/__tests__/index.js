@@ -22,7 +22,7 @@ const react = new React(path.resolve(__dirname, './__ignore__/pages'), {
 describe('react', () => {
   beforeEach(() => {
     jest.resetModules();
-    outputFileSync.mockReset();
+    outputFileSync.mockClear();
   });
 
   test('can not found folder', () => {

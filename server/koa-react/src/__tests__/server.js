@@ -61,7 +61,7 @@ describe.each`
           },
         }),
       };
-      outputFileSync.mockReset();
+      outputFileSync.mockClear();
 
       const { server: newServer, domain: newDomain } = await runningServer(
         dev,

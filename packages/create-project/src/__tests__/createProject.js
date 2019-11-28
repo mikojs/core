@@ -60,8 +60,8 @@ describe('create project', () => {
       context?: contextType,
     ) => {
       beforeEach(async () => {
-        mockLog.mockReset();
-        outputFileSync.mockReset();
+        mockLog.mockClear();
+        outputFileSync.mockClear();
         execa.cmds = [];
         inquirer.result = inquirerResult;
         global.console.info = mockLog;

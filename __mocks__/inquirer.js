@@ -1,5 +1,7 @@
 // @flow
 
-export default {
-  prompt: jest.fn<$ReadOnlyArray<void>, void>(),
-};
+export default ({
+  prompt: jest.fn().mockResolvedValue({}),
+}: {|
+  prompt: JestMockFn<$ReadOnlyArray<void>, Promise<{}>>,
+|});

@@ -4,7 +4,7 @@ import fs from 'fs';
 // $FlowFixMe jest mock
 import { net } from 'net';
 
-import { isRunning } from 'is-running';
+import isRunning from 'is-running';
 import rimraf from 'rimraf';
 
 import createServer, {
@@ -56,9 +56,9 @@ describe('create server', () => {
   describe('trigger data step by step', () => {
     beforeEach(() => {
       debugLog.mockClear();
-      isRunning.running = true;
+      isRunning.mockReturnValue(true);
       // $FlowFixMe jest mock
-      fs.existsSync.mockReturnValue(true);
+      fs.existsSync.mockClear();
     });
 
     test('give the data which can not be parsed', () => {
@@ -107,7 +107,7 @@ describe('create server', () => {
     });
 
     test('pid process is close', () => {
-      isRunning.running = false;
+      isRunning.mockReturnValue(false);
       jest.advanceTimersByTime(TIME_TO_CHECK + TIME_TO_REMOVE_FILES);
 
       expect(debugLog).toHaveBeenCalledTimes(2);
@@ -135,7 +135,7 @@ describe('create server', () => {
     });
 
     test('pid1 process is close and file does not exist', () => {
-      isRunning.running = false;
+      isRunning.mockReturnValue(false);
       // $FlowFixMe jest mock
       fs.existsSync.mockReturnValue(false);
       jest.advanceTimersByTime(TIME_TO_CHECK);

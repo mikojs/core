@@ -6,7 +6,7 @@ import path from 'path';
 import prettier from 'prettier';
 import { format } from 'prettier-package-json';
 import outputFileSync from 'output-file-sync';
-import { inquirer } from 'inquirer';
+import inquirer from 'inquirer';
 import execa from 'execa';
 import chalk from 'chalk';
 
@@ -62,7 +62,7 @@ describe('create project', () => {
         mockLog.mockClear();
         outputFileSync.mockClear();
         execa.mockClear();
-        inquirer.result = inquirerResult;
+        inquirer.prompt.mockResolvedValue(inquirerResult);
         global.console.info = mockLog;
 
         await base.init({

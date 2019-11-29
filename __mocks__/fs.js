@@ -2,7 +2,7 @@
 
 export default {
   ...jest.requireActual('fs'),
-  existsSync: jest.fn<$ReadOnlyArray<void>, void>(() => true),
-  mkdirSync: jest.fn<$ReadOnlyArray<void>, void>(),
-  createWriteStream: jest.fn<$ReadOnlyArray<void>, void>(),
+  existsSync: jest.fn().mockReturnValue(true),
+  mkdirSync: jest.fn(),
+  createWriteStream: jest.fn(),
 };

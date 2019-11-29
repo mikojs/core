@@ -1,7 +1,6 @@
 // @flow
 
-// $FlowFixMe jest mock
-import { fs } from 'fs';
+import fs from 'fs';
 // $FlowFixMe jest mock
 import { net } from 'net';
 
@@ -58,7 +57,8 @@ describe('create server', () => {
     beforeEach(() => {
       debugLog.mockClear();
       isRunning.running = true;
-      fs.exist = true;
+      // $FlowFixMe jest mock
+      fs.existsSync.mockReturnValue(true);
     });
 
     test('give the data which can not be parsed', () => {
@@ -136,7 +136,8 @@ describe('create server', () => {
 
     test('pid1 process is close and file does not exist', () => {
       isRunning.running = false;
-      fs.exist = false;
+      // $FlowFixMe jest mock
+      fs.existsSync.mockReturnValue(false);
       jest.advanceTimersByTime(TIME_TO_CHECK);
 
       expect(debugLog).toHaveBeenCalledTimes(2);

@@ -1,7 +1,6 @@
 // @flow
 
-// $FlowFixMe jest mock
-import { fs } from 'fs';
+import fs from 'fs';
 // $FlowFixMe jest mock
 import { execa } from 'execa';
 
@@ -61,7 +60,8 @@ describe('badges', () => {
     |}) => {
       execa.mainFunction = () =>
         'origin\tgit@github.com:mikojs/core.git (fetch)';
-      fs.exist = fsExist;
+      // $FlowFixMe jest mock
+      fs.existsSync.mockReturnValue(fsExist);
 
       const result = await badges('<!-- badges.start --><!-- badges.end -->', {
         ...ctx,

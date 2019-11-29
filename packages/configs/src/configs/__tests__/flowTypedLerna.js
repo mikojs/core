@@ -1,7 +1,6 @@
 // @flow
 
-// $FlowFixMe jest mock
-import { fs } from 'fs';
+import fs from 'fs';
 
 import flowTypedLerna from '../flowTypedLerna';
 
@@ -15,7 +14,8 @@ describe('flow typed lerna', () => {
   `(
     'run "install" with node_module exist = $fsExist',
     ({ fsExist }: {| fsExist: boolean |}) => {
-      fs.exist = fsExist;
+      // $FlowFixMe jest mock
+      fs.existsSync.mockReturnValue(fsExist);
 
       expect(flowTypedLerna.run(['install']).slice(0, -1)).toEqual([
         'install',

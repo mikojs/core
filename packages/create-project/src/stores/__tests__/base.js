@@ -48,7 +48,7 @@ describe('base', () => {
         skipCommand: false,
         verbose: true,
       };
-      // TODO: flow not support not
+      // TODO: flow not support
       // eslint-disable-next-line flowtype/no-weak-types
       (error: any).stderr = stderr;
       execa.mockResolvedValueOnce().mockRejectedValueOnce(error);

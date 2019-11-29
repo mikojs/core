@@ -4,8 +4,7 @@ import path from 'path';
 
 import outputFileSync from 'output-file-sync';
 import { inquirer } from 'inquirer';
-// $FlowFixMe jest mock
-import { execa } from 'execa';
+import execa from 'execa';
 import chalk from 'chalk';
 
 import Store from '../index';
@@ -21,6 +20,7 @@ added;`;
 describe('store', () => {
   beforeEach(() => {
     outputFileSync.mockClear();
+    execa.mockClear();
   });
 
   test.each`
@@ -57,7 +57,6 @@ ${chalk`{red removed;
   );
 
   test('run command with --skip-command', async () => {
-    execa.cmds = [];
     example.ctx = {
       projectDir: 'project dir',
       skipCommand: true,
@@ -67,7 +66,7 @@ ${chalk`{red removed;
 
     await example.execa('command skip');
 
-    expect(execa.cmds).toHaveLength(0);
+    expect(execa.mock.calls).toHaveLength(0);
   });
 
   test('run command with verbose = false', async () => {
@@ -110,9 +109,7 @@ ${chalk`{red removed;
         lerna: false,
         verbose,
       };
-      execa.mainFunction = () => {
-        throw new Error('command error');
-      };
+      execa.mockRejectedValue(new Error('command error'));
 
       await expect(example.execa('command error')).rejects.toThrow(
         'Run command: `command error` fail',

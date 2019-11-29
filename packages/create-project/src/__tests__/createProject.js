@@ -7,8 +7,7 @@ import prettier from 'prettier';
 import { format } from 'prettier-package-json';
 import outputFileSync from 'output-file-sync';
 import { inquirer } from 'inquirer';
-// $FlowFixMe jest mock
-import { execa } from 'execa';
+import execa from 'execa';
 import chalk from 'chalk';
 
 import { d3DirTree } from '@mikojs/utils';
@@ -62,7 +61,7 @@ describe('create project', () => {
       beforeEach(async () => {
         mockLog.mockClear();
         outputFileSync.mockClear();
-        execa.cmds = [];
+        execa.mockClear();
         inquirer.result = inquirerResult;
         global.console.info = mockLog;
 
@@ -76,12 +75,17 @@ describe('create project', () => {
       });
 
       test('check the commands', () => {
-        const cmds = execa.cmds.filter((cmd: string) => !/git/.test(cmd));
+        const cmds = execa.mock.calls.filter(
+          ([cmd]: [string]) => cmd === 'git',
+        );
 
         expect(mockLog).toHaveBeenCalledTimes(cmds.length);
-        cmds.forEach((cmd: string) => {
+        cmds.forEach(([cmd, argu]: [string, $ReadOnlyArray<string>]) => {
           expect(mockLog).toHaveBeenCalledWith(
-            chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
+            chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${[
+              cmd,
+              ...argu,
+            ].join(' ')}}`,
           );
         });
       });
@@ -128,7 +132,7 @@ describe('create project', () => {
               case '.json':
                 const jsonContent = {
                   ...JSON.parse(content),
-                  ...getPkgInstalled(execa.cmds),
+                  ...getPkgInstalled(),
                 };
 
                 expect(

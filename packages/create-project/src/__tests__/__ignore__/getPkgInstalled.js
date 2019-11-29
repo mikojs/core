@@ -1,5 +1,7 @@
 // @flow
 
+import execa from 'execa';
+
 import configs from '@mikojs/configs/lib/configs';
 
 type resultType = {
@@ -16,35 +18,36 @@ const PASS_COMMANDS = [
 
 /**
  * @example
- * getPkgInstalled(['command'])
- *
- * @param {Array} cmds - commands array
+ * getPkgInstalled()
  *
  * @return {object} - pkg object
  */
-export default (cmds: $ReadOnlyArray<string>): resultType => {
-  const pkgInstalled = cmds.reduce(
-    (result: resultType, cmd: string): resultType => {
-      if (/yarn add/.test(cmd)) {
-        const key = /--dev/.test(cmd) ? 'devDependencies' : 'dependencies';
+export default (): resultType => {
+  const pkgInstalled = execa.mock.calls.reduce(
+    (
+      result: resultType,
+      [cmd, argu]: [string, $ReadOnlyArray<string>],
+    ): resultType => {
+      if (cmd === 'yarn' && argu[0] === 'add') {
+        const key = argu.includes('--dev') ? 'devDependencies' : 'dependencies';
 
         return {
           ...result,
-          [key]: cmd
-            .replace(/yarn add (--dev )?/, '')
-            .split(/ /)
-            .reduce(
-              (newResult: ?$Values<resultType>, pkgName: string) => ({
-                ...newResult,
-                [pkgName]: 'version',
-              }),
-              result[key],
-            ),
+          [key]: argu.reduce(
+            (newResult: $Values<resultType>, arguKey: string) =>
+              ['add', '--dev'].includes(arguKey)
+                ? newResult
+                : {
+                    ...newResult,
+                    [arguKey]: 'version',
+                  },
+            result[key],
+          ),
         };
       }
 
-      if (/yarn configs install/.test(cmd)) {
-        const configType = cmd.replace(/yarn configs install /, '');
+      if (cmd === 'yarn' && argu[0] === 'configs' && argu[1] === 'install') {
+        const configType = argu[argu.length - 1];
         const configPackages =
           // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
           configs[configType]?.install?.(['--dev']) ||
@@ -69,8 +72,8 @@ export default (cmds: $ReadOnlyArray<string>): resultType => {
         };
       }
 
-      if (!PASS_COMMANDS.includes(cmd))
-        throw new Error(`Find not expect command: ${cmd}`);
+      if (!PASS_COMMANDS.includes([cmd, ...argu].join(' ')))
+        throw new Error(`Find not expect command: ${[cmd, ...argu].join(' ')}`);
 
       return result;
     },

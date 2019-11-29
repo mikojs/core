@@ -1,7 +1,6 @@
 // @flow
 
-// $FlowFixMe jest mock
-import { execa } from 'execa';
+import execa from 'execa';
 import chalk from 'chalk';
 
 import { version } from '../../../package.json';
@@ -19,6 +18,10 @@ const DEFAULT_GIT_COMMANDS = [
 ];
 
 describe('base', () => {
+  beforeEach(() => {
+    execa.mockClear();
+  });
+
   test.each`
     ctx                                      | stderr                 | expected
     ${{}}                                    | ${'error'}             | ${['yarn flow-typed install']}
@@ -36,6 +39,7 @@ describe('base', () => {
       expected: $ReadOnlyArray<string>,
     |}) => {
       const mockLog = jest.fn();
+      const error = new Error('error');
 
       global.console.info = mockLog;
       base.ctx = {
@@ -44,16 +48,10 @@ describe('base', () => {
         skipCommand: false,
         verbose: true,
       };
-      execa.cmds = [];
-      execa.mainFunction = (cmd: string) => {
-        if (cmd !== 'git status') return;
-
-        const error = new Error('error');
-
-        // eslint-disable-next-line flowtype/no-weak-types
-        (error: any).stderr = stderr;
-        throw error;
-      };
+      // TODO: flow not support not
+      // eslint-disable-next-line flowtype/no-weak-types
+      (error: any).stderr = stderr;
+      execa.mockResolvedValueOnce().mockRejectedValueOnce(error);
 
       expect(
         await base.end({
@@ -62,10 +60,17 @@ describe('base', () => {
           verbose: true,
         }),
       ).toBeUndefined();
-      expect(execa.cmds).toEqual([...expected]);
-      expect(mockLog).toHaveBeenCalledTimes(execa.cmds.length);
 
-      execa.cmds.forEach((cmd: string) => {
+      const cmds = execa.mock.calls
+        .map(([cmd, argu]: [string, $ReadOnlyArray<string>]) =>
+          [cmd, ...argu].join(' '),
+        )
+        .filter((cmd: string) => cmd !== 'git status');
+
+      expect(cmds).toEqual(expected);
+      expect(mockLog).toHaveBeenCalledTimes(execa.mock.calls.length - 1);
+
+      cmds.forEach((cmd: string) => {
         expect(mockLog).toHaveBeenCalledWith(
           chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
         );

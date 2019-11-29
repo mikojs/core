@@ -3,11 +3,11 @@
 // $FlowFixMe jest mock
 import { fs } from 'fs';
 
-import flowTypedLerna from '../flow-typed-lerna';
+import flowTypedLerna from '../flowTypedLerna';
 
 jest.mock('fs');
 
-describe('flow-typed-lerna', () => {
+describe('flow typed lerna', () => {
   test.each`
     fsExist
     ${true}

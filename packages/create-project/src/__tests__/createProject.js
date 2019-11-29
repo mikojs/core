@@ -62,6 +62,7 @@ describe('create project', () => {
         mockLog.mockClear();
         outputFileSync.mockClear();
         execa.mockClear();
+        execa.mockResolvedValue({ stdout: 'mock-execa' });
         inquirer.prompt.mockResolvedValue(inquirerResult);
         global.console.info = mockLog;
 
@@ -76,7 +77,7 @@ describe('create project', () => {
 
       test('check the commands', () => {
         const cmds = execa.mock.calls.filter(
-          ([cmd]: [string]) => cmd === 'git',
+          ([cmd]: [string]) => cmd !== 'git',
         );
 
         expect(mockLog).toHaveBeenCalledTimes(cmds.length);
@@ -108,14 +109,12 @@ describe('create project', () => {
         test.each(checkFiles)(
           'check `%s`',
           (info: string, filePath: string, extension: string) => {
-            const content = (
-              outputFileSync.mock.calls.find(
-                ([outputFilePath]: [string]) => filePath === outputFilePath,
-              ) ||
+            const content = (outputFileSync.mock.calls.find(
+              ([outputFilePath]: [string]) => filePath === outputFilePath,
+            ) ||
               (() => {
                 throw new Error(`Can not find ${filePath}`);
-              })()
-            )
+              })())[1]
               .replace(/git config --get user.name/g, 'username')
               .replace(/git config --get user.email/g, 'email')
               .replace(path.basename(projectDir), 'package-name');

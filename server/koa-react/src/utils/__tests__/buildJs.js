@@ -1,7 +1,6 @@
 // @flow
 
-// $FlowFixMe jest mock
-import { webpack } from 'webpack';
+import webpack from 'webpack';
 
 import buildJs from '../buildJs';
 
@@ -13,44 +12,45 @@ const config = {
 };
 
 describe('build js', () => {
+  beforeEach(() => {
+    // $FlowFixMe jest mock
+    webpack.mockCallbackArguments.mockClear();
+  });
+
   test('error with detail', async () => {
-    /** test error detail */
-    class ErrorDetail extends Error {
-      +details: string;
+    const error = new Error('error');
 
-      /**
-       * @example
-       * new ErrorDetail('error')
-       *
-       * @param {string} errorMessage - error message
-       */
-      constructor(errorMessage: string) {
-        super(errorMessage);
-        this.details = errorMessage;
-      }
-    }
-
-    webpack.err = new ErrorDetail('error');
+    // TODO: flow not support
+    // eslint-disable-next-line flowtype/no-weak-types
+    (error: any).details = 'error';
+    // $FlowFixMe jest mock
+    webpack.mockCallbackArguments.mockReturnValue([error]);
 
     await expect(buildJs(config)).rejects.toBe('error');
   });
 
   test('error with not detail', async () => {
-    webpack.err = new Error('error');
+    const error = new Error('error');
 
-    await expect(buildJs(config)).rejects.toBe(webpack.err);
+    // $FlowFixMe jest mock
+    webpack.mockCallbackArguments.mockReturnValue([error]);
+
+    await expect(buildJs(config)).rejects.toBe(error);
   });
 
   test('stats has error', async () => {
     const error = new Error('error');
 
-    webpack.err = null;
-    webpack.stats = {
-      hasErrors: () => true,
-      toJson: () => ({
-        errors: error,
-      }),
-    };
+    // $FlowFixMe jest mock
+    webpack.mockCallbackArguments.mockReturnValue([
+      null,
+      {
+        hasErrors: () => true,
+        toJson: () => ({
+          errors: error,
+        }),
+      },
+    ]);
 
     await expect(buildJs(config)).rejects.toBe(error);
   });

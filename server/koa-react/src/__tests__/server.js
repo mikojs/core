@@ -7,8 +7,7 @@
 import path from 'path';
 
 import fetch from 'node-fetch';
-// $FlowFixMe jest mock
-import { webpack } from 'webpack';
+import webpack from 'webpack';
 import outputFileSync from 'output-file-sync';
 
 import runningServer from './__ignore__/server';
@@ -53,14 +52,18 @@ describe.each`
 
     beforeAll(async () => {
       global.console.log = mockLog;
-      webpack.stats = {
-        hasErrors: () => false,
-        toJson: () => ({
-          assetsByChunkName: {
-            client: 'client.js',
-          },
-        }),
-      };
+      // $FlowFixMe jest mock
+      webpack.mockCallbackArguments.mockReturnValue([
+        null,
+        {
+          hasErrors: () => false,
+          toJson: () => ({
+            assetsByChunkName: {
+              client: 'client.js',
+            },
+          }),
+        },
+      ]);
       outputFileSync.mockClear();
 
       const { server: newServer, domain: newDomain } = await runningServer(

@@ -17,9 +17,7 @@ describe('create logs', () => {
       // $FlowFixMe jest mock
       fs.existsSync.mockReturnValue(fsExist);
 
-      const result = createLogs();
-
-      expect(result[0]).toBe('combined');
+      expect(createLogs()[0]).toBe('combined');
     },
   );
 });

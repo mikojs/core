@@ -12,11 +12,6 @@ const config = {
 };
 
 describe('build js', () => {
-  beforeEach(() => {
-    // $FlowFixMe jest mock
-    webpack.mockCallbackArguments.mockClear();
-  });
-
   test('error with detail', async () => {
     const error = new Error('error');
 

@@ -31,7 +31,7 @@ const printMessage = (
       message
         .replace(
           /Error ([-]+) /g,
-          `Error $1 ${path.relative(process.cwd(), cwd)}`,
+          `Error $1 ${path.relative(process.cwd(), cwd)}/`,
         )
         .replace(/\nFound [0-9]+ errors\n/g, ''),
     );
@@ -145,10 +145,11 @@ export default async (
 
     log(
       !isShowAllErrors && countError > MAX_ERROR
-        ? chalk`{reset \n...${countError -
-            MAX_ERROR} more errors (only ${MAX_ERROR} out of ${countError} errors displayed)
+        ? chalk`{reset \n...${(
+            countError - MAX_ERROR
+          ).toString()} more errors (only ${MAX_ERROR.toString()} out of ${countError.toString()} errors displayed)
 To see all errors, re-run Flow with --show-all-errors}`
-        : chalk`{reset \nFound ${countError} errors}`,
+        : chalk`{reset \nFound ${countError.toString()} errors}`,
     );
     return;
   };

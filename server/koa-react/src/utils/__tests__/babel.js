@@ -22,6 +22,7 @@ describe('babel', () => {
       expect(
         transformSync(content, {
           filename: path.resolve(__dirname, './__ignore__/testings.js'),
+          presets: ['@babel/env'],
           plugins: [
             [
               babel,
@@ -31,6 +32,7 @@ describe('babel', () => {
             ],
           ],
           babelrc: false,
+          configFile: false,
         }).code,
       ).toBe(expected);
     },

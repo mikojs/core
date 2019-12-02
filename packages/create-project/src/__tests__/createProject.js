@@ -61,8 +61,7 @@ describe('create project', () => {
       beforeEach(async () => {
         mockLog.mockClear();
         outputFileSync.mockClear();
-        execa.mockClear();
-        execa.mockResolvedValue({ stdout: 'mock-execa' });
+        execa.mockResolvedValue({ stdout: 'mock-execa' }).mockClear();
         inquirer.prompt.mockResolvedValue(inquirerResult);
         global.console.info = mockLog;
 

@@ -3,8 +3,8 @@
 import path from 'path';
 import { Writable } from 'stream';
 import readline from 'readline';
-import chalk from 'chalk';
 
+import chalk from 'chalk';
 import execa from 'execa';
 import debug from 'debug';
 

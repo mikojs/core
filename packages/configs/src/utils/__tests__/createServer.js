@@ -55,7 +55,7 @@ describe('create server', () => {
   describe('trigger data step by step', () => {
     beforeEach(() => {
       debugLog.mockClear();
-      isRunning.mockReturnValue(true);
+      isRunning.mockClear();
       // $FlowFixMe jest mock
       fs.existsSync.mockClear();
     });

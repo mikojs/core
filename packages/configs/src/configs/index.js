@@ -9,7 +9,7 @@ import lint from './lint';
 import lintsteged from './lintsteged';
 import jest from './jest';
 import server from './server';
-import flowTypedLerna from './flow-typed-lerna';
+import flowTypedLerna from './flowTypedLerna';
 
 export default ({
   // custom command

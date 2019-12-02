@@ -1,25 +1,27 @@
 // @flow
 
-/** mock webpack */
-class Webpack {
-  stats = {};
+const mockCallbackArguments = jest.fn().mockReturnValue([
+  null,
+  {
+    hasErrors: () => false,
+    toJson: () => ({}),
+  },
+]);
 
-  err = null;
+const webpack: JestMockFn<
+  [{||}, (err: ?Error, stats: {}) => void],
+  void,
+> = jest
+  .fn()
+  .mockImplementation(
+    (config: {||}, callback: (err: ?Error, stats: {}) => void) => {
+      callback(...mockCallbackArguments());
+    },
+  );
 
-  /**
-   * @example
-   * webpack.main({}, () => {})
-   *
-   * @param {object} config - webpack config
-   * @param {Function} callback - trigger callback after rendering
-   */
-  +main = (config: {||}, callback: (err: ?Error, stats: {}) => {}) => {
-    callback(this.err, this.stats);
-  };
-}
+// $FlowFixMe TODO: flow not support
+webpack.EnvironmentPlugin = class EnvironmentPlugin {};
+// $FlowFixMe TODO: flow not support
+webpack.mockCallbackArguments = mockCallbackArguments;
 
-export const webpack = new Webpack();
-
-webpack.main.EnvironmentPlugin = class EnvironmentPlugin {};
-
-export default webpack.main;
+export default webpack;

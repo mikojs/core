@@ -2,7 +2,7 @@
 
 import path from 'path';
 
-import { outputFileSync } from 'output-file-sync';
+import outputFileSync from 'output-file-sync';
 import { emptyFunction } from 'fbjs';
 import chalk from 'chalk';
 
@@ -29,7 +29,7 @@ describe('generate files', () => {
   });
 
   beforeEach(() => {
-    outputFileSync.destPaths = [];
+    outputFileSync.mockClear();
   });
 
   test.each`
@@ -53,7 +53,11 @@ describe('generate files', () => {
 
   test('generate', async () => {
     expect(await generateFiles('jest')).toBeTruthy();
-    expect(outputFileSync.destPaths).toEqual(
+    expect(
+      outputFileSync.mock.calls.map(
+        ([outputFilePath]: [string]) => outputFilePath,
+      ),
+    ).toEqual(
       [
         'jest.config.js',
         'babel.config.js',

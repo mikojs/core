@@ -44,42 +44,44 @@ const errorFilePath = path.resolve(__dirname, './pages/.templates/Error.js');
 export default [
   [
     path.resolve(__dirname, './pages/index.js'),
-    [path.resolve('./node_modules/.cache/no-basename/routesData.js')],
-    [routesData],
+    [
+      path.resolve('./node_modules/.cache/no-basename/routesData.js'),
+      routesData,
+    ],
   ],
-  [path.resolve(__dirname, './pages/.templates/Document.js'), [], []],
+  [path.resolve(__dirname, './pages/.templates/Document.js'), []],
   [
     mainFilePath,
-    [path.resolve('./node_modules/.cache/no-basename/Main.js')],
     [
+      path.resolve('./node_modules/.cache/no-basename/Main.js'),
       `module.exports = require('${mainFilePath}').default || require('${mainFilePath}');`,
     ],
   ],
   [
     loadingFilePath,
-    [path.resolve('./node_modules/.cache/no-basename/Loading.js')],
     [
+      path.resolve('./node_modules/.cache/no-basename/Loading.js'),
       `module.exports = require('${loadingFilePath}').default || require('${loadingFilePath}');`,
     ],
   ],
   [
     errorFilePath,
-    [path.resolve('./node_modules/.cache/no-basename/Error.js')],
     [
+      path.resolve('./node_modules/.cache/no-basename/Error.js'),
       `module.exports = require('${errorFilePath}').default || require('${errorFilePath}');`,
     ],
   ],
   [
     path.resolve(__dirname, './pages/.templates/NotFound.js'),
-    [path.resolve('./node_modules/.cache/no-basename/routesData.js')],
     [
+      path.resolve('./node_modules/.cache/no-basename/routesData.js'),
       routesData.replace(
         /templates\/NotFound.js/,
         '__tests__/__ignore__/pages/.templates/NotFound.js',
       ),
     ],
   ],
-  [path.resolve(__dirname, './pages/.templates/Others.js'), [], []],
-  [path.resolve(__dirname, './pages/exclude.js'), [], []],
-  [__dirname, [], []],
+  [path.resolve(__dirname, './pages/.templates/Others.js'), []],
+  [path.resolve(__dirname, './pages/exclude.js'), []],
+  [__dirname, []],
 ];

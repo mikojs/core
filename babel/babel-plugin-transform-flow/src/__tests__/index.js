@@ -1,14 +1,13 @@
 // @flow
 
 import { transformSync } from '@babel/core';
-import { outputFileSync } from 'output-file-sync';
+import outputFileSync from 'output-file-sync';
 
 import testings from './__ignore__/testings';
 
 describe('babel-plugin-transform-flow', () => {
   beforeEach(() => {
-    outputFileSync.destPaths = [];
-    outputFileSync.contents = [];
+    outputFileSync.mockClear();
   });
 
   test.each(testings)(
@@ -17,8 +16,7 @@ describe('babel-plugin-transform-flow', () => {
       info: string,
       options: {},
       content: string,
-      filePath: string | false,
-      output: string | false,
+      expected: $ReadOnlyArray<[string, string]>,
       logInfo: string | false,
     ) => {
       const mockLog = jest.fn();
@@ -26,8 +24,9 @@ describe('babel-plugin-transform-flow', () => {
       global.console.log = mockLog;
       transformSync(content, options);
 
-      expect(outputFileSync.destPaths).toEqual(filePath ? [filePath] : []);
-      expect(outputFileSync.contents).toEqual(output ? [output] : []);
+      expect(outputFileSync.mock.calls).toEqual(
+        expected.length === 0 ? [] : [expected],
+      );
 
       if (logInfo) expect(mockLog).toHaveBeenCalledWith(logInfo);
       else expect(mockLog).not.toHaveBeenCalled();

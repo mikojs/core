@@ -30,8 +30,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 export default Root;`,
     `"use strict";
 
-require("core-js/modules/es6.object.define-property");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -43,8 +41,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 var _default = require("react-hot-loader/root").hot(require("@mikojs/koa-react/lib/utils/getStatic").hoistNonReactStaticsHotExported(Root, process.env.NODE_ENV !== "production"));
 
-exports["default"] = _default;
-module.exports = exports.default;`,
+exports["default"] = _default;`,
   ],
   [
     `import React from 'react';

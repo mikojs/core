@@ -1,6 +1,6 @@
 // @flow
 
-import { findProcess } from 'find-process';
+import findProcess from 'find-process';
 
 import findMainServer from '../findMainServer';
 
@@ -20,7 +20,7 @@ describe('find main server', () => {
       result: $ReadOnlyArray<{| pid: number, cmd: string |}>,
       expected: ?{| isMain: boolean, port: string |},
     |}) => {
-      findProcess.result = result;
+      findProcess.mockReturnValue(result);
 
       expect(await findMainServer()).toEqual(
         !expected

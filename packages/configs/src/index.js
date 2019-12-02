@@ -37,7 +37,7 @@ export default (
 
   sendToServer(JSON.stringify({ pid: process.pid, filePath }), () => {
     debugLog(`${filePath} has been sent to the server`);
-  });
+  }).catch(debugLog);
 
   if (ignoreFilePath)
     sendToServer(
@@ -45,7 +45,7 @@ export default (
       () => {
         debugLog(`${ignoreFilePath} has been sent to the server`);
       },
-    );
+    ).catch(debugLog);
 
   return (
     {}

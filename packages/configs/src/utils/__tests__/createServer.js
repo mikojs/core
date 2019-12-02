@@ -1,12 +1,11 @@
 // @flow
 
-// $FlowFixMe jest mock
-import { fs } from 'fs';
-// $FlowFixMe jest mock
-import { net } from 'net';
+import fs from 'fs';
+import net from 'net';
 
-import { isRunning } from 'is-running';
+import isRunning from 'is-running';
 import rimraf from 'rimraf';
+import { emptyFunction } from 'fbjs';
 
 import createServer, {
   TIME_TO_CHECK,
@@ -16,7 +15,6 @@ import createServer, {
 
 const port = 8000;
 const debugLog = jest.fn();
-let dataCallback: (data: string) => void;
 
 jest.useFakeTimers();
 jest.mock('fs');
@@ -25,7 +23,6 @@ jest.mock('net');
 describe('create server', () => {
   beforeAll(() => {
     createServer(port, debugLog);
-    [, dataCallback] = net.find('data');
   });
 
   beforeEach(() => {
@@ -34,7 +31,7 @@ describe('create server', () => {
 
   test.each`
     eventName   | argu                  | expected
-    ${'error'}  | ${new Error('error')} | ${'error'}
+    ${'on'}     | ${new Error('error')} | ${'error'}
     ${'listen'} | ${undefined}          | ${`(${process.pid}) Open server at ${port}`}
   `(
     'trigger $eventName',
@@ -43,11 +40,12 @@ describe('create server', () => {
       argu,
       expected,
     }: {|
-      eventName: string,
+      eventName: 'on' | 'listen',
       argu?: mixed,
       expected: string,
     |}) => {
-      net.find(eventName)[1](argu);
+      // $FlowFixMe jest mock
+      net.createServer(emptyFunction)[eventName].mock.calls[0][1](argu);
 
       expect(debugLog).toHaveBeenCalledTimes(1);
       expect(debugLog).toHaveBeenCalledWith(expected);
@@ -57,12 +55,14 @@ describe('create server', () => {
   describe('trigger data step by step', () => {
     beforeEach(() => {
       debugLog.mockClear();
-      isRunning.running = true;
-      fs.exist = true;
+      isRunning.mockClear();
+      // $FlowFixMe jest mock
+      fs.existsSync.mockClear();
     });
 
     test('give the data which can not be parsed', () => {
-      dataCallback('test');
+      // $FlowFixMe jest mock
+      net.mockSocket().on.mock.calls[0][1]('test');
 
       expect(debugLog).toHaveBeenCalledTimes(2);
       expect(debugLog).toHaveBeenCalledWith('test');
@@ -86,7 +86,8 @@ describe('create server', () => {
         data: { [string]: string },
         expected: { [string]: $ReadOnlyArray<string> },
       |}) => {
-        dataCallback(JSON.stringify(data));
+        // $FlowFixMe jest mock
+        net.mockSocket().on.mock.calls[0][1](JSON.stringify(data));
 
         expect(debugLog).toHaveBeenCalledTimes(
           Object.keys(data).length === 0 ? 1 : 2,
@@ -107,7 +108,7 @@ describe('create server', () => {
     });
 
     test('pid process is close', () => {
-      isRunning.running = false;
+      isRunning.mockReturnValue(false);
       jest.advanceTimersByTime(TIME_TO_CHECK + TIME_TO_REMOVE_FILES);
 
       expect(debugLog).toHaveBeenCalledTimes(2);
@@ -135,8 +136,9 @@ describe('create server', () => {
     });
 
     test('pid1 process is close and file does not exist', () => {
-      isRunning.running = false;
-      fs.exist = false;
+      isRunning.mockReturnValue(false);
+      // $FlowFixMe jest mock
+      fs.existsSync.mockReturnValue(false);
       jest.advanceTimersByTime(TIME_TO_CHECK);
 
       expect(debugLog).toHaveBeenCalledTimes(2);
@@ -148,7 +150,7 @@ describe('create server', () => {
 
     test('close the server after the all processes are close', () => {
       jest.advanceTimersByTime(TIME_TO_CHECK + TIME_TO_CLOSE_SERVER);
-      net.find('close')[1]();
+      net.createServer(emptyFunction).close.mock.calls[0][0]();
 
       expect(debugLog).toHaveBeenCalledTimes(1);
       expect(debugLog).toHaveBeenCalledWith('Close server');

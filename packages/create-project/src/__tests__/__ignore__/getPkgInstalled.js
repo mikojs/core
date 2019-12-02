@@ -20,10 +20,10 @@ const PASS_COMMANDS = [
  * @example
  * getPkgInstalled()
  *
- * @return {object} - pkg object
+ * @return {resultType} - pkg object
  */
-export default (): resultType => {
-  const pkgInstalled = execa.mock.calls.reduce(
+export default () =>
+  execa.mock.calls.reduce(
     (
       result: resultType,
       [cmd, argu]: [string, $ReadOnlyArray<string>],
@@ -79,6 +79,3 @@ export default (): resultType => {
     },
     {},
   );
-
-  return pkgInstalled;
-};

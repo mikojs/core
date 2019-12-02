@@ -37,15 +37,14 @@ const debugLog = debug('nested-flow:bin');
    */
   let endFunc: () => void = () => {};
 
-  for (const folderPath of findFlowDir()) {
-    debugLog(folderPath);
+  for (const folderPath of findFlowDir())
     try {
+      debugLog(folderPath);
       endFunc = (await command(argv, folderPath)) || endFunc;
     } catch (e) {
       debugLog(e);
       hasError = true;
     }
-  }
 
   endFunc();
   debugLog(endFunc.toString());

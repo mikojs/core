@@ -110,7 +110,7 @@ describe('Root', () => {
   );
 
   test('update page after component is unmount', async () => {
-    mainRender.mockReset();
+    mainRender.mockClear();
 
     expect(mainRender).not.toHaveBeenCalled();
 

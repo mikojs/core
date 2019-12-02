@@ -1,9 +1,7 @@
 // @flow
 
-// $FlowFixMe jest mock
-import { fs } from 'fs';
-// $FlowFixMe jest mock
-import { execa } from 'execa';
+import fs from 'fs';
+import execa from 'execa';
 
 import badges from '../badges';
 
@@ -33,9 +31,7 @@ describe('badges', () => {
     const mockLog = jest.fn();
 
     global.console.error = mockLog;
-    execa.mainFunction = () => {
-      throw new Error('can not find git remote');
-    };
+    execa.mockRejectedValue(new Error('can not find git remote'));
 
     expect(await badges('readme', ctx)).toBeNull();
     expect(mockLog).toHaveBeenCalled();
@@ -59,9 +55,11 @@ describe('badges', () => {
       fsExist: boolean,
       expected: $ReadOnlyArray<string>,
     |}) => {
-      execa.mainFunction = () =>
-        'origin\tgit@github.com:mikojs/core.git (fetch)';
-      fs.exist = fsExist;
+      execa.mockResolvedValue({
+        stdout: 'origin\tgit@github.com:mikojs/core.git (fetch)',
+      });
+      // $FlowFixMe jest mock
+      fs.existsSync.mockReturnValue(fsExist);
 
       const result = await badges('<!-- badges.start --><!-- badges.end -->', {
         ...ctx,

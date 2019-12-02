@@ -1,25 +1,19 @@
 // @flow
 
-// $FlowFixMe jest mock
-import { net } from 'net';
+import net from 'net';
 
 import sendToServer from '../sendToServer';
 
 jest.mock('net');
+jest.unmock('find-process');
 jest.useFakeTimers();
 
-describe('send to server', () => {
-  beforeEach(() => {
-    net.callback.mockClear();
-  });
+test('send to server', async () => {
+  const mockCallback = jest.fn();
 
-  test('send the message to the server', async () => {
-    const mockCallback = jest.fn();
+  await sendToServer('test', mockCallback);
+  net.connect(0).on.mock.calls[0][1]('error');
+  jest.runAllTimers();
 
-    await sendToServer('test', mockCallback);
-    net.find('error')[1]('error');
-    jest.runAllTimers();
-
-    expect(net.find('end')[1]).toBe(mockCallback);
-  });
+  expect(net.connect(0).end.mock.calls).toEqual([['test', mockCallback]]);
 });

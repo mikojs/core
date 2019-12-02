@@ -6,7 +6,7 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
-import { chokidar } from 'chokidar';
+import chokidar from 'chokidar';
 
 import server from '../index';
 
@@ -52,9 +52,9 @@ describe('server', () => {
     expect(server.watch('dir', [])(mockRouter)).toEqual(mockRouter);
 
     require.cache['test.js'] = true;
-    chokidar.watchCallback('add', 'test.js');
-    chokidar.watchCallback('delete', 'test.js');
-    chokidar.watchCallback('add', 'test');
+    chokidar.watch().on.mock.calls[0][1]('add', 'test.js');
+    chokidar.watch().on.mock.calls[0][1]('delete', 'test.js');
+    chokidar.watch().on.mock.calls[0][1]('add', 'test');
   });
 
   describe('running server', () => {

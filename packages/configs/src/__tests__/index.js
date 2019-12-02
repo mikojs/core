@@ -8,7 +8,7 @@ import configs from 'utils/configs';
 
 jest.mock(
   '../utils/sendToServer',
-  () => (data: mixed, callback: () => void) => {
+  () => async (data: mixed, callback: () => void) => {
     callback();
   },
 );

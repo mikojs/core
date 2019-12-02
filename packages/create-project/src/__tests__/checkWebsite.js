@@ -69,7 +69,7 @@ package description
         expect({
           ...JSONContent,
           description: 'package description',
-          author: 'username <email>',
+          author: 'mock-execa <mock-execa>',
           homepage: 'http://mikojs/package-homepage',
           repository: 'https://github.com/mikojs/core.git',
           version: '1.0.0',

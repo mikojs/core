@@ -5,10 +5,9 @@ import path from 'path';
 
 import prettier from 'prettier';
 import { format } from 'prettier-package-json';
-import { outputFileSync } from 'output-file-sync';
-import { inquirer } from 'inquirer';
-// $FlowFixMe jest mock
-import { execa } from 'execa';
+import outputFileSync from 'output-file-sync';
+import inquirer from 'inquirer';
+import execa from 'execa';
 import chalk from 'chalk';
 
 import { d3DirTree } from '@mikojs/utils';
@@ -61,10 +60,9 @@ describe('create project', () => {
     ) => {
       beforeEach(async () => {
         mockLog.mockClear();
-        outputFileSync.destPaths = [];
-        outputFileSync.contents = [];
-        execa.cmds = [];
-        inquirer.result = inquirerResult;
+        outputFileSync.mockClear();
+        execa.mockResolvedValue({ stdout: 'mock-execa' }).mockClear();
+        inquirer.prompt.mockResolvedValue(inquirerResult);
         global.console.info = mockLog;
 
         await base.init({
@@ -77,12 +75,17 @@ describe('create project', () => {
       });
 
       test('check the commands', () => {
-        const cmds = execa.cmds.filter((cmd: string) => !/git/.test(cmd));
+        const cmds = execa.mock.calls.filter(
+          ([cmd]: [string]) => cmd !== 'git',
+        );
 
         expect(mockLog).toHaveBeenCalledTimes(cmds.length);
-        cmds.forEach((cmd: string) => {
+        cmds.forEach(([cmd, argu]: [string, $ReadOnlyArray<string>]) => {
           expect(mockLog).toHaveBeenCalledWith(
-            chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${cmd}}`,
+            chalk`{blue ℹ }{blue {bold @mikojs/create-project}} Run command: {green ${[
+              cmd,
+              ...argu,
+            ].join(' ')}}`,
           );
         });
       });
@@ -99,21 +102,18 @@ describe('create project', () => {
           ]);
 
         test('check the amount of the checking files', () => {
-          expect(checkFiles.length).toBe(outputFileSync.contents.length);
+          expect(checkFiles.length).toBe(outputFileSync.mock.calls.length);
         });
 
         test.each(checkFiles)(
           'check `%s`',
           (info: string, filePath: string, extension: string) => {
-            const content = (
-              outputFileSync.contents.find(
-                (_: string, contentIndex: number) =>
-                  filePath === outputFileSync.destPaths[contentIndex],
-              ) ||
+            const content = (outputFileSync.mock.calls.find(
+              ([outputFilePath]: [string]) => filePath === outputFilePath,
+            ) ||
               (() => {
                 throw new Error(`Can not find ${filePath}`);
-              })()
-            )
+              })())[1]
               .replace(/git config --get user.name/g, 'username')
               .replace(/git config --get user.email/g, 'email')
               .replace(path.basename(projectDir), 'package-name');
@@ -130,7 +130,7 @@ describe('create project', () => {
               case '.json':
                 const jsonContent = {
                   ...JSON.parse(content),
-                  ...getPkgInstalled(execa.cmds),
+                  ...getPkgInstalled(),
                 };
 
                 expect(

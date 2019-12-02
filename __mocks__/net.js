@@ -1,47 +1,55 @@
 // @flow
 
-/** mock net */
-class Net {
-  +callback = jest.fn<[string, () => void], void>();
+const mockSocket: JestMockFn<
+  $ReadOnlyArray<void>,
+  {|
+    setEncoding: JestMockFn<$ReadOnlyArray<void>, void>,
+    on: JestMockFn<$ReadOnlyArray<void>, void>,
+  |},
+> = jest.fn().mockReturnValue({
+  setEncoding: jest.fn<$ReadOnlyArray<void>, void>(),
+  on: jest.fn<$ReadOnlyArray<void>, void>(),
+});
+const mockCreateServerOn = jest.fn<$ReadOnlyArray<void>, void>();
+const mockCreateServerListen = jest.fn<$ReadOnlyArray<void>, void>();
+const mockCreateServerClose = jest.fn<$ReadOnlyArray<void>, void>();
 
-  /**
-   * @example
-   * net.find('end')
-   *
-   * @param {string} kind - the kind of the callback
-   *
-   * @return {Array} - the mock of the callback
-   */
-  +find = (kind: string) =>
-    this.callback.mock.calls.find(
-      ([type]: [string, () => void]) => type === kind,
-    );
-
-  +main = {
-    connect: () => ({
-      end: (data: string, endCallback: () => void) => {
-        this.callback('end', endCallback);
-      },
-      on: this.callback,
-    }),
-    createServer: (callback: ({}) => void): {} => {
-      callback({
-        setEncoding: jest.fn<$ReadOnlyArray<void>, void>(),
-        on: this.callback,
-      });
+export default ({
+  mockSocket,
+  createServer: jest
+    .fn()
+    .mockImplementation((callback: (socket: mixed) => void): {|
+      on: typeof mockCreateServerOn,
+      listen: typeof mockCreateServerListen,
+      close: typeof mockCreateServerClose,
+    |} => {
+      callback(mockSocket());
 
       return {
-        on: this.callback,
-        listen: (port: number, listenCallback: () => void) => {
-          this.callback('listen', listenCallback);
-        },
-        close: (closeCallback: () => void) => {
-          this.callback('close', closeCallback);
-        },
+        on: mockCreateServerOn,
+        listen: mockCreateServerListen,
+        close: mockCreateServerClose,
       };
-    },
-  };
-}
-
-export const net = new Net();
-export default net.main;
+    }),
+  connect: jest.fn().mockReturnValue({
+    on: jest.fn(),
+    end: jest.fn(),
+  }),
+}: {|
+  mockSocket: typeof mockSocket,
+  createServer: JestMockFn<
+    [(socket: mixed) => void],
+    {|
+      on: typeof mockCreateServerOn,
+      listen: typeof mockCreateServerListen,
+      close: typeof mockCreateServerClose,
+    |},
+  >,
+  connect: JestMockFn<
+    $ReadOnlyArray<void>,
+    {|
+      on: JestMockFn<$ReadOnlyArray<void>, void>,
+      end: JestMockFn<$ReadOnlyArray<void>, void>,
+    |},
+  >,
+|});

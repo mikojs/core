@@ -5,7 +5,7 @@ import path from 'path';
 import Koa from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
-import { outputFileSync } from 'output-file-sync';
+import outputFileSync from 'output-file-sync';
 
 import Graphql from '../index';
 
@@ -39,15 +39,12 @@ describe('graphql', () => {
   test('relay', () => {
     const graphql = new Graphql(graphqlFolder);
 
-    outputFileSync.destPaths = [];
-    outputFileSync.contents = [];
     graphql.relay([]);
 
-    expect(outputFileSync.destPaths).toEqual([
-      path.resolve('./node_modules/.cache/koa-graphql/schema.graphql'),
-    ]);
-    expect(outputFileSync.contents).toEqual([
-      `type Event {
+    expect(outputFileSync.mock.calls).toEqual([
+      [
+        path.resolve('./node_modules/.cache/koa-graphql/schema.graphql'),
+        `type Event {
   id: ID!
   name: String!
 }
@@ -62,6 +59,7 @@ type User {
   event: Event!
 }
 `,
+      ],
     ]);
   });
 

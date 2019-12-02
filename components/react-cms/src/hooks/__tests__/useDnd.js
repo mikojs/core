@@ -15,10 +15,10 @@ import { type itemType } from '../useSource';
 
 describe('use dnd', () => {
   beforeEach(() => {
-    useDrag.mockReset();
-    useDrop.mockReset();
-    useDragLayer.mockReset();
-    getElementPosition.mockReset();
+    useDrag.mockClear();
+    useDrop.mockClear();
+    useDragLayer.mockClear();
+    getElementPosition.mockClear();
   });
 
   test.each`

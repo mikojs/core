@@ -9,7 +9,7 @@ import React from '../index';
 import updateTestings from './__ignore__/updateTestings';
 
 jest.mock('node-fetch', () =>
-  jest.fn(async (url: string) => ({
+  jest.fn().mockImplementation(async (url: string) => ({
     text: () => url,
   })),
 );
@@ -68,7 +68,7 @@ describe('react', () => {
 
   test.each(updateTestings)(
     'udpate cache with %s',
-    async (filePath: string, expected: $ReadOnlyArray<[string, string]>) => {
+    (filePath: string, expected: $ReadOnlyArray<[string, string]>) => {
       react.update(filePath);
 
       expect(outputFileSync.mock.calls).toEqual(

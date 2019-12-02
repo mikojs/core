@@ -26,8 +26,6 @@ type testTaskType = [number, string, string, ?string];
 
 type testDataType = [string, $ReadOnlyArray<testTaskType>, boolean];
 
-jest.unmock('find-process');
-
 const root = path.resolve(__dirname, './__ignore__');
 
 const eslintResult = new CLIEngine({

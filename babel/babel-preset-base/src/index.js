@@ -28,6 +28,7 @@ export default declare(
       ],
       plugins: [
         '@babel/proposal-optional-chaining',
+        '@babel/proposal-nullish-coalescing-operator',
         [
           'module-resolver',
           {

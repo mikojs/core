@@ -116,6 +116,7 @@ module.exports = (() => {
       ],
       plugins: [
         '@babel/proposal-optional-chaining',
+        '@babel/proposal-nullish-coalescing-operator',
         [
           'module-resolver',
           {

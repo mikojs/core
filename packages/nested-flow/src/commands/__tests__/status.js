@@ -35,9 +35,7 @@ describe('status', () => {
       expect(mockLog).toHaveBeenCalledTimes(times);
 
       if (times !== 0)
-        expect(mockLog).toHaveBeenCalledWith(
-          expected !== null ? expected : message,
-        );
+        expect(mockLog).toHaveBeenCalledWith(expected ?? message);
     },
   );
 

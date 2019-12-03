@@ -13,6 +13,7 @@ import envinfo from 'envinfo';
  * @return {Array} - if the version can be found, use to add the version arguments
  */
 const addFlowVersion = async (): Promise<$ReadOnlyArray<string>> => {
+  // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
   const version = JSON.parse(
     await envinfo.run(
       {
@@ -20,7 +21,7 @@ const addFlowVersion = async (): Promise<$ReadOnlyArray<string>> => {
       },
       { json: true },
     ),
-  ).npmPackages?.['flow-bin']?.installed;
+  ).npmPackages?.['flow-bin']?.wanted.replace(/\^/, '');
 
   return !version ? [] : ['-f', version];
 };
@@ -47,14 +48,15 @@ export default async (argv: $ReadOnlyArray<string>, cwd: string) => {
   );
   const transform = new Writable({
     write: (chunk: Buffer | string, encoding: string, callback: () => void) => {
-      const output = chunk.toString();
-
       process.stdout.write(
-        output.replace(
-          /(flow-typed\/npm)/g,
-          `${path.relative(process.cwd(), cwd)}/flow-typed/npm`,
-        ),
+        chunk
+          .toString()
+          .replace(
+            /(flow-typed\/npm)/g,
+            path.relative(process.cwd(), path.resolve(cwd, './flow-typed/npm')),
+          ),
       );
+      callback();
     },
   });
 

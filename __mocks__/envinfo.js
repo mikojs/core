@@ -1,7 +1,7 @@
 // @flow
 
-export default {
-  run: () =>
+export default ({
+  run: jest.fn().mockResolvedValue(
     JSON.stringify({
       Binaries: {
         Node: {
@@ -15,4 +15,7 @@ export default {
         },
       },
     }),
-};
+  ),
+}: {|
+  run: JestMockFn<$ReadOnlyArray<void>, Promise<string>>,
+|});

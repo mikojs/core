@@ -53,6 +53,11 @@ export default async (
   cwd: string,
 ): Promise<() => void> => {
   const isShowAllErrors = argv.includes('--show-all-errors');
+  const cache = {
+    spinnerIndex: 0,
+    startingServer: false,
+    prevOutput: '',
+  };
   const subprocess = execa(
     argv[0],
     [
@@ -63,10 +68,6 @@ export default async (
     ],
     { cwd },
   );
-  let spinnerIndex: number = 0;
-  let startingServer: boolean = false;
-  let prevOutput: string = '';
-
   const transform = new Writable({
     write: (chunk: Buffer | string, encoding: string, callback: () => void) => {
       const output = chunk.toString();
@@ -78,11 +79,13 @@ export default async (
         readline.clearLine(process.stdout, 0);
         readline.cursorTo(process.stdout, 0);
         process.stdout.write(
-          `${output.replace(/\n$/, '')}: ${spinner[spinnerIndex]}`,
+          `${output.replace(/\n$/, '')}: ${spinner[cache.spinnerIndex]}`,
         );
-        spinnerIndex =
-          spinner.length - 1 === spinnerIndex ? 0 : spinnerIndex + 1;
-        startingServer = true;
+        cache.spinnerIndex =
+          spinner.length - 1 === cache.spinnerIndex
+            ? 0
+            : cache.spinnerIndex + 1;
+        cache.startingServer = true;
       } else if (
         /^Launching Flow server for/.test(output) ||
         /^Spawned flow server/.test(output) ||
@@ -91,14 +94,14 @@ export default async (
       ) {
         process.stdout.write(output);
       } else {
-        if (startingServer) {
+        if (cache.startingServer) {
           readline.clearLine(process.stdout, 0);
           readline.cursorTo(process.stdout, 0);
-          startingServer = false;
+          cache.startingServer = false;
         }
 
         if (!/No errors!/.test(output))
-          prevOutput = output
+          cache.prevOutput = output
             .split(/\n/)
             .reduce(
               (
@@ -120,7 +123,7 @@ export default async (
 
                 return `${result}${message}${addEnterLine}`;
               },
-              prevOutput,
+              cache.prevOutput,
             );
       }
 
@@ -133,7 +136,7 @@ export default async (
   subprocess.stderr.pipe(transform);
 
   await subprocess;
-  printMessage(prevOutput, cwd, isShowAllErrors);
+  printMessage(cache.prevOutput, cwd, isShowAllErrors);
 
   return () => {
     const { log } = console;

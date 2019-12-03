@@ -72,7 +72,6 @@ describe('status', () => {
           )();
           // $FlowFixMe jest mock
           process.stdout.write = mockLog;
-
           execa().stdout.pipe.mock.calls[0][0].write('Error --- a.js');
           execa().stdout.pipe.mock.calls[0][0].write('Error --- b.js');
 
@@ -99,14 +98,14 @@ describe('status', () => {
             )
           )();
 
-          expect(mockLog).toHaveBeenCalledTimes(isShowAllErrors ? 2 : 1);
+          expect(mockLog).toHaveBeenCalledTimes(!isShowAllErrors ? 1 : 2);
           expect(mockLog).toHaveBeenCalledWith(
-            isShowAllErrors
+            !isShowAllErrors
               ? chalk`{reset
-Found 54 errors}`
-              : chalk`{reset
 ...3 more errors (only 50 out of 53 errors displayed)
-To see all errors, re-run Flow with --show-all-errors}`,
+To see all errors, re-run Flow with --show-all-errors}`
+              : chalk`{reset
+Found 54 errors}`,
           );
         });
       },

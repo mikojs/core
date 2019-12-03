@@ -29,7 +29,8 @@ export default (cwd?: string = process.cwd()): $ReadOnlyArray<string> =>
     .map(({ data: { path: filePath }, parent }: d3DirTreeNodeType): string => {
       const config = ini.parse(fs.readFileSync(filePath, 'utf-8'));
       // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-      const childConfigs = (parent?.leaves() || [])
+      parent // eslint-disable-line flowtype/no-unused-expressions
+        ?.leaves()
         .filter(
           ({
             data: { name: childName, path: childFilePath },
@@ -41,21 +42,20 @@ export default (cwd?: string = process.cwd()): $ReadOnlyArray<string> =>
             `<PROJECT_ROOT>${path
               .dirname(childFilePath)
               .replace(path.dirname(filePath), '')}`,
-        );
-
-      childConfigs.forEach((key: string) => {
-        if (!Object.keys(config.ignore).includes(key))
-          logger
-            .warn(
-              chalk`You should add {red ${key}} in the {green ${path.relative(
-                process.cwd(),
-                filePath,
-              )}}`,
-            )
-            .warn(
-              'The root config should ignore the folder which has the .flowconfig',
-            );
-      });
+        )
+        .forEach((key: string) => {
+          if (!Object.keys(config.ignore).includes(key))
+            logger
+              .warn(
+                chalk`You should add {red ${key}} in the {green ${path.relative(
+                  process.cwd(),
+                  filePath,
+                )}}`,
+              )
+              .warn(
+                'The root config should ignore the folder which has the .flowconfig',
+              );
+        });
 
       return path.dirname(filePath);
     });

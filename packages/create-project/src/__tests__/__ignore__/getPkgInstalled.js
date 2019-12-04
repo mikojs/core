@@ -35,7 +35,8 @@ export default () =>
           ...result,
           [key]: argu.reduce(
             (newResult: $Values<resultType>, arguKey: string) =>
-              ['add', '--dev'].includes(arguKey)
+              /** flow-bin can not be uesed in testing, flow-typed can not use flow-bin@latest */
+              ['add', '--dev', 'flow-bin'].includes(arguKey)
                 ? newResult
                 : {
                     ...newResult,

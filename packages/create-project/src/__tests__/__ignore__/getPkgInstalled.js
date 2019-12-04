@@ -63,10 +63,14 @@ export default () =>
             ? configPackages
             : configPackages.slice(1)
           ).reduce(
-            (newResult: ?$Values<resultType>, pkgName: string) => ({
-              ...newResult,
-              [pkgName]: 'latest',
-            }),
+            (newResult: ?$Values<resultType>, pkgName: string) =>
+              /** need to ignore flow-bin, flow-typed can not use flow-bin@latest */
+              pkgName === 'flow-bin'
+                ? { ...newResult }
+                : {
+                    ...newResult,
+                    [pkgName]: 'latest',
+                  },
             result[key],
           ),
         };

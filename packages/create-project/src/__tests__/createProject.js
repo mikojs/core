@@ -92,7 +92,7 @@ describe('create project', () => {
 
       describe('check the files', () => {
         const checkFiles = d3DirTree(projectDir, {
-          exclude: [/.*\.swp/, /__generated__/],
+          exclude: [/.*\.swp/, /node_modules/, /flow-typed/, /__generated__/],
         })
           .leaves()
           .map(({ data: { path: filePath, extension } }: d3DirTreeNodeType) => [

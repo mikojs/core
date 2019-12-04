@@ -39,7 +39,7 @@ export default () =>
                 ? newResult
                 : {
                     ...newResult,
-                    [arguKey]: 'version',
+                    [arguKey]: 'latest',
                   },
             result[key],
           ),
@@ -65,7 +65,7 @@ export default () =>
           ).reduce(
             (newResult: ?$Values<resultType>, pkgName: string) => ({
               ...newResult,
-              [pkgName]: 'version',
+              [pkgName]: 'latest',
             }),
             result[key],
           ),

@@ -1,8 +1,8 @@
 // @flow
 
-import findFlowDir from '../findFlowDir';
+import findFlowDirs from '../findFlowDirs';
 
-describe('find flow dir', () => {
+describe('find flow dirs', () => {
   test.each`
     cwd          | expected
     ${undefined} | ${14}
@@ -14,7 +14,7 @@ describe('find flow dir', () => {
 
       global.console.warn = mockLog;
 
-      expect(findFlowDir(cwd)).toHaveLength(expected);
+      expect(findFlowDirs(cwd)).toHaveLength(expected);
       (!cwd ? expect(mockLog) : expect(mockLog).not).toHaveBeenCalled();
     },
   );

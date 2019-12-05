@@ -7,7 +7,7 @@ import chalk from 'chalk';
 import { handleUnhandledRejection } from '@mikojs/utils';
 
 import cliOptions from 'utils/cliOptions';
-import findFlowDir from 'utils/findFlowDir';
+import findFlowDirs from 'utils/findFlowDirs';
 
 import statusCommand from 'commands/status';
 import stopCommand from 'commands/stop';
@@ -39,7 +39,7 @@ const debugLog = debug('nested-flow:bin');
    */
   let endFunc: () => void = () => {};
 
-  for (const folderPath of findFlowDir())
+  for (const folderPath of findFlowDirs())
     try {
       debugLog(folderPath);
       endFunc = (await command(argv, folderPath)) || endFunc;

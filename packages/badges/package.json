@@ -13,6 +13,7 @@
     "@mikojs/utils": "^1.7.1",
     "chalk": "^3.0.0",
     "commander": "^4.0.1",
+    "core-js": "^3.4.7",
     "debug": "^4.1.1",
     "execa": "^3.3.0",
     "fbjs": "^1.0.0",

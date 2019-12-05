@@ -8,7 +8,9 @@
   "version": "1.8.0",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.0.0"
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/runtime": "^7.7.4",
+    "core-js": "^3.4.7"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0"

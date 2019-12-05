@@ -21,7 +21,7 @@ export default declare(
           '@babel/env',
           {
             useBuiltIns: 'usage',
-            corejs: '2.6.5',
+            corejs: 3,
           },
         ],
         '@babel/flow',
@@ -29,6 +29,15 @@ export default declare(
       plugins: [
         '@babel/proposal-optional-chaining',
         '@babel/proposal-nullish-coalescing-operator',
+        [
+          '@babel/transform-runtime',
+          {
+            corejs: false,
+            helpers: false,
+            regenerator: true,
+            useESModules: false,
+          },
+        ],
         [
           'module-resolver',
           {

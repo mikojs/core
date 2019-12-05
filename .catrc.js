@@ -9,32 +9,20 @@ const babel = config => {
 
   if (!config.overrides) config.overrides = [];
 
-  config.plugins.push(
-    [
-      '@babel/transform-runtime',
-      {
-        corejs: false,
-        helpers: false,
-        regenerator: true,
-        useESModules: false,
+  config.plugins.push('add-module-exports', [
+    'transform-imports',
+    {
+      '@mikojs/utils': {
+        transform: '@mikojs/utils/lib/${member}',
       },
-    ],
-    'add-module-exports',
-    [
-      'transform-imports',
-      {
-        '@mikojs/utils': {
-          transform: '@mikojs/utils/lib/${member}',
-        },
-        fbjs: {
-          transform: 'fbjs/lib/${member}',
-        },
-        validator: {
-          transform: 'validator/lib/${member}',
-        },
+      fbjs: {
+        transform: 'fbjs/lib/${member}',
       },
-    ],
-  );
+      validator: {
+        transform: 'validator/lib/${member}',
+      },
+    },
+  ]);
 
   return config;
 };
@@ -109,7 +97,7 @@ module.exports = (() => {
           '@babel/env',
           {
             useBuiltIns: 'usage',
-            corejs: '2.6.5',
+            corejs: 3,
           },
         ],
         '@babel/flow',
@@ -117,6 +105,15 @@ module.exports = (() => {
       plugins: [
         '@babel/proposal-optional-chaining',
         '@babel/proposal-nullish-coalescing-operator',
+        [
+          '@babel/transform-runtime',
+          {
+            corejs: false,
+            helpers: false,
+            regenerator: true,
+            useESModules: false,
+          },
+        ],
         [
           'module-resolver',
           {

@@ -6,11 +6,15 @@ import { Writable } from 'stream';
 
 import execa from 'execa';
 import envinfo from 'envinfo';
+import ora from 'ora';
+import chalk from 'chalk';
 
-import { d3DirTree } from '@mikojs/utils';
+import { d3DirTree, createLogger } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import findFlowDirs from 'utils/findFlowDirs';
+
+const logger = createLogger('@mikojs/nested-configs', ora());
 
 /**
  * @example
@@ -77,6 +81,9 @@ export default async (
   await subprocess;
 
   return () => {
+    logger.start(
+      chalk`Linking the {green flow-typed} files to the nested folders...`,
+    );
     findFlowDirs(process.cwd(), false).forEach(
       (folderPath: string, index: number, flowDirs: $ReadOnlyArray<string>) => {
         const childFolders = flowDirs.filter(
@@ -91,14 +98,22 @@ export default async (
             .leaves()
             .forEach(
               ({ data: { path: filePath, name } }: d3DirTreeNodeType) => {
-                fs.linkSync(
-                  filePath,
-                  path.resolve(childFolderPath, './flow-typed/npm', name),
+                const linkedFilePath = path.resolve(
+                  childFolderPath,
+                  './flow-typed/npm',
+                  name,
                 );
+
+                if (fs.existsSync(linkedFilePath)) return;
+
+                fs.linkSync(filePath, linkedFilePath);
               },
             );
         });
       },
+    );
+    logger.succeed(
+      chalk`The {green flow-typed} files have linked to the nested flow folders`,
     );
   };
 };

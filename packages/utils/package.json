@@ -7,6 +7,10 @@
   "repository": "https://github.com/mikojs/core/tree/master/packages/utils",
   "version": "1.7.1",
   "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.7.4",
+    "core-js": "^3.4.7"
+  },
   "devDependencies": {
     "chalk": "^3.0.0",
     "d3-hierarchy": "^1.1.9",

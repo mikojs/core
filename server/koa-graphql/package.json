@@ -8,7 +8,9 @@
   "version": "1.8.0",
   "main": "./lib/index.js",
   "dependencies": {
+    "@babel/runtime": "^7.7.4",
     "@mikojs/utils": "^1.7.1",
+    "core-js": "^3.4.7",
     "d3-hierarchy": "^1.1.9",
     "debug": "^4.1.1",
     "directory-tree": "^2.2.4",

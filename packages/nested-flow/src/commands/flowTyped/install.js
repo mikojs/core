@@ -1,10 +1,16 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 import { Writable } from 'stream';
 
 import execa from 'execa';
 import envinfo from 'envinfo';
+
+import { d3DirTree } from '@mikojs/utils';
+import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
+
+import findFlowDirs from 'utils/findFlowDirs';
 
 /**
  * @example
@@ -32,8 +38,13 @@ const addFlowVersion = async (): Promise<$ReadOnlyArray<string>> => {
  *
  * @param {Array} argv - argv array
  * @param {string} cwd - the folder where command runs
+ *
+ * @return {Function} - the end function
  */
-export default async (argv: $ReadOnlyArray<string>, cwd: string) => {
+export default async (
+  argv: $ReadOnlyArray<string>,
+  cwd: string,
+): Promise<() => void> => {
   const subprocess = execa(
     argv[0],
     [
@@ -64,4 +75,30 @@ export default async (argv: $ReadOnlyArray<string>, cwd: string) => {
   subprocess.stderr.pipe(transform);
 
   await subprocess;
+
+  return () => {
+    findFlowDirs(process.cwd(), false).forEach(
+      (folderPath: string, index: number, flowDirs: $ReadOnlyArray<string>) => {
+        const childFolders = flowDirs.filter(
+          (filePath: string) =>
+            filePath.includes(folderPath) && filePath !== folderPath,
+        );
+
+        if (childFolders.length === 0) return;
+
+        childFolders.forEach((childFolderPath: string) => {
+          d3DirTree(path.resolve(folderPath, './flow-typed/npm'))
+            .leaves()
+            .forEach(
+              ({ data: { path: filePath, name } }: d3DirTreeNodeType) => {
+                fs.linkSync(
+                  filePath,
+                  path.resolve(childFolderPath, './flow-typed/npm', name),
+                );
+              },
+            );
+        });
+      },
+    );
+  };
 };

@@ -21,7 +21,7 @@ export default declare(
           '@babel/env',
           {
             useBuiltIns: 'usage',
-            corejs: '2.6.5',
+            corejs: 3,
           },
         ],
         '@babel/flow',

@@ -30,6 +30,15 @@ export default declare(
         '@babel/proposal-optional-chaining',
         '@babel/proposal-nullish-coalescing-operator',
         [
+          '@babel/transform-runtime',
+          {
+            corejs: false,
+            helpers: false,
+            regenerator: true,
+            useESModules: false,
+          },
+        ],
+        [
           'module-resolver',
           {
             root: ['./src'],

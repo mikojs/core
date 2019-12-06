@@ -12,6 +12,7 @@ import findFlowDirs from 'utils/findFlowDirs';
 import statusCommand from 'commands/status';
 import stopCommand from 'commands/stop';
 import flowTypedInstallCommand from 'commands/flowTyped/install';
+import flowTypedRemoveCommand from 'commands/flowTyped/remove';
 
 handleUnhandledRejection();
 
@@ -28,6 +29,7 @@ const debugLog = debug('nested-flow:bin');
       'flow-status': statusCommand,
       'flow-stop': stopCommand,
       'flow-typed-install': flowTypedInstallCommand,
+      'flow-typed-remove': flowTypedRemoveCommand,
     }[filteredArgv.join('-')] ||
     (() => {
       throw new Error(chalk`{red ${argv.join(' ')}} is not yet supported.`);

@@ -18,7 +18,8 @@
     "envinfo": "^7.5.0",
     "execa": "^3.3.0",
     "ini": "^1.3.5",
-    "ora": "^4.0.3"
+    "ora": "^4.0.3",
+    "rimraf": "^3.0.0"
   },
   "keywords": ["nested configs"],
   "publishConfig": {

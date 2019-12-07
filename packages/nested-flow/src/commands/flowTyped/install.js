@@ -38,6 +38,33 @@ const addFlowVersion = async (): Promise<$ReadOnlyArray<string>> => {
 
 /**
  * @example
+ * createNotFoundFolder('/path')
+ *
+ * @param {string} folder - folder path
+ */
+const createNotFoundFolder = (folder: string) => {
+  if (!fs.existsSync(path.dirname(folder)))
+    createNotFoundFolder(path.dirname(folder));
+
+  if (!fs.existsSync(folder)) fs.mkdirSync(folder);
+};
+
+/**
+ * @example
+ * link('/source', '/target')
+ *
+ * @param {string} source - source path
+ * @param {string} target - target path
+ */
+const link = (source: string, target: string) => {
+  if (fs.existsSync(target)) return;
+
+  createNotFoundFolder(path.dirname(target));
+  fs.linkSync(source, target);
+};
+
+/**
+ * @example
  * command(['flow-typed', 'install'], '/folder')
  *
  * @param {Array} argv - argv array
@@ -94,21 +121,20 @@ export default async (
         if (childFolders.length === 0) return;
 
         childFolders.forEach((childFolderPath: string) => {
-          d3DirTree(path.resolve(folderPath, './flow-typed/npm'))
+          const rootFolder = path.resolve(folderPath, './flow-typed/npm');
+
+          d3DirTree(rootFolder)
             .leaves()
-            .forEach(
-              ({ data: { path: filePath, name } }: d3DirTreeNodeType) => {
-                const linkedFilePath = path.resolve(
+            .forEach(({ data: { path: filePath } }: d3DirTreeNodeType) => {
+              link(
+                filePath,
+                path.resolve(
                   childFolderPath,
                   './flow-typed/npm',
-                  name,
-                );
-
-                if (fs.existsSync(linkedFilePath)) return;
-
-                fs.linkSync(filePath, linkedFilePath);
-              },
-            );
+                  path.relative(rootFolder, filePath),
+                ),
+              );
+            });
         });
       },
     );

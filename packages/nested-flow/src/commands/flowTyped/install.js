@@ -10,7 +10,7 @@ import ora from 'ora';
 import chalk from 'chalk';
 import debug from 'debug';
 
-import { d3DirTree, createLogger } from '@mikojs/utils';
+import { d3DirTree, createLogger, requireModule } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import findFlowDirs from 'utils/findFlowDirs';
@@ -68,7 +68,7 @@ const link = (source: string, target: string) => {
 
   debugLog({ source, target });
   createNotFoundFolder(path.dirname(target));
-  fs.linkSync(source, target);
+  fs.symlinkSync(source, target, fs.statSync(source).isFile() ? 'file' : 'dir');
 };
 
 /**
@@ -133,22 +133,45 @@ export default async (
         if (childFolders.length === 0) return;
 
         childFolders.forEach((childFolderPath: string) => {
+          const pkgPath = path.resolve(childFolderPath, './package.json');
+          const pkg = fs.existsSync(pkgPath) ? requireModule(pkgPath) : {};
           const rootFolder = path.resolve(folderPath, './flow-typed/npm');
 
-          debugLog({ childFolderPath });
-          d3DirTree(rootFolder)
+          debugLog({ childFolderPath, pkgPath, pkg });
+
+          const notFoundInFlowTyped = d3DirTree(rootFolder)
             .leaves()
-            .forEach(({ data: { path: filePath } }: d3DirTreeNodeType) => {
-              debugLog({ filePath });
-              link(
-                filePath,
-                path.resolve(
-                  childFolderPath,
-                  './flow-typed/npm',
-                  path.relative(rootFolder, filePath),
-                ),
-              );
-            });
+            .reduce(
+              (
+                result: $ReadOnlyArray<string>,
+                { data: { path: filePath } }: d3DirTreeNodeType,
+              ): $ReadOnlyArray<string> => {
+                const moduleName = path.relative(rootFolder, filePath);
+
+                link(
+                  filePath,
+                  path.resolve(childFolderPath, './flow-typed/npm', moduleName),
+                );
+
+                return result.filter(
+                  (key: string) => !moduleName.includes(key),
+                );
+              },
+              [
+                ...Object.keys(pkg.dependencies || {}),
+                ...Object.keys(pkg.devDependencies || {}),
+              ],
+            );
+
+          if (notFoundInFlowTyped.length === 0) return;
+
+          notFoundInFlowTyped.forEach((key: string) => {
+            debugLog({ moduleName: key });
+            link(
+              path.resolve(folderPath, './node_modules', key),
+              path.resolve(childFolderPath, './node_modules', key),
+            );
+          });
         });
       },
     );

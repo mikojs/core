@@ -8,12 +8,14 @@ import execa from 'execa';
 import envinfo from 'envinfo';
 import ora from 'ora';
 import chalk from 'chalk';
+import debug from 'debug';
 
 import { d3DirTree, createLogger } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import findFlowDirs from 'utils/findFlowDirs';
 
+const debugLog = debug('nested-flow:commands:flow-typed:install');
 const logger = createLogger('@mikojs/nested-configs', ora());
 
 /**
@@ -33,6 +35,8 @@ const addFlowVersion = async (): Promise<$ReadOnlyArray<string>> => {
     ),
   ).npmPackages?.['flow-bin']?.wanted.replace(/\^/, '');
 
+  debugLog({ version });
+
   return !version ? [] : ['-f', version];
 };
 
@@ -46,7 +50,10 @@ const createNotFoundFolder = (folder: string) => {
   if (!fs.existsSync(path.dirname(folder)))
     createNotFoundFolder(path.dirname(folder));
 
-  if (!fs.existsSync(folder)) fs.mkdirSync(folder);
+  if (fs.existsSync(folder)) return;
+
+  debugLog({ createNotFoundFolder: folder });
+  fs.mkdirSync(folder);
 };
 
 /**
@@ -59,6 +66,7 @@ const createNotFoundFolder = (folder: string) => {
 const link = (source: string, target: string) => {
   if (fs.existsSync(target)) return;
 
+  debugLog({ source, target });
   createNotFoundFolder(path.dirname(target));
   fs.linkSync(source, target);
 };
@@ -118,14 +126,20 @@ export default async (
             filePath.includes(folderPath) && filePath !== folderPath,
         );
 
+        debugLog({
+          folderPath,
+        });
+
         if (childFolders.length === 0) return;
 
         childFolders.forEach((childFolderPath: string) => {
           const rootFolder = path.resolve(folderPath, './flow-typed/npm');
 
+          debugLog({ childFolderPath });
           d3DirTree(rootFolder)
             .leaves()
             .forEach(({ data: { path: filePath } }: d3DirTreeNodeType) => {
+              debugLog({ filePath });
               link(
                 filePath,
                 path.resolve(

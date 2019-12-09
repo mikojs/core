@@ -1,9 +1,30 @@
 // @flow
 
+import fs from 'fs';
+import path from 'path';
+
 import envinfo from 'envinfo';
 import execa from 'execa';
 
+import { requireModule } from '@mikojs/utils';
+
 import install from '../install';
+
+import findFlowDirs from 'utils/findFlowDirs';
+
+jest.mock('fs');
+jest.mock('@mikojs/utils/lib/requireModule', () => jest.fn());
+jest.mock('utils/findFlowDirs', () => jest.fn());
+
+// $FlowFixMe jest mock
+findFlowDirs.mockReturnValue(
+  jest.requireActual('../../../utils/findFlowDirs')(
+    path.resolve(__dirname, '../../../utils/__tests__/__ignore__'),
+    false,
+  ),
+);
+// $FlowFixMe jest mock
+fs.existsSync.mockImplementation(jest.requireActual('fs').existsSync);
 
 describe('install', () => {
   beforeEach(() => {
@@ -64,4 +85,23 @@ describe('install', () => {
       );
     },
   );
+
+  test('link flow-typed', async () => {
+    const mockLog = jest.fn();
+
+    global.console.log = mockLog;
+    // $FlowFixMe jest mock
+    requireModule.mockReturnValue({
+      dependencies: {
+        '@mikojs/test-module': 'version',
+      },
+      devDependencies: {
+        'test-file.js': 'version',
+      },
+    });
+    (await install(['flow-typed', 'install'], __dirname))();
+
+    expect(mockLog).toHaveBeenCalledTimes(2);
+    expect(fs.symlinkSync).toHaveBeenCalledTimes(4);
+  });
 });

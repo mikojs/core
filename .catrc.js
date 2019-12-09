@@ -64,6 +64,8 @@ const lint = {
       ...ignore.ignore,
       // ignore for @mikojs/eslint-config-base testing
       'packages/eslint-config-base/src/__tests__/__ignore__',
+      'packages/nested-flow/**/flow-typed/npm',
+      'packages/create-project/**/flow-typed/npm',
     ],
   }),
 };

@@ -77,7 +77,11 @@ const jest = {
 
     return {
       ...config,
-      collectCoverageFrom: [...collectCoverageFrom, '!**/packages/jest/**'],
+      collectCoverageFrom: [
+        ...collectCoverageFrom,
+        '!**/packages/jest/**',
+        '!**/packages/create-project/**/flow-typed/npm/**',
+      ],
       forceCoverageMatch: d3DirTree(
         path.resolve(
           __dirname,

@@ -121,58 +121,53 @@ export default async (
     );
     findFlowDirs(process.cwd(), false).forEach(
       (folderPath: string, index: number, flowDirs: $ReadOnlyArray<string>) => {
-        const childFolders = flowDirs.filter(
-          (filePath: string) =>
-            filePath.includes(folderPath) && filePath !== folderPath,
-        );
+        debugLog({ folderPath });
+        flowDirs
+          .filter(
+            (filePath: string) =>
+              filePath.includes(folderPath) && filePath !== folderPath,
+          )
+          .forEach((childFolderPath: string) => {
+            const pkgPath = path.resolve(childFolderPath, './package.json');
+            const pkg = fs.existsSync(pkgPath) ? requireModule(pkgPath) : {};
+            const rootFolder = path.resolve(folderPath, './flow-typed/npm');
 
-        debugLog({
-          folderPath,
-        });
+            debugLog({ childFolderPath, pkgPath, pkg });
+            d3DirTree(rootFolder)
+              .leaves()
+              .reduce(
+                (
+                  result: $ReadOnlyArray<string>,
+                  { data: { path: filePath } }: d3DirTreeNodeType,
+                ): $ReadOnlyArray<string> => {
+                  const moduleName = path.relative(rootFolder, filePath);
 
-        if (childFolders.length === 0) return;
+                  link(
+                    filePath,
+                    path.resolve(
+                      childFolderPath,
+                      './flow-typed/npm',
+                      moduleName,
+                    ),
+                  );
 
-        childFolders.forEach((childFolderPath: string) => {
-          const pkgPath = path.resolve(childFolderPath, './package.json');
-          const pkg = fs.existsSync(pkgPath) ? requireModule(pkgPath) : {};
-          const rootFolder = path.resolve(folderPath, './flow-typed/npm');
-
-          debugLog({ childFolderPath, pkgPath, pkg });
-
-          const notFoundInFlowTyped = d3DirTree(rootFolder)
-            .leaves()
-            .reduce(
-              (
-                result: $ReadOnlyArray<string>,
-                { data: { path: filePath } }: d3DirTreeNodeType,
-              ): $ReadOnlyArray<string> => {
-                const moduleName = path.relative(rootFolder, filePath);
-
+                  return result.filter(
+                    (key: string) => !moduleName.includes(key),
+                  );
+                },
+                [
+                  ...Object.keys(pkg.dependencies || {}),
+                  ...Object.keys(pkg.devDependencies || {}),
+                ],
+              )
+              .forEach((key: string) => {
+                debugLog({ moduleName: key });
                 link(
-                  filePath,
-                  path.resolve(childFolderPath, './flow-typed/npm', moduleName),
+                  path.resolve(folderPath, './node_modules', key),
+                  path.resolve(childFolderPath, './node_modules', key),
                 );
-
-                return result.filter(
-                  (key: string) => !moduleName.includes(key),
-                );
-              },
-              [
-                ...Object.keys(pkg.dependencies || {}),
-                ...Object.keys(pkg.devDependencies || {}),
-              ],
-            );
-
-          if (notFoundInFlowTyped.length === 0) return;
-
-          notFoundInFlowTyped.forEach((key: string) => {
-            debugLog({ moduleName: key });
-            link(
-              path.resolve(folderPath, './node_modules', key),
-              path.resolve(childFolderPath, './node_modules', key),
-            );
+              });
           });
-        });
       },
     );
     logger.succeed(

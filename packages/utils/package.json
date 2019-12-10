@@ -8,8 +8,8 @@
   "version": "1.7.1",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.7.4",
-    "core-js": "^3.4.7"
+    "@babel/runtime": "^7.7.6",
+    "core-js": "^3.4.8"
   },
   "devDependencies": {
     "chalk": "^3.0.0",

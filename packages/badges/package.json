@@ -9,16 +9,16 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.7.4",
+    "@babel/runtime": "^7.7.6",
     "@mikojs/utils": "^1.7.1",
     "chalk": "^3.0.0",
     "commander": "^4.0.1",
-    "core-js": "^3.4.7",
+    "core-js": "^3.4.8",
     "debug": "^4.1.1",
-    "execa": "^3.3.0",
+    "execa": "^3.4.0",
     "fbjs": "^1.0.0",
     "output-file-sync": "^2.0.1",
-    "read-pkg-up": "^7.0.0"
+    "read-pkg-up": "^7.0.1"
   },
   "keywords": ["badges", "mikojs"],
   "publishConfig": {

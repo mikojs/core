@@ -13,13 +13,17 @@ const logger = createLogger('@mikojs/nest-configs');
 
 /**
  * @example
- * findFlowDir()
+ * findFlowDirs()
  *
  * @param {string} cwd - the root folder
+ * @param {boolean} showWarning - show warning or not
  *
  * @return {Array} - the path array of the nested .flowconfig
  */
-export default (cwd?: string = process.cwd()): $ReadOnlyArray<string> =>
+export default (
+  cwd?: string = process.cwd(),
+  showWarning?: boolean = true,
+): $ReadOnlyArray<string> =>
   d3DirTree(cwd, {
     extensions: /^$/,
     exclude: [/node_module/, /\.git/, /lib/],
@@ -44,7 +48,7 @@ export default (cwd?: string = process.cwd()): $ReadOnlyArray<string> =>
               .replace(path.dirname(filePath), '')}`,
         )
         .forEach((key: string) => {
-          if (!Object.keys(config.ignore).includes(key))
+          if (!Object.keys(config.ignore).includes(key) && showWarning)
             logger
               .warn(
                 chalk`You should add {red ${key}} in the {green ${path.relative(

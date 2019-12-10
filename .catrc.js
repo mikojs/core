@@ -52,6 +52,8 @@ const lint = {
       ...ignore.ignore,
       // ignore for @mikojs/eslint-config-base testing
       'packages/eslint-config-base/src/__tests__/__ignore__',
+      'packages/nested-flow/**/flow-typed/npm',
+      'packages/create-project/**/flow-typed/npm',
     ],
   }),
 };
@@ -65,7 +67,11 @@ const jest = {
 
     return {
       ...config,
-      collectCoverageFrom: [...collectCoverageFrom, '!**/packages/jest/**'],
+      collectCoverageFrom: [
+        ...collectCoverageFrom,
+        '!**/packages/jest/**',
+        '!**/packages/create-project/**/flow-typed/npm/**',
+      ],
       forceCoverageMatch: d3DirTree(
         path.resolve(
           __dirname,

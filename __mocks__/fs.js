@@ -5,4 +5,5 @@ export default {
   existsSync: jest.fn().mockReturnValue(true),
   mkdirSync: jest.fn(),
   createWriteStream: jest.fn(),
+  symlinkSync: jest.fn(),
 };

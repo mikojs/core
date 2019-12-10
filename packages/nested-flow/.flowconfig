@@ -1,4 +1,5 @@
 [ignore]
+<PROJECT_ROOT>/src/utils/__tests__/__ignore__
 
 [include]
 

@@ -1,6 +1,22 @@
 [ignore]
-# ignore for @mikojs/eslint-config-base
-<PROJECT_ROOT>/packages/eslint-config-base/src/__tests__/__ignore__
+<PROJECT_ROOT>/babel/babel-plugin-import-css
+<PROJECT_ROOT>/babel/babel-plugin-transform-flow
+<PROJECT_ROOT>/babel/babel-preset-base
+<PROJECT_ROOT>/components/react-cms
+<PROJECT_ROOT>/packages/badges
+<PROJECT_ROOT>/packages/configs
+<PROJECT_ROOT>/packages/create-project
+<PROJECT_ROOT>/packages/eslint-config-base
+<PROJECT_ROOT>/packages/jest
+<PROJECT_ROOT>/packages/nested-flow
+<PROJECT_ROOT>/packages/utils
+<PROJECT_ROOT>/packages/website
+<PROJECT_ROOT>/server/koa-base
+<PROJECT_ROOT>/server/koa-graphql
+<PROJECT_ROOT>/server/koa-react
+<PROJECT_ROOT>/server/server
+<PROJECT_ROOT>/server/use-css
+<PROJECT_ROOT>/server/use-less
 
 [include]
 
@@ -10,13 +26,5 @@
 [lints]
 
 [options]
-module.file_ext=.js
-module.file_ext=.less
-module.system.node.resolve_dirname=node_modules
-module.system.node.resolve_dirname=./src
-module.system.node.resolve_dirname=./packages/create-project/src/__tests__/__ignore__/relay-server/src
-esproposal.optional_chaining=enable
-esproposal.decorators=ignore
-experimental.const_params=true
 
 [strict]

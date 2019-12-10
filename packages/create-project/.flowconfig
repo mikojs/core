@@ -1,4 +1,11 @@
 [ignore]
+<PROJECT_ROOT>/src/__tests__/__ignore__/basic-server
+<PROJECT_ROOT>/src/__tests__/__ignore__/basic-usage
+<PROJECT_ROOT>/src/__tests__/__ignore__/graphql-server
+<PROJECT_ROOT>/src/__tests__/__ignore__/npm-pkg
+<PROJECT_ROOT>/src/__tests__/__ignore__/private-pkg
+<PROJECT_ROOT>/src/__tests__/__ignore__/react-server
+<PROJECT_ROOT>/src/__tests__/__ignore__/relay-server
 
 [include]
 

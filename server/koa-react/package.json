@@ -13,12 +13,12 @@
   },
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/runtime": "^7.7.4",
+    "@babel/runtime": "^7.7.6",
     "@hot-loader/react-dom": "^16.11.0",
     "@mikojs/utils": "^1.7.1",
     "address": "^1.1.2",
     "babel-loader": "^8.0.6",
-    "core-js": "^3.4.7",
+    "core-js": "^3.4.8",
     "d3-hierarchy": "^1.1.9",
     "debug": "^4.1.1",
     "directory-tree": "^2.2.4",
@@ -40,7 +40,7 @@
     "react-router": "^5.1.2",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.1.2",
-    "terser-webpack-plugin": "^2.2.1"
+    "terser-webpack-plugin": "^2.2.2"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0",
@@ -50,7 +50,7 @@
     "webpack": ">=4.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.4",
+    "@babel/core": "^7.7.5",
     "@babel/traverse": "^7.7.4",
     "enzyme": "^3.10.0",
     "get-port": "^5.0.0",

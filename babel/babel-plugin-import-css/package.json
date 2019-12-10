@@ -9,14 +9,14 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/runtime": "^7.7.4",
-    "core-js": "^3.4.7"
+    "@babel/runtime": "^7.7.6",
+    "core-js": "^3.4.8"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.4",
+    "@babel/core": "^7.7.5",
     "@babel/traverse": "^7.7.4"
   },
   "keywords": [

@@ -35,6 +35,7 @@
     "enzyme-adapter-react-16": "latest",
     "eslint": "latest",
     "eslint-watch": "latest",
+    "flow-bin": "latest",
     "flow-typed": "latest",
     "get-port": "latest",
     "husky": "latest",

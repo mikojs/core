@@ -86,12 +86,8 @@ describe('install', () => {
     },
   );
 
-  test('link flow-typed and run command failed', async () => {
+  test('link flow-typed', async () => {
     const mockLog = jest.fn();
-    const mockResult: Promise<void> & {
-      stdout?: {},
-      stderr?: {},
-    } = Promise.reject(new Error('error'));
 
     global.console.log = mockLog;
     // $FlowFixMe jest mock
@@ -103,17 +99,8 @@ describe('install', () => {
         'test-file.js': 'version',
       },
     });
-    mockResult.stdout = {
-      pipe: jest.fn(),
-    };
-    mockResult.stderr = {
-      pipe: jest.fn(),
-    };
-    execa.mockImplementation(() => mockResult);
+    (await install(['flow-typed', 'install'], __dirname))();
 
-    const endFunc = await install(['flow-typed', 'install'], __dirname);
-
-    expect(endFunc()).toBeTruthy();
     expect(mockLog).toHaveBeenCalledTimes(2);
     expect(fs.symlinkSync).toHaveBeenCalledTimes(4);
   });

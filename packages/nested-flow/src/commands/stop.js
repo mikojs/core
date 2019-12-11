@@ -1,9 +1,6 @@
 // @flow
 
 import execa from 'execa';
-import debug from 'debug';
-
-const debugLog = debug('nested-flow:commands:stop');
 
 /**
  * @example
@@ -11,27 +8,13 @@ const debugLog = debug('nested-flow:commands:stop');
  *
  * @param {Array} argv - argv array
  * @param {string} cwd - the folder where command runs
- *
- * @return {Function} - the end function
  */
-export default async (
-  argv: $ReadOnlyArray<string>,
-  cwd: string,
-): Promise<() => boolean> => {
+export default async (argv: $ReadOnlyArray<string>, cwd: string) => {
   const { log } = console;
-  let hasError: boolean = false;
 
-  try {
-    await execa(argv[0], argv.slice(1), {
-      cwd,
-      stdio: 'inherit',
-    });
-  } catch (e) {
-    debugLog(e);
-    hasError = true;
-  }
-
+  await execa(argv[0], argv.slice(1), {
+    cwd,
+    stdio: 'inherit',
+  });
   log();
-
-  return () => hasError;
 };

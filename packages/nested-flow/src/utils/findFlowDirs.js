@@ -41,21 +41,11 @@ export default (
           }: d3DirTreeNodeType) =>
             childFilePath !== filePath && childName === '.flowconfig',
         )
-        .reduce(
-          (
-            result: $ReadOnlyArray<string>,
-            { data: { path: childFilePath } }: d3DirTreeNodeType,
-          ): $ReadOnlyArray<string> => {
-            const key = `<PROJECT_ROOT>${path
+        .map(
+          ({ data: { path: childFilePath } }: d3DirTreeNodeType) =>
+            `<PROJECT_ROOT>${path
               .dirname(childFilePath)
-              .replace(path.dirname(filePath), '')}`;
-
-            if (result.some((prevKey: string) => key.includes(prevKey)))
-              return result;
-
-            return [...result, key];
-          },
-          [],
+              .replace(path.dirname(filePath), '')}`,
         )
         .forEach((key: string) => {
           if (!Object.keys(config.ignore).includes(key) && showWarning)

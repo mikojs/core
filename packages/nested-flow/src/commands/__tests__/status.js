@@ -10,14 +10,31 @@ import testings from './__ignore__/testings';
 jest.mock('readline');
 
 describe('status', () => {
-  test('first trigger', async () => {
+  beforeEach(() => {
+    execa.mockClear();
+  });
+
+  test('first trigger and run command failed', async () => {
     const mockLog = jest.fn();
+    const mockResult: Promise<void> & {
+      stdout?: {},
+      stderr?: {},
+    } = Promise.reject(new Error('error'));
 
     // $FlowFixMe jest mock
     process.stdout.write = mockLog;
     global.console.log = mockLog;
-    (await status(['flow'], __dirname))();
+    mockResult.stdout = {
+      pipe: jest.fn(),
+    };
+    mockResult.stderr = {
+      pipe: jest.fn(),
+    };
+    execa.mockImplementation(() => mockResult);
 
+    const endFunc = await status(['flow'], __dirname);
+
+    expect(endFunc()).toBeTruthy();
     expect(mockLog).toHaveBeenCalledTimes(2);
     expect(mockLog).toHaveBeenCalledWith('');
     expect(mockLog).toHaveBeenCalledWith(chalk`{reset No errors!}`);

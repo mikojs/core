@@ -83,7 +83,7 @@ const link = (source: string, target: string) => {
 export default async (
   argv: $ReadOnlyArray<string>,
   cwd: string,
-): Promise<() => void> => {
+): Promise<() => boolean> => {
   const subprocess = execa(
     argv[0],
     [
@@ -109,13 +109,19 @@ export default async (
       callback();
     },
   });
+  let hasError: boolean = false;
 
   subprocess.stdout.pipe(transform);
   subprocess.stderr.pipe(transform);
 
-  await subprocess;
+  try {
+    await subprocess;
+  } catch (e) {
+    debugLog(e);
+    hasError = true;
+  }
 
-  return () => {
+  return (): boolean => {
     logger.start(
       chalk`Linking the {green flow-typed} files to the nested folders...`,
     );
@@ -173,5 +179,7 @@ export default async (
     logger.succeed(
       chalk`The {green flow-typed} files have linked to the nested flow folders`,
     );
+
+    return hasError;
   };
 };

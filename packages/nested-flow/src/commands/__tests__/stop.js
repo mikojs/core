@@ -1,12 +1,32 @@
 // @flow
 
+import execa from 'execa';
+
 import stop from '../stop';
 
-test('stop', async () => {
-  const mockLog = jest.fn();
+describe('stop', () => {
+  beforeEach(() => {
+    execa.mockClear();
+  });
 
-  global.console.log = mockLog;
+  test.each`
+    hasError
+    ${false}
+    ${true}
+  `(
+    'run command with error = $hasError',
+    async ({ hasError }: {| hasError: boolean |}) => {
+      const mockLog = jest.fn();
 
-  expect(await stop(['flow', 'stop'], __dirname)).toBeUndefined();
-  expect(mockLog).toHaveBeenCalled();
+      global.console.log = mockLog;
+
+      if (hasError)
+        execa.mockImplementation(() => Promise.reject(new Error('error')));
+
+      const endFunc = await stop(['flow', 'stop'], __dirname);
+
+      expect(endFunc()).toBe(hasError);
+      expect(mockLog).toHaveBeenCalled();
+    },
+  );
 });

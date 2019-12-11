@@ -1,5 +1,83 @@
 # CHANGELOG
 
+## 1.8.1 (2019-12-11)
+
+#### :boom: Breaking Change
+
+- `create-project`, `nested-flow`
+  - [#494](https://github.com/mikojs/core/pull/494) (@mikojs/core) Revert nested flow ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `nested-flow`, `utils`, `website`
+  - [#488](https://github.com/mikojs/core/pull/488) (@mikojs/core) Fix core-js ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`
+  - [#480](https://github.com/mikojs/core/pull/480) (@mikojs/configs, @mikojs/badges, @mikojs/create-project) Modify commander ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#478](https://github.com/mikojs/core/pull/478) (@mikojs/configs) Merge config key ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-base`
+  - [#474](https://github.com/mikojs/core/pull/474) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#473](https://github.com/mikojs/core/pull/473) (@mikojs/create-project) Remove findup in flowconfig ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `nested-flow`, `utils`, `website`
+  - [#491](https://github.com/mikojs/core/pull/491) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+  - [#488](https://github.com/mikojs/core/pull/488) (@mikojs/core) Fix core-js ([@HsuTing](https://github.com/HsuTing))
+- `create-project`, `nested-flow`
+  - [#486](https://github.com/mikojs/core/pull/486) (@mikojs/nested-flow) Add flow-typed install ([@HsuTing](https://github.com/HsuTing))
+  - [#477](https://github.com/mikojs/core/pull/477) (@mikojs/nested-flow) Add the new package ([@HsuTing](https://github.com/HsuTing))
+- `nested-flow`
+  - [#485](https://github.com/mikojs/core/pull/485) (@mikojs/babel-preset-base) Add @babel/plugin-proposal-nullish-coalescing-operator ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#475](https://github.com/mikojs/core/pull/475) (@mikojs/create-project) Add new option ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `utils`, `website`
+  - [#472](https://github.com/mikojs/core/pull/472) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+  - [#464](https://github.com/mikojs/core/pull/464) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-base`
+  - [#465](https://github.com/mikojs/core/pull/465) (@mikojs/eslint-config-base) add eslint-plugin-react-hooks ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`
+  - [#462](https://github.com/mikojs/core/pull/462) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`, `eslint-config-base`, `jest`, `website`
+  - [#460](https://github.com/mikojs/core/pull/460) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#458](https://github.com/mikojs/core/pull/458) (@mikojs/react-cms) Add renderer ([@HsuTing](https://github.com/HsuTing))
+  - [#457](https://github.com/mikojs/core/pull/457) (@mikojs/react-cms) Add reducer detail ([@HsuTing](https://github.com/HsuTing))
+  - [#456](https://github.com/mikojs/core/pull/456) (@mikojs/react-cms) Add source ([@HsuTing](https://github.com/HsuTing))
+  - [#440](https://github.com/mikojs/core/pull/440) (@mikojs/react-dnd) Add main view ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `nested-flow`
+  - [#493](https://github.com/mikojs/core/pull/493) (@mikojs/nested-flow) Fix nested flow error ([@HsuTing](https://github.com/HsuTing))
+  - [#489](https://github.com/mikojs/core/pull/489) (@mikojs/nested-flow) Link files after running `flow-typed install` ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#479](https://github.com/mikojs/core/pull/479) (@mikojs/configs) Fix the new config error ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#470](https://github.com/mikojs/core/pull/470) (@mikojs/koa-react) Use the babel version of react hot loader ([@HsuTing](https://github.com/HsuTing))
+  - [#469](https://github.com/mikojs/core/pull/469) @mikojs/server) Fix server stdin not work ([@HsuTing](https://github.com/HsuTing))
+  - [#466](https://github.com/mikojs/core/pull/466) (@mikojs/react-dnd) Fix dnd error ([@HsuTing](https://github.com/HsuTing))
+  - [#459](https://github.com/mikojs/core/pull/459) (@mikojs/react-cms) Fix error ([@HsuTing](https://github.com/HsuTing))
+- `create-project`
+  - [#467](https://github.com/mikojs/core/pull/467) (@mikojs/create-project) Fix showing diff error ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-base`, `jest`, `website`
+  - [#468](https://github.com/mikojs/core/pull/468) (@mikojs/koa-react) Fix error with the new version of react-is ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `create-project`
+  - [#487](https://github.com/mikojs/core/pull/487) (@mikojs/create-project) Use latest version ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `create-project`
+  - [#482](https://github.com/mikojs/core/pull/482) (@mikojs/core) Rewrite mock function to jest.fn() ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#481](https://github.com/mikojs/core/pull/481) (@mikojs/configs) Modify cliOptions code style ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `create-project`, `eslint-config-base`, `jest`, `utils`, `website`
+  - [#476](https://github.com/mikojs/core/pull/476) (@mikojs/core) Modify description ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#471](https://github.com/mikojs/core/pull/471) (@mikojs/babel-plugin-import-css) Modify code style ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.8.0 (2019-10-22)
 
 #### :boom: Breaking Change

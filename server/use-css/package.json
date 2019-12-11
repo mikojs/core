@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/use-css",
   "repository": "https://github.com/mikojs/core/tree/master/server/use-css",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.7.6",

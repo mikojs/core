@@ -5,11 +5,11 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/koa-graphql",
   "repository": "https://github.com/mikojs/core/tree/master/server/koa-graphql",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.7.6",
-    "@mikojs/utils": "^1.7.1",
+    "@mikojs/utils": "^1.8.1",
     "core-js": "^3.4.8",
     "d3-hierarchy": "^1.1.9",
     "debug": "^4.1.1",

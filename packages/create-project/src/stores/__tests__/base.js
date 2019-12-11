@@ -39,9 +39,7 @@ describe('base', () => {
       expected: $ReadOnlyArray<string>,
     |}) => {
       const mockLog = jest.fn();
-      const error: Error & {
-        stderr?: string,
-      } = new Error('error');
+      const error = new Error('error');
 
       global.console.info = mockLog;
       base.ctx = {
@@ -50,7 +48,9 @@ describe('base', () => {
         skipCommand: false,
         verbose: true,
       };
-      error.stderr = stderr;
+      // TODO: flow not support
+      // eslint-disable-next-line flowtype/no-weak-types
+      (error: any).stderr = stderr;
       execa.mockResolvedValueOnce().mockRejectedValueOnce(error);
 
       expect(

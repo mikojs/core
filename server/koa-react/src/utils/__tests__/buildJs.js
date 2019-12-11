@@ -13,11 +13,11 @@ const config = {
 
 describe('build js', () => {
   test('error with detail', async () => {
-    const error: Error & {
-      details?: string,
-    } = new Error('error');
+    const error = new Error('error');
 
-    error.details = 'error';
+    // TODO: flow not support
+    // eslint-disable-next-line flowtype/no-weak-types
+    (error: any).details = 'error';
     // $FlowFixMe jest mock
     webpack.mockCallbackArguments.mockReturnValue([error]);
 

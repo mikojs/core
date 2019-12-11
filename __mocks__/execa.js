@@ -1,19 +1,6 @@
 // @flow
 
-const mockResult: Promise<{ stdout: string }> & {
-  stdout?: {},
-  stderr?: {},
-} = Promise.resolve({ stdout: '' });
-
-mockResult.stdout = {
-  pipe: jest.fn(),
-};
-
-mockResult.stderr = {
-  pipe: jest.fn(),
-};
-
-export default (jest.fn().mockImplementation(() => mockResult): JestMockFn<
+export default (jest.fn().mockResolvedValue({ stdout: '' }): JestMockFn<
   $ReadOnlyArray<void>,
-  typeof mockResult,
+  Promise<{ stdout: string }>,
 >);

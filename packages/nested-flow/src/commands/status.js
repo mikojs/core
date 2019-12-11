@@ -51,7 +51,7 @@ const printMessage = (
 export default async (
   argv: $ReadOnlyArray<string>,
   cwd: string,
-): Promise<() => void> => {
+): Promise<() => boolean> => {
   const isShowAllErrors = argv.includes('--show-all-errors');
   const cache = {
     spinnerIndex: 0,
@@ -130,30 +130,35 @@ export default async (
       callback();
     },
   });
+  let hasError: boolean = false;
 
   debugLog({ isShowAllErrors });
   subprocess.stdout.pipe(transform);
   subprocess.stderr.pipe(transform);
 
-  await subprocess;
+  try {
+    await subprocess;
+  } catch (e) {
+    debugLog(e);
+    hasError = true;
+  }
+
   printMessage(cache.prevOutput, cwd, isShowAllErrors);
 
-  return () => {
+  return (): boolean => {
     const { log } = console;
 
-    if (countError === 0) {
-      log(chalk`{reset No errors!}`);
-      return;
-    }
-
-    log(
-      !isShowAllErrors && countError > MAX_ERROR
-        ? chalk`{reset \n...${(
-            countError - MAX_ERROR
-          ).toString()} more errors (only ${MAX_ERROR.toString()} out of ${countError.toString()} errors displayed)
+    if (countError === 0) log(chalk`{reset No errors!}`);
+    else
+      log(
+        !isShowAllErrors && countError > MAX_ERROR
+          ? chalk`{reset \n...${(
+              countError - MAX_ERROR
+            ).toString()} more errors (only ${MAX_ERROR.toString()} out of ${countError.toString()} errors displayed)
 To see all errors, re-run Flow with --show-all-errors}`
-        : chalk`{reset \nFound ${countError.toString()} errors}`,
-    );
-    return;
+          : chalk`{reset \nFound ${countError.toString()} errors}`,
+      );
+
+    return hasError;
   };
 };

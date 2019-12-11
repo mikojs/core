@@ -25,9 +25,7 @@ export default (
       .arguments('[commands...]')
       .usage(chalk`{green [commands...]}`)
       .description(
-        chalk`you can use each command in the {cyan flow}
-
-Example:
+        chalk`Example:
   nested-flow
   nested-flow {green flow-typed install}`,
       )
@@ -54,9 +52,7 @@ Example:
       .command('flow-typed')
       .arguments('[commands...]')
       .usage(chalk`{green [commands...]}`)
-      .description(
-        chalk`you can use ecah command in the {cyan flow-typed}, and {cyan flow-typed remove} is an additional command used to remove the {cyan flow-typed} folders`,
-      )
+      .description('you can use ecah command in the flow-typed')
       .allowUnknownOption()
       .action(
         (

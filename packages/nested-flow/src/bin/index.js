@@ -7,12 +7,11 @@ import chalk from 'chalk';
 import { handleUnhandledRejection } from '@mikojs/utils';
 
 import cliOptions from 'utils/cliOptions';
-import findFlowDirs from 'utils/findFlowDirs';
+import findFlowDir from 'utils/findFlowDir';
 
 import statusCommand from 'commands/status';
 import stopCommand from 'commands/stop';
 import flowTypedInstallCommand from 'commands/flowTyped/install';
-import flowTypedRemoveCommand from 'commands/flowTyped/remove';
 
 handleUnhandledRejection();
 
@@ -29,7 +28,6 @@ const debugLog = debug('nested-flow:bin');
       'flow-status': statusCommand,
       'flow-stop': stopCommand,
       'flow-typed-install': flowTypedInstallCommand,
-      'flow-typed-remove': flowTypedRemoveCommand,
     }[filteredArgv.join('-')] ||
     (() => {
       throw new Error(chalk`{red ${argv.join(' ')}} is not yet supported.`);
@@ -41,7 +39,7 @@ const debugLog = debug('nested-flow:bin');
    */
   let endFunc: () => void = () => {};
 
-  for (const folderPath of findFlowDirs())
+  for (const folderPath of findFlowDir())
     try {
       debugLog(folderPath);
       endFunc = (await command(argv, folderPath)) || endFunc;

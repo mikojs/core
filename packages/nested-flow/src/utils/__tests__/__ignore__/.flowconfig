@@ -1,7 +1,5 @@
 [ignore]
-<PROJECT_ROOT>/nodeModulesExist
-<PROJECT_ROOT>/pkgExist
-<PROJECT_ROOT>/pkgNotExist
+<PROJECT_ROOT>/test
 
 [include]
 

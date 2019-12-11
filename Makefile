@@ -8,7 +8,6 @@ install:
 	@yarn lerna exec "configs flow-typed:lerna install --verbose" \
 		--stream \
 		--concurrency 1
-	@yarn nested-flow flow-typed install
 
 babel-all:
 	@$(call babel-build)

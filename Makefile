@@ -8,7 +8,6 @@ install:
 	@yarn lerna exec "configs flow-typed:lerna install --verbose" \
 		--stream \
 		--concurrency 1
-	@yarn nested-flow flow-typed install
 
 babel-all:
 	@$(call babel-build)
@@ -56,7 +55,6 @@ define babel-build
 		$(2)
 	ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
 	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
-	ln -snf $(ROOT)/packages/nested-flow/lib/bin/index.js ./node_modules/.bin/nested-flow
 	ln -snf $(ROOT)/server/server/lib/bin/index.js ./node_modules/.bin/server
 	yarn lerna exec \
 		"configs babel:lerna $(1)" \

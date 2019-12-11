@@ -48,6 +48,7 @@
     "eslint": "latest",
     "eslint-watch": "latest",
     "fetch-mock": "latest",
+    "flow-bin": "latest",
     "flow-typed": "latest",
     "get-port": "latest",
     "husky": "latest",

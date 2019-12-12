@@ -28,7 +28,7 @@
     "koa": ">=2.0.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.113.0",
+    "flow-bin": "^0.110.0",
     "flow-typed": "^2.6.2",
     "koa": "^2.11.0",
     "node-fetch": "^2.6.0"

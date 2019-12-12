@@ -33,6 +33,7 @@
     "d3-hierarchy": "^1.1.9",
     "directory-tree": "^2.2.4",
     "flow-bin": "^0.113.0",
+    "flow-typed": "^2.6.2",
     "prettier": "^1.19.1",
     "prettier-package-json": "^2.1.3"
   },

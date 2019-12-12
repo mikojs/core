@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "flow-bin": "^0.113.0",
+    "flow-typed": "^2.6.2",
     "webpack": "^4.41.2"
   },
   "keywords": ["koa-react", "mikojs", "use-css"],

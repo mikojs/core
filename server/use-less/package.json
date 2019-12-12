@@ -19,6 +19,8 @@
     "@mikojs/use-css": ">=1.0.0"
   },
   "devDependencies": {
+    "@mikojs/koa-react": "^1.8.1",
+    "@mikojs/use-css": "^1.8.1",
     "flow-bin": "^0.110.0",
     "flow-typed": "^2.6.2",
     "webpack": "^4.41.2"

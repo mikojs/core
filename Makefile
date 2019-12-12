@@ -5,8 +5,8 @@ install:
 	@yarn lerna bootstrap
 	@make babel-all
 	@yarn flow-typed install --verbose
-	@yarn flow-mono create-symlinks && \
-		yarn flow-mono install-types && \
+	@yarn flow-mono create-symlinks .flowconfig && \
+		yarn flow-mono install-types --ignoreDeps=peer && \
 		yarn flow-mono create-stubs --use-root
 
 babel-all:

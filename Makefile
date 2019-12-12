@@ -5,9 +5,9 @@ install:
 	@yarn lerna bootstrap
 	@make babel-all
 	@yarn flow-typed install --verbose
-	@yarn lerna exec "configs flow-typed:lerna install --verbose" \
-		--stream \
-		--concurrency 1
+	@yarn flow-mono create-symlinks && \
+		yarn flow-mono install-types && \
+		yarn flow-mono create-stubs --use-root
 
 babel-all:
 	@$(call babel-build)
@@ -38,7 +38,17 @@ clean:
 		./babel/**/lib \
 		./server/**/lib \
 		./components/**/lib
-	rm -rf ./flow-typed/npm
+	rm -rf \
+		./packages/**/.flowconfig \
+		./babel/**/.flowconfig \
+		./server/**/.flowconfig \
+		./components/**/.flowconfig
+	rm -rf \
+		./flow-typed/npm \
+		./packages/**/flow-typed/npm \
+		./babel/**/flow-typed/npm \
+		./server/**/flow-typed/npm \
+		./components/**/flow-typed/npm
 	rm -rf ./coverage
 	rm -rf ./.eslintcache
 	rm -rf ./.changelog

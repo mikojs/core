@@ -25,6 +25,9 @@
     "output-file-sync": "^2.0.1",
     "rimraf": "^3.0.0"
   },
+  "devDependencies": {
+    "flow-bin": "^0.113.0"
+  },
   "keywords": ["configs", "mikojs"],
   "publishConfig": {
     "access": "public"

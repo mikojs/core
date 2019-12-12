@@ -17,6 +17,9 @@
   "peerDependencies": {
     "@babel/core": ">=7.0.0"
   },
+  "devDependencies": {
+    "flow-bin": "^0.113.0"
+  },
   "keywords": ["babel plugin", "mikojs", "transform flow files"],
   "publishConfig": {
     "access": "public"

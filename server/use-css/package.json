@@ -18,6 +18,7 @@
     "@mikojs/koa-react": ">=1.0.0"
   },
   "devDependencies": {
+    "flow-bin": "^0.113.0",
     "webpack": "^4.41.2"
   },
   "keywords": ["koa-react", "mikojs", "use-css"],

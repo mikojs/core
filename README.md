@@ -44,10 +44,8 @@ Here are the other packages for creating a new project.
 
 - [@mikojs/create-project](./packages/create-project)
 - [@mikojs/utils](./packages/utils)
-- [@mikojs/logger](./packages/logger)
 - [@mikojs/configs](./packages/configs)
 - [@mikojs/badges](./packages/badges)
-- [@mikojs/lerna-flow-typed-install](./packages/lerna-flow-typed-instal)
 - [@mikojs/eslint-config-base](./packages/eslint-config-base)
 - [@mikojs/jest](./packages/jest)
 

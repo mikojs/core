@@ -17,7 +17,7 @@
 
 [homepage]: https://mikojs.github.io/core/
 
-The packages in this repo are used to create a new project for `@mikojs/create-project`.
+The packages in this repo are used to create a new project quickly. The new project will be base on `babel`, `eslint`, `flow`, `husky`, `jest`, `lint-staged`, `mikojs`, `prettier`.
 
 #### Babel
 
@@ -42,7 +42,6 @@ Here are the plugins for building the server.
 
 Here are the other packages for creating a new project.
 
-- [@mikojs/create-project](./packages/create-project)
 - [@mikojs/utils](./packages/utils)
 - [@mikojs/logger](./packages/logger)
 - [@mikojs/configs](./packages/configs)

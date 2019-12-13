@@ -14,7 +14,6 @@ module.file_ext=.js
 module.file_ext=.less
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=./src
-module.system.node.resolve_dirname=./packages/create-project/src/__tests__/__ignore__/relay-server/src
 esproposal.optional_chaining=enable
 esproposal.decorators=ignore
 experimental.const_params=true

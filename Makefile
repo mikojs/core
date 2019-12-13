@@ -1,9 +1,11 @@
 ROOT=$(shell pwd)
 
-install:
+install-all:
 	@yarn install
 	@yarn lerna bootstrap
 	@make babel-all
+
+flow-typed-all:
 	@yarn flow-typed install --verbose
 	@yarn lerna exec "configs flow-typed:lerna install --verbose" \
 		--stream \

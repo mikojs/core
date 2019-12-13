@@ -16,7 +16,7 @@ save-cache: &save-cache
     - ~/.flow-typed
   key: dependencies-{{ checksum "yarn.lock" }}-v2
 
-install-all: &install-all
+install: &install
   name: Install packages
   command: yarn install:all
 
@@ -30,12 +30,13 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore-cache
-      - run: *install-all
+      - run: *install
       - save_cache: *save-cache
 
       - run:
           name: Check code style
           command: |
+            yarn flow-typed:all
             yarn configs lint .
             yarn flow
 
@@ -50,7 +51,7 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore-cache
-      - run: *install-all
+      - run: *install
       - run: *set-npm-key
 
       - run:
@@ -65,7 +66,7 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore-cache
-      - run: *install-all
+      - run: *install
       - run: *set-npm-key
 
       - run:

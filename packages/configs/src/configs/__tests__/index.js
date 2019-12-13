@@ -33,8 +33,7 @@ describe('configs', () => {
 
             case 'install':
             case 'run':
-              (configKey === 'exec' ||
-              (configKey === 'flow-typed:lerna' && key === 'run')
+              (configKey === 'exec'
                 ? expect(value([]))
                 : expect(value([])).not
               ).toHaveLength(0);

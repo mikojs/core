@@ -7,7 +7,7 @@ install-all:
 
 flow-typed-all:
 	@yarn flow-typed install --verbose
-	@yarn lerna exec "configs flow-typed:lerna install --verbose" \
+	@yarn lerna exec "flow-typed install --verbose -f 0.110.0" \
 		--stream \
 		--concurrency 1
 

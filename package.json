@@ -6,7 +6,8 @@
   "scripts": {
     "clean": "make clean",
     "dev": "make babel-changed WATCH=-w",
-    "install:all": "make install",
+    "flow-typed:all": "make flow-typed-all",
+    "install:all": "make install-all",
     "prod": "NODE_ENV=production make babel-all",
     "release": "make release",
     "test": "make babel-changed && lerna run test --stream && configs test"

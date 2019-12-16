@@ -15,6 +15,7 @@ lib
 # flow
 **/flow-typed/npm
 **/.flowconfig
+!./.flowconfig
 
 # jest
 coverage

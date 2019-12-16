@@ -1,6 +1,4 @@
 [ignore]
-# ignore for @mikojs/eslint-config-base
-<PROJECT_ROOT>/packages/eslint-config-base/src/__tests__/__ignore__
 
 [include]
 

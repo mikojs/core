@@ -9,13 +9,13 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.7.6",
-    "core-js": "^3.4.8"
-  },
-  "devDependencies": {
     "chalk": "^3.0.0",
+    "core-js": "^3.4.8",
     "d3-hierarchy": "^1.1.9",
     "directory-tree": "^2.2.4",
-    "fbjs": "^1.0.0",
+    "fbjs": "^1.0.0"
+  },
+  "devDependencies": {
     "flow-bin": "^0.110.0",
     "flow-typed": "^2.6.2"
   },

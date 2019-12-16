@@ -8,8 +8,7 @@ install-all:
 flow-typed-all:
 	@yarn flow-typed install --verbose
 	@yarn flow-mono create-symlinks .flowconfig && \
-		yarn flow-mono install-types --ignoreDeps=peer && \
-		yarn flow-mono create-stubs --use-root
+		yarn flow-mono install-types --ignoreDeps=peer
 
 babel-all:
 	@$(call babel-build)
@@ -34,8 +33,10 @@ release:
 	@open https://github.com/mikojs/core/releases
 
 clean:
-	@yarn lerna exec "rm -rf lib .flowconfig flow-typed/npm"
+	@yarn lerna exec "rm -rf lib .flowconfig flow-typed/npm" \
+		--ignore @mikojs/eslint-config-base
 	@yarn lerna clean && rm -rf ./node_modules
+	rm -rf ./flow-typed/npm
 	rm -rf ./coverage
 	rm -rf ./.eslintcache
 	rm -rf ./.changelog

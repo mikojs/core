@@ -35,6 +35,8 @@ release:
 clean:
 	@yarn lerna exec "rm -rf lib .flowconfig flow-typed/npm" \
 		--ignore @mikojs/eslint-config-base
+	@rm -rf ./packages/eslint-config-base/lib && \
+		rm -rf ./packages/eslint-config-base/flow-typed/npm
 	@yarn lerna clean && rm -rf ./node_modules
 	rm -rf ./flow-typed/npm
 	rm -rf ./coverage

@@ -34,23 +34,8 @@ release:
 	@open https://github.com/mikojs/core/releases
 
 clean:
+	@yarn lerna exec "rm -rf lib .flowconfig flow-typed/npm"
 	@yarn lerna clean && rm -rf ./node_modules
-	rm -rf \
-		./packages/**/lib \
-		./babel/**/lib \
-		./server/**/lib \
-		./components/**/lib
-	rm -rf \
-		./packages/**/.flowconfig \
-		./babel/**/.flowconfig \
-		./server/**/.flowconfig \
-		./components/**/.flowconfig
-	rm -rf \
-		./flow-typed/npm \
-		./packages/**/flow-typed/npm \
-		./babel/**/flow-typed/npm \
-		./server/**/flow-typed/npm \
-		./components/**/flow-typed/npm
 	rm -rf ./coverage
 	rm -rf ./.eslintcache
 	rm -rf ./.changelog

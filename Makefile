@@ -1,11 +1,13 @@
 ROOT=$(shell pwd)
 
-install:
+install-all:
 	@yarn install
 	@yarn lerna bootstrap
 	@make babel-all
+
+flow-typed-all:
 	@yarn flow-typed install --verbose
-	@yarn flow-mono create-symlinks && \
+	@yarn flow-mono create-symlinks .flowconfig && \
 		yarn flow-mono install-types && \
 		yarn flow-mono create-stubs --use-root
 

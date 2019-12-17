@@ -1,4 +1,5 @@
 [ignore]
+.*/koa-react/flow-typed/.*
 
 [include]
 
@@ -14,7 +15,11 @@ module.file_ext=.less
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=./src
 esproposal.optional_chaining=enable
-esproposal.decorators=ignore
-experimental.const_params=true
 
 [strict]
+
+[untyped]
+.*/.*/node_modules/graphql/.*
+.*/.*/node_modules/express-graphql/.*
+.*/.*/node_modules/react-relay-network-modern/.*
+.*/.*/node_modules/react-relay-network-modern-ssr/.*

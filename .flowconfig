@@ -16,3 +16,8 @@ module.system.node.root_relative_dirname=./src
 esproposal.optional_chaining=enable
 
 [strict]
+
+[untyped]
+# FIXME: flow-mono-cli error https://github.com/ImmoweltGroup/flow-mono-cli/issues/310
+.*/node_modules/graphql/.*
+.*/node_modules/express-graphql/.*

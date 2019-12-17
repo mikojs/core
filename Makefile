@@ -1,26 +1,33 @@
 ROOT=$(shell pwd)
+BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
+WATCH=""
 
 install-all:
 	@yarn install
 	@yarn lerna bootstrap
+	@yarn patch-package
 	@make babel-all
 
 flow-typed-all:
 	@yarn flow-typed install --verbose
-	@yarn lerna exec "flow-typed install --verbose -f 0.110.0" \
-		--stream \
-		--concurrency 1
+	@yarn flow-mono create-symlinks .flowconfig && \
+		yarn flow-mono install-types --ignoreDeps=peer
 
 babel-all:
 	@$(call babel-build)
 
-BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
-WATCH=""
 babel-changed:
 ifeq ($(shell printenv CI), true)
 	@echo "Skip babel build"
 else
 	@$(call babel-build, $(WATCH), --since $(BRANCH))
+endif
+
+flow:
+ifeq ($(shell printenv CI), true)
+	@yarn lerna exec "flow --quiet && flow stop" --stream --concurrency 1
+else
+	@yarn lerna exec "flow --quiet" --stream --concurrency 1 --since $(BRANCH)
 endif
 
 release:
@@ -34,12 +41,11 @@ release:
 	@open https://github.com/mikojs/core/releases
 
 clean:
+	@yarn lerna exec "rm -rf lib .flowconfig flow-typed/npm" \
+		--ignore @mikojs/eslint-config-base
+	@rm -rf ./packages/eslint-config-base/lib && \
+		rm -rf ./packages/eslint-config-base/flow-typed/npm
 	@yarn lerna clean && rm -rf ./node_modules
-	rm -rf \
-		./packages/**/lib \
-		./babel/**/lib \
-		./server/**/lib \
-		./components/**/lib
 	rm -rf ./flow-typed/npm
 	rm -rf ./coverage
 	rm -rf ./.eslintcache

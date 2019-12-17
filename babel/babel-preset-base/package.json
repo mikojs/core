@@ -24,6 +24,10 @@
   "peerDependencies": {
     "@babel/core": ">=7.0.0"
   },
+  "devDependencies": {
+    "flow-bin": "^0.110.0",
+    "flow-typed": "^2.6.2"
+  },
   "keywords": ["babel preset", "base", "mikojs"],
   "publishConfig": {
     "access": "public"

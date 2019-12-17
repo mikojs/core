@@ -13,7 +13,9 @@ lib
 .eslintcache
 
 # flow
-flow-typed/npm
+**/flow-typed/npm
+**/.flowconfig
+!./.flowconfig
 
 # jest
 coverage

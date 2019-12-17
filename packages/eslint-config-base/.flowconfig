@@ -1,0 +1,15 @@
+[ignore]
+<PROJECT_ROOT>/src/__tests__/__ignore__
+
+[include]
+
+[libs]
+./flow-typed
+../../flow-typed
+
+[lints]
+
+[options]
+esproposal.optional_chaining=enable
+
+[strict]

@@ -1,0 +1,22 @@
+diff --git a/node_modules/flow-mono-cli/dist/commands/install-types.js b/node_modules/flow-mono-cli/dist/commands/install-types.js
+index cc4d54d..2d16deb 100644
+--- a/node_modules/flow-mono-cli/dist/commands/install-types.js
++++ b/node_modules/flow-mono-cli/dist/commands/install-types.js
+@@ -22,7 +22,7 @@ async function installFlowTypes() {
+     cwd: rootPath
+   });
+   info(`Installing "flow-typed" definitions for dependencies in ${packagePaths.length} packages`);
+-  await Promise.all(packagePaths.map(async packagePath => {
++  for (const packagePath of packagePaths) {
+     try {
+       const args = flowTyped.parseArgs();
+       await exec.asyncWithRetries('flow-typed', ['install'].concat(args), {
+@@ -37,7 +37,7 @@ async function installFlowTypes() {
+       error(`Failed installing "flow-typed" definitions in package "${name}"`, e.message);
+       console.error(e);
+     }
+-  }));
++  }
+   success('Installed "flow-typed" definitions');
+ }
+ 

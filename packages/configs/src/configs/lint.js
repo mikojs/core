@@ -41,7 +41,7 @@ export default {
       'lib',
 
       // flow
-      'flow-typed/npm',
+      '**/flow-typed/npm',
 
       // jest
       'coverage',

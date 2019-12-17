@@ -36,7 +36,7 @@
     "@mikojs/jest": "^1.8.1",
     "fbjs": "^1.0.0",
     "fetch-mock": "^8.0.1",
-    "flow-bin": "^0.114.0",
+    "flow-bin": "^0.110.0",
     "flow-typed": "^2.6.2",
     "get-port": "^5.0.0",
     "relay-test-utils": "^7.1.0"

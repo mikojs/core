@@ -1,8 +1,5 @@
 [ignore]
-.*/server/src/.*
 .*/koa-react/src/.*
-.*/koa-graphql/src/.*
-.*/react-cms/src/.*
 
 [include]
 

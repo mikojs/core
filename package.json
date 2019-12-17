@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "make clean",
     "dev": "make babel-changed WATCH=-w",
-    "flow": "yarn lerna exec flow --stream",
+    "flow": "yarn lerna exec flow --stream --concurrency 1",
     "flow-typed:all": "make flow-typed-all",
     "install:all": "make install-all",
     "prod": "NODE_ENV=production make babel-all",

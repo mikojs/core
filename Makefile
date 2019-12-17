@@ -25,7 +25,7 @@ endif
 
 flow:
 ifeq ($(shell printenv CI), true)
-	@yarn lerna exec "flow --quiet" --stream --concurrency 1
+	@yarn lerna exec "flow --quiet && flow stop" --stream --concurrency 1
 else
 	@yarn lerna exec "flow --quiet" --stream --concurrency 1 --since $(BRANCH)
 endif

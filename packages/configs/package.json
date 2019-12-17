@@ -13,7 +13,7 @@
     "@mikojs/utils": "^1.8.1",
     "chalk": "^3.0.0",
     "commander": "^4.0.1",
-    "core-js": "^3.4.8",
+    "core-js": "^3.5.0",
     "cosmiconfig": "^6.0.0",
     "debug": "^4.1.1",
     "execa": "^3.4.0",

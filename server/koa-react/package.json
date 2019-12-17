@@ -18,10 +18,10 @@
     "@mikojs/utils": "^1.8.1",
     "address": "^1.1.2",
     "babel-loader": "^8.0.6",
-    "core-js": "^3.4.8",
+    "core-js": "^3.5.0",
     "debug": "^4.1.1",
     "fbjs": "^1.0.0",
-    "find-cache-dir": "^3.1.0",
+    "find-cache-dir": "^3.2.0",
     "hoist-non-react-statics": "^3.3.1",
     "koa-compose": "^4.1.0",
     "koa-mount": "^4.0.0",
@@ -38,7 +38,7 @@
     "react-router": "^5.1.2",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.1.2",
-    "terser-webpack-plugin": "^2.2.2"
+    "terser-webpack-plugin": "^2.3.1"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0",

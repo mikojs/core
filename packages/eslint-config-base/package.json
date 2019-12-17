@@ -10,7 +10,7 @@
   "dependencies": {
     "@babel/runtime": "^7.7.6",
     "babel-eslint": "^10.0.3",
-    "core-js": "^3.4.8",
+    "core-js": "^3.5.0",
     "eslint-config-fbjs": "^3.1.1",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^6.7.0",
@@ -20,7 +20,7 @@
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-jsdoc": "^18.4.3",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "eslint-plugin-relay": "^1.4.1"
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@mikojs/utils": "^1.8.1",
-    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-module-resolver": "^4.0.0",
     "eslint": "^6.7.2",
     "fbjs": "^1.0.0",
     "flow-bin": "^0.110.0",

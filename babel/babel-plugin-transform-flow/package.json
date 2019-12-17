@@ -11,7 +11,7 @@
     "@babel/core": "^7.7.5",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/runtime": "^7.7.6",
-    "core-js": "^3.4.8",
+    "core-js": "^3.5.0",
     "output-file-sync": "^2.0.1"
   },
   "peerDependencies": {

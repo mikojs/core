@@ -11,7 +11,7 @@
     "@babel/runtime": "^7.7.6",
     "@mikojs/utils": "^1.8.1",
     "babel-jest": "^24.9.0",
-    "core-js": "^3.4.8",
+    "core-js": "^3.5.0",
     "enzyme": "^3.10.0",
     "fbjs": "^1.0.0"
   },

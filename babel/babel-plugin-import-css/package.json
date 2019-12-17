@@ -10,7 +10,7 @@
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/runtime": "^7.7.6",
-    "core-js": "^3.4.8"
+    "core-js": "^3.5.0"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0"

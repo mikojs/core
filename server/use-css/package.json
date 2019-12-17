@@ -9,10 +9,10 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.7.6",
-    "core-js": "^3.4.8",
-    "css-loader": "^3.3.0",
+    "core-js": "^3.5.0",
+    "css-loader": "^3.4.0",
     "fbjs": "^1.0.0",
-    "style-loader": "^1.0.1"
+    "style-loader": "^1.0.2"
   },
   "peerDependencies": {
     "@mikojs/koa-react": ">=1.0.0"

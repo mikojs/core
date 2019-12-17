@@ -1,4 +1,6 @@
 ROOT=$(shell pwd)
+BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
+WATCH=""
 
 install-all:
 	@yarn install
@@ -13,13 +15,18 @@ flow-typed-all:
 babel-all:
 	@$(call babel-build)
 
-BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
-WATCH=""
 babel-changed:
 ifeq ($(shell printenv CI), true)
 	@echo "Skip babel build"
 else
 	@$(call babel-build, $(WATCH), --since $(BRANCH))
+endif
+
+flow:
+ifeq ($(shell printenv CI), true)
+	@yarn lerna exec flow --stream --concurrency 1
+else
+	@yarn lerna exec flow --stream --concurrency 1 --since $(BRANCH)
 endif
 
 release:

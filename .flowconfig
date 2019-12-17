@@ -1,4 +1,5 @@
 [ignore]
+.*/koa-react/src/.*
 
 [include]
 

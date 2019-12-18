@@ -34,7 +34,7 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "eslint": "^6.7.2",
     "fbjs": "^1.0.0",
-    "flow-bin": "^0.110.0",
+    "flow-bin": "^0.114.0",
     "flow-typed": "^2.6.2",
     "react": "^16.12.0"
   },

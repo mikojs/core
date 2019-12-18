@@ -13,6 +13,11 @@ import SourceContext from '../SourceContext';
 
 import { type itemType } from './useSource';
 
+type propsType = {|
+  ref: $Call<typeof useRef, null | mixed>,
+  style?: {},
+|};
+
 const CAN_DRAG_TYPE: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
   'only-drag',
   'drag-and-drop',
@@ -32,14 +37,11 @@ const CAN_DROP_TYPE: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
  *
  * @return {object} - the new props of the component has been injected
  */
-const useDnd = (item: itemType): {} => {
+const useDnd = (item: itemType): propsType => {
   const { updateSource } = useContext(SourceContext);
-  const newProps: {
-    ref: $Call<typeof useRef, null | mixed>,
-    style?: {},
-  } = {
+  const newProps: propsType = {
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-    ...(item.getProps?.() || {}),
+    ...(item.getProps?.() || {}: $Diff<propsType, {| ref: mixed |}>),
     ref: useRef(null),
   };
   const [{ isDragging }, connectDrag] = useDrag({

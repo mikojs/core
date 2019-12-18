@@ -21,7 +21,7 @@
     "@mikojs/koa-react": "^1.8.1",
     "flow-bin": "^0.110.0",
     "flow-typed": "^2.6.2",
-    "webpack": "^4.41.2"
+    "webpack": "^4.41.3"
   },
   "keywords": ["koa-react", "mikojs", "use-css"],
   "publishConfig": {

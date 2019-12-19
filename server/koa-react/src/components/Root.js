@@ -94,7 +94,7 @@ const Root = <M, P>({
   return (
     <ErrorCatch Error={Error}>
       <Main {...mainProps} Component={getStatic(Page)}>
-        {<-V: { key: string }>(props?: V) =>
+        {(props?: P) =>
           prevCtx.originalUrl !== ctx.originalUrl ? (
             <Loading />
           ) : (

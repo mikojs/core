@@ -40,7 +40,7 @@ export class Configs {
     configsEnv: $ReadOnlyArray<string>,
   } => ({
     ...config,
-    configsEnv: this.configsEnv,
+    configsEnv: this.configsEnv || [],
   });
 
   /**
@@ -118,11 +118,11 @@ export class Configs {
           |> config.run || emptyFunction.thatReturnsArgument
           |> customConfig.run || emptyFunction.thatReturnsArgument,
         env: {
-          ...config.env,
+          ...(config.env || {}),
           ...customConfig.env,
         },
         configsFiles: {
-          ...config.configsFiles,
+          ...(config.configsFiles || {}),
           ...customConfig.configsFiles,
         },
       };

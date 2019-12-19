@@ -21,6 +21,19 @@ type optionType =
       cliName: string,
     |};
 
+type infoType = {|
+  alias?: string,
+  install?: $ReadOnlyArray<string>,
+  config?: {},
+  ignore?: {|
+    name?: string,
+    ignore?: $ReadOnlyArray<string>,
+  |},
+  run?: $ReadOnlyArray<string>,
+  env?: {},
+  configsFiles?: {},
+|};
+
 const debugLog = debug('configs:cliOptions');
 const logger = createLogger('@mikojs/configs');
 
@@ -52,7 +65,7 @@ const printInfo = (cliName: ?string): boolean => {
     info(
       JSON.stringify(
         (Object.keys(config): $ReadOnlyArray<string>).reduce(
-          (result: {}, key: string): {} => {
+          (result: infoType, key: string): infoType => {
             switch (key) {
               case 'install':
               case 'run':
@@ -83,7 +96,8 @@ const printInfo = (cliName: ?string): boolean => {
                 };
             }
           },
-          {},
+          // $FlowFixMe TODO: https://github.com/facebook/flow/issues/2977
+          ({}: infoType),
         ),
         null,
         2,

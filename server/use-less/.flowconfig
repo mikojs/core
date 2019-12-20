@@ -1,6 +1,4 @@
 [ignore]
-.*/koa-react/src/.*
-.*/koa-react/flow-typed/npm/.*
 
 [include]
 
@@ -14,3 +12,7 @@
 esproposal.optional_chaining=enable
 
 [strict]
+
+[declarations]
+.*/koa-react/src/.*
+.*/koa-react/flow-typed/npm/.*

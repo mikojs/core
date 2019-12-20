@@ -68,25 +68,29 @@ const printInfo = (cliName: ?string): boolean => {
           (result: infoType, key: string): infoType => {
             switch (key) {
               case 'install':
+                return {
+                  ...result,
+                  install: config.install?.([]),
+                };
+
               case 'run':
                 return {
                   ...result,
-                  // $FlowFixMe TODO: https://github.com/facebook/flow/issues/2645
-                  [key]: config[key]([]),
+                  run: config.run?.([]),
                 };
 
               case 'config':
                 return {
                   ...result,
                   // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-                  [key]: config[key]?.(configs.addConfigsEnv({})),
+                  config: config.config?.(configs.addConfigsEnv({})),
                 };
 
               case 'ignore':
                 return {
                   ...result,
                   // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-                  [key]: config[key]?.(),
+                  ignore: config.ignore?.(),
                 };
 
               default:

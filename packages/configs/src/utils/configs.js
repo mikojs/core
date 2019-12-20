@@ -119,11 +119,11 @@ export class Configs {
           |> customConfig.run || emptyFunction.thatReturnsArgument,
         env: {
           ...(config.env || {}),
-          ...customConfig.env,
+          ...(customConfig.env || {}),
         },
         configsFiles: {
           ...(config.configsFiles || {}),
-          ...customConfig.configsFiles,
+          ...(customConfig.configsFiles || {}),
         },
       };
     });

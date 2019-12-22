@@ -49,37 +49,56 @@ export default [
   reactHooks,
   extendsConfig,
 ].reduce(
-  (newConfig: configType, otherConfig: configType) =>
-    Object.keys({ ...newConfig, ...otherConfig }).reduce(
-      (config: configType, key: string): configType => {
+  (config: configType, otherConfig: configType) =>
+    Object.keys(otherConfig).reduce(
+      (result: configType, key: string): configType => {
         switch (key) {
           case 'extends':
+            return {
+              ...result,
+              extends: [
+                ...(result.extends || []),
+                ...(otherConfig.extends || []),
+              ],
+            };
+
           case 'plugins':
             return {
-              ...config,
-              [key]: [...(newConfig[key] || []), ...(otherConfig[key] || [])],
+              ...result,
+              plugins: [
+                ...(result.plugins || []),
+                ...(otherConfig.plugins || []),
+              ],
             };
 
           case 'settings':
+            return {
+              ...result,
+              // $FlowFixMe https://github.com/facebook/flow/issues/8243
+              settings: {
+                ...result.settings,
+                ...otherConfig.settings,
+              },
+            };
+
           case 'rules':
             return {
-              ...config,
-              [key]: {
-                ...newConfig[key],
-                ...otherConfig[key],
+              ...result,
+              // $FlowFixMe https://github.com/facebook/flow/issues/8243
+              rules: {
+                ...result.rules,
+                ...otherConfig.rules,
               },
             };
 
           default:
             return {
-              ...config,
-              [key]: newConfig[key] || otherConfig[key],
+              ...result,
+              [key]: result[key] || otherConfig[key],
             };
         }
       },
-      {
-        extends: [],
-      },
+      config,
     ),
-  ({ extends: [] }: configType),
+  ({}: configType),
 );

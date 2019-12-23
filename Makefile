@@ -41,10 +41,13 @@ release:
 	@open https://github.com/mikojs/core/releases
 
 clean:
-	@yarn lerna exec "rm -rf lib .flowconfig flow-typed/npm" \
-		--ignore @mikojs/eslint-config-base
-	@rm -rf ./packages/eslint-config-base/lib && \
-		rm -rf ./packages/eslint-config-base/flow-typed/npm
+	@yarn lerna exec "rm -rf lib flow-typed/npm" \
+	@yarn lerna exec "rm -rf .flowconfig" \
+		--ignore @mikojs/eslint-config-base \
+		--ignore @mikojs/koa-graphql \
+		--ignore @mikojs/use-css \
+		--ignore @mikojs/use-less \
+		--ignore @mikojs/website
 	@yarn lerna clean && rm -rf ./node_modules
 	rm -rf ./flow-typed/npm
 	rm -rf ./coverage

@@ -71,7 +71,7 @@ describe('create environment', () => {
           createEnvironment(
             relayData,
             JSON.stringify({
-              queryID: query?.()?.params.name,
+              queryID: query?.params.name,
               variables: {},
             }),
           ),

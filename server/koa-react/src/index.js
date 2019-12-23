@@ -28,6 +28,7 @@ import buildStatic, {
 } from './utils/buildStatic';
 import server from './utils/server';
 
+import { type propsType } from './components/Root';
 import { type wrapperType } from './components/testRender';
 
 // TODO: use koa-webpack type
@@ -261,7 +262,18 @@ export default class React {
    *
    * @return {wrapperType} - testing wrapper component
    */
-  +render = (to: string, props?: {}): wrapperType => {
+  +render = (
+    to: string,
+    props?: {|
+      Main?: $PropertyType<propsType<>, 'Main'>,
+      Loading?: $PropertyType<propsType<>, 'Loading'>,
+      Error?: $PropertyType<propsType<>, 'Error'>,
+      routesData?: $PropertyType<propsType<>, 'routesData'>,
+      InitialPage?: $PropertyType<propsType<>, 'InitialPage'>,
+      mainInitialProps?: $PropertyType<propsType<>, 'mainInitialProps'>,
+      pageInitialProps?: $PropertyType<propsType<>, 'pageInitialProps'>,
+    |},
+  ): wrapperType => {
     const { cache } = this.store;
 
     return requireModule(path.resolve(__dirname, './components/testRender'))(

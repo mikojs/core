@@ -21,6 +21,19 @@ type optionType =
       cliName: string,
     |};
 
+type infoType = {|
+  alias?: string,
+  install?: $ReadOnlyArray<string>,
+  config?: {},
+  ignore?: {|
+    name?: string,
+    ignore?: $ReadOnlyArray<string>,
+  |},
+  run?: $ReadOnlyArray<string>,
+  env?: {},
+  configsFiles?: {},
+|};
+
 const debugLog = debug('configs:cliOptions');
 const logger = createLogger('@mikojs/configs');
 
@@ -52,28 +65,32 @@ const printInfo = (cliName: ?string): boolean => {
     info(
       JSON.stringify(
         (Object.keys(config): $ReadOnlyArray<string>).reduce(
-          (result: {}, key: string): {} => {
+          (result: infoType, key: string): infoType => {
             switch (key) {
               case 'install':
+                return {
+                  ...result,
+                  install: config.install?.([]),
+                };
+
               case 'run':
                 return {
                   ...result,
-                  // $FlowFixMe TODO: https://github.com/facebook/flow/issues/2645
-                  [key]: config[key]([]),
+                  run: config.run?.([]),
                 };
 
               case 'config':
                 return {
                   ...result,
                   // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-                  [key]: config[key]?.(configs.addConfigsEnv({})),
+                  config: config.config?.(configs.addConfigsEnv({})),
                 };
 
               case 'ignore':
                 return {
                   ...result,
                   // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-                  [key]: config[key]?.(),
+                  ignore: config.ignore?.(),
                 };
 
               default:
@@ -83,7 +100,8 @@ const printInfo = (cliName: ?string): boolean => {
                 };
             }
           },
-          {},
+          // $FlowFixMe TODO: https://github.com/facebook/flow/issues/2977
+          ({}: infoType),
         ),
         null,
         2,

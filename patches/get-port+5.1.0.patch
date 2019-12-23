@@ -1,0 +1,14 @@
+diff --git a/node_modules/get-port/index.js b/node_modules/get-port/index.js
+index ec4ec49..4f90527 100644
+--- a/node_modules/get-port/index.js
++++ b/node_modules/get-port/index.js
+@@ -53,7 +53,8 @@ module.exports = async options => {
+ 			lockedPorts.young = new Set();
+ 		}, releaseOldLockedPortsIntervalMs);
+ 
+-		interval.unref();
++    if (interval.unref)
++  		interval.unref();
+ 	}
+ 
+ 	for (const port of portCheckSequence(ports)) {

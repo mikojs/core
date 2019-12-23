@@ -23,17 +23,17 @@ export default async (
   props: propsType<{}, { to?: string }>,
   to?: string,
 ): Promise<wrapperType> => {
+  // FIXME: https://github.com/facebook/flow/issues/2977
+  const newProps = { ...props };
+
+  if (to) {
+    newProps.InitialPage = Link;
+    newProps.pageInitialProps = { to };
+  }
+
   const wrapper = mount<typeof Router>(
     <Router initialEntries={[to === '/' ? 'initialUrl' : '/']}>
-      <Root
-        {...props}
-        {...(!to
-          ? {}
-          : {
-              InitialPage: Link,
-              pageInitialProps: { to },
-            })}
-      />
+      <Root {...newProps} />
     </Router>,
   );
 

@@ -4,6 +4,10 @@ import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@mikojs/utils';
 
+type transformFlowOptionType = {
+  ignore: ?RegExp,
+};
+
 export default {
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
@@ -20,11 +24,12 @@ export default {
               '@mikojs/base',
               {
                 '@mikojs/transform-flow': {
-                  ...(!configsEnv.includes('relay')
+                  // FIXME: https://github.com/facebook/flow/issues/2977
+                  ...((!configsEnv.includes('relay')
                     ? {}
                     : {
                         ignore: /__generated__/,
-                      }),
+                      }): transformFlowOptionType),
                   ...(!configsEnv.includes('server')
                     ? {}
                     : {

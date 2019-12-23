@@ -35,8 +35,7 @@ const Main = ({
   const environment = createEnvironment(
     relayData,
     JSON.stringify({
-      // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-      queryID: Component.query?.()?.params.name,
+      queryID: Component.query?.params.name,
       variables,
     }),
   );

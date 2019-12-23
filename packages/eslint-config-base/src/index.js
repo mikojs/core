@@ -50,7 +50,7 @@ export default [
   extendsConfig,
 ].reduce(
   (config: configType, otherConfig: configType) =>
-    Object.keys(otherConfig).reduce(
+    ['extends', 'plugins', 'parser', 'env', 'settings', 'rules'].reduce(
       (result: configType, key: string): configType => {
         switch (key) {
           case 'extends':

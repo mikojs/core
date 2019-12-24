@@ -48,9 +48,6 @@ export default (
     ).catch(debugLog);
 
   return (
-    {}
-    |> configs.addConfigsEnv
-    |> configs.store[cliName].config || emptyFunction.thatReturnsArgument
-    |> configs.removeConfigsEnv
+    {} |> configs.store[cliName].config || emptyFunction.thatReturnsArgument
   );
 };

@@ -9,7 +9,7 @@
 import path from 'path';
 
 import { cosmiconfigSync } from 'cosmiconfig';
-import { emptyFunction, filterObject } from 'fbjs';
+import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
 import { type objConfigType, type configsType } from '../types';
@@ -25,34 +25,6 @@ export class Configs {
   rootDir = process.cwd();
 
   customConfigsPath = null;
-
-  configsEnv = [];
-
-  /**
-   * @example
-   * configs.addConfigsEnv({})
-   *
-   * @param {object} config - config from parent
-   *
-   * @return {object} - config with configsEnv
-   */
-  +addConfigsEnv = (config: {}): {
-    configsEnv: $ReadOnlyArray<string>,
-  } => ({
-    ...config,
-    configsEnv: this.configsEnv || [],
-  });
-
-  /**
-   * @example
-   * configs.removeConfigsEnv({})
-   *
-   * @param {object} config - config with configsEnv
-   *
-   * @return {object} - configs without configsEnv
-   */
-  +removeConfigsEnv = (config: {}): {} =>
-    filterObject(config, (value: mixed, key: string) => key !== 'configsEnv');
 
   /**
    * @example
@@ -77,11 +49,6 @@ export class Configs {
     }
 
     Object.keys(customConfigs).forEach((key: string) => {
-      if (key === 'configsEnv') {
-        this.configsEnv = customConfigs[key];
-        return;
-      }
-
       const customConfig: objConfigType =
         typeof customConfigs[key] !== 'function'
           ? customConfigs[key]
@@ -101,11 +68,8 @@ export class Configs {
           |> customConfig.install || emptyFunction.thatReturnsArgument,
         config: (configObj: {}) =>
           configObj
-          |> this.addConfigsEnv
           |> config.config || emptyFunction.thatReturnsArgument
-          |> this.addConfigsEnv
-          |> customConfig.config || emptyFunction.thatReturnsArgument
-          |> this.removeConfigsEnv,
+          |> customConfig.config || emptyFunction.thatReturnsArgument,
         ignore: (ignore?: {|
           name?: string,
           ignore?: $ReadOnlyArray<string>,

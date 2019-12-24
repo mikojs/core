@@ -17,18 +17,10 @@ export default {
           definedTags: [
             'flow',
             'jest-environment',
-            ...(!configsEnv.includes('react') ? [] : ['react']),
             ...(!configsEnv.includes('relay') ? [] : ['relayHash']),
           ],
         },
       ],
-      ...(!configsEnv.includes('react')
-        ? {}
-        : {
-            'jsdoc/require-example': ['error', { exemptedBy: ['react'] }],
-            'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
-            'jsdoc/require-returns': ['error', { exemptedBy: ['react'] }],
-          }),
     },
   }),
   ignore: () => ({

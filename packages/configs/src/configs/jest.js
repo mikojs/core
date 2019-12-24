@@ -8,10 +8,7 @@ export default {
   ],
   run: (argv: $ReadOnlyArray<string>) => [...argv, '--coverage=false'],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
-    setupFiles: [
-      '@mikojs/jest',
-      ...(!configsEnv.includes('react') ? [] : ['@mikojs/jest/lib/react']),
-    ],
+    setupFiles: ['@mikojs/jest'],
     testPathIgnorePatterns: [
       '__tests__/__ignore__',
       ...(!configsEnv.includes('relay') ? [] : ['__tests__/__generated__']),

@@ -8,27 +8,15 @@ export default {
     'eslint',
     'eslint-watch',
   ],
-  config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
+  config: () => ({
     extends: '@mikojs/base',
     rules: {
       'jsdoc/check-tag-names': [
         'error',
         {
-          definedTags: [
-            'flow',
-            'jest-environment',
-            ...(!configsEnv.includes('react') ? [] : ['react']),
-            ...(!configsEnv.includes('relay') ? [] : ['relayHash']),
-          ],
+          definedTags: ['flow', 'jest-environment'],
         },
       ],
-      ...(!configsEnv.includes('react')
-        ? {}
-        : {
-            'jsdoc/require-example': ['error', { exemptedBy: ['react'] }],
-            'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
-            'jsdoc/require-returns': ['error', { exemptedBy: ['react'] }],
-          }),
     },
   }),
   ignore: () => ({

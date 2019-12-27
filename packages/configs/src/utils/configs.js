@@ -61,7 +61,10 @@ export class Configs {
    * @param {{ config: configsType, filepath: string }} customConfigsObj - custom config
    */
   +handleCustomConfigs = (
-    customConfigsObj: ?{ config: configsType, filepath: string },
+    customConfigsObj: ?{
+      config: configsType | $ReadOnlyArray<configsType>,
+      filepath: string,
+    },
   ) => {
     if (!customConfigsObj) return;
 
@@ -74,6 +77,16 @@ export class Configs {
       debugLog(customConfigsObj);
       this.customConfigsPath = customConfigsPath;
       this.rootDir = path.dirname(customConfigsPath);
+    }
+
+    if (customConfigs instanceof Array) {
+      customConfigs.forEach((eachCustomConfig: configsType) => {
+        this.handleCustomConfigs({
+          config: eachCustomConfig,
+          filepath: __dirname,
+        });
+      });
+      return;
     }
 
     Object.keys(customConfigs).forEach((key: string) => {

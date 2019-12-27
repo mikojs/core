@@ -34,20 +34,22 @@ describe('configs', () => {
 
     // custom config
     configs.handleCustomConfigs({
-      config: {
-        funcConfig: emptyFunction.thatReturnsArgument,
-        objConfig: {
-          config: emptyFunction.thatReturnsArgument,
+      config: [
+        {
+          funcConfig: emptyFunction.thatReturnsArgument,
+          objConfig: {
+            config: emptyFunction.thatReturnsArgument,
+          },
+          funcMergeObject: {
+            config: emptyFunction.thatReturnsArgument,
+          },
+          objMergeFunc: emptyFunction.thatReturnsArgument,
+          noConfigInDefault: {
+            config: emptyFunction.thatReturnsArgument,
+          },
+          noConfigInCustom: {},
         },
-        funcMergeObject: {
-          config: emptyFunction.thatReturnsArgument,
-        },
-        objMergeFunc: emptyFunction.thatReturnsArgument,
-        noConfigInDefault: {
-          config: emptyFunction.thatReturnsArgument,
-        },
-        noConfigInCustom: {},
-      },
+      ],
       filepath: path.resolve(__dirname, './customConfig.js'),
     });
   });

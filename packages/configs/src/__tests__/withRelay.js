@@ -26,4 +26,16 @@ describe('with relay', () => {
       },
     });
   });
+
+  test('jest', () => {
+    expect(
+      withRelay[1].jest.config({
+        testPathIgnorePatterns: [],
+        coveragePathIgnorePatterns: [],
+      }),
+    ).toEqual({
+      testPathIgnorePatterns: ['__tests__/__generated__'],
+      coveragePathIgnorePatterns: ['__generated__'],
+    });
+  });
 });

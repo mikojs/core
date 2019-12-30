@@ -7,25 +7,16 @@ export default {
     '@mikojs/jest',
   ],
   run: (argv: $ReadOnlyArray<string>) => [...argv, '--coverage=false'],
-  config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
-    setupFiles: [
-      '@mikojs/jest',
-      ...(!configsEnv.includes('react') ? [] : ['@mikojs/jest/lib/react']),
-    ],
-    testPathIgnorePatterns: [
-      '__tests__/__ignore__',
-      ...(!configsEnv.includes('relay') ? [] : ['__tests__/__generated__']),
-    ],
+  config: () => ({
+    setupFiles: ['@mikojs/jest'],
+    testPathIgnorePatterns: ['__tests__/__ignore__'],
     collectCoverage: true,
     collectCoverageFrom: [
       '**/src/**/*.js',
       '**/src/**/.*/**/*.js',
       '!**/bin/*.js',
     ],
-    coveragePathIgnorePatterns: [
-      '__tests__/__ignore__',
-      ...(!configsEnv.includes('relay') ? [] : ['__generated__']),
-    ],
+    coveragePathIgnorePatterns: ['__tests__/__ignore__'],
     coverageDirectory: 'coverage',
     coverageReporters: ['html', 'text'],
     coverageThreshold: {

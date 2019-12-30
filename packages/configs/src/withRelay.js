@@ -5,6 +5,7 @@ import withReact from './withReact';
 export default [
   withReact,
   {
+    // lint
     lint: {
       config: ({
         rules,
@@ -33,6 +34,28 @@ export default [
             },
           ],
         },
+      }),
+    },
+
+    // jest
+    jest: {
+      config: ({
+        testPathIgnorePatterns,
+        coveragePathIgnorePatterns,
+        ...config
+      }: {
+        testPathIgnorePatterns: $ReadOnlyArray<string>,
+        coveragePathIgnorePatterns: $ReadOnlyArray<string>,
+      }) => ({
+        ...config,
+        testPathIgnorePatterns: [
+          ...testPathIgnorePatterns,
+          '__tests__/__generated__',
+        ],
+        coveragePathIgnorePatterns: [
+          ...coveragePathIgnorePatterns,
+          '__generated__',
+        ],
       }),
     },
   },

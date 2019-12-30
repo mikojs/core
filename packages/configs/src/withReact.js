@@ -1,6 +1,7 @@
 // @flow
 
 export default {
+  // lint
   lint: {
     config: ({
       rules,
@@ -42,6 +43,19 @@ export default {
         'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
         'jsdoc/require-returns': ['error', { exemptedBy: ['react'] }],
       },
+    }),
+  },
+
+  // jest
+  jest: {
+    config: ({
+      setupFiles,
+      ...config
+    }: {
+      setupFiles: $ReadOnlyArray<string>,
+    }) => ({
+      ...config,
+      setupFiles: [...setupFiles, '@mikojs/jest/lib/react'],
     }),
   },
 };

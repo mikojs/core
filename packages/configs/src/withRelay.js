@@ -12,7 +12,7 @@ export default [
       }: {
         rules: {
           'jsdoc/check-tag-names': [
-            'string',
+            string,
             {
               definedTags: $ReadOnlyArray<string>,
             },
@@ -23,7 +23,7 @@ export default [
         rules: {
           ...rules,
           'jsdoc/check-tag-names': [
-            'error',
+            rules['jsdoc/check-tag-names'][0],
             {
               ...rules['jsdoc/check-tag-names'][1],
               definedTags: [

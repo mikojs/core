@@ -42,4 +42,14 @@ describe('with react', () => {
       });
     },
   );
+
+  test('jest', () => {
+    expect(
+      withReact.jest.config({
+        setupFiles: [],
+      }),
+    ).toEqual({
+      setupFiles: ['@mikojs/jest/lib/react'],
+    });
+  });
 });

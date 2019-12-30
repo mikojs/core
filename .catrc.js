@@ -108,19 +108,25 @@ module.exports = (() => {
           : ['**/__tests__/**', '**/__mocks__/**'],
     });
 
-  return {
-    configsEnv: ['server', 'react', 'relay', 'less'],
+  // eslint-disable-next-line import/no-extraneous-dependencies
+  const withRelay = require('@mikojs/configs/lib/withRelay');
 
-    // babel
-    babel,
-    'babel:lerna': babel,
+  return [
+    withRelay,
+    {
+      configsEnv: ['server', 'react', 'relay', 'less'],
 
-    // eslint
-    lint,
-    'lint:watch': lint,
+      // babel
+      babel,
+      'babel:lerna': babel,
 
-    // jest
-    jest,
-    test: jest,
-  };
+      // eslint
+      lint,
+      'lint:watch': lint,
+
+      // jest
+      jest,
+      test: jest,
+    },
+  ];
 })();

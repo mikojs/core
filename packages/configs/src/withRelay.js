@@ -18,7 +18,7 @@ export default [
             rule || 'error',
             {
               ...options,
-              definedTags: [...(options.definedTags || []), 'react'],
+              definedTags: [...(options.definedTags || []), 'relay'],
             },
           ],
         }),

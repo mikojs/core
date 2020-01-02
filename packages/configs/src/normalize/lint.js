@@ -8,18 +8,18 @@ export type rulesType = {
 };
 
 export type lintType = {
-  rules: $ObjMap<rulesType, <V>(V) => V | string>,
+  rules?: $ObjMap<rulesType, <V>(V) => V | string>,
 };
 
 export default {
-  rules: <R: {}, C: {}>(rules: R, newRulesCallback: C) =>
+  rules: <R: {}, C: {}>(rules: ?R, newRulesCallback: C) =>
     Object.keys(newRulesCallback).reduce(
-      (result: R, ruleName: $Keys<C>) => ({
+      (result: ?R, ruleName: $Keys<C>) => ({
         ...result,
         [ruleName]: newRulesCallback[ruleName](
-          rules[ruleName] instanceof Array
-            ? rules[ruleName]
-            : [rules[ruleName], {}],
+          rules?.[ruleName] instanceof Array
+            ? rules?.[ruleName]
+            : [rules?.[ruleName], {}],
         ),
       }),
       rules,

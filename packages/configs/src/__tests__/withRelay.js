@@ -3,29 +3,40 @@
 import withRelay from '../withRelay';
 
 describe('with relay', () => {
-  test('lint', () => {
-    expect(
-      withRelay[1].lint.config({
+  test.each`
+    isEmptyConfig
+    ${false}
+    ${true}
+  `(
+    'lint with isEmptyConfig = $isEmptyConfig',
+    ({ isEmptyConfig }: {| isEmptyConfig: boolean |}) => {
+      expect(
+        withRelay[1].lint.config(
+          isEmptyConfig
+            ? {}
+            : {
+                rules: {
+                  'jsdoc/check-tag-names': [
+                    'error',
+                    {
+                      definedTags: [],
+                    },
+                  ],
+                },
+              },
+        ),
+      ).toEqual({
         rules: {
           'jsdoc/check-tag-names': [
             'error',
             {
-              definedTags: [],
+              definedTags: ['relay'],
             },
           ],
         },
-      }),
-    ).toEqual({
-      rules: {
-        'jsdoc/check-tag-names': [
-          'error',
-          {
-            definedTags: ['relay'],
-          },
-        ],
-      },
-    });
-  });
+      });
+    },
+  );
 
   test('jest', () => {
     expect(

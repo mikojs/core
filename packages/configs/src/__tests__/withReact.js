@@ -4,29 +4,25 @@ import withReact from '../withReact';
 
 describe('with react', () => {
   test.each`
-    checkTagNames
-    ${'error'}
-    ${['error', { definedTags: [] }]}
+    isEmptyConfig
+    ${false}
+    ${true}
   `(
-    'lint with jsdoc/check-tag-names = $checkTagNames',
-    ({
-      checkTagNames,
-    }: {|
-      checkTagNames:
-        | string
-        | [
-            string,
-            {
-              definedTags: $ReadOnlyArray<string>,
-            },
-          ],
-    |}) => {
+    'lint with isStrOptions = $isStrOptions',
+    ({ isEmptyConfig }: {| isEmptyConfig: boolean |}) => {
       expect(
-        withReact.lint.config({
-          rules: {
-            'jsdoc/check-tag-names': checkTagNames,
-          },
-        }),
+        withReact.lint.config(
+          isEmptyConfig
+            ? {}
+            : {
+                rules: {
+                  'jsdoc/check-tag-names': ['error', { definedTags: [] }],
+                  'jsdoc/require-example': ['error', { exemptedBy: [] }],
+                  'jsdoc/require-param': ['error', { exemptedBy: [] }],
+                  'jsdoc/require-returns': ['error', { exemptedBy: [] }],
+                },
+              },
+        ),
       ).toEqual({
         rules: {
           'jsdoc/check-tag-names': [

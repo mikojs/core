@@ -2,38 +2,26 @@
 
 import withReact from './withReact';
 
+import normalizeLint, { type rulesType, type lintType } from './normalize/lint';
+
 export default [
   withReact,
   {
     // lint
     lint: {
-      config: ({
-        rules,
-        ...config
-      }: {
-        rules: {
-          'jsdoc/check-tag-names': [
-            string,
-            {
-              definedTags: $ReadOnlyArray<string>,
-            },
-          ],
-        },
-      }) => ({
+      config: ({ rules, ...config }: lintType) => ({
         ...config,
-        rules: {
-          ...rules,
-          'jsdoc/check-tag-names': [
-            rules['jsdoc/check-tag-names'][0],
+        rules: normalizeLint.rules(rules, {
+          'jsdoc/check-tag-names': ([rule, options]: $NonMaybeType<
+            $PropertyType<rulesType, 'jsdoc/check-tag-names'>,
+          >) => [
+            rule || 'error',
             {
-              ...rules['jsdoc/check-tag-names'][1],
-              definedTags: [
-                ...rules['jsdoc/check-tag-names'][1].definedTags,
-                'relay',
-              ],
+              ...options,
+              definedTags: [...(options.definedTags || []), 'relay'],
             },
           ],
-        },
+        }),
       }),
     },
 

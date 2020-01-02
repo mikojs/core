@@ -1,48 +1,50 @@
 // @flow
 
+import normalizeLint, { type rulesType, type lintType } from './normalize/lint';
+
 export default {
   // lint
   lint: {
-    config: ({
-      rules,
-      ...config
-    }: {
-      rules: {
-        'jsdoc/check-tag-names':
-          | string
-          | [
-              string,
-              {
-                definedTags: $ReadOnlyArray<string>,
-              },
-            ],
-      },
-    }) => ({
+    config: ({ rules, ...config }: lintType) => ({
       ...config,
-      rules: {
-        ...rules,
-        'jsdoc/check-tag-names':
-          typeof rules['jsdoc/check-tag-names'] === 'string'
-            ? [
-                rules['jsdoc/check-tag-names'],
-                {
-                  definedTags: ['react'],
-                },
-              ]
-            : [
-                'error',
-                {
-                  ...rules['jsdoc/check-tag-names'][1],
-                  definedTags: [
-                    ...rules['jsdoc/check-tag-names'][1].definedTags,
-                    'react',
-                  ],
-                },
-              ],
-        'jsdoc/require-example': ['error', { exemptedBy: ['react'] }],
-        'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
-        'jsdoc/require-returns': ['error', { exemptedBy: ['react'] }],
-      },
+      rules: normalizeLint.rules(rules, {
+        'jsdoc/check-tag-names': ([rule, options]: $NonMaybeType<
+          $PropertyType<rulesType, 'jsdoc/check-tag-names'>,
+        >) => [
+          rule || 'error',
+          {
+            ...options,
+            definedTags: [...(options.definedTags || []), 'react'],
+          },
+        ],
+        'jsdoc/require-example': ([rule, options]: $NonMaybeType<
+          $PropertyType<rulesType, 'jsdoc/require-example'>,
+        >) => [
+          rule || 'error',
+          {
+            ...options,
+            exemptedBy: [...(options.exemptedBy || []), 'react'],
+          },
+        ],
+        'jsdoc/require-param': ([rule, options]: $NonMaybeType<
+          $PropertyType<rulesType, 'jsdoc/require-param'>,
+        >) => [
+          rule || 'error',
+          {
+            ...options,
+            exemptedBy: [...(options.exemptedBy || []), 'react'],
+          },
+        ],
+        'jsdoc/require-returns': ([rule, options]: $NonMaybeType<
+          $PropertyType<rulesType, 'jsdoc/require-returns'>,
+        >) => [
+          rule || 'error',
+          {
+            ...options,
+            exemptedBy: [...(options.exemptedBy || []), 'react'],
+          },
+        ],
+      }),
     }),
   },
 

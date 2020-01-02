@@ -7,7 +7,7 @@ export default {
   lint: {
     config: ({ rules, ...config }: lintType) => ({
       ...config,
-      rules: normalizeLint(rules, {
+      rules: normalizeLint.rules(rules, {
         'jsdoc/check-tag-names': ([rule, options]: $NonMaybeType<
           $PropertyType<rulesType, 'jsdoc/check-tag-names'>,
         >) => [

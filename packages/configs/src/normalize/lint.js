@@ -11,6 +11,17 @@ export type lintType = {
   rules?: $ObjMap<rulesType, <V>(V) => V | string>,
 };
 
+/**
+ * @example
+ * removeEmptyOption(['error'])
+ *
+ * @param {Array} rule - rule option
+ *
+ * @return {string | Array} - new rule option
+ */
+const removeEmptyOption = (rule: [string, {}]) =>
+  Object.keys(rule[1] || {}).length === 0 ? rule[0] : rule;
+
 export default {
   rules: <C: {}>(
     rules: $PropertyType<lintType, 'rules'>,
@@ -19,10 +30,12 @@ export default {
     Object.keys(newRulesCallback).reduce(
       (result: $PropertyType<lintType, 'rules'>, ruleName: $Keys<C>) => ({
         ...result,
-        [ruleName]: newRulesCallback[ruleName](
-          rules?.[ruleName] instanceof Array
-            ? rules?.[ruleName]
-            : [rules?.[ruleName], {}],
+        [ruleName]: removeEmptyOption(
+          newRulesCallback[ruleName](
+            rules?.[ruleName] instanceof Array
+              ? rules?.[ruleName]
+              : [rules?.[ruleName], {}],
+          ),
         ),
       }),
       rules,

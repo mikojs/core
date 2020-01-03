@@ -12,6 +12,19 @@ export type babelType = {
   plugins?: stringPresetOrPluginType,
 };
 
+/**
+ * @example
+ * removeEmptyOption(['pluginName'])
+ *
+ * @param {presetOrPluginType} presetOrPlugin - preset or plugin
+ *
+ * @return {stringPresetOrPluginType} - new preset or plugin
+ */
+const removeEmptyOption = (presetOrPlugin: presetOrPluginType) =>
+  Object.keys(presetOrPlugin[1] || {}).length === 0
+    ? presetOrPlugin[0]
+    : presetOrPlugin;
+
 export default {
   presetOrPlugin: <C: {}>(
     presetsOrPlugins: ?stringPresetOrPluginType,
@@ -26,14 +39,18 @@ export default {
       );
 
       if (index === -1) {
-        newPresetsOrPlugins.push(newPresetsOrPluginsCallback[name]([name, {}]));
+        newPresetsOrPlugins.push(
+          removeEmptyOption(newPresetsOrPluginsCallback[name]([name, {}])),
+        );
         return;
       }
 
-      newPresetsOrPlugins[index] = newPresetsOrPluginsCallback[name](
-        newPresetsOrPlugins[index] instanceof Array
-          ? newPresetsOrPlugins[index]
-          : [newPresetsOrPlugins[index], {}],
+      newPresetsOrPlugins[index] = removeEmptyOption(
+        newPresetsOrPluginsCallback[name](
+          newPresetsOrPlugins[index] instanceof Array
+            ? newPresetsOrPlugins[index]
+            : [newPresetsOrPlugins[index], {}],
+        ),
       );
     });
 

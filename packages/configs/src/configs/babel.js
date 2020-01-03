@@ -4,10 +4,6 @@ import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@mikojs/utils';
 
-type transformFlowOptionType = {
-  ignore: ?RegExp,
-};
-
 export default {
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
@@ -17,19 +13,13 @@ export default {
   ],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
     presets: [
-      ...(!configsEnv.some((env: string) => ['relay', 'server'].includes(env))
+      ...(!configsEnv.some((env: string) => ['server'].includes(env))
         ? ['@mikojs/base']
         : [
             [
               '@mikojs/base',
               {
                 '@mikojs/transform-flow': {
-                  // FIXME: https://github.com/facebook/flow/issues/2977
-                  ...((!configsEnv.includes('relay')
-                    ? {}
-                    : {
-                        ignore: /__generated__/,
-                      }): transformFlowOptionType),
                   ...(!configsEnv.includes('server')
                     ? {}
                     : {
@@ -71,7 +61,6 @@ export default {
               },
             ],
           ]),
-      ...(!configsEnv.includes('relay') ? [] : ['relay']),
       ...(!configsEnv.includes('server')
         ? []
         : [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]]),

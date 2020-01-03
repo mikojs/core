@@ -12,29 +12,7 @@ export default {
     '@mikojs/babel-preset-base',
   ],
   config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
-    presets: [
-      ...(!configsEnv.some((env: string) => ['server'].includes(env))
-        ? ['@mikojs/base']
-        : [
-            [
-              '@mikojs/base',
-              {
-                '@mikojs/transform-flow': {
-                  ...(!configsEnv.includes('server')
-                    ? {}
-                    : {
-                        plugins: [
-                          [
-                            '@babel/proposal-pipeline-operator',
-                            { proposal: 'minimal' },
-                          ],
-                        ],
-                      }),
-                },
-              },
-            ],
-          ]),
-    ],
+    presets: ['@mikojs/base'],
     plugins: [
       ...(!configsEnv.some((env: string) => ['css', 'less'].includes(env))
         ? []
@@ -61,9 +39,6 @@ export default {
               },
             ],
           ]),
-      ...(!configsEnv.includes('server')
-        ? []
-        : [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]]),
     ],
     ignore: mockChoice(
       process.env.NODE_ENV === 'test',

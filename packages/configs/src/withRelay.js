@@ -19,8 +19,8 @@ export default [
           '@mikojs/base': ([preset, options]: [
             string,
             {
-              '@mikojs/transform-flow': {
-                ignore: RegExp,
+              '@mikojs/transform-flow'?: {
+                ignore?: RegExp,
               },
             },
           ]) => [

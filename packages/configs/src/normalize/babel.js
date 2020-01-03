@@ -1,22 +1,32 @@
 // @flow
 
-type presetOrPluginType = string | [string, {}];
+export type presetOrPluginType = [string, {}];
+
+type stringPresetOrPluginType = $TupleMap<
+  $ReadOnlyArray<presetOrPluginType>,
+  <V>(V) => V | string,
+>;
+
+export type babelType = {
+  presets?: stringPresetOrPluginType,
+  plugins?: stringPresetOrPluginType,
+};
 
 export default {
-  presetOrPlugin: <R: $ReadOnlyArray<presetOrPluginType>, C: {}>(
-    presetsOrPlugins: R,
+  presetOrPlugin: <C: {}>(
+    presetsOrPlugins: ?stringPresetOrPluginType,
     newPresetsOrPluginsCallback: C,
-  ): R => {
-    const newPresetsOrPlugins = [...presetsOrPlugins];
+  ): stringPresetOrPluginType => {
+    const newPresetsOrPlugins = [...(presetsOrPlugins || [])];
 
     Object.keys(newPresetsOrPluginsCallback).forEach((name: $Keys<C>) => {
       const index = newPresetsOrPlugins.findIndex(
-        (presetOrPlugin: presetOrPluginType) =>
+        (presetOrPlugin: presetOrPluginType | string) =>
           presetOrPlugin === name || presetOrPlugin[0] === name,
       );
 
       if (index === -1) {
-        newPresetsOrPlugins.push(newPresetsOrPluginsCallback[name]([name]));
+        newPresetsOrPlugins.push(newPresetsOrPluginsCallback[name]([name, {}]));
         return;
       }
 

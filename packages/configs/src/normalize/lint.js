@@ -13,11 +13,11 @@ export type lintType = {
 
 export default {
   rules: <C: {}>(
-    rules: ?$PropertyType<lintType, 'rules'>,
+    rules: $PropertyType<lintType, 'rules'>,
     newRulesCallback: C,
   ) =>
     Object.keys(newRulesCallback).reduce(
-      (result: ?$PropertyType<lintType, 'rules'>, ruleName: $Keys<C>) => ({
+      (result: $PropertyType<lintType, 'rules'>, ruleName: $Keys<C>) => ({
         ...result,
         [ruleName]: newRulesCallback[ruleName](
           rules?.[ruleName] instanceof Array

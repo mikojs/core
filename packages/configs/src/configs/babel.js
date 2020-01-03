@@ -11,35 +11,8 @@ export default {
     '@babel/core',
     '@mikojs/babel-preset-base',
   ],
-  config: ({ configsEnv }: { configsEnv: $ReadOnlyArray<string> }) => ({
+  config: () => ({
     presets: ['@mikojs/base'],
-    plugins: [
-      ...(!configsEnv.some((env: string) => ['css', 'less'].includes(env))
-        ? []
-        : [
-            [
-              'css-modules-transform',
-              {
-                extensions: configsEnv.includes('less') ? ['.less'] : ['.css'],
-                devMode: process.env.NODE_ENV !== 'production',
-                keepImport: process.env.NODE_ENV !== 'test',
-                extractCss: {
-                  dir: './lib',
-                  relativeRoot: './src',
-                  filename: configsEnv.includes('less')
-                    ? '[path]/[name].less'
-                    : '[path]/[name].css',
-                },
-              },
-            ],
-            [
-              '@mikojs/import-css',
-              {
-                test: configsEnv.includes('less') ? /\.less$/ : /\.css$/,
-              },
-            ],
-          ]),
-    ],
     ignore: mockChoice(
       process.env.NODE_ENV === 'test',
       emptyFunction.thatReturns([]),

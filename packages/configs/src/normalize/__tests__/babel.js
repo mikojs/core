@@ -5,7 +5,7 @@ import babel, { type presetOrPluginType } from '../babel';
 test('babel', () => {
   expect(
     babel.presetOrPlugin(['test'], {
-      test: ([preset, options]: presetOrPluginType) => [preset, options],
+      test: ([preset]: presetOrPluginType) => [preset],
     }),
   ).toEqual(['test']);
 });

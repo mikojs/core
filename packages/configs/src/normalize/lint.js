@@ -20,7 +20,7 @@ export type lintType = {
  * @return {string | Array} - new rule option
  */
 const removeEmptyOption = (rule: [string, {}]) =>
-  Object.keys(rule[1]).length === 0 ? rule[0] : rule;
+  Object.keys(rule[1] || {}).length === 0 ? rule[0] : rule;
 
 export default {
   rules: <C: {}>(

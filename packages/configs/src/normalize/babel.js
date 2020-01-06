@@ -21,7 +21,7 @@ export type babelType = {
  * @return {stringPresetOrPluginType} - new preset or plugin
  */
 const removeEmptyOption = (presetOrPlugin: presetOrPluginType) =>
-  Object.keys(presetOrPlugin[1]).length === 0
+  Object.keys(presetOrPlugin[1] || {}).length === 0
     ? presetOrPlugin[0]
     : presetOrPlugin;
 

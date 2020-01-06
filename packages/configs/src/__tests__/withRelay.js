@@ -12,12 +12,12 @@ describe('with relay', () => {
     ({ isEmptyConfig }: {| isEmptyConfig: boolean |}) => {
       test('babel', () => {
         expect(
-          withRelay[1].react.config(
+          withRelay[1].babel.config(
             isEmptyConfig
               ? {}
               : {
-                  presets: ['@mikojs/base', {}],
-                  plugins: ['relay', {}],
+                  presets: [['@mikojs/base', {}]],
+                  plugins: [['relay', {}]],
                 },
           ),
         ).toEqual({

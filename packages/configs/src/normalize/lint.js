@@ -1,10 +1,10 @@
 // @flow
 
 export type rulesType = {
-  'jsdoc/check-tag-names'?: [string, { definedTags: $ReadOnlyArray<string> }],
-  'jsdoc/require-example'?: [string, { exemptedBy: $ReadOnlyArray<string> }],
-  'jsdoc/require-param'?: [string, { exemptedBy: $ReadOnlyArray<string> }],
-  'jsdoc/require-returns'?: [string, { exemptedBy: $ReadOnlyArray<string> }],
+  'jsdoc/check-tag-names'?: [string, { definedTags?: $ReadOnlyArray<string> }],
+  'jsdoc/require-example'?: [string, { exemptedBy?: $ReadOnlyArray<string> }],
+  'jsdoc/require-param'?: [string, { exemptedBy?: $ReadOnlyArray<string> }],
+  'jsdoc/require-returns'?: [string, { exemptedBy?: $ReadOnlyArray<string> }],
 };
 
 export type lintType = {
@@ -20,7 +20,7 @@ export type lintType = {
  * @return {string | Array} - new rule option
  */
 const removeEmptyOption = (rule: [string, {}]) =>
-  Object.keys(rule[1] || {}).length === 0 ? rule[0] : rule;
+  Object.keys(rule[1]).length === 0 ? rule[0] : rule;
 
 export default {
   rules: <C: {}>(

@@ -81,9 +81,6 @@ This module use [cosmiconfig](https://github.com/davidtheclark/cosmiconfig) to f
 
 ```js
 module.exports = {
-  // configsEnv is special key, this will give to the argument of the each config function
-  configsEnv: ['react'],
-
   // overwrite the existing config by function
   babel: config => { ... },
 

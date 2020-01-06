@@ -119,8 +119,6 @@ module.exports = (() => {
     withServer,
     withLess,
     {
-      configsEnv: ['server', 'react', 'relay', 'less'],
-
       // babel
       babel,
       'babel:lerna': babel,

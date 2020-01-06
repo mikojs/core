@@ -55,25 +55,6 @@ describe('cli options', () => {
     );
   });
 
-  test('run command with --configs-env', async () => {
-    expect(
-      await cliOptions([
-        ...defaultArgv,
-        'runCmd',
-        '--optionA',
-        '--configs-env',
-        'react',
-        '--optionB',
-      ]),
-    ).toEqual({
-      cli: babelCli,
-      argv: ['--optionA', '--optionB'],
-      env: {},
-      cliName: 'runCmd',
-    });
-    expect(configs.configsEnv).toEqual(['react']);
-  });
-
   test.each`
     cliName     | argv
     ${'runCmd'} | ${[]}

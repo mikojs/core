@@ -10,7 +10,7 @@ export default {
   babel: {
     config: ({ presets, plugins, ...config }: babelType) => ({
       ...config,
-      presets: normalizeBabel.presetOrPlugin(presets, {
+      presets: normalizeBabel.presetOrPlugin('preset', presets, {
         '@mikojs/base': ([preset, options]: [
           string,
           {
@@ -25,6 +25,7 @@ export default {
             '@mikojs/transform-flow': {
               ...options['@mikojs/transform-flow'],
               plugins: normalizeBabel.presetOrPlugin(
+                'plugin',
                 options['@mikojs/transform-flow']?.plugins,
                 {
                   '@babel/proposal-pipeline-operator': ([
@@ -43,7 +44,7 @@ export default {
           },
         ],
       }),
-      plugins: normalizeBabel.presetOrPlugin(plugins, {
+      plugins: normalizeBabel.presetOrPlugin('plugin', plugins, {
         '@babel/proposal-pipeline-operator': ([
           plugin,
           options,

@@ -14,7 +14,7 @@ export default [
     babel: {
       config: ({ plugins, ...config }: babelType) => ({
         ...config,
-        plugins: normalizeBabel.presetOrPlugin(plugins, {
+        plugins: normalizeBabel.presetOrPlugin('plugin', plugins, {
           'css-modules-transform': ([plugin, options]: [
             string,
             {

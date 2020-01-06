@@ -11,13 +11,13 @@ export default {
   babel: {
     config: ({ presets, plugins, ...config }: babelType) => ({
       ...config,
-      presets: normalizeBabel.presetOrPlugin(presets, {
+      presets: normalizeBabel.presetOrPlugin('preset', presets, {
         '@babel/react': ([preset, options]: presetOrPluginType) => [
           preset,
           options,
         ],
       }),
-      plugins: normalizeBabel.presetOrPlugin(plugins, {
+      plugins: normalizeBabel.presetOrPlugin('plugin', plugins, {
         '@babel/proposal-class-properties': ([
           plugin,
           options,

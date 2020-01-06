@@ -15,7 +15,7 @@ export default [
     babel: {
       config: ({ presets, plugins, ...config }: babelType) => ({
         ...config,
-        presets: normalizeBabel.presetOrPlugin(presets, {
+        presets: normalizeBabel.presetOrPlugin('preset', presets, {
           '@mikojs/base': ([preset, options]: [
             string,
             {
@@ -34,7 +34,7 @@ export default [
             },
           ],
         }),
-        plugins: normalizeBabel.presetOrPlugin(plugins, {
+        plugins: normalizeBabel.presetOrPlugin('plugin', plugins, {
           relay: ([preset, options]: presetOrPluginType) => [preset, options],
         }),
       }),

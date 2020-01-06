@@ -124,4 +124,26 @@ module.exports = {
     },
   },
 };
+
+// use multipe configs
+const withReact = require('@mikojs/configs/lib/withReact');
+
+module.exports = [
+  withReact,
+  {
+    babel: {
+      ...
+    },
+  },
+];
 ```
+
+###### Configs
+
+- [withReact](./src/withReact)
+- [withRelay](./src/withRelay)
+- [withCss](./src/withCss)
+- [withLess](./src/withLess)
+- [withServer](./src/withServer)
+
+You can write the custom config, too.

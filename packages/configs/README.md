@@ -81,9 +81,6 @@ This module use [cosmiconfig](https://github.com/davidtheclark/cosmiconfig) to f
 
 ```js
 module.exports = {
-  // configsEnv is special key, this will give to the argument of the each config function
-  configsEnv: ['react'],
-
   // overwrite the existing config by function
   babel: config => { ... },
 
@@ -127,4 +124,26 @@ module.exports = {
     },
   },
 };
+
+// use multipe configs
+const withReact = require('@mikojs/configs/lib/withReact');
+
+module.exports = [
+  withReact,
+  {
+    babel: {
+      ...
+    },
+  },
+];
 ```
+
+###### Configs
+
+- [withReact](./src/withReact)
+- [withRelay](./src/withRelay)
+- [withCss](./src/withCss)
+- [withLess](./src/withLess)
+- [withServer](./src/withServer)
+
+You can write the custom config, too.

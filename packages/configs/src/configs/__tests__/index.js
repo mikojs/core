@@ -40,7 +40,7 @@ describe('configs', () => {
               break;
 
             case 'config':
-              expect(Object.keys(value({ configsEnv: [] }))).not.toBe(0);
+              expect(Object.keys(value({}))).not.toBe(0);
               break;
 
             case 'env':

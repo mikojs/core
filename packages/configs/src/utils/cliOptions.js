@@ -83,7 +83,7 @@ const printInfo = (cliName: ?string): boolean => {
                 return {
                   ...result,
                   // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-                  config: config.config?.(configs.addConfigsEnv({})),
+                  config: config.config?.({}),
                 };
 
               case 'ignore':
@@ -176,13 +176,11 @@ const filterOptions = (optionKey: ?string, arg: string, prevArg: string) =>
  */
 const getOptions = ({
   cliName,
-  configsEnv,
   configsFiles,
   rawArgs,
   options,
 }: {|
   cliName: string,
-  configsEnv?: $ReadOnlyArray<string>,
   configsFiles?: $ReadOnlyArray<string>,
   rawArgs: $ReadOnlyArray<string>,
   options: $ReadOnlyArray<{|
@@ -191,8 +189,6 @@ const getOptions = ({
   |}>,
 |}): optionType => {
   if (!validateCliName(cliName)) return false;
-
-  if (configsEnv instanceof Array) configs.configsEnv = configsEnv;
 
   if (configs.store[cliName] && configsFiles instanceof Array)
     configsFiles.forEach((key: string) => {
@@ -261,18 +257,11 @@ export default async (argv: $ReadOnlyArray<string>): Promise<optionType> =>
       .description(
         chalk`Example:
   configs {green babel -w}
-  configs {green babel} {gray --configs-env envA,envB}
-  configs {green exec rawArgsFilteredrun custom command} {gray --configs-env envA,envB --configs-files babel,lint}
+  configs {green exec rawArgsFilteredrun custom command} {gray --configs-files babel,lint}
   configs {cyan info}
   configs {cyan info} {green babel}
   configs {cyan install} {green babel}
   configs {cyan remove} {green babel}`,
-      )
-      .option(
-        '--configs-env [env...]',
-        'configs environment variables',
-        // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-        (value: string) => value?.split(','),
       )
       .option(
         '--configs-files [fileName...]',
@@ -286,7 +275,6 @@ export default async (argv: $ReadOnlyArray<string>): Promise<optionType> =>
           cliName: string,
           _: mixed,
           options: {|
-            configsEnv?: $ReadOnlyArray<string>,
             configsFiles?: $ReadOnlyArray<string>,
             rawArgs: $ReadOnlyArray<string>,
             options: $ReadOnlyArray<{|

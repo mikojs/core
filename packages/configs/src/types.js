@@ -1,8 +1,6 @@
 // @flow
 
-export type funcConfigType = (config: {
-  configsEnv: $ReadOnlyArray<string>,
-}) => {};
+export type funcConfigType = (config: {}) => {};
 
 export type objConfigType = {|
   alias?: string | ((argv: $ReadOnlyArray<string>) => string),
@@ -23,6 +21,5 @@ export type objConfigType = {|
 export type configType = funcConfigType | objConfigType;
 
 export type configsType = {
-  configsEnv?: $ReadOnlyArray<string>,
   [string]: configType,
 };

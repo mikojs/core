@@ -4,8 +4,8 @@ import babel, { type presetOrPluginType } from '../babel';
 
 test('babel', () => {
   expect(
-    babel.presetOrPlugin('preset', ['test'], {
-      test: ([preset]: presetOrPluginType) => [preset],
+    babel.presetOrPlugin('preset', ['env'], {
+      'babel-preset-env': ([preset]: presetOrPluginType) => [preset],
     }),
-  ).toEqual(['test']);
+  ).toEqual(['env']);
 });

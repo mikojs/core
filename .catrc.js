@@ -108,11 +108,16 @@ module.exports = (() => {
           : ['**/__tests__/**', '**/__mocks__/**'],
     });
 
-  // eslint-disable-next-line import/no-extraneous-dependencies
+  /* eslint-disable import/no-extraneous-dependencies */
   const withRelay = require('@mikojs/configs/lib/withRelay');
+  const withServer = require('@mikojs/configs/lib/withServer');
+  const withLess = require('@mikojs/configs/lib/withLess');
+  /* eslint-enable import/no-extraneous-dependencies */
 
   return [
     withRelay,
+    withServer,
+    withLess,
     {
       configsEnv: ['server', 'react', 'relay', 'less'],
 

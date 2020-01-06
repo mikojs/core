@@ -1,8 +1,37 @@
 // @flow
 
+import normalizeBabel, {
+  type babelType,
+  type presetOrPluginType,
+} from './normalize/babel';
 import normalizeLint, { type rulesType, type lintType } from './normalize/lint';
 
 export default {
+  // babel
+  babel: {
+    config: ({ presets, plugins, ...config }: babelType) => ({
+      ...config,
+      presets: normalizeBabel.presetOrPlugin('preset', presets, {
+        '@babel/react': ([preset, options]: presetOrPluginType) => [
+          preset,
+          options,
+        ],
+      }),
+      plugins: normalizeBabel.presetOrPlugin('plugin', plugins, {
+        '@babel/proposal-class-properties': ([
+          plugin,
+          options,
+        ]: presetOrPluginType) => [
+          plugin,
+          {
+            ...options,
+            loose: true,
+          },
+        ],
+      }),
+    }),
+  },
+
   // lint
   lint: {
     config: ({ rules, ...config }: lintType) => ({

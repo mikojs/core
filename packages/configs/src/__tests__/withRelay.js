@@ -3,37 +3,59 @@
 import withRelay from '../withRelay';
 
 describe('with relay', () => {
-  test.each`
+  describe.each`
     isEmptyConfig
     ${false}
     ${true}
   `(
-    'lint with isEmptyConfig = $isEmptyConfig',
+    'isEmptyConfig = $isEmptyConfig',
     ({ isEmptyConfig }: {| isEmptyConfig: boolean |}) => {
-      expect(
-        withRelay[1].lint.config(
-          isEmptyConfig
-            ? {}
-            : {
-                rules: {
-                  'jsdoc/check-tag-names': [
-                    'error',
-                    {
-                      definedTags: [],
-                    },
-                  ],
+      test('babel', () => {
+        expect(
+          withRelay[1].babel.config(
+            isEmptyConfig
+              ? {}
+              : {
+                  presets: [['@mikojs/base', {}]],
+                  plugins: [['relay', {}]],
+                },
+          ),
+        ).toEqual({
+          presets: [
+            [
+              '@mikojs/base',
+              {
+                '@mikojs/transform-flow': {
+                  ignore: /__generated__/,
                 },
               },
-        ),
-      ).toEqual({
-        rules: {
-          'jsdoc/check-tag-names': [
-            'error',
-            {
-              definedTags: ['relay'],
-            },
+            ],
           ],
-        },
+          plugins: ['relay'],
+        });
+      });
+
+      test('lint', () => {
+        expect(
+          withRelay[1].lint.config(
+            isEmptyConfig
+              ? {}
+              : {
+                  rules: {
+                    'jsdoc/check-tag-names': ['error', {}],
+                  },
+                },
+          ),
+        ).toEqual({
+          rules: {
+            'jsdoc/check-tag-names': [
+              'error',
+              {
+                definedTags: ['relay'],
+              },
+            ],
+          },
+        });
       });
     },
   );

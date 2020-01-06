@@ -3,38 +3,63 @@
 import withReact from '../withReact';
 
 describe('with react', () => {
-  test.each`
+  describe.each`
     isEmptyConfig
     ${false}
     ${true}
   `(
-    'lint with isStrOptions = $isStrOptions',
+    'isEmptyConfig = $isEmptyConfig',
     ({ isEmptyConfig }: {| isEmptyConfig: boolean |}) => {
-      expect(
-        withReact.lint.config(
-          isEmptyConfig
-            ? {}
-            : {
-                rules: {
-                  'jsdoc/check-tag-names': ['error', { definedTags: [] }],
-                  'jsdoc/require-example': ['error', { exemptedBy: [] }],
-                  'jsdoc/require-param': ['error', { exemptedBy: [] }],
-                  'jsdoc/require-returns': ['error', { exemptedBy: [] }],
+      test('babel', () => {
+        expect(
+          withReact.babel.config(
+            isEmptyConfig
+              ? {}
+              : {
+                  presets: [['@babel/react', {}]],
+                  plugins: [['@babel/proposal-class-properties', {}]],
                 },
+          ),
+        ).toEqual({
+          presets: ['@babel/react'],
+          plugins: [
+            [
+              '@babel/proposal-class-properties',
+              {
+                loose: true,
               },
-        ),
-      ).toEqual({
-        rules: {
-          'jsdoc/check-tag-names': [
-            'error',
-            {
-              definedTags: ['react'],
-            },
+            ],
           ],
-          'jsdoc/require-example': ['error', { exemptedBy: ['react'] }],
-          'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
-          'jsdoc/require-returns': ['error', { exemptedBy: ['react'] }],
-        },
+        });
+      });
+
+      test('lint', () => {
+        expect(
+          withReact.lint.config(
+            isEmptyConfig
+              ? {}
+              : {
+                  rules: {
+                    'jsdoc/check-tag-names': ['error', {}],
+                    'jsdoc/require-example': ['error', {}],
+                    'jsdoc/require-param': ['error', {}],
+                    'jsdoc/require-returns': ['error', {}],
+                  },
+                },
+          ),
+        ).toEqual({
+          rules: {
+            'jsdoc/check-tag-names': [
+              'error',
+              {
+                definedTags: ['react'],
+              },
+            ],
+            'jsdoc/require-example': ['error', { exemptedBy: ['react'] }],
+            'jsdoc/require-param': ['error', { exemptedBy: ['react'] }],
+            'jsdoc/require-returns': ['error', { exemptedBy: ['react'] }],
+          },
+        });
       });
     },
   );

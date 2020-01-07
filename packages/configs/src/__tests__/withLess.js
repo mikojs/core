@@ -12,7 +12,7 @@ describe('with less', () => {
     ({ isEmptyConfig }: {| isEmptyConfig: boolean |}) => {
       test('babel', () => {
         expect(
-          withLess[1].babel.config(
+          withLess[1].babel(
             isEmptyConfig
               ? {}
               : {

@@ -5,52 +5,43 @@ import execa from 'execa';
 import { type configsType, type objConfigType } from './types';
 import configs from './configs';
 
-type babelArgvResultType = {|
-  isWatching: boolean,
-  filteredArgv: $ReadOnlyArray<string>,
-|};
+const WATCH_OPTIONS = ['-w', '--watch'];
+
+/**
+ * @example
+ * addWatchOptions(['lerna', 'exec', ...])
+ *
+ * @param {Array} argv - original argv
+ *
+ * @return {Promise} - new argv
+ */
+const addWatchOptions = async (argv: $ReadOnlyArray<string>) => [
+  ...argv.filter((key: string) => !WATCH_OPTIONS.includes(key)),
+  ...(!argv.some((key: string) => WATCH_OPTIONS.includes(key))
+    ? []
+    : [
+        '--since',
+        (await execa('git', ['branch'])).stdout
+          .replace(/^[^*] (.*)$/m, '')
+          .replace(/[*\n ]/g, ''),
+      ]),
+];
 
 const newConfigs = {
   exec: {
     install: (argv: $ReadOnlyArray<string>) => [...argv, 'lerna'],
     config: () => ({
-      'lerna:babel': async (
-        argv: $ReadOnlyArray<string>,
-      ): Promise<$ReadOnlyArray<string>> => {
-        const { isWatching, filteredArgv } = argv.reduce(
-          (result: babelArgvResultType, key: string): babelArgvResultType => {
-            const isWatchOptionExist = ['--watch', '-w'].includes(key);
-
-            return {
-              isWatching: result.isWatching || isWatchOptionExist,
-              filteredArgv: isWatchOptionExist
-                ? result.filteredArgv
-                : [...result.filteredArgv, key],
-            };
-          },
-          {
-            isWatching: false,
-            filteredArgv: [],
-          },
-        );
-
-        return [
+      'lerna:babel': (argv: $ReadOnlyArray<string>) =>
+        addWatchOptions([
           'lerna',
           'exec',
-          `"configs babel${isWatching ? ' -w' : ''}"`,
+          `"configs babel${
+            argv.some((key: string) => WATCH_OPTIONS.includes(key)) ? ' -w' : ''
+          }"`,
           '--parallel',
           '--stream',
-          ...(!isWatching
-            ? []
-            : [
-                '--since',
-                (await execa('git', ['branch'])).stdout
-                  .replace(/^[^*] (.*)$/m, '')
-                  .replace(/[*\n ]/g, ''),
-              ]),
-          ...filteredArgv,
-        ];
-      },
+          ...argv,
+        ]),
     }),
   },
 };

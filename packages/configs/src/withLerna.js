@@ -31,6 +31,7 @@ const newConfigs = {
   exec: {
     install: (argv: $ReadOnlyArray<string>) => [...argv, 'lerna'],
     config: () => ({
+      // babel
       'lerna:babel': (argv: $ReadOnlyArray<string>) =>
         addWatchOptions([
           'lerna',
@@ -40,6 +41,18 @@ const newConfigs = {
           }"`,
           '--parallel',
           '--stream',
+          ...argv,
+        ]),
+
+      // flow
+      'lerna:flow': (argv: $ReadOnlyArray<string>) =>
+        addWatchOptions([
+          'lerna',
+          'exec',
+          `"flow --quiet${process.env.CI ? ' && flow stop' : ''}"`,
+          '--stream',
+          '--concurrency',
+          '1',
           ...argv,
         ]),
     }),

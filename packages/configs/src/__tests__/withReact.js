@@ -12,7 +12,7 @@ describe('with react', () => {
     ({ isEmptyConfig }: {| isEmptyConfig: boolean |}) => {
       test('babel', () => {
         expect(
-          withReact.babel.config(
+          withReact.babel(
             isEmptyConfig
               ? {}
               : {
@@ -35,7 +35,7 @@ describe('with react', () => {
 
       test('lint', () => {
         expect(
-          withReact.lint.config(
+          withReact.lint(
             isEmptyConfig
               ? {}
               : {
@@ -66,7 +66,7 @@ describe('with react', () => {
 
   test('jest', () => {
     expect(
-      withReact.jest.config({
+      withReact.jest({
         setupFiles: [],
       }),
     ).toEqual({

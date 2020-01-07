@@ -12,7 +12,7 @@ describe('with relay', () => {
     ({ isEmptyConfig }: {| isEmptyConfig: boolean |}) => {
       test('babel', () => {
         expect(
-          withRelay[1].babel.config(
+          withRelay[1].babel(
             isEmptyConfig
               ? {}
               : {
@@ -37,7 +37,7 @@ describe('with relay', () => {
 
       test('lint', () => {
         expect(
-          withRelay[1].lint.config(
+          withRelay[1].lint(
             isEmptyConfig
               ? {}
               : {
@@ -62,7 +62,7 @@ describe('with relay', () => {
 
   test('jest', () => {
     expect(
-      withRelay[1].jest.config({
+      withRelay[1].jest({
         testPathIgnorePatterns: [],
         coveragePathIgnorePatterns: [],
       }),

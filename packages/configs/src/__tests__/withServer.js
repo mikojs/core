@@ -12,7 +12,7 @@ describe('with server', () => {
     ({ isEmptyConfig }: {| isEmptyConfig: boolean |}) => {
       test('babel', () => {
         expect(
-          withServer.babel.config(
+          withServer.babel(
             isEmptyConfig
               ? {}
               : {

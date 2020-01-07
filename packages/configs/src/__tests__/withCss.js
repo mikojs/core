@@ -12,7 +12,7 @@ describe('with css', () => {
     ({ isEmptyConfig }: {| isEmptyConfig: boolean |}) => {
       test('babel', () => {
         expect(
-          withCss.babel.config(
+          withCss.babel(
             isEmptyConfig
               ? {}
               : {

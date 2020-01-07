@@ -11,38 +11,36 @@ export default [
   withCss,
   {
     // babel
-    babel: {
-      config: ({ plugins, ...config }: babelType) => ({
-        ...config,
-        plugins: normalizeBabel.presetOrPlugin('plugin', plugins, {
-          'css-modules-transform': ([plugin, options]: [
-            string,
-            {
-              extensions: $ReadOnlyArray<string>,
-              extractCss: {
-                filename: string,
-              },
+    babel: ({ plugins, ...config }: babelType) => ({
+      ...config,
+      plugins: normalizeBabel.presetOrPlugin('plugin', plugins, {
+        'css-modules-transform': ([plugin, options]: [
+          string,
+          {
+            extensions: $ReadOnlyArray<string>,
+            extractCss: {
+              filename: string,
             },
-          ]) => [
-            plugin,
-            {
-              ...options,
-              extensions: ['.less'],
-              extractCss: {
-                ...options.extractCss,
-                filename: '[path]/[name].less',
-              },
+          },
+        ]) => [
+          plugin,
+          {
+            ...options,
+            extensions: ['.less'],
+            extractCss: {
+              ...options.extractCss,
+              filename: '[path]/[name].less',
             },
-          ],
-          '@mikojs/import-css': ([plugin, options]: presetOrPluginType) => [
-            plugin,
-            {
-              ...options,
-              test: /\.less$/,
-            },
-          ],
-        }),
+          },
+        ],
+        '@mikojs/import-css': ([plugin, options]: presetOrPluginType) => [
+          plugin,
+          {
+            ...options,
+            test: /\.less$/,
+          },
+        ],
       }),
-    },
+    }),
   },
 ];

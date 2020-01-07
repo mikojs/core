@@ -112,12 +112,14 @@ module.exports = (() => {
   const withRelay = require('@mikojs/configs/lib/withRelay');
   const withServer = require('@mikojs/configs/lib/withServer');
   const withLess = require('@mikojs/configs/lib/withLess');
+  const withLerna = require('@mikojs/configs/lib/withLerna');
   /* eslint-enable import/no-extraneous-dependencies */
 
   return [
     withRelay,
     withServer,
     withLess,
+    withLerna,
     {
       // babel
       babel,

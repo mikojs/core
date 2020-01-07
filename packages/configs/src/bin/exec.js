@@ -15,8 +15,8 @@ handleUnhandledRejection();
 (async () => {
   const config = cosmiconfigSync('exec').search()?.config || {};
   const [type, ...argv] = process.argv.slice(2);
-  const commands = [
-    ...(config[type] || [npmWhich(process.cwd()).sync(type)]),
+  const commands = (await config[type]?.(argv)) || [
+    npmWhich(process.cwd()).sync(type),
     ...argv,
   ];
 

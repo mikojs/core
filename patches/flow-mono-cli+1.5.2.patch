@@ -1,0 +1,26 @@
+diff --git a/node_modules/flow-mono-cli/dist/commands/install-types.js b/node_modules/flow-mono-cli/dist/commands/install-types.js
+index cc4d54d..6c595f2 100644
+--- a/node_modules/flow-mono-cli/dist/commands/install-types.js
++++ b/node_modules/flow-mono-cli/dist/commands/install-types.js
+@@ -1,4 +1,4 @@
+-const exec = require('./../lib/exec.js');
++const Worker = require('jest-worker').default;
+ 
+ const path = require('./../lib/paths.js');
+ 
+@@ -13,6 +13,7 @@ const {
+ } = require('./../lib/logger.js');
+ 
+ async function installFlowTypes() {
++  const exec = new Worker(require.resolve('./../lib/exec.js'));
+   const [rootPath, packagePaths] = await Promise.all([path.resolveMonoRepoRootPath(), path.resolveMonoRepoPackagePaths()]); // We will update the flow-typed cache first to avoid errors when running the install step in parallel.
+ 
+   info('Updating the global "flow-typed" definitions cache');
+@@ -39,6 +40,7 @@ async function installFlowTypes() {
+     }
+   }));
+   success('Installed "flow-typed" definitions');
++  exec.end();
+ }
+ 
+ module.exports = installFlowTypes;

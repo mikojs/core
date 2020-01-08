@@ -38,7 +38,7 @@ jobs:
           command: |
             yarn flow-typed:all
             yarn configs lint .
-            yarn flow
+            yarn configs exec lerna:flow
 
       - run:
           name: Test

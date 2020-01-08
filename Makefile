@@ -1,27 +1,41 @@
 ROOT=$(shell pwd)
 BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
-WATCH=""
 
 install-all:
 	@yarn install
 	@yarn lerna bootstrap
 	@yarn patch-package
-	@make babel-all
+	@make build-base
+	@yarn configs exec lerna:babel
 
 flow-typed-all:
 	@yarn flow-typed install --verbose
 	@yarn flow-mono create-symlinks .flowconfig && \
 		yarn flow-mono install-types --ignoreDeps=peer
 
-babel-all:
-	@$(call babel-build)
-
-babel-changed:
-ifeq ($(shell printenv CI), true)
-	@echo "Skip babel build"
+build-base:
+ifeq ($(CHANGED), true)
+	@yarn lerna exec \
+		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
+		--parallel \
+		--stream \
+		--include-dependencies \
+		--scope @mikojs/configs \
+		--scope @mikojs/babel-* \
+		--since \
+		$(BRANCH)
 else
-	@$(call babel-build, $(WATCH), --since $(BRANCH))
+	@yarn lerna exec \
+		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
+		--parallel \
+		--stream \
+		--include-dependencies \
+		--scope @mikojs/configs \
+		--scope @mikojs/babel-*
 endif
+	@ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
+	@ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
+	@ln -snf $(ROOT)/server/server/lib/bin/index.js ./node_modules/.bin/server
 
 release:
 	@yarn lerna-changelog && \
@@ -47,22 +61,3 @@ clean:
 	rm -rf ./.eslintcache
 	rm -rf ./.changelog
 	rm -rf ./*.log
-
-define babel-build
-	yarn lerna exec \
-		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \
-		--parallel \
-		--stream \
-		--include-dependencies \
-		--scope @mikojs/configs \
-		--scope @mikojs/babel-* \
-		$(2)
-	ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
-	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
-	ln -snf $(ROOT)/server/server/lib/bin/index.js ./node_modules/.bin/server
-	yarn lerna exec \
-		"configs babel:lerna $(1)" \
-		--parallel \
-		--stream \
-		$(2)
-endef

@@ -17,7 +17,10 @@ describe('generate files', () => {
   beforeAll(() => {
     configs.handleCustomConfigs({
       config: {
-        notFindCli: emptyFunction.thatReturnsArgument,
+        cliStr: emptyFunction.thatReturnsArgument,
+        cliFunc: {
+          alias: emptyFunction.thatReturnsArgument,
+        },
         jest: {
           configsFiles: {
             'babel:lerna': false,
@@ -34,10 +37,10 @@ describe('generate files', () => {
 
   test.each`
     cliName
-    ${'notFindCli'}
-    ${'exec'}
+    ${'cliStr'}
+    ${'cliFunc'}
   `(
-    'error with cliName = $cliName',
+    'empty configsFiles with cliName = $cliName',
     async ({ cliName }: {| cliName: string |}) => {
       const mockLog = jest.fn();
 

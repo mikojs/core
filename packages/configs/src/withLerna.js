@@ -5,19 +5,20 @@ import execa from 'execa';
 import { type configsType, type objConfigType } from './types';
 import configs from './configs';
 
+const CHANGED_OPTIONS = ['-c', '--changed'];
 const WATCH_OPTIONS = ['-w', '--watch'];
 
 /**
  * @example
- * addWatchOptions(['lerna', 'exec', ...])
+ * addChangedOptions(['lerna', 'exec', ...])
  *
  * @param {Array} argv - original argv
  *
  * @return {Promise} - new argv
  */
-const addWatchOptions = async (argv: $ReadOnlyArray<string>) => [
-  ...argv.filter((key: string) => !WATCH_OPTIONS.includes(key)),
-  ...(!argv.some((key: string) => WATCH_OPTIONS.includes(key))
+const addChangedOptions = async (argv: $ReadOnlyArray<string>) => [
+  ...argv.filter((key: string) => !CHANGED_OPTIONS.includes(key)),
+  ...(!argv.some((key: string) => CHANGED_OPTIONS.includes(key))
     ? []
     : [
         '--since',
@@ -33,7 +34,7 @@ const newConfigs = {
     config: () => ({
       // babel
       'lerna:babel': (argv: $ReadOnlyArray<string>) =>
-        addWatchOptions([
+        addChangedOptions([
           'lerna',
           'exec',
           `"configs babel${
@@ -41,12 +42,12 @@ const newConfigs = {
           }"`,
           '--parallel',
           '--stream',
-          ...argv,
+          ...argv.filter((key: string) => !WATCH_OPTIONS.includes(key)),
         ]),
 
       // flow
       'lerna:flow': (argv: $ReadOnlyArray<string>) =>
-        addWatchOptions([
+        addChangedOptions([
           'lerna',
           'exec',
           `"flow --quiet${process.env.CI ? ' && flow stop' : ''}"`,

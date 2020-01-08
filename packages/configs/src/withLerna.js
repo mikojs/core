@@ -31,7 +31,9 @@ const addChangedOptions = async (argv: $ReadOnlyArray<string>) => [
 const newConfigs = {
   exec: {
     install: (argv: $ReadOnlyArray<string>) => [...argv, 'lerna'],
-    config: () => ({
+    config: (config: {}) => ({
+      ...config,
+
       // babel
       'lerna:babel': (argv: $ReadOnlyArray<string>) =>
         addChangedOptions([

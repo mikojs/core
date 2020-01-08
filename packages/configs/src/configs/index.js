@@ -16,15 +16,6 @@ export default ({
 
   // babel
   babel,
-  'babel:lerna': {
-    ...babel,
-    alias: 'babel',
-    run: (argv: $ReadOnlyArray<string>) => [
-      ...babel.run(argv),
-      '--config-file',
-      '../../babel.config.js',
-    ],
-  },
 
   // prettier
   prettier,
@@ -56,13 +47,4 @@ export default ({
 
   // @mikojs/server
   server,
-  'server:lerna': {
-    ...server,
-    alias: 'server',
-    run: (argv: $ReadOnlyArray<string>) => [
-      ...server.run(argv),
-      '--config-file',
-      '../../babel.config.js',
-    ],
-  },
 }: configsType);

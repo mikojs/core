@@ -123,7 +123,6 @@ module.exports = (() => {
     {
       // babel
       babel,
-      'babel:lerna': babel,
 
       // eslint
       lint,

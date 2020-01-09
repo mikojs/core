@@ -1,9 +1,10 @@
 // @flow
 
-import npmWhich from 'npm-which';
+import path from 'path';
 
 export default {
-  alias: (argv: $ReadOnlyArray<string>) =>
-    npmWhich(process.cwd()).sync(argv[1]),
-  run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => argv.slice(1),
+  alias: () => path.resolve(__dirname, '../bin/exec'),
+  configsFiles: {
+    exec: '.execrc.js',
+  },
 };

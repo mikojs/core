@@ -17,11 +17,9 @@ describe('configs', () => {
 
           switch (key) {
             case 'alias':
-              if (typeof value !== 'function') expect(value).toBeTruthy();
+              if (configKey !== 'exec') expect(value).toBeTruthy();
               else
-                expect(value([configKey, 'babel'])).toBe(
-                  path.resolve('./node_modules/.bin/babel'),
-                );
+                expect(value()).toBe(path.resolve(__dirname, '../../bin/exec'));
               break;
 
             case 'ignore':

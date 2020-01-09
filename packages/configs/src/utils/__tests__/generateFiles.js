@@ -17,7 +17,10 @@ describe('generate files', () => {
   beforeAll(() => {
     configs.handleCustomConfigs({
       config: {
-        emptyConfigsFiles: emptyFunction.thatReturnsArgument,
+        cliStr: emptyFunction.thatReturnsArgument,
+        cliFunc: {
+          alias: emptyFunction.thatReturnsArgument,
+        },
         jest: {
           configsFiles: {
             'babel:lerna': false,
@@ -32,17 +35,24 @@ describe('generate files', () => {
     outputFileSync.mockClear();
   });
 
-  test('error with empty configs files', async () => {
-    const mockLog = jest.fn();
+  test.each`
+    cliName
+    ${'cliStr'}
+    ${'cliFunc'}
+  `(
+    'empty configsFiles with cliName = $cliName',
+    async ({ cliName }: {| cliName: string |}) => {
+      const mockLog = jest.fn();
 
-    global.console.error = mockLog;
+      global.console.error = mockLog;
 
-    expect(await generateFiles('emptyConfigsFiles')).toBeFalsy();
-    expect(mockLog).toHaveBeenCalledTimes(5);
-    expect(mockLog).toHaveBeenCalledWith(
-      chalk`{red ✖ }{red {bold @mikojs/configs}} Can not generate the config file, You can:`,
-    );
-  });
+      expect(await generateFiles('emptyConfigsFiles')).toBeFalsy();
+      expect(mockLog).toHaveBeenCalledTimes(5);
+      expect(mockLog).toHaveBeenCalledWith(
+        chalk`{red ✖ }{red {bold @mikojs/configs}} Can not generate the config file, You can:`,
+      );
+    },
+  );
 
   test('generate', async () => {
     expect(await generateFiles('jest')).toBeTruthy();

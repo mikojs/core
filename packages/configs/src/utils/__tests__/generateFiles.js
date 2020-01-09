@@ -46,7 +46,7 @@ describe('generate files', () => {
 
       global.console.error = mockLog;
 
-      expect(await generateFiles('emptyConfigsFiles')).toBeFalsy();
+      expect(await generateFiles(cliName)).toBeFalsy();
       expect(mockLog).toHaveBeenCalledTimes(5);
       expect(mockLog).toHaveBeenCalledWith(
         chalk`{red ✖ }{red {bold @mikojs/configs}} Can not generate the config file, You can:`,

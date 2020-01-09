@@ -12,11 +12,33 @@ const logger = createLogger('@mikojs/configs (exec)');
 
 handleUnhandledRejection();
 
+/**
+ * @example
+ * getCommands(['lerna', 'babel'], {})
+ *
+ * @param {Array} keys - commands keys
+ * @param {object} prevConfig - prev config
+ *
+ * @return {Array} - commands
+ */
+const getCommands = (
+  [key, ...otherKeys]: $ReadOnlyArray<string>,
+  prevConfig: {},
+): ?$ReadOnlyArray<string> => {
+  if (!prevConfig[key]) return null;
+
+  if (otherKeys.length === 0) return prevConfig[key];
+
+  return getCommands(otherKeys, prevConfig[key]);
+};
+
 (async () => {
   const config = cosmiconfigSync('exec').search()?.config || {};
   const [type, ...argv] = process.argv.slice(2);
-  const commands = (await config[type]?.(argv)) || [
-    npmWhich(process.cwd()).sync(type),
+  const commands = [
+    ...(getCommands(type.split(/:/), config) || [
+      npmWhich(process.cwd()).sync(type),
+    ]),
     ...argv,
   ];
 

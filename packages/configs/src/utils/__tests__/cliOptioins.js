@@ -58,7 +58,7 @@ describe('cli options', () => {
   test.each`
     cliName     | argv
     ${'runCmd'} | ${[]}
-    ${'babel'}  | ${['src', '-d', 'lib', '--verbose']}
+    ${'babel'}  | ${['src', '-d', 'lib', '--verbose', '--config-file', '../../babel.config.js']}
   `(
     'run command with --configs-files',
     async ({

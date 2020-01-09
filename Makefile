@@ -68,7 +68,7 @@ define babel-build
 	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
 	ln -snf $(ROOT)/server/server/lib/bin/index.js ./node_modules/.bin/server
 	yarn lerna exec \
-		"configs babel:lerna $(1)" \
+		"configs babel $(1)" \
 		--parallel \
 		--stream \
 		$(2)

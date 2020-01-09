@@ -9,9 +9,9 @@
   "version": "1.8.1",
   "main": "./lib/index.js",
   "scripts": {
-    "dev": "configs server:lerna -w",
-    "start": "NODE_ENV=production configs server:lerna",
-    "test": "SKIP_SERVER=true configs server:lerna"
+    "dev": "configs server -w",
+    "start": "NODE_ENV=production configs server",
+    "test": "SKIP_SERVER=true configs server"
   },
   "dependencies": {
     "@babel/runtime": "^7.7.7",

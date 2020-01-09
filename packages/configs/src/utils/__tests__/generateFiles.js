@@ -21,11 +21,6 @@ describe('generate files', () => {
         cliFunc: {
           alias: emptyFunction.thatReturnsArgument,
         },
-        jest: {
-          configsFiles: {
-            'babel:lerna': false,
-          },
-        },
       },
       filepath: path.resolve(process.cwd(), './.catrc.js'),
     });

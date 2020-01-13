@@ -37,7 +37,7 @@ jobs:
           name: Flow
           command: |
             yarn flow-typed:all
-            yarn flow
+            yarn configs exec lerna:flow
 
       - run:
           name: Check code style

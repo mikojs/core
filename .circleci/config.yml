@@ -34,11 +34,14 @@ jobs:
       - save_cache: *save-cache
 
       - run:
-          name: Check code style
+          name: Flow
           command: |
             yarn flow-typed:all
-            yarn configs lint .
             yarn flow
+
+      - run:
+          name: Check code style
+          command: yarn configs lint .
 
       - run:
           name: Test

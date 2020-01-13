@@ -6,7 +6,6 @@
   "scripts": {
     "clean": "make clean",
     "dev": "make babel-changed WATCH=-w",
-    "flow": "make flow",
     "flow-typed:all": "make flow-typed-all",
     "install:all": "make install-all",
     "prod": "NODE_ENV=production make babel-all",
@@ -49,7 +48,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "make babel-changed && configs lint-staged && yarn flow",
+      "pre-commit": "make babel-changed && configs lint-staged && configs exec lerna:flow --changed",
       "post-merge": "make babel-all",
       "post-checkout": "make babel-changed BRANCH=master"
     }

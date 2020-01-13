@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "flow-bin": "^0.114.0",
-    "flow-typed": "^2.6.2"
+    "flow-typed": "^2.6.2",
+    "git-branch": "^2.0.1"
   },
   "keywords": ["configs", "mikojs"],
   "publishConfig": {

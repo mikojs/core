@@ -8,15 +8,15 @@
   "version": "1.8.1",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.7.7",
+    "@babel/runtime": "^7.8.3",
     "chalk": "^3.0.0",
-    "core-js": "^3.6.0",
+    "core-js": "^3.6.4",
     "d3-hierarchy": "^1.1.9",
     "directory-tree": "^2.2.4",
     "fbjs": "^1.0.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.114.0",
+    "flow-bin": "^0.115.0",
     "flow-typed": "^2.6.2"
   },
   "keywords": ["mikojs", "utils"],

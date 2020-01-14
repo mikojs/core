@@ -21,6 +21,11 @@ describe('generate files', () => {
         cliFunc: {
           alias: emptyFunction.thatReturnsArgument,
         },
+        jest: {
+          configsFiles: {
+            prettier: false,
+          },
+        },
       },
       filepath: path.resolve(process.cwd(), './.catrc.js'),
     });

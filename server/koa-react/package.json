@@ -12,13 +12,13 @@
     "run-test-server": "NODE_PORT=8000 ./lib/lib/__ignore__/run.js"
   },
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/runtime": "^7.7.7",
+    "@babel/helper-plugin-utils": "^7.8.3",
+    "@babel/runtime": "^7.8.3",
     "@hot-loader/react-dom": "^16.11.0",
     "@mikojs/utils": "^1.8.1",
     "address": "^1.1.2",
     "babel-loader": "^8.0.6",
-    "core-js": "^3.6.0",
+    "core-js": "^3.6.4",
     "debug": "^4.1.1",
     "fbjs": "^1.0.0",
     "find-cache-dir": "^3.2.0",
@@ -38,7 +38,7 @@
     "react-router": "^5.1.2",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.1.2",
-    "terser-webpack-plugin": "^2.3.1"
+    "terser-webpack-plugin": "^2.3.2"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0",
@@ -48,17 +48,17 @@
     "webpack": ">=4.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.7",
-    "@babel/traverse": "^7.7.4",
+    "@babel/core": "^7.8.3",
+    "@babel/traverse": "^7.8.3",
     "enzyme": "^3.11.0",
-    "flow-bin": "^0.114.0",
+    "flow-bin": "^0.115.0",
     "flow-typed": "^2.6.2",
     "get-port": "^5.1.0",
     "koa": "^2.11.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "webpack": "^4.41.4"
+    "webpack": "^4.41.5"
   },
   "keywords": [
     "koa",

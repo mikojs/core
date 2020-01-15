@@ -9,11 +9,11 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.7.7",
+    "@babel/runtime": "^7.8.3",
     "@mikojs/utils": "^1.8.1",
     "chalk": "^3.0.0",
-    "commander": "^4.0.1",
-    "core-js": "^3.6.0",
+    "commander": "^4.1.0",
+    "core-js": "^3.6.4",
     "cosmiconfig": "^6.0.0",
     "debug": "^4.1.1",
     "execa": "^4.0.0",
@@ -26,7 +26,7 @@
     "rimraf": "^3.0.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.114.0",
+    "flow-bin": "^0.115.0",
     "flow-typed": "^2.6.2",
     "git-branch": "^2.0.1"
   },

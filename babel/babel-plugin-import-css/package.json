@@ -8,17 +8,17 @@
   "version": "1.8.1",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/runtime": "^7.7.7",
-    "core-js": "^3.6.0"
+    "@babel/helper-plugin-utils": "^7.8.3",
+    "@babel/runtime": "^7.8.3",
+    "core-js": "^3.6.4"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.7",
-    "@babel/traverse": "^7.7.4",
-    "flow-bin": "^0.114.0",
+    "@babel/core": "^7.8.3",
+    "@babel/traverse": "^7.8.3",
+    "flow-bin": "^0.115.0",
     "flow-typed": "^2.6.2"
   },
   "keywords": [

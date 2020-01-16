@@ -11,7 +11,8 @@ describe('with lerna', () => {
         (eventName: string) => {
           switch (eventName) {
             case 'config':
-              if (configName === 'exec')
+              if (configName === 'exec') {
+                delete process.env.CI;
                 expect(withLerna[(configName: 'exec')].config({})).toEqual({
                   lerna: {
                     flow: [
@@ -24,6 +25,7 @@ describe('with lerna', () => {
                     ],
                   },
                 });
+              }
               break;
 
             case 'run':

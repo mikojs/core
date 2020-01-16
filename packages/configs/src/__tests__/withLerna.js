@@ -5,32 +5,38 @@ import withLerna from '../withLerna';
 describe('with lerna', () => {
   describe.each(Object.keys(withLerna).map((key: string) => [key]))(
     '%s',
-    (configName: string) => {
+    (configName: string | 'exec' | 'babel' | 'server') => {
       test.each(Object.keys(withLerna[configName]).map((key: string) => [key]))(
         '%s',
         (eventName: string) => {
           switch (eventName) {
             case 'config':
-              expect(withLerna[configName].config({})).toEqual({
-                lerna: {
-                  flow: [
-                    'lerna',
-                    'exec',
-                    '"flow --quiet"',
-                    '--stream',
-                    '--concurrency',
-                    '1',
-                  ],
-                },
-              });
+              if (configName === 'exec')
+                expect(withLerna[(configName: 'exec')].config({})).toEqual({
+                  lerna: {
+                    flow: [
+                      'lerna',
+                      'exec',
+                      '"flow --quiet"',
+                      '--stream',
+                      '--concurrency',
+                      '1',
+                    ],
+                  },
+                });
               break;
 
             case 'run':
-              expect(withLerna[configName].run([])).toEqual(
-                configName === 'exec'
-                  ? []
-                  : ['--config-file', '../../babel.config.js'],
-              );
+              if (
+                configName === 'exec' ||
+                configName === 'babel' ||
+                configName === 'server'
+              )
+                expect(withLerna[configName].run([])).toEqual(
+                  configName === 'exec'
+                    ? []
+                    : ['--config-file', '../../babel.config.js'],
+                );
               break;
 
             default:

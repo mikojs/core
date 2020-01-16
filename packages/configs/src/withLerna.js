@@ -53,6 +53,7 @@ const newConfigs = {
           '--concurrency',
           '1',
         ],
+        babel: ['lerna', 'exec', '"configs babel"', '--stream'],
       },
     }),
   },

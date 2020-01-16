@@ -40,7 +40,7 @@ const newConfigs = {
       ),
     config: (config: {}): {
       lerna: {
-        flow: $ReadOnlyArray<string>,
+        [string]: $ReadOnlyArray<string>,
       },
     } => ({
       ...config,
@@ -54,6 +54,7 @@ const newConfigs = {
           '1',
         ],
         babel: ['lerna', 'exec', '"configs babel"', '--stream'],
+        'babel:watch': ['lerna', 'exec', '"configs babel -w"', '--stream'],
       },
     }),
   },

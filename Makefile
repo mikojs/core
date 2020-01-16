@@ -5,7 +5,6 @@ WATCH=""
 install-all:
 	@yarn install
 	@yarn lerna bootstrap
-	@yarn patch-package
 	@make babel-all
 
 flow-typed-all:

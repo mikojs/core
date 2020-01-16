@@ -6,7 +6,6 @@
   "scripts": {
     "clean": "make clean",
     "dev": "make babel-changed WATCH=-w",
-    "flow": "make flow",
     "flow-typed:all": "make flow-typed-all",
     "install:all": "make install-all",
     "prod": "NODE_ENV=production make babel-all",
@@ -35,7 +34,6 @@
     "lerna": "^3.20.2",
     "lerna-changelog": "^1.0.0",
     "lint-staged": "^9.5.0",
-    "patch-package": "^6.2.0",
     "prettier": "^1.19.1",
     "prettier-package-json": "^2.1.3",
     "react": "^16.12.0",
@@ -49,7 +47,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "make babel-changed && configs lint-staged && yarn flow",
+      "pre-commit": "make babel-changed && configs lint-staged && configs exec lerna:flow --changed",
       "post-merge": "make babel-all",
       "post-checkout": "make babel-changed BRANCH=master"
     }

@@ -5,7 +5,6 @@ WATCH=""
 install-all:
 	@yarn install
 	@yarn lerna bootstrap
-	@yarn patch-package
 	@make babel-all
 
 flow-typed-all:
@@ -23,13 +22,6 @@ else
 	@$(call babel-build, $(WATCH), --since $(BRANCH))
 endif
 
-flow:
-ifeq ($(shell printenv CI), true)
-	@yarn lerna exec "flow --quiet && flow stop" --stream --concurrency 1
-else
-	@yarn lerna exec "flow --quiet" --stream --concurrency 1 --since $(BRANCH)
-endif
-
 release:
 	@yarn lerna-changelog && \
 		echo "\nContinue with any keyword or exit with 'ctrl + c'..." && \
@@ -41,7 +33,7 @@ release:
 	@open https://github.com/mikojs/core/releases
 
 clean:
-	@yarn lerna exec "rm -rf lib flow-typed/npm" \
+	@yarn lerna exec "rm -rf lib flow-typed/npm"
 	@yarn lerna exec "rm -rf .flowconfig" \
 		--ignore @mikojs/eslint-config-base \
 		--ignore @mikojs/koa-graphql \

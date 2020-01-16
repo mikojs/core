@@ -6,15 +6,15 @@ defaults: &defaults
 
 restore-cache: &restore-cache
   keys:
-    - dependencies-{{ checksum "yarn.lock" }}-949d2d61
-    - dependencies-949d2d61
+    - dependencies-{{ checksum "yarn.lock" }}-f54ec6eb
+    - dependencies-f54ec6eb
 
 save-cache: &save-cache
   paths:
     - node_modules
     - flow-typed/npm
     - ~/.flow-typed
-  key: dependencies-{{ checksum "yarn.lock" }}-949d2d61
+  key: dependencies-{{ checksum "yarn.lock" }}-f54ec6eb
 
 install: &install
   name: Install packages
@@ -34,11 +34,14 @@ jobs:
       - save_cache: *save-cache
 
       - run:
-          name: Check code style
+          name: Flow
           command: |
             yarn flow-typed:all
-            yarn configs lint .
-            yarn flow
+            yarn configs exec lerna:flow
+
+      - run:
+          name: Check code style
+          command: yarn configs lint .
 
       - run:
           name: Test

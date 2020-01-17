@@ -1,26 +1,22 @@
 ROOT=$(shell pwd)
 BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
-WATCH=""
 
 install-all:
 	@yarn install
 	@yarn lerna bootstrap
-	@make babel-all
+	@make babel-base-all
+	@yarn configs exec lerna:babel
 
 flow-typed-all:
 	@yarn flow-typed install --verbose
 	@yarn flow-mono create-symlinks .flowconfig && \
 		yarn flow-mono install-types --ignoreDeps=peer
 
-babel-all:
+babel-base-all:
 	@$(call babel-build)
 
-babel-changed:
-ifeq ($(shell printenv CI), true)
-	@echo "Skip babel build"
-else
-	@$(call babel-build, $(WATCH), --since $(BRANCH))
-endif
+babel-base-changed:
+	@$(call babel-build, --since $(BRANCH))
 
 release:
 	@yarn lerna-changelog && \
@@ -55,13 +51,8 @@ define babel-build
 		--include-dependencies \
 		--scope @mikojs/configs \
 		--scope @mikojs/babel-* \
-		$(2)
+		$(1)
 	ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
 	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
 	ln -snf $(ROOT)/server/server/lib/bin/index.js ./node_modules/.bin/server
-	yarn lerna exec \
-		"configs babel $(1)" \
-		--parallel \
-		--stream \
-		$(2)
 endef

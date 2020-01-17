@@ -39,12 +39,7 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
 
       const { log } = console;
 
-      log(
-        stats.toString(
-          // $FlowFixMe FIXME: https://github.com/flow-typed/flow-typed/pull/3701
-          { logStats, colors: true },
-        ),
-      );
+      log(stats.toString({ logStats, colors: true }));
       resolve(stats.toJson().assetsByChunkName);
     });
   });

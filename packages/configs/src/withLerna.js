@@ -41,10 +41,14 @@ const newConfigs = {
     config: (config: {}): {
       lerna: {
         [string]: $ReadOnlyArray<string>,
+        'flow-typed': {
+          [string]: $ReadOnlyArray<string>,
+        },
       },
     } => ({
       ...config,
       lerna: {
+        // flow
         flow: [
           'lerna',
           'exec',
@@ -53,6 +57,15 @@ const newConfigs = {
           '--concurrency',
           '1',
         ],
+
+        // flow-typed
+        'flow-typed': {
+          install: ['flow-typed', 'install', '--verbose'],
+          'create-symlinks': ['flow-mono', 'create-symlinks', '.flowconfig'],
+          'install-types': ['flow-mono', 'install-types', '--ignoreDeps=peer'],
+        },
+
+        // babel
         babel: ['lerna', 'exec', '"configs babel"', '--stream'],
         'babel:watch': ['lerna', 'exec', '"configs babel -w"', '--stream'],
       },

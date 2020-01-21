@@ -52,7 +52,10 @@ describe('with lerna', () => {
       'run with --changed = $isChanged',
       ({ isChanged }: {| isChanged: boolean |}) => {
         expect(
-          withLerna.exec.run([!isChanged ? '--test' : '--changed'])[0],
+          withLerna.exec.run([
+            'lerna:test',
+            !isChanged ? '--test' : '--changed',
+          ])[1],
         ).toBe(!isChanged ? '--test' : '--since');
       },
     );

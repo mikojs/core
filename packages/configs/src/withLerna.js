@@ -34,7 +34,7 @@ const newConfigs = {
       argv.reduce(
         (newArgv: $ReadOnlyArray<string>, argvStr: string) => [
           ...newArgv,
-          ...(argvStr === '--changed'
+          ...(argvStr === '--changed' && /^lerna:/.test(argv[0])
             ? ['--since', gitBranch.sync().replace(/Branch: /, '')]
             : [argvStr]),
         ],
@@ -56,7 +56,7 @@ const newConfigs = {
         install: ['flow-mono', 'install-types', '--ignoreDeps=peer'],
       },
 
-      // flow
+      // lerna
       lerna: {
         // flow
         flow: [

@@ -32,7 +32,9 @@ describe('with lerna', () => {
 
             default:
               expect(withLerna[configName][eventName]([])).toEqual(
-                configName === 'exec' ? ['git-branch'] : ['-W'],
+                configName === 'exec'
+                  ? ['lerna', 'git-branch', 'flow-mono-cli']
+                  : ['-W'],
               );
               break;
           }

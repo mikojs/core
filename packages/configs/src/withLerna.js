@@ -41,20 +41,14 @@ const newConfigs = {
         [],
       ),
     config: (config: {}): {
-      'flow-mono': {
-        [string]: $ReadOnlyArray<string>,
-      },
       lerna: {
         [string]: $ReadOnlyArray<string>,
+        'flow-typed': {
+          [string]: $ReadOnlyArray<string>,
+        },
       },
     } => ({
       ...config,
-
-      // flow-mono
-      'flow-mono': {
-        create: ['flow-mono', 'create-symlinks', '.flowconfig'],
-        install: ['flow-mono', 'install-types', '--ignoreDeps=peer'],
-      },
 
       // lerna
       lerna: {
@@ -67,6 +61,21 @@ const newConfigs = {
           '--concurrency',
           '1',
         ],
+
+        // flow-typed
+        'flow-typed': {
+          install: [
+            'exec:flow-typed:install',
+            '&&',
+            'flow-mono',
+            'create-symlinks',
+            '.flowconfig',
+            '&&',
+            'flow-mono',
+            'install-types',
+            '--ignoreDeps=peer',
+          ],
+        },
 
         // babel
         babel: ['lerna', 'exec', '"configs babel"', '--stream'],

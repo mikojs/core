@@ -15,4 +15,10 @@ describe('get exec commands', () => {
   test('not exist', () => {
     expect(getExecCommands(['not', 'exist'], {})).toBeNull();
   });
+
+  test('not find exec command', () => {
+    expect(() => getExecCommands(['test'], { test: ['exec:error'] })).toThrow(
+      'Can not find `exec:error` in the config',
+    );
+  });
 });

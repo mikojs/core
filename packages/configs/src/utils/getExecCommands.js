@@ -6,12 +6,14 @@
  *
  * @param {Array} keys - commands keys
  * @param {object} prevConfig - prev config
+ * @param {object} rootConfig - root config
  *
  * @return {Array} - commands
  */
 const getExecCommands = (
   [key, ...otherKeys]: $ReadOnlyArray<string>,
   prevConfig: {},
+  rootConfig?: {} = prevConfig,
 ): ?$ReadOnlyArray<string> => {
   Object.keys(prevConfig).forEach((prevConfigKey: string) => {
     if (/:/.test(prevConfigKey)) {
@@ -26,9 +28,21 @@ const getExecCommands = (
 
   if (!prevConfig[key]) return null;
 
-  if (otherKeys.length === 0) return prevConfig[key];
+  if (otherKeys.length !== 0)
+    return getExecCommands(otherKeys, prevConfig[key], rootConfig);
 
-  return getExecCommands(otherKeys, prevConfig[key]);
+  return prevConfig[key]?.reduce(
+    (result: $ReadOnlyArray<string>, command: string) => [
+      ...result,
+      ...(/^exec:/.test(command)
+        ? getExecCommands(command.split(/:/).slice(1), rootConfig) ||
+          (() => {
+            throw new Error(`Can not find \`${command}\` in the config`);
+          })()
+        : [command]),
+    ],
+    [],
+  );
 };
 
 export default getExecCommands;

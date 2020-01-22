@@ -26,4 +26,13 @@ export default [
       },
     },
   ],
+  [
+    'test',
+    {
+      test: ['exec:lerna:babel'],
+      lerna: {
+        babel: ['cmd'],
+      },
+    },
+  ],
 ];

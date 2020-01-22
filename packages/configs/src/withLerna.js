@@ -26,13 +26,15 @@ const newConfigs = {
   exec: {
     install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
       ...install,
+      'lerna',
       'git-branch',
+      'flow-mono-cli',
     ],
     run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
       argv.reduce(
         (newArgv: $ReadOnlyArray<string>, argvStr: string) => [
           ...newArgv,
-          ...(argvStr === '--changed'
+          ...(argvStr === '--changed' && /^lerna:/.test(argv[0])
             ? ['--since', gitBranch.sync().replace(/Branch: /, '')]
             : [argvStr]),
         ],
@@ -41,10 +43,16 @@ const newConfigs = {
     config: (config: {}): {
       lerna: {
         [string]: $ReadOnlyArray<string>,
+        'flow-typed': {
+          [string]: $ReadOnlyArray<string>,
+        },
       },
     } => ({
       ...config,
+
+      // lerna
       lerna: {
+        // flow
         flow: [
           'lerna',
           'exec',
@@ -53,6 +61,23 @@ const newConfigs = {
           '--concurrency',
           '1',
         ],
+
+        // flow-typed
+        'flow-typed': {
+          install: [
+            'exec:flow-typed:install',
+            '&&',
+            'flow-mono',
+            'create-symlinks',
+            '.flowconfig',
+            '&&',
+            'flow-mono',
+            'install-types',
+            '--ignoreDeps=peer',
+          ],
+        },
+
+        // babel
         babel: ['lerna', 'exec', '"configs babel"', '--stream'],
         'babel:watch': ['lerna', 'exec', '"configs babel -w"', '--stream'],
       },

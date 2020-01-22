@@ -7,11 +7,6 @@ install-all:
 	@make babel-base-all
 	@yarn configs exec lerna:babel
 
-flow-typed-all:
-	@yarn flow-typed install --verbose
-	@yarn flow-mono create-symlinks .flowconfig && \
-		yarn flow-mono install-types --ignoreDeps=peer
-
 babel-base-all:
 	@$(call babel-build)
 

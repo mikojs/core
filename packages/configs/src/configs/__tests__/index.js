@@ -31,10 +31,7 @@ describe('configs', () => {
 
             case 'install':
             case 'run':
-              (configKey === 'exec'
-                ? expect(value([]))
-                : expect(value([])).not
-              ).toHaveLength(0);
+              expect(value([])).not.toHaveLength(0);
               break;
 
             case 'config':

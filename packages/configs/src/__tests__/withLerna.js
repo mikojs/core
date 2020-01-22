@@ -32,7 +32,9 @@ describe('with lerna', () => {
 
             default:
               expect(withLerna[configName][eventName]([])).toEqual(
-                configName === 'exec' ? ['git-branch'] : ['-W'],
+                configName === 'exec'
+                  ? ['lerna', 'git-branch', 'flow-mono-cli']
+                  : ['-W'],
               );
               break;
           }
@@ -50,7 +52,10 @@ describe('with lerna', () => {
       'run with --changed = $isChanged',
       ({ isChanged }: {| isChanged: boolean |}) => {
         expect(
-          withLerna.exec.run([!isChanged ? '--test' : '--changed'])[0],
+          withLerna.exec.run([
+            'lerna:test',
+            !isChanged ? '--test' : '--changed',
+          ])[1],
         ).toBe(!isChanged ? '--test' : '--since');
       },
     );

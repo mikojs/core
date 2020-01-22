@@ -29,10 +29,19 @@ handleUnhandledRejection();
   logger.log(chalk`Run command: {gray ${commands.join(' ')}}`);
   debugLog({ type, argv, config });
 
+  const eachCommands = commands.reduce(
+    (result: $ReadOnlyArray<$ReadOnlyArray<string>>, command: string) =>
+      command === '&&'
+        ? [...result, []]
+        : [...result.slice(0, -1), [...result[result.length - 1], command]],
+    [[]],
+  );
+
   try {
-    await execa(commands[0], commands.slice(1), {
-      stdio: 'inherit',
-    });
+    for (const eachCommand of eachCommands)
+      await execa(eachCommand[0], eachCommand.slice(1), {
+        stdio: 'inherit',
+      });
   } catch (e) {
     logger.log('Run command fail');
     debugLog(e);

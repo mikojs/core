@@ -9,6 +9,7 @@ export default {
     'flow-bin',
     'flow-typed',
     'husky',
+    'standard-version',
   ],
   config: () => ({
     // flow-typed
@@ -32,6 +33,9 @@ export default {
 
       'post-checkout': ['configs', 'babel'],
     },
+
+    // release
+    release: ['standard-version'],
   }),
   configsFiles: {
     exec: '.execrc.js',

@@ -25,7 +25,7 @@ const newConfigs = {
   },
   exec: {
     install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...install,
+      ...install.filter((key: string) => key !== 'standard-version'),
       'lerna',
       'lerna-changelog',
       'git-branch',
@@ -103,6 +103,7 @@ const newConfigs = {
         'post-checkout': ['exec:lerna:babel', '--since', 'master'],
       },
 
+      // release
       release: [
         'lerna-changelog',
         '&&',

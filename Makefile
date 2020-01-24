@@ -13,16 +13,6 @@ babel-base-all:
 babel-base-changed:
 	@$(call babel-build, --since $(BRANCH))
 
-release:
-	@yarn lerna-changelog && \
-		echo "\nContinue with any keyword or exit with 'ctrl + c'..." && \
-		read -p ""
-	@vim CHANGELOG.md && \
-		git add CHANGELOG.md && \
-		git commit -m "chore(root): add CHANGELOG.md"
-	@yarn lerna version
-	@open https://github.com/mikojs/core/releases
-
 clean:
 	@yarn lerna exec "rm -rf lib flow-typed/npm"
 	@yarn lerna exec "rm -rf .flowconfig" \

@@ -8,7 +8,6 @@
     "dev": "make babel-base-changed && configs exec lerna:babel:watch --changed",
     "install:all": "make install-all",
     "prod": "NODE_ENV=production make babel-base-all && configs exec lerna:babel",
-    "release": "make release",
     "test": "make babel-base-changed && configs exec lerna:babel --changed && lerna run test --stream && configs test"
   },
   "devDependencies": {

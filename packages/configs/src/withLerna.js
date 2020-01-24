@@ -81,6 +81,26 @@ const newConfigs = {
         babel: ['lerna', 'exec', '"configs babel"', '--stream'],
         'babel:watch': ['lerna', 'exec', '"configs babel -w"', '--stream'],
       },
+
+      // husky
+      husky: {
+        'pre-commit': [
+          'exec:lerna:babel',
+          '--since',
+          gitBranch.sync().replace(/Branch: /, ''),
+          '&&',
+          'configs',
+          'lint-staged',
+          '&&',
+          'exec:lerna:flow',
+          '--since',
+          gitBranch.sync().replace(/Branch: /, ''),
+        ],
+
+        'post-merge': ['exec:lerna:babel'],
+
+        'post-checkout': ['exec:lerna:babel', '--since', 'master'],
+      },
     }),
   },
 };

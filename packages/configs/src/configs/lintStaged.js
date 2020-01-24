@@ -3,7 +3,6 @@
 export default {
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
-    'husky',
     'lint-staged',
     'prettier-package-json',
     '@mikojs/badges',

@@ -46,9 +46,9 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "make babel-base-changed && configs exec lerna:babel --changed && configs lint-staged && configs exec lerna:flow --changed",
-      "post-merge": "make babel-base-all && configs exec lerna:babel",
-      "post-checkout": "make babel-base-changed BRANCH=master && configs exec lerna:babel --since master"
+      "pre-commit": "make babel-base-changed && configs exec husky:pre-commit",
+      "post-merge": "make babel-base-all && configs exec husky:post-merge",
+      "post-checkout": "make babel-base-changed BRANCH=master && configs exec husky:post-checkout"
     }
   }
 }

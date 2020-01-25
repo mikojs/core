@@ -46,4 +46,14 @@ export default {
       ],
     }),
   }),
+
+  // lint-staged
+  'lint-staged': (config: { '*.css'?: $ReadOnlyArray<string> }) => ({
+    ...config,
+    '*.css': [
+      ...(config['*.css'] || []).filter((key: string) => key !== 'git add'),
+      'yarn prettier --parser css --write',
+      'git add',
+    ],
+  }),
 };

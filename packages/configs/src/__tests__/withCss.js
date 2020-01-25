@@ -46,6 +46,20 @@ describe('with css', () => {
           ],
         });
       });
+
+      test('lint-staged', () => {
+        expect(
+          withCss['lint-staged'](
+            isEmptyConfig
+              ? {}
+              : {
+                  '*.css': ['git add'],
+                },
+          ),
+        ).toEqual({
+          '*.css': ['yarn prettier --parser css --write', 'git add'],
+        });
+      });
     },
   );
 });

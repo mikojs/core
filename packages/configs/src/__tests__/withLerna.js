@@ -64,8 +64,12 @@ describe('with lerna', () => {
           withLerna.exec.run([
             'lerna:test',
             !isChanged ? '--test' : '--changed',
-          ])[1],
-        ).toBe(!isChanged ? '--test' : '--since');
+          ]),
+        ).toEqual(
+          !isChanged
+            ? ['lerna:test', '--test']
+            : ['lerna:test', '--since', 'master'],
+        );
       },
     );
 

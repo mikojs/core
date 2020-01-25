@@ -36,7 +36,7 @@ const newConfigs = {
         (newArgv: $ReadOnlyArray<string>, argvStr: string) => [
           ...newArgv,
           ...(argvStr === '--changed' && /^lerna:/.test(argv[0])
-            ? ['--since', gitBranch.sync().replace(/Branch: /, '')]
+            ? ['--since', gitBranch.sync()?.replace(/Branch: /, '') || 'master']
             : [argvStr]),
         ],
         [],
@@ -93,14 +93,14 @@ const newConfigs = {
         'pre-commit': [
           'exec:lerna:babel',
           '--since',
-          gitBranch.sync().replace(/Branch: /, ''),
+          gitBranch.sync()?.replace(/Branch: /, '') || 'master',
           '&&',
           'configs',
           'lint-staged',
           '&&',
           'exec:lerna:flow',
           '--since',
-          gitBranch.sync().replace(/Branch: /, ''),
+          gitBranch.sync()?.replace(/Branch: /, '') || 'master',
         ],
 
         'post-merge': ['exec:lerna:babel'],

@@ -11,7 +11,11 @@ babel-base-all:
 	@$(call babel-build)
 
 babel-base-changed:
+ifeq ($(shell printenv CI), true)
+	@echo "Skip babel build"
+else
 	@$(call babel-build, --since $(BRANCH))
+endif
 
 define babel-build
 	yarn lerna exec \

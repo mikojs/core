@@ -42,6 +42,20 @@ describe('with less', () => {
           ],
         });
       });
+
+      test('lint-staged', () => {
+        expect(
+          withLess[1]['lint-staged'](
+            isEmptyConfig
+              ? {}
+              : {
+                  '*.less': ['git add'],
+                },
+          ),
+        ).toEqual({
+          '*.less': ['yarn prettier --parser less --write', 'git add'],
+        });
+      });
     },
   );
 });

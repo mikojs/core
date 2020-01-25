@@ -35,10 +35,10 @@
   "devDependencies": {
     "@mikojs/jest": "^1.8.1",
     "fbjs": "^1.0.0",
-    "fetch-mock": "^8.3.1",
-    "flow-bin": "^0.115.0",
+    "fetch-mock": "^8.3.2",
+    "flow-bin": "^0.116.1",
     "flow-typed": "^2.6.2",
-    "get-port": "^5.1.0",
+    "get-port": "^5.1.1",
     "relay-test-utils": "^8.0.0"
   },
   "keywords": ["website"]

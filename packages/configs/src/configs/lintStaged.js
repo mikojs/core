@@ -8,18 +8,13 @@ export default {
     '@mikojs/badges',
   ],
   config: () => ({
-    '*.js': ['yarn configs prettier', 'yarn configs lint', 'git add'],
-    '*.js.flow': ['yarn configs prettier --parser flow', 'git add'],
-    '**/!(README).md': ['yarn configs prettier --parser markdown', 'git add'],
-    '**/README.md': [
-      'badges',
-      'yarn configs prettier --parser markdown',
-      'git add',
-    ],
+    '*.js': ['configs prettier', 'configs lint'],
+    '*.js.flow': ['configs prettier --parser flow'],
+    '**/!(README).md': ['configs prettier --parser markdown'],
+    '**/README.md': ['badges', 'configs prettier --parser markdown'],
     '**/package.json': [
-      'yarn prettier-package-json --write',
-      'yarn configs prettier --parser json',
-      'git add',
+      'prettier-package-json --write',
+      'configs prettier --parser json',
     ],
   }),
   configsFiles: {

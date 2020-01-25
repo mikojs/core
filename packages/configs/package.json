@@ -19,14 +19,14 @@
     "execa": "^4.0.0",
     "fbjs": "^1.0.0",
     "find-process": "^1.4.3",
-    "get-port": "^5.1.0",
+    "get-port": "^5.1.1",
     "is-running": "^2.1.0",
     "npm-which": "^3.0.1",
     "output-file-sync": "^2.0.1",
     "rimraf": "^3.0.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.115.0",
+    "flow-bin": "^0.116.1",
     "flow-typed": "^2.6.2",
     "git-branch": "^2.0.1"
   },

@@ -49,11 +49,11 @@ describe('with less', () => {
             isEmptyConfig
               ? {}
               : {
-                  '*.less': ['git add'],
+                  '*.less': [],
                 },
           ),
         ).toEqual({
-          '*.less': ['yarn prettier --parser less --write', 'git add'],
+          '*.less': ['prettier --parser less --write'],
         });
       });
     },

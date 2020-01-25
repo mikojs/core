@@ -53,11 +53,11 @@ describe('with css', () => {
             isEmptyConfig
               ? {}
               : {
-                  '*.css': ['git add'],
+                  '*.css': [],
                 },
           ),
         ).toEqual({
-          '*.css': ['yarn prettier --parser css --write', 'git add'],
+          '*.css': ['prettier --parser css --write'],
         });
       });
     },

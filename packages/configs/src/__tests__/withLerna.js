@@ -13,7 +13,7 @@ describe('with lerna', () => {
             case 'config':
               if (configName === 'exec')
                 expect(
-                  withLerna[(configName: 'exec')].config({ clean: [] }),
+                  withLerna[(configName: 'exec')].config({}),
                 ).not.toBeUndefined();
               break;
 
@@ -68,7 +68,7 @@ describe('with lerna', () => {
       if (isCi) process.env.CI = 'true';
       else delete process.env.CI;
 
-      expect(withLerna.exec.config({ clean: [] }).lerna.flow[2]).toBe(
+      expect(withLerna.exec.config({}).lerna.flow[2]).toBe(
         isCi ? '"flow --quiet && flow stop"' : '"flow --quiet"',
       );
     });

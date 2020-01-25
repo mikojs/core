@@ -45,7 +45,7 @@ const newConfigs = {
       clean,
       ...config
     }: {
-      clean: $ReadOnlyArray<string>,
+      clean?: $ReadOnlyArray<string>,
     }): {
       lerna: {
         [string]: $ReadOnlyArray<string>,
@@ -144,7 +144,7 @@ const newConfigs = {
         'lerna',
         'clean',
         '&&',
-        ...clean,
+        ...(clean || ['rm', '-rf']),
         './.changelog',
       ],
     }),

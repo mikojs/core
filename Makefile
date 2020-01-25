@@ -1,5 +1,9 @@
 ROOT=$(shell pwd)
+ifeq ($(shell printenv CI), true)
+BRANCH="master"
+else
 BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
+endif
 
 install-all:
 	@yarn install

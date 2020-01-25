@@ -57,7 +57,7 @@ describe('with css', () => {
                 },
           ),
         ).toEqual({
-          '*.css': ['yarn prettier --parser css --write'],
+          '*.css': ['prettier --parser css --write'],
         });
       });
     },

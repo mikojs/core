@@ -53,7 +53,7 @@ describe('with less', () => {
                 },
           ),
         ).toEqual({
-          '*.less': ['yarn prettier --parser less --write'],
+          '*.less': ['prettier --parser less --write'],
         });
       });
     },

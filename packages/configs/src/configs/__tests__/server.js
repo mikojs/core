@@ -4,9 +4,7 @@ import server from '../server';
 
 describe('server', () => {
   test('install', () => {
-    expect(server.install(['yarn', 'add', '--dev'])).toEqual([
-      'yarn',
-      'add',
+    expect(server.install(['--dev'])).toEqual([
       'koa',
       '@mikojs/server',
       '@mikojs/koa-base',

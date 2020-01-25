@@ -50,6 +50,6 @@ export default {
   // lint-staged
   'lint-staged': (config: { '*.css'?: $ReadOnlyArray<string> }) => ({
     ...config,
-    '*.css': [...(config['*.css'] || []), 'yarn prettier --parser css --write'],
+    '*.css': [...(config['*.css'] || []), 'prettier --parser css --write'],
   }),
 };

@@ -46,10 +46,7 @@ export default [
     // lint-staged
     'lint-staged': (config: { '*.less'?: $ReadOnlyArray<string> }) => ({
       ...config,
-      '*.less': [
-        ...(config['*.less'] || []),
-        'yarn prettier --parser less --write',
-      ],
+      '*.less': [...(config['*.less'] || []), 'prettier --parser less --write'],
     }),
   },
 ];

@@ -41,7 +41,12 @@ const newConfigs = {
         ],
         [],
       ),
-    config: (config: {}): {
+    config: ({
+      clean,
+      ...config
+    }: {
+      clean: $ReadOnlyArray<string>,
+    }): {
       lerna: {
         [string]: $ReadOnlyArray<string>,
         'flow-typed': {
@@ -128,6 +133,19 @@ const newConfigs = {
         '&&',
         'lerna',
         'version',
+      ],
+
+      // clean
+      clean: [
+        'lerna',
+        'exec',
+        '"rm -rf lib flow-typed/npm .flowconfig"',
+        '&&',
+        'lerna',
+        'clean',
+        '&&',
+        ...clean,
+        './.changelog',
       ],
     }),
   },

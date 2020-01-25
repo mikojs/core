@@ -13,21 +13,6 @@ babel-base-all:
 babel-base-changed:
 	@$(call babel-build, --since $(BRANCH))
 
-clean:
-	@yarn lerna exec "rm -rf lib flow-typed/npm"
-	@yarn lerna exec "rm -rf .flowconfig" \
-		--ignore @mikojs/eslint-config-base \
-		--ignore @mikojs/koa-graphql \
-		--ignore @mikojs/use-css \
-		--ignore @mikojs/use-less \
-		--ignore @mikojs/website
-	@yarn lerna clean && rm -rf ./node_modules
-	rm -rf ./flow-typed/npm
-	rm -rf ./coverage
-	rm -rf ./.eslintcache
-	rm -rf ./.changelog
-	rm -rf ./*.log
-
 define babel-build
 	yarn lerna exec \
 		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \

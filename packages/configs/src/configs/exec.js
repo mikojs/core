@@ -36,6 +36,17 @@ export default {
 
     // release
     release: ['standard-version'],
+
+    // clean
+    clean: [
+      'rm',
+      '-rf',
+      './flow-typed/npm',
+      './coverage',
+      './.eslintcache',
+      './*.log',
+      './node_modules',
+    ],
   }),
   configsFiles: {
     exec: '.execrc.js',

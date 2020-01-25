@@ -4,7 +4,6 @@
   "license": "MIT",
   "workspaces": ["packages/*", "babel/*", "server/*", "components/*"],
   "scripts": {
-    "clean": "make clean",
     "dev": "make babel-base-changed && configs exec lerna:babel:watch --changed",
     "install:all": "make install-all",
     "prod": "NODE_ENV=production make babel-base-all && configs exec lerna:babel",

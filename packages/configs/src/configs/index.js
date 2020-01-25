@@ -6,7 +6,7 @@ import exec from './exec';
 import babel from './babel';
 import prettier from './prettier';
 import lint from './lint';
-import lintsteged from './lintsteged';
+import lintStaged from './lintStaged';
 import jest from './jest';
 import server from './server';
 
@@ -35,7 +35,7 @@ export default ({
   },
 
   // lint-staged
-  'lint-staged': lintsteged,
+  'lint-staged': lintStaged,
 
   // jest
   jest,

@@ -25,8 +25,9 @@ const newConfigs = {
   },
   exec: {
     install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...install,
+      ...install.filter((key: string) => key !== 'standard-version'),
       'lerna',
+      'lerna-changelog',
       'git-branch',
       'flow-mono-cli',
     ],
@@ -40,7 +41,12 @@ const newConfigs = {
         ],
         [],
       ),
-    config: (config: {}): {
+    config: ({
+      clean,
+      ...config
+    }: {
+      clean?: $ReadOnlyArray<string>,
+    }): {
       lerna: {
         [string]: $ReadOnlyArray<string>,
         'flow-typed': {
@@ -81,6 +87,66 @@ const newConfigs = {
         babel: ['lerna', 'exec', '"configs babel"', '--stream'],
         'babel:watch': ['lerna', 'exec', '"configs babel -w"', '--stream'],
       },
+
+      // husky
+      husky: {
+        'pre-commit': [
+          'exec:lerna:babel',
+          '--since',
+          gitBranch.sync().replace(/Branch: /, ''),
+          '&&',
+          'configs',
+          'lint-staged',
+          '&&',
+          'exec:lerna:flow',
+          '--since',
+          gitBranch.sync().replace(/Branch: /, ''),
+        ],
+
+        'post-merge': ['exec:lerna:babel'],
+
+        'post-checkout': ['exec:lerna:babel', '--since', 'master'],
+      },
+
+      // release
+      release: [
+        'lerna-changelog',
+        '&&',
+        'echo',
+        '\nContinue with any keyword or exit with "ctrl + c"...',
+        '&&',
+        'read',
+        '-p',
+        '',
+        '&&',
+        'vim',
+        'CHANGELOG.md',
+        '&&',
+        'git',
+        'add',
+        'CHANGELOG.md',
+        '&&',
+        'git',
+        'commit',
+        '-m',
+        'chore(root): add CHANGELOG.md',
+        '&&',
+        'lerna',
+        'version',
+      ],
+
+      // clean
+      clean: [
+        'lerna',
+        'exec',
+        '"rm -rf lib flow-typed/npm .flowconfig"',
+        '&&',
+        'lerna',
+        'clean',
+        '&&',
+        ...(clean || ['rm', '-rf']),
+        './.changelog',
+      ],
     }),
   },
 };

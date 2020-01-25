@@ -13,31 +13,6 @@ babel-base-all:
 babel-base-changed:
 	@$(call babel-build, --since $(BRANCH))
 
-release:
-	@yarn lerna-changelog && \
-		echo "\nContinue with any keyword or exit with 'ctrl + c'..." && \
-		read -p ""
-	@vim CHANGELOG.md && \
-		git add CHANGELOG.md && \
-		git commit -m "chore(root): add CHANGELOG.md"
-	@yarn lerna version
-	@open https://github.com/mikojs/core/releases
-
-clean:
-	@yarn lerna exec "rm -rf lib flow-typed/npm"
-	@yarn lerna exec "rm -rf .flowconfig" \
-		--ignore @mikojs/eslint-config-base \
-		--ignore @mikojs/koa-graphql \
-		--ignore @mikojs/use-css \
-		--ignore @mikojs/use-less \
-		--ignore @mikojs/website
-	@yarn lerna clean && rm -rf ./node_modules
-	rm -rf ./flow-typed/npm
-	rm -rf ./coverage
-	rm -rf ./.eslintcache
-	rm -rf ./.changelog
-	rm -rf ./*.log
-
 define babel-build
 	yarn lerna exec \
 		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.catrc.js --verbose" \

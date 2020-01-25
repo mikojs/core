@@ -44,6 +44,15 @@ describe('with lerna', () => {
   );
 
   describe('exec', () => {
+    test('install with filtering standard-version', () => {
+      expect(withLerna.exec.install(['standard-version'])).toEqual([
+        'lerna',
+        'lerna-changelog',
+        'git-branch',
+        'flow-mono-cli',
+      ]);
+    });
+
     test.each`
       isChanged
       ${true}

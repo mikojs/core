@@ -6,7 +6,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core",
   "repository": "https://github.com/mikojs/core/tree/master/website/website",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "main": "./lib/index.js",
   "scripts": {
     "dev": "configs server -w",
@@ -15,13 +15,13 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.8.3",
-    "@mikojs/koa-base": "^1.8.1",
-    "@mikojs/koa-graphql": "^1.8.1",
-    "@mikojs/koa-react": "^1.8.1",
-    "@mikojs/react-cms": "^1.8.1",
-    "@mikojs/server": "^1.8.1",
-    "@mikojs/use-css": "^1.8.1",
-    "@mikojs/use-less": "^1.8.1",
+    "@mikojs/koa-base": "^1.9.0",
+    "@mikojs/koa-graphql": "^1.9.0",
+    "@mikojs/koa-react": "^1.9.0",
+    "@mikojs/react-cms": "^1.9.0",
+    "@mikojs/server": "^1.9.0",
+    "@mikojs/use-css": "^1.9.0",
+    "@mikojs/use-less": "^1.9.0",
     "core-js": "^3.6.4",
     "node-fetch": "^2.6.0",
     "react": "^16.12.0",
@@ -33,7 +33,7 @@
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
-    "@mikojs/jest": "^1.8.1",
+    "@mikojs/jest": "^1.9.0",
     "fbjs": "^1.0.0",
     "fetch-mock": "^8.3.2",
     "flow-bin": "^0.116.1",

@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/use-css",
   "repository": "https://github.com/mikojs/core/tree/master/server/use-css",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.8.3",
@@ -18,7 +18,7 @@
     "@mikojs/koa-react": ">=1.0.0"
   },
   "devDependencies": {
-    "@mikojs/koa-react": "^1.8.1",
+    "@mikojs/koa-react": "^1.9.0",
     "flow-bin": "^0.116.1",
     "flow-typed": "^2.6.2",
     "webpack": "^4.41.5"

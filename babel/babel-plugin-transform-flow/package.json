@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-plugin-transform-flow",
   "repository": "https://github.com/mikojs/core/tree/master/babel/babel-plugin-transform-flow",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/core": "^7.8.3",

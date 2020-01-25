@@ -5,11 +5,11 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/jest",
   "repository": "https://github.com/mikojs/core/tree/master/packages/jest",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.8.3",
-    "@mikojs/utils": "^1.8.1",
+    "@mikojs/utils": "^1.9.0",
     "babel-jest": "^25.1.0",
     "core-js": "^3.6.4",
     "enzyme": "^3.11.0",

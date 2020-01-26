@@ -1,0 +1,30 @@
+{
+  "name": "@mikojs/create-project",
+  "description": "Creating project for mikojs.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/create-project",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/create-project",
+  "version": "1.8.1",
+  "main": "./lib/index.js",
+  "bin": "./lib/bin/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.8.3",
+    "@mikojs/utils": "^1.8.1",
+    "core-js": "^3.6.4"
+  },
+  "keywords": [
+    "babel",
+    "createt project",
+    "eslint",
+    "flow",
+    "husky",
+    "jest",
+    "lint-staged",
+    "mikojs",
+    "prettier"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

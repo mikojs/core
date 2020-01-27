@@ -17,7 +17,8 @@
     "git-user-email": "^0.2.2",
     "git-user-name": "^2.0.0",
     "inquirer": "^7.0.4",
-    "validator": "^12.2.0"
+    "validator": "^12.2.0",
+    "output-file-sync": "^2.0.1"
   },
   "keywords": [
     "babel",

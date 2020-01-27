@@ -7,23 +7,34 @@ import gitUserEmail from 'git-user-email';
 import inquirer from 'inquirer';
 import { isURL } from 'validator';
 
+type pkgType = {|
+  private?: boolean,
+  name?: string,
+  license?: string,
+  author?: string,
+  version?: string,
+  main?: string,
+  publishConfig?: {
+    access: string,
+  },
+|};
+
 /**
  * @example
  * getPkg('/', {})
  *
  * @param {string} projectDir - project dir path
- * @param {object} originialPkg - original pkg
+ * @param {pkgType} originialPkg - original pkg
+ *
+ * @return {pkgType} - pkg data
  */
-export default async (projectDir: string, originialPkg: {}) => {
+export default async (projectDir: string, originialPkg: pkgType): Promise<{|
+  ...pkgType,
+  author: string,
+|}> => {
   const username = gitUserName({ type: 'global', path: undefined });
   const email = gitUserEmail({ type: 'global', path: undefined });
-  const pkg: {
-    [string]: string,
-    private?: boolean,
-    publishConfig?: {
-      access: string,
-    },
-  } = {
+  const pkg: pkgType = {
     ...originialPkg,
     license: 'MIT',
     version: '1.0.0',
@@ -93,7 +104,7 @@ export default async (projectDir: string, originialPkg: {}) => {
     ),
   );
 
-  Object.keys(data).forEach((key: string) => {
+  Object.keys(data).forEach((key: 'author') => {
     pkg[key] = data[key];
   });
 
@@ -102,4 +113,6 @@ export default async (projectDir: string, originialPkg: {}) => {
     pkg.publishConfig = {
       access: 'public',
     };
+
+  return pkg;
 };

@@ -8,14 +8,23 @@ node_modules
 
 # babel
 lib
+babel.config.js
 
 # eslint
+.eslintignore
+.eslintrc.js
 .eslintcache
+
+# prettier
+.prettierrc.js
 
 # flow
 **/flow-typed/npm
 **/.flowconfig
 !./.flowconfig
+
+# lint-staged
+.lintstagedrc.js
 
 # jest
 coverage
@@ -25,3 +34,6 @@ __generated__
 
 # lerna-changelog
 .changelog
+
+# configs
+.execrc.js

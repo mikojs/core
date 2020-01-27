@@ -1,5 +1,8 @@
 // @flow
 
+import fs from 'fs';
+import path from 'path';
+
 import debug from 'debug';
 import chalk from 'chalk';
 import outputFileSync from 'output-file-sync';
@@ -42,12 +45,32 @@ export default async (cliName: string): Promise<boolean> => {
 
   debugLog(`Config files: ${JSON.stringify(files, null, 2)}`);
 
+  const fileContent = [
+    path.resolve(configs.rootDir, './.gitignore'),
+    path.resolve(process.cwd(), './.gitignore'),
+  ]
+    .reduce(
+      (result: string, filePath: string) =>
+        !result && fs.existsSync(filePath)
+          ? fs.readFileSync(filePath, 'utf-8')
+          : result,
+      '',
+    )
+    .replace(/^#.*$/gm, '');
+
   await Promise.all(
     Object.keys(files).map((key: string) =>
       Promise.all(
         files[key].map(
           ({ filePath, content }: $ElementType<filesDataType, number>) =>
             new Promise(resolve => {
+              const filename = path.basename(filePath);
+
+              if (!new RegExp(filename).test(fileContent))
+                logger.warn(
+                  chalk`{red ${filename}} should be added in {bold {gray .gitignore}}`,
+                );
+
               debugLog(`Generate config: ${filePath}`);
               sendToServer(
                 JSON.stringify({ pid: process.pid, filePath }),

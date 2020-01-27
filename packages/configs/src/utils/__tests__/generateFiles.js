@@ -21,6 +21,11 @@ describe('generate files', () => {
         cliFunc: {
           alias: emptyFunction.thatReturnsArgument,
         },
+        fileNotIgnore: {
+          configsFiles: {
+            fileNotIgnore: './fileNotIgnore.js',
+          },
+        },
         jest: {
           configsFiles: {
             prettier: false,
@@ -53,6 +58,18 @@ describe('generate files', () => {
       );
     },
   );
+
+  test('config file is not added in .gitignore', async () => {
+    const mockLog = jest.fn();
+
+    global.console.warn = mockLog;
+
+    expect(await generateFiles('fileNotIgnore')).toBeTruthy();
+    expect(mockLog).toHaveBeenCalledTimes(1);
+    expect(mockLog).toHaveBeenCalledWith(
+      chalk`{yellow ⚠ }{yellow {bold @mikojs/configs}} {red fileNotIgnore.js} should be added in {bold {gray .gitignore}}`,
+    );
+  });
 
   test('generate', async () => {
     expect(await generateFiles('jest')).toBeTruthy();

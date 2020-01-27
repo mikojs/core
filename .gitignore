@@ -7,12 +7,12 @@
 node_modules
 
 # babel
-lib
 babel.config.js
+lib
 
 # eslint
-.eslintignore
 .eslintrc.js
+.eslintignore
 .eslintcache
 
 # prettier
@@ -27,6 +27,7 @@ babel.config.js
 .lintstagedrc.js
 
 # jest
+jest.config.js
 coverage
 
 # relay

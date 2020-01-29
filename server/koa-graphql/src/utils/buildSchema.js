@@ -15,7 +15,7 @@ type buildSchemasType = {
   resolvers: $PropertyType<makeExecutableSchemaOptionsType, 'resolvers'>,
 };
 
-const debugLog = debug('graphql');
+const debugLog = debug('graphql:buildSchema');
 
 /**
  * @example

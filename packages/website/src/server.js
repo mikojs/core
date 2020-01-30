@@ -12,7 +12,7 @@ import { emptyFunction } from 'fbjs';
 
 import server, { type contextType } from '@mikojs/server';
 import base from '@mikojs/koa-base';
-import Graphql from '@mikojs/koa-graphql';
+import koaGraphql from '@mikojs/koa-graphql';
 import React from '@mikojs/koa-react';
 import useCss from '@mikojs/use-css';
 import useLess from '@mikojs/use-less';
@@ -33,16 +33,22 @@ export default async ({
   port,
   close,
 }: contextType): Promise<?http$Server> => {
-  const graphql = new Graphql(path.resolve(dir, './graphql'));
+  const graphql = koaGraphql(path.resolve(dir, './graphql'));
   const react = new React(
     path.resolve(dir, './pages'),
     { dev, exclude: /__generated__/ } |> useCss |> useLess,
   );
 
-  await graphql.relay(['--src', src, '--exclude', '**/server.js']);
+  await graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']);
 
   if (dev && watch)
-    graphql.relay(['--src', src, '--watch', '--exclude', '**/server.js']);
+    graphql.runRelayCompiler([
+      '--src',
+      src,
+      '--watch',
+      '--exclude',
+      '**/server.js',
+    ]);
 
   if (process.env.SKIP_SERVER) {
     close();

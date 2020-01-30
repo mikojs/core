@@ -20,7 +20,7 @@ esproposal.optional_chaining=enable
 .*/koa-react/src/.*
 .*/koa-react/flow-typed/npm/.*
 .*/koa-graphql/src/.*
-.*/koa-graphql/lib/index.js.flow
+.*/koa-graphql/lib/.*
 .*/react-relay-network-modern/.*
 .*/react-relay-network-modern-ssr/.*
 .*/express-graphql/.*

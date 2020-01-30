@@ -2,7 +2,7 @@
 
 import { graphql, type GraphQLArgs as GraphQLArgsType } from 'graphql';
 import { type makeExecutableSchemaOptionsType } from 'graphql-tools';
-import execa from 'execa';
+import execa, { type ExecaPromise as execaPromiseType } from 'execa';
 
 import buildSchema from './utils/buildSchema';
 import updateSchema from './utils/updateSchema';
@@ -18,6 +18,7 @@ type funcsType = {|
     $Call<typeof buildSchema, string>,
     optionsType,
   >,
+  runRelayCompiler: (argv: $ReadOnlyArray<string>) => execaPromiseType,
   query: (
     graphQLArgs: $Diff<GraphQLArgsType, { schema: mixed }>,
   ) => $Call<typeof graphql, GraphQLArgsType>,

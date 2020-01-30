@@ -85,7 +85,13 @@ const newConfigs = {
 
         // babel
         babel: ['lerna', 'exec', '"configs babel"', '--stream'],
-        'babel:watch': ['lerna', 'exec', '"configs babel -w"', '--stream'],
+        'babel:watch': [
+          'lerna',
+          'exec',
+          '"configs babel -w"',
+          '--stream',
+          '--parallel',
+        ],
       },
 
       // husky

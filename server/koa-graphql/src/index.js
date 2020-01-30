@@ -1,218 +1,68 @@
 // @flow
 
-import {
-  type IncomingMessage as incomingMessageType,
-  type ServerResponse as serverResponseType,
-} from 'http';
-import path from 'path';
-
-import { type Context as koaContextType } from 'koa';
-import {
-  graphql,
-  printSchema,
-  type GraphQLSchema as GraphQLSchemaType,
-  type GraphQLArgs as GraphQLArgsType,
-} from 'graphql';
-import graphqlHTTP, {
-  type OptionsData as expressGraphqlOptionsType,
-} from 'express-graphql';
-import {
-  makeExecutableSchema,
-  addResolveFunctionsToSchema,
-  type makeExecutableSchemaOptionsType,
-} from 'graphql-tools';
+import { graphql, type GraphQLArgs as GraphQLArgsType } from 'graphql';
+import { type makeExecutableSchemaOptionsType } from 'graphql-tools';
 import execa, { type ExecaPromise as execaPromiseType } from 'execa';
-import findCacheDir from 'find-cache-dir';
-import outputFileSync from 'output-file-sync';
-import compose from 'koa-compose';
-import bodyparser from 'koa-bodyparser';
-import debug from 'debug';
 
-import { d3DirTree, requireModule } from '@mikojs/utils';
-import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
+import buildSchema from './utils/buildSchema';
+import updateSchema from './utils/updateSchema';
+import buildMiddleware, { type optionsType } from './utils/buildMiddleware';
+import getSchemaFilePath from './utils/getSchemaFilePath';
 
-type buildSchemasType = {
-  typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
-  resolvers: $PropertyType<makeExecutableSchemaOptionsType, 'resolvers'>,
-};
+type funcsType = {|
+  update: (filePath: string) => void,
+  middleware: (
+    options?: optionsType,
+  ) => $Call<
+    typeof buildMiddleware,
+    $Call<typeof buildSchema, string>,
+    optionsType,
+  >,
+  runRelayCompiler: (argv: $ReadOnlyArray<string>) => execaPromiseType,
+  query: (
+    graphQLArgs: $Diff<GraphQLArgsType, { schema: mixed }>,
+  ) => $Call<typeof graphql, GraphQLArgsType>,
+|};
 
-export type optionsType = buildSchemasType & {
-  typeDefs?: $PropertyType<buildSchemasType, 'typeDefs'>,
-  resolvers?: $PropertyType<buildSchemasType, 'resolvers'>,
+/**
+ * @example
+ * graphql('/folderPath')
+ *
+ * @param {string} folderPath - the folder path
+ * @param {makeExecutableSchemaOptionsType} options - build schema options
+ *
+ * @return {funcsType} - koa graphql functions
+ */
+export default (
+  folderPath: string,
   options?: makeExecutableSchemaOptionsType,
-};
+): funcsType => {
+  const schema = buildSchema(folderPath, options);
 
-const debugLog = debug('graphql');
+  return {
+    // update
+    update: (filePath: string) =>
+      updateSchema(folderPath, options, schema, filePath),
 
-/** koa-graphql */
-export default class Graphql {
-  schema: GraphQLSchemaType;
-  folderPath: string;
-  options: $PropertyType<optionsType, 'options'>;
+    // middleware
+    middleware: (graphqlOptions?: optionsType) =>
+      buildMiddleware(schema, graphqlOptions),
 
-  /**
-   * @example
-   * new Graphql('folder path')
-   *
-   * @param {string} folderPath - folder path
-   * @param {optionsType} options - make executable schema options
-   */
-  constructor(
-    folderPath: string,
-    {
-      typeDefs: additionalTypeDefs,
-      resolvers: additionalResolvers,
-      options = {},
-    }: optionsType = {},
-  ) {
-    const { typeDefs, resolvers } = d3DirTree(folderPath, {
-      extensions: /.jsx?$/,
-    })
-      .leaves()
-      .reduce(
-        (
-          result: buildSchemasType,
-          { data: { path: filePath } }: d3DirTreeNodeType,
-        ): buildSchemasType => {
-          const { typeDefs: newTypeDefs, ...newResolvers } = requireModule(
-            filePath,
-          );
-
-          return {
-            typeDefs: [...result.typeDefs, newTypeDefs],
-            resolvers: Object.keys(newResolvers).reduce(
-              (
-                prevResolvers: $PropertyType<buildSchemasType, 'resolvers'>,
-                resolverName: string,
-              ) => ({
-                ...prevResolvers,
-                [resolverName]: {
-                  ...prevResolvers[resolverName],
-                  ...newResolvers[resolverName],
-                },
-              }),
-              result.resolvers,
-            ),
-          };
-        },
+    // run relay-compiler
+    runRelayCompiler: (argv: $ReadOnlyArray<string>) =>
+      execa(
+        'relay-compiler',
+        ['--schema', getSchemaFilePath(schema), ...argv],
         {
-          typeDefs:
-            additionalTypeDefs instanceof Array || !additionalTypeDefs
-              ? additionalTypeDefs || []
-              : [additionalTypeDefs],
-          resolvers: additionalResolvers || {},
+          stdio: 'inherit',
         },
-      );
+      ),
 
-    debugLog({
-      typeDefs,
-      resolvers,
-    });
-
-    this.folderPath = folderPath;
-    this.options = options;
-    this.schema = makeExecutableSchema({
-      ...options,
-      resolverValidationOptions: {
-        ...options.requireResolversForResolveType,
-        requireResolversForResolveType: false,
-      },
-      typeDefs,
-      resolvers,
-    });
-  }
-
-  /**
-   * @example
-   * graphql.update('/file-path')
-   *
-   * @param {string} filePath - file path
-   */
-  update = (filePath: string) => {
-    if (!new RegExp(path.resolve(this.folderPath)).test(filePath)) return;
-
-    const newResolvers = requireModule(filePath);
-
-    delete newResolvers.typeDefs;
-
-    if (Object.keys(newResolvers).length === 0) return;
-
-    addResolveFunctionsToSchema({
-      schema: this.schema,
-      resolvers: newResolvers,
-      resolverValidationOptions: {
-        ...this.options?.requireResolversForResolveType,
-        requireResolversForResolveType: false,
-      },
-      inheritResolversFromInterfaces: true,
-    });
+    // query
+    query: (graphQLArgs: $Diff<GraphQLArgsType, { schema: mixed }>) =>
+      graphql({
+        ...graphQLArgs,
+        schema,
+      }),
   };
-
-  /**
-   * @example
-   * graphql.relay(['--src', './src'])
-   *
-   * @param {Array} argv - argv for relay-compiler
-   *
-   * @return {process} - child process
-   */
-  +relay = (argv: $ReadOnlyArray<string>): execaPromiseType => {
-    const schemaFilePath = path.resolve(
-      findCacheDir({ name: 'koa-graphql' }),
-      './schema.graphql',
-    );
-
-    debugLog(schemaFilePath);
-    outputFileSync(schemaFilePath, printSchema(this.schema));
-
-    return execa('relay-compiler', ['--schema', schemaFilePath, ...argv], {
-      stdio: 'inherit',
-    });
-  };
-
-  /**
-   * @example
-   * graphql.middleware()
-   *
-   * @param {expressGraphqlOptionsType} options - koa graphql options
-   *
-   * @return {Function} - koa-graphql middleware
-   */
-  +middleware = (
-    options?: $Diff<expressGraphqlOptionsType, { schema: mixed }>,
-  ) =>
-    compose([
-      bodyparser(),
-      async (
-        ctx: {
-          ...koaContextType,
-          request: incomingMessageType & {|
-            body: mixed,
-          |},
-          res: serverResponseType & {| json?: ?(data: mixed) => void |},
-        },
-        next: () => Promise<void>,
-      ) => {
-        ctx.res.statusCode = 200;
-
-        await graphqlHTTP({
-          ...options,
-          schema: this.schema,
-        })(ctx.request, ctx.res);
-      },
-    ]);
-
-  /**
-   * @example
-   * graphql.query('{ version }')
-   *
-   * @param {GraphQLArgsType} graphQLArgs - the argument for query
-   *
-   * @return {object} - the result of the data
-   */
-  +query = (graphQLArgs: $Diff<GraphQLArgsType, { schema: mixed }>) =>
-    graphql({
-      ...graphQLArgs,
-      schema: this.schema,
-    });
-}
+};

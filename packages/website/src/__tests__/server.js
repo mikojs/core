@@ -4,15 +4,15 @@ import getPort from 'get-port';
 
 import server from '../server';
 
-jest.mock(
-  '@mikojs/koa-graphql',
-  () =>
-    class MockGraphql {
-      relay = jest.fn();
-      middleware = () => async (ctx: mixed, next: () => Promise<void>) => {
+jest.mock('@mikojs/koa-graphql', () =>
+  jest.fn().mockReturnValue({
+    runRelayCompiler: jest.fn(),
+    middleware: jest
+      .fn()
+      .mockReturnValue(async (ctx: mixed, next: () => Promise<void>) => {
         await next();
-      };
-    },
+      }),
+  }),
 );
 
 jest.mock(

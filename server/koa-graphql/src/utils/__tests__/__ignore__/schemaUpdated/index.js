@@ -3,10 +3,7 @@
 export default {
   typeDefs: `
   type Query {
-    version: String!
+    version: Int!
   }
   `,
-  Query: {
-    version: () => '2.0.0',
-  },
 };

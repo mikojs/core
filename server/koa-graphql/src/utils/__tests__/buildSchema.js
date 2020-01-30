@@ -11,10 +11,10 @@ test('build schema', () => {
     printSchema(
       buildSchema(path.resolve(__dirname, './__ignore__/schema'), {
         typeDefs: `
-        extend type Query {
-          foo: String!
-        }
-      `,
+          extend type Query {
+            foo: String!
+          }
+        `,
       }),
     ),
   ).toBe(`type Query {

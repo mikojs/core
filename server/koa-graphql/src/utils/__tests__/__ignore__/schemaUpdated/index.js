@@ -2,8 +2,8 @@
 
 export default {
   typeDefs: `
-  type Query {
-    version: Int!
-  }
+    type Query {
+      version: Int!
+    }
   `,
 };

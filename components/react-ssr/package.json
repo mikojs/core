@@ -8,6 +8,10 @@
   "repository": "https://github.com/mikojs/core/tree/master/components/react-ssr",
   "version": "1.0.0",
   "main": "./lib/index.js",
+  "dependencies": {
+    "fbjs": "^1.0.0",
+    "react-router-dom": "^5.1.2"
+  },
   "peerDependencies": {
     "react": ">=16.0.0",
     "react-dom": ">=16.0.0"

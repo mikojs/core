@@ -5,9 +5,17 @@ import { type makeExecutableSchemaOptionsType } from 'graphql-tools';
 
 import buildSchema from './utils/buildSchema';
 import updateSchema from './utils/updateSchema';
+import buildMiddleware, { type optionsType } from './utils/buildMiddleware';
 
 type funcsType = {|
   update: (filePath: string) => void,
+  middleware: (
+    options: optionsType,
+  ) => $Call<
+    typeof buildMiddleware,
+    $Call<typeof buildSchema, string>,
+    optionsType,
+  >,
   query: (
     graphQLArgs: $Diff<GraphQLArgsType, { schema: mixed }>,
   ) => $Call<typeof graphql, GraphQLArgsType>,
@@ -32,6 +40,10 @@ export default (
     // update
     update: (filePath: string) =>
       updateSchema(folderPath, options, schema, filePath),
+
+    // middleware
+    middleware: (graphqlOptions?: optionsType) =>
+      buildMiddleware(schema, graphqlOptions),
 
     // query
     query: (graphQLArgs: $Diff<GraphQLArgsType, { schema: mixed }>) =>

@@ -10,7 +10,7 @@ import buildMiddleware, { type optionsType } from './utils/buildMiddleware';
 type funcsType = {|
   update: (filePath: string) => void,
   middleware: (
-    options: optionsType,
+    options?: optionsType,
   ) => $Call<
     typeof buildMiddleware,
     $Call<typeof buildSchema, string>,

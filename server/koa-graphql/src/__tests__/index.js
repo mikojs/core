@@ -5,10 +5,11 @@ import path from 'path';
 import Koa from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
+import execa from 'execa';
 
 import graphql from '../index';
 
-const { update, middleware, query } = graphql(
+const { update, middleware, runRelayCompiler, query } = graphql(
   path.resolve(__dirname, './__ignore__/schema'),
 );
 
@@ -48,14 +49,30 @@ describe('graphql', () => {
     server.close();
   });
 
+  test('run relay compiler', async () => {
+    await runRelayCompiler([]);
+
+    expect(execa).toHaveBeenCalledTimes(1);
+    expect(execa).toHaveBeenCalledWith(
+      'relay-compiler',
+      [
+        '--schema',
+        path.resolve('./node_modules/.cache/koa-graphql/schema.graphql'),
+      ],
+      {
+        stdio: 'inherit',
+      },
+    );
+  });
+
   test('query', async () => {
     expect(
       await query({
         source: `
-        {
-          version
-        }
-      `,
+          {
+            version
+          }
+        `,
       }),
     ).toEqual({
       data: {

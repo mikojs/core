@@ -2,10 +2,12 @@
 
 import { graphql, type GraphQLArgs as GraphQLArgsType } from 'graphql';
 import { type makeExecutableSchemaOptionsType } from 'graphql-tools';
+import execa from 'execa';
 
 import buildSchema from './utils/buildSchema';
 import updateSchema from './utils/updateSchema';
 import buildMiddleware, { type optionsType } from './utils/buildMiddleware';
+import getSchemaFilePath from './utils/getSchemaFilePath';
 
 type funcsType = {|
   update: (filePath: string) => void,
@@ -44,6 +46,16 @@ export default (
     // middleware
     middleware: (graphqlOptions?: optionsType) =>
       buildMiddleware(schema, graphqlOptions),
+
+    // run relay-compiler
+    runRelayCompiler: (argv: $ReadOnlyArray<string>) =>
+      execa(
+        'relay-compiler',
+        ['--schema', getSchemaFilePath(schema), ...argv],
+        {
+          stdio: 'inherit',
+        },
+      ),
 
     // query
     query: (graphQLArgs: $Diff<GraphQLArgsType, { schema: mixed }>) =>

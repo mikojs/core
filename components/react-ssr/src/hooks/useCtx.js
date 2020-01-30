@@ -5,18 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { ExecutionEnvironment } from 'fbjs';
 
 type ctxType = {|
-  ctx:
-    | {}
-    | {|
-        path: string,
-        querystring: string,
-        originalUrl: string,
-        origin: string,
-        href: string,
-        host: string,
-        hostname: string,
-        protocol: string,
-      |},
+  ctx: { [string]: string },
   isLoading: boolean,
 |};
 

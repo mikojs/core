@@ -9,7 +9,7 @@ type errorPropsType = {|
   },
 |};
 
-type propsType = {|
+export type propsType = {|
   Error: ComponentType<errorPropsType>,
   children: NodeType,
 |};

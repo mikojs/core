@@ -4,9 +4,10 @@ import { useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ExecutionEnvironment } from 'fbjs';
 
-type ctxType = {|
+export type ctxType = {|
   ctx: { [string]: string },
   isLoading: boolean,
+  isServer: boolean,
 |};
 
 /**
@@ -41,5 +42,6 @@ export default (): ctxType => {
   return {
     ctx,
     isLoading: prevCtx.originalUrl !== ctx.originalUrl,
+    isServer,
   };
 };

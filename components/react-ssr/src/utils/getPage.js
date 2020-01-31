@@ -7,7 +7,7 @@ import { invariant } from 'fbjs';
 
 import getStatic from 'utils/getStatic';
 
-type routesDataType = $ReadOnlyArray<{|
+export type routesDataType = $ReadOnlyArray<{|
   exact: true,
   path: $ReadOnlyArray<string>,
   component: {|
@@ -17,6 +17,13 @@ type routesDataType = $ReadOnlyArray<{|
     |}>,
   |},
 |}>;
+
+export type returnType = {|
+  Page: ComponentType<*>,
+  mainProps: {},
+  pageProps: {},
+  chunkName: string,
+|};
 
 /**
  * @example
@@ -36,12 +43,7 @@ export default async (
     [string]: string,
   },
   isServer: boolean,
-): Promise<{|
-  Page: ComponentType<*>,
-  mainProps: {},
-  pageProps: {},
-  chunkName: string,
-|}> => {
+): Promise<returnType> => {
   const [matchRoute] = matchRoutes(routesData, ctx.path);
 
   invariant(matchRoute, 'Can not find the match route');

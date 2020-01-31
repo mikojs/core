@@ -12,7 +12,7 @@ import getStatic from 'utils/getStatic';
 import useCtx from 'hooks/useCtx';
 import usePage, { type returnType as usePageReturnType } from 'hooks/usePage';
 
-type propsType = {|
+export type propsType = {|
   Main: ComponentType<*>,
   Loading: ComponentType<{||}>,
   Error: $PropertyType<errorCatchPropsType, 'Error'>,

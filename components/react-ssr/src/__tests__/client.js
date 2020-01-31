@@ -5,7 +5,7 @@ import client from '../client';
 import testings, {
   Main,
   Loading,
-  Error,
+  ErrorComponent,
   chunkName,
   routesData,
 } from './__ignore__/testings';
@@ -25,9 +25,12 @@ test('client', async () => {
   global.console.error = mockLog;
 
   await client({
+    // $FlowFixMe jest mock
     Main,
+    // $FlowFixMe jest mock
     Loading,
-    Error,
+    // $FlowFixMe jest mock
+    Error: ErrorComponent,
     routesData,
   });
 

@@ -4,11 +4,7 @@ import crypto from 'crypto';
 import stream, { type Readable as ReadableType } from 'stream';
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
-import {
-  renderToStaticMarkup,
-  renderToString,
-  renderToNodeStream,
-} from 'react-dom/server';
+import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Multistream from 'multistream';
@@ -116,7 +112,7 @@ export default async (
     lowerDocumentStream,
   ]).on('error', (error: Error) => {
     errorCallback(
-      `${renderToString(
+      `${renderToStaticMarkup(
         <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
       )}${lowerDocument}`,
     );

@@ -12,28 +12,59 @@ import server from '../server';
 import testings, {
   Document,
   Main,
-  Error,
+  ErrorComponent,
+  Page,
   chunkName,
   routesData,
 } from './__ignore__/testings';
 
-test('server', async () => {
-  expect(
-    await server(
-      { url: chunkName, path: chunkName },
-      { Document, Main, Error, routesData },
-      <script />,
-      jest.fn(),
-    ).then(
-      (stream: MultistreamType) =>
-        new Promise(resolve => {
-          let output: string = '';
+const errorCallback = jest.fn();
 
-          stream.on('data', (chunk: string) => {
-            output = `${output}${chunk}`;
-          });
-          stream.on('end', () => resolve(output));
-        }),
-    ),
-  ).toBe(`<!DOCTYPE html><main id="__MIKOJS__">${testings}</main>`);
+/**
+ * @example
+ * renderServer()
+ *
+ * @return {string} - render string
+ */
+const renderServer = () =>
+  server(
+    { url: chunkName, path: chunkName },
+    // $FlowFixMe jest mock
+    { Document, Main, Error: ErrorComponent, routesData },
+    <script />,
+    errorCallback,
+  ).then(
+    (stream: MultistreamType) =>
+      new Promise(resolve => {
+        let output: string = '';
+
+        stream.on('data', (chunk: string) => {
+          output = `${output}${chunk}`;
+        });
+        stream.on('error', () => resolve(output));
+        stream.on('end', () => resolve(output));
+      }),
+  );
+
+describe('server', () => {
+  test('work', async () => {
+    expect(await renderServer()).toBe(
+      `<!DOCTYPE html><main id="__MIKOJS__">${testings}</main>`,
+    );
+  });
+
+  test('error', async () => {
+    ErrorComponent.mockImplementation(({ error }: {| error: Error |}) => (
+      <div>{error.message}</div>
+    ));
+    Page.mockImplementation(() => {
+      throw new Error('render error');
+    });
+
+    expect(await renderServer()).toBe('<!DOCTYPE html><main id="__MIKOJS__">');
+    expect(errorCallback).toHaveBeenCalledTimes(1);
+    expect(errorCallback).toHaveBeenCalledWith(
+      '<div>render error</div></main>',
+    );
+  });
 });

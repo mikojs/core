@@ -53,18 +53,18 @@ describe('server', () => {
     );
   });
 
-  test('error', async () => {
+  test('render error', async () => {
     ErrorComponent.mockImplementation(({ error }: {| error: Error |}) => (
       <div>{error.message}</div>
     ));
     Page.mockImplementation(() => {
-      throw new Error('render error');
+      throw new Error('Render error');
     });
 
     expect(await renderServer()).toBe('<!DOCTYPE html><main id="__MIKOJS__">');
     expect(errorCallback).toHaveBeenCalledTimes(1);
     expect(errorCallback).toHaveBeenCalledWith(
-      '<div>render error</div></main>',
+      '<div>Render error</div></main>',
     );
   });
 });

@@ -10,29 +10,61 @@ import testings, {
   routesData,
 } from './__ignore__/testings';
 
-test('client', async () => {
-  const main = global.document.createElement('main');
-  const mockLog = jest.fn();
+describe('client', () => {
+  test('work', async () => {
+    const main = global.document.createElement('main');
+    const mockLog = jest.fn();
 
-  main.setAttribute('id', '__MIKOJS__');
-  main.innerHTML = testings;
-  global.document.querySelector('body').appendChild(main);
-  global.window.__MIKOJS_DATA__ = {
-    mainInitialProps: {},
-    pageInitialProps: {},
-    chunkName,
-  };
-  global.console.error = mockLog;
+    main.setAttribute('id', '__MIKOJS__');
+    main.innerHTML = testings;
+    global.document.querySelector('body').appendChild(main);
+    global.window.__MIKOJS_DATA__ = {
+      mainInitialProps: {},
+      pageInitialProps: {},
+      chunkName,
+    };
+    global.console.error = mockLog;
 
-  await client({
-    // $FlowFixMe jest mock
-    Main,
-    // $FlowFixMe jest mock
-    Loading,
-    // $FlowFixMe jest mock
-    Error: ErrorComponent,
-    routesData,
+    await client({
+      // $FlowFixMe jest mock
+      Main,
+      // $FlowFixMe jest mock
+      Loading,
+      // $FlowFixMe jest mock
+      Error: ErrorComponent,
+      routesData,
+    });
+
+    expect(mockLog).not.toHaveBeenCalled();
   });
 
-  expect(mockLog).not.toHaveBeenCalled();
+  test('not find page component', async () => {
+    await expect(
+      client({
+        // $FlowFixMe jest mock
+        Main,
+        // $FlowFixMe jest mock
+        Loading,
+        // $FlowFixMe jest mock
+        Error: ErrorComponent,
+        routesData: [],
+      }),
+    ).rejects.toThrow('Can not find page component');
+  });
+
+  test('not find main HTMLElement', async () => {
+    global.document.getElementById('__MIKOJS__').remove();
+
+    await expect(
+      client({
+        // $FlowFixMe jest mock
+        Main,
+        // $FlowFixMe jest mock
+        Loading,
+        // $FlowFixMe jest mock
+        Error: ErrorComponent,
+        routesData,
+      }),
+    ).rejects.toThrow('Can not find main HTMLElement');
+  });
 });

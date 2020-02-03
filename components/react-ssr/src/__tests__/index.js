@@ -7,6 +7,7 @@ import { MemoryRouter as Router, Link } from 'react-router-dom';
 import { mount } from 'enzyme';
 
 import Root from '../index';
+import { type errorPropsType } from '../ErrorCatch';
 
 import {
   mainRender,
@@ -22,6 +23,13 @@ import {
 } from './__ignore__/testings';
 
 pageRender.mockReturnValue(<Link to="/two" />);
+errorRender.mockImplementation(({ error }: errorPropsType) => (
+  <>
+    <Link to="/" />
+
+    <div>{error.message}</div>
+  </>
+));
 
 const wrapper = mount(
   <Router initialEntries={[chunkName]}>
@@ -95,4 +103,14 @@ describe('react-ssr', () => {
       }
     },
   );
+
+  test('update page after component is unmount', () => {
+    wrapper.find(Link).simulate('click', { button: 0 });
+
+    expect(mainRender).not.toHaveBeenCalled();
+
+    wrapper.unmount();
+
+    expect(mainRender).not.toHaveBeenCalled();
+  });
 });

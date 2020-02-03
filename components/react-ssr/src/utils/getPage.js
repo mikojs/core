@@ -7,19 +7,36 @@ import { invariant } from 'fbjs';
 
 import getStatic from 'utils/getStatic';
 
+export type pageComponentType = ComponentType<*> & {
+  getInitialProps?: ({
+    ctx: { [string]: string },
+    isServer: boolean,
+    match: { url: string },
+  }) => {},
+};
+
+export type mainComponentType = ComponentType<*> & {
+  getInitialProps?: ({
+    ctx: { [string]: string },
+    isServer: boolean,
+    Page: pageComponentType,
+    pageProps: {},
+  }) => {},
+};
+
 export type routesDataType = $ReadOnlyArray<{|
   exact: true,
   path: $ReadOnlyArray<string>,
   component: {|
     chunkName: string,
     loader: () => Promise<{|
-      default: ComponentType<*>,
+      default: pageComponentType,
     |}>,
   |},
 |}>;
 
 export type returnType = {|
-  Page: ComponentType<*>,
+  Page: pageComponentType,
   mainProps: {},
   pageProps: {},
   chunkName: string,
@@ -67,7 +84,7 @@ export default async (
     (await getStatic(Main).getInitialProps?.({
       ctx,
       isServer,
-      Component: getStatic(Page),
+      Page: getStatic(Page),
       pageProps,
     })) || {};
 

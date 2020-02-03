@@ -35,7 +35,12 @@ export default async (
     routesData,
   }: {|
     ...$Diff<propsType, {| Loading: mixed, initialState: mixed |}>,
-    Document: ComponentType<*>,
+    Document: ComponentType<*> & {
+      getInitialProps?: ({
+        ctx: { [string]: string },
+        isServer: boolean,
+      }) => {},
+    },
   |},
   scripts: NodeType,
   errorCallback: (html: string) => void,

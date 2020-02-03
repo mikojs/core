@@ -2,7 +2,7 @@
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
 
-type errorPropsType = {|
+export type errorPropsType = {|
   error: Error,
   errorInfo: {
     componentStack: string,

@@ -13,7 +13,7 @@ import testings, {
   Document,
   Main,
   ErrorComponent,
-  Page,
+  pageRender,
   chunkName,
   routesData,
 } from './__ignore__/testings';
@@ -29,7 +29,6 @@ const errorCallback = jest.fn();
 const renderServer = () =>
   server(
     { url: chunkName, path: chunkName },
-    // $FlowFixMe jest mock
     { Document, Main, Error: ErrorComponent, routesData },
     <script />,
     errorCallback,
@@ -54,10 +53,7 @@ describe('server', () => {
   });
 
   test('render error', async () => {
-    ErrorComponent.mockImplementation(({ error }: {| error: Error |}) => (
-      <div>{error.message}</div>
-    ));
-    Page.mockImplementation(() => {
+    pageRender.mockImplementation(() => {
       throw new Error('Render error');
     });
 

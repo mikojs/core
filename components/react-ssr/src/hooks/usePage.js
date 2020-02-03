@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, type ComponentType } from 'react';
 
 import getPage, {
+  type mainComponentType,
   type routesDataType,
   type returnType as getPageReturnType,
 } from 'utils/getPage';
@@ -25,7 +26,7 @@ export type returnType = $Diff<getPageReturnType, {| chunkName: mixed |}>;
  */
 export default (
   initialState: returnType,
-  Main: ComponentType<*>,
+  Main: mainComponentType,
   routesData: routesDataType,
   ctx: $PropertyType<ctxType, 'ctx'>,
   isServer: $PropertyType<ctxType, 'isServer'>,

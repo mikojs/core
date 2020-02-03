@@ -26,11 +26,8 @@ describe('client', () => {
     global.console.error = mockLog;
 
     await client({
-      // $FlowFixMe jest mock
       Main,
-      // $FlowFixMe jest mock
       Loading,
-      // $FlowFixMe jest mock
       Error: ErrorComponent,
       routesData,
     });
@@ -41,11 +38,8 @@ describe('client', () => {
   test('not find page component', async () => {
     await expect(
       client({
-        // $FlowFixMe jest mock
         Main,
-        // $FlowFixMe jest mock
         Loading,
-        // $FlowFixMe jest mock
         Error: ErrorComponent,
         routesData: [],
       }),
@@ -57,11 +51,8 @@ describe('client', () => {
 
     await expect(
       client({
-        // $FlowFixMe jest mock
         Main,
-        // $FlowFixMe jest mock
         Loading,
-        // $FlowFixMe jest mock
         Error: ErrorComponent,
         routesData,
       }),

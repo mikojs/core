@@ -6,14 +6,14 @@ import ErrorCatch, {
   type propsType as errorCatchPropsType,
 } from './ErrorCatch';
 
-import { type routesDataType } from 'utils/getPage';
+import { type mainComponentType, type routesDataType } from 'utils/getPage';
 import getStatic from 'utils/getStatic';
 
 import useCtx from 'hooks/useCtx';
 import usePage, { type returnType as usePageReturnType } from 'hooks/usePage';
 
 export type propsType = {|
-  Main: ComponentType<*>,
+  Main: mainComponentType,
   Loading: ComponentType<{||}>,
   Error: $PropertyType<errorCatchPropsType, 'Error'>,
   routesData: routesDataType,

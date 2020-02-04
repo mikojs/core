@@ -8,14 +8,13 @@ import outputFileSync from 'output-file-sync';
 
 import { d3DirTree, requireModule } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
-
-import { type propsType as rootPropsType } from 'components/Root';
+import { type propsType as rootPropsType } from '@mikojs/react-ssr';
 
 import NotFound from 'templates/NotFound';
 
 export type handlerType = (
-  routesData: $PropertyType<rootPropsType<>, 'routesData'>,
-) => $PropertyType<rootPropsType<>, 'routesData'>;
+  routesData: $PropertyType<rootPropsType, 'routesData'>,
+) => $PropertyType<rootPropsType, 'routesData'>;
 
 type fileType =
   | 'document'
@@ -47,7 +46,7 @@ export default class Cache {
     basename: ?string,
     exclude: ?RegExp,
   |};
-  routesData: $PropertyType<rootPropsType<>, 'routesData'>;
+  routesData: $PropertyType<rootPropsType, 'routesData'>;
   document: string;
   main: string;
   loading: string;
@@ -79,10 +78,12 @@ export default class Cache {
       {
         exact: true,
         path: [`${basename || ''}/*`],
+        // $FlowFixMe FIXME remove
         component: {
           filePath: path.resolve(__dirname, '../templates/NotFound.js'),
           chunkName: `pages${basename || ''}/notFound`,
           loader: async () => ({
+            // $FlowFixMe FIXME remove
             default: NotFound,
           }),
         },
@@ -119,6 +120,7 @@ export default class Cache {
                   {
                     exact: true,
                     path: this.getPath(relativePath),
+                    // $FlowFixMe FIXME remove
                     component: {
                       filePath,
                       chunkName: `pages${basename || ''}/${relativePath}`,
@@ -194,6 +196,7 @@ export default class Cache {
             ...this.routesData.slice(0, this.routesData.length - 1),
             {
               ...this.routesData[this.routesData.length - 1],
+              // $FlowFixMe FIXME remove
               component: {
                 ...this.routesData[this.routesData.length - 1].component,
                 filePath,
@@ -258,9 +261,13 @@ export default class Cache {
       .map(
         ({
           path: routePath,
-          component: { filePath, chunkName },
+          component: {
+            // $FlowFixMe FIXME remove
+            filePath,
+            chunkName,
+          },
         }: $ElementType<
-          $PropertyType<rootPropsType<>, 'routesData'>,
+          $PropertyType<rootPropsType, 'routesData'>,
           number,
         >): string =>
           `{ ${[
@@ -324,6 +331,7 @@ export default class Cache {
             {
               exact: true,
               path: this.getPath(relativePath),
+              // $FlowFixMe FIXME remove
               component: {
                 filePath,
                 chunkName,
@@ -334,7 +342,7 @@ export default class Cache {
               ({
                 component: { chunkName: routeChunkName },
               }: $ElementType<
-                $PropertyType<rootPropsType<>, 'routesData'>,
+                $PropertyType<rootPropsType, 'routesData'>,
                 number,
               >) => routeChunkName !== chunkName,
             ),

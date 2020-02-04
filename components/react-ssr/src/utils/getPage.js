@@ -53,12 +53,10 @@ export type returnType = {|
  *
  * @return {object} - page object
  */
-export default async (
+export default async <C>(
   Main: ComponentType<*>,
   routesData: routesDataType,
-  ctx: {
-    [string]: string,
-  },
+  ctx: C & { path: string },
   isServer: boolean,
 ): Promise<returnType> => {
   const [matchRoute] = matchRoutes(routesData, ctx.path);

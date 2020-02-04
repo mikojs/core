@@ -63,7 +63,9 @@ export default (
         <script src={commonsUrl} async />
         <script src={clientUrl} async />
       </>,
-      ctx.res.end,
+      (errorHtml: string) => {
+        ctx.res.end(errorHtml);
+      },
     )
   ).pipe(ctx.res);
 };

@@ -1,0 +1,34 @@
+{
+  "private": true,
+  "name": "@mikojs/react-ssr",
+  "description": "Use to render the component with the server rendering and the client rendering.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/react-ssr",
+  "repository": "https://github.com/mikojs/core/tree/master/components/react-ssr",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "fbjs": "^1.0.0",
+    "multistream": "^4.0.0",
+    "react-helmet": "^5.2.1",
+    "react-is": "^16.12.0",
+    "react-router-config": "^5.1.1",
+    "react-router-dom": "^5.1.2"
+  },
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
+  },
+  "devDependencies": {
+    "enzyme": "^3.11.0",
+    "flow-bin": "^0.116.1",
+    "flow-typed": "^2.6.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "keywords": ["mikojs", "react", "react-ssr"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

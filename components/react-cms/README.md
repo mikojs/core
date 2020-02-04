@@ -6,7 +6,7 @@
 
 <!-- badges.end -->
 
-[website]: https://mikojs.github.io/core/react-dnd
+[website]: https://mikojs.github.io/core/react-cms
 
 Use to build the website with the react components.
 

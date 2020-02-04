@@ -30,4 +30,4 @@ const isMemo = (Component: memoComponentType) => Component?.$$typeof === Memo;
  */
 export default (Component: ComponentType<*>) =>
   // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/8145
-  !isMemo(Component) ? Component : Component.type || Component;
+  !isMemo(Component) ? Component : Component.type;

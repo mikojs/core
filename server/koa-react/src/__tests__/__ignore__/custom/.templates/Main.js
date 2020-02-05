@@ -1,12 +1,12 @@
 // @flow
 
-import React, { type Node as NodeType, type ComponentType } from 'react';
+import React, { type Node as NodeType } from 'react';
 
-import { type mainCtxType } from '../../../../types';
+import { type mainInitialArguType } from '@mikojs/react-ssr';
 
 type propsType = {|
   value: string,
-  name: string,
+  name: ?string,
   pageProps: {},
   children: ({ value: string }) => NodeType,
 |};
@@ -24,16 +24,13 @@ const Main = ({ value, name, pageProps, children }: propsType) => (
  * @example
  * Main.getInitialProps(context)
  *
- * @param {mainCtxType} context - context data
+ * @param {mainInitialArguType} context - context data
  *
  * @return {propsType} - initial props
  */
-Main.getInitialProps = ({
-  Component,
-  pageProps,
-}: mainCtxType<{}, {}, ComponentType<{}> & { type: { name: string } }>) => ({
+Main.getInitialProps = ({ Page, pageProps }: mainInitialArguType<{}>) => ({
   value: 'test data',
-  name: Component.name,
+  name: Page.name,
   pageProps,
 });
 

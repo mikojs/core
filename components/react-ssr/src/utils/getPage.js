@@ -7,21 +7,25 @@ import { invariant } from 'fbjs';
 
 import getStatic from 'utils/getStatic';
 
+export type pageInitialArguType<C> = {|
+  ctx: C,
+  isServer: boolean,
+  match: { url: string },
+|};
+
 export type pageComponentType<C, P> = ComponentType<*> & {
-  getInitialProps?: ({
-    ctx: C,
-    isServer: boolean,
-    match: { url: string },
-  }) => P,
+  getInitialProps?: (argu: pageInitialArguType<C>) => P,
 };
 
+export type mainInitialArguType<C> = {|
+  ctx: C,
+  isServer: boolean,
+  Page: pageComponentType<*, *>,
+  pageProps: {},
+|};
+
 export type mainComponentType<C, P> = ComponentType<*> & {
-  getInitialProps?: ({
-    ctx: C,
-    isServer: boolean,
-    Page: pageComponentType<*, *>,
-    pageProps: {},
-  }) => P,
+  getInitialProps?: (argu: mainInitialArguType<C>) => P,
 };
 
 export type routesDataType = $ReadOnlyArray<{|

@@ -59,10 +59,10 @@ export default (
         Error: requireModule(cache.error),
         routesData: cache.routesData,
       },
-      <>
-        <script src={commonsUrl} async />
-        <script src={clientUrl} async />
-      </>,
+      [
+        <script key="common" src={commonsUrl} async />,
+        <script key="client" src={clientUrl} async />,
+      ],
       (errorHtml: string) => {
         ctx.res.end(errorHtml);
       },

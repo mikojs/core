@@ -17,6 +17,7 @@ esproposal.optional_chaining=enable
 
 [declarations]
 .*/server/src/.*
+.*/react-ssr/src/.*
 .*/koa-react/src/.*
 .*/koa-react/flow-typed/npm/.*
 .*/koa-graphql/src/.*

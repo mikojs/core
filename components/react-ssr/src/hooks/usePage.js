@@ -26,7 +26,7 @@ export type returnType = $Diff<getPageReturnType, {| chunkName: mixed |}>;
  */
 export default (
   initialState: returnType,
-  Main: mainComponentType,
+  Main: mainComponentType<*, *>,
   routesData: routesDataType,
   ctx: $PropertyType<ctxType, 'ctx'>,
   isServer: $PropertyType<ctxType, 'isServer'>,

@@ -7,21 +7,25 @@ import { invariant } from 'fbjs';
 
 import getStatic from 'utils/getStatic';
 
-export type pageComponentType = ComponentType<*> & {
-  getInitialProps?: ({
-    ctx: { [string]: string },
-    isServer: boolean,
-    match: { url: string },
-  }) => {},
+export type pageInitialArguType<C> = {|
+  ctx: C,
+  isServer: boolean,
+  match: { url: string },
+|};
+
+export type pageComponentType<C, P> = ComponentType<*> & {
+  getInitialProps?: (argu: pageInitialArguType<C>) => P,
 };
 
-export type mainComponentType = ComponentType<*> & {
-  getInitialProps?: ({
-    ctx: { [string]: string },
-    isServer: boolean,
-    Page: pageComponentType,
-    pageProps: {},
-  }) => {},
+export type mainInitialArguType<C> = {|
+  ctx: C,
+  isServer: boolean,
+  Page: pageComponentType<*, *>,
+  pageProps: {},
+|};
+
+export type mainComponentType<C, P> = ComponentType<*> & {
+  getInitialProps?: (argu: mainInitialArguType<C>) => P,
 };
 
 export type routesDataType = $ReadOnlyArray<{|
@@ -30,13 +34,13 @@ export type routesDataType = $ReadOnlyArray<{|
   component: {|
     chunkName: string,
     loader: () => Promise<{|
-      default: pageComponentType,
+      default: pageComponentType<*, *>,
     |}>,
   |},
 |}>;
 
 export type returnType = {|
-  Page: pageComponentType,
+  Page: pageComponentType<*, *>,
   mainProps: {},
   pageProps: {},
   chunkName: string,
@@ -53,12 +57,10 @@ export type returnType = {|
  *
  * @return {object} - page object
  */
-export default async (
+export default async <C>(
   Main: ComponentType<*>,
   routesData: routesDataType,
-  ctx: {
-    [string]: string,
-  },
+  ctx: C & { path: string },
   isServer: boolean,
 ): Promise<returnType> => {
   const [matchRoute] = matchRoutes(routesData, ctx.path);

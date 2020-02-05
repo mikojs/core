@@ -22,7 +22,7 @@ type ctxType<T = {}> = {|
 export type routesDataType = $PropertyType<rootPropsType<>, 'routesData'>;
 
 export type mainCtxType<P = {}, T = {}, C = ComponentType<P>> = ctxType<T> & {|
-  Component: C,
+  Page: C,
   pageProps: P,
 |};
 

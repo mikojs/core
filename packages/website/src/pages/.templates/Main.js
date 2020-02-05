@@ -21,7 +21,7 @@ type pageComponentType = ComponentType<*> & {|
 type propsType = {|
   variables?: VariablesType,
   relayData?: SSRCacheType,
-  Component: pageComponentType,
+  Page: pageComponentType,
   children: <P>(props: P) => NodeType,
 |};
 
@@ -29,13 +29,13 @@ type propsType = {|
 const Main = ({
   variables = {},
   relayData,
-  Component,
+  Page,
   children,
 }: propsType): NodeType => {
   const environment = createEnvironment(
     relayData,
     JSON.stringify({
-      queryID: Component.query?.params.name,
+      queryID: Page.query?.params.name,
       variables,
     }),
   );
@@ -43,7 +43,7 @@ const Main = ({
   return (
     <QueryRenderer
       environment={environment}
-      query={Component.query}
+      query={Page.query}
       variables={variables}
       render={({ error, props }: ReadyStateType): NodeType => {
         if (error) return <div>{error.message}</div>;
@@ -65,7 +65,7 @@ const Main = ({
  * @return {propsType} - initial props
  */
 Main.getInitialProps = async ({
-  Component,
+  Page,
   pageProps: { variables },
 }: mainCtxType<
   {
@@ -73,12 +73,12 @@ Main.getInitialProps = async ({
   },
   {},
   pageComponentType,
->): Promise<$Diff<propsType, { Component: mixed, children: mixed }>> => {
+>): Promise<$Diff<propsType, { Page: mixed, children: mixed }>> => {
   try {
-    if (initEnvironment && Component.query) {
+    if (initEnvironment && Page.query) {
       const { environment, relaySSR } = initEnvironment();
 
-      await fetchQuery(environment, Component.query, variables);
+      await fetchQuery(environment, Page.query, variables);
 
       return {
         variables,

@@ -1,31 +1,16 @@
 // @flow
 
-import crypto from 'crypto';
-import stream, { type Readable as ReadableType } from 'stream';
-
 import debug from 'debug';
 import {
   type Context as koaContextType,
   type Middleware as koaMiddlewareType,
 } from 'koa';
 import React from 'react';
-import {
-  renderToStaticMarkup,
-  renderToString,
-  renderToNodeStream,
-} from 'react-dom/server';
-import { StaticRouter as Router } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-import Multistream from 'multistream';
-import { emptyFunction } from 'fbjs';
 
 import { requireModule } from '@mikojs/utils';
+import server from '@mikojs/react-ssr/lib/server';
 
-import getStatic from './getStatic';
 import type CacheType from './Cache';
-
-import Root from 'components/Root';
-import getPage from 'components/getPage';
 
 const debugLog = debug('react:server');
 
@@ -65,93 +50,22 @@ export default (
   ctx.type = 'text/html';
   ctx.respond = false;
 
-  const Document = requireModule(cache.document);
-  const Main = requireModule(cache.main);
-  const ErrorComponent = requireModule(cache.error);
-
-  // [start] preload
-  // preload Document, Main, Page
-  const { head: documentHead, ...documentInitialProps } =
-    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-    (await getStatic(Document).getInitialProps?.({
+  (
+    await server(
       ctx,
-      isServer: true,
-    })) || {};
-  renderToStaticMarkup(documentHead || null);
-
-  const {
-    Page: InitialPage,
-    mainProps: mainInitialProps,
-    pageProps: pageInitialProps,
-    chunkName,
-  } = await getPage(Main, cache.routesData, ctx, true);
-
-  debugLog({
-    documentInitialProps,
-    mainInitialProps,
-    pageInitialProps,
-    chunkName,
-  });
-
-  // preload scripts
-  renderToStaticMarkup(
-    <Helmet>
-      <script>{`var __MIKOJS_DATA__ = ${JSON.stringify({
-        mainInitialProps,
-        pageInitialProps,
-        chunkName,
-      })};`}</script>
-      <script src={commonsUrl} async />
-      <script src={clientUrl} async />
-    </Helmet>,
-  );
-  // [end] preload
-
-  // make document scream
-  const hash = crypto.createHmac('sha256', '@mikojs/koa-react').digest('hex');
-  const [
-    [upperDocumentStream],
-    [lowerDocumentStream, lowerDocument],
-  ] = renderToStaticMarkup(
-    <Document {...documentInitialProps} helmet={Helmet.renderStatic()}>
-      <main id="__MIKOJS__">{hash}</main>
-    </Document>,
-  )
-    .split(hash)
-    .map((docmentText: string): [ReadableType, string] => {
-      const docmentStream = new stream.Readable();
-
-      docmentStream.push(docmentText);
-      docmentStream.push(null);
-
-      return [docmentStream, docmentText];
-    });
-
-  // render page
-  ctx.res.write('<!DOCTYPE html>');
-  new Multistream([
-    upperDocumentStream,
-    renderToNodeStream(
-      <Router location={ctx.url} context={{}}>
-        <Root
-          Main={Main}
-          Loading={emptyFunction.thatReturnsNull}
-          Error={ErrorComponent}
-          routesData={cache.routesData}
-          InitialPage={InitialPage}
-          mainInitialProps={mainInitialProps}
-          pageInitialProps={pageInitialProps}
-        />
-      </Router>,
-    ),
-    lowerDocumentStream,
-  ])
-    .on('error', async (error: Error) => {
-      ctx.res.end(
-        `${renderToString(
-          <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
-        )}${lowerDocument}`,
-      );
-    })
-    .pipe(ctx.res);
+      {
+        Document: requireModule(cache.document),
+        Main: requireModule(cache.main),
+        Error: requireModule(cache.error),
+        routesData: cache.routesData,
+      },
+      [
+        <script key="common" src={commonsUrl} async />,
+        <script key="client" src={clientUrl} async />,
+      ],
+      (errorHtml: string) => {
+        ctx.res.end(errorHtml);
+      },
+    )
+  ).pipe(ctx.res);
 };

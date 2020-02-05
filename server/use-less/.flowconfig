@@ -14,5 +14,6 @@ esproposal.optional_chaining=enable
 [strict]
 
 [declarations]
+.*/react-ssr/src/.*
 .*/koa-react/src/.*
 .*/koa-react/flow-typed/npm/.*

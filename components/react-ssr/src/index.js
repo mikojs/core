@@ -6,14 +6,24 @@ import ErrorCatch, {
   type propsType as errorCatchPropsType,
 } from './ErrorCatch';
 
-import { type mainComponentType, type routesDataType } from 'utils/getPage';
+import {
+  type pageInitialArguType as pageArguType,
+  type pageComponentType as pageType,
+  type mainInitialArguType as mainArguType,
+  type mainComponentType as mainType,
+  type routesDataType,
+} from 'utils/getPage';
 import getStatic from 'utils/getStatic';
 
 import useCtx from 'hooks/useCtx';
 import usePage, { type returnType as usePageReturnType } from 'hooks/usePage';
 
+export type pageInitialArguType<C> = pageArguType<C>;
+export type pageComponentType<C, P> = pageType<C, P>;
+export type mainInitialArguType<C> = mainArguType<C>;
+export type mainComponentType<C, P> = mainType<C, P>;
 export type propsType = {|
-  Main: mainComponentType,
+  Main: mainType<*, *>,
   Loading: ComponentType<{||}>,
   Error: $PropertyType<errorCatchPropsType, 'Error'>,
   routesData: routesDataType,
@@ -39,7 +49,7 @@ const Root = ({
 
   return (
     <ErrorCatch Error={Error}>
-      <Main {...mainProps} Component={getStatic(Page)}>
+      <Main {...mainProps} Page={getStatic(Page)}>
         {(props?: {}) =>
           isLoading ? <Loading /> : <Page {...props} {...pageProps} />
         }

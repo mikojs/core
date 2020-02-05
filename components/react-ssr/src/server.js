@@ -26,8 +26,8 @@ import getPage from 'utils/getPage';
  *
  * @return {ReadableType} - rendering stream
  */
-export default async (
-  ctx: { [string]: string },
+export default async <C>(
+  ctx: C & { url: string, path: string },
   {
     Document,
     Main,
@@ -37,13 +37,13 @@ export default async (
     ...$Diff<propsType, {| Loading: mixed, initialState: mixed |}>,
     Document: ComponentType<*> & {
       getInitialProps?: ({
-        ctx: { [string]: string },
+        ctx: C,
         isServer: boolean,
       }) => {},
     },
   |},
   scripts: NodeType,
-  errorCallback: (html: string) => void,
+  errorCallback: (errorHtml: string) => void,
 ): Promise<ReadableType> => {
   // [start] preload
   // preload Document, Main, Page

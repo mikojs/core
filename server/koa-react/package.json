@@ -28,7 +28,6 @@
     "koa-mount": "^4.0.0",
     "koa-static": "^5.0.0",
     "koa-webpack": "^5.2.5",
-    "multistream": "^4.0.0",
     "node-fetch": "^2.6.0",
     "output-file-sync": "^2.0.1",
     "progress-bar-webpack-plugin": "^2.1.0",

@@ -7,21 +7,21 @@ import { invariant } from 'fbjs';
 
 import getStatic from 'utils/getStatic';
 
-export type pageComponentType = ComponentType<*> & {
+export type pageComponentType<C, P> = ComponentType<*> & {
   getInitialProps?: ({
-    ctx: { [string]: string },
+    ctx: C,
     isServer: boolean,
     match: { url: string },
-  }) => {},
+  }) => P,
 };
 
-export type mainComponentType = ComponentType<*> & {
+export type mainComponentType<C, P> = ComponentType<*> & {
   getInitialProps?: ({
-    ctx: { [string]: string },
+    ctx: C,
     isServer: boolean,
-    Page: pageComponentType,
+    Page: pageComponentType<*, *>,
     pageProps: {},
-  }) => {},
+  }) => P,
 };
 
 export type routesDataType = $ReadOnlyArray<{|
@@ -30,13 +30,13 @@ export type routesDataType = $ReadOnlyArray<{|
   component: {|
     chunkName: string,
     loader: () => Promise<{|
-      default: pageComponentType,
+      default: pageComponentType<*, *>,
     |}>,
   |},
 |}>;
 
 export type returnType = {|
-  Page: pageComponentType,
+  Page: pageComponentType<*, *>,
   mainProps: {},
   pageProps: {},
   chunkName: string,

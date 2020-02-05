@@ -37,7 +37,7 @@ export default async <C>(
     ...$Diff<propsType, {| Loading: mixed, initialState: mixed |}>,
     Document: ComponentType<*> & {
       getInitialProps?: ({
-        ctx: { [string]: string },
+        ctx: C,
         isServer: boolean,
       }) => {},
     },

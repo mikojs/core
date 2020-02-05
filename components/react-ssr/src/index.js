@@ -13,7 +13,7 @@ import useCtx from 'hooks/useCtx';
 import usePage, { type returnType as usePageReturnType } from 'hooks/usePage';
 
 export type propsType = {|
-  Main: mainComponentType,
+  Main: mainComponentType<*, *>,
   Loading: ComponentType<{||}>,
   Error: $PropertyType<errorCatchPropsType, 'Error'>,
   routesData: routesDataType,

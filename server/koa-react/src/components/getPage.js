@@ -58,7 +58,7 @@ export default async (
     (await getStatic(Main).getInitialProps?.({
       ctx,
       isServer,
-      Component: getStatic(Page),
+      Page: getStatic(Page),
       pageProps,
     })) || {};
 

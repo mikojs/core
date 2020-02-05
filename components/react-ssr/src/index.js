@@ -49,7 +49,7 @@ const Root = ({
 
   return (
     <ErrorCatch Error={Error}>
-      <Main {...mainProps} Component={getStatic(Page)}>
+      <Main {...mainProps} Page={getStatic(Page)}>
         {(props?: {}) =>
           isLoading ? <Loading /> : <Page {...props} {...pageProps} />
         }

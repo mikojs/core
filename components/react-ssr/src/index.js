@@ -3,6 +3,7 @@
 import React, { type ComponentType, type Node as NodeType } from 'react';
 
 import ErrorCatch, {
+  type errorPropsType,
   type propsType as errorCatchPropsType,
 } from './ErrorCatch';
 
@@ -22,6 +23,7 @@ export type pageInitialArguType<C> = pageArguType<C>;
 export type pageComponentType<C, P> = pageType<C, P>;
 export type mainInitialArguType<C> = mainArguType<C>;
 export type mainComponentType<C, P> = mainType<C, P>;
+export type errorComponentPropsType = errorPropsType;
 export type propsType = {|
   Main: mainType<*, *>,
   Loading: ComponentType<{||}>,

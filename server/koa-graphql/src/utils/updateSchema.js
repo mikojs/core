@@ -18,12 +18,16 @@ const debugLog = debug('graphql:updateSchema');
  * updateSchema('/folderPath', options, schema, '/filePath')
  *
  * @param {string} folderPath - the folder path
+ * @param {RegExp} extensions - file extensions
+ * @param {RegExp} exclude - exclude files
  * @param {makeExecutableSchemaOptionsType} options - build schema options
  * @param {GraphQLSchemaType} schema - built schema
  * @param {string} filePath - the file path
  */
 export default (
   folderPath: string,
+  extensions: RegExp,
+  exclude?: RegExp,
   { resolverValidationOptions }: makeExecutableSchemaOptionsType = {},
   schema: GraphQLSchemaType,
   filePath: string,

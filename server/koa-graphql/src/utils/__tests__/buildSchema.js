@@ -9,13 +9,18 @@ import buildSchema from '../buildSchema';
 test('build schema', () => {
   expect(
     printSchema(
-      buildSchema(path.resolve(__dirname, './__ignore__/schema'), {
-        typeDefs: `
+      buildSchema(
+        path.resolve(__dirname, './__ignore__/schema'),
+        /\.js$/,
+        undefined,
+        {
+          typeDefs: `
           extend type Query {
             foo: String!
           }
         `,
-      }),
+        },
+      ),
     ),
   ).toBe(`type Query {
   version: String!

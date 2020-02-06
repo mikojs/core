@@ -15,7 +15,7 @@ type funcsType = {|
     options?: optionsType,
   ) => $Call<
     typeof buildMiddleware,
-    $Call<typeof buildSchema, string>,
+    $Call<typeof buildSchema, string, RegExp>,
     optionsType,
   >,
   runRelayCompiler: (argv: $ReadOnlyArray<string>) => execaPromiseType,
@@ -29,20 +29,24 @@ type funcsType = {|
  * graphql('/folderPath')
  *
  * @param {string} folderPath - the folder path
+ * @param {RegExp} extensions - file extensions
+ * @param {RegExp} exclude - exclude files
  * @param {makeExecutableSchemaOptionsType} options - build schema options
  *
  * @return {funcsType} - koa graphql functions
  */
 export default (
   folderPath: string,
+  extensions?: RegExp = /\.js$/,
+  exclude?: RegExp,
   options?: makeExecutableSchemaOptionsType,
 ): funcsType => {
-  const schema = buildSchema(folderPath, options);
+  const schema = buildSchema(folderPath, extensions, exclude, options);
 
   return {
     // update
     update: (filePath: string) =>
-      updateSchema(folderPath, options, schema, filePath),
+      updateSchema(folderPath, extensions, exclude, options, schema, filePath),
 
     // middleware
     middleware: (graphqlOptions?: optionsType) =>

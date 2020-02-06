@@ -22,12 +22,16 @@ const debugLog = debug('graphql:buildSchema');
  * buildSchema('/folderPath')
  *
  * @param {string} folderPath - folder path
+ * @param {RegExp} extensions - file extensions
+ * @param {RegExp} exclude - exclude files
  * @param {makeExecutableSchemaOptionsType} options - schema option
  *
  * @return {GraphQLSchemaType} - graphql schema
  */
 export default (
   folderPath: string,
+  extensions: RegExp,
+  exclude?: RegExp,
   {
     typeDefs: additionalTypeDefs,
     resolvers: additionalResolvers,
@@ -36,7 +40,8 @@ export default (
   }: makeExecutableSchemaOptionsType = {},
 ): GraphQLSchemaType => {
   const { typeDefs, resolvers } = d3DirTree(folderPath, {
-    extensions: /.jsx?$/,
+    extensions: extensions,
+    exclude,
   })
     .leaves()
     .reduce(

@@ -8,7 +8,7 @@ import buildSchema from '../buildSchema';
 import updateSchema from '../updateSchema';
 
 const folderPath = path.resolve(__dirname, './__ignore__/schema');
-const schema = buildSchema(folderPath);
+const schema = buildSchema(folderPath, /\.js$/);
 
 describe('update schema', () => {
   test.each`
@@ -20,6 +20,8 @@ describe('update schema', () => {
     ({ filePath }: {| filePath: string |}) => {
       updateSchema(
         folderPath,
+        /\.js$/,
+        undefined,
         undefined,
         schema,
         path.resolve(__dirname, filePath),

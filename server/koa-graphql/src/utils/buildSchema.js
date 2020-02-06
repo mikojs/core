@@ -42,7 +42,7 @@ export default (
   }: optionsType,
 ): GraphQLSchemaType => {
   const { typeDefs, resolvers } = d3DirTree(folderPath, {
-    extensions: extensions,
+    extensions,
     exclude,
   })
     .leaves()

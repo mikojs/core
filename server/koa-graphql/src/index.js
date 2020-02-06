@@ -11,11 +11,11 @@ import buildMiddleware, {
 } from './utils/buildMiddleware';
 import getSchemaFilePath from './utils/getSchemaFilePath';
 
-type optionsType = {
+export type optionsType = {|
   extensions?: RegExp,
   exclude?: RegExp,
   makeExecutableSchemaOptions?: makeExecutableSchemaOptionsType,
-};
+|};
 
 type returnType = {|
   update: (filePath: string) => void,
@@ -23,7 +23,7 @@ type returnType = {|
     options?: buildMiddlewareOptionsType,
   ) => $Call<
     typeof buildMiddleware,
-    $Call<typeof buildSchema, string, RegExp>,
+    $Call<typeof buildSchema, string, optionsType>,
     buildMiddlewareOptionsType,
   >,
   runRelayCompiler: (argv: $ReadOnlyArray<string>) => execaPromiseType,
@@ -36,32 +36,23 @@ type returnType = {|
  * @example
  * graphql('/folderPath')
  *
+ *
  * @param {string} folderPath - the folder path
  * @param {optionsType} options - koa graphql options
  *
  * @return {returnType} - koa graphql functions
  */
-export default (folderPath: string, options?: optionsType): returnType => {
-  const { extensions = /\.js$/, exclude, makeExecutableSchemaOptions } =
-    options || {};
-  const schema = buildSchema(
-    folderPath,
-    extensions,
-    exclude,
-    makeExecutableSchemaOptions,
-  );
+export default (
+  folderPath: string,
+  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
+  options?: optionsType = {},
+): returnType => {
+  const schema = buildSchema(folderPath, options);
 
   return {
     // update
     update: (filePath: string) =>
-      updateSchema(
-        folderPath,
-        extensions,
-        exclude,
-        makeExecutableSchemaOptions,
-        schema,
-        filePath,
-      ),
+      updateSchema(folderPath, options, schema, filePath),
 
     // middleware
     middleware: (graphqlOptions?: buildMiddlewareOptionsType) =>

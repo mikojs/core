@@ -10,6 +10,8 @@ import debug from 'debug';
 import { d3DirTree, requireModule } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
+import { type optionsType } from '../index';
+
 type buildSchemasType = {
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
   resolvers: $PropertyType<makeExecutableSchemaOptionsType, 'resolvers'>,
@@ -19,25 +21,25 @@ const debugLog = debug('graphql:buildSchema');
 
 /**
  * @example
- * buildSchema('/folderPath')
+ * buildSchema('/folderPath', {})
  *
  * @param {string} folderPath - folder path
- * @param {RegExp} extensions - file extensions
- * @param {RegExp} exclude - exclude files
- * @param {makeExecutableSchemaOptionsType} options - schema options
+ * @param {optionsType} options - koa graphql options
  *
  * @return {GraphQLSchemaType} - graphql schema
  */
 export default (
   folderPath: string,
-  extensions: RegExp,
-  exclude?: RegExp,
   {
-    typeDefs: additionalTypeDefs,
-    resolvers: additionalResolvers,
-    resolverValidationOptions,
-    ...options
-  }: makeExecutableSchemaOptionsType = {},
+    extensions = /\.js$/,
+    exclude,
+    makeExecutableSchemaOptions: {
+      typeDefs: additionalTypeDefs,
+      resolvers: additionalResolvers,
+      resolverValidationOptions,
+      ...options
+    } = {},
+  }: optionsType,
 ): GraphQLSchemaType => {
   const { typeDefs, resolvers } = d3DirTree(folderPath, {
     extensions: extensions,

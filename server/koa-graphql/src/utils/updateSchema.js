@@ -3,13 +3,12 @@
 import path from 'path';
 
 import { type GraphQLSchema as GraphQLSchemaType } from 'graphql';
-import {
-  addResolveFunctionsToSchema,
-  type makeExecutableSchemaOptionsType,
-} from 'graphql-tools';
+import { addResolveFunctionsToSchema } from 'graphql-tools';
 import debug from 'debug';
 
 import { requireModule } from '@mikojs/utils';
+
+import { type optionsType } from '../index';
 
 const debugLog = debug('graphql:updateSchema');
 
@@ -18,17 +17,17 @@ const debugLog = debug('graphql:updateSchema');
  * updateSchema('/folderPath', /\.js$/, undefined, undefined, schema, '/filePath')
  *
  * @param {string} folderPath - the folder path
- * @param {RegExp} extensions - file extensions
- * @param {RegExp} exclude - exclude files
- * @param {makeExecutableSchemaOptionsType} options - build schema options
+ * @param {optionsType} options - koa graphql options
  * @param {GraphQLSchemaType} schema - built schema
  * @param {string} filePath - the file path
  */
 export default (
   folderPath: string,
-  extensions: RegExp,
-  exclude?: RegExp,
-  { resolverValidationOptions }: makeExecutableSchemaOptionsType = {},
+  {
+    extensions = /\.js$/,
+    exclude,
+    makeExecutableSchemaOptions: { resolverValidationOptions } = {},
+  }: optionsType,
   schema: GraphQLSchemaType,
   filePath: string,
 ) => {

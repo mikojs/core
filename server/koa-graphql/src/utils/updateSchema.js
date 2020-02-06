@@ -15,7 +15,7 @@ const debugLog = debug('graphql:updateSchema');
 
 /**
  * @example
- * updateSchema('/folderPath', options, schema, '/filePath')
+ * updateSchema('/folderPath', /\.js$/, undefined, undefined, schema, '/filePath')
  *
  * @param {string} folderPath - the folder path
  * @param {RegExp} extensions - file extensions
@@ -32,7 +32,12 @@ export default (
   schema: GraphQLSchemaType,
   filePath: string,
 ) => {
-  if (!new RegExp(path.resolve(folderPath)).test(filePath)) return;
+  if (
+    !extensions.test(filePath) ||
+    exclude?.test(filePath) ||
+    !new RegExp(path.resolve(folderPath)).test(filePath)
+  )
+    return;
 
   const newResolvers = requireModule(filePath);
 

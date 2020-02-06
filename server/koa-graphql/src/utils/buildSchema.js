@@ -24,7 +24,7 @@ const debugLog = debug('graphql:buildSchema');
  * @param {string} folderPath - folder path
  * @param {RegExp} extensions - file extensions
  * @param {RegExp} exclude - exclude files
- * @param {makeExecutableSchemaOptionsType} options - schema option
+ * @param {makeExecutableSchemaOptionsType} options - schema options
  *
  * @return {GraphQLSchemaType} - graphql schema
  */

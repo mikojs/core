@@ -6,17 +6,25 @@ import execa, { type ExecaPromise as execaPromiseType } from 'execa';
 
 import buildSchema from './utils/buildSchema';
 import updateSchema from './utils/updateSchema';
-import buildMiddleware, { type optionsType } from './utils/buildMiddleware';
+import buildMiddleware, {
+  type optionsType as buildMiddlewareOptionsType,
+} from './utils/buildMiddleware';
 import getSchemaFilePath from './utils/getSchemaFilePath';
 
-type funcsType = {|
+type optionsType = {
+  extensions?: RegExp,
+  exclude?: RegExp,
+  makeExecutableSchemaOptions?: makeExecutableSchemaOptionsType,
+};
+
+type returnType = {|
   update: (filePath: string) => void,
   middleware: (
-    options?: optionsType,
+    options?: buildMiddlewareOptionsType,
   ) => $Call<
     typeof buildMiddleware,
     $Call<typeof buildSchema, string, RegExp>,
-    optionsType,
+    buildMiddlewareOptionsType,
   >,
   runRelayCompiler: (argv: $ReadOnlyArray<string>) => execaPromiseType,
   query: (
@@ -29,27 +37,34 @@ type funcsType = {|
  * graphql('/folderPath')
  *
  * @param {string} folderPath - the folder path
- * @param {RegExp} extensions - file extensions
- * @param {RegExp} exclude - exclude files
- * @param {makeExecutableSchemaOptionsType} options - build schema options
+ * @param {optionsType} options - koa graphql options
  *
- * @return {funcsType} - koa graphql functions
+ * @return {returnType} - koa graphql functions
  */
-export default (
-  folderPath: string,
-  extensions?: RegExp = /\.js$/,
-  exclude?: RegExp,
-  options?: makeExecutableSchemaOptionsType,
-): funcsType => {
-  const schema = buildSchema(folderPath, extensions, exclude, options);
+export default (folderPath: string, options?: optionsType): returnType => {
+  const { extensions = /\.js$/, exclude, makeExecutableSchemaOptions } =
+    options || {};
+  const schema = buildSchema(
+    folderPath,
+    extensions,
+    exclude,
+    makeExecutableSchemaOptions,
+  );
 
   return {
     // update
     update: (filePath: string) =>
-      updateSchema(folderPath, extensions, exclude, options, schema, filePath),
+      updateSchema(
+        folderPath,
+        extensions,
+        exclude,
+        makeExecutableSchemaOptions,
+        schema,
+        filePath,
+      ),
 
     // middleware
-    middleware: (graphqlOptions?: optionsType) =>
+    middleware: (graphqlOptions?: buildMiddlewareOptionsType) =>
       buildMiddleware(schema, graphqlOptions),
 
     // run relay-compiler

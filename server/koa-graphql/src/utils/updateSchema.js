@@ -14,7 +14,7 @@ const debugLog = debug('graphql:updateSchema');
 
 /**
  * @example
- * updateSchema('/folderPath', /\.js$/, undefined, undefined, schema, '/filePath')
+ * updateSchema('/folderPath', {}, schema, '/filePath')
  *
  * @param {string} folderPath - the folder path
  * @param {optionsType} options - koa graphql options

@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@mikojs/react-ssr",
   "description": "Use to render the component with the server rendering and the client rendering.",
   "license": "MIT",

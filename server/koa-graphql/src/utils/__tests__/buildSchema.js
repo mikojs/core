@@ -10,11 +10,13 @@ test('build schema', () => {
   expect(
     printSchema(
       buildSchema(path.resolve(__dirname, './__ignore__/schema'), {
-        typeDefs: `
-          extend type Query {
-            foo: String!
-          }
-        `,
+        makeExecutableSchemaOptions: {
+          typeDefs: `
+              extend type Query {
+                foo: String!
+              }
+            `,
+        },
       }),
     ),
   ).toBe(`type Query {

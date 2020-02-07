@@ -6,17 +6,25 @@ import execa, { type ExecaPromise as execaPromiseType } from 'execa';
 
 import buildSchema from './utils/buildSchema';
 import updateSchema from './utils/updateSchema';
-import buildMiddleware, { type optionsType } from './utils/buildMiddleware';
+import buildMiddleware, {
+  type optionsType as buildMiddlewareOptionsType,
+} from './utils/buildMiddleware';
 import getSchemaFilePath from './utils/getSchemaFilePath';
 
-type funcsType = {|
+export type optionsType = {|
+  extensions?: RegExp,
+  exclude?: RegExp,
+  makeExecutableSchemaOptions?: makeExecutableSchemaOptionsType,
+|};
+
+type returnType = {|
   update: (filePath: string) => void,
   middleware: (
-    options?: optionsType,
+    options?: buildMiddlewareOptionsType,
   ) => $Call<
     typeof buildMiddleware,
-    $Call<typeof buildSchema, string>,
-    optionsType,
+    $Call<typeof buildSchema, string, optionsType>,
+    buildMiddlewareOptionsType,
   >,
   runRelayCompiler: (argv: $ReadOnlyArray<string>) => execaPromiseType,
   query: (
@@ -28,15 +36,17 @@ type funcsType = {|
  * @example
  * graphql('/folderPath')
  *
- * @param {string} folderPath - the folder path
- * @param {makeExecutableSchemaOptionsType} options - build schema options
  *
- * @return {funcsType} - koa graphql functions
+ * @param {string} folderPath - the folder path
+ * @param {optionsType} options - koa graphql options
+ *
+ * @return {returnType} - koa graphql functions
  */
 export default (
   folderPath: string,
-  options?: makeExecutableSchemaOptionsType,
-): funcsType => {
+  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
+  options?: optionsType = {},
+): returnType => {
   const schema = buildSchema(folderPath, options);
 
   return {
@@ -45,7 +55,7 @@ export default (
       updateSchema(folderPath, options, schema, filePath),
 
     // middleware
-    middleware: (graphqlOptions?: optionsType) =>
+    middleware: (graphqlOptions?: buildMiddlewareOptionsType) =>
       buildMiddleware(schema, graphqlOptions),
 
     // run relay-compiler

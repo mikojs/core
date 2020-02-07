@@ -18,7 +18,8 @@ export type cacheType = {|
   main: string,
   loading: string,
   error: string,
-  routesData: $ReadOnlyArray<{|
+  // eslint-disable-next-line flowtype/no-mutable-array
+  routesData: Array<{|
     ...$ElementType<$PropertyType<ssrPropsType, 'routesData'>, number>,
     filePath: string,
   |}>,

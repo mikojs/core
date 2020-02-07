@@ -9,6 +9,8 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@mikojs/react-ssr": "^1.0.0",
+    "@mikojs/utils": "^1.9.0",
+    "debug": "^4.1.1",
     "react-helmet": "^5.2.1",
     "react-loading": "^2.0.3"
   },

@@ -36,7 +36,6 @@ type returnType = {|
  * @example
  * graphql('/folderPath')
  *
- *
  * @param {string} folderPath - the folder path
  * @param {optionsType} options - koa graphql options
  *

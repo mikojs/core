@@ -13,7 +13,7 @@ import { type optionsType } from '../index';
 import getRouteData from './getRouteData';
 import getFileType from './getFileType';
 
-type cacheType = {|
+export type cacheType = {|
   document: string,
   main: string,
   loading: string,

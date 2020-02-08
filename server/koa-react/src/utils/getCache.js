@@ -27,18 +27,16 @@ const debugLog = debug('react:get-cache');
 
 /**
  * @example
- * getCache('/', {}, getPath)
+ * getCache('/', {})
  *
  * @param {string} folderPath - the folder path
  * @param {optionsType} options - koa react options
- * @param {Function} getPath - get path function
  *
  * @return {cacheType} - cache data
  */
 export default (
   folderPath: string,
-  { extensions = /\.js$/ }: optionsType,
-  getPath: (relativePath: string) => string,
+  { extensions = /\.js$/, basename }: optionsType,
 ): cacheType => {
   const cache = {
     document: path.resolve(__dirname, '../templates/Document.js'),
@@ -47,9 +45,9 @@ export default (
     error: path.resolve(__dirname, '../templates/Error.js'),
     routesData: [
       getRouteData(
+        basename,
         '*',
         path.resolve(__dirname, '../templates/NotFound.js'),
-        getPath,
       ),
     ],
     addPage: (filePath: string) => {
@@ -75,17 +73,17 @@ export default (
 
         case 'not-found':
           cache.routesData[cache.routesData.length - 1] = getRouteData(
+            basename,
             '*',
             filePath,
-            getPath,
           );
           break;
 
         case 'page':
           const routeData = getRouteData(
+            basename,
             fileType.relativePath,
             filePath,
-            getPath,
           );
 
           cache.routesData = [

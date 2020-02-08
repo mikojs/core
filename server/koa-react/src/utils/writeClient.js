@@ -6,7 +6,7 @@ import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
 import debug from 'debug';
 
-import { type cacheType } from './buildCache';
+import { type cacheType } from './getCache';
 
 const cacheDir = findCacheDir({
   name: crypto

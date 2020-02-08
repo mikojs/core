@@ -4,32 +4,30 @@ import path from 'path';
 
 import debug from 'debug';
 
-import { d3DirTree } from '@mikojs/utils';
-import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 import { type propsType as ssrPropsType } from '@mikojs/react-ssr';
 
 import { type optionsType } from '../index';
 
-import getRouteData from './getRouteData';
 import getFileType from './getFileType';
+import getRouteData from './getRouteData';
 
 export type cacheType = {|
   document: string,
   main: string,
   loading: string,
   error: string,
-  // eslint-disable-next-line flowtype/no-mutable-array
-  routesData: Array<{|
+  routesData: $ReadOnlyArray<{|
     ...$ElementType<$PropertyType<ssrPropsType, 'routesData'>, number>,
     filePath: string,
   |}>,
+  addPage: (filePath: string) => void,
 |};
 
-const debugLog = debug('react:build-cache');
+const debugLog = debug('react:get-cache');
 
 /**
  * @example
- * buildCache('/', {}, getPath)
+ * getCache('/', {}, getPath)
  *
  * @param {string} folderPath - the folder path
  * @param {optionsType} options - koa react options
@@ -39,7 +37,7 @@ const debugLog = debug('react:build-cache');
  */
 export default (
   folderPath: string,
-  { extensions = /\.js$/, exclude }: optionsType,
+  { extensions = /\.js$/ }: optionsType,
   getPath: (relativePath: string) => string,
 ): cacheType => {
   const cache = {
@@ -54,15 +52,7 @@ export default (
         getPath,
       ),
     ],
-  };
-
-  debugLog(cache);
-  d3DirTree(folderPath, {
-    extensions,
-    exclude,
-  })
-    .leaves()
-    .forEach(({ data: { name, path: filePath } }: d3DirTreeNodeType) => {
+    addPage: (filePath: string) => {
       const fileType = getFileType(folderPath, extensions, filePath);
 
       debugLog(fileType);
@@ -92,16 +82,32 @@ export default (
           break;
 
         case 'page':
+          const routeData = getRouteData(
+            fileType.relativePath,
+            filePath,
+            getPath,
+          );
+
           cache.routesData = [
-            getRouteData(fileType.relativePath, filePath, getPath),
-            ...cache.routesData,
+            routeData,
+            ...cache.routesData.filter(
+              ({
+                component: { chunkName },
+              }: $ElementType<
+                $PropertyType<cacheType, 'routesData'>,
+                number,
+              >) => chunkName !== routeData.component.chunkName,
+            ),
           ];
           break;
 
         default:
           break;
       }
-    });
+
+      debugLog(cache);
+    },
+  };
 
   debugLog(cache);
 

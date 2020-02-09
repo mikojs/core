@@ -5,13 +5,16 @@ import path from 'path';
 import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
-import getCache from './utils/getCache';
+import getCache, { type cacheType } from './utils/getCache';
 import writeClient from './utils/writeClient';
 
 export type optionsType = {|
   basename?: string,
   extensions?: RegExp,
   exclude?: RegExp,
+  handler?: (
+    routesData: $PropertyType<cacheType, 'routesData'>,
+  ) => $PropertyType<cacheType, 'routesData'>,
 |};
 
 type returnType = {|
@@ -43,7 +46,7 @@ export default (
     .forEach(({ data: { path: filePath } }: d3DirTreeNodeType) => {
       cache.addPage(filePath);
     });
-  writeClient(cache);
+  writeClient(cache, options);
 
   return {
     update: (filePath: string) => {
@@ -55,7 +58,7 @@ export default (
         return;
 
       cache.addPage(filePath);
-      writeClient(cache);
+      writeClient(cache, options);
     },
   };
 };

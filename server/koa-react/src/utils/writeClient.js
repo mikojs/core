@@ -5,6 +5,9 @@ import crypto from 'crypto';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
 import debug from 'debug';
+import { emptyFunction } from 'fbjs';
+
+import { type optionsType } from '../index';
 
 import { type cacheType } from './getCache';
 
@@ -25,7 +28,10 @@ const debugLog = debug('react:write-client');
  *
  * @return {string} - client path
  */
-export default (cache: cacheType): string => {
+export default (
+  cache: cacheType,
+  { handler = emptyFunction.thatReturnsArgument }: optionsType,
+): string => {
   const clientPath = cacheDir('client.js');
 
   debugLog(clientPath);
@@ -44,7 +50,7 @@ client({
   Main: require('${cache.main}').default || require('${cache.main}'),
   Loading: require('${cache.loading}').default || require('${cache.loading}'),
   Error: require('${cache.error}').default || require('${cache.error}'),
-  routesData: [${cache.routesData
+  routesData: [${handler(cache.routesData)
     .map(
       ({
         path,

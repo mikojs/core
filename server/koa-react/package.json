@@ -11,6 +11,7 @@
     "@mikojs/react-ssr": "^1.0.0",
     "@mikojs/utils": "^1.9.0",
     "debug": "^4.1.1",
+    "fbjs": "^1.0.0",
     "find-cache-dir": "^3.2.0",
     "output-file-sync": "^2.0.1",
     "react-helmet": "^5.2.1",

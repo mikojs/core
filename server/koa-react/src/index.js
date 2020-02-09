@@ -2,11 +2,14 @@
 
 import path from 'path';
 
-import { d3DirTree } from '@mikojs/utils';
+import { type Middleware as MiddlewareType } from 'koa';
+
+import { d3DirTree, requireModule } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import getCache, { type cacheType } from './utils/getCache';
 import writeClient from './utils/writeClient';
+import buildServer from './utils/buildServer';
 
 export type optionsType = {|
   basename?: string,
@@ -19,6 +22,8 @@ export type optionsType = {|
 
 type returnType = {|
   update: (filePath: string) => void,
+  client: () => void,
+  server: MiddlewareType,
 |};
 
 /**
@@ -46,9 +51,11 @@ export default (
     .forEach(({ data: { path: filePath } }: d3DirTreeNodeType) => {
       cache.addPage(filePath);
     });
-  writeClient(cache, options);
+
+  const clientPath = writeClient(cache, options);
 
   return {
+    // update
     update: (filePath: string) => {
       if (
         !extensions.test(filePath) ||
@@ -60,5 +67,14 @@ export default (
       cache.addPage(filePath);
       writeClient(cache, options);
     },
+
+    // client
+    client: () => requireModule(clientPath),
+
+    // server
+    server: buildServer(options, cache, {
+      clientUrl: 'TODO: clientUrl',
+      commonsUrl: 'TOOD: commonsUrl',
+    }),
   };
 };

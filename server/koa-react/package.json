@@ -14,13 +14,16 @@
     "fbjs": "^1.0.0",
     "find-cache-dir": "^3.2.0",
     "output-file-sync": "^2.0.1",
+    "progress-bar-webpack-plugin": "^2.1.0",
     "react-helmet": "^5.2.1",
-    "react-loading": "^2.0.3"
+    "react-loading": "^2.0.3",
+    "terser-webpack-plugin": "^2.3.2"
   },
   "peerDependencies": {
     "koa": ">=2.0.0",
     "react": ">=16.0.0",
-    "react-dom": ">=16.0.0"
+    "react-dom": ">=16.0.0",
+    "webpack": ">=4.0.0"
   },
   "devDependencies": {
     "flow-bin": "^0.116.1",

@@ -14,9 +14,16 @@ import getCache, { type cacheType } from './utils/getCache';
 import getConfig from './utils/getConfig';
 import writeClient from './utils/writeClient';
 import buildServer from './utils/buildServer';
+import buildJs from './utils/buildJs';
 
-type configType = {
+export type webpackMiddlewarweOptionsType = {
   config: WebpackOptionsType,
+  devMiddleware: {
+    stats?: $PropertyType<
+      $NonMaybeType<$PropertyType<WebpackOptionsType, 'devServer'>>,
+      'stats',
+    >,
+  },
 };
 
 export type optionsType = {|
@@ -24,7 +31,10 @@ export type optionsType = {|
   basename?: string,
   extensions?: RegExp,
   exclude?: RegExp,
-  webpackMiddlewarweOptions?: (config: configType, dev: boolean) => configType,
+  webpackMiddlewarweOptions?: (
+    options: webpackMiddlewarweOptionsType,
+    dev: boolean,
+  ) => webpackMiddlewarweOptionsType,
   handler?: (
     routesData: $PropertyType<cacheType, 'routesData'>,
   ) => $PropertyType<cacheType, 'routesData'>,
@@ -34,6 +44,7 @@ type returnType = {|
   update: (filePath: string) => void,
   client: () => void,
   server: MiddlewareType,
+  buildJs: () => Promise<{ [string]: string }>,
 |};
 
 /**
@@ -87,7 +98,7 @@ export default (
 
   invariant(
     webpackMiddlewarweOptions.config.output?.publicPath &&
-    webpackMiddlewarweOptions.config.output?.path,
+      webpackMiddlewarweOptions.config.output?.path,
     'Both of `publicPath`, `path` in `webpackMiddlewarweOptions.config.output` are required',
   );
 
@@ -122,5 +133,8 @@ export default (
       clientUrl: 'TODO: clientUrl',
       commonsUrl: 'TOOD: commonsUrl',
     }),
+
+    // build js
+    buildJs: () => buildJs(webpackMiddlewarweOptions),
   };
 };

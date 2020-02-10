@@ -3,18 +3,28 @@
 import path from 'path';
 
 import { type Middleware as MiddlewareType } from 'koa';
+import { type WebpackOptions as WebpackOptionsType } from 'webpack';
+import { emptyFunction, invariant } from 'fbjs';
+import address from 'address';
 
-import { d3DirTree, requireModule } from '@mikojs/utils';
+import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import getCache, { type cacheType } from './utils/getCache';
+import getConfig from './utils/getConfig';
 import writeClient from './utils/writeClient';
 import buildServer from './utils/buildServer';
 
+type configType = {
+  config: WebpackOptionsType,
+};
+
 export type optionsType = {|
+  dev?: boolean,
   basename?: string,
   extensions?: RegExp,
   exclude?: RegExp,
+  webpackMiddlewarweOptions?: (config: configType, dev: boolean) => configType,
   handler?: (
     routesData: $PropertyType<cacheType, 'routesData'>,
   ) => $PropertyType<cacheType, 'routesData'>,
@@ -41,7 +51,12 @@ export default (
   options?: optionsType = {},
 ): returnType => {
   const cache = getCache(folderPath, options);
-  const { extensions = /\.js$/, exclude } = options;
+  const {
+    dev = process.env.NODE_ENV !== 'production',
+    extensions = /\.js$/,
+    exclude,
+    webpackMiddlewarweOptions: webpackMiddlewarweOptionsFunc = emptyFunction.thatReturnsArgument,
+  } = options;
 
   d3DirTree(folderPath, {
     extensions,
@@ -53,6 +68,28 @@ export default (
     });
 
   const clientPath = writeClient(cache, options);
+  const webpackMiddlewarweOptions = webpackMiddlewarweOptionsFunc(
+    {
+      config: getConfig(folderPath, options, cache, clientPath),
+      devMiddleware: {
+        stats: {
+          maxModules: 0,
+          colors: true,
+        },
+      },
+      hotClient: {
+        logLevel: 'warn',
+        host: address.ip(),
+      },
+    },
+    dev,
+  );
+
+  invariant(
+    webpackMiddlewarweOptions.config.output?.publicPath &&
+    webpackMiddlewarweOptions.config.output?.path,
+    'Both of `publicPath`, `path` in `webpackMiddlewarweOptions.config.output` are required',
+  );
 
   return {
     // update
@@ -69,7 +106,16 @@ export default (
     },
 
     // client
-    client: () => requireModule(clientPath),
+    client: () =>
+      dev
+        ? require('koa-webpack')(webpackMiddlewarweOptions)
+        : require('koa-mount')(
+            // FIXME: invariant should check type
+            webpackMiddlewarweOptions.config.output?.publicPath,
+            require('koa-static')(
+              webpackMiddlewarweOptions.config.output?.path,
+            ),
+          ),
 
     // server
     server: buildServer(options, cache, {

@@ -18,16 +18,19 @@ import { type cacheType } from './getCache';
  * @param {optionsType} options - koa react options
  * @param {cacheType} cache - cache data
  * @param {string} clientPath - the client path
- * @param {boolean} dev - dev mode or not
  *
  * @return {object} - webpack config
  */
 export default (
   folderPath: string,
-  { basename, extensions = /\.js$/, exclude }: optionsType,
+  {
+    dev = process.env.NODE_ENV !== 'production',
+    basename,
+    extensions = /\.js$/,
+    exclude,
+  }: optionsType,
   cache: cacheType,
   clientPath: string,
-  dev: boolean,
 ) => ({
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval' : false,

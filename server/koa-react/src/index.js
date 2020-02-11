@@ -3,6 +3,7 @@
 import path from 'path';
 
 import { type Middleware as MiddlewareType } from 'koa';
+import compose from 'koa-compose';
 import { type WebpackOptions as WebpackOptionsType } from 'webpack';
 import { emptyFunction, invariant } from 'fbjs';
 import address from 'address';
@@ -42,7 +43,8 @@ export type optionsType = {|
 
 type returnType = {|
   update: (filePath: string) => void,
-  client: () => void,
+  middleware: MiddlewareType,
+  client: MiddlewareType,
   server: MiddlewareType,
   buildJs: () => Promise<{ [string]: string }>,
 |};
@@ -102,6 +104,18 @@ export default (
     'Both of `publicPath`, `path` in `webpackMiddlewarweOptions.config.output` are required',
   );
 
+  const client = dev
+    ? require('koa-webpack')(webpackMiddlewarweOptions)
+    : require('koa-mount')(
+        // FIXME: invariant should check type
+        webpackMiddlewarweOptions.config.output?.publicPath,
+        require('koa-static')(webpackMiddlewarweOptions.config.output?.path),
+      );
+  const server = buildServer(options, cache, {
+    clientUrl: 'TODO: clientUrl',
+    commonsUrl: 'TOOD: commonsUrl',
+  });
+
   return {
     // update
     update: (filePath: string) => {
@@ -116,23 +130,14 @@ export default (
       writeClient(cache, options);
     },
 
+    // middleware
+    middleware: compose([client, server]),
+
     // client
-    client: () =>
-      dev
-        ? require('koa-webpack')(webpackMiddlewarweOptions)
-        : require('koa-mount')(
-            // FIXME: invariant should check type
-            webpackMiddlewarweOptions.config.output?.publicPath,
-            require('koa-static')(
-              webpackMiddlewarweOptions.config.output?.path,
-            ),
-          ),
+    client,
 
     // server
-    server: buildServer(options, cache, {
-      clientUrl: 'TODO: clientUrl',
-      commonsUrl: 'TOOD: commonsUrl',
-    }),
+    server,
 
     // build js
     buildJs: () => buildJs(webpackMiddlewarweOptions),

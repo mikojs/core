@@ -41,7 +41,7 @@ export type optionsType = {|
   ) => $PropertyType<cacheType, 'routesData'>,
 |};
 
-type returnType = {|
+export type returnType = {|
   update: (filePath: string) => void,
   middleware: MiddlewareType,
   client: MiddlewareType,
@@ -100,7 +100,7 @@ export default async (
   );
 
   const client = dev
-    ? require('koa-webpack')(webpackMiddlewarweOptions)
+    ? await require('koa-webpack')(webpackMiddlewarweOptions)
     : await require('./utils/buildProdClient').default(
         webpackMiddlewarweOptions,
       );

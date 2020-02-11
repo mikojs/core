@@ -47,6 +47,7 @@ export default async (
         ...ctx.state.webpackStats,
         toJson: () => ({ assetsByChunkName }),
       };
+      await next();
     },
     mount(
       // FIXME: invariant should check type

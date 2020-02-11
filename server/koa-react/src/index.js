@@ -8,7 +8,7 @@ import { type WebpackOptions as WebpackOptionsType } from 'webpack';
 import { emptyFunction } from 'fbjs';
 import address from 'address';
 
-import { d3DirTree } from '@mikojs/utils';
+import { d3DirTree, requireModule } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import getCache, { type cacheType } from './utils/getCache';
@@ -101,7 +101,7 @@ export default async (
 
   const client = dev
     ? await require('koa-webpack')(webpackMiddlewarweOptions)
-    : await require('./utils/buildProdClient').default(
+    : await requireModule(path.resolve(__dirname, './utils/buildProdClient'))(
         webpackMiddlewarweOptions,
       );
   const server = buildServer(options, cache);

@@ -5,7 +5,7 @@ import path from 'path';
 import { type Middleware as MiddlewareType } from 'koa';
 import compose from 'koa-compose';
 import { type WebpackOptions as WebpackOptionsType } from 'webpack';
-import { emptyFunction, invariant } from 'fbjs';
+import { emptyFunction } from 'fbjs';
 import address from 'address';
 
 import { d3DirTree } from '@mikojs/utils';
@@ -58,11 +58,11 @@ type returnType = {|
  *
  * @return {returnType} - koa react functions
  */
-export default (
+export default async (
   folderPath: string,
   // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
   options?: optionsType = {},
-): returnType => {
+): Promise<returnType> => {
   const cache = getCache(folderPath, options);
   const {
     dev = process.env.NODE_ENV !== 'production',
@@ -99,18 +99,10 @@ export default (
     dev,
   );
 
-  invariant(
-    webpackMiddlewarweOptions.config.output?.publicPath &&
-      webpackMiddlewarweOptions.config.output?.path,
-    'Both of `publicPath`, `path` in `webpackMiddlewarweOptions.config.output` are required',
-  );
-
   const client = dev
     ? require('koa-webpack')(webpackMiddlewarweOptions)
-    : require('koa-mount')(
-        // FIXME: invariant should check type
-        webpackMiddlewarweOptions.config.output?.publicPath,
-        require('koa-static')(webpackMiddlewarweOptions.config.output?.path),
+    : await require('./utils/buildProdClient').default(
+        webpackMiddlewarweOptions,
       );
   const server = buildServer(options, cache);
 

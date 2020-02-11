@@ -85,6 +85,7 @@ export default (
     {
       config: getConfig(folderPath, options, cache, clientPath),
       devMiddleware: {
+        serverSideRender: true,
         stats: {
           maxModules: 0,
           colors: true,
@@ -111,10 +112,7 @@ export default (
         webpackMiddlewarweOptions.config.output?.publicPath,
         require('koa-static')(webpackMiddlewarweOptions.config.output?.path),
       );
-  const server = buildServer(options, cache, {
-    clientUrl: 'TODO: clientUrl',
-    commonsUrl: 'TOOD: commonsUrl',
-  });
+  const server = buildServer(options, cache);
 
   return {
     // update
@@ -137,6 +135,7 @@ export default (
     client,
 
     // server
+    // $FlowFixMe TODO: can not extend koa context type
     server,
 
     // build js

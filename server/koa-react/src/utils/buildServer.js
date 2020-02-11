@@ -16,22 +16,39 @@ import { type cacheType } from './getCache';
 
 const debugLog = debug('react:build-server');
 
+type ctxType = {
+  ...koaContextType,
+  state: {
+    webpackStats: {
+      toJson: () => { assetsByChunkName: { [string]: string } },
+    },
+  },
+};
+
 /**
  * @example
  * buildServer(options, cache, urls)
  *
  * @param {optionsType} options - koa react options
  * @param {cacheType} cache - cache data
- * @param {object} urls - urls
  *
  * @return {koaMiddlewareType} - koa middleware
  */
-export default (
-  { basename }: optionsType,
-  cache: cacheType,
-  { clientUrl, commonsUrl }: { [string]: string },
-) => async (ctx: koaContextType, next: () => Promise<void>) => {
+export default ({ basename }: optionsType, cache: cacheType) => async (
+  ctx: ctxType,
+  next: () => Promise<void>,
+) => {
   debugLog(ctx.path);
+
+  const { assetsByChunkName } = ctx.state.webpackStats.toJson();
+  const commonsUrl =
+    assetsByChunkName[
+      [basename?.replace(/^\//, ''), 'commons'].filter(Boolean).join('/')
+    ];
+  const clientUrl =
+    assetsByChunkName[
+      [basename?.replace(/^\//, ''), 'client'].filter(Boolean).join('/')
+    ];
 
   if (commonsUrl === ctx.path) {
     ctx.status = 200;

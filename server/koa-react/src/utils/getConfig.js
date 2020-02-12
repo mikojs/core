@@ -12,7 +12,7 @@ import { type cacheType } from './getCache';
 
 /**
  * @example
- * getConfig('/', optinos, cache, '/client.js', true)
+ * getConfig('/', optinos, cache, '/client.js')
  *
  * @param {string} folderPath - the folder path
  * @param {optionsType} options - koa react options

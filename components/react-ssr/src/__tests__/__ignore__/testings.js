@@ -10,18 +10,18 @@ import { type pageComponentType, type mainComponentType } from 'utils/getPage';
 export const Document = ({ children }: {| children: NodeType |}) => children;
 
 export const mainRender: JestMockFn<
-  [{| children: () => NodeType |}],
+  [{ children: () => NodeType }],
   NodeType,
 > = jest
   .fn()
-  .mockImplementation(({ children }: {| children: () => NodeType |}) =>
+  .mockImplementation(({ children }: { children: () => NodeType }) =>
     children(),
   );
 
 /** @react main component */
-export const Main: mainComponentType<{}, {}> = (props: {|
+export const Main: mainComponentType<{}, {}> = (props: {
   children: () => NodeType,
-|}) => mainRender(props);
+}) => mainRender(props);
 
 Main.getInitialProps = jest.fn();
 

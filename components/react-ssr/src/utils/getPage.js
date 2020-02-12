@@ -1,6 +1,6 @@
 // @flow
 
-import { type ComponentType } from 'react';
+import { type ComponentType, type Node as NodeType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
 import { invariant } from 'fbjs';
@@ -13,18 +13,27 @@ export type pageInitialArguType<C> = {|
   match: { url: string },
 |};
 
-export type pageComponentType<C, P> = ComponentType<*> & {
+export type pageComponentType<C, P, EP = {}> = ComponentType<{
+  ...P,
+  ...EP,
+}> & {
   getInitialProps?: (argu: pageInitialArguType<C>) => P,
 };
 
-export type mainInitialArguType<C> = {|
+export type mainInitialArguType<C, P = pageComponentType<C, *>> = {|
   ctx: C,
   isServer: boolean,
-  Page: pageComponentType<*, *>,
-  pageProps: {},
+  Page: P,
+  pageProps: $Call<
+    $NonMaybeType<$PropertyType<P, 'getInitialProps'>>,
+    pageInitialArguType<C>,
+  >,
 |};
 
-export type mainComponentType<C, P> = ComponentType<*> & {
+export type mainComponentType<C, P> = ComponentType<{
+  ...P,
+  children: () => NodeType,
+}> & {
   getInitialProps?: (argu: mainInitialArguType<C>) => P,
 };
 

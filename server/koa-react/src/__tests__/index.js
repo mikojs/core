@@ -54,8 +54,8 @@ describe('react', () => {
       global.console.log = mockLog;
 
       expect(await reactObj.buildJs()).toEqual({
-        commons: 'commons',
-        client: 'client',
+        commons: '/commons',
+        client: '/client',
       });
       expect(mockLog).toHaveBeenCalledTimes(1);
     });

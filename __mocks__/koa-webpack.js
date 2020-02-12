@@ -12,8 +12,8 @@ export default (jest
       ...ctx.state.webpackStats,
       toJson: () => ({
         assetsByChunkName: {
-          commons: 'commons',
-          client: 'client',
+          commons: '/commons',
+          client: '/client',
         },
       }),
     };

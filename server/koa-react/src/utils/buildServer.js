@@ -57,10 +57,7 @@ export default ({ basename }: optionsType, cache: cacheType) => async (
     return;
   }
 
-  if (
-    !new RegExp(basename || '').test(ctx.path) ||
-    ctx.accepts('html') !== 'html'
-  ) {
+  if (ctx.accepts('html') !== 'html') {
     await next();
     return;
   }

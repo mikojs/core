@@ -6,8 +6,8 @@ const mockCallbackArguments = jest.fn().mockReturnValue([
     hasErrors: () => false,
     toJson: () => ({
       assetsByChunkName: {
-        commons: 'commons',
-        client: 'client',
+        commons: '/commons',
+        client: '/client',
       },
     }),
   },

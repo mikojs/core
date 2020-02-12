@@ -18,10 +18,7 @@ const debugLog = debug('react:build-js');
  *
  * @return {Promise} - chunk names
  */
-export default ({
-  config,
-  devMiddleware: { stats: logStats },
-}: webpackMiddlewarweOptionsType) =>
+export default ({ config, devMiddleware }: webpackMiddlewarweOptionsType) =>
   new Promise<{
     [string]: string,
   }>((resolve, reject) => {
@@ -42,7 +39,7 @@ export default ({
 
       const { log } = console;
 
-      log(stats.toString({ logStats, colors: true }));
+      log(stats.toString({ logStats: devMiddleware?.stats, colors: true }));
       resolve(stats.toJson().assetsByChunkName);
     });
   });

@@ -15,6 +15,25 @@ import getCache from '../getCache';
 import buildServer from '../buildServer';
 
 describe('build server', () => {
+  test('not found', async () => {
+    const app = new Koa();
+    const port = await getPort();
+
+    app.use(await webpack());
+    // $FlowFixMe TODO: can not extend koa context type
+    app.use(buildServer({}, getCache(__dirname, {})));
+
+    const server = app.listen(port);
+
+    expect(
+      await fetch(
+        `http://localhost:${port}/not found`,
+      ).then((res: ResponseType) => res.text()),
+    ).toMatch(/404 | Page not found/);
+
+    server.close();
+  });
+
   test('commons js', async () => {
     const app = new Koa();
     const port = await getPort();

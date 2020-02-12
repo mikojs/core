@@ -2,31 +2,44 @@
 
 import { emptyFunction } from 'fbjs';
 
-import { type optionsType, type configType } from '@mikojs/koa-react';
+import {
+  type optionsType,
+  type webpackMiddlewarweOptionsType,
+} from '@mikojs/koa-react';
 
 /**
  * @example
  * useCss({})
  *
- * @param {optionsType} config - prev @mikojs/koa-react config
+ * @param {optionsType} options - prev @mikojs/koa-react options
  *
- * @return {optionsType} - @mikojs/koa-react config
+ * @return {optionsType} - @mikojs/koa-react options
  */
 export default ({
-  config: configFunc = emptyFunction.thatReturnsArgument,
+  webpackMiddlewarweOptions: webpackMiddlewarweOptionsFunc = emptyFunction.thatReturnsArgument,
   ...options
 }: optionsType = {}): optionsType & {
-  config: $NonMaybeType<$PropertyType<optionsType, 'config'>>,
+  webpackMiddlewarweOptions: $NonMaybeType<
+    $PropertyType<optionsType, 'webpackMiddlewarweOptions'>,
+  >,
 } => ({
   ...options,
-  config: (config: configType, dev: boolean): configType => {
-    const prevConfig = configFunc(config, dev);
+  webpackMiddlewarweOptions: (
+    webpackMiddlewarweOptions: webpackMiddlewarweOptionsType,
+    dev: boolean,
+  ): webpackMiddlewarweOptionsType => {
+    const prevWebpackMiddlewarweOptions = webpackMiddlewarweOptionsFunc(
+      webpackMiddlewarweOptions,
+      dev,
+    );
 
-    if (!prevConfig.config.module) prevConfig.config.module = {};
+    if (!prevWebpackMiddlewarweOptions.config.module)
+      prevWebpackMiddlewarweOptions.config.module = {};
 
-    if (!prevConfig.config.module.rules) prevConfig.config.module.rules = [];
+    if (!prevWebpackMiddlewarweOptions.config.module.rules)
+      prevWebpackMiddlewarweOptions.config.module.rules = [];
 
-    prevConfig.config.module.rules.push({
+    prevWebpackMiddlewarweOptions.config.module.rules.push({
       test: /\.css$/,
       use: [
         {
@@ -38,12 +51,15 @@ export default ({
       ],
     });
 
-    prevConfig.config.optimization = {
-      ...prevConfig.config.optimization,
+    prevWebpackMiddlewarweOptions.config.optimization = {
+      ...prevWebpackMiddlewarweOptions.config.optimization,
       splitChunks: {
-        ...(prevConfig.config.optimization?.splitChunks || {}),
+        ...(prevWebpackMiddlewarweOptions.config.optimization?.splitChunks ||
+          {}),
         cacheGroups: {
-          ...(prevConfig.config.optimization?.splitChunks || {}).cacheGroups,
+          ...(
+            prevWebpackMiddlewarweOptions.config.optimization?.splitChunks || {}
+          ).cacheGroups,
           styles: {
             name: 'styles',
             test: /\.css$/,
@@ -54,6 +70,6 @@ export default ({
       },
     };
 
-    return prevConfig;
+    return prevWebpackMiddlewarweOptions;
   },
 });

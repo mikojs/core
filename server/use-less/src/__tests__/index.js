@@ -8,7 +8,7 @@ describe('use-less', () => {
   test('use @mikojs/ues-less with @mikojs/use-css', () => {
     expect(
       // TODO: use pipeline
-      useLess(useCss()).config(
+      useLess(useCss()).webpackMiddlewarweOptions(
         {
           config: {},
           devMiddleware: {},
@@ -51,7 +51,7 @@ describe('use-less', () => {
 
   test('splitChunks is false', () => {
     expect(
-      useLess().config(
+      useLess().webpackMiddlewarweOptions(
         {
           config: {
             module: {

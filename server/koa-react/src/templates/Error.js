@@ -3,7 +3,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-import { type errorPropsType } from '../types';
+import { type errorComponentPropsType } from '@mikojs/react-ssr';
 
 import * as styles from './styles/error';
 
@@ -11,7 +11,7 @@ import * as styles from './styles/error';
 const Error = ({
   error: { message },
   errorInfo: { componentStack },
-}: errorPropsType) => (
+}: errorComponentPropsType) => (
   <div style={styles.root}>
     <Helmet>
       <title>500 | Error</title>
@@ -22,14 +22,13 @@ const Error = ({
 
       <p style={styles.p}>{message}</p>
 
-      <p
-        style={styles.p}
-        dangerouslySetInnerHTML={{
-          __html: componentStack.replace(/\n/, '').replace(/\n/g, '<br />'),
-        }}
-      />
+      {componentStack.split(/\n/).map((text: string) => (
+        <p key={text} style={styles.p}>
+          {text}
+        </p>
+      ))}
     </div>
   </div>
 );
 
-export default Error;
+export default React.memo<errorComponentPropsType>(Error);

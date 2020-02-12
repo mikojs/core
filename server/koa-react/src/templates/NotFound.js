@@ -3,9 +3,11 @@
 import React, { type Node as NodeType } from 'react';
 import { Helmet } from 'react-helmet';
 
-import { type pageCtxType } from '../types';
+import { type pageInitialArguType } from '@mikojs/react-ssr';
 
 import * as styles from './styles/notFound';
+
+type propsType = {||};
 
 /** @react render the not found page */
 const NotFound = () => (
@@ -20,13 +22,13 @@ const NotFound = () => (
  * @example
  * NotFound.getInitialProps({ ctx })
  *
- * @param {pageCtxType} context - cnotext data
+ * @param {pageInitialArguType} context - cnotext data
  *
  * @return {object} - initial props
  */
 NotFound.getInitialProps = ({
   ctx,
-}: pageCtxType<{| status: number |}>): {|
+}: pageInitialArguType<{ status: number }>): {|
   head: NodeType,
 |} => {
   ctx.status = 404;
@@ -40,4 +42,4 @@ NotFound.getInitialProps = ({
   };
 };
 
-export default React.memo<{||}>(NotFound);
+export default React.memo<propsType>(NotFound);

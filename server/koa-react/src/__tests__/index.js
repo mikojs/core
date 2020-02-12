@@ -1,79 +1,63 @@
-// @flow
+/**
+ * @jest-environment node
+ *
+ * @flow
+ */
 
 import path from 'path';
 
-import outputFileSync from 'output-file-sync';
+import Koa from 'koa';
+import getPort from 'get-port';
+import fetch, { type Response as ResponseType } from 'node-fetch';
 
-import React from '../index';
+import react, { type returnType } from '../index';
 
-import updateTestings from './__ignore__/updateTestings';
+import testings from './__ignore__/testings';
 
-jest.mock('node-fetch', () =>
-  jest.fn().mockImplementation(async (url: string) => ({
-    text: () => url,
-  })),
-);
-
-const react = new React(path.resolve(__dirname, './__ignore__/pages'), {
-  dev: false,
-  exclude: /exclude/,
-});
+let reactObj: returnType;
 
 describe('react', () => {
-  beforeEach(() => {
-    jest.resetModules();
-    outputFileSync.mockClear();
-  });
-
-  test('can not found folder', () => {
-    expect(() => new React('/test')).toThrow('folder can not be found.');
-  });
-
-  test('not find urls file path', async () => {
-    const mockLog = jest.fn();
-
-    react.store.urlsFilePath = null;
-    global.console.warn = mockLog;
-
-    expect(await react.buildStatic()).toBeUndefined();
-    expect(mockLog).toHaveBeenCalledTimes(8);
-  });
-
-  test('not find module in buildStatic', async () => {
-    react.store.urlsFilePath = path.resolve(
-      __dirname,
-      './__ignore__/notFound.js',
-    );
-
-    expect(await react.buildStatic()).toBeUndefined();
-  });
-
-  test('throw error in buildStatic', async () => {
-    react.store.urlsFilePath = path.resolve(
-      __dirname,
-      './__ignore__/throwError.js',
-    );
-
-    await expect(react.buildStatic()).rejects.toThrow('error');
-  });
-
-  test('throw error in middleware', async () => {
-    react.store.urlsFilePath = path.resolve(
-      __dirname,
-      './__ignore__/throwError.js',
-    );
-
-    await expect(react.middleware()).rejects.toThrow('error');
-  });
-
-  test.each(updateTestings)(
-    'udpate cache with %s',
-    (filePath: string, expected: $ReadOnlyArray<[string, string]>) => {
-      react.update(filePath);
-
-      expect(outputFileSync.mock.calls).toEqual(
-        expected.length === 0 ? [] : [expected],
+  describe.each`
+    dev
+    ${true}
+    ${false}
+  `('dev = $dev', ({ dev }: {| dev: boolean |}) => {
+    beforeAll(async () => {
+      reactObj = await react(
+        path.resolve(__dirname, './__ignore__/pages'),
+        dev ? undefined : { dev },
       );
-    },
-  );
+      reactObj.update(path.resolve(__dirname, './__ignore__/pages/index.js'));
+      reactObj.update(path.resolve(__dirname));
+    });
+
+    test('middleware', async () => {
+      const app = new Koa();
+      const port = await getPort();
+
+      app.use(reactObj.middleware);
+
+      const server = app.listen(port);
+
+      expect(
+        await fetch(`http://localhost:${port}`).then((res: ResponseType) =>
+          res.text(),
+        ),
+      ).toBe(testings);
+
+      server.close();
+    });
+
+    test('build', async () => {
+      const mockLog = jest.fn();
+
+      global.console.log = mockLog;
+
+      expect(await reactObj.buildJs()).toEqual({
+        commons: '/commons',
+        client: '/client',
+      });
+      expect(mockLog).toHaveBeenCalledTimes(1);
+    });
+  });
 });

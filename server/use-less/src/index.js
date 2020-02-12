@@ -3,27 +3,38 @@
 import { invariant, emptyFunction } from 'fbjs';
 import { type RuleSetRule as RuleSetRuleType } from 'webpack';
 
-import { type optionsType, type configType } from '@mikojs/koa-react';
+import {
+  type optionsType,
+  type webpackMiddlewarweOptionsType,
+} from '@mikojs/koa-react';
 
 /**
  * @example
  * useLess({})
  *
- * @param {optionsType} config - prev @mikojs/koa-react config
+ * @param {optionsType} options - prev @mikojs/koa-react options
  *
- * @return {optionsType} - @mikojs/koa-react config
+ * @return {optionsType} - @mikojs/koa-react options
  */
 export default ({
-  config: configFunc = emptyFunction.thatReturnsArgument,
+  webpackMiddlewarweOptions: webpackMiddlewarweOptionsFunc = emptyFunction.thatReturnsArgument,
   ...options
 }: optionsType = {}): optionsType & {
-  config: $NonMaybeType<$PropertyType<optionsType, 'config'>>,
+  webpackMiddlewarweOptions: $NonMaybeType<
+    $PropertyType<optionsType, 'webpackMiddlewarweOptions'>,
+  >,
 } => ({
   ...options,
-  config: (config: configType, dev: boolean): configType => {
-    const prevConfig = configFunc(config, dev);
+  webpackMiddlewarweOptions: (
+    webpackMiddlewarweOptions: webpackMiddlewarweOptionsType,
+    dev: boolean,
+  ): webpackMiddlewarweOptionsType => {
+    const prevWebpackMiddlewarweOptions = webpackMiddlewarweOptionsFunc(
+      webpackMiddlewarweOptions,
+      dev,
+    );
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
-    const cssLoader = prevConfig.config.module?.rules?.find(
+    const cssLoader = prevWebpackMiddlewarweOptions.config.module?.rules?.find(
       // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
       ({ test }: RuleSetRuleType) => test?.toString() === /\.css$/.toString(),
     );
@@ -38,12 +49,15 @@ export default ({
       loader: 'less-loader',
     });
 
-    prevConfig.config.optimization = {
-      ...prevConfig.config.optimization,
+    prevWebpackMiddlewarweOptions.config.optimization = {
+      ...prevWebpackMiddlewarweOptions.config.optimization,
       splitChunks: {
-        ...(prevConfig.config.optimization?.splitChunks || {}),
+        ...(prevWebpackMiddlewarweOptions.config.optimization?.splitChunks ||
+          {}),
         cacheGroups: {
-          ...(prevConfig.config.optimization?.splitChunks || {}).cacheGroups,
+          ...(
+            prevWebpackMiddlewarweOptions.config.optimization?.splitChunks || {}
+          ).cacheGroups,
           styles: {
             name: 'styles',
             test: /\.(css|less)$/,
@@ -54,6 +68,6 @@ export default ({
       },
     };
 
-    return prevConfig;
+    return prevWebpackMiddlewarweOptions;
   },
 });

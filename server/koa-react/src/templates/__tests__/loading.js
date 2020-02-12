@@ -6,8 +6,8 @@ import ReactLoading from 'react-loading';
 
 import Loading from '../Loading';
 
-describe('Loading', () => {
-  test('Can not find main HTMLElement', () => {
+describe('loading', () => {
+  test('can not find main HTMLElement', () => {
     const mockLog = jest.fn();
 
     global.console.error = mockLog;
@@ -18,7 +18,7 @@ describe('Loading', () => {
     expect(mockLog).toHaveBeenCalled();
   });
 
-  test('work', () => {
+  test('can render', () => {
     const main = global.document.createElement('main');
 
     main.setAttribute('id', '__MIKOJS__');

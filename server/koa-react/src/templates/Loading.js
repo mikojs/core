@@ -1,47 +1,37 @@
 // @flow
 
-import React, { type Node as NodeType } from 'react';
+import React, { useEffect, type Node as NodeType } from 'react';
 import ReactDOM from 'react-dom';
 import ReactLoading from 'react-loading';
 
 import styles from './styles/loading';
 
-type propsType = {};
+type propsType = {||};
 
-/** render the loading page */
-export default class Loading extends React.PureComponent<propsType> {
-  rootDOM: HTMLElement;
-  loadingDOM: HTMLElement;
+/** @react render the loading page */
+const Loading = (): NodeType => {
+  const loadingDOM = document.createElement('div');
 
-  /** @react */
-  constructor(props: propsType) {
-    super(props);
-
-    this.rootDOM =
+  useEffect((): (() => void) => {
+    const rootDOM =
       document.getElementById('__MIKOJS__') ||
       (() => {
         throw new Error('Can not find main HTMLElement');
       })();
-    this.loadingDOM = document.createElement('div');
-  }
 
-  /** @react */
-  componentDidMount() {
-    this.rootDOM.appendChild(this.loadingDOM);
-  }
+    rootDOM.appendChild(loadingDOM);
 
-  /** @react */
-  componentWillUnmount() {
-    this.rootDOM.removeChild(this.loadingDOM);
-  }
+    return () => {
+      rootDOM.removeChild(loadingDOM);
+    };
+  }, []);
 
-  /** @react */
-  render(): NodeType {
-    return ReactDOM.createPortal(
-      <div style={styles}>
-        <ReactLoading type="cylon" color="#80D8FF" />
-      </div>,
-      this.loadingDOM,
-    );
-  }
-}
+  return ReactDOM.createPortal(
+    <div style={styles}>
+      <ReactLoading type="cylon" color="#80D8FF" />
+    </div>,
+    loadingDOM,
+  );
+};
+
+export default React.memo<propsType>(Loading);

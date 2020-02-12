@@ -1,24 +1,24 @@
 // @flow
 
-import debug from 'debug';
 import webpack, {
   type WebpackError as webpackErrorType,
   type Stats as statsType,
 } from 'webpack';
+import debug from 'debug';
 
-import { type configType } from '../index';
+import { type webpackMiddlewarweOptionsType } from '../index';
 
-const debugLog = debug('react:buildJs');
+const debugLog = debug('react:build-js');
 
 /**
  * @example
- * buildJs(config)
+ * buildJs(options)
  *
- * @param {configType} config - koa webpack config
+ * @param {webpackMiddlewarweOptionsType} options - webpack middleware options
  *
- * @return {{ string: string }} - js filenames which are build from webpack
+ * @return {Promise} - chunk names
  */
-export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
+export default ({ config, devMiddleware }: webpackMiddlewarweOptionsType) =>
   new Promise<{
     [string]: string,
   }>((resolve, reject) => {
@@ -39,7 +39,7 @@ export default ({ config, devMiddleware: { stats: logStats } }: configType) =>
 
       const { log } = console;
 
-      log(stats.toString({ logStats, colors: true }));
+      log(stats.toString({ logStats: devMiddleware?.stats, colors: true }));
       resolve(stats.toJson().assetsByChunkName);
     });
   });

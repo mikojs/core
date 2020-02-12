@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type Node as NodeType, type ComponentType } from 'react';
+import React, { type Node as NodeType } from 'react';
 import {
   QueryRenderer,
   fetchQuery,
@@ -10,18 +10,26 @@ import {
 } from 'react-relay';
 import { type SSRCache as SSRCacheType } from 'react-relay-network-modern-ssr/node8/server';
 
-import { type mainCtxType } from '@mikojs/koa-react/lib/types';
+import {
+  type mainInitialArguType,
+  type pageComponentType,
+} from '@mikojs/react-ssr';
 
 import { initEnvironment, createEnvironment } from 'utils/createEnvironment';
 
-type pageComponentType = ComponentType<*> & {|
-  query: GraphQLTaggedNodeType,
-|};
+type pageType = pageComponentType<
+  {},
+  {
+    variables?: VariablesType,
+  },
+> & {
+  query?: GraphQLTaggedNodeType,
+};
 
 type propsType = {|
   variables?: VariablesType,
   relayData?: SSRCacheType,
-  Page: pageComponentType,
+  Page: pageType,
   children: <P>(props: P) => NodeType,
 |};
 
@@ -60,20 +68,16 @@ const Main = ({
  * @example
  * Main.getInitialProps(ctx)
  *
- * @param {mainCtxType} ctx - context from @mikojs/koa-react
+ * @param {mainInitialArguType} ctx - context from @mikojs/koa-react
  *
  * @return {propsType} - initial props
  */
 Main.getInitialProps = async ({
   Page,
   pageProps: { variables },
-}: mainCtxType<
-  {
-    variables?: VariablesType,
-  },
-  {},
-  pageComponentType,
->): Promise<$Diff<propsType, { Page: mixed, children: mixed }>> => {
+}: mainInitialArguType<{}, pageType>): Promise<
+  $Diff<propsType, { Page: mixed, children: mixed }>,
+> => {
   try {
     if (initEnvironment && Page.query) {
       const { environment, relaySSR } = initEnvironment();

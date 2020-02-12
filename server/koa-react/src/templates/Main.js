@@ -1,8 +1,12 @@
 // @flow
 
-import { type Node as NodeType } from 'react';
+import React, { type Node as NodeType } from 'react';
+
+type propsType = {|
+  children: () => NodeType,
+|};
 
 /** @react control the all page Components */
-const Main = ({ children }: {| children: () => NodeType |}) => children();
+const Main = ({ children }: propsType) => children();
 
-export default Main;
+export default React.memo<propsType>(Main);

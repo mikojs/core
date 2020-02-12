@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@mikojs/react-ssr",
   "description": "Use to render the component with the server rendering and the client rendering.",
   "license": "MIT",
@@ -13,6 +12,7 @@
     "multistream": "^4.0.0",
     "react-helmet": "^5.2.1",
     "react-is": "^16.12.0",
+    "react-router": "^5.1.2",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.1.2"
   },

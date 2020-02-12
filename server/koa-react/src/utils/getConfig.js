@@ -6,42 +6,40 @@ import webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 
-import type CacheType from './Cache';
+import { type optionsType } from '../index';
 
-const CLIENT_PATH = path.resolve(__dirname, './client.js');
-const ROOT_PATH = path.resolve(__dirname, './Root.js');
+import { type cacheType } from './getCache';
 
 /**
  * @example
- * getConfig(true, '/folder-path', '/', data)
+ * getConfig('/', optinos, cache, '/client.js')
  *
- * @param {boolean} dev - is dev or not
- * @param {string} folderPath - folder path
- * @param {string} basename - basename to join url
- * @param {RegExp} exclude - exclude file path
- * @param {CacheType} cache - cache data
+ * @param {string} folderPath - the folder path
+ * @param {optionsType} options - koa react options
+ * @param {cacheType} cache - cache data
+ * @param {string} clientPath - the client path
  *
  * @return {object} - webpack config
  */
 export default (
-  dev: boolean,
   folderPath: string,
-  basename: ?string,
-  exclude?: RegExp,
-  cache: CacheType,
+  {
+    dev = process.env.NODE_ENV !== 'production',
+    basename,
+    extensions = /\.js$/,
+    exclude,
+  }: optionsType,
+  cache: cacheType,
+  clientPath: string,
 ) => ({
   mode: dev ? 'development' : 'production',
   devtool: dev ? 'eval' : false,
-  entry: !basename
-    ? {
-        client: ['react-hot-loader/patch', CLIENT_PATH],
-      }
-    : {
-        [`${basename.replace(/^\//, '')}/client`]: [
-          'react-hot-loader/patch',
-          CLIENT_PATH,
-        ],
-      },
+  entry: {
+    [[basename?.replace(/^\//, ''), 'client'].filter(Boolean).join('/')]: [
+      'react-hot-loader/patch',
+      clientPath,
+    ],
+  },
   output: {
     path: dev ? undefined : path.resolve('./public/js'),
     publicPath: dev ? '/assets/' : '/public/js/',
@@ -63,9 +61,9 @@ export default (
         default: false,
         vendors: false,
         commons: {
-          name: !basename
-            ? 'commons'
-            : `${basename.replace(/^\//, '')}/commons`,
+          name: [basename?.replace(/^\//, ''), 'commons']
+            .filter(Boolean)
+            .join('/'),
           chunks: 'all',
           minChunks:
             cache.routesData.length > 2 ? cache.routesData.length * 0.5 : 2,
@@ -82,24 +80,8 @@ export default (
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        include: [CLIENT_PATH, ROOT_PATH, folderPath],
-        loader: 'babel-loader',
-        options: {
-          plugins: [
-            [
-              path.resolve(__dirname, './babel.js'),
-              {
-                cacheDir: cache.cacheDir,
-              },
-            ],
-            'react-hot-loader/babel',
-          ],
-        },
-      },
-      {
-        test: /\.jsx?$/,
-        exclude: [/node_modules/, folderPath],
+        test: extensions,
+        include: [clientPath, folderPath],
         loader: 'babel-loader',
         options: {
           plugins: ['react-hot-loader/babel'],

@@ -1,6 +1,6 @@
 // @flow
 
-import { type configType } from '@mikojs/koa-react';
+import { type webpackMiddlewarweOptionsType } from '@mikojs/koa-react';
 
 import useCss from '../index.js';
 
@@ -12,9 +12,13 @@ describe('use-css', () => {
     ${{ module: { rules: [] } }}
   `(
     'config = $config',
-    ({ config }: {| config: $PropertyType<configType, 'config'> |}) => {
+    ({
+      config,
+    }: {|
+      config: $PropertyType<webpackMiddlewarweOptionsType, 'config'>,
+    |}) => {
       expect(
-        useCss().config(
+        useCss().webpackMiddlewarweOptions(
           {
             config,
             devMiddleware: {},

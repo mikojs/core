@@ -1,290 +1,136 @@
 // @flow
 
-import fs from 'fs';
 import path from 'path';
 
-import debug from 'debug';
-import {
-  type Middleware as koaMiddlewareType,
-  type Context as koaContextType,
-} from 'koa';
+import { type Middleware as MiddlewareType } from 'koa';
 import compose from 'koa-compose';
 import { type WebpackOptions as WebpackOptionsType } from 'webpack';
-import { invariant, emptyFunction } from 'fbjs';
-import outputFileSync from 'output-file-sync';
+import { emptyFunction } from 'fbjs';
 import address from 'address';
 
-import {
-  handleUnhandledRejection,
-  requireModule,
-  mockChoice,
-} from '@mikojs/utils';
+import { d3DirTree, requireModule } from '@mikojs/utils';
+import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
-import Cache, { type handlerType } from './utils/Cache';
+import getCache, { type cacheType } from './utils/getCache';
 import getConfig from './utils/getConfig';
+import writeClient from './utils/writeClient';
+import buildServer from './utils/buildServer';
 import buildJs from './utils/buildJs';
-import buildStatic, {
-  type optionsType as buildStaticOptionsType,
-} from './utils/buildStatic';
-import server from './utils/server';
 
-import { type propsType } from './components/Root';
-import { type wrapperType } from './components/testRender';
-
-// TODO: use koa-webpack type
-export type configType = {
+export type webpackMiddlewarweOptionsType = {
   config: WebpackOptionsType,
-  devMiddleware: {|
+  devMiddleware: {
     stats?: $PropertyType<
       $NonMaybeType<$PropertyType<WebpackOptionsType, 'devServer'>>,
       'stats',
     >,
-  |},
+  },
 };
 
 export type optionsType = {|
   dev?: boolean,
-  config?: (config: configType, dev: boolean) => configType,
-  handler?: handlerType,
   basename?: string,
+  extensions?: RegExp,
   exclude?: RegExp,
+  webpackMiddlewarweOptions?: (
+    options: webpackMiddlewarweOptionsType,
+    dev: boolean,
+  ) => webpackMiddlewarweOptionsType,
+  handler?: (
+    routesData: $PropertyType<cacheType, 'routesData'>,
+  ) => $PropertyType<cacheType, 'routesData'>,
 |};
 
-handleUnhandledRejection();
+export type returnType = {|
+  update: (filePath: string) => void,
+  middleware: MiddlewareType,
+  client: MiddlewareType,
+  server: MiddlewareType,
+  buildJs: () => Promise<{ [string]: string }>,
+|};
 
-const debugLog = debug('react');
+/**
+ * @example
+ * react('/')
+ *
+ * @param {string} folderPath - the folder path
+ * @param {optionsType} options - koa react options
+ *
+ * @return {returnType} - koa react functions
+ */
+export default async (
+  folderPath: string,
+  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
+  options?: optionsType = {},
+): Promise<returnType> => {
+  const cache = getCache(folderPath, options);
+  const {
+    dev = process.env.NODE_ENV !== 'production',
+    extensions = /\.js$/,
+    exclude,
+    webpackMiddlewarweOptions: webpackMiddlewarweOptionsFunc = emptyFunction.thatReturnsArgument,
+  } = options;
 
-/** koa-react */
-export default class React {
-  store: {|
-    cache: Cache,
-    dev: boolean,
-    config: configType,
-    basename?: string,
-    basenamePath: string,
-    urls: {|
-      clientUrl: string,
-      commonsUrl: string,
-    |},
-    urlsFilePath: string | null,
-  |};
+  d3DirTree(folderPath, {
+    extensions,
+    exclude,
+  })
+    .leaves()
+    .forEach(({ data: { path: filePath } }: d3DirTreeNodeType) => {
+      cache.addPage(filePath);
+    });
 
-  /**
-   * @example
-   * new React('folder path')
-   *
-   * @param {string} folderPath - folder path
-   * @param {optionsType} options - koa-react options
-   */
-  constructor(
-    folderPath: string,
+  const clientPath = writeClient(cache, options);
+  const webpackMiddlewarweOptions = webpackMiddlewarweOptionsFunc(
     {
-      dev = true,
-      config: configFunc = emptyFunction.thatReturnsArgument,
-      handler = emptyFunction.thatReturnsArgument,
-      basename,
-      exclude,
-    }: optionsType = {},
-  ) {
-    invariant(
-      fs.existsSync(folderPath),
-      `\`${path.relative(
-        process.cwd(),
-        folderPath,
-      )}\` folder can not be found.`,
-    );
-
-    debugLog({
-      folderPath,
-      dev,
-      basename,
-    });
-
-    const cache = new Cache(folderPath, handler, basename, exclude);
-    const config = configFunc(
-      {
-        config: getConfig(dev, folderPath, basename, exclude, cache),
-        devMiddleware: {
-          stats: {
-            maxModules: 0,
-            colors: true,
-          },
-        },
-        hotClient: {
-          logLevel: 'warn',
-          host: address.ip(),
+      config: getConfig(folderPath, options, cache, clientPath),
+      devMiddleware: {
+        serverSideRender: true,
+        stats: {
+          maxModules: 0,
+          colors: true,
         },
       },
-      dev,
-    );
-
-    invariant(
-      config.config.output && config.config.output.publicPath,
-      '`{  publicPath }` in `config.config.output` can not be null',
-    );
-
-    const { path: urlsPath, publicPath } = config.config.output;
-    const basenamePath = basename ? `${basename.replace(/^\//, '')}/` : '';
-
-    this.store = {
-      cache,
-      dev,
-      config,
-      basename,
-      basenamePath,
-      urls: {
-        clientUrl: `${publicPath}${basenamePath}client.js`,
-        commonsUrl: `${publicPath}${basenamePath}commons.js`,
+      hotClient: {
+        logLevel: 'warn',
+        host: address.ip(),
       },
-      urlsFilePath: !urlsPath
-        ? null
-        : path.resolve(urlsPath, basenamePath, 'urls.json'),
-    };
+    },
+    dev,
+  );
 
-    debugLog(this.store);
-  }
-
-  /**
-   * @example
-   * react.update('filePath')
-   *
-   * @param {string} filePath - file path to watch
-   */
-  +update = (filePath: string) => {
-    this.store.cache.update(filePath);
-  };
-
-  /**
-   * @example
-   * await react.buildJs()
-   */
-  +buildJs = async () => {
-    const { config, basenamePath, urlsFilePath } = this.store;
-
-    // FIXME: avoid to trigger webpack again
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    invariant(
-      config.config.output && config.config.output.publicPath,
-      '`{ publicPath }` in `config.config.output` can not be null',
-    );
-
-    const { publicPath } = config.config.output;
-    const chunkNames = await buildJs(config);
-
-    debugLog(chunkNames);
-
-    ['client', 'commons'].forEach((key: string) => {
-      const name = `${basenamePath}${key}`;
-
-      if (chunkNames[name])
-        this.store.urls[`${key}Url`] = `${publicPath}${chunkNames[name]}`;
-    });
-
-    debugLog(this.store.urls);
-    outputFileSync(urlsFilePath, JSON.stringify(this.store.urls));
-  };
-
-  /**
-   * @example
-   * await react.buildStatic(options)
-   *
-   * @param {buildStaticOptionsType} options - build static options
-   */
-  +buildStatic = async (options?: buildStaticOptionsType) => {
-    const { cache, urls, urlsFilePath } = this.store;
-
-    if (urlsFilePath) {
-      try {
-        this.store.urls = requireModule(urlsFilePath);
-      } catch (e) {
-        if (!/Cannot find module/.test(e.message)) throw e;
-      }
-    }
-
-    await buildStatic(cache, urls.commonsUrl, options);
-  };
-
-  /**
-   * @example
-   * await react.middleware()
-   *
-   * @return {Function} - koa-react middleware
-   */
-  +middleware = async (): Promise<koaMiddlewareType> => {
-    const { cache, dev, config, basename, urls, urlsFilePath } = this.store;
-
-    invariant(
-      config.config.output &&
-        (dev || (config.config.output.path && config.config.output.publicPath)),
-      '`{ path, publicPath }` in `config.config.output` can not be null',
-    );
-
-    const { path: urlsPath, publicPath } = config.config.output;
-
-    try {
-      if (!dev && urlsFilePath) this.store.urls = requireModule(urlsFilePath);
-    } catch (e) {
-      invariant(
-        !/Cannot find module/.test(e.message),
-        'Use buildJs before running prod mode',
+  const client = dev
+    ? await require('koa-webpack')(webpackMiddlewarweOptions)
+    : await requireModule(path.resolve(__dirname, './utils/buildProdClient'))(
+        webpackMiddlewarweOptions,
       );
+  const server = buildServer(options, cache);
 
-      throw e;
-    }
+  return {
+    // update
+    update: (filePath: string) => {
+      if (
+        !extensions.test(filePath) ||
+        exclude?.test(filePath) ||
+        !new RegExp(path.resolve(folderPath)).test(filePath)
+      )
+        return;
 
-    // FIXME: avoid to trigger webpack again
-    await new Promise(resolve => setTimeout(resolve, 1000));
+      cache.addPage(filePath);
+      writeClient(cache, options);
+    },
 
-    return compose([
-      dev
-        ? await mockChoice(
-            process.env.NODE_ENV === 'test',
-            emptyFunction.thatReturns(
-              async (ctx: koaContextType, next: () => Promise<void>) => {
-                await next();
-              },
-            ),
-            require('koa-webpack'),
-            config,
-          )
-        : require('koa-mount')(publicPath, require('koa-static')(urlsPath)),
-      server(basename, cache, urls),
-    ]);
+    // middleware
+    middleware: compose([client, server]),
+
+    // client
+    client,
+
+    // server
+    // $FlowFixMe TODO: can not extend koa context type
+    server,
+
+    // build js
+    buildJs: () => buildJs(webpackMiddlewarweOptions),
   };
-
-  /**
-   * @example
-   * await react.render({})
-   *
-   * @param {string} to - the link to render the first page
-   * @param {object} props - the props to render the component
-   *
-   * @return {wrapperType} - testing wrapper component
-   */
-  +render = (
-    to: string,
-    props?: {|
-      Main?: $PropertyType<propsType<>, 'Main'>,
-      Loading?: $PropertyType<propsType<>, 'Loading'>,
-      Error?: $PropertyType<propsType<>, 'Error'>,
-      routesData?: $PropertyType<propsType<>, 'routesData'>,
-      InitialPage?: $PropertyType<propsType<>, 'InitialPage'>,
-      mainInitialProps?: $PropertyType<propsType<>, 'mainInitialProps'>,
-      pageInitialProps?: $PropertyType<propsType<>, 'pageInitialProps'>,
-    |},
-  ): wrapperType => {
-    const { cache } = this.store;
-
-    return requireModule(path.resolve(__dirname, './components/testRender'))(
-      {
-        Main: requireModule(cache.main),
-        Loading: requireModule(cache.loading),
-        Error: requireModule(cache.error),
-        routesData: cache.routesData,
-        ...props,
-      },
-      to,
-    );
-  };
-}
+};

@@ -13,7 +13,7 @@ import { emptyFunction } from 'fbjs';
 import server, { type contextType } from '@mikojs/server';
 import base from '@mikojs/koa-base';
 import koaGraphql from '@mikojs/koa-graphql';
-import React from '@mikojs/koa-react';
+import koaReact from '@mikojs/koa-react';
 import useCss from '@mikojs/use-css';
 import useLess from '@mikojs/use-less';
 
@@ -34,10 +34,6 @@ export default async ({
   close,
 }: contextType): Promise<?http$Server> => {
   const graphql = koaGraphql(path.resolve(dir, './graphql'));
-  const react = new React(
-    path.resolve(dir, './pages'),
-    { dev, exclude: /__generated__/ } |> useCss |> useLess,
-  );
 
   await graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']);
 
@@ -54,6 +50,11 @@ export default async ({
     close();
     return null;
   }
+
+  const react = await koaReact(
+    path.resolve(dir, './pages'),
+    { dev, exclude: /__generated__/ } |> useCss |> useLess,
+  );
 
   return (
     server.init()

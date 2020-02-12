@@ -15,14 +15,15 @@ jest.mock('@mikojs/koa-graphql', () =>
   }),
 );
 
-jest.mock(
-  '@mikojs/koa-react',
-  () =>
-    class MockReact {
-      middleware = () => async (ctx: mixed, next: () => Promise<void>) => {
+jest.mock('@mikojs/koa-react', () =>
+  jest.fn().mockReturnValue({
+    runRelayCompiler: jest.fn(),
+    middleware: jest
+      .fn()
+      .mockReturnValue(async (ctx: mixed, next: () => Promise<void>) => {
         await next();
-      };
-    },
+      }),
+  }),
 );
 
 describe('server', () => {

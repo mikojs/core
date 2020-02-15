@@ -18,7 +18,7 @@ export type filesDataType = $ReadOnlyArray<{|
  * @return {object} - configsFiles object to generate the files
  */
 const findFiles = (cliName: string): ?{ [string]: filesDataType } => {
-  const { configsFiles = {}, ignore: getIgnore } = configs.store[cliName];
+  const { configsFiles = {}, ignore: getIgnore } = configs.get(cliName);
   const { name: ignoreName, ignore = [] } = getIgnore?.() || {};
 
   if (Object.keys(configsFiles).length === 0) return null;

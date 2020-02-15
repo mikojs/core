@@ -15,7 +15,7 @@ jest.mock('../sendToServer', () => (data: mixed, callback: () => void) => {
 
 describe('generate files', () => {
   beforeAll(() => {
-    configs.handleCustomConfigs({
+    configs.loadConfig({
       config: {
         cliStr: emptyFunction.thatReturnsArgument,
         cliFunc: {

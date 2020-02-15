@@ -14,7 +14,7 @@ const babelCli = npmWhich(process.cwd()).sync('babel');
 
 describe('cli options', () => {
   beforeAll(() => {
-    configs.handleCustomConfigs({
+    configs.loadConfig({
       config: {
         notFoundCommand: {},
         runError: {
@@ -82,7 +82,7 @@ describe('cli options', () => {
         env: {},
         cliName,
       });
-      expect(configs.store.runCmd.configsFiles).toEqual({
+      expect(configs.get('runCmd').configsFiles).toEqual({
         jest: true,
       });
     },

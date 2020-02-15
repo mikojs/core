@@ -49,7 +49,7 @@ const printInfo = (cliName: ?string): boolean => {
   const { info } = console;
 
   if (cliName) {
-    const config = configs.store[cliName];
+    const config = configs.get(cliName);
 
     if (!config) {
       logger
@@ -114,7 +114,7 @@ const printInfo = (cliName: ?string): boolean => {
   } else {
     logger.info('Here are the all config names which you can use:');
     info();
-    Object.keys(configs.store).forEach((key: string) => {
+    configs.all().forEach((key: string) => {
       info(`  - ${key}`);
     });
     info();
@@ -139,7 +139,7 @@ const validateCliName = (cliName: ?string): boolean => {
     return false;
   }
 
-  if (!configs.store[cliName]) {
+  if (!configs.get(cliName)) {
     logger
       .fail(chalk`Can not find {cyan \`${cliName}\`} in configs`)
       .fail(chalk`Use {green \`info\`} to get the more information`);
@@ -190,19 +190,13 @@ const getOptions = ({
 |}): optionType => {
   if (!validateCliName(cliName)) return false;
 
-  if (configs.store[cliName] && configsFiles instanceof Array)
-    configsFiles.forEach((key: string) => {
-      if (!configs.store[cliName].configsFiles)
-        configs.store[cliName].configsFiles = {};
-
-      configs.store[cliName].configsFiles[key] = true;
-    });
+  configs.addConfigsFilesToConfig(cliName, configsFiles || []);
 
   const {
     alias: cli = cliName,
     run = emptyFunction.thatReturnsArgument,
     env = {},
-  } = configs.store[cliName];
+  } = configs.get(cliName);
   const rawArgsFiltered = rawArgs
     .slice(2)
     .filter(
@@ -308,7 +302,7 @@ export default async (argv: $ReadOnlyArray<string>): Promise<optionType> =>
             : {
                 cli: 'install',
                 argv: (
-                  configs.store[cliName].install ||
+                  configs.get(cliName).install ||
                   emptyFunction.thatReturnsArgument
                 )(['yarn', 'add', '--dev']),
                 env: {},

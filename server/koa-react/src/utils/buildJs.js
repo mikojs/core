@@ -8,7 +8,7 @@ import debug from 'debug';
 
 import { type webpackMiddlewarweOptionsType } from '../index';
 
-const debugLog = debug('react:build-js');
+const debugLog = debug('react:buildJs');
 
 /**
  * @example

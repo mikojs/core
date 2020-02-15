@@ -17,7 +17,7 @@ type returnType = {|
   filePath: string,
 |};
 
-const debugLog = debug('react:get-file-type');
+const debugLog = debug('react:getFileType');
 
 /**
  * @example

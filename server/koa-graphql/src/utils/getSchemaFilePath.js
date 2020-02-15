@@ -7,7 +7,7 @@ import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
 import debug from 'debug';
 
-const debugLog = debug('graphql:get-schema-file-path');
+const debugLog = debug('graphql:getSchemaFilePath');
 
 /**
  * @example

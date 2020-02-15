@@ -1,120 +1,69 @@
-/**
- * fixme-flow-file-annotation
- *
- * TODO: Flow not support @babel/plugin-proposal-pipeline-operator
- * https://github.com/facebook/flow/issues/5443
- */
-/* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
+// @flow
 
 import path from 'path';
 
 import { cosmiconfigSync } from 'cosmiconfig';
-import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
-import { type objConfigType, type configsType } from '../types';
+import { type configsType } from '../types';
+
+import buildCache from './buildCache';
 
 import defaultConfigs from 'configs';
 
-const debugLog = debug('configs:configs');
+type configObjType = {|
+  config: configsType | $ReadOnlyArray<configsType>,
+  filepath: string,
+|};
 
-/** Store configs */
-export class Configs {
-  +store: { [string]: objConfigType } = {};
+const cache = buildCache();
+const debugLog = debug('configs:readConfigs');
+let customConfigsPath: ?string = null;
+let rootDir: string = process.cwd();
 
-  rootDir = process.cwd();
+/**
+ * @example
+ * loadConfig()
+ *
+ * @param {configObjType} configObj - config object
+ */
+const loadConfig = (configObj: ?configObjType) => {
+  debugLog(configObj);
 
-  customConfigsPath = null;
+  if (!configObj) return;
 
-  /**
-   * @example
-   * configs.handleCustomConfigs()
-   *
-   * @param {{ config: configsType, filepath: string }} customConfigsObj - custom config
-   */
-  +handleCustomConfigs = (
-    customConfigsObj: ?{
-      config: configsType | $ReadOnlyArray<configsType>,
-      filepath: string,
-    },
-  ) => {
-    if (!customConfigsObj) return;
+  const { config: configs, filepath } = configObj;
 
-    const {
-      config: customConfigs,
-      filepath: customConfigsPath,
-    } = customConfigsObj;
+  if (filepath !== __dirname) {
+    debugLog(configObj);
+    customConfigsPath = filepath;
+    rootDir = path.dirname(filepath);
+  }
 
-    if (customConfigsPath !== __dirname) {
-      debugLog(customConfigsObj);
-      this.customConfigsPath = customConfigsPath;
-      this.rootDir = path.dirname(customConfigsPath);
-    }
-
-    if (customConfigs instanceof Array) {
-      customConfigs.forEach((eachCustomConfig: configsType) => {
-        this.handleCustomConfigs({
-          config: eachCustomConfig,
-          filepath: __dirname,
-        });
+  if (configs instanceof Array) {
+    configs.forEach((config: configsType) => {
+      loadConfig({
+        config,
+        filepath: __dirname,
       });
-      return;
-    }
-
-    Object.keys(customConfigs).forEach((key: string) => {
-      const customConfig: objConfigType =
-        typeof customConfigs[key] !== 'function'
-          ? customConfigs[key]
-          : { config: customConfigs[key] };
-      const config = this.store[key];
-
-      if (!config) {
-        this.store[key] = customConfig;
-        return;
-      }
-
-      this.store[key] = {
-        alias: customConfig.alias || config.alias,
-        install: (install: $ReadOnlyArray<string>) =>
-          install
-          |> config.install || emptyFunction.thatReturnsArgument
-          |> customConfig.install || emptyFunction.thatReturnsArgument,
-        config: (configObj: {}) =>
-          configObj
-          |> config.config || emptyFunction.thatReturnsArgument
-          |> customConfig.config || emptyFunction.thatReturnsArgument,
-        ignore: (ignore?: {|
-          name?: string,
-          ignore?: $ReadOnlyArray<string>,
-        |}) =>
-          ignore
-          |> config.ignore || emptyFunction.thatReturnsArgument
-          |> customConfig.ignore || emptyFunction.thatReturnsArgument,
-        run: (argv: $ReadOnlyArray<string>) =>
-          argv
-          |> config.run || emptyFunction.thatReturnsArgument
-          |> customConfig.run || emptyFunction.thatReturnsArgument,
-        env: {
-          ...(config.env || {}),
-          ...(customConfig.env || {}),
-        },
-        configsFiles: {
-          ...(config.configsFiles || {}),
-          ...(customConfig.configsFiles || {}),
-        },
-      };
     });
+    return;
+  }
 
-    debugLog(this.store);
-  };
-}
+  cache.addConfig(configs);
+};
 
-const configs = new Configs();
-
-configs.handleCustomConfigs({
+loadConfig({
   config: defaultConfigs,
   filepath: __dirname,
 });
-configs.handleCustomConfigs(cosmiconfigSync('cat').search());
+loadConfig(cosmiconfigSync('cat').search());
 
-export default configs;
+export default {
+  customConfigsPath,
+  rootDir,
+  loadConfig,
+  get: cache.get,
+  all: cache.all,
+  addConfigsFilesToConfig: cache.addConfigsFilesToConfig,
+};

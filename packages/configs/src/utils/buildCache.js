@@ -11,8 +11,11 @@ import debug from 'debug';
 
 import { type objConfigType, type configsType } from '../types';
 
-type returnType = {|
+export type returnType = {|
   cache: { [string]: objConfigType },
+  get: (key: string) => objConfigType,
+  all: () => $ReadOnlyArray<string>,
+  addConfigsFilesToConfig: (key: string, configsFiles: $ReadOnlyArray<string>) => void,
   addConfig: (configs: configsType) => void,
 |};
 
@@ -29,6 +32,22 @@ export default (): returnType => {
 
   return {
     cache,
+
+    get: (key: string) => cache[key],
+
+    all: () => Object.keys(cache),
+
+    addConfigsFilesToConfig: (key: string, configsFiles: $ReadOnlyArray<string>) => {
+      if (!cache[key])
+        return;
+
+      configsFiles.forEach((configsFilesName: string) => {
+        cache[key].configsFiles = {
+          ...cache[key].configsFiles,
+          [configsFilesName]: true,
+        };
+      });
+    },
 
     addConfig: (configs: configsType) => {
       Object.keys(configs).forEach((key: string) => {

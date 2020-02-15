@@ -23,7 +23,7 @@ export type cacheType = {|
   addPage: (filePath: string) => void,
 |};
 
-const debugLog = debug('react:get-cache');
+const debugLog = debug('react:getCache');
 
 /**
  * @example

@@ -14,7 +14,7 @@ import { type optionsType } from '../index';
 
 import { type cacheType } from './getCache';
 
-const debugLog = debug('react:build-server');
+const debugLog = debug('react:buildServer');
 
 type ctxType = {
   ...koaContextType,

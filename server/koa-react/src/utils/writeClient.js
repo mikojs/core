@@ -18,7 +18,7 @@ const cacheDir = findCacheDir({
     .slice(0, 8),
   thunk: true,
 });
-const debugLog = debug('react:write-client');
+const debugLog = debug('react:writeClient');
 
 /**
  * @example

@@ -21,16 +21,16 @@ type infoType = {|
 
 /**
  * @example
- * printInfo('cliName')
+ * printInfo(logger, 'cliName')
  *
- * @param {string} cliName - cli name
  * @param {createLoggerType} logger - logger functions
+ * @param {string} cliName - cli name
  *
  * @return {boolean} - test result
  */
 export default (
-  cliName: ?string,
   logger: $Call<createLoggerType, string>,
+  cliName: ?string,
 ): boolean => {
   const { info } = console;
 

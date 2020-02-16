@@ -11,6 +11,7 @@ import { createLogger } from '@mikojs/utils';
 import { version } from '../../package.json';
 
 import printInfo from './printInfo';
+import validateCliName from './validateCliName';
 
 import configs from 'utils/configs';
 
@@ -25,32 +26,6 @@ type optionType =
 
 const debugLog = debug('configs:cliOptions');
 const logger = createLogger('@mikojs/configs');
-
-/**
- * @example
- * validateCliName('cliName')
- *
- * @param {string} cliName - cli name
- *
- * @return {boolean} - test result
- */
-const validateCliName = (cliName: ?string): boolean => {
-  if (!cliName) {
-    logger
-      .fail(chalk`Should give an argument at least`)
-      .fail(chalk`Use {green \`-h\`} to get the more information`);
-    return false;
-  }
-
-  if (!configs.get(cliName)) {
-    logger
-      .fail(chalk`Can not find {cyan \`${cliName}\`} in configs`)
-      .fail(chalk`Use {green \`info\`} to get the more information`);
-    return false;
-  }
-
-  return true;
-};
 
 /**
  * @example
@@ -91,7 +66,7 @@ const getOptions = ({
     long: string,
   |}>,
 |}): optionType => {
-  if (!validateCliName(cliName)) return false;
+  if (!validateCliName(logger, cliName)) return false;
 
   configs.addConfigsFilesToConfig(cliName, configsFiles || []);
 
@@ -190,7 +165,7 @@ export default async (argv: $ReadOnlyArray<string>): Promise<optionType> =>
       .usage(chalk`{green [command-type]}`)
       .description('print more info about configs')
       .action((cliName: ?string) => {
-        resolve(printInfo(cliName, logger));
+        resolve(printInfo(logger, cliName));
       });
 
     program
@@ -200,7 +175,7 @@ export default async (argv: $ReadOnlyArray<string>): Promise<optionType> =>
       .description('install packages by config')
       .action((cliName: string) => {
         resolve(
-          !validateCliName(cliName)
+          !validateCliName(logger, cliName)
             ? false
             : {
                 cli: 'install',
@@ -221,7 +196,7 @@ export default async (argv: $ReadOnlyArray<string>): Promise<optionType> =>
       .description('use to remove the generated files and the server')
       .action((cliName: string) => {
         resolve(
-          !validateCliName(cliName)
+          !validateCliName(logger, cliName)
             ? false
             : {
                 cli: 'remove',
@@ -232,6 +207,6 @@ export default async (argv: $ReadOnlyArray<string>): Promise<optionType> =>
         );
       });
 
-    if (argv.length === 2) resolve(validateCliName());
+    if (argv.length === 2) resolve(validateCliName(logger));
     else program.parse([...argv]);
   });

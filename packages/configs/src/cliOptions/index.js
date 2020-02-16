@@ -10,7 +10,7 @@ import { createLogger } from '@mikojs/utils';
 
 import { version } from '../../package.json';
 
-import configs from './configs';
+import configs from 'utils/configs';
 
 type optionType =
   | boolean

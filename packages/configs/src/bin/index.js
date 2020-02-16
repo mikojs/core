@@ -13,11 +13,12 @@ import rimraf from 'rimraf';
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import configs from 'utils/configs';
-import cliOptions from 'utils/cliOptions';
 import findMainServer from 'utils/findMainServer';
 import sendToServer from 'utils/sendToServer';
 import findFiles, { type filesDataType } from 'utils/findFiles';
 import generateFiles from 'utils/generateFiles';
+
+import cliOptions from 'cliOptions';
 
 const logger = createLogger('@mikojs/configs');
 

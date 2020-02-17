@@ -12,10 +12,12 @@ import debug from 'debug';
 import { type objConfigType, type configsType } from '../types';
 
 export type returnType = {|
-  cache: { [string]: objConfigType },
   get: (key: string) => objConfigType,
   all: () => $ReadOnlyArray<string>,
-  addConfigsFilesToConfig: (key: string, configsFiles: $ReadOnlyArray<string>) => void,
+  addConfigsFilesToConfig: (
+    key: string,
+    configsFiles: $ReadOnlyArray<string>,
+  ) => void,
   addConfig: (configs: configsType) => void,
 |};
 
@@ -28,25 +30,30 @@ const debugLog = debug('configs:buildCache');
  * @return {returnType} - cache data and functions
  */
 export default (): returnType => {
-  const cache = {};
+  const cache: { [string]: objConfigType } = {};
 
   return {
-    cache,
-
     get: (key: string) => cache[key],
 
     all: () => Object.keys(cache),
 
-    addConfigsFilesToConfig: (key: string, configsFiles: $ReadOnlyArray<string>) => {
-      if (!cache[key])
-        return;
-
-      configsFiles.forEach((configsFilesName: string) => {
-        cache[key].configsFiles = {
-          ...cache[key].configsFiles,
-          [configsFilesName]: true,
-        };
-      });
+    addConfigsFilesToConfig: (
+      key: string,
+      configsFiles: $ReadOnlyArray<string>,
+    ) => {
+      cache[key] = {
+        ...cache[key],
+        configsFiles: configsFiles.reduce(
+          (
+            result: $PropertyType<objConfigType, 'configsFiles'>,
+            configsFilesName: string,
+          ) => ({
+            ...result,
+            [configsFilesName]: true,
+          }),
+          cache[key]?.configsFiles || {},
+        ),
+      };
     },
 
     addConfig: (configs: configsType) => {
@@ -83,14 +90,23 @@ export default (): returnType => {
             argv
             |> prevConfig.run || emptyFunction.thatReturnsArgument
             |> newConfig.run || emptyFunction.thatReturnsArgument,
-          env: {
-            ...(prevConfig.env || {}),
-            ...(newConfig.env || {}),
-          },
-          configsFiles: {
-            ...(prevConfig.configsFiles || {}),
-            ...(newConfig.configsFiles || {}),
-          },
+          env: Object.keys(newConfig.env || {}).reduce(
+            (result: $PropertyType<objConfigType, 'env'>, envName: string) => ({
+              ...result,
+              [envName]: newConfig.env?.[envName],
+            }),
+            prevConfig.env,
+          ),
+          configsFiles: Object.keys(newConfig.configsFiles || {}).reduce(
+            (
+              result: $PropertyType<objConfigType, 'configsFiles'>,
+              configsFilesName: string,
+            ) => ({
+              ...result,
+              [configsFilesName]: newConfig.configsFiles?.[configsFilesName],
+            }),
+            prevConfig.configsFiles,
+          ),
         };
       });
 

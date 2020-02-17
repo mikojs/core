@@ -15,7 +15,7 @@ import fetch, { type Response as ResponseType } from 'node-fetch';
 export default async (
   path: string,
   method?: string = 'get',
-  options?: {} = {},
+  options?: mixed,
 ): Promise<string | {}> => {
   if (method === 'del')
     return fetch(`http://localhost:8000${path}`, {

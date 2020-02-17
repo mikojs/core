@@ -47,7 +47,5 @@ export default (
       },
     ).catch(debugLog);
 
-  return (
-    {} |> configs.store[cliName].config || emptyFunction.thatReturnsArgument
-  );
+  return {} |> configs.get(cliName).config || emptyFunction.thatReturnsArgument;
 };

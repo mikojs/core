@@ -15,7 +15,7 @@ jest.mock(
 
 describe('configs', () => {
   beforeAll(() => {
-    configs.handleCustomConfigs({
+    configs.loadConfig({
       config: {
         getConfig: {},
       },

@@ -28,7 +28,7 @@ export default async (cliName: string): Promise<boolean> => {
   const files = findFiles(cliName);
 
   if (!files) {
-    const { alias: cli = cliName } = configs.store[cliName];
+    const { alias: cli = cliName } = configs.get(cliName);
 
     logger
       .fail('Can not generate the config file, You can:')

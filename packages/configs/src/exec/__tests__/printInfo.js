@@ -16,7 +16,7 @@ test('print info', () => {
     },
   });
 
-  expect(mockLog).toHaveBeenNthCalledWith(1, 'lerna:babel');
-  expect(mockLog).toHaveBeenNthCalledWith(2, 'lerna:babel:watch');
-  expect(mockLog).toHaveBeenNthCalledWith(3, 'lerna:lint:watch');
+  expect(mockLog).toHaveBeenNthCalledWith(1, '  - lerna:babel');
+  expect(mockLog).toHaveBeenNthCalledWith(2, '  - lerna:babel:watch');
+  expect(mockLog).toHaveBeenNthCalledWith(3, '  - lerna:lint:watch');
 });

@@ -2,7 +2,7 @@
 
 /**
  * @example
- * getExecCommands(['lerna', 'babel'], {})
+ * getCommands(['lerna', 'babel'], {})
  *
  * @param {Array} keys - commands keys
  * @param {object} prevConfig - prev config
@@ -10,7 +10,7 @@
  *
  * @return {Array} - commands
  */
-const getExecCommands = (
+const getCommands = (
   [key, ...otherKeys]: $ReadOnlyArray<string>,
   prevConfig: {},
   rootConfig?: {} = prevConfig,
@@ -29,13 +29,13 @@ const getExecCommands = (
   if (!prevConfig[key]) return null;
 
   if (otherKeys.length !== 0)
-    return getExecCommands(otherKeys, prevConfig[key], rootConfig);
+    return getCommands(otherKeys, prevConfig[key], rootConfig);
 
   return prevConfig[key]?.reduce(
     (result: $ReadOnlyArray<string>, command: string) => [
       ...result,
       ...(/^exec:/.test(command)
-        ? getExecCommands(command.split(/:/).slice(1), rootConfig) ||
+        ? getCommands(command.split(/:/).slice(1), rootConfig) ||
           (() => {
             throw new Error(`Can not find \`${command}\` in the config`);
           })()
@@ -45,4 +45,4 @@ const getExecCommands = (
   );
 };
 
-export default getExecCommands;
+export default getCommands;

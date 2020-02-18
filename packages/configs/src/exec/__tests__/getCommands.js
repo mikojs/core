@@ -1,23 +1,23 @@
 // @flow
 
-import getExecCommands from '../getExecCommands';
+import getCommands from '../getCommands';
 
 import testings from './__ignore__/testings';
 
-describe('get exec commands', () => {
+describe('get commands', () => {
   test.each(testings)(
     'run command = %s with %j',
     (command: string, config: {}) => {
-      expect(getExecCommands(command.split(/:/), config)).toEqual(['cmd']);
+      expect(getCommands(command.split(/:/), config)).toEqual(['cmd']);
     },
   );
 
   test('not exist', () => {
-    expect(getExecCommands(['not', 'exist'], {})).toBeNull();
+    expect(getCommands(['not', 'exist'], {})).toBeNull();
   });
 
   test('not find exec command', () => {
-    expect(() => getExecCommands(['test'], { test: ['exec:error'] })).toThrow(
+    expect(() => getCommands(['test'], { test: ['exec:error'] })).toThrow(
       'Can not find `exec:error` in the config',
     );
   });

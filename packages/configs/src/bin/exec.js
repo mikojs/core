@@ -9,7 +9,7 @@ import debug from 'debug';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
-import getExecCommands from 'utils/getExecCommands';
+import getExecCommands from 'exec/getCommands';
 
 const logger = createLogger('@mikojs/configs (exec)');
 const debugLog = debug('configs:bin:exec');

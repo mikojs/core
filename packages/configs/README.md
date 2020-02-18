@@ -138,12 +138,30 @@ module.exports = [
 ];
 ```
 
+###### Exec configs
+
+```js
+module.exports = {
+  exec: config => ({
+    ...config,
+    key: [...],            // you can use `yarn configs exec key`
+    'key-a': {
+      key: [...],          // you can use `yarn configs exec key-a:key`
+      'key:watch': [...],  // you can use `yarn configs exec key-a:key:watch`
+    },
+  }),
+};
+```
+
+For example, if you write `{ key: ['ls', '-a'] }` and run `yarn configs exec key`, this will execute `ls -a`. On the other hand, you can find the all commands by `yarn configs exec info`. You can lerna the more information [here](./src/configs/exec.js).
+
 ###### Configs
 
-- [withReact](./src/withReact)
-- [withRelay](./src/withRelay)
-- [withCss](./src/withCss)
-- [withLess](./src/withLess)
-- [withServer](./src/withServer)
+- [withReact](./src/withReact.js)
+- [withRelay](./src/withRelay.js)
+- [withCss](./src/withCss.js)
+- [withLess](./src/withLess.js)
+- [withServer](./src/withServer.js)
+- [withLerna](./src/withLerna.js)
 
 You can write the custom config, too.

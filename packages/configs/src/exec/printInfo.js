@@ -11,7 +11,8 @@ const printInfo = (config: {}, prevKeys?: $ReadOnlyArray<string> = []) => {
   const { log } = console;
 
   Object.keys(config).forEach((key: string) => {
-    if (config[key] instanceof Array) log([...prevKeys, key].join(':'));
+    if (config[key] instanceof Array)
+      log(`  - ${[...prevKeys, key].join(':')}`);
     else printInfo(config[key], [...prevKeys, key]);
   });
 };

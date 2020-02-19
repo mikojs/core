@@ -3,10 +3,8 @@
 import path from 'path';
 
 import Koa, { type Middleware as koaMiddlewareType } from 'koa';
-import Router from 'koa-router';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
-import debug from 'debug';
 import ora from 'ora';
 import { emptyFunction } from 'fbjs';
 
@@ -16,9 +14,11 @@ import {
   createLogger,
 } from '@mikojs/utils';
 
-import Endpoint from './utils/Endpoint';
+import buildRouter, {
+  type returnType as buildRouterReturnType,
+} from './utils/buildRouter';
 
-type routerType = Router | Endpoint | Koa;
+type routerType = Koa | buildRouterReturnType;
 
 type watchFuncType = (filePath: string) => void;
 
@@ -32,7 +32,6 @@ export type contextType = {|
   close: () => void,
 |};
 
-const debugLog = debug('server');
 const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
 
 /**
@@ -48,20 +47,13 @@ const removeCache = (filePath: string) => {
 handleUnhandledRejection();
 
 export default {
-  start: (prefix: ?string): Router => {
-    debugLog({
-      method: 'start',
-      prefix,
-    });
-
-    return prefix ? new Router({ prefix }) : new Router();
-  },
-
-  get: (prefix: string) => new Endpoint(prefix, 'get'),
-  post: (prefix: string) => new Endpoint(prefix, 'post'),
-  put: (prefix: string) => new Endpoint(prefix, 'put'),
-  del: (prefix: string) => new Endpoint(prefix, 'del'),
-  all: (prefix: string) => new Endpoint(prefix, 'all'),
+  ...['start', 'get', 'post', 'put', 'del', 'all'].reduce(
+    (result: { [string]: $Call<typeof buildRouter, string> }, key: string) => ({
+      ...result,
+      [key]: buildRouter(key),
+    }),
+    {},
+  ),
 
   use: (middleware: koaMiddlewareType) => <-R: routerType>(router: R): R => {
     router.use(middleware);
@@ -69,77 +61,15 @@ export default {
     return router;
   },
 
-  end: (
-    router: Router | Endpoint,
-  ): (<-R: Router | Koa>(parentRouter: R) => R) => {
-    if (router instanceof Endpoint)
-      return <-R: Router | Koa>(parentRouter: R): R => {
-        /**
-         * TODO: https://github.com/facebook/flow/issues/2282
-         * instanceof not work
-         *
-         * $FlowFixMe
-         */
-        const {
-          // $FlowFixMe
-          urlPattern,
-          // $FlowFixMe
-          method,
-          // $FlowFixMe
-          middlewares,
-        } =
-          // $FlowFixMe
-          router;
+  end: (router: buildRouterReturnType) => <-R: routerType>(
+    parentRouter: R,
+  ): R => {
+    if (router.type === 'router') router.end();
 
-        if (!(parentRouter instanceof Router))
-          throw new Error(`\`server.${method}\` is not under \`server.start\``);
+    parentRouter.use(router.routes());
+    parentRouter.use(router.allowedMethods());
 
-        switch (method) {
-          case 'get':
-            parentRouter.get(urlPattern, ...middlewares);
-            break;
-
-          case 'post':
-            parentRouter.post(urlPattern, ...middlewares);
-            break;
-
-          case 'put':
-            parentRouter.put(urlPattern, ...middlewares);
-            break;
-
-          case 'del':
-            parentRouter.del(urlPattern, ...middlewares);
-            break;
-
-          case 'all':
-            parentRouter.all(urlPattern, ...middlewares);
-            break;
-
-          default:
-            throw new Error(
-              `can not find \`${method}\` method in \`koa-router\``,
-            );
-        }
-
-        return parentRouter;
-      };
-
-    return <-R: Router | Koa>(parentRouter: R): R => {
-      /**
-       * TODO: https://github.com/facebook/flow/issues/2282
-       * instanceof not work
-       */
-      parentRouter.use(
-        // $FlowFixMe
-        router.routes(),
-      );
-      parentRouter.use(
-        // $FlowFixMe
-        router.allowedMethods(),
-      );
-
-      return parentRouter;
-    };
+    return parentRouter;
   },
 
   watch: (dir: string, watchFuncs: $ReadOnlyArray<watchFuncType>) => <R>(

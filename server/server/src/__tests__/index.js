@@ -13,39 +13,9 @@ import server from '../index';
 import testServer from './__ignore__/testServer';
 import fetchServer from './__ignore__/fetchServer';
 
-import Endpoint from 'utils/Endpoint';
-
 let runningServer: http$Server;
 
 describe('server', () => {
-  test.each`
-    method
-    ${'get'}
-    ${'post'}
-    ${'put'}
-    ${'del'}
-    ${'all'}
-  `(
-    '`server.$method` is not under `server.start',
-    async ({ method }: {| method: string |}) => {
-      await expect(
-        (async () =>
-          (await server.init()) |> ('/test' |> server[method] |> server.end))(),
-      ).rejects.toThrow(`\`server.${method}\` is not under \`server.start\``);
-    },
-  );
-
-  test('can not find `test` method in `koa-router`', async () => {
-    await expect(
-      (async () =>
-        (await server.init())
-        |> (undefined
-          |> server.start
-          |> (new Endpoint('/test', 'test') |> server.end)
-          |> server.end))(),
-    ).rejects.toThrow('can not find `test` method in `koa-router`');
-  });
-
   test('server.watch work', async () => {
     const mockRouter = jest.fn();
 

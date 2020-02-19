@@ -3,10 +3,12 @@
 import { type Middleware as koaMiddlewareType } from 'koa';
 import Router from 'koa-router';
 
-type returnType = {|
+export type returnType = {|
   type: 'router',
+  routes: () => koaMiddlewareType,
+  allowedMethods: () => koaMiddlewareType,
   use: (middleware: koaMiddlewareType) => void,
-  end: () => $ReadOnlyArray<koaMiddlewareType>,
+  end: () => void,
 |};
 
 /**
@@ -19,18 +21,17 @@ type returnType = {|
  */
 export default (method: string) => (prefix?: string): returnType => {
   const middlewares = !prefix ? [] : [prefix];
+  const router = new Router();
 
   return {
     type: 'router',
+    routes: () => router.routes(),
+    allowedMethods: () => router.allowedMethods(),
     use: (middleware: koaMiddlewareType) => {
       middlewares.push(middleware);
     },
-    end: (): $ReadOnlyArray<koaMiddlewareType> => {
-      const router = new Router();
-
+    end: () => {
       router[method === 'start' ? 'use' : method](...middlewares);
-
-      return [router.routes(), router.allowedMethods()];
     },
   };
 };

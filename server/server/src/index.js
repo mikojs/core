@@ -1,9 +1,6 @@
 // @flow
 
-import path from 'path';
-
 import Koa, { type Middleware as koaMiddlewareType } from 'koa';
-import chokidar from 'chokidar';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 
@@ -13,8 +10,6 @@ import buildRouter, {
 import buildServer from './utils/buildServer';
 
 type routerType = Koa | buildRouterReturnType;
-
-type watchFuncType = (filePath: string) => void;
 
 export type contextType = {|
   src: string,
@@ -26,16 +21,6 @@ export type contextType = {|
   close: () => void,
 |};
 
-/**
- * @example
- * removeCache('/file-path')
- *
- * @param {string} filePath - remvoe cache from file path
- */
-const removeCache = (filePath: string) => {
-  delete require.cache[filePath];
-};
-
 handleUnhandledRejection();
 
 export default {
@@ -46,6 +31,7 @@ export default {
     }),
     {},
   ),
+  ...buildServer(),
 
   use: (middleware: koaMiddlewareType) => <-R: routerType>(router: R): R => {
     router.use(middleware);
@@ -63,25 +49,4 @@ export default {
 
     return parentRouter;
   },
-
-  watch: (dir: string, watchFuncs: $ReadOnlyArray<watchFuncType>) => <R>(
-    router: R,
-  ): R => {
-    chokidar
-      .watch(path.resolve(dir), {
-        ignoreInitial: true,
-      })
-      .on('all', (event: string, filePath: string) => {
-        if (!['add', 'change'].includes(event) || !/\.jsx?$/.test(filePath))
-          return;
-
-        [removeCache, ...watchFuncs].forEach((watchFunc: watchFuncType) => {
-          watchFunc(filePath);
-        });
-      });
-
-    return router;
-  },
-
-  ...buildServer(),
 };

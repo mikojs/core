@@ -42,8 +42,9 @@ export default {
   end: (router: buildRouterReturnType) => <-R: routerType>(
     parentRouter: R,
   ): R => {
-    if (router.type === 'router') router.end();
-
+    // FIXME
+    // eslint-disable-next-line flowtype/no-unused-expressions
+    router?.end();
     parentRouter.use(router.routes());
     parentRouter.use(router.allowedMethods());
 

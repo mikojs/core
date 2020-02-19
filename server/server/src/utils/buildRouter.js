@@ -4,7 +4,6 @@ import { type Middleware as koaMiddlewareType } from 'koa';
 import Router from 'koa-router';
 
 export type returnType = {|
-  type: 'router',
   routes: () => koaMiddlewareType,
   allowedMethods: () => koaMiddlewareType,
   use: (middleware: koaMiddlewareType) => void,
@@ -24,7 +23,6 @@ export default (method: string) => (prefix?: string): returnType => {
   const router = new Router();
 
   return {
-    type: 'router',
     routes: () => router.routes(),
     allowedMethods: () => router.allowedMethods(),
     use: (middleware: koaMiddlewareType) => {

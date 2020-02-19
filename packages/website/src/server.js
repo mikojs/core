@@ -60,17 +60,14 @@ export default async ({
   return (
     server.init()
     |> server.use(base)
-    |> (undefined
+    |> ('/graphql'
       |> server.start
-      |> ('/graphql'
-        |> server.all
-        |> server.use(
-          graphql.middleware({
-            graphiql: dev,
-            pretty: dev,
-          }),
-        )
-        |> server.end)
+      |> server.use(
+        graphql.middleware({
+          graphiql: dev,
+          pretty: dev,
+        }),
+      )
       |> server.end)
     |> server.use(await react.middleware())
     |> server.run(dir, { dev, port })

@@ -18,8 +18,8 @@ export type returnType = {|
  *
  * @return {Function} - build router function
  */
-export default (method: string) => (prefix?: string): returnType => {
-  const middlewares = !prefix ? [] : [prefix];
+export default (method: string) => (prefix: string): returnType => {
+  const middlewares = [prefix];
   const router = new Router();
 
   return {

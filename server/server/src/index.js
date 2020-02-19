@@ -4,19 +4,13 @@ import path from 'path';
 
 import Koa, { type Middleware as koaMiddlewareType } from 'koa';
 import chokidar from 'chokidar';
-import chalk from 'chalk';
-import ora from 'ora';
-import { emptyFunction } from 'fbjs';
 
-import {
-  handleUnhandledRejection,
-  mockChoice,
-  createLogger,
-} from '@mikojs/utils';
+import { handleUnhandledRejection } from '@mikojs/utils';
 
 import buildRouter, {
   type returnType as buildRouterReturnType,
 } from './utils/buildRouter';
+import buildServer from './utils/buildServer';
 
 type routerType = Koa | buildRouterReturnType;
 
@@ -31,8 +25,6 @@ export type contextType = {|
   restart: () => void,
   close: () => void,
 |};
-
-const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
 
 /**
  * @example
@@ -91,28 +83,5 @@ export default {
     return router;
   },
 
-  init: (): Koa => {
-    mockChoice(
-      process.env.NODE_ENV === 'test',
-      emptyFunction,
-      logger.start,
-      'Server start',
-    );
-
-    return new Koa();
-  },
-
-  run: (port?: number = 8000) => (app: Koa): Promise<http$Server> =>
-    new Promise(resolve => {
-      const server = app.listen(port, () => {
-        mockChoice(
-          process.env.NODE_ENV === 'test',
-          emptyFunction,
-          logger.succeed,
-          chalk`Running server at port: {gray {bold ${port.toString()}}}`,
-        );
-
-        resolve(server);
-      });
-    }),
+  ...buildServer(),
 };

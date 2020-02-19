@@ -24,14 +24,14 @@ export type contextType = {|
 handleUnhandledRejection();
 
 export default {
-  ...['start', 'get', 'post', 'put', 'del', 'all'].reduce(
-    (result: { [string]: $Call<typeof buildRouter, string> }, key: string) => ({
-      ...result,
-      [key]: buildRouter(key),
-    }),
-    {},
-  ),
   ...buildServer(),
+
+  start: buildRouter('start'),
+  get: buildRouter('get'),
+  post: buildRouter('post'),
+  put: buildRouter('put'),
+  del: buildRouter('del'),
+  all: buildRouter('all'),
 
   use: (middleware: koaMiddlewareType) => <-R: routerType>(router: R): R => {
     router.use(middleware);

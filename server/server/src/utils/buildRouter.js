@@ -1,7 +1,7 @@
 // @flow
 
 import { type Middleware as koaMiddlewareType } from 'koa';
-import Router from 'koa-router';
+import Router from '@koa/router';
 
 export type returnType = {|
   routes: () => koaMiddlewareType,

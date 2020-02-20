@@ -70,6 +70,6 @@ export default async ({
       )
       |> server.end)
     |> server.use(await react.middleware())
-    |> server.run(dir, { dev, port })
+    |> server.run({ dev, port, dir })
   );
 };

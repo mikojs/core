@@ -18,7 +18,8 @@ describe('build server', () => {
 
     global.console.log = mockLog;
 
-    const runningServer = await server.run(__dirname, {
+    const runningServer = await server.run({
+      dir: __dirname,
       port: await getPort(),
     })(new Koa());
 
@@ -47,9 +48,7 @@ describe('build server', () => {
 
   test('watch with dev = false', async () => {
     (
-      await buildServer().run(__dirname, { dev: false, port: await getPort() })(
-        new Koa(),
-      )
+      await buildServer().run({ dev: false, port: await getPort() })(new Koa())
     ).close();
 
     expect(chokidar.watch().on).not.toHaveBeenCalled();

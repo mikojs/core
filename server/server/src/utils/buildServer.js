@@ -13,15 +13,13 @@ type callbackType = (filePath: string) => void;
 type optionsType = {|
   dev?: boolean,
   port?: number,
+  dir?: string,
 |};
 
 type returnType = {|
   init: () => Koa,
   on: (events: eventsType, callback: callbackType) => void,
-  run: (
-    folderPath: string,
-    options?: optionsType,
-  ) => (app: Koa) => Promise<http$Server>,
+  run: (options?: optionsType) => (app: Koa) => Promise<http$Server>,
 |};
 
 const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
@@ -58,19 +56,17 @@ export default (): returnType => {
       });
     },
 
-    run: (folderPath: string, options?: optionsType) => (
-      app: Koa,
-    ): Promise<http$Server> =>
+    run: (options?: optionsType) => (app: Koa): Promise<http$Server> =>
       new Promise(resolve => {
-        const { dev = true, port = 8000 } = options || {};
+        const { dev = true, port = 8000, dir } = options || {};
         const server = app.listen(port, () => {
           logger.succeed(
             chalk`Running server at port: {gray {bold ${port.toString()}}}`,
           );
 
-          if (dev)
+          if (dev && dir)
             chokidar
-              .watch(folderPath, {
+              .watch(dir, {
                 ignoreInitial: true,
               })
               .on('all', (event: string, filePath: string) => {

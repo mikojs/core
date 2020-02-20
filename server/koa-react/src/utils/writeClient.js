@@ -9,7 +9,7 @@ import { emptyFunction } from 'fbjs';
 
 import { type optionsType } from '../index';
 
-import { type cacheType } from './getCache';
+import { type cacheType } from './buildCache';
 
 const cacheDir = findCacheDir({
   name: crypto

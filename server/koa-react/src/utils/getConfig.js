@@ -8,7 +8,7 @@ import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 
 import { type optionsType } from '../index';
 
-import { type cacheType } from './getCache';
+import { type cacheType } from './buildCache';
 
 /**
  * @example

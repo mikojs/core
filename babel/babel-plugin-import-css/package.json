@@ -9,17 +9,17 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.8.3",
-    "@babel/runtime": "^7.8.3",
+    "@babel/runtime": "^7.8.4",
     "core-js": "^3.6.4"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3",
-    "@babel/traverse": "^7.8.3",
-    "flow-bin": "^0.116.1",
-    "flow-typed": "^2.6.2"
+    "@babel/core": "^7.8.4",
+    "@babel/traverse": "^7.8.4",
+    "flow-bin": "^0.118.0",
+    "flow-typed": "^3.0.0"
   },
   "keywords": [
     "babel plugin",

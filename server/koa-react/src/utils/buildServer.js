@@ -12,7 +12,7 @@ import server from '@mikojs/react-ssr/lib/server';
 
 import { type optionsType } from '../index';
 
-import { type cacheType } from './getCache';
+import { type cacheType } from './buildCache';
 
 const debugLog = debug('react:buildServer');
 

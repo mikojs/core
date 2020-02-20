@@ -2,7 +2,7 @@
 
 import { requireModule } from '@mikojs/utils';
 
-import { type cacheType } from './getCache';
+import { type cacheType } from './buildCache';
 
 /**
  * @example

@@ -23,11 +23,11 @@ export type cacheType = {|
   addPage: (filePath: string) => void,
 |};
 
-const debugLog = debug('react:getCache');
+const debugLog = debug('react:buildCache');
 
 /**
  * @example
- * getCache('/', {})
+ * buildCache('/', {})
  *
  * @param {string} folderPath - the folder path
  * @param {optionsType} options - koa react options

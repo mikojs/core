@@ -2,11 +2,11 @@
 
 import path from 'path';
 
-import getCache from '../getCache';
+import buildCache from '../buildCache';
 import getConfig from '../getConfig';
 
 test('get config', () => {
-  const cache = getCache(__dirname, {});
+  const cache = buildCache(__dirname, {});
 
   cache.addPage(path.resolve(__dirname, './0.js'));
   cache.addPage(path.resolve(__dirname, './1.js'));

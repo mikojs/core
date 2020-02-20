@@ -11,7 +11,7 @@ import address from 'address';
 import { d3DirTree, requireModule } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
-import getCache, { type cacheType } from './utils/getCache';
+import buildCache, { type cacheType } from './utils/buildCache';
 import getConfig from './utils/getConfig';
 import writeClient from './utils/writeClient';
 import buildServer from './utils/buildServer';
@@ -63,7 +63,7 @@ export default async (
   // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
   options?: optionsType = {},
 ): Promise<returnType> => {
-  const cache = getCache(folderPath, options);
+  const cache = buildCache(folderPath, options);
   const {
     dev = process.env.NODE_ENV !== 'production',
     extensions = /\.js$/,

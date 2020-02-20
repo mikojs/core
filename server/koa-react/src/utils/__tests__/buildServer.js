@@ -11,7 +11,7 @@ import webpack from 'koa-webpack';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
-import getCache from '../getCache';
+import buildCache from '../buildCache';
 import buildServer from '../buildServer';
 
 describe('build server', () => {
@@ -21,7 +21,7 @@ describe('build server', () => {
 
     app.use(await webpack());
     // $FlowFixMe TODO: can not extend koa context type
-    app.use(buildServer({}, getCache(__dirname, {})));
+    app.use(buildServer({}, buildCache(__dirname, {})));
 
     const server = app.listen(port);
 
@@ -40,7 +40,7 @@ describe('build server', () => {
 
     app.use(await webpack());
     // $FlowFixMe TODO: can not extend koa context type
-    app.use(buildServer({}, getCache(__dirname, {})));
+    app.use(buildServer({}, buildCache(__dirname, {})));
 
     const server = app.listen(port);
 
@@ -59,7 +59,7 @@ describe('build server', () => {
 
     app.use(await webpack());
     // $FlowFixMe TODO: can not extend koa context type
-    app.use(buildServer({}, getCache(__dirname, {})));
+    app.use(buildServer({}, buildCache(__dirname, {})));
 
     const server = app.listen(port);
 
@@ -78,7 +78,7 @@ describe('build server', () => {
   test('render error', async () => {
     const app = new Koa();
     const port = await getPort();
-    const cache = getCache(__dirname, {});
+    const cache = buildCache(__dirname, {});
 
     cache.addPage(path.resolve(__dirname, './__ignore__/ErrorComponent.js'));
     app.use(await webpack());

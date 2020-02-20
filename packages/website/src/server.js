@@ -8,8 +8,6 @@
 
 import path from 'path';
 
-import { emptyFunction } from 'fbjs';
-
 import server, { type contextType } from '@mikojs/server';
 import base from '@mikojs/koa-base';
 import koaGraphql from '@mikojs/koa-graphql';
@@ -56,25 +54,22 @@ export default async ({
     { dev, exclude: /__generated__/ } |> useCss |> useLess,
   );
 
+  server.on(['add', 'change'], graphql.update);
+  server.on(['add', 'change'], react.update);
+
   return (
     server.init()
     |> server.use(base)
-    |> (undefined
+    |> ('/graphql'
       |> server.start
-      |> ('/graphql'
-        |> server.all
-        |> server.use(
-          graphql.middleware({
-            graphiql: dev,
-            pretty: dev,
-          }),
-        )
-        |> server.end)
+      |> server.use(
+        graphql.middleware({
+          graphiql: dev,
+          pretty: dev,
+        }),
+      )
       |> server.end)
     |> server.use(await react.middleware())
-    |> server.run(port)
-    |> (dev && watch
-      ? server.watch(dir, [graphql.update, react.update])
-      : emptyFunction.thatReturnsArgument)
+    |> server.run({ dev, port, dir })
   );
 };

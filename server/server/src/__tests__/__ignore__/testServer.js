@@ -10,6 +10,8 @@ import { type Context as koaContextType } from 'koa';
 
 import server from '../../index';
 
+global.console.log = jest.fn();
+
 /**
  * @example
  * customMiddleware('test')

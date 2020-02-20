@@ -12,19 +12,8 @@ import fetch, { type Response as ResponseType } from 'node-fetch';
  *
  * @return {any} - require data
  */
-export default async (
-  path: string,
-  method?: string = 'get',
-  options?: mixed,
-): Promise<string | {}> => {
-  if (method === 'del')
-    return fetch(`http://localhost:8000${path}`, {
-      ...options,
-      method: 'del',
-    }).then((res: ResponseType) => res.text());
-
-  return fetch(`http://localhost:8000${path}`, {
+export default async (path: string, method?: string = 'get', options?: mixed) =>
+  fetch(`http://localhost:8000${path}`, {
     ...options,
     method,
-  }).then((res: ResponseType) => res.json());
-};
+  }).then((res: ResponseType) => (method === 'del' ? res.text() : res.json()));

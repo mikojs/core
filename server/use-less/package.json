@@ -8,10 +8,10 @@
   "version": "1.9.0",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.8.3",
+    "@babel/runtime": "^7.8.4",
     "core-js": "^3.6.4",
     "fbjs": "^1.0.0",
-    "less": "^3.10.3",
+    "less": "^3.11.1",
     "less-loader": "^5.0.0"
   },
   "peerDependencies": {
@@ -21,9 +21,9 @@
   "devDependencies": {
     "@mikojs/koa-react": "^1.9.0",
     "@mikojs/use-css": "^1.9.0",
-    "flow-bin": "^0.116.1",
-    "flow-typed": "^2.6.2",
-    "webpack": "^4.41.5"
+    "flow-bin": "^0.118.0",
+    "flow-typed": "^3.0.0",
+    "webpack": "^4.41.6"
   },
   "keywords": ["koa-react", "mikojs", "use-less"],
   "publishConfig": {

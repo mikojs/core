@@ -4,22 +4,19 @@ import Koa from 'koa';
 import chokidar from 'chokidar';
 import ora from 'ora';
 import chalk from 'chalk';
+import { emptyFunction } from 'fbjs';
 
-import { createLogger } from '@mikojs/utils';
+import { createLogger, mockChoice } from '@mikojs/utils';
 
-type eventsType = $ReadOnlyArray<string> | string;
-type callbackType = (filePath: string) => void;
-
-type optionsType = {|
-  dev?: boolean,
-  port?: number,
-  dir?: string,
-|};
+import buildCache, {
+  type optionsType,
+  type returnType as buildCacheReturnType,
+} from './buildCache';
 
 type returnType = {|
-  init: () => Koa,
-  on: (events: eventsType, callback: callbackType) => void,
-  run: (options?: optionsType) => (app: Koa) => Promise<http$Server>,
+  init: (options: optionsType) => Koa,
+  on: $PropertyType<buildCacheReturnType, 'add'>,
+  run: (app: Koa) => Promise<http$Server>,
 |};
 
 const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
@@ -31,62 +28,79 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
  * @return {returnType} - server object
  */
 export default (): returnType => {
-  const callbackCache = [
-    {
-      events: ['add', 'change'],
-      callback: (filePath: string) => {
-        if (!/\.js$/.test(filePath)) return;
-
-        delete require.cache[filePath];
-      },
-    },
-  ];
+  const cache = buildCache();
+  const options: $NonMaybeType<optionsType> = { dev: true, port: 8000 };
 
   return {
-    init: (): Koa => {
-      logger.start('Server start');
+    init: (initOptions?: optionsType): Koa => {
+      mockChoice(
+        process.env.NODE_ENV === 'test',
+        emptyFunction,
+        logger.start,
+        'Server start',
+      );
+      Object.keys(initOptions || {}).forEach((key: string) => {
+        options[key] = initOptions?.[key];
+      });
+
+      if (!options.dev && options.build) {
+        cache.add('build', () =>
+          mockChoice(
+            process.env.NODE_ENV === 'test',
+            emptyFunction,
+            process.exit,
+            0,
+          ),
+        );
+        cache.run('build', options);
+      }
 
       return new Koa();
     },
 
-    on: (events: eventsType, callback: callbackType) => {
-      callbackCache.push({
-        events,
-        callback,
-      });
-    },
+    on: cache.add,
 
-    run: (options?: optionsType) => (app: Koa): Promise<http$Server> =>
-      new Promise(resolve => {
-        const { dev = true, port = 8000, dir } = options || {};
-        const server = app.listen(port, () => {
-          logger.succeed(
-            chalk`Running server at port: {gray {bold ${port.toString()}}}`,
-          );
+    run: async (app: Koa): Promise<http$Server> => {
+      const { dev, port, dir } = options;
 
-          if (dev && dir)
-            chokidar
-              .watch(dir, {
-                ignoreInitial: true,
-              })
-              .on('all', (event: string, filePath: string) => {
-                callbackCache.forEach(
-                  ({
-                    events,
-                    callback,
-                  }: {|
-                    events: eventsType,
-                    callback: callbackType,
-                  |}) => {
-                    if (events !== event && !events.includes(event)) return;
+      await cache.run('run', options);
 
-                    callback(filePath);
-                  },
-                );
-              });
-
-          resolve(server);
+      const server = await new Promise(resolve => {
+        const runningServer = app.listen(port, () => {
+          resolve(runningServer);
         });
-      }),
+      });
+
+      mockChoice(
+        process.env.NODE_ENV === 'test',
+        emptyFunction,
+        logger.succeed,
+        chalk`Running server at port: {gray {bold ${port?.toString()}}}`,
+      );
+
+      if (dev) {
+        cache.run('watch', options);
+
+        if (dir)
+          chokidar
+            .watch(dir, {
+              ignoreInitial: true,
+            })
+            .on('all', async (event: string, filePath: string) => {
+              if (event === 'add')
+                await cache.run('watch:add', {
+                  ...options,
+                  filePath,
+                });
+              else if (event === 'change')
+                await cache.run('watch:change', {
+                  ...options,
+                  filePath,
+                });
+            });
+      }
+
+      return server;
+    },
   };
 };

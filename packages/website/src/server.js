@@ -35,15 +35,6 @@ export default async ({
 
   await graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']);
 
-  if (dev && watch)
-    graphql.runRelayCompiler([
-      '--src',
-      src,
-      '--watch',
-      '--exclude',
-      '**/server.js',
-    ]);
-
   if (process.env.SKIP_SERVER) {
     close();
     return null;
@@ -54,11 +45,29 @@ export default async ({
     { dev, exclude: /__generated__/ } |> useCss |> useLess,
   );
 
-  server.on(['add', 'change'], graphql.update);
-  server.on(['add', 'change'], react.update);
+  server.on(['build', 'run'], () =>
+    graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']),
+  );
+  server.on('watch', () =>
+    graphql.runRelayCompiler([
+      '--src',
+      src,
+      '--watch',
+      '--exclude',
+      '**/server.js',
+    ]),
+  );
+  server.on(
+    ['watch:add', 'watch:change'],
+    ({ filePath }: { filePath?: string }) => graphql.update(filePath),
+  );
+  server.on(
+    ['watch:add', 'watch:change'],
+    ({ filePath }: { filePath?: string }) => react.update(filePath),
+  );
 
   return (
-    server.init()
+    server.init({ dev, port, dir })
     |> server.use(base)
     |> ('/graphql'
       |> server.start
@@ -70,6 +79,6 @@ export default async ({
       )
       |> server.end)
     |> server.use(await react.middleware())
-    |> server.run({ dev, port, dir })
+    |> server.run
   );
 };

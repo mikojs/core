@@ -42,7 +42,7 @@ export type optionsType = {|
 |};
 
 export type returnType = {|
-  update: (filePath: string) => void,
+  update: (filePath: ?string) => void,
   middleware: MiddlewareType,
   client: MiddlewareType,
   server: MiddlewareType,
@@ -108,8 +108,9 @@ export default async (
 
   return {
     // update
-    update: (filePath: string) => {
+    update: (filePath: ?string) => {
       if (
+        !filePath ||
         !extensions.test(filePath) ||
         exclude?.test(filePath) ||
         !new RegExp(path.resolve(folderPath)).test(filePath)

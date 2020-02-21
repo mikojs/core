@@ -10,8 +10,6 @@ import { type Context as koaContextType } from 'koa';
 
 import server from '../../index';
 
-global.console.log = jest.fn();
-
 /**
  * @example
  * customMiddleware('test')
@@ -61,4 +59,4 @@ export default () =>
       |> server.use(customMiddleware('all'))
       |> server.end)
     |> server.end)
-  |> server.run();
+  |> server.run;

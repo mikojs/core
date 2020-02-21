@@ -12,10 +12,8 @@ describe('build server', () => {
 
   test('run server with build = true', async () => {
     const server = buildServer();
-    const mockLog = jest.fn();
     const mockCallback = jest.fn();
 
-    global.console.log = mockLog;
     server.on('build', mockCallback);
     (
       await server.run(
@@ -27,7 +25,6 @@ describe('build server', () => {
       )
     ).close();
 
-    expect(mockLog).toHaveBeenCalledTimes(2);
     expect(mockCallback).toHaveBeenCalledTimes(1);
   });
 

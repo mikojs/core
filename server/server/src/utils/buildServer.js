@@ -33,7 +33,12 @@ export default (): returnType => {
 
   return {
     init: (initOptions?: optionsType): Koa => {
-      logger.start('Server start');
+      mockChoice(
+        process.env.NODE_ENV === 'test',
+        emptyFunction,
+        logger.start,
+        'Server start',
+      );
       Object.keys(initOptions || {}).forEach((key: string) => {
         options[key] = initOptions?.[key];
       });
@@ -66,7 +71,10 @@ export default (): returnType => {
         });
       });
 
-      logger.succeed(
+      mockChoice(
+        process.env.NODE_ENV === 'test',
+        emptyFunction,
+        logger.succeed,
         chalk`Running server at port: {gray {bold ${port?.toString()}}}`,
       );
 

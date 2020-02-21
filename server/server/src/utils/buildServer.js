@@ -7,18 +7,14 @@ import chalk from 'chalk';
 
 import { createLogger } from '@mikojs/utils';
 
-type eventsType = $ReadOnlyArray<string> | string;
-type callbackType = (filePath: string) => void;
-
-type optionsType = {|
-  dev?: boolean,
-  port?: number,
-  dir?: string,
-|};
+import buildCache, {
+  type optionsType,
+  type returnType as buildCacheReturnType,
+} from './buildCache';
 
 type returnType = {|
   init: () => Koa,
-  on: (events: eventsType, callback: callbackType) => void,
+  on: $PropertyType<buildCacheReturnType, 'add'>,
   run: (options?: optionsType) => (app: Koa) => Promise<http$Server>,
 |};
 
@@ -31,16 +27,7 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
  * @return {returnType} - server object
  */
 export default (): returnType => {
-  const callbackCache = [
-    {
-      events: ['add', 'change'],
-      callback: (filePath: string) => {
-        if (!/\.js$/.test(filePath)) return;
-
-        delete require.cache[filePath];
-      },
-    },
-  ];
+  const cache = buildCache();
 
   return {
     init: (): Koa => {
@@ -49,12 +36,7 @@ export default (): returnType => {
       return new Koa();
     },
 
-    on: (events: eventsType, callback: callbackType) => {
-      callbackCache.push({
-        events,
-        callback,
-      });
-    },
+    on: cache.add,
 
     run: (options?: optionsType) => (app: Koa): Promise<http$Server> =>
       new Promise(resolve => {
@@ -70,19 +52,10 @@ export default (): returnType => {
                 ignoreInitial: true,
               })
               .on('all', (event: string, filePath: string) => {
-                callbackCache.forEach(
-                  ({
-                    events,
-                    callback,
-                  }: {|
-                    events: eventsType,
-                    callback: callbackType,
-                  |}) => {
-                    if (events !== event && !events.includes(event)) return;
-
-                    callback(filePath);
-                  },
-                );
+                cache.run(`watch:${event}`, {
+                  ...options,
+                  filePath,
+                });
               });
 
           resolve(server);

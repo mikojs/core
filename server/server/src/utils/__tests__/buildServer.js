@@ -10,41 +10,60 @@ describe('build server', () => {
     chokidar.watch().on.mockClear();
   });
 
-  test('watch with dev = true', async () => {
+  test('run server with build = true', async () => {
     const server = buildServer();
     const mockLog = jest.fn();
     const mockCallback = jest.fn();
 
     global.console.log = mockLog;
+    server.on('build', mockCallback);
+    (
+      await server.run(
+        server.init({
+          dev: false,
+          build: true,
+          port: await getPort(),
+        }),
+      )
+    ).close();
 
-    const runningServer = await server.run(
-      server.init({
-        dir: __dirname,
-        port: await getPort(),
-      }),
-    );
+    expect(mockLog).toHaveBeenCalledTimes(2);
+    expect(mockCallback).toHaveBeenCalledTimes(1);
+  });
+
+  test('watch with dev = true', async () => {
+    const server = buildServer();
+    const mockCallback = jest.fn();
 
     server.on('watch:add', mockCallback);
+    (
+      await server.run(
+        server.init({
+          dir: __dirname,
+          port: await getPort(),
+        }),
+      )
+    ).close();
 
     const [[, chokidarCallback]] = chokidar.watch().on.mock.calls;
 
-    expect(mockLog).toHaveBeenCalledTimes(1);
-
-    chokidarCallback('add', 'test.js');
+    await chokidarCallback('add', 'test.js');
 
     expect(mockCallback).toHaveBeenCalledTimes(1);
-    expect(mockCallback).toHaveBeenCalledWith('test.js');
+    expect(mockCallback).toHaveBeenCalledWith(
+      expect.objectContaining({ filePath: 'test.js' }),
+    );
 
-    chokidarCallback('remove', 'test.js');
+    await chokidarCallback('remove', 'test.js');
 
     expect(mockCallback).toHaveBeenCalledTimes(1);
 
-    chokidarCallback('add', 'test');
+    await chokidarCallback('change', 'test');
 
-    expect(mockCallback).toHaveBeenCalledTimes(2);
-    expect(mockCallback).toHaveBeenCalledWith('test');
-
-    runningServer.close();
+    expect(mockCallback).toHaveBeenCalledTimes(1);
+    expect(mockCallback).not.toHaveBeenCalledWith(
+      expect.objectContaining({ filePath: 'test' }),
+    );
   });
 
   test('watch with dev = false', async () => {

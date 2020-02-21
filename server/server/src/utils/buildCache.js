@@ -46,9 +46,10 @@ export default (): returnType => {
     },
     run: (eventName: eventType, options: optionsType) =>
       cache
-        .filter(
-          ({ events }: cacheType) =>
-            events === eventName || !events.includes(eventName),
+        .filter(({ events }: cacheType) =>
+          events instanceof Array
+            ? events.includes(eventName)
+            : events === eventName,
         )
         .reduce(
           (result: Promise<void>, { callback }: cacheType) =>

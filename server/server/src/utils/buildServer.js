@@ -38,7 +38,7 @@ export default (): returnType => {
         options[key] = initOptions?.[key];
       });
 
-      if (options.build) {
+      if (!options.dev && options.build) {
         cache.add('build', () =>
           mockChoice(
             process.env.NODE_ENV === 'test',
@@ -56,7 +56,7 @@ export default (): returnType => {
     on: cache.add,
 
     run: async (app: Koa): Promise<http$Server> => {
-      const { dev = true, port = 8000, dir } = options;
+      const { dev, port, dir } = options;
 
       await cache.run('run', options);
 
@@ -67,7 +67,7 @@ export default (): returnType => {
       });
 
       logger.succeed(
-        chalk`Running server at port: {gray {bold ${port.toString()}}}`,
+        chalk`Running server at port: {gray {bold ${port?.toString()}}}`,
       );
 
       if (dev) {
@@ -78,14 +78,14 @@ export default (): returnType => {
             .watch(dir, {
               ignoreInitial: true,
             })
-            .on('all', (event: string, filePath: string) => {
+            .on('all', async (event: string, filePath: string) => {
               if (event === 'add')
-                cache.run('watch:add', {
+                await cache.run('watch:add', {
                   ...options,
                   filePath,
                 });
               else if (event === 'change')
-                cache.run('watch:change', {
+                await cache.run('watch:change', {
                   ...options,
                   filePath,
                 });

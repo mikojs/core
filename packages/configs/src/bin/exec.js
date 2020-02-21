@@ -42,19 +42,23 @@ handleUnhandledRejection();
 
     logger.log(chalk`Run command: {gray ${commands.join(' ')}}`);
     debugLog({ type, argv, config });
-
-    const eachCommands = commands.reduce(
-      (result: $ReadOnlyArray<$ReadOnlyArray<string>>, command: string) =>
-        command === '&&'
-          ? [...result, []]
-          : [...result.slice(0, -1), [...result[result.length - 1], command]],
-      [[]],
-    );
-
-    for (const eachCommand of eachCommands)
-      await execa(eachCommand[0], eachCommand.slice(1), {
-        stdio: 'inherit',
-      });
+    await commands
+      .reduce(
+        (result: $ReadOnlyArray<$ReadOnlyArray<string>>, command: string) =>
+          command === '&&'
+            ? [...result, []]
+            : [...result.slice(0, -1), [...result[result.length - 1], command]],
+        [[]],
+      )
+      .reduce(
+        (result: Promise<void>, command: $ReadOnlyArray<string>) =>
+          result.then(() =>
+            execa(command[0], command.slice(1), {
+              stdio: 'inherit',
+            }),
+          ),
+        Promise.resolve(),
+      );
   } catch (e) {
     logger.log(
       chalk`Run command fail, you can use {green exec info} to find the more commands`,

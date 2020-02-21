@@ -29,9 +29,10 @@ export default (
     makeExecutableSchemaOptions: { resolverValidationOptions } = {},
   }: optionsType,
   schema: GraphQLSchemaType,
-  filePath: string,
+  filePath: ?string,
 ) => {
   if (
+    !filePath ||
     !extensions.test(filePath) ||
     exclude?.test(filePath) ||
     !new RegExp(path.resolve(folderPath)).test(filePath)

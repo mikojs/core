@@ -18,7 +18,7 @@ export type optionsType = {|
 |};
 
 type returnType = {|
-  update: (filePath: string) => void,
+  update: (filePath: ?string) => void,
   middleware: (
     options?: buildMiddlewareOptionsType,
   ) => $Call<
@@ -50,7 +50,7 @@ export default (
 
   return {
     // update
-    update: (filePath: string) =>
+    update: (filePath: ?string) =>
       updateSchema(folderPath, options, schema, filePath),
 
     // middleware

@@ -32,33 +32,34 @@ export default async ({
   close,
 }: contextType): Promise<?http$Server> => {
   const graphql = koaGraphql(path.resolve(dir, './graphql'));
+  const react = await koaReact(
+    path.resolve(dir, './pages'),
+    { dev, exclude: /__generated__/ } |> useCss |> useLess,
+  );
 
-  await graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']);
-
-  if (dev && watch)
+  server.on(['build', 'run'], () =>
+    graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']),
+  );
+  server.on('watch', () =>
     graphql.runRelayCompiler([
       '--src',
       src,
       '--watch',
       '--exclude',
       '**/server.js',
-    ]);
-
-  if (process.env.SKIP_SERVER) {
-    close();
-    return null;
-  }
-
-  const react = await koaReact(
-    path.resolve(dir, './pages'),
-    { dev, exclude: /__generated__/ } |> useCss |> useLess,
+    ]),
+  );
+  server.on(
+    ['watch:add', 'watch:change'],
+    ({ filePath }: { filePath?: string }) => graphql.update(filePath),
+  );
+  server.on(
+    ['watch:add', 'watch:change'],
+    ({ filePath }: { filePath?: string }) => react.update(filePath),
   );
 
-  server.on(['add', 'change'], graphql.update);
-  server.on(['add', 'change'], react.update);
-
   return (
-    server.init()
+    server.init({ dev, port, dir })
     |> server.use(base)
     |> ('/graphql'
       |> server.start
@@ -70,6 +71,6 @@ export default async ({
       )
       |> server.end)
     |> server.use(await react.middleware())
-    |> server.run({ dev, port, dir })
+    |> server.run
   );
 };

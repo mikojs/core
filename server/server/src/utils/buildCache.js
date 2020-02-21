@@ -2,12 +2,15 @@
 
 export type optionsType = {|
   dev?: boolean,
+  build?: boolean,
+  prod?: boolean,
   port?: number,
   dir?: string,
   filePath?: string,
 |};
 
-type eventsType = $ReadOnlyArray<string> | string;
+type eventType = 'build' | 'watch:add' | 'watch:change';
+type eventsType = $ReadOnlyArray<eventType> | eventType;
 type callbackType = (options: optionsType) => Promise<void> | void;
 
 type cacheType = {|
@@ -17,7 +20,7 @@ type cacheType = {|
 
 export type returnType = {|
   add: (events: eventsType, callback: callbackType) => void,
-  run: (eventName: string, options: optionsType) => Promise<void>,
+  run: (eventName: eventType, options: optionsType) => Promise<void>,
 |};
 
 /**
@@ -29,7 +32,7 @@ export type returnType = {|
 export default (): returnType => {
   const cache = [
     {
-      events: ['add', 'change'],
+      events: ['watch:add', 'watch:change'],
       callback: ({ filePath }: optionsType) => {
         if (!filePath || !/\.js$/.test(filePath)) return;
 
@@ -42,7 +45,7 @@ export default (): returnType => {
     add: (events: eventsType, callback: callbackType) => {
       cache.push({ events, callback });
     },
-    run: (eventName: string, options: optionsType) =>
+    run: (eventName: eventType, options: optionsType) =>
       cache
         .filter(
           ({ events }: cacheType) =>

@@ -24,7 +24,7 @@ describe('build server', () => {
       }),
     );
 
-    server.on('add', mockCallback);
+    server.on('watch:add', mockCallback);
 
     const [[, chokidarCallback]] = chokidar.watch().on.mock.calls;
 

@@ -4,8 +4,9 @@ import Koa from 'koa';
 import chokidar from 'chokidar';
 import ora from 'ora';
 import chalk from 'chalk';
+import { emptyFunction } from 'fbjs';
 
-import { createLogger } from '@mikojs/utils';
+import { createLogger, mockChoice } from '@mikojs/utils';
 
 import buildCache, {
   type optionsType,
@@ -37,6 +38,18 @@ export default (): returnType => {
         options[key] = initOptions?.[key];
       });
 
+      if (options.build)
+        cache
+          .run('build', options)
+          .then(() =>
+            mockChoice(
+              process.env.NODE_ENV === 'test',
+              emptyFunction,
+              process.exit,
+              0,
+            ),
+          );
+
       return new Koa();
     },
 
@@ -60,10 +73,16 @@ export default (): returnType => {
             ignoreInitial: true,
           })
           .on('all', (event: string, filePath: string) => {
-            cache.run(`watch:${event}`, {
-              ...options,
-              filePath,
-            });
+            if (event === 'add')
+              cache.run('watch:add', {
+                ...options,
+                filePath,
+              });
+            else if (event === 'change')
+              cache.run('watch:change', {
+                ...options,
+                filePath,
+              });
           });
 
       return server;

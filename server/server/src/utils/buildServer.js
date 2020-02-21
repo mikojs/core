@@ -38,28 +38,31 @@ export default (): returnType => {
 
     on: cache.add,
 
-    run: (options?: optionsType) => (app: Koa): Promise<http$Server> =>
-      new Promise(resolve => {
-        const { dev = true, port = 8000, dir } = options || {};
-        const server = app.listen(port, () => {
-          logger.succeed(
-            chalk`Running server at port: {gray {bold ${port.toString()}}}`,
-          );
-
-          if (dev && dir)
-            chokidar
-              .watch(dir, {
-                ignoreInitial: true,
-              })
-              .on('all', (event: string, filePath: string) => {
-                cache.run(`watch:${event}`, {
-                  ...options,
-                  filePath,
-                });
-              });
-
-          resolve(server);
+    run: (options?: optionsType) => async (app: Koa): Promise<http$Server> => {
+      const { dev = true, port = 8000, dir } = options || {};
+      const server = await new Promise(resolve => {
+        const runningServer = app.listen(port, () => {
+          resolve(runningServer);
         });
-      }),
+      });
+
+      logger.succeed(
+        chalk`Running server at port: {gray {bold ${port.toString()}}}`,
+      );
+
+      if (dev && dir)
+        chokidar
+          .watch(dir, {
+            ignoreInitial: true,
+          })
+          .on('all', (event: string, filePath: string) => {
+            cache.run(`watch:${event}`, {
+              ...options,
+              filePath,
+            });
+          });
+
+      return server;
+    },
   };
 };

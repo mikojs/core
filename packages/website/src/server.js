@@ -32,6 +32,14 @@ export default async ({
   close,
 }: contextType): Promise<?http$Server> => {
   const graphql = koaGraphql(path.resolve(dir, './graphql'));
+
+  await graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']);
+
+  if (process.env.SKIP_SERVER) {
+    close();
+    return null;
+  }
+
   const react = await koaReact(
     path.resolve(dir, './pages'),
     { dev, exclude: /__generated__/ } |> useCss |> useLess,

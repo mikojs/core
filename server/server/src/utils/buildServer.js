@@ -38,17 +38,17 @@ export default (): returnType => {
         options[key] = initOptions?.[key];
       });
 
-      if (options.build)
-        cache
-          .run('build', options)
-          .then(() =>
-            mockChoice(
-              process.env.NODE_ENV === 'test',
-              emptyFunction,
-              process.exit,
-              0,
-            ),
-          );
+      if (options.build) {
+        cache.add('build', () =>
+          mockChoice(
+            process.env.NODE_ENV === 'test',
+            emptyFunction,
+            process.exit,
+            0,
+          ),
+        );
+        cache.run('build', options);
+      }
 
       return new Koa();
     },
@@ -57,6 +57,9 @@ export default (): returnType => {
 
     run: async (app: Koa): Promise<http$Server> => {
       const { dev = true, port = 8000, dir } = options;
+
+      await cache.run('run', options);
+
       const server = await new Promise(resolve => {
         const runningServer = app.listen(port, () => {
           resolve(runningServer);
@@ -67,23 +70,27 @@ export default (): returnType => {
         chalk`Running server at port: {gray {bold ${port.toString()}}}`,
       );
 
-      if (dev && dir)
-        chokidar
-          .watch(dir, {
-            ignoreInitial: true,
-          })
-          .on('all', (event: string, filePath: string) => {
-            if (event === 'add')
-              cache.run('watch:add', {
-                ...options,
-                filePath,
-              });
-            else if (event === 'change')
-              cache.run('watch:change', {
-                ...options,
-                filePath,
-              });
-          });
+      if (dev) {
+        cache.run('watch', options);
+
+        if (dir)
+          chokidar
+            .watch(dir, {
+              ignoreInitial: true,
+            })
+            .on('all', (event: string, filePath: string) => {
+              if (event === 'add')
+                cache.run('watch:add', {
+                  ...options,
+                  filePath,
+                });
+              else if (event === 'change')
+                cache.run('watch:change', {
+                  ...options,
+                  filePath,
+                });
+            });
+      }
 
       return server;
     },

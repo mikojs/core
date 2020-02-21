@@ -3,13 +3,12 @@
 export type optionsType = {|
   dev?: boolean,
   build?: boolean,
-  prod?: boolean,
   port?: number,
   dir?: string,
   filePath?: string,
 |};
 
-type eventType = 'build' | 'watch:add' | 'watch:change';
+type eventType = 'build' | 'run' | 'watch' | 'watch:add' | 'watch:change';
 type eventsType = $ReadOnlyArray<eventType> | eventType;
 type callbackType = (options: optionsType) => Promise<void> | void;
 

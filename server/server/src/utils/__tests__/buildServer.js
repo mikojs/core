@@ -1,6 +1,5 @@
 // @flow
 
-import Koa from 'koa';
 import chokidar from 'chokidar';
 import getPort from 'get-port';
 
@@ -18,10 +17,12 @@ describe('build server', () => {
 
     global.console.log = mockLog;
 
-    const runningServer = await server.run({
-      dir: __dirname,
-      port: await getPort(),
-    })(new Koa());
+    const runningServer = await server.run(
+      server.init({
+        dir: __dirname,
+        port: await getPort(),
+      }),
+    );
 
     server.on('add', mockCallback);
 
@@ -47,8 +48,10 @@ describe('build server', () => {
   });
 
   test('watch with dev = false', async () => {
+    const server = buildServer();
+
     (
-      await buildServer().run({ dev: false, port: await getPort() })(new Koa())
+      await server.run(server.init({ dev: false, port: await getPort() }))
     ).close();
 
     expect(chokidar.watch().on).not.toHaveBeenCalled();

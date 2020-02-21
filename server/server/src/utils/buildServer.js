@@ -13,9 +13,9 @@ import buildCache, {
 } from './buildCache';
 
 type returnType = {|
-  init: () => Koa,
+  init: (options: optionsType) => Koa,
   on: $PropertyType<buildCacheReturnType, 'add'>,
-  run: (options?: optionsType) => (app: Koa) => Promise<http$Server>,
+  run: (app: Koa) => Promise<http$Server>,
 |};
 
 const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
@@ -28,18 +28,22 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
  */
 export default (): returnType => {
   const cache = buildCache();
+  const options: $NonMaybeType<optionsType> = { dev: true, port: 8000 };
 
   return {
-    init: (): Koa => {
+    init: (initOptions?: optionsType): Koa => {
       logger.start('Server start');
+      Object.keys(initOptions || {}).forEach((key: string) => {
+        options[key] = initOptions?.[key];
+      });
 
       return new Koa();
     },
 
     on: cache.add,
 
-    run: (options?: optionsType) => async (app: Koa): Promise<http$Server> => {
-      const { dev = true, port = 8000, dir } = options || {};
+    run: async (app: Koa): Promise<http$Server> => {
+      const { dev = true, port = 8000, dir } = options;
       const server = await new Promise(resolve => {
         const runningServer = app.listen(port, () => {
           resolve(runningServer);

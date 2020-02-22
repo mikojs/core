@@ -1,9 +1,6 @@
 // @flow
 
-import {
-  type Context as koaContextType,
-  type Middleware as koaMiddlewareType,
-} from 'koa';
+import { type Middleware as koaMiddlewareType } from 'koa';
 import compose from 'koa-compose';
 import mount from 'koa-mount';
 import koaStatic from 'koa-static';
@@ -11,44 +8,24 @@ import { invariant } from 'fbjs';
 
 import { type webpackMiddlewarweOptionsType } from '../index';
 
-import buildJs from './buildJs';
-
-type ctxType = {
-  ...koaContextType,
-  state: {
-    webpackStats: {
-      toJson: () => { assetsByChunkName: { [string]: string } },
-    },
-  },
-};
-
 /**
  * @example
  * buildClient(webpackMiddlewarweOptions)
  *
  * @param {webpackMiddlewarweOptionsType} webpackMiddlewarweOptions - webpack middleware options
  *
- * @return {koaMiddlewareType} - prod client middleware
+ * @return {koaMiddlewareType} - koa middleware
  */
-export default async (
+export default (
   webpackMiddlewarweOptions: webpackMiddlewarweOptionsType,
-): Promise<koaMiddlewareType> => {
+): koaMiddlewareType => {
   invariant(
     webpackMiddlewarweOptions.config.output?.publicPath &&
       webpackMiddlewarweOptions.config.output?.path,
     'Both of `publicPath`, `path` in `webpackMiddlewarweOptions.config.output` are required',
   );
 
-  const assetsByChunkName = await buildJs(webpackMiddlewarweOptions);
-
   return compose([
-    async (ctx: ctxType, next: () => Promise<void>) => {
-      ctx.state.webpackStats = {
-        ...ctx.state.webpackStats,
-        toJson: () => ({ assetsByChunkName }),
-      };
-      await next();
-    },
     mount(
       // FIXME: invariant should check type
       webpackMiddlewarweOptions.config.output?.publicPath,

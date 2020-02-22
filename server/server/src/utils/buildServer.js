@@ -29,7 +29,11 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
  */
 export default (): returnType => {
   const cache = buildCache();
-  const options: $NonMaybeType<optionsType> = { dev: true, port: 8000 };
+  const options: $NonMaybeType<optionsType> = {
+    dev: process.env.NODE_ENV !== 'production',
+    build: Boolean(process.env.BUILD),
+    port: parseInt(process.env.PORT || '8000', 10),
+  };
 
   return {
     init: (initOptions?: optionsType): Koa => {

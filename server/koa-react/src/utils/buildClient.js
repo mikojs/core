@@ -24,7 +24,7 @@ type ctxType = {
 
 /**
  * @example
- * buildProdClient(webpackMiddlewarweOptions)
+ * buildClient(webpackMiddlewarweOptions)
  *
  * @param {webpackMiddlewarweOptionsType} webpackMiddlewarweOptions - webpack middleware options
  *

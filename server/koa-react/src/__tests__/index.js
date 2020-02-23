@@ -47,17 +47,5 @@ describe('react', () => {
 
       server.close();
     });
-
-    test('build', async () => {
-      const mockLog = jest.fn();
-
-      global.console.log = mockLog;
-
-      expect(await reactObj.buildJs()).toEqual({
-        commons: '/commons',
-        client: '/client',
-      });
-      expect(mockLog).toHaveBeenCalledTimes(1);
-    });
   });
 });

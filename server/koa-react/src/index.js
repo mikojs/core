@@ -52,12 +52,7 @@ export default async (
   options?: optionsType = {},
 ): Promise<returnType> => {
   const cache = buildCache(folderPath, options);
-  const {
-    // dev = process.env.NODE_ENV !== 'production',
-    extensions = /\.js$/,
-    exclude,
-    // webpackMiddlewarweOptions: webpackMiddlewarweOptionsFunc = emptyFunction.thatReturnsArgument,
-  } = options;
+  const { extensions = /\.js$/, exclude } = options;
 
   d3DirTree(folderPath, {
     extensions,
@@ -68,8 +63,6 @@ export default async (
       cache.addPage(filePath);
     });
 
-  // const clientPath = writeClient(cache, options);
-  // const config = getConfig(folderPath, options, cache, clientPath)
   const server = buildServer(options, cache);
 
   return {
@@ -84,7 +77,7 @@ export default async (
         return;
 
       cache.addPage(filePath);
-      writeClient(cache, options);
+      writeClient(options, cache);
     },
 
     // middleware

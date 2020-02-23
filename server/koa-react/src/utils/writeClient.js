@@ -22,15 +22,16 @@ const debugLog = debug('react:writeClient');
 
 /**
  * @example
- * writeClient(cache)
+ * writeClient(options, cache)
  *
+ * @param {optionsType} options - koa react options
  * @param {cacheType} cache - koa react cache
  *
  * @return {string} - client path
  */
 export default (
-  cache: cacheType,
   { handler = emptyFunction.thatReturnsArgument }: optionsType,
+  cache: cacheType,
 ): string => {
   const clientPath = cacheDir('client.js');
 

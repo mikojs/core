@@ -1,10 +1,16 @@
 // @flow
 
+import path from 'path';
+
 import {
   type Context as koaContextType,
   type Middleware as koaMiddlewareType,
 } from 'koa';
 import compose from 'koa-compose';
+import { invariant } from 'fbjs';
+
+import { d3DirTree } from '@mikojs/utils';
+import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import { type optionsType } from '../index';
 
@@ -42,10 +48,10 @@ export default (
   { dev = process.env.NODE_ENV !== 'production', basename }: optionsType,
   { compiler, config, devMiddleware }: buildCompilerReturnType,
 ): koaMiddlewareType => {
-  const commonsUrl = [basename?.replace(/^\//, ''), 'commons']
+  let commonsUrl: string = [basename?.replace(/^\//, ''), 'commons']
     .filter(Boolean)
     .join('/');
-  const clientUrl = [basename?.replace(/^\//, ''), 'client']
+  let clientUrl: string = [basename?.replace(/^\//, ''), 'client']
     .filter(Boolean)
     .join('/');
 
@@ -73,10 +79,31 @@ export default (
       await next();
     };
 
+  const { publicPath, path: folderPath } = config.output || {};
+
+  invariant(
+    publicPath && folderPath,
+    '`publicPath` and `folderPath` is required in webpack config.output',
+  );
+  d3DirTree(folderPath, {
+    extensions: /\.js$/,
+  })
+    .leaves()
+    .forEach(({ data: { name, path: filePath } }: d3DirTreeNodeType) => {
+      if (new RegExp(commonsUrl).test(name))
+        commonsUrl = path.relative(folderPath, filePath);
+
+      if (new RegExp(clientUrl).test(name))
+        clientUrl = path.relative(folderPath, filePath);
+    });
+
   return compose([
-    require('koa-mount')(
-      config.output?.publicPath,
-      require('koa-static')(config.output?.path),
-    ),
+    async (ctx: ctxType, next: () => Promise<void>) => {
+      ctx.state.commonsUrl = commonsUrl;
+      ctx.state.clientUrl = clientUrl;
+
+      await next();
+    },
+    require('koa-mount')(publicPath, require('koa-static')(folderPath)),
   ]);
 };

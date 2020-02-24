@@ -11,7 +11,7 @@ import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
 import buildCache from '../buildCache';
-import buildMiddleware from '../buildMiddleware';
+import buildServer from '../buildServer';
 
 describe('build server', () => {
   test('not found', async () => {
@@ -19,7 +19,7 @@ describe('build server', () => {
     const port = await getPort();
 
     // $FlowFixMe TODO: can not extend koa context type
-    app.use(buildMiddleware({}, buildCache(__dirname, {})));
+    app.use(buildServer({}, buildCache(__dirname, {})));
 
     const server = app.listen(port);
 
@@ -37,7 +37,7 @@ describe('build server', () => {
     const port = await getPort();
 
     // $FlowFixMe TODO: can not extend koa context type
-    app.use(buildMiddleware({}, buildCache(__dirname, {})));
+    app.use(buildServer({}, buildCache(__dirname, {})));
 
     const server = app.listen(port);
 
@@ -55,7 +55,7 @@ describe('build server', () => {
     const port = await getPort();
 
     // $FlowFixMe TODO: can not extend koa context type
-    app.use(buildMiddleware({}, buildCache(__dirname, {})));
+    app.use(buildServer({}, buildCache(__dirname, {})));
 
     const server = app.listen(port);
 
@@ -78,7 +78,7 @@ describe('build server', () => {
 
     cache.addPage(path.resolve(__dirname, './__ignore__/ErrorComponent.js'));
     // $FlowFixMe TODO: can not extend koa context type
-    app.use(buildMiddleware({}, cache));
+    app.use(buildServer({}, cache));
 
     const server = app.listen(port);
 

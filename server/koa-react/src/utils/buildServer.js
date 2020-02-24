@@ -18,11 +18,7 @@ const debugLog = debug('react:buildServer');
 
 type ctxType = {
   ...koaContextType,
-  state: {
-    webpackStats: {
-      toJson: () => { assetsByChunkName: { [string]: string } },
-    },
-  },
+  assetsByChunkName: { [string]: string },
 };
 
 /**
@@ -40,13 +36,12 @@ export default ({ basename }: optionsType, cache: cacheType) => async (
 ) => {
   debugLog(ctx.path);
 
-  const { assetsByChunkName } = ctx.state.webpackStats.toJson();
   const commonsUrl =
-    assetsByChunkName[
+    ctx.assetsByChunkName[
       [basename?.replace(/^\//, ''), 'commons'].filter(Boolean).join('/')
     ];
   const clientUrl =
-    assetsByChunkName[
+    ctx.assetsByChunkName[
       [basename?.replace(/^\//, ''), 'client'].filter(Boolean).join('/')
     ];
 

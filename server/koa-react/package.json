@@ -26,7 +26,9 @@
     "react-helmet": "^5.2.1",
     "react-hot-loader": "^4.12.19",
     "react-loading": "^2.0.3",
-    "terser-webpack-plugin": "^2.3.5"
+    "terser-webpack-plugin": "^2.3.5",
+    "webpack-dev-middleware": "^3.7.2",
+    "webpack-hot-client": "^4.1.2"
   },
   "peerDependencies": {
     "koa": ">=2.0.0",

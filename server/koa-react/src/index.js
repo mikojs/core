@@ -4,18 +4,19 @@ import path from 'path';
 
 import { type Middleware as MiddlewareType } from 'koa';
 import compose from 'koa-compose';
-import { type WebpackOptions as WebpackOptionsType } from 'webpack';
 
 import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import buildCache, { type cacheType } from './utils/buildCache';
 import writeClient from './utils/writeClient';
+import { type returnType as buildCompilerReturnType } from './utils/buildCompiler';
 import buildServer from './utils/buildServer';
 
-export type webpackMiddlewarweOptionsType = {
-  config: WebpackOptionsType,
-};
+export type webpackMiddlewarweOptionsType = $Diff<
+  buildCompilerReturnType,
+  {| compiler: mixed, run: mixed |},
+>;
 
 export type optionsType = {|
   dev?: boolean,

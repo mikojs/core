@@ -13,6 +13,7 @@ import writeClient from './utils/writeClient';
 import buildCompiler, {
   type returnType as buildCompilerReturnType,
 } from './utils/buildCompiler';
+import buildClient from './utils/buildClient';
 import buildServer from './utils/buildServer';
 
 export type webpackMiddlewarweOptionsType = $Diff<
@@ -36,8 +37,9 @@ export type optionsType = {|
 
 export type returnType = {|
   update: (filePath: ?string) => void,
-  webpack: () => Promise<void>,
+  runWebpack: () => Promise<void>,
   middleware: MiddlewareType,
+  client: MiddlewareType,
   server: MiddlewareType,
 |};
 
@@ -56,11 +58,7 @@ export default async (
   options?: optionsType = {},
 ): Promise<returnType> => {
   const cache = buildCache(folderPath, options);
-  const {
-    dev = process.env.NODE_ENV !== 'production',
-    extensions = /\.js$/,
-    exclude,
-  } = options;
+  const { extensions = /\.js$/, exclude } = options;
 
   d3DirTree(folderPath, {
     extensions,
@@ -72,6 +70,7 @@ export default async (
     });
 
   const compiler = buildCompiler(folderPath, options, cache);
+  const client = buildClient(options, compiler);
   const server = buildServer(options, cache);
 
   return {
@@ -90,20 +89,13 @@ export default async (
     },
 
     // run webpack or watching
-    webpack: compiler.run,
+    runWebpack: compiler.run,
 
     // middleware
-    middleware: compose([
-      ...(dev
-        ? []
-        : [
-            require('koa-mount')(
-              compiler.config.output?.publicPath,
-              require('koa-static')(compiler.config.output?.path),
-            ),
-          ]),
-      server,
-    ]),
+    middleware: compose([client, server]),
+
+    // client
+    client,
 
     // server
     // $FlowFixMe TODO: can not extend koa context type

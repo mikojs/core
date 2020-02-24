@@ -55,7 +55,11 @@ export default async (
   options?: optionsType = {},
 ): Promise<returnType> => {
   const cache = buildCache(folderPath, options);
-  const { extensions = /\.js$/, exclude } = options;
+  const {
+    dev = process.env.NODE_ENV !== 'production',
+    extensions = /\.js$/,
+    exclude,
+  } = options;
 
   d3DirTree(folderPath, {
     extensions,
@@ -87,7 +91,16 @@ export default async (
     runWebpack: compiler.run,
 
     // middleware
-    // $FlowFixMe TODO: can not extend koa context type
-    middleware: compose([buildMiddleware(options, cache, compiler)]),
+    middleware: compose([
+      ...(dev
+        ? []
+        : [
+            require('koa-mount')(
+              compiler.config.output?.publicPath,
+              require('koa-static')(compiler.config.output?.path),
+            ),
+          ]),
+      buildMiddleware(options, cache, compiler),
+    ]),
   };
 };

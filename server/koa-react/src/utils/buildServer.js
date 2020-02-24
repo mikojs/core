@@ -13,12 +13,23 @@ import server from '@mikojs/react-ssr/lib/server';
 import { type optionsType } from '../index';
 
 import { type cacheType } from './buildCache';
+import { type returnType as buildCompilerReturnType } from './buildCompiler';
 
 const debugLog = debug('react:buildServer');
 
 type ctxType = {
   ...koaContextType,
-  assetsByChunkName: { [string]: string },
+  res: http$ServerResponse & {
+    locals: {
+      webpack: {
+        devMiddleware: {
+          stats: {
+            toJson: () => { [string]: string },
+          },
+        },
+      },
+    },
+  },
 };
 
 /**
@@ -30,20 +41,34 @@ type ctxType = {
  *
  * @return {koaMiddlewareType} - koa middleware
  */
-export default ({ basename }: optionsType, cache: cacheType) => async (
-  ctx: ctxType,
-  next: () => Promise<void>,
-) => {
+export default (
+  { dev = process.env.NODE_ENV !== 'production', basename }: optionsType,
+  cache: cacheType,
+  { compiler, devMiddleware }: buildCompilerReturnType,
+) => async (ctx: ctxType, next: () => Promise<void>) => {
   debugLog(ctx.path);
 
-  const commonsUrl =
-    ctx.assetsByChunkName[
-      [basename?.replace(/^\//, ''), 'commons'].filter(Boolean).join('/')
-    ];
-  const clientUrl =
-    ctx.assetsByChunkName[
-      [basename?.replace(/^\//, ''), 'client'].filter(Boolean).join('/')
-    ];
+  let commonsUrl: string = [basename?.replace(/^\//, ''), 'commons']
+    .filter(Boolean)
+    .join('/');
+  let clientUrl: string = [basename?.replace(/^\//, ''), 'client']
+    .filter(Boolean)
+    .join('/');
+
+  if (dev && compiler) {
+    await new Promise(resolve => {
+      require('webpack-dev-middleware')(compiler, devMiddleware)(
+        ctx.req,
+        ctx.res,
+        resolve,
+      );
+    });
+
+    const assetsByChunkName = ctx.res.locals.webpack.devMiddleware.stats.toJson();
+
+    commonsUrl = assetsByChunkName[commonsUrl];
+    clientUrl = assetsByChunkName[clientUrl];
+  }
 
   if (commonsUrl === ctx.path) {
     ctx.status = 200;

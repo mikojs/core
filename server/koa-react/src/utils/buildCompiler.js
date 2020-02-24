@@ -6,7 +6,6 @@ import webpack, {
   type WebpackOptions as WebpackOptionsType,
   type WebpackCompiler as WebpackCompilerType,
 } from 'webpack';
-import hotClient from 'webpack-hot-client';
 
 import { type optionsType } from '../index';
 
@@ -77,7 +76,7 @@ export default (
           return;
         }
 
-        const { server } = hotClient(
+        const { server } = require('webpack-hot-client')(
           compiler,
           webpackMiddlewarweOptions.hotClient,
         );

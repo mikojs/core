@@ -10,7 +10,9 @@ import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import buildCache, { type cacheType } from './utils/buildCache';
 import writeClient from './utils/writeClient';
-import { type returnType as buildCompilerReturnType } from './utils/buildCompiler';
+import buildCompiler, {
+  type returnType as buildCompilerReturnType,
+} from './utils/buildCompiler';
 import buildServer from './utils/buildServer';
 
 export type webpackMiddlewarweOptionsType = $Diff<
@@ -34,6 +36,7 @@ export type optionsType = {|
 
 export type returnType = {|
   update: (filePath: ?string) => void,
+  webpack: () => Promise<void>,
   middleware: MiddlewareType,
   server: MiddlewareType,
 |};
@@ -64,7 +67,8 @@ export default async (
       cache.addPage(filePath);
     });
 
-  const server = buildServer(options, cache);
+  const compiler = buildCompiler(folderPath, options, cache);
+  const server = buildServer(options, cache, compiler);
 
   return {
     // update
@@ -80,6 +84,9 @@ export default async (
       cache.addPage(filePath);
       writeClient(options, cache);
     },
+
+    // run webpack or watching
+    webpack: compiler.run,
 
     // middleware
     middleware: compose([server]),

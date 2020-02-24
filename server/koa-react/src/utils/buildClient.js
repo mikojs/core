@@ -48,12 +48,15 @@ export default (
   { dev = process.env.NODE_ENV !== 'production', basename }: optionsType,
   { compiler, config, devMiddleware }: buildCompilerReturnType,
 ): koaMiddlewareType => {
+  const { publicPath, path: folderPath } = config.output || {};
   let commonsUrl: string = [basename?.replace(/^\//, ''), 'commons']
     .filter(Boolean)
     .join('/');
   let clientUrl: string = [basename?.replace(/^\//, ''), 'client']
     .filter(Boolean)
     .join('/');
+
+  invariant(publicPath, '`publicPath` is required in webpack config.output');
 
   if (dev)
     // $FlowFixMe TODO: can not extend koa context type
@@ -72,19 +75,14 @@ export default (
         ctx.state.commonsUrl = assetsByChunkName[commonsUrl];
         ctx.state.clientUrl = assetsByChunkName[clientUrl];
       } else {
-        ctx.state.commonsUrl = commonsUrl;
-        ctx.state.clientUrl = clientUrl;
+        ctx.state.commonsUrl = `${publicPath}${commonsUrl}`;
+        ctx.state.clientUrl = `${publicPath}${clientUrl}`;
       }
 
       await next();
     };
 
-  const { publicPath, path: folderPath } = config.output || {};
-
-  invariant(
-    publicPath && folderPath,
-    '`publicPath` and `folderPath` is required in webpack config.output',
-  );
+  invariant(folderPath, '`folderPath` is required in webpack config.output');
   d3DirTree(folderPath, {
     extensions: /\.js$/,
   })
@@ -99,8 +97,8 @@ export default (
 
   return compose([
     async (ctx: ctxType, next: () => Promise<void>) => {
-      ctx.state.commonsUrl = commonsUrl;
-      ctx.state.clientUrl = clientUrl;
+      ctx.state.commonsUrl = `${publicPath}${commonsUrl}`;
+      ctx.state.clientUrl = `${publicPath}${clientUrl}`;
 
       await next();
     },

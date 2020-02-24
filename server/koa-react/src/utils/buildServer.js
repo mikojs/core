@@ -16,7 +16,7 @@ import { type cacheType } from './buildCache';
 
 const debugLog = debug('react:buildServer');
 
-type ctxType = {
+export type ctxType = {
   ...koaContextType,
   state: {
     commonsUrl: string,

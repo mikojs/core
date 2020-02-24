@@ -11,7 +11,7 @@ import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
 import buildCache from '../buildCache';
-import buildServer from '../buildServer';
+import buildServer, { type ctxType } from '../buildServer';
 
 describe('build server', () => {
   test('not found', async () => {
@@ -36,6 +36,11 @@ describe('build server', () => {
     const app = new Koa();
     const port = await getPort();
 
+    // $FlowFixMe TODO: can not extend koa context type
+    app.use(async (ctx: ctxType, next: () => Promise<void>) => {
+      ctx.state.commonsUrl = '/commons';
+      await next();
+    });
     // $FlowFixMe TODO: can not extend koa context type
     app.use(buildServer({}, buildCache(__dirname, {})));
 

@@ -10,7 +10,10 @@ import Koa from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
-import react, { type returnType } from '../index';
+import react, {
+  type returnType,
+  type webpackMiddlewarweOptionsType,
+} from '../index';
 
 import testings from './__ignore__/testings';
 
@@ -25,7 +28,24 @@ describe('react', () => {
     beforeAll(async () => {
       reactObj = await react(
         path.resolve(__dirname, './__ignore__/pages'),
-        dev ? undefined : { dev },
+        dev
+          ? undefined
+          : {
+              dev,
+              webpackMiddlewarweOptions: (
+                config: webpackMiddlewarweOptionsType,
+              ) => ({
+                ...config,
+                config: {
+                  ...config.config,
+                  output: {
+                    ...config.config.output,
+                    path: path.resolve(__dirname, './__ignore__'),
+                    publicPath: '/assets/',
+                  },
+                },
+              }),
+            },
       );
       reactObj.update(path.resolve(__dirname, './__ignore__/pages/index.js'));
       reactObj.update(path.resolve(__dirname));

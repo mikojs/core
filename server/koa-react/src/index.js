@@ -72,7 +72,7 @@ export default async (
     });
 
   const compiler = buildCompiler(folderPath, options, cache);
-  const server = buildServer(options, cache, compiler);
+  const server = buildServer(options, cache);
 
   return {
     // update

@@ -13,64 +13,33 @@ import server from '@mikojs/react-ssr/lib/server';
 import { type optionsType } from '../index';
 
 import { type cacheType } from './buildCache';
-import { type returnType as buildCompilerReturnType } from './buildCompiler';
 
 const debugLog = debug('react:buildServer');
 
 type ctxType = {
   ...koaContextType,
-  res: http$ServerResponse & {
-    locals: {
-      webpack: {
-        devMiddleware: {
-          stats: {
-            toJson: () => { [string]: string },
-          },
-        },
-      },
-    },
+  state: {
+    commonsUrl: string,
+    clientUrl: string,
   },
 };
 
 /**
  * @example
- * buildServer(options, cache, urls)
+ * buildServer(options, cache)
  *
  * @param {optionsType} options - koa react options
  * @param {cacheType} cache - cache data
  *
  * @return {koaMiddlewareType} - koa middleware
  */
-export default (
-  { dev = process.env.NODE_ENV !== 'production', basename }: optionsType,
-  cache: cacheType,
-  { compiler, devMiddleware }: buildCompilerReturnType,
-) => async (ctx: ctxType, next: () => Promise<void>) => {
+export default ({ basename }: optionsType, cache: cacheType) => async (
+  ctx: ctxType,
+  next: () => Promise<void>,
+) => {
   debugLog(ctx.path);
 
-  let commonsUrl: string = [basename?.replace(/^\//, ''), 'commons']
-    .filter(Boolean)
-    .join('/');
-  let clientUrl: string = [basename?.replace(/^\//, ''), 'client']
-    .filter(Boolean)
-    .join('/');
-
-  if (dev && compiler) {
-    await new Promise(resolve => {
-      require('webpack-dev-middleware')(compiler, devMiddleware)(
-        ctx.req,
-        ctx.res,
-        resolve,
-      );
-    });
-
-    const assetsByChunkName = ctx.res.locals.webpack.devMiddleware.stats.toJson();
-
-    commonsUrl = assetsByChunkName[commonsUrl];
-    clientUrl = assetsByChunkName[clientUrl];
-  }
-
-  if (commonsUrl === ctx.path) {
+  if (ctx.state.commonsUrl === ctx.path) {
     ctx.status = 200;
     ctx.type = 'application/javascript';
     ctx.body = '';
@@ -102,8 +71,8 @@ export default (
         ),
       },
       [
-        <script key="common" src={commonsUrl} async />,
-        <script key="client" src={clientUrl} async />,
+        <script key="common" src={ctx.state.commonsUrl} async />,
+        <script key="client" src={ctx.state.clientUrl} async />,
       ],
       (errorHtml: string) => {
         ctx.res.end(errorHtml);

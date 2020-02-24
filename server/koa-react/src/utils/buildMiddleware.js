@@ -15,7 +15,7 @@ import { type optionsType } from '../index';
 import { type cacheType } from './buildCache';
 import { type returnType as buildCompilerReturnType } from './buildCompiler';
 
-const debugLog = debug('react:buildServer');
+const debugLog = debug('react:buildMiddleware');
 
 type ctxType = {
   ...koaContextType,
@@ -34,7 +34,7 @@ type ctxType = {
 
 /**
  * @example
- * buildServer(options, cache, urls)
+ * buildMiddleware(options, cache, urls)
  *
  * @param {optionsType} options - koa react options
  * @param {cacheType} cache - cache data

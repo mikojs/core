@@ -13,7 +13,7 @@ import writeClient from './utils/writeClient';
 import buildCompiler, {
   type returnType as buildCompilerReturnType,
 } from './utils/buildCompiler';
-import buildServer from './utils/buildServer';
+import buildMiddleware from './utils/buildMiddleware';
 
 export type webpackMiddlewarweOptionsType = $Diff<
   buildCompilerReturnType,
@@ -36,9 +36,8 @@ export type optionsType = {|
 
 export type returnType = {|
   update: (filePath: ?string) => void,
-  webpack: () => Promise<void>,
+  runWebpack: () => Promise<void>,
   middleware: MiddlewareType,
-  server: MiddlewareType,
 |};
 
 /**
@@ -68,7 +67,6 @@ export default async (
     });
 
   const compiler = buildCompiler(folderPath, options, cache);
-  const server = buildServer(options, cache, compiler);
 
   return {
     // update
@@ -86,13 +84,10 @@ export default async (
     },
 
     // run webpack or watching
-    webpack: compiler.run,
+    runWebpack: compiler.run,
 
     // middleware
-    middleware: compose([server]),
-
-    // server
     // $FlowFixMe TODO: can not extend koa context type
-    server,
+    middleware: compose([buildMiddleware(options, cache, compiler)]),
   };
 };

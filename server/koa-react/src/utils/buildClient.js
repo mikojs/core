@@ -16,7 +16,7 @@ import { type optionsType } from '../index';
 
 import { type returnType as buildCompilerReturnType } from './buildCompiler';
 
-type ctxType = {
+export type ctxType = {
   ...koaContextType,
   state: {
     commonsUrl: string,
@@ -48,7 +48,8 @@ export default (
   { dev = process.env.NODE_ENV !== 'production', basename }: optionsType,
   { compiler, config, devMiddleware }: buildCompilerReturnType,
 ): koaMiddlewareType => {
-  const { publicPath, path: folderPath } = config.output || {};
+  const publicPath = config.output?.publicPath;
+  const folderPath = config.output?.path;
   let commonsUrl: string = [basename?.replace(/^\//, ''), 'commons']
     .filter(Boolean)
     .join('/');
@@ -75,8 +76,8 @@ export default (
         ctx.state.commonsUrl = assetsByChunkName[commonsUrl];
         ctx.state.clientUrl = assetsByChunkName[clientUrl];
       } else {
-        ctx.state.commonsUrl = `${publicPath}${commonsUrl}`;
-        ctx.state.clientUrl = `${publicPath}${clientUrl}`;
+        ctx.state.commonsUrl = `${publicPath}${commonsUrl}.js`;
+        ctx.state.clientUrl = `${publicPath}${clientUrl}.js`;
       }
 
       await next();

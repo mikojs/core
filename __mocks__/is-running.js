@@ -1,6 +1,3 @@
 // @flow
 
-export default (jest.fn().mockReturnValue(true): JestMockFn<
-  $ReadOnlyArray<void>,
-  true,
->);
+export default jest.fn().mockReturnValue(true);

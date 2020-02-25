@@ -34,7 +34,7 @@ const findRootProcess = async (
   if (
     result ||
     currentProcess.name !== 'node' ||
-    require.resolve(currentProcess.cmd.split(/ /)[1]) !== filename
+    require.resolve(currentProcess.cmd.split(/ /)[1] || '') !== filename
   )
     return result;
 

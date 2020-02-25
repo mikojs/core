@@ -50,12 +50,13 @@ export default (
 ): koaMiddlewareType => {
   const publicPath = config.output?.publicPath;
   const folderPath = config.output?.path;
-  let commonsUrl: string = [basename?.replace(/^\//, ''), 'commons']
-    .filter(Boolean)
-    .join('/');
-  let clientUrl: string = [basename?.replace(/^\//, ''), 'client']
-    .filter(Boolean)
-    .join('/');
+  const cache = ['commons', 'client'].reduce(
+    (result: { [string]: string }, key: string) => ({
+      ...result,
+      [key]: [basename?.replace(/^\//, ''), key].filter(Boolean).join('/'),
+    }),
+    {},
+  );
 
   invariant(publicPath, '`publicPath` is required in webpack config.output');
 
@@ -73,11 +74,11 @@ export default (
 
         const assetsByChunkName = ctx.res.locals.webpack.devMiddleware.stats.toJson();
 
-        ctx.state.commonsUrl = assetsByChunkName[commonsUrl];
-        ctx.state.clientUrl = assetsByChunkName[clientUrl];
+        ctx.state.commonsUrl = assetsByChunkName[cache.commons];
+        ctx.state.clientUrl = assetsByChunkName[cache.client];
       } else {
-        ctx.state.commonsUrl = `${publicPath}${commonsUrl}.js`;
-        ctx.state.clientUrl = `${publicPath}${clientUrl}.js`;
+        ctx.state.commonsUrl = `${publicPath}${cache.commons}.js`;
+        ctx.state.clientUrl = `${publicPath}${cache.client}.js`;
       }
 
       await next();
@@ -89,17 +90,16 @@ export default (
   })
     .leaves()
     .forEach(({ data: { name, path: filePath } }: d3DirTreeNodeType) => {
-      if (new RegExp(commonsUrl).test(name))
-        commonsUrl = path.relative(folderPath, filePath);
-
-      if (new RegExp(clientUrl).test(name))
-        clientUrl = path.relative(folderPath, filePath);
+      Object.keys(cache).forEach((key: string) => {
+        if (new RegExp(cache[key]).test(name))
+          cache[key] = path.relative(folderPath, filePath);
+      });
     });
 
   return compose([
     async (ctx: ctxType, next: () => Promise<void>) => {
-      ctx.state.commonsUrl = `${publicPath}${commonsUrl}`;
-      ctx.state.clientUrl = `${publicPath}${clientUrl}`;
+      ctx.state.commonsUrl = `${publicPath}${cache.commons}`;
+      ctx.state.clientUrl = `${publicPath}${cache.client}`;
 
       await next();
     },

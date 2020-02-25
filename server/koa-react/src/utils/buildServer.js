@@ -71,7 +71,7 @@ export default ({ basename }: optionsType, cache: cacheType) => async (
         ),
       },
       [
-        <script key="common" src={ctx.state.commonsUrl} async />,
+        <script key="commons" src={ctx.state.commonsUrl} async />,
         <script key="client" src={ctx.state.clientUrl} async />,
       ],
       (errorHtml: string) => {

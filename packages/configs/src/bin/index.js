@@ -17,6 +17,7 @@ import findMainServer from 'utils/findMainServer';
 import sendToServer from 'utils/sendToServer';
 import findFiles, { type filesDataType } from 'utils/findFiles';
 import generateFiles from 'utils/generateFiles';
+import findRootProcess from 'utils/findRootProcess';
 
 import cliOptions from 'cliOptions';
 
@@ -122,7 +123,10 @@ handleUnhandledRejection();
           env,
         });
       } catch (e) {
-        logger.log('Run command fail');
+        const rootProcess = await findRootProcess(__filename);
+
+        if (rootProcess?.pid === process.pid) logger.log('Run command fail');
+
         debugLog(e);
         process.exit(e.exitCode || 1);
       }

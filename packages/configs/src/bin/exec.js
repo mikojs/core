@@ -12,6 +12,8 @@ import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import printInfo from 'exec/printInfo';
 import getExecCommands from 'exec/getCommands';
 
+import findRootProcess from 'utils/findRootProcess';
+
 const logger = createLogger('@mikojs/configs (exec)');
 const debugLog = debug('configs:bin:exec');
 
@@ -60,9 +62,13 @@ handleUnhandledRejection();
         Promise.resolve(),
       );
   } catch (e) {
-    logger.log(
-      chalk`Run command fail, you can use {green exec info} to find the more commands`,
-    );
+    const rootProcess = await findRootProcess(__filename);
+
+    if (rootProcess?.pid === process.pid)
+      logger.log(
+        chalk`Run command fail, you can use {green exec info} to find the more commands`,
+      );
+
     debugLog(e);
     process.exit(e.exitCode || 1);
   }

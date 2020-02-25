@@ -4,28 +4,22 @@ import path from 'path';
 
 import { type Middleware as MiddlewareType } from 'koa';
 import compose from 'koa-compose';
-import { type WebpackOptions as WebpackOptionsType } from 'webpack';
-import { emptyFunction } from 'fbjs';
-import address from 'address';
 
-import { d3DirTree, requireModule } from '@mikojs/utils';
+import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import buildCache, { type cacheType } from './utils/buildCache';
-import getConfig from './utils/getConfig';
 import writeClient from './utils/writeClient';
+import buildCompiler, {
+  type returnType as buildCompilerReturnType,
+} from './utils/buildCompiler';
+import buildClient from './utils/buildClient';
 import buildServer from './utils/buildServer';
-import buildJs from './utils/buildJs';
 
-export type webpackMiddlewarweOptionsType = {
-  config: WebpackOptionsType,
-  devMiddleware: {
-    stats?: $PropertyType<
-      $NonMaybeType<$PropertyType<WebpackOptionsType, 'devServer'>>,
-      'stats',
-    >,
-  },
-};
+export type webpackMiddlewarweOptionsType = $Diff<
+  buildCompilerReturnType,
+  {| compiler: mixed, run: mixed |},
+>;
 
 export type optionsType = {|
   dev?: boolean,
@@ -43,10 +37,10 @@ export type optionsType = {|
 
 export type returnType = {|
   update: (filePath: ?string) => void,
+  runWebpack: () => Promise<void>,
   middleware: MiddlewareType,
   client: MiddlewareType,
   server: MiddlewareType,
-  buildJs: () => Promise<{ [string]: string }>,
 |};
 
 /**
@@ -64,12 +58,7 @@ export default async (
   options?: optionsType = {},
 ): Promise<returnType> => {
   const cache = buildCache(folderPath, options);
-  const {
-    dev = process.env.NODE_ENV !== 'production',
-    extensions = /\.js$/,
-    exclude,
-    webpackMiddlewarweOptions: webpackMiddlewarweOptionsFunc = emptyFunction.thatReturnsArgument,
-  } = options;
+  const { extensions = /\.js$/, exclude } = options;
 
   d3DirTree(folderPath, {
     extensions,
@@ -80,30 +69,8 @@ export default async (
       cache.addPage(filePath);
     });
 
-  const clientPath = writeClient(cache, options);
-  const webpackMiddlewarweOptions = webpackMiddlewarweOptionsFunc(
-    {
-      config: getConfig(folderPath, options, cache, clientPath),
-      devMiddleware: {
-        serverSideRender: true,
-        stats: {
-          maxModules: 0,
-          colors: true,
-        },
-      },
-      hotClient: {
-        logLevel: 'warn',
-        host: address.ip(),
-      },
-    },
-    dev,
-  );
-
-  const client = dev
-    ? await require('koa-webpack')(webpackMiddlewarweOptions)
-    : await requireModule(path.resolve(__dirname, './utils/buildProdClient'))(
-        webpackMiddlewarweOptions,
-      );
+  const compiler = buildCompiler(folderPath, options, cache);
+  const client = buildClient(options, compiler);
   const server = buildServer(options, cache);
 
   return {
@@ -118,8 +85,11 @@ export default async (
         return;
 
       cache.addPage(filePath);
-      writeClient(cache, options);
+      writeClient(options, cache);
     },
+
+    // run webpack or watching
+    runWebpack: compiler.run,
 
     // middleware
     middleware: compose([client, server]),
@@ -130,8 +100,5 @@ export default async (
     // server
     // $FlowFixMe TODO: can not extend koa context type
     server,
-
-    // build js
-    buildJs: () => buildJs(webpackMiddlewarweOptions),
   };
 };

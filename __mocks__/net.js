@@ -1,20 +1,14 @@
 // @flow
 
-const mockSocket: JestMockFn<
-  $ReadOnlyArray<void>,
-  {|
-    setEncoding: JestMockFn<$ReadOnlyArray<void>, void>,
-    on: JestMockFn<$ReadOnlyArray<void>, void>,
-  |},
-> = jest.fn().mockReturnValue({
-  setEncoding: jest.fn<$ReadOnlyArray<void>, void>(),
-  on: jest.fn<$ReadOnlyArray<void>, void>(),
+const mockSocket = jest.fn().mockReturnValue({
+  setEncoding: jest.fn(),
+  on: jest.fn(),
 });
-const mockCreateServerOn = jest.fn<$ReadOnlyArray<void>, void>();
-const mockCreateServerListen = jest.fn<$ReadOnlyArray<void>, void>();
-const mockCreateServerClose = jest.fn<$ReadOnlyArray<void>, void>();
+const mockCreateServerOn = jest.fn();
+const mockCreateServerListen = jest.fn();
+const mockCreateServerClose = jest.fn();
 
-export default ({
+export default {
   mockSocket,
   createServer: jest
     .fn()
@@ -35,21 +29,4 @@ export default ({
     on: jest.fn(),
     end: jest.fn(),
   }),
-}: {|
-  mockSocket: typeof mockSocket,
-  createServer: JestMockFn<
-    [(socket: mixed) => void],
-    {|
-      on: typeof mockCreateServerOn,
-      listen: typeof mockCreateServerListen,
-      close: typeof mockCreateServerClose,
-    |},
-  >,
-  connect: JestMockFn<
-    $ReadOnlyArray<void>,
-    {|
-      on: JestMockFn<$ReadOnlyArray<void>, void>,
-      end: JestMockFn<$ReadOnlyArray<void>, void>,
-    |},
-  >,
-|});
+};

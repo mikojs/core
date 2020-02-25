@@ -16,18 +16,17 @@ import { type cacheType } from './buildCache';
 
 const debugLog = debug('react:buildServer');
 
-type ctxType = {
+export type ctxType = {
   ...koaContextType,
   state: {
-    webpackStats: {
-      toJson: () => { assetsByChunkName: { [string]: string } },
-    },
+    commonsUrl: string,
+    clientUrl: string,
   },
 };
 
 /**
  * @example
- * buildServer(options, cache, urls)
+ * buildServer(options, cache)
  *
  * @param {optionsType} options - koa react options
  * @param {cacheType} cache - cache data
@@ -40,17 +39,7 @@ export default ({ basename }: optionsType, cache: cacheType) => async (
 ) => {
   debugLog(ctx.path);
 
-  const { assetsByChunkName } = ctx.state.webpackStats.toJson();
-  const commonsUrl =
-    assetsByChunkName[
-      [basename?.replace(/^\//, ''), 'commons'].filter(Boolean).join('/')
-    ];
-  const clientUrl =
-    assetsByChunkName[
-      [basename?.replace(/^\//, ''), 'client'].filter(Boolean).join('/')
-    ];
-
-  if (commonsUrl === ctx.path) {
+  if (ctx.state.commonsUrl === ctx.path) {
     ctx.status = 200;
     ctx.type = 'application/javascript';
     ctx.body = '';
@@ -82,8 +71,8 @@ export default ({ basename }: optionsType, cache: cacheType) => async (
         ),
       },
       [
-        <script key="common" src={commonsUrl} async />,
-        <script key="client" src={clientUrl} async />,
+        <script key="commons" src={ctx.state.commonsUrl} async />,
+        <script key="client" src={ctx.state.clientUrl} async />,
       ],
       (errorHtml: string) => {
         ctx.res.end(errorHtml);

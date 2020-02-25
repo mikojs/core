@@ -17,6 +17,7 @@ import findMainServer from 'utils/findMainServer';
 import sendToServer from 'utils/sendToServer';
 import findFiles, { type filesDataType } from 'utils/findFiles';
 import generateFiles from 'utils/generateFiles';
+import findRootProcess from 'utils/findRootProcess';
 
 import cliOptions from 'cliOptions';
 
@@ -32,11 +33,12 @@ handleUnhandledRejection();
     return;
   }
 
+  const rootProcess = await findRootProcess(__filename);
   const { cli, argv, env, cliName } = options;
   const debugLog = debug(`configs:bin[${cliName}]`);
   const { customConfigsPath } = configs;
 
-  if (customConfigsPath)
+  if (customConfigsPath && rootProcess?.pid === process.pid)
     logger
       .info('Using external configuration')
       .info(`Location: ${customConfigsPath}`);
@@ -122,7 +124,8 @@ handleUnhandledRejection();
           env,
         });
       } catch (e) {
-        logger.log('Run command fail');
+        if (rootProcess?.pid === process.pid) logger.log('Run command fail');
+
         debugLog(e);
         process.exit(e.exitCode || 1);
       }

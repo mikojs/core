@@ -33,11 +33,12 @@ handleUnhandledRejection();
     return;
   }
 
+  const rootProcess = await findRootProcess(__filename);
   const { cli, argv, env, cliName } = options;
   const debugLog = debug(`configs:bin[${cliName}]`);
   const { customConfigsPath } = configs;
 
-  if (customConfigsPath)
+  if (customConfigsPath && rootProcess?.pid === process.pid)
     logger
       .info('Using external configuration')
       .info(`Location: ${customConfigsPath}`);
@@ -123,8 +124,6 @@ handleUnhandledRejection();
           env,
         });
       } catch (e) {
-        const rootProcess = await findRootProcess(__filename);
-
         if (rootProcess?.pid === process.pid) logger.log('Run command fail');
 
         debugLog(e);

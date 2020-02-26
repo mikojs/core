@@ -31,7 +31,7 @@ describe('build server', () => {
     const server = buildServer();
     const mockCallback = jest.fn();
 
-    server.on('watch', mockCallback);
+    server.on(['watch'], mockCallback);
     (
       await server.run(
         server.init({

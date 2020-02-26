@@ -32,11 +32,10 @@ describe('build server', () => {
     const server = buildServer();
     const mockCallback = jest.fn();
 
-    server.on('watch:add', mockCallback);
+    server.on('watch', mockCallback);
     (
       await server.run(
         server.init({
-          dir: __dirname,
           port: await getPort(),
         }),
       )

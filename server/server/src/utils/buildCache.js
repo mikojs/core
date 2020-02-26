@@ -4,11 +4,9 @@ export type optionsType = {|
   dev?: boolean,
   build?: boolean,
   port?: number,
-  dir?: string,
-  filePath?: string,
 |};
 
-type eventType = 'build' | 'run' | 'watch' | 'watch:add' | 'watch:change';
+type eventType = 'build' | 'run' | 'watch';
 type eventsType = $ReadOnlyArray<eventType> | eventType;
 type callbackType = (options: optionsType) => Promise<void> | void;
 
@@ -18,7 +16,12 @@ type cacheType = {|
 |};
 
 export type returnType = {|
-  add: (events: eventsType, callback: callbackType) => void,
+  on: (
+    events: eventsType,
+    callback: callbackType,
+  ) => {|
+    on: $PropertyType<returnType, 'on'>,
+  |},
   run: (eventName: eventType, options: optionsType) => Promise<void>,
 |};
 
@@ -29,21 +32,30 @@ export type returnType = {|
  * @return {returnType} - cache functions
  */
 export default (): returnType => {
-  const cache = [
-    {
-      events: ['watch:add', 'watch:change'],
-      callback: ({ filePath }: optionsType) => {
-        if (!filePath || !/\.js$/.test(filePath)) return;
+  const cache = [];
 
-        delete require.cache[filePath];
-      },
-    },
-  ];
+  /**
+   * @example
+   * on('add', () => {})
+   *
+   * @param {eventsType} events - event names
+   * @param {Function} callback - callback funcrion
+   *
+   * @return {object} - on object
+   */
+  const on = (
+    events: eventsType,
+    callback: callbackType,
+  ): {| on: $PropertyType<returnType, 'on'> |} => {
+    cache.push({ events, callback });
+
+    return {
+      on,
+    };
+  };
 
   return {
-    add: (events: eventsType, callback: callbackType) => {
-      cache.push({ events, callback });
-    },
+    on,
     run: (eventName: eventType, options: optionsType) =>
       cache
         .filter(({ events }: cacheType) =>

@@ -1,7 +1,6 @@
 // @flow
 
 import Koa from 'koa';
-import chokidar from 'chokidar';
 import ora from 'ora';
 import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
@@ -15,7 +14,7 @@ import buildCache, {
 
 type returnType = {|
   init: (options: optionsType) => Koa,
-  on: $PropertyType<buildCacheReturnType, 'add'>,
+  on: $PropertyType<buildCacheReturnType, 'on'>,
   run: (app: Koa) => Promise<http$Server>,
 |};
 
@@ -48,7 +47,7 @@ export default (): returnType => {
       });
 
       if (!options.dev && options.build) {
-        cache.add('build', () =>
+        cache.on('build', () =>
           mockChoice(
             process.env.NODE_ENV === 'test',
             emptyFunction,
@@ -62,10 +61,10 @@ export default (): returnType => {
       return new Koa();
     },
 
-    on: cache.add,
+    on: cache.on,
 
     run: async (app: Koa): Promise<http$Server> => {
-      const { dev, port, dir } = options;
+      const { dev, port } = options;
 
       await cache.run('run', options);
 
@@ -82,27 +81,7 @@ export default (): returnType => {
         chalk`Running server at port: {gray {bold ${port?.toString()}}}`,
       );
 
-      if (dev) {
-        cache.run('watch', options);
-
-        if (dir)
-          chokidar
-            .watch(dir, {
-              ignoreInitial: true,
-            })
-            .on('all', async (event: string, filePath: string) => {
-              if (event === 'add')
-                await cache.run('watch:add', {
-                  ...options,
-                  filePath,
-                });
-              else if (event === 'change')
-                await cache.run('watch:change', {
-                  ...options,
-                  filePath,
-                });
-            });
-      }
+      if (dev) cache.run('watch', options);
 
       return server;
     },

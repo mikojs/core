@@ -11,10 +11,14 @@ import buildCache, {
   type optionsType,
   type returnType as buildCacheReturnType,
 } from './buildCache';
+import buildWatchFiles, {
+  type returnType as buildWatchFilesReturnType,
+} from './buildWatchFiles';
 
 type returnType = {|
   init: (options: optionsType) => Koa,
   on: $PropertyType<buildCacheReturnType, 'on'>,
+  watchFiles: $PropertyType<buildWatchFilesReturnType, 'init'>,
   run: (app: Koa) => Promise<http$Server>,
 |};
 
@@ -28,6 +32,7 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
  */
 export default (): returnType => {
   const cache = buildCache();
+  const watchFiles = buildWatchFiles();
   const options: $NonMaybeType<optionsType> = {
     dev: process.env.NODE_ENV !== 'production',
     build: Boolean(process.env.BUILD),
@@ -62,6 +67,7 @@ export default (): returnType => {
     },
 
     on: cache.on,
+    watchFiles: watchFiles.init,
 
     run: async (app: Koa): Promise<http$Server> => {
       const { dev, port } = options;
@@ -81,7 +87,10 @@ export default (): returnType => {
         chalk`Running server at port: {gray {bold ${port?.toString()}}}`,
       );
 
-      if (dev) cache.run('watch', options);
+      if (dev) {
+        cache.on('watch', watchFiles.run);
+        cache.run('watch', options);
+      }
 
       return server;
     },

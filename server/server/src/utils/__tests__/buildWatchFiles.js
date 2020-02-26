@@ -2,7 +2,7 @@
 
 import chokidar from 'chokidar';
 
-import buildWatchFiles from '../buildWatchFiles';
+import buildWatchFiles, { removeFileCache } from '../buildWatchFiles';
 
 describe('build watch files', () => {
   test('run', () => {
@@ -13,5 +13,13 @@ describe('build watch files', () => {
     watchFiles.run();
 
     expect(chokidar.watch().on).toHaveBeenCalledWith('add', mockCallback);
+  });
+
+  test.each`
+    filePath
+    ${'test'}
+    ${'test.js'}
+  `('remove file cache', ({ filePath }: {| filePath: string |}) => {
+    expect(removeFileCache(filePath)).toBeUndefined();
   });
 });

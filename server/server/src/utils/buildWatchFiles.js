@@ -21,8 +21,8 @@ export type returnType = {|
  *
  * @param {string} filePath - file path to remove cache
  */
-const removeFileCache = (filePath: string) => {
-  if (!filePath || !/\.js$/.test(filePath)) return;
+export const removeFileCache = (filePath: string) => {
+  if (!/\.js$/.test(filePath)) return;
 
   delete require.cache[filePath];
 };

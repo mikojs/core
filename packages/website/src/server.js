@@ -57,17 +57,15 @@ export default async ({
       '**/server.js',
     ]),
   );
-  server.on(
-    ['watch:add', 'watch:change'],
-    ({ filePath }: { filePath?: string }) => graphql.update(filePath),
-  );
-  server.on(
-    ['watch:add', 'watch:change'],
-    ({ filePath }: { filePath?: string }) => react.update(filePath),
-  );
+  server
+    .watchFiles(dir)
+    .on('add', graphql.update)
+    .on('add', react.update)
+    .on('change', graphql.update)
+    .on('change', react.update);
 
   return (
-    server.init({ dev, port, dir })
+    server.init({ dev, port })
     |> server.use(base)
     |> ('/graphql'
       |> server.start

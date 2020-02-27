@@ -3,6 +3,9 @@
 import { graphql, type GraphQLArgs as GraphQLArgsType } from 'graphql';
 import { type makeExecutableSchemaOptionsType } from 'graphql-tools';
 import execa, { type ExecaPromise as execaPromiseType } from 'execa';
+import { emptyFunction } from 'fbjs';
+
+import { mockChoice } from '@mikojs/utils';
 
 import buildSchema from './utils/buildSchema';
 import updateSchema from './utils/updateSchema';
@@ -59,7 +62,10 @@ export default (
 
     // run relay-compiler
     runRelayCompiler: (argv: $ReadOnlyArray<string>) =>
-      execa(
+      mockChoice(
+        process.env.NODE_ENV === 'test',
+        emptyFunction,
+        execa,
         'relay-compiler',
         ['--schema', getSchemaFilePath(schema), ...argv],
         {

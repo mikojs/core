@@ -12,7 +12,7 @@ describe('build server', () => {
     server.on('build', mockCallback);
     (
       await server.run(
-        server.init({
+        await server.init({
           dev: false,
           build: true,
           port: await getPort(),
@@ -34,7 +34,7 @@ describe('build server', () => {
     server.on(['watch'], mockCallback);
     (
       await server.run(
-        server.init({
+        await server.init({
           dev,
           port: await getPort(),
         }),

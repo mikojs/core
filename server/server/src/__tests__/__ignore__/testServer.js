@@ -32,8 +32,8 @@ const customMiddleware = (newBody: string) => async (
  *
  * @return {object} - http server
  */
-export default () =>
-  server.init()
+export default async () =>
+  (await server.init())
   |> server.use(customMiddleware('entry router'))
   |> ('/test'
     |> server.start

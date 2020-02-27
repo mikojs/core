@@ -16,7 +16,7 @@ import buildWatchFiles, {
 } from './buildWatchFiles';
 
 type returnType = {|
-  init: (options: optionsType) => Koa,
+  init: (options: optionsType) => Promise<Koa>,
   on: $PropertyType<buildCacheReturnType, 'on'>,
   watchFiles: $PropertyType<buildWatchFilesReturnType, 'init'>,
   run: (app: Koa) => Promise<http$Server>,
@@ -40,7 +40,7 @@ export default (): returnType => {
   };
 
   return {
-    init: (initOptions?: optionsType): Koa => {
+    init: async (initOptions?: optionsType): Promise<Koa> => {
       Object.keys(initOptions || {}).forEach((key: string) => {
         options[key] = initOptions?.[key];
       });
@@ -52,15 +52,19 @@ export default (): returnType => {
       );
 
       if (options.build) {
-        cache.on('build', () =>
-          mockChoice(
-            process.env.NODE_ENV === 'test',
-            emptyFunction,
-            process.exit,
-            0,
-          ),
-        );
-        cache.run('build', options);
+        await new Promise(resolve => {
+          cache.on('build', () =>
+            resolve(
+              mockChoice(
+                process.env.NODE_ENV === 'test',
+                emptyFunction,
+                process.exit,
+                0,
+              ),
+            ),
+          );
+          cache.run('build', options);
+        });
       }
 
       return new Koa();

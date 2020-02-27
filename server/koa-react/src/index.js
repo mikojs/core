@@ -52,11 +52,11 @@ export type returnType = {|
  *
  * @return {returnType} - koa react functions
  */
-export default async (
+export default (
   folderPath: string,
   // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
   options?: optionsType = {},
-): Promise<returnType> => {
+): returnType => {
   const cache = buildCache(folderPath, options);
   const { extensions = /\.js$/, exclude } = options;
 

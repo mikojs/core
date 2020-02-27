@@ -1,15 +1,10 @@
 // @flow
 
-import chokidar from 'chokidar';
 import getPort from 'get-port';
 
 import buildServer from '../buildServer';
 
 describe('build server', () => {
-  beforeEach(() => {
-    chokidar.watch().on.mockClear();
-  });
-
   test('run server with build = true', async () => {
     const server = buildServer();
     const mockCallback = jest.fn();
@@ -17,7 +12,7 @@ describe('build server', () => {
     server.on('build', mockCallback);
     (
       await server.run(
-        server.init({
+        await server.init({
           dev: false,
           build: true,
           port: await getPort(),
@@ -28,48 +23,24 @@ describe('build server', () => {
     expect(mockCallback).toHaveBeenCalledTimes(1);
   });
 
-  test('watch with dev = true', async () => {
+  test.each`
+    dev
+    ${true}
+    ${false}
+  `('run server with dev = $dev', async ({ dev }: {| dev: boolean |}) => {
     const server = buildServer();
     const mockCallback = jest.fn();
 
-    server.on('watch:add', mockCallback);
+    server.on(['watch'], mockCallback);
     (
       await server.run(
-        server.init({
-          dir: __dirname,
+        await server.init({
+          dev,
           port: await getPort(),
         }),
       )
     ).close();
 
-    const [[, chokidarCallback]] = chokidar.watch().on.mock.calls;
-
-    await chokidarCallback('add', 'test.js');
-
-    expect(mockCallback).toHaveBeenCalledTimes(1);
-    expect(mockCallback).toHaveBeenCalledWith(
-      expect.objectContaining({ filePath: 'test.js' }),
-    );
-
-    await chokidarCallback('remove', 'test.js');
-
-    expect(mockCallback).toHaveBeenCalledTimes(1);
-
-    await chokidarCallback('change', 'test');
-
-    expect(mockCallback).toHaveBeenCalledTimes(1);
-    expect(mockCallback).not.toHaveBeenCalledWith(
-      expect.objectContaining({ filePath: 'test' }),
-    );
-  });
-
-  test('watch with dev = false', async () => {
-    const server = buildServer();
-
-    (
-      await server.run(server.init({ dev: false, port: await getPort() }))
-    ).close();
-
-    expect(chokidar.watch().on).not.toHaveBeenCalled();
+    (dev ? expect(mockCallback) : expect(mockCallback).not).toHaveBeenCalled();
   });
 });

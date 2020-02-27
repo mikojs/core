@@ -1,7 +1,6 @@
 // @flow
 
 import Koa from 'koa';
-import chokidar from 'chokidar';
 import ora from 'ora';
 import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
@@ -12,10 +11,14 @@ import buildCache, {
   type optionsType,
   type returnType as buildCacheReturnType,
 } from './buildCache';
+import buildWatchFiles, {
+  type returnType as buildWatchFilesReturnType,
+} from './buildWatchFiles';
 
 type returnType = {|
-  init: (options: optionsType) => Koa,
-  on: $PropertyType<buildCacheReturnType, 'add'>,
+  init: (options: optionsType) => Promise<Koa>,
+  on: $PropertyType<buildCacheReturnType, 'on'>,
+  watchFiles: $PropertyType<buildWatchFilesReturnType, 'init'>,
   run: (app: Koa) => Promise<http$Server>,
 |};
 
@@ -29,6 +32,7 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
  */
 export default (): returnType => {
   const cache = buildCache();
+  const watchFiles = buildWatchFiles();
   const options: $NonMaybeType<optionsType> = {
     dev: process.env.NODE_ENV !== 'production',
     build: Boolean(process.env.BUILD),
@@ -36,36 +40,41 @@ export default (): returnType => {
   };
 
   return {
-    init: (initOptions?: optionsType): Koa => {
+    init: async (initOptions?: optionsType): Promise<Koa> => {
+      Object.keys(initOptions || {}).forEach((key: string) => {
+        options[key] = initOptions?.[key];
+      });
       mockChoice(
-        process.env.NODE_ENV === 'test',
+        options.build || process.env.NODE_ENV === 'test',
         emptyFunction,
         logger.start,
         'Server start',
       );
-      Object.keys(initOptions || {}).forEach((key: string) => {
-        options[key] = initOptions?.[key];
-      });
 
-      if (!options.dev && options.build) {
-        cache.add('build', () =>
-          mockChoice(
-            process.env.NODE_ENV === 'test',
-            emptyFunction,
-            process.exit,
-            0,
-          ),
-        );
-        cache.run('build', options);
+      if (options.build) {
+        await new Promise(resolve => {
+          cache.on('build', () =>
+            resolve(
+              mockChoice(
+                process.env.NODE_ENV === 'test',
+                emptyFunction,
+                process.exit,
+                0,
+              ),
+            ),
+          );
+          cache.run('build', options);
+        });
       }
 
       return new Koa();
     },
 
-    on: cache.add,
+    on: cache.on,
+    watchFiles: watchFiles.init,
 
     run: async (app: Koa): Promise<http$Server> => {
-      const { dev, port, dir } = options;
+      const { dev, port } = options;
 
       await cache.run('run', options);
 
@@ -83,25 +92,14 @@ export default (): returnType => {
       );
 
       if (dev) {
+        cache.on('watch', () =>
+          mockChoice(
+            process.env.NODE_ENV === 'test',
+            emptyFunction,
+            watchFiles.run,
+          ),
+        );
         cache.run('watch', options);
-
-        if (dir)
-          chokidar
-            .watch(dir, {
-              ignoreInitial: true,
-            })
-            .on('all', async (event: string, filePath: string) => {
-              if (event === 'add')
-                await cache.run('watch:add', {
-                  ...options,
-                  filePath,
-                });
-              else if (event === 'change')
-                await cache.run('watch:change', {
-                  ...options,
-                  filePath,
-                });
-            });
       }
 
       return server;

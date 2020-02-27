@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "configs server -w",
     "start": "NODE_ENV=production configs server",
-    "test": "SKIP_SERVER=true configs server"
+    "test": "BUILD=true configs server"
   },
   "dependencies": {
     "@babel/runtime": "^7.8.4",

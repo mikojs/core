@@ -23,51 +23,37 @@ import useLess from '@mikojs/use-less';
  *
  * @return {object} - http server
  */
-export default async ({
-  src,
-  dir,
-  dev,
-  watch,
-  port,
-  close,
-}: contextType): Promise<?http$Server> => {
-  const graphql = koaGraphql(path.resolve(dir, './graphql'));
-
-  await graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']);
-
-  if (process.env.SKIP_SERVER) {
-    close();
-    return null;
-  }
-
-  const react = await koaReact(
-    path.resolve(dir, './pages'),
+export default async ({ port }: contextType): Promise<http$Server> => {
+  const src = path.resolve(__dirname, '../src');
+  const dev = process.env.NODE_ENV !== 'production';
+  const graphql = koaGraphql(path.resolve(__dirname, './graphql'));
+  const react = koaReact(
+    path.resolve(__dirname, './pages'),
     { dev, exclude: /__generated__/ } |> useCss |> useLess,
   );
 
-  server.on(['build', 'run'], () =>
-    graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']),
-  );
-  server.on('watch', () =>
-    graphql.runRelayCompiler([
-      '--src',
-      src,
-      '--watch',
-      '--exclude',
-      '**/server.js',
-    ]),
-  );
-  server.on(
-    ['watch:add', 'watch:change'],
-    ({ filePath }: { filePath?: string }) => graphql.update(filePath),
-  );
-  server.on(
-    ['watch:add', 'watch:change'],
-    ({ filePath }: { filePath?: string }) => react.update(filePath),
-  );
+  server
+    .on(['build', 'run'], () =>
+      graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']),
+    )
+    .on('watch', () =>
+      graphql.runRelayCompiler([
+        '--src',
+        src,
+        '--watch',
+        '--exclude',
+        '**/server.js',
+      ]),
+    )
+    .on(['build', 'watch'], react.runWebpack);
+
+  server
+    .watchFiles(__dirname)
+    .on(['add', 'change'], graphql.update)
+    .on(['add', 'change'], react.update);
 
   return (
-    server.init({ dev, port, dir })
+    (await server.init({ dev, port }))
     |> server.use(base)
     |> ('/graphql'
       |> server.start
@@ -78,7 +64,7 @@ export default async ({
         }),
       )
       |> server.end)
-    |> server.use(await react.middleware())
+    |> server.use(react.middleware)
     |> server.run
   );
 };

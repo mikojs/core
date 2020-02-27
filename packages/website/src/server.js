@@ -23,46 +23,34 @@ import useLess from '@mikojs/use-less';
  *
  * @return {object} - http server
  */
-export default async ({
-  src,
-  dir,
-  dev,
-  watch,
-  port,
-  close,
-}: contextType): Promise<?http$Server> => {
-  const graphql = koaGraphql(path.resolve(dir, './graphql'));
-
-  await graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']);
-
-  if (process.env.SKIP_SERVER) {
-    close();
-    return null;
-  }
-
+export default async ({ port }: contextType): Promise<?http$Server> => {
+  const src = path.resolve(__dirname, '../src');
+  const dev = process.env.NODE_ENV !== 'production';
+  const graphql = koaGraphql(path.resolve(__dirname, './graphql'));
   const react = await koaReact(
-    path.resolve(dir, './pages'),
+    path.resolve(__dirname, './pages'),
     { dev, exclude: /__generated__/ } |> useCss |> useLess,
   );
 
-  server.on(['build', 'run'], () =>
-    graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']),
-  );
-  server.on('watch', () =>
-    graphql.runRelayCompiler([
-      '--src',
-      src,
-      '--watch',
-      '--exclude',
-      '**/server.js',
-    ]),
-  );
   server
-    .watchFiles(dir)
-    .on('add', graphql.update)
-    .on('add', react.update)
-    .on('change', graphql.update)
-    .on('change', react.update);
+    .on(['build', 'run'], () =>
+      graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']),
+    )
+    .on('watch', () =>
+      graphql.runRelayCompiler([
+        '--src',
+        src,
+        '--watch',
+        '--exclude',
+        '**/server.js',
+      ]),
+    )
+    .on(['build', 'watch'], react.runWebpack);
+
+  server
+    .watchFiles(__dirname)
+    .on(['add', 'change'], graphql.update)
+    .on(['add', 'change'], react.update);
 
   return (
     server.init({ dev, port })

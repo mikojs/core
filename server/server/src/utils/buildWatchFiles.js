@@ -36,10 +36,7 @@ export const removeFileCache = (filePath: string) => {
 export default (): returnType => {
   const cache = {
     dir: '.',
-    events: [
-      ['add', removeFileCache],
-      ['change', removeFileCache],
-    ],
+    events: [[['add', 'change'], removeFileCache]],
   };
 
   /**
@@ -67,7 +64,13 @@ export default (): returnType => {
     run: () => {
       cache.events.reduce(
         (result: watcherType, argu: $ReadOnlyArray<mixed>) =>
-          result.on(...argu),
+          !(argu[0] instanceof Array)
+            ? result.on(...argu)
+            : argu[0].reduce(
+                (subResult: watcherType, key: string) =>
+                  subResult.on(key, ...argu.slice(1)),
+                result,
+              ),
         require('chokidar').watch(cache.dir, {
           ignoreInitial: true,
         }),

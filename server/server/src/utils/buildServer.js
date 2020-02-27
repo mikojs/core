@@ -88,7 +88,13 @@ export default (): returnType => {
       );
 
       if (dev) {
-        cache.on('watch', watchFiles.run);
+        cache.on('watch', () =>
+          mockChoice(
+            process.env.NODE_ENV === 'test',
+            emptyFunction,
+            watchFiles.run,
+          ),
+        );
         cache.run('watch', options);
       }
 

@@ -23,11 +23,11 @@ import useLess from '@mikojs/use-less';
  *
  * @return {object} - http server
  */
-export default async ({ port }: contextType): Promise<?http$Server> => {
+export default ({ port }: contextType): Promise<http$Server> => {
   const src = path.resolve(__dirname, '../src');
   const dev = process.env.NODE_ENV !== 'production';
   const graphql = koaGraphql(path.resolve(__dirname, './graphql'));
-  const react = await koaReact(
+  const react = koaReact(
     path.resolve(__dirname, './pages'),
     { dev, exclude: /__generated__/ } |> useCss |> useLess,
   );
@@ -64,7 +64,7 @@ export default async ({ port }: contextType): Promise<?http$Server> => {
         }),
       )
       |> server.end)
-    |> server.use(await react.middleware())
+    |> server.use(react.middleware)
     |> server.run
   );
 };

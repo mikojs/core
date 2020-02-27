@@ -41,17 +41,17 @@ export default (): returnType => {
 
   return {
     init: (initOptions?: optionsType): Koa => {
+      Object.keys(initOptions || {}).forEach((key: string) => {
+        options[key] = initOptions?.[key];
+      });
       mockChoice(
-        process.env.NODE_ENV === 'test',
+        options.build || process.env.NODE_ENV === 'test',
         emptyFunction,
         logger.start,
         'Server start',
       );
-      Object.keys(initOptions || {}).forEach((key: string) => {
-        options[key] = initOptions?.[key];
-      });
 
-      if (!options.dev && options.build) {
+      if (options.build) {
         cache.on('build', () =>
           mockChoice(
             process.env.NODE_ENV === 'test',

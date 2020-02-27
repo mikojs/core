@@ -23,7 +23,7 @@ import useLess from '@mikojs/use-less';
  *
  * @return {object} - http server
  */
-export default ({ port }: contextType): Promise<http$Server> => {
+export default async ({ port }: contextType): Promise<http$Server> => {
   const src = path.resolve(__dirname, '../src');
   const dev = process.env.NODE_ENV !== 'production';
   const graphql = koaGraphql(path.resolve(__dirname, './graphql'));
@@ -53,7 +53,7 @@ export default ({ port }: contextType): Promise<http$Server> => {
     .on(['add', 'change'], react.update);
 
   return (
-    server.init({ dev, port })
+    (await server.init({ dev, port }))
     |> server.use(base)
     |> ('/graphql'
       |> server.start

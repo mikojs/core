@@ -4,8 +4,9 @@ import path from 'path';
 
 import { type Middleware as MiddlewareType } from 'koa';
 import compose from 'koa-compose';
+import { emptyFunction } from 'fbjs';
 
-import { d3DirTree } from '@mikojs/utils';
+import { d3DirTree, mockChoice } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import buildCache, { type cacheType } from './utils/buildCache';
@@ -89,7 +90,8 @@ export default (
     },
 
     // run webpack or watching
-    runWebpack: compiler.run,
+    runWebpack: () =>
+      mockChoice(process.env.NODE_ENV === 'test', emptyFunction, compiler.run),
 
     // middleware
     middleware: compose([client, server]),

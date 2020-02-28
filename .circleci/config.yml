@@ -25,7 +25,7 @@ set-npm-key: &set-npm-key
   command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
 
 jobs:
-  test:
+  basic:
     <<: *defaults
     steps:
       - checkout
@@ -43,11 +43,32 @@ jobs:
           name: Check code style
           command: yarn configs lint .
 
+  normal-test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore-cache
+      - run: *install
+
       - run:
           name: Test
           command: yarn test -i
       - store_artifacts:
           path: coverage
+
+  website-test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore-cache
+      - run: *install
+
+      - run:
+          name: Test
+          command: yarn test -i ./packages/website --root-dir ./packages/website
+      - store_artifacts:
+          path: ./packages/website/coverage
+          destination: coverage
 
   deploy-beta:
     <<: *defaults
@@ -80,7 +101,21 @@ workflows:
   version: 2
   test-and-deploy:
     jobs:
-      - test:
+      - basic:
+          filters:
+            tags:
+              only: /.*/
+
+      - normal-test:
+          requires:
+            - basic
+          filters:
+            tags:
+              only: /.*/
+
+      - website-test:
+          requires:
+            - basic
           filters:
             tags:
               only: /.*/
@@ -88,7 +123,8 @@ workflows:
       - deploy-beta:
           context: global-env
           requires:
-            - test
+            - normal-test
+            - website-test
           filters:
             branches:
               ignore: /.*/
@@ -98,7 +134,8 @@ workflows:
       - deploy:
           context: global-env
           requires:
-            - test
+            - normal-test
+            - website-test
           filters:
             branches:
               ignore: /.*/

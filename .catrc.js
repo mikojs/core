@@ -53,9 +53,17 @@ const lint = {
 };
 
 const jest = {
-  config: ({ collectCoverageFrom, ...config }) => ({
+  config: ({ collectCoverageFrom, testPathIgnorePatterns, ...config }) => ({
     ...config,
-    collectCoverageFrom: [...collectCoverageFrom, '!**/packages/jest/**'],
+    collectCoverageFrom: [
+      ...collectCoverageFrom,
+      '!**/packages/jest/**',
+      '!**/packages/website/**',
+    ],
+    testPathIgnorePatterns: [
+      ...testPathIgnorePatterns,
+      '<rootDir>/packages/website/',
+    ],
   }),
   configsFiles: {
     lint: true,

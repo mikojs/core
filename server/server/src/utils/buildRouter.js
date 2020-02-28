@@ -18,7 +18,9 @@ export type returnType = {|
  *
  * @return {Function} - build router function
  */
-export default (method: string) => (prefix: string): returnType => {
+export default (method: 'start' | 'get' | 'post' | 'put' | 'del' | 'all') => (
+  prefix: string,
+): returnType => {
   const middlewares = [prefix];
   const router = new Router();
 
@@ -29,7 +31,31 @@ export default (method: string) => (prefix: string): returnType => {
       middlewares.push(middleware);
     },
     end: () => {
-      router[method === 'start' ? 'use' : method](...middlewares);
+      switch (method) {
+        case 'get':
+          router.get(...middlewares);
+          break;
+
+        case 'post':
+          router.post(...middlewares);
+          break;
+
+        case 'put':
+          router.put(...middlewares);
+          break;
+
+        case 'del':
+          router.del(...middlewares);
+          break;
+
+        case 'all':
+          router.all(...middlewares);
+          break;
+
+        default:
+          router.use(...middlewares);
+          break;
+      }
     },
   };
 };

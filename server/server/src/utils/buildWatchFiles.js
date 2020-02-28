@@ -1,5 +1,11 @@
 // @flow
 
+type cacheType = {|
+  dir: string | RegExp | $ReadOnlyArray<string> | $ReadOnlyArray<RegExp>,
+  // eslint-disable-next-line flowtype/no-mutable-array
+  events: Array<$ReadOnlyArray<mixed>>,
+|};
+
 type watcherType = {|
   on: (...argu: $ReadOnlyArray<mixed>) => watcherType,
 |};
@@ -34,7 +40,7 @@ export const removeFileCache = (filePath: string) => {
  * @return {returnType} - watch files functions
  */
 export default (): returnType => {
-  const cache = {
+  const cache: cacheType = {
     dir: '.',
     events: [[['add', 'change'], removeFileCache]],
   };
@@ -56,7 +62,9 @@ export default (): returnType => {
   };
 
   return {
-    init: (dir: string): $Call<$PropertyType<returnType, 'init'>, string> => {
+    init: (
+      dir: $PropertyType<cacheType, 'dir'>,
+    ): $Call<$PropertyType<returnType, 'init'>, string> => {
       cache.dir = dir;
 
       return { on };

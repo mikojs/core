@@ -8,43 +8,27 @@
 
 import path from 'path';
 
-import server, { type contextType } from '@mikojs/server';
+import server from '@mikojs/server';
 import base from '@mikojs/koa-base';
 import koaGraphql from '@mikojs/koa-graphql';
 import koaReact from '@mikojs/koa-react';
 import useCss from '@mikojs/use-css';
 import useLess from '@mikojs/use-less';
 
-/**
- * @example
- * server(context)
- *
- * @param {contextType} context - the context of the server
- *
- * @return {object} - http server
- */
-export default async ({ port }: contextType): Promise<http$Server> => {
+(async (): Promise<http$Server> => {
   const src = path.resolve(__dirname, '../src');
   const dev = process.env.NODE_ENV !== 'production';
+  const build = Boolean(process.env.BUILD);
   const graphql = koaGraphql(path.resolve(__dirname, './graphql'));
   const react = koaReact(
     path.resolve(__dirname, './pages'),
     { dev, exclude: /__generated__/ } |> useCss |> useLess,
   );
+  const relayArgv = ['--src', src, '--exclude', 'server.js'];
 
   server
-    .on(['build', 'run'], () =>
-      graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']),
-    )
-    .on('watch', () =>
-      graphql.runRelayCompiler([
-        '--src',
-        src,
-        '--watch',
-        '--exclude',
-        '**/server.js',
-      ]),
-    )
+    .on(['build', 'run'], () => graphql.runRelayCompiler(relayArgv))
+    .on('watch', () => graphql.runRelayCompiler([...relayArgv, '--watch']))
     .on(['build', 'watch'], react.runWebpack);
 
   server
@@ -53,7 +37,7 @@ export default async ({ port }: contextType): Promise<http$Server> => {
     .on(['add', 'change'], react.update);
 
   return (
-    (await server.init({ dev, port }))
+    (await server.init({ dev, build }))
     |> server.use(base)
     |> ('/graphql'
       |> server.start
@@ -67,4 +51,4 @@ export default async ({ port }: contextType): Promise<http$Server> => {
     |> server.use(react.middleware)
     |> server.run
   );
-};
+})();

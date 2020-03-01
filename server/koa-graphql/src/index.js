@@ -70,6 +70,7 @@ export default (
         ['--schema', getSchemaFilePath(schema), ...argv],
         {
           stdio: 'inherit',
+          preferLocal: true,
         },
       ),
 

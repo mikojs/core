@@ -1,7 +1,6 @@
 // @flow
 
 import { declare } from '@babel/helper-plugin-utils';
-import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@mikojs/utils';
 import { type optionsType as transformFLowOptions } from '@mikojs/babel-plugin-transform-flow';
@@ -47,8 +46,8 @@ export default declare(
         ],
         ...mockChoice(
           process.env.NODE_ENV === 'test',
-          emptyFunction.thatReturns([]),
-          emptyFunction.thatReturns([
+          [],
+          [
             [
               '@mikojs/transform-flow',
               {
@@ -67,8 +66,8 @@ export default declare(
                 ],
               },
             ],
-          ]),
-        )(),
+          ],
+        ),
       ],
     };
   },

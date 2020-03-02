@@ -2,13 +2,12 @@
 
 /**
  * @example
- * mockChoice(true, () => {}, () => {})
+ * mockChoice(true, mixed, mixed)
  *
  * @param {boolean} result - determine to use which one
- * @param {Function} funcOne - use when result is true
- * @param {Function} funcTwo - use when result is false
+ * @param {any} one - use when result is true
+ * @param {any} two - use when result is false
  *
- * @return {Function} result of function
+ * @return {any} result choicing
  */
-export default <-F>(result: boolean, funcOne: F, funcTwo: F): F =>
-  result ? funcOne : funcTwo;
+export default <-V>(result: boolean, one: V, two: V): V => (result ? one : two);

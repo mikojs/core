@@ -17,6 +17,11 @@ type buildSchemasType = {
   resolvers: $PropertyType<makeExecutableSchemaOptionsType, 'resolvers'>,
 };
 
+export type fileType = {
+  [string]: $PropertyType<buildSchemasType, 'resolvers'>,
+  typeDefs: $PropertyType<buildSchemasType, 'typeDefs'>,
+};
+
 const debugLog = debug('graphql:buildSchema');
 
 /**
@@ -51,9 +56,10 @@ export default (
         result: buildSchemasType,
         { data: { path: filePath } }: d3DirTreeNodeType,
       ): buildSchemasType => {
-        const { typeDefs: newTypeDefs, ...newResolvers } = requireModule(
-          filePath,
-        );
+        const {
+          typeDefs: newTypeDefs,
+          ...newResolvers
+        } = requireModule<fileType>(filePath);
 
         return {
           typeDefs: [...result.typeDefs, newTypeDefs],

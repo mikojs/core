@@ -6,6 +6,7 @@ import ErrorCatch, {
   type errorPropsType,
   type propsType as errorCatchPropsType,
 } from './ErrorCatch';
+import { type documentComponentType as documentType } from './server';
 
 import {
   type pageInitialArguType as pageArguType,
@@ -34,6 +35,7 @@ export type propsType = {|
   routesData: routesDataType,
   initialState: usePageReturnType,
 |};
+export type documentComponentType<C> = documentType<C>;
 
 /** @react use to control page */
 const Root = ({

@@ -34,7 +34,9 @@ client.on('data', async (data: string) => {
     });
 
   try {
-    await requireModule(serverFile)(
+    await requireModule<(context: contextType) => Promise<http$Server>>(
+      serverFile,
+    )(
       ({
         ...context,
         restart: () => {

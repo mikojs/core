@@ -2,7 +2,7 @@
 
 import mockChoice from '../mockChoice';
 
-describe('mock choic', () => {
+describe('mock choice', () => {
   test.each`
     expected
     ${true}

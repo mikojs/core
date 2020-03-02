@@ -73,5 +73,11 @@ export default [
         '__generated__',
       ],
     }),
+
+    // exec:
+    exec: ({ grep, ...config }: { grep: $ReadOnlyArray<string> }) => ({
+      ...config,
+      grep: [...grep, '--exclude', '**/__generated__/**'],
+    }),
   },
 ];

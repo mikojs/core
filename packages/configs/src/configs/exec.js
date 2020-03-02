@@ -47,6 +47,21 @@ export default {
       './*.log',
       './node_modules',
     ],
+
+    // grep to skip some files
+    grep: [
+      'grep',
+      '--exclude',
+      '**/.eslintcache',
+      ...['.git', 'node_modules', 'lib', 'flow-typed', 'coverage'].reduce(
+        (result: $ReadOnlyArray<string>, key: string) => [
+          ...result,
+          '--exclude',
+          `**/${key}/**`,
+        ],
+        [],
+      ),
+    ],
   }),
   configsFiles: {
     exec: '.execrc.js',

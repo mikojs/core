@@ -15,11 +15,11 @@ import Root, { type propsType } from './index';
 import getStatic from 'utils/getStatic';
 import getPage from 'utils/getPage';
 
-export type documentComponentType<C> = ComponentType<*> & {
+export type documentComponentType<C, P> = ComponentType<P> & {
   getInitialProps?: ({
     ctx: C,
     isServer: boolean,
-  }) => {},
+  }) => P,
 };
 
 /**
@@ -42,7 +42,7 @@ export default async <-C>(
     routesData,
   }: {|
     ...$Diff<propsType, {| Loading: mixed, initialState: mixed |}>,
-    Document: documentComponentType<C>,
+    Document: documentComponentType<C, *>,
   |},
   scripts: NodeType,
   errorCallback: (errorHtml: string) => void,

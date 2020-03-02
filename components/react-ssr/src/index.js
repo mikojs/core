@@ -35,7 +35,7 @@ export type propsType = {|
   routesData: routesDataType,
   initialState: usePageReturnType,
 |};
-export type documentComponentType<C> = documentType<C>;
+export type documentComponentType<C, P> = documentType<C, P>;
 
 /** @react use to control page */
 const Root = ({

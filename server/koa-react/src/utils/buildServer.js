@@ -64,7 +64,7 @@ export default ({ basename }: optionsType, cache: cacheType) => async (
     await server(
       ctx,
       {
-        Document: requireModule<documentComponentType<*>>(cache.document),
+        Document: requireModule<documentComponentType<*, *>>(cache.document),
         Main: requireModule<mainComponentType<*, *>>(cache.main),
         Error: requireModule<ComponentType<errorComponentPropsType>>(
           cache.error,

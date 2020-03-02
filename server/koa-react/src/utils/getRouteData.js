@@ -1,6 +1,7 @@
 // @flow
 
 import { requireModule } from '@mikojs/utils';
+import { type pageComponentType } from '@mikojs/react-ssr';
 
 import { type cacheType } from './buildCache';
 
@@ -30,7 +31,7 @@ export default (
     component: {
       chunkName: `pages${routePath.replace(/\*$/, 'notFound')}`,
       loader: async () => ({
-        default: requireModule(filePath),
+        default: requireModule<pageComponentType<*, *>>(filePath),
       }),
     },
     filePath,

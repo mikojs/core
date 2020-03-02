@@ -116,7 +116,7 @@ handleUnhandledRejection();
 
   if (!dev || !opts.cliOptions.watch) {
     await new Promise((resolve, reject) =>
-      requireModule(serverFile)(
+      requireModule<(context: contextType) => Promise<http$Server>>(serverFile)(
         ({
           ...context,
           restart: () => {

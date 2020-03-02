@@ -10,6 +10,8 @@ import { requireModule } from '@mikojs/utils';
 
 import { type optionsType } from '../index';
 
+import { type fileType } from './buildSchema';
+
 const debugLog = debug('graphql:updateSchema');
 
 /**
@@ -39,7 +41,7 @@ export default (
   )
     return;
 
-  const newResolvers = requireModule(filePath);
+  const newResolvers = requireModule<fileType>(filePath);
 
   debugLog(newResolvers);
   delete newResolvers.typeDefs;

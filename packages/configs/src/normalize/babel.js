@@ -4,7 +4,7 @@ export type presetOrPluginType = [string, {}];
 
 type stringPresetOrPluginType = $TupleMap<
   $ReadOnlyArray<presetOrPluginType>,
-  <V>(V) => V | string,
+  <-V>(V) => V | string,
 >;
 
 export type babelType = {
@@ -68,7 +68,7 @@ const removeEmptyOption = (presetOrPlugin: presetOrPluginType) =>
     : presetOrPlugin;
 
 export default {
-  presetOrPlugin: <C: {}>(
+  presetOrPlugin: <-C: {}>(
     type: 'plugin' | 'preset',
     presetsOrPlugins: ?stringPresetOrPluginType,
     newPresetsOrPluginsCallback: C,

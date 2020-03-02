@@ -66,7 +66,7 @@ export type returnType = {|
  *
  * @return {object} - page object
  */
-export default async <C>(
+export default async <-C>(
   Main: ComponentType<*>,
   routesData: routesDataType,
   ctx: C & { path: string },

@@ -8,7 +8,7 @@ export type rulesType = {
 };
 
 export type lintType = {
-  rules?: $ObjMap<rulesType, <V>(V) => V | string>,
+  rules?: $ObjMap<rulesType, <-V>(V) => V | string>,
 };
 
 /**
@@ -23,7 +23,7 @@ const removeEmptyOption = (rule: [string, {}]) =>
   Object.keys(rule[1] || {}).length === 0 ? rule[0] : rule;
 
 export default {
-  rules: <C: {}>(
+  rules: <-C: {}>(
     rules: $PropertyType<lintType, 'rules'>,
     newRulesCallback: C,
   ) =>

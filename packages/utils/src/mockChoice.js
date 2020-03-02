@@ -2,18 +2,12 @@
 
 /**
  * @example
- * mockChoice(true, () => {}, () => {})
+ * mockChoice(true, mixed, mixed)
  *
  * @param {boolean} result - determine to use which one
- * @param {Function} funcOne - use when result is true
- * @param {Function} funcTwo - use when result is false
- * @param {Array} args - arguments to give the function
+ * @param {any} one - use when result is true
+ * @param {any} two - use when result is false
  *
- * @return {any} result of running function
+ * @return {any} result choicing
  */
-export default <-A, -R>(
-  result: boolean,
-  funcOne: (...args: $ReadOnlyArray<A>) => R,
-  funcTwo: (...args: $ReadOnlyArray<A>) => R,
-  ...args: $ReadOnlyArray<A>
-): R => (result ? funcOne(...args) : funcTwo(...args));
+export default <-V>(result: boolean, one: V, two: V): V => (result ? one : two);

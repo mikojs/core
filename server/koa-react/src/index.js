@@ -90,8 +90,11 @@ export default (
     },
 
     // run webpack or watching
-    runWebpack: () =>
-      mockChoice(process.env.NODE_ENV === 'test', emptyFunction, compiler.run),
+    runWebpack: mockChoice(
+      process.env.NODE_ENV === 'test',
+      emptyFunction,
+      compiler.run,
+    ),
 
     // middleware
     middleware: compose([client, server]),

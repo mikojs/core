@@ -47,7 +47,6 @@ describe('react', () => {
               }),
             },
       );
-      reactObj.runWebpack();
       reactObj.update(path.resolve(__dirname, './__ignore__/pages/index.js'));
       reactObj.update(path.resolve(__dirname));
     });

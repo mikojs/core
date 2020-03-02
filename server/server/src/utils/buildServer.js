@@ -48,8 +48,7 @@ export default (): returnType => {
         options.build || process.env.NODE_ENV === 'test',
         emptyFunction,
         logger.start,
-        'Server start',
-      );
+      )('Server start');
 
       if (options.build) {
         await new Promise(resolve => {
@@ -59,8 +58,7 @@ export default (): returnType => {
                 process.env.NODE_ENV === 'test',
                 emptyFunction,
                 process.exit,
-                0,
-              ),
+              )(0),
             ),
           );
           cache.run('build', options);
@@ -88,11 +86,11 @@ export default (): returnType => {
         process.env.NODE_ENV === 'test',
         emptyFunction,
         logger.succeed,
-        chalk`Running server at port: {gray {bold ${port?.toString()}}}`,
-      );
+      )(chalk`Running server at port: {gray {bold ${port?.toString()}}}`);
 
       if (dev) {
-        cache.on('watch', () =>
+        cache.on(
+          'watch',
           mockChoice(
             process.env.NODE_ENV === 'test',
             emptyFunction,

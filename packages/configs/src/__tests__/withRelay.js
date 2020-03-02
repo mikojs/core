@@ -71,4 +71,14 @@ describe('with relay', () => {
       coveragePathIgnorePatterns: ['__generated__'],
     });
   });
+
+  test('exec', () => {
+    expect(
+      withRelay[1].exec({
+        grep: [],
+      }),
+    ).toEqual({
+      grep: ['--exclude', '**/__generated__/**'],
+    });
+  });
 });

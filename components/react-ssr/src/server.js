@@ -26,7 +26,7 @@ import getPage from 'utils/getPage';
  *
  * @return {ReadableType} - rendering stream
  */
-export default async <C>(
+export default async <-C>(
   ctx: C & { url: string, path: string },
   {
     Document,

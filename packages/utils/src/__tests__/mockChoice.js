@@ -12,6 +12,6 @@ describe.each`
       result,
       () => true,
       () => false,
-    );
+    )();
   });
 });

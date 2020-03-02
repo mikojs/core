@@ -44,21 +44,14 @@ export default (): returnType => {
     dir: '.',
     events: [[['add', 'change'], removeFileCache]],
   };
+  const events = {
+    on: (
+      ...argu: $ReadOnlyArray<mixed>
+    ): $Call<$PropertyType<returnType, 'init'>, string> => {
+      cache.events.push(argu);
 
-  /**
-   * @example
-   * on()
-   *
-   * @param {Array} argu - watch event and callback
-   *
-   * @return {object} - on object
-   */
-  const on = (
-    ...argu: $ReadOnlyArray<mixed>
-  ): $Call<$PropertyType<returnType, 'init'>, string> => {
-    cache.events.push(argu);
-
-    return { on };
+      return events;
+    },
   };
 
   return {
@@ -67,7 +60,7 @@ export default (): returnType => {
     ): $Call<$PropertyType<returnType, 'init'>, string> => {
       cache.dir = dir;
 
-      return { on };
+      return events;
     },
     run: () => {
       cache.events.reduce(

@@ -6,19 +6,22 @@ import { requireModule } from '@mikojs/utils';
 
 /**
  * @example
- * helpers('name')
+ * helpers()
  *
- * @param {string} helperName - helper name
- *
- * @return {any} - help object
+ * @return {Function} - help function
  */
-export default <+C>(helperName: string): C => {
+export default (): (<C>(helperName: string) => C) => {
   const cache = {};
 
-  if (!cache[helperName])
-    cache[helperName] = requireModule<() => C>(
-      path.resolve(__dirname, helperName),
-    )();
+  return <+C>(helperName: string): C => {
+    if (!cache[helperName])
+      cache[helperName] = requireModule<() => C>(
+        path.resolve(
+          __dirname,
+          `build${helperName[0].toUpperCase()}${helperName.slice(1)}`,
+        ),
+      )();
 
-  return cache[helperName];
+    return cache[helperName];
+  };
 };

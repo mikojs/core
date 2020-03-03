@@ -11,7 +11,8 @@ describe('build chokidar', () => {
       .add('pathOne')
       .add('pathTwo');
 
-    expect(await chokidar.run()).toBeUndefined();
+    expect(chokidar.run()).toBeUndefined();
+    expect(await chokidar.watcher()?.close()).toBeUndefined();
   });
 
   test.each`

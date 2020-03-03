@@ -24,11 +24,14 @@ type watcherType = {|
 |};
 
 export type returnType = {|
-  add: (dirOrPath: dirOrPathType) => $Diff<returnType, {| run: mixed |}>,
+  add: (
+    dirOrPath: dirOrPathType,
+  ) => $Diff<returnType, {| run: mixed, watcher: mixed |}>,
   on: (
     eventNames: eventNamesType,
     callback: callbackType,
-  ) => $Diff<returnType, {| run: mixed |}>,
+  ) => $Diff<returnType, {| run: mixed, watcher: mixed |}>,
+  watcher: () => ?watcherType,
   run: () => void,
 |};
 
@@ -51,16 +54,18 @@ export const removeFileCache = (filePath: string) => {
  * @return {returnType} - watch files functions
  */
 export default (): returnType => {
-  const cache = [];
-  let isInitialized: boolean = false;
-
+  const cache = {
+    isInitialized: false,
+    watcher: null,
+    events: [],
+  };
   const events = {
     add: (dirOrPath: dirOrPathType): typeof events => {
-      if (isInitialized)
-        cache.push((watcher: watcherType) => watcher.add(dirOrPath));
+      if (cache.isInitialized)
+        cache.events.push((watcher: watcherType) => watcher.add(dirOrPath));
       else {
-        isInitialized = true;
-        cache.unshift((watcher: watcherType) =>
+        cache.isInitialized = true;
+        cache.events.unshift((watcher: watcherType) =>
           watcher.watch(dirOrPath, {
             ignoreInitial: true,
           }),
@@ -72,7 +77,9 @@ export default (): returnType => {
     on: (eventNames: eventNamesType, callback: callbackType): typeof events => {
       (eventNames instanceof Array ? eventNames : [eventNames]).forEach(
         (eventName: string) => {
-          cache.push((watcher: watcherType) => watcher.on(eventName, callback));
+          cache.events.push((watcher: watcherType) =>
+            watcher.on(eventName, callback),
+          );
         },
       );
 
@@ -84,13 +91,14 @@ export default (): returnType => {
 
   return {
     ...events,
+    watcher: () => cache.watcher,
     run: () => {
       invariant(
-        isInitialized,
+        cache.isInitialized,
         'You must add a folder, a file path at least. It can be `string`, `regexp` or `array`.',
       );
 
-      cache.reduce(
+      cache.watcher = cache.events.reduce(
         (
           result: watcherType,
           callback: (watcher: watcherType) => watcherType,

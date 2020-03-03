@@ -5,9 +5,14 @@ import {
   type Context as koaContextType,
   type Middleware as koaMiddlewareType,
 } from 'koa';
-import React from 'react';
+import React, { type ComponentType } from 'react';
 
 import { requireModule } from '@mikojs/utils';
+import {
+  type documentComponentType,
+  type mainComponentType,
+  type errorComponentPropsType,
+} from '@mikojs/react-ssr';
 import server from '@mikojs/react-ssr/lib/server';
 
 import { type optionsType } from '../index';
@@ -59,9 +64,11 @@ export default ({ basename }: optionsType, cache: cacheType) => async (
     await server(
       ctx,
       {
-        Document: requireModule(cache.document),
-        Main: requireModule(cache.main),
-        Error: requireModule(cache.error),
+        Document: requireModule<documentComponentType<*, *>>(cache.document),
+        Main: requireModule<mainComponentType<*, *>>(cache.main),
+        Error: requireModule<ComponentType<errorComponentPropsType>>(
+          cache.error,
+        ),
         routesData: cache.routesData.map(
           ({
             filePath,

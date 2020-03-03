@@ -8,7 +8,7 @@
  *
  * @return {any} - module
  */
-export default (moduleName: string) =>
+export default <+M>(moduleName: string): M =>
   /\.json$/.test(moduleName)
     ? // $FlowFixMe The parameter passed to require must be a string literal.
       require(moduleName)

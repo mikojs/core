@@ -6,23 +6,21 @@ export type optionsType = {|
   port?: number,
 |};
 
-type eventType = 'build' | 'run' | 'watch';
-type eventsType = $ReadOnlyArray<eventType> | eventType;
+type eventNameType = 'build' | 'run' | 'watch';
+type eventNamesType = $ReadOnlyArray<eventNameType> | eventNameType;
 type callbackType = (options: optionsType) => Promise<void> | void;
 
 type cacheType = {|
-  events: eventsType,
+  eventNames: eventNamesType,
   callback: callbackType,
 |};
 
 export type returnType = {|
   on: (
-    events: eventsType,
+    eventNames: eventNamesType,
     callback: callbackType,
-  ) => {|
-    on: $PropertyType<returnType, 'on'>,
-  |},
-  run: (eventName: eventType, options: optionsType) => Promise<void>,
+  ) => $Diff<returnType, {| run: mixed |}>,
+  run: (eventName: eventNameType, options: optionsType) => Promise<void>,
 |};
 
 /**
@@ -33,35 +31,22 @@ export type returnType = {|
  */
 export default (): returnType => {
   const cache = [];
+  const events = {
+    on: (eventNames: eventNamesType, callback: callbackType): typeof events => {
+      cache.push({ eventNames, callback });
 
-  /**
-   * @example
-   * on('add', () => {})
-   *
-   * @param {eventsType} events - event names
-   * @param {Function} callback - callback funcrion
-   *
-   * @return {object} - on object
-   */
-  const on = (
-    events: eventsType,
-    callback: callbackType,
-  ): {| on: $PropertyType<returnType, 'on'> |} => {
-    cache.push({ events, callback });
-
-    return {
-      on,
-    };
+      return events;
+    },
   };
 
   return {
-    on,
-    run: (eventName: eventType, options: optionsType) =>
+    ...events,
+    run: (eventName: eventNameType, options: optionsType) =>
       cache
-        .filter(({ events }: cacheType) =>
-          events instanceof Array
-            ? events.includes(eventName)
-            : events === eventName,
+        .filter(({ eventNames }: cacheType) =>
+          eventNames instanceof Array
+            ? eventNames.includes(eventName)
+            : eventNames === eventName,
         )
         .reduce(
           (result: Promise<void>, { callback }: cacheType) =>

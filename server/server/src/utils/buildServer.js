@@ -11,14 +11,15 @@ import buildCache, {
   type optionsType,
   type returnType as buildCacheReturnType,
 } from './buildCache';
-import buildWatchFiles, {
-  type returnType as buildWatchFilesReturnType,
-} from './buildWatchFiles';
+
+import buildChokidar, {
+  type returnType as buildChokidarReturnType,
+} from 'helpers/buildChokidar';
 
 type returnType = {|
   init: (options: optionsType) => Promise<Koa>,
   on: $PropertyType<buildCacheReturnType, 'on'>,
-  watchFiles: $PropertyType<buildWatchFilesReturnType, 'init'>,
+  watchFiles: $PropertyType<buildChokidarReturnType, 'init'>,
   run: (app: Koa) => Promise<http$Server>,
 |};
 
@@ -32,7 +33,7 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
  */
 export default (): returnType => {
   const cache = buildCache();
-  const watchFiles = buildWatchFiles();
+  const chokidar = buildChokidar();
   const options: $NonMaybeType<optionsType> = {
     dev: process.env.NODE_ENV !== 'production',
     build: Boolean(process.env.BUILD),
@@ -69,7 +70,7 @@ export default (): returnType => {
     },
 
     on: cache.on,
-    watchFiles: watchFiles.init,
+    watchFiles: chokidar.init,
 
     run: async (app: Koa): Promise<http$Server> => {
       const { dev, port } = options;
@@ -94,7 +95,7 @@ export default (): returnType => {
           mockChoice(
             process.env.NODE_ENV === 'test',
             emptyFunction,
-            watchFiles.run,
+            chokidar.run,
           ),
         );
         cache.run('watch', options);

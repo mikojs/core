@@ -23,7 +23,7 @@ export default compose([
           skip: emptyFunction.thatReturns(process.env.NODE_ENV === 'test'),
         },
       ]),
-    ),
+    )(),
   ),
   helmet(),
   etag(),

@@ -62,10 +62,7 @@ export default (
 
     // run relay-compiler
     runRelayCompiler: (argv: $ReadOnlyArray<string>) =>
-      mockChoice(
-        process.env.NODE_ENV === 'test',
-        emptyFunction,
-        execa,
+      mockChoice(process.env.NODE_ENV === 'test', emptyFunction, execa)(
         'relay-compiler',
         ['--schema', getSchemaFilePath(schema), ...argv],
         {

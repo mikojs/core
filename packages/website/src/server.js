@@ -9,6 +9,7 @@
 import path from 'path';
 
 import server from '@mikojs/server';
+import { type returnType as chokidarType } from '@mikojs/server/lib/helpers/buildChokidar';
 import base from '@mikojs/koa-base';
 import koaGraphql from '@mikojs/koa-graphql';
 import koaReact from '@mikojs/koa-react';
@@ -19,22 +20,25 @@ import useLess from '@mikojs/use-less';
   const src = path.resolve(__dirname, '../src');
   const dev = process.env.NODE_ENV !== 'production';
   const build = Boolean(process.env.BUILD);
+  const relayArgv = ['--src', src, '--exclude', 'server.js'];
+
   const graphql = koaGraphql(path.resolve(__dirname, './graphql'));
   const react = koaReact(
     path.resolve(__dirname, './pages'),
     { dev, exclude: /__generated__/ } |> useCss |> useLess,
   );
-  const relayArgv = ['--src', src, '--exclude', 'server.js'];
+  const chokidar: chokidarType = server.helpers('chokidar');
+
+  chokidar
+    .add(__dirname)
+    .on(['add', 'change'], graphql.update)
+    .on(['add', 'change'], react.update);
 
   server
     .on(['build', 'run'], () => graphql.runRelayCompiler(relayArgv))
     .on('watch', () => graphql.runRelayCompiler([...relayArgv, '--watch']))
-    .on(['build', 'watch'], react.runWebpack);
-
-  server
-    .watchFiles(__dirname)
-    .on(['add', 'change'], graphql.update)
-    .on(['add', 'change'], react.update);
+    .on(['build', 'watch'], react.runWebpack)
+    .on('watch', chokidar.run);
 
   return (
     (await server.init({ dev, build }))

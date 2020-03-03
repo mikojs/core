@@ -11,14 +11,10 @@ import buildCache, {
   type optionsType,
   type returnType as buildCacheReturnType,
 } from './buildCache';
-import buildWatchFiles, {
-  type returnType as buildWatchFilesReturnType,
-} from './buildWatchFiles';
 
 type returnType = {|
   init: (options: optionsType) => Promise<Koa>,
   on: $PropertyType<buildCacheReturnType, 'on'>,
-  watchFiles: $PropertyType<buildWatchFilesReturnType, 'init'>,
   run: (app: Koa) => Promise<http$Server>,
 |};
 
@@ -32,7 +28,6 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
  */
 export default (): returnType => {
   const cache = buildCache();
-  const watchFiles = buildWatchFiles();
   const options: $NonMaybeType<optionsType> = {
     dev: process.env.NODE_ENV !== 'production',
     build: Boolean(process.env.BUILD),
@@ -40,6 +35,8 @@ export default (): returnType => {
   };
 
   return {
+    on: cache.on,
+
     init: async (initOptions?: optionsType): Promise<Koa> => {
       Object.keys(initOptions || {}).forEach((key: string) => {
         options[key] = initOptions?.[key];
@@ -48,8 +45,7 @@ export default (): returnType => {
         options.build || process.env.NODE_ENV === 'test',
         emptyFunction,
         logger.start,
-        'Server start',
-      );
+      )('Server start');
 
       if (options.build) {
         await new Promise(resolve => {
@@ -59,8 +55,7 @@ export default (): returnType => {
                 process.env.NODE_ENV === 'test',
                 emptyFunction,
                 process.exit,
-                0,
-              ),
+              )(0),
             ),
           );
           cache.run('build', options);
@@ -69,9 +64,6 @@ export default (): returnType => {
 
       return new Koa();
     },
-
-    on: cache.on,
-    watchFiles: watchFiles.init,
 
     run: async (app: Koa): Promise<http$Server> => {
       const { dev, port } = options;
@@ -88,19 +80,9 @@ export default (): returnType => {
         process.env.NODE_ENV === 'test',
         emptyFunction,
         logger.succeed,
-        chalk`Running server at port: {gray {bold ${port?.toString()}}}`,
-      );
+      )(chalk`Running server at port: {gray {bold ${port?.toString()}}}`);
 
-      if (dev) {
-        cache.on('watch', () =>
-          mockChoice(
-            process.env.NODE_ENV === 'test',
-            emptyFunction,
-            watchFiles.run,
-          ),
-        );
-        cache.run('watch', options);
-      }
+      if (dev) cache.run('watch', options);
 
       return server;
     },

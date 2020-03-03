@@ -14,7 +14,7 @@ export type propsType = {|
   children: NodeType,
 |};
 
-type stateType = $ObjMap<errorPropsType, <V>(V) => ?V>;
+type stateType = $ObjMap<errorPropsType, <-V>(V) => ?V>;
 
 /** use to catch component rendering error */
 export default class ErrorCatch extends React.PureComponent<

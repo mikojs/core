@@ -2,16 +2,12 @@
 
 import mockChoice from '../mockChoice';
 
-describe.each`
-  result
-  ${true}
-  ${false}
-`('mock choice', ({ result }: {| result: boolean |}) => {
-  test(`type: ${result.toString()}`, () => {
-    mockChoice(
-      result,
-      () => true,
-      () => false,
-    );
+describe('mock choice', () => {
+  test.each`
+    expected
+    ${true}
+    ${false}
+  `('expected = $expected', ({ expected }: {| expected: boolean |}) => {
+    expect(mockChoice(expected, true, false)).toBe(expected);
   });
 });

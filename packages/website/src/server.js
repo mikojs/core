@@ -33,6 +33,12 @@ export default async ({ port }: contextType): Promise<http$Server> => {
   );
 
   server
+    .helpers('chokidar')
+    .add(__dirname)
+    .on(['add', 'change'], graphql.update)
+    .on(['add', 'change'], react.update);
+
+  server
     .on(['build', 'run'], () =>
       graphql.runRelayCompiler(['--src', src, '--exclude', '**/server.js']),
     )
@@ -45,12 +51,8 @@ export default async ({ port }: contextType): Promise<http$Server> => {
         '**/server.js',
       ]),
     )
-    .on(['build', 'watch'], react.runWebpack);
-
-  server
-    .watchFiles(__dirname)
-    .on(['add', 'change'], graphql.update)
-    .on(['add', 'change'], react.update);
+    .on(['build', 'watch'], react.runWebpack)
+    .on('watch', server.helpers('chokidar').run);
 
   return (
     (await server.init({ dev, port }))

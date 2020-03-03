@@ -1,24 +1,33 @@
 // @flow
 
-type cacheType = {|
-  dir: string | RegExp | $ReadOnlyArray<string> | $ReadOnlyArray<RegExp>,
-  // eslint-disable-next-line flowtype/no-mutable-array
-  events: Array<$ReadOnlyArray<mixed>>,
-|};
+import { invariant } from 'fbjs';
+
+type dirOrPathType =
+  | string
+  | RegExp
+  | $ReadOnlyArray<string>
+  | $ReadOnlyArray<RegExp>;
+type eventNamesType = string | $ReadOnlyArray<string>;
 
 type watcherType = {|
-  on: (...argu: $ReadOnlyArray<mixed>) => watcherType,
+  watch: (
+    dirOrPath: dirOrPathType,
+    options: {| ignoreInitial: boolean |},
+  ) => watcherType,
+  add: (dirOrPath: dirOrPathType) => watcherType,
+  on: (
+    eventNames: eventNamesType,
+    callback: (filePath: string) => void,
+  ) => watcherType,
 |};
 
 export type returnType = {|
-  init: (
-    dir: string,
-  ) => {
-    on: (
-      ...argu: $ReadOnlyArray<mixed>
-    ) => $Call<$PropertyType<returnType, 'init'>, string>,
-  },
-  run: () => void,
+  add: (dirOrPath: dirOrPathType) => $Diff<returnType, {| watch: mixed |}>,
+  on: (
+    eventNames: eventNamesType,
+    callback: (filePath: string) => void,
+  ) => $Diff<returnType, {| watch: mixed |}>,
+  watch: () => void,
 |};
 
 /**
@@ -35,46 +44,57 @@ export const removeFileCache = (filePath: string) => {
 
 /**
  * @example
- * buildWatchFiles()
+ * buildChokidar()
  *
  * @return {returnType} - watch files functions
  */
 export default (): returnType => {
-  const cache: cacheType = {
-    dir: '.',
-    events: [[['add', 'change'], removeFileCache]],
-  };
+  const cache = [];
+  let isInitialized: boolean = false;
+
   const events = {
+    add: (dirOrPath: dirOrPathType): typeof events => {
+      if (!isInitialized)
+        cache.push((watcher: watcherType) => watcher.add(dirOrPath));
+      else {
+        isInitialized = true;
+        cache.unshift((watcher: watcherType) =>
+          watcher.watch(dirOrPath, {
+            ignoreInitial: true,
+          }),
+        );
+      }
+
+      return events;
+    },
     on: (
-      ...argu: $ReadOnlyArray<mixed>
-    ): $Call<$PropertyType<returnType, 'init'>, string> => {
-      cache.events.push(argu);
+      eventNames: eventNamesType,
+      callback: (filePath: string) => void,
+    ): typeof events => {
+      (eventNames instanceof Array ? eventNames : [eventNames]).forEach(
+        (eventName: string) => {
+          cache.push((watcher: watcherType) => watcher.on(eventName, callback));
+        },
+      );
 
       return events;
     },
   };
 
   return {
-    init: (
-      dir: $PropertyType<cacheType, 'dir'>,
-    ): $Call<$PropertyType<returnType, 'init'>, string> => {
-      cache.dir = dir;
+    ...events,
+    watch: () => {
+      invariant(
+        isInitialized,
+        'You must add a folder, a file path at least. It can be `string`, `regexp` or `array`.',
+      );
 
-      return events;
-    },
-    run: () => {
-      cache.events.reduce(
-        (result: watcherType, argu: $ReadOnlyArray<mixed>) =>
-          !(argu[0] instanceof Array)
-            ? result.on(...argu)
-            : argu[0].reduce(
-                (subResult: watcherType, key: string) =>
-                  subResult.on(key, ...argu.slice(1)),
-                result,
-              ),
-        require('chokidar').watch(cache.dir, {
-          ignoreInitial: true,
-        }),
+      cache.reduce(
+        (
+          result: watcherType,
+          callback: (watcher: watcherType) => watcherType,
+        ) => callback(result),
+        require('chokidar'),
       );
     },
   };

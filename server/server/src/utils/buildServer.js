@@ -12,14 +12,9 @@ import buildCache, {
   type returnType as buildCacheReturnType,
 } from './buildCache';
 
-import buildChokidar, {
-  type returnType as buildChokidarReturnType,
-} from 'helpers/buildChokidar';
-
 type returnType = {|
   init: (options: optionsType) => Promise<Koa>,
   on: $PropertyType<buildCacheReturnType, 'on'>,
-  watchFiles: $PropertyType<buildChokidarReturnType, 'init'>,
   run: (app: Koa) => Promise<http$Server>,
 |};
 
@@ -33,7 +28,6 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
  */
 export default (): returnType => {
   const cache = buildCache();
-  const chokidar = buildChokidar();
   const options: $NonMaybeType<optionsType> = {
     dev: process.env.NODE_ENV !== 'production',
     build: Boolean(process.env.BUILD),
@@ -41,6 +35,8 @@ export default (): returnType => {
   };
 
   return {
+    on: cache.on,
+
     init: async (initOptions?: optionsType): Promise<Koa> => {
       Object.keys(initOptions || {}).forEach((key: string) => {
         options[key] = initOptions?.[key];
@@ -69,9 +65,6 @@ export default (): returnType => {
       return new Koa();
     },
 
-    on: cache.on,
-    watchFiles: chokidar.init,
-
     run: async (app: Koa): Promise<http$Server> => {
       const { dev, port } = options;
 
@@ -89,17 +82,7 @@ export default (): returnType => {
         logger.succeed,
       )(chalk`Running server at port: {gray {bold ${port?.toString()}}}`);
 
-      if (dev) {
-        cache.on(
-          'watch',
-          mockChoice(
-            process.env.NODE_ENV === 'test',
-            emptyFunction,
-            chokidar.run,
-          ),
-        );
-        cache.run('watch', options);
-      }
+      if (dev) cache.run('watch', options);
 
       return server;
     },

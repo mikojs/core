@@ -9,6 +9,8 @@ import buildRouter, {
 } from './utils/buildRouter';
 import buildServer from './utils/buildServer';
 
+import helpers from './helpers';
+
 type routerType = Koa | buildRouterReturnType;
 
 export type contextType = {|
@@ -25,6 +27,7 @@ handleUnhandledRejection();
 
 export default {
   ...buildServer(),
+  helpers,
 
   start: buildRouter('start'),
   get: buildRouter('get'),

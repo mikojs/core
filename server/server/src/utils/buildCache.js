@@ -32,10 +32,7 @@ export type returnType = {|
 export default (): returnType => {
   const cache = [];
   const events = {
-    on: (
-      eventNames: eventNamesType,
-      callback: callbackType,
-    ): $Diff<returnType, {| run: mixed |}> => {
+    on: (eventNames: eventNamesType, callback: callbackType): typeof events => {
       cache.push({ eventNames, callback });
 
       return events;

@@ -8,6 +8,7 @@ type dirOrPathType =
   | $ReadOnlyArray<string>
   | $ReadOnlyArray<RegExp>;
 type eventNamesType = string | $ReadOnlyArray<string>;
+type callbackType = (filePath: string) => void;
 
 type watcherType = {|
   watch: (
@@ -19,15 +20,16 @@ type watcherType = {|
     eventNames: eventNamesType,
     callback: (filePath: string) => void,
   ) => watcherType,
+  close: () => Promise<void>,
 |};
 
 export type returnType = {|
-  add: (dirOrPath: dirOrPathType) => $Diff<returnType, {| watch: mixed |}>,
+  add: (dirOrPath: dirOrPathType) => $Diff<returnType, {| run: mixed |}>,
   on: (
     eventNames: eventNamesType,
-    callback: (filePath: string) => void,
-  ) => $Diff<returnType, {| watch: mixed |}>,
-  watch: () => void,
+    callback: callbackType,
+  ) => $Diff<returnType, {| run: mixed |}>,
+  run: () => watcherType,
 |};
 
 /**
@@ -54,7 +56,7 @@ export default (): returnType => {
 
   const events = {
     add: (dirOrPath: dirOrPathType): typeof events => {
-      if (!isInitialized)
+      if (isInitialized)
         cache.push((watcher: watcherType) => watcher.add(dirOrPath));
       else {
         isInitialized = true;
@@ -67,10 +69,7 @@ export default (): returnType => {
 
       return events;
     },
-    on: (
-      eventNames: eventNamesType,
-      callback: (filePath: string) => void,
-    ): typeof events => {
+    on: (eventNames: eventNamesType, callback: callbackType): typeof events => {
       (eventNames instanceof Array ? eventNames : [eventNames]).forEach(
         (eventName: string) => {
           cache.push((watcher: watcherType) => watcher.on(eventName, callback));
@@ -81,15 +80,17 @@ export default (): returnType => {
     },
   };
 
+  events.on(['add', 'change'], removeFileCache);
+
   return {
     ...events,
-    watch: () => {
+    run: (): watcherType => {
       invariant(
         isInitialized,
         'You must add a folder, a file path at least. It can be `string`, `regexp` or `array`.',
       );
 
-      cache.reduce(
+      return cache.reduce(
         (
           result: watcherType,
           callback: (watcher: watcherType) => watcherType,

@@ -29,7 +29,7 @@ export type returnType = {|
     eventNames: eventNamesType,
     callback: callbackType,
   ) => $Diff<returnType, {| run: mixed |}>,
-  run: () => watcherType,
+  run: () => void,
 |};
 
 /**
@@ -84,13 +84,13 @@ export default (): returnType => {
 
   return {
     ...events,
-    run: (): watcherType => {
+    run: () => {
       invariant(
         isInitialized,
         'You must add a folder, a file path at least. It can be `string`, `regexp` or `array`.',
       );
 
-      return cache.reduce(
+      cache.reduce(
         (
           result: watcherType,
           callback: (watcher: watcherType) => watcherType,

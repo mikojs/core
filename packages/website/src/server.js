@@ -9,6 +9,7 @@
 import path from 'path';
 
 import server, { type contextType } from '@mikojs/server';
+import { type returnType as chokidarType } from '@mikojs/server/lib/helpers/buildChokidar';
 import base from '@mikojs/koa-base';
 import koaGraphql from '@mikojs/koa-graphql';
 import koaReact from '@mikojs/koa-react';
@@ -31,9 +32,9 @@ export default async ({ port }: contextType): Promise<http$Server> => {
     path.resolve(__dirname, './pages'),
     { dev, exclude: /__generated__/ } |> useCss |> useLess,
   );
+  const chokidar: chokidarType = server.helpers('chokidar');
 
-  server
-    .helpers('chokidar')
+  chokidar
     .add(__dirname)
     .on(['add', 'change'], graphql.update)
     .on(['add', 'change'], react.update);
@@ -52,7 +53,7 @@ export default async ({ port }: contextType): Promise<http$Server> => {
       ]),
     )
     .on(['build', 'watch'], react.runWebpack)
-    .on('watch', server.helpers('chokidar').run);
+    .on('watch', chokidar.run);
 
   return (
     (await server.init({ dev, port }))

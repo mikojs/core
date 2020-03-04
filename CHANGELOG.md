@@ -1,5 +1,63 @@
 # CHANGELOG
 
+## v1.9.1 (2020-03-04)
+
+#### :boom: Breaking Change
+
+- `configs`, `utils`
+  - [#553](https://github.com/mikojs/core/pull/553) (@mikojs/utils) Modify mockChoice return type ([@HsuTing](https://github.com/HsuTing))
+- `website`
+  - [#538](https://github.com/mikojs/core/pull/538) (@mikojs/server) Simplify server ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#533](https://github.com/mikojs/core/pull/533) (@mikojs/configs) Simplify configs ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-base`, `website`
+  - [#531](https://github.com/mikojs/core/pull/531) (@mikojs/koa-react) Rewrite koa-react ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `website`
+  - [#527](https://github.com/mikojs/core/pull/527) (@mikojs/koa-graphql) Simplify functions ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `website`
+  - [#557](https://github.com/mikojs/core/pull/557) (@mikojs/server) Modify detail ([@HsuTing](https://github.com/HsuTing))
+  - [#554](https://github.com/mikojs/core/pull/554) (@mikojs/server) Modify code style ([@HsuTing](https://github.com/HsuTing))
+  - [#547](https://github.com/mikojs/core/pull/547) (@mikojs/server) Add watchFiles event ([@HsuTing](https://github.com/HsuTing))
+  - [#544](https://github.com/mikojs/core/pull/544) (@mikojs/server) Add server more listeners ([@HsuTing](https://github.com/HsuTing))
+  - [#529](https://github.com/mikojs/core/pull/529) (@mikojs/koa-react) Use @mikojs/react-ssr ([@HsuTing](https://github.com/HsuTing))
+- `utils`
+  - [#555](https://github.com/mikojs/core/pull/555) (@mikojs/utils) Add requireModule type ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#546](https://github.com/mikojs/core/pull/546) (@mikojs/configs) Not show too many log ([@HsuTing](https://github.com/HsuTing))
+  - [#536](https://github.com/mikojs/core/pull/536) (@mikojs/configs) Add exec help information ([@HsuTing](https://github.com/HsuTing))
+  - [#533](https://github.com/mikojs/core/pull/533) (@mikojs/configs) Simplify configs ([@HsuTing](https://github.com/HsuTing))
+  - [#526](https://github.com/mikojs/core/pull/526) (@mikojs/configs) Ignore config file ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#545](https://github.com/mikojs/core/pull/545) (@mikojs/koa-react) Add webpack ([@HsuTing](https://github.com/HsuTing))
+  - [#530](https://github.com/mikojs/core/pull/530) (@mikojs/koa-graphql) Add more options to filter the files ([@HsuTing](https://github.com/HsuTing))
+  - [#528](https://github.com/mikojs/core/pull/528) (@mikojs/react-ssr) Add new package ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `eslint-config-base`, `jest`, `utils`, `website`
+  - [#540](https://github.com/mikojs/core/pull/540) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- [#550](https://github.com/mikojs/core/pull/550) (@mikojs/server) Fix flow type error ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `website`
+  - [#549](https://github.com/mikojs/core/pull/549) (@mikojs/core) Add single test ([@HsuTing](https://github.com/HsuTing))
+  - [#532](https://github.com/mikojs/core/pull/532) (@mikojs/website) Remove pages temp ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#543](https://github.com/mikojs/core/pull/543) (@mikojs/configs) Modify code style ([@HsuTing](https://github.com/HsuTing))
+  - [#537](https://github.com/mikojs/core/pull/537) (@mikojs/configs) Modify README ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#542](https://github.com/mikojs/core/pull/542) (@mikojs/koa-react) Rename getConfig to buildCache ([@HsuTing](https://github.com/HsuTing))
+  - [#541](https://github.com/mikojs/core/pull/541) (@mikojs/core) Upgrade jest version ([@HsuTing](https://github.com/HsuTing))
+  - [#534](https://github.com/mikojs/core/pull/534) (@mikojs/koa-react, @mikojs/koa-graphql) Modify debug name ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.9.0 (2020-01-25)
 
 #### :boom: Breaking Change

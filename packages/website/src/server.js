@@ -39,7 +39,7 @@ import useLess from '@mikojs/use-less';
     .on(['add', 'change'], react.update);
 
   server
-    .on('build', babel.build)
+    .on(['build', 'run'], babel.build)
     .on('watch', babel.watch)
     .on('watch', chokidar.watch)
     .on(['build', 'run'], () => graphql.runRelayCompiler(relayArgv))

@@ -26,13 +26,13 @@ type watcherType = {|
 export type returnType = {|
   add: (
     dirOrPath: dirOrPathType,
-  ) => $Diff<returnType, {| run: mixed, watcher: mixed |}>,
+  ) => $Diff<returnType, {| watch: mixed, watcher: mixed |}>,
   on: (
     eventNames: eventNamesType,
     callback: callbackType,
-  ) => $Diff<returnType, {| run: mixed, watcher: mixed |}>,
+  ) => $Diff<returnType, {| watch: mixed, watcher: mixed |}>,
   watcher: () => ?watcherType,
-  run: () => void,
+  watch: () => void,
 |};
 
 /**
@@ -51,7 +51,7 @@ export const removeFileCache = (filePath: string) => {
  * @example
  * buildChokidar()
  *
- * @return {returnType} - watch files functions
+ * @return {returnType} - chokidar functions
  */
 export default (): returnType => {
   const cache = {
@@ -92,7 +92,7 @@ export default (): returnType => {
   return {
     ...events,
     watcher: () => cache.watcher,
-    run: () => {
+    watch: () => {
       invariant(
         cache.isInitialized,
         'You must add a folder, a file path at least. It can be `string`, `regexp` or `array`.',

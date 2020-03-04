@@ -18,8 +18,7 @@ describe('configs', () => {
           switch (key) {
             case 'alias':
               if (configKey !== 'exec') expect(value).toBeTruthy();
-              else
-                expect(value()).toBe(path.resolve(__dirname, '../../bin/exec'));
+              else expect(value()).toBe(path.resolve(__dirname, '../bin/exec'));
               break;
 
             case 'ignore':

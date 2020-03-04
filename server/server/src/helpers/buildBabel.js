@@ -2,7 +2,7 @@
 
 import { emptyFunction } from 'fbjs';
 
-type returnType = {|
+export type returnType = {|
   command: (argv: $ReadOnlyArray<string>) => void,
   build: () => Promise<void>,
   watch: () => Promise<void>,

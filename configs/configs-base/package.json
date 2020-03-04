@@ -12,6 +12,7 @@
     "core-js": "^3.6.4"
   },
   "devDependencies": {
+    "@mikojs/configs": "^1.9.1",
     "flow-bin": "^0.118.0",
     "flow-typed": "^3.0.0",
     "git-branch": "^2.0.1"

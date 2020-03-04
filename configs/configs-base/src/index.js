@@ -1,6 +1,6 @@
 // @flow
 
-import { type configsType } from './types';
+import { type configsType } from '@mikojs/configs/lib/types';
 
 import exec from './base/exec';
 import babel from './base/babel';

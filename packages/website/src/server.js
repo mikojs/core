@@ -9,7 +9,6 @@
 import path from 'path';
 
 import server, { type contextType } from '@mikojs/server';
-import { type returnType as chokidarType } from '@mikojs/server/lib/helpers/buildChokidar';
 import base from '@mikojs/koa-base';
 import koaGraphql from '@mikojs/koa-graphql';
 import koaReact from '@mikojs/koa-react';
@@ -30,7 +29,7 @@ export default async ({ port }: contextType): Promise<http$Server> => {
   const build = Boolean(process.env.BUILD);
   const relayArgv = ['--src', src, '--exclude', 'server.js'];
 
-  const chokidar: chokidarType = server.helpers('chokidar');
+  const chokidar = server.helpers('chokidar');
   const graphql = koaGraphql(path.resolve(__dirname, './graphql'));
   const react = koaReact(
     path.resolve(__dirname, './pages'),

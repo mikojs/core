@@ -2,6 +2,7 @@
 
 import buildChokidar from './buildChokidar';
 
-export default () => (helperName: 'chokidar') => ({
-  chokidar: buildChokidar,
-});
+export default () => (helperName: 'chokidar') =>
+  ({
+    chokidar: buildChokidar(),
+  }[helperName]);

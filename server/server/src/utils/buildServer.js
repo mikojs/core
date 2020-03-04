@@ -68,7 +68,7 @@ export default (): returnType => {
     run: async (app: Koa): Promise<http$Server> => {
       const { dev, port } = options;
 
-      await cache.run('run', options);
+      if (dev) await cache.run('run', options);
 
       const server = await new Promise(resolve => {
         const runningServer = app.listen(port, () => {

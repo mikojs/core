@@ -5,7 +5,7 @@ import withLerna from '../withLerna';
 describe('with lerna', () => {
   describe.each(Object.keys(withLerna).map((key: string) => [key]))(
     '%s',
-    (configName: string | 'exec' | 'babel' | 'server') => {
+    (configName: string | 'exec' | 'babel') => {
       test.each(Object.keys(withLerna[configName]).map((key: string) => [key]))(
         '%s',
         (eventName: string) => {
@@ -18,11 +18,7 @@ describe('with lerna', () => {
               break;
 
             case 'run':
-              if (
-                configName === 'exec' ||
-                configName === 'babel' ||
-                configName === 'server'
-              )
+              if (configName === 'exec' || configName === 'babel')
                 expect(withLerna[configName].run([])).toEqual(
                   configName === 'exec'
                     ? []

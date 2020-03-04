@@ -16,13 +16,6 @@ const newConfigs = {
       '../../babel.config.js',
     ],
   },
-  server: {
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...argv,
-      '--config-file',
-      '../../babel.config.js',
-    ],
-  },
   exec: {
     install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
       ...install.filter((key: string) => key !== 'standard-version'),

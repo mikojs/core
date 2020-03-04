@@ -8,7 +8,6 @@ import prettier from './prettier';
 import lint from './lint';
 import lintStaged from './lintStaged';
 import jest from './jest';
-import server from './server';
 
 export default ({
   // custom command
@@ -44,7 +43,4 @@ export default ({
     alias: 'jest',
     run: (argv: $ReadOnlyArray<string>) => [...argv, '--silent'],
   },
-
-  // @mikojs/server
-  server,
 }: configsType);

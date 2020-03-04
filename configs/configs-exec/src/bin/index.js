@@ -7,11 +7,14 @@ import execa from 'execa';
 import chalk from 'chalk';
 import debug from 'debug';
 
-import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
+import {
+  handleUnhandledRejection,
+  createLogger,
+  findRootProcess,
+} from '@mikojs/utils';
 
 import printInfo from 'utils/printInfo';
 import getExecCommands from 'utils/getCommands';
-import findRootProcess from 'utils/findRootProcess';
 
 const logger = createLogger('@mikojs/configs (exec)');
 const debugLog = debug('configs-exec:bin');

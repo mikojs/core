@@ -1,0 +1,7 @@
+// @flow
+
+import buildChokidar from './buildChokidar';
+
+export default () => (helperName: 'chokidar') => ({
+  chokidar: buildChokidar,
+});

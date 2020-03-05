@@ -139,15 +139,13 @@ module.exports = (() => {
     });
 
   /* eslint-disable import/no-extraneous-dependencies */
-  const base = require('@mikojs/configs-base');
-  const withRelay = require('@mikojs/configs-base/lib/withRelay');
-  const withServer = require('@mikojs/configs-base/lib/withServer');
-  const withLess = require('@mikojs/configs-base/lib/withLess');
-  const withLerna = require('@mikojs/configs-base/lib/withLerna');
+  const withRelay = require('@mikojs/configs/lib/withRelay');
+  const withServer = require('@mikojs/configs/lib/withServer');
+  const withLess = require('@mikojs/configs/lib/withLess');
+  const withLerna = require('@mikojs/configs/lib/withLerna');
   /* eslint-enable import/no-extraneous-dependencies */
 
   return [
-    base,
     withRelay,
     withServer,
     withLess,

@@ -9,6 +9,8 @@ import { type configsType } from '../types';
 
 import buildCache from './buildCache';
 
+import defaultConfigs from 'configs';
+
 type configObjType = {|
   config: configsType | $ReadOnlyArray<configsType>,
   filepath: string,
@@ -51,6 +53,10 @@ const loadConfig = (configObj: ?configObjType) => {
   cache.addConfig(configs);
 };
 
+loadConfig({
+  config: defaultConfigs,
+  filepath: __dirname,
+});
 loadConfig(cosmiconfigSync('cat').search());
 
 export default {

@@ -17,4 +17,3 @@ esproposal.optional_chaining=enable
 
 [declarations]
 .*/configs/src/.*
-.*/configs-exec/src/.*

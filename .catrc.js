@@ -81,7 +81,6 @@ const exec = ({ clean, ...config }) => ({
     '"rm -rf .flowconfig"',
     ...[
       '@mikojs/eslint-config-base',
-      '@mikojs/configs-base',
       '@mikojs/koa-react',
       '@mikojs/koa-graphql',
       '@mikojs/use-css',

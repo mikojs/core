@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/configs",
-  "repository": "https://github.com/mikojs/core/tree/master/configs/configs",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/configs",
   "version": "1.9.1",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",

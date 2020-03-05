@@ -5,7 +5,6 @@ import path from 'path';
 
 import execa from 'execa';
 import debug from 'debug';
-import npmWhich from 'npm-which';
 import getPort from 'get-port';
 import chalk from 'chalk';
 import rimraf from 'rimraf';
@@ -115,7 +114,7 @@ handleUnhandledRejection();
           chalk`Run command: {gray ${[path.basename(cli), ...argv].join(' ')}}`,
         );
 
-        await execa(npmWhich(process.cwd()).sync('node'), [cli, ...argv], {
+        await execa(cli, argv, {
           stdio: 'inherit',
           env,
         });

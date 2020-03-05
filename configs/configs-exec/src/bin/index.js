@@ -48,6 +48,8 @@ handleUnhandledRejection();
         Promise.resolve(),
       );
   } catch (e) {
+    if (/not found/.test(e.message)) throw e;
+
     const rootProcess = await findRootProcess(__filename);
 
     if (rootProcess?.pid === process.pid)

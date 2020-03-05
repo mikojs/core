@@ -14,7 +14,7 @@ export type optionType =
   | boolean
   | {|
       cli: string,
-      argv: $ReadOnlyArray<string>,
+      getArgv: () => $ReadOnlyArray<string>,
       env: {},
       cliName: string,
     |};
@@ -89,7 +89,7 @@ export default (
         typeof cli !== 'function'
           ? npmWhich(process.cwd()).sync(cli)
           : cli([cliName, ...rawArgsFiltered]),
-      argv: run(rawArgsFiltered),
+      getArgv: () => run(rawArgsFiltered),
       env,
       cliName,
     };

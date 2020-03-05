@@ -8,4 +8,3 @@ export { default as mockChoice } from './mockChoice';
 export { default as requireModule } from './requireModule';
 export { default as chainingLogger } from './chainingLogger';
 export { default as createLogger } from './createLogger';
-export { default as findRootProcess } from './findRootProcess';

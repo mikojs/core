@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import configs from '../index';
 
 describe('configs', () => {
@@ -15,7 +17,9 @@ describe('configs', () => {
 
           switch (key) {
             case 'alias':
-              expect(value).toBeTruthy();
+              if (configKey !== 'exec') expect(value).toBeTruthy();
+              else
+                expect(value()).toBe(path.resolve(__dirname, '../../bin/exec'));
               break;
 
             case 'ignore':

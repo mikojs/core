@@ -2,7 +2,7 @@
 
 import gitBranch from 'git-branch';
 
-import configs from './index';
+import configs from './configs';
 
 const newConfigs = {
   babel: {

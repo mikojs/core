@@ -1,14 +1,14 @@
 // @flow
 
-import { type configsType } from '@mikojs/configs/lib/types';
+import { type configsType } from '../types';
 
-import exec from './base/exec';
-import babel from './base/babel';
-import prettier from './base/prettier';
-import lint from './base/lint';
-import lintStaged from './base/lintStaged';
-import jest from './base/jest';
-import server from './base/server';
+import exec from './exec';
+import babel from './babel';
+import prettier from './prettier';
+import lint from './lint';
+import lintStaged from './lintStaged';
+import jest from './jest';
+import server from './server';
 
 export default ({
   // custom command

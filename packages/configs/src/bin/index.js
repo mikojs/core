@@ -10,17 +10,14 @@ import getPort from 'get-port';
 import chalk from 'chalk';
 import rimraf from 'rimraf';
 
-import {
-  handleUnhandledRejection,
-  createLogger,
-  findRootProcess,
-} from '@mikojs/utils';
+import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import configs from 'utils/configs';
 import findMainServer from 'utils/findMainServer';
 import sendToServer from 'utils/sendToServer';
 import findFiles, { type filesDataType } from 'utils/findFiles';
 import generateFiles from 'utils/generateFiles';
+import findRootProcess from 'utils/findRootProcess';
 
 import cliOptions from 'cliOptions';
 

@@ -2,13 +2,7 @@
   "private": true,
   "name": "@mikojs/core",
   "license": "MIT",
-  "workspaces": [
-    "packages/*",
-    "babel/*",
-    "server/*",
-    "components/*",
-    "configs/*"
-  ],
+  "workspaces": ["packages/*", "babel/*", "server/*", "components/*"],
   "scripts": {
     "dev": "make babel-base-changed && configs exec lerna:babel:watch --changed",
     "install:all": "make install-all",

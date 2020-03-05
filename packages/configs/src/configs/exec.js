@@ -1,7 +1,9 @@
 // @flow
 
+import path from 'path';
+
 export default {
-  alias: 'configs-exec',
+  alias: () => path.resolve(__dirname, '../bin/exec'),
   install: (install: $ReadOnlyArray<string>) => [
     ...install,
     'flow-bin',

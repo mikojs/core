@@ -1,34 +1,49 @@
 #! /usr/bin/env node
 // @flow
 
+import { cosmiconfigSync } from 'cosmiconfig';
+import npmWhich from 'npm-which';
 import execa from 'execa';
 import chalk from 'chalk';
 import debug from 'debug';
 
-import {
-  handleUnhandledRejection,
-  createLogger,
-  findRootProcess,
-} from '@mikojs/utils';
+import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
-import cliOptions from 'utils/cliOptions';
+import printInfo from 'exec/printInfo';
+import getExecCommands from 'exec/getCommands';
+
+import findRootProcess from 'utils/findRootProcess';
 
 const logger = createLogger('@mikojs/configs (exec)');
-const debugLog = debug('configs-exec:bin');
+const debugLog = debug('configs:bin:exec');
 
 handleUnhandledRejection();
 
 (async () => {
+  const config = cosmiconfigSync('exec').search()?.config || {};
+
   try {
-    const commands = await cliOptions(process.argv);
+    const [type, ...argv] = process.argv.slice(2);
 
-    debugLog(commands);
+    if (type === 'info') {
+      const { log } = console;
 
-    if (!commands) throw new Error('commands are required');
+      logger.info('Here are the all commands which you can use:');
+      log();
+      printInfo(config);
+      log();
+      return;
+    }
 
-    if (commands === true) return;
+    const commands = [
+      ...(getExecCommands(type.split(/:/), config) || [
+        npmWhich(process.cwd()).sync(type),
+      ]),
+      ...argv,
+    ];
 
     logger.log(chalk`Run command: {gray ${commands.join(' ')}}`);
+    debugLog({ type, argv, config });
     await commands
       .reduce(
         (result: $ReadOnlyArray<$ReadOnlyArray<string>>, command: string) =>
@@ -47,8 +62,6 @@ handleUnhandledRejection();
         Promise.resolve(),
       );
   } catch (e) {
-    if (/not found/.test(e.message)) throw e;
-
     const rootProcess = await findRootProcess(__filename);
 
     if (rootProcess?.pid === process.pid)

@@ -31,11 +31,14 @@ const findRootProcess = async (
 
   const result = await findRootProcess(filename, currentProcess.ppid);
 
-  return result ||
+  if (
+    result ||
     currentProcess.name !== 'node' ||
     require.resolve(currentProcess.cmd.split(/ /)[1] || '') !== filename
-    ? result
-    : currentProcess;
+  )
+    return result;
+
+  return currentProcess;
 };
 
 export default findRootProcess;

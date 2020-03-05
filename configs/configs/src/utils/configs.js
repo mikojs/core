@@ -27,7 +27,7 @@ let rootDir: string = process.cwd();
 const loadConfig = (configObj: ?configObjType) => {
   debugLog(configObj);
 
-  if (!configObj) return;
+  if (!configObj) throw new Error('Can not find the config');
 
   const { config: configs, filepath } = configObj;
 

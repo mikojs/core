@@ -23,7 +23,7 @@ define babel-build
 		--parallel \
 		--stream \
 		--include-dependencies \
-		--scope @mikojs/configs \
+		--scope @mikojs/configs* \
 		--scope @mikojs/babel-* \
 		$(1)
 	ln -snf $(ROOT)/configs/configs-exec/lib/bin/index.js ./node_modules/.bin/configs-exec

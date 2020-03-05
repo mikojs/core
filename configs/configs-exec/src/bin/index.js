@@ -24,7 +24,9 @@ handleUnhandledRejection();
 
     debugLog(commands);
 
-    if (!(commands instanceof Array)) return;
+    if (!commands) throw new Error('commands are required');
+
+    if (commands === true) return;
 
     logger.log(chalk`Run command: {gray ${commands.join(' ')}}`);
     await commands

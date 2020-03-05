@@ -14,7 +14,6 @@ it('test d3DirTree', () => {
     'chainingLogger.js',
     'createLogger.js',
     'd3DirTree.js',
-    'findRootProcess.js',
     'handleUnhandledRejection.js',
     'index.js',
     'index.js.flow',

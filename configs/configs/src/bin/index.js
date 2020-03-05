@@ -16,7 +16,6 @@ import {
   findRootProcess,
 } from '@mikojs/utils';
 
-import configs from 'utils/configs';
 import findMainServer from 'utils/findMainServer';
 import sendToServer from 'utils/sendToServer';
 import findFiles, { type filesDataType } from 'utils/findFiles';
@@ -39,12 +38,6 @@ handleUnhandledRejection();
   const rootProcess = await findRootProcess(__filename);
   const { cli, argv, env, cliName } = options;
   const debugLog = debug(`configs:bin[${cliName}]`);
-  const { customConfigsPath } = configs;
-
-  if (customConfigsPath && rootProcess?.pid === process.pid)
-    logger
-      .info('Using external configuration')
-      .info(`Location: ${customConfigsPath}`);
 
   switch (cli) {
     case 'install':

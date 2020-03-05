@@ -16,7 +16,6 @@ type configObjType = {|
 
 const cache = buildCache();
 const debugLog = debug('configs:readConfigs');
-let customConfigsPath: ?string = null;
 let rootDir: string = process.cwd();
 
 /**
@@ -32,17 +31,13 @@ const loadConfig = (configObj: ?configObjType) => {
 
   const { config: configs, filepath } = configObj;
 
-  if (filepath !== __dirname) {
-    debugLog(configObj);
-    customConfigsPath = filepath;
-    rootDir = path.dirname(filepath);
-  }
+  rootDir = path.dirname(filepath);
 
   if (configs instanceof Array) {
     configs.forEach((config: configsType) => {
       loadConfig({
         config,
-        filepath: __dirname,
+        filepath,
       });
     });
     return;
@@ -54,7 +49,6 @@ const loadConfig = (configObj: ?configObjType) => {
 loadConfig(cosmiconfigSync('cat').search());
 
 export default {
-  customConfigsPath,
   rootDir,
   loadConfig,
   get: cache.get,

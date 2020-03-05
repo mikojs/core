@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 // @flow
 
-import { cosmiconfigSync } from 'cosmiconfig';
 import execa from 'execa';
 import chalk from 'chalk';
 import debug from 'debug';
@@ -20,12 +19,10 @@ const debugLog = debug('configs-exec:bin');
 handleUnhandledRejection();
 
 (async () => {
-  const config = cosmiconfigSync('exec').search()?.config || {};
-
   try {
     const commands = await cliOptions(process.argv);
 
-    debugLog({ commands, config });
+    debugLog(commands);
 
     if (!(commands instanceof Array)) return;
 

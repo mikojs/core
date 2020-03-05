@@ -1,5 +1,8 @@
 // @flow
 
+import npmWhich from 'npm-which';
+import { cosmiconfigSync } from 'cosmiconfig';
+
 import cliOptions from '../cliOptions';
 
 jest.mock('cosmiconfig', () => ({
@@ -18,6 +21,7 @@ describe('cli options', () => {
     ${[]}             | ${false}
     ${['test']}       | ${['test', 'foo']}
     ${['test', '-a']} | ${['test', 'foo', '-a']}
+    ${['ls']}         | ${[npmWhich(process.cwd()).sync('ls')]}
     ${['info']}       | ${true}
   `(
     'run $argv',
@@ -40,4 +44,14 @@ describe('cli options', () => {
       if (expected === true) expect(mockLog).toHaveBeenCalled();
     },
   );
+
+  test('empty config', async () => {
+    cosmiconfigSync.mockReturnValue({
+      search: jest.fn().mockReturnValue(undefined),
+    });
+
+    await expect(cliOptions(['node', 'configs-exec', 'foo'])).rejects.toThrow(
+      'not found: foo',
+    );
+  });
 });

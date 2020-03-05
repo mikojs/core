@@ -8,6 +8,7 @@
   "version": "1.9.1",
   "main": "./lib/index.js",
   "dependencies": {
+    "@mikojs/configs-exec": "^1.9.1",
     "@mikojs/utils": "^1.9.1",
     "core-js": "^3.6.4"
   },

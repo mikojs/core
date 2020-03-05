@@ -2,7 +2,6 @@
 // @flow
 
 import { cosmiconfigSync } from 'cosmiconfig';
-import npmWhich from 'npm-which';
 import execa from 'execa';
 import chalk from 'chalk';
 import debug from 'debug';
@@ -13,8 +12,7 @@ import {
   findRootProcess,
 } from '@mikojs/utils';
 
-import printInfo from 'utils/printInfo';
-import getExecCommands from 'utils/getCommands';
+import cliOptions from 'utils/cliOptions';
 
 const logger = createLogger('@mikojs/configs (exec)');
 const debugLog = debug('configs-exec:bin');
@@ -25,27 +23,13 @@ handleUnhandledRejection();
   const config = cosmiconfigSync('exec').search()?.config || {};
 
   try {
-    const [type, ...argv] = process.argv.slice(2);
+    const commands = await cliOptions(process.argv);
 
-    if (type === 'info') {
-      const { log } = console;
+    debugLog({ commands, config });
 
-      logger.info('Here are the all commands which you can use:');
-      log();
-      printInfo(config);
-      log();
-      return;
-    }
-
-    const commands = [
-      ...(getExecCommands(type.split(/:/), config) || [
-        npmWhich(process.cwd()).sync(type),
-      ]),
-      ...argv,
-    ];
+    if (!(commands instanceof Array)) return;
 
     logger.log(chalk`Run command: {gray ${commands.join(' ')}}`);
-    debugLog({ type, argv, config });
     await commands
       .reduce(
         (result: $ReadOnlyArray<$ReadOnlyArray<string>>, command: string) =>

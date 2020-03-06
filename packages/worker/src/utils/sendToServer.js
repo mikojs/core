@@ -13,18 +13,21 @@ const debugLog = debug('worker:sendToServer');
  * sendToServer('{}', () => {})
  *
  * @param {string} data - the data which will be sent to the server
- * @param {Function} callback - callback function
  */
-const sendToServer = async (data: string, callback: () => void) => {
+const sendToServer = async (data: string) => {
   const mainServer = await findMainServer();
   const client = net.connect(parseInt(mainServer?.port || -1, 10));
 
-  client.on('error', (err: Error) => {
-    debugLog(err);
-    setTimeout(sendToServer, 10, data, callback);
-  });
+  await new Promise<void>(resolve => {
+    client.on('error', (err: Error) => {
+      debugLog(err);
+      setTimeout(() => {
+        sendToServer(data).then(resolve);
+      }, 10);
+    });
 
-  client.end(data, callback);
+    client.end(data, resolve);
+  });
 };
 
 export default sendToServer;

@@ -15,23 +15,25 @@ const debugLog = debug('worker:buildServer');
  * @param {number} port - the port of the server
  */
 export default (port: number) => {
-  const cache = {
-    errors: [],
-  };
+  const cache = {};
   const server = net.createServer((socket: net.Socket) => {
     socket.setEncoding('utf8');
     socket.on('data', (data: string) => {
-      const { filePath } = JSON.parse(data);
-      const { error } = requireModule(filePath);
+      const { type, filePath, message } = JSON.parse(data);
 
-      cache.errors.push(error);
+      if (type === 'init') {
+        if (!cache[filePath]) cache[filePath] = requireModule(filePath);
+      }
+      // eslint-disable-next-line flowtype/no-unused-expressions
+      else cache[filePath]?.[type](message);
     });
   });
 
   server.on('error', (err: Error) => {
     debugLog(err);
-    cache.errors.forEach((callback: (err: Error) => void) => {
-      callback(err);
+    Object.keys(cache).forEach((key: string) => {
+      // eslint-disable-next-line flowtype/no-unused-expressions
+      cache[key]?.error(err);
     });
   });
 

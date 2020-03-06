@@ -1,0 +1,22 @@
+{
+  "name": "@mikojs/worker",
+  "description": "Use to create a socket server and handle the event from the client side.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/worker",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/worker",
+  "version": "1.9.1",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.8.4",
+    "core-js": "^3.6.4"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.118.0",
+    "flow-typed": "^3.0.0"
+  },
+  "keywords": ["mikojs", "worker"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

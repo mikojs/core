@@ -1,27 +1,36 @@
 // @flow
 
 import gitBranch from 'git-branch';
+import { cosmiconfigSync } from 'cosmiconfig';
+import { emptyFunction } from 'fbjs';
 
 import configs from './configs';
 
+const cosmiconfigOptions = {
+  loaders: {
+    '.js': emptyFunction.thatReturnsArgument,
+  },
+};
 const newConfigs = {
   babel: {
     install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
       ...install,
       '-W',
     ],
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...argv,
-      '--config-file',
-      '../../babel.config.js',
-    ],
+    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
+      [
+        ...argv,
+        '--config-file',
+        cosmiconfigSync('babel', cosmiconfigOptions).search()?.filepath,
+      ].filter(Boolean),
   },
   server: {
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...argv,
-      '--config-file',
-      '../../babel.config.js',
-    ],
+    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
+      [
+        ...argv,
+        '--config-file',
+        cosmiconfigSync('babel', cosmiconfigOptions).search()?.filepath,
+      ].filter(Boolean),
   },
   exec: {
     install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [

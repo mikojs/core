@@ -5,7 +5,6 @@ import path from 'path';
 
 import execa from 'execa';
 import debug from 'debug';
-import npmWhich from 'npm-which';
 import getPort from 'get-port';
 import chalk from 'chalk';
 import rimraf from 'rimraf';
@@ -34,7 +33,7 @@ handleUnhandledRejection();
   }
 
   const rootProcess = await findRootProcess(__filename);
-  const { cli, argv, env, cliName } = options;
+  const { cli, getArgv, env, cliName } = options;
   const debugLog = debug(`configs:bin[${cliName}]`);
   const { customConfigsPath } = configs;
 
@@ -44,11 +43,14 @@ handleUnhandledRejection();
       .info(`Location: ${customConfigsPath}`);
 
   switch (cli) {
-    case 'install':
+    case 'install': {
+      const argv = getArgv();
+
       await execa(argv[0], argv.slice(1), {
         stdio: 'inherit',
       });
       return;
+    }
 
     case 'remove': {
       const files = findFiles(cliName);
@@ -115,11 +117,12 @@ handleUnhandledRejection();
         }
 
         // run command
+        const argv = getArgv();
+
         logger.log(
           chalk`Run command: {gray ${[path.basename(cli), ...argv].join(' ')}}`,
         );
-
-        await execa(npmWhich(process.cwd()).sync('node'), [cli, ...argv], {
+        await execa('node', [cli, ...argv], {
           stdio: 'inherit',
           env,
         });

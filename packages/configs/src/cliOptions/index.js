@@ -87,10 +87,11 @@ export default async (argv: $ReadOnlyArray<string>): Promise<optionType> =>
             ? false
             : {
                 cli: 'install',
-                argv: (
-                  configs.get(cliName).install ||
-                  emptyFunction.thatReturnsArgument
-                )(['yarn', 'add', '--dev']),
+                getArgv: () =>
+                  (
+                    configs.get(cliName).install ||
+                    emptyFunction.thatReturnsArgument
+                  )(['yarn', 'add', '--dev']),
                 env: {},
                 cliName,
               },
@@ -108,7 +109,7 @@ export default async (argv: $ReadOnlyArray<string>): Promise<optionType> =>
             ? false
             : {
                 cli: 'remove',
-                argv: [],
+                getArgv: () => [],
                 env: {},
                 cliName,
               },

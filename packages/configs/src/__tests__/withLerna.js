@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import withLerna from '../withLerna';
 
 describe('with lerna', () => {
@@ -26,7 +28,7 @@ describe('with lerna', () => {
                 expect(withLerna[configName].run([])).toEqual(
                   configName === 'exec'
                     ? []
-                    : ['--config-file', '../../babel.config.js'],
+                    : ['--config-file', path.resolve('./babel.config.js')],
                 );
               break;
 

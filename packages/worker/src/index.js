@@ -1,7 +1,11 @@
 // @flow
 
+import path from 'path';
+
+import execa from 'execa';
+import getPort from 'get-port';
+
 import findMainServer from './utils/findMainServer';
-import buildServer from './utils/buildServer';
 import sendToServer from './utils/sendToServer';
 
 type returnType = (type: string, data: {}) => Promise<void>;
@@ -17,7 +21,11 @@ type returnType = (type: string, data: {}) => Promise<void>;
 export default async (filePath: string): Promise<returnType> => {
   const mainServer = await findMainServer();
 
-  if (!mainServer) await buildServer(8000); // TODO: should use exec to running server in the background
+  if (!mainServer)
+    execa(path.resolve(__dirname, './bin/index.js'), [await getPort()], {
+      detached: true,
+      stdio: 'ignore',
+    }).unref();
 
   await sendToServer(
     JSON.stringify({

@@ -16,24 +16,39 @@ const debugLog = debug('worker:buildServer');
  */
 export default (port: number) => {
   const cache = {};
+  let timer: TimeoutID;
+
   const server = net.createServer((socket: net.Socket) => {
     socket.setEncoding('utf8');
     socket.on('data', (data: string) => {
-      const { type, filePath, message } = JSON.parse(data);
+      const { type, filePath, argv } = JSON.parse(data);
 
       if (type === 'init') {
-        if (!cache[filePath]) cache[filePath] = requireModule(filePath);
-      }
-      // eslint-disable-next-line flowtype/no-unused-expressions
-      else cache[filePath]?.[type](message);
+        if (!cache[filePath]) {
+          clearTimeout(timer);
+          cache[filePath] = requireModule(filePath);
+          cache[filePath].on('close', () => {
+            delete cache[filePath];
+            delete require.cache[filePath];
+
+            if (Object.keys(cache).length !== 0) return;
+
+            timer = setTimeout(() => {
+              server.close(() => {
+                debugLog('Close server');
+              });
+            }, 5000);
+          });
+        }
+      } else cache[filePath].emit(type, ...argv);
     });
   });
 
   server.on('error', (err: Error) => {
     debugLog(err);
     Object.keys(cache).forEach((key: string) => {
-      // eslint-disable-next-line flowtype/no-unused-expressions
-      cache[key]?.error(err);
+      if (cache[key].eventNames().includes('error'))
+        cache[key].emit('error', err);
     });
   });
 

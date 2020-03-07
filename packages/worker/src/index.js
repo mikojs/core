@@ -34,12 +34,12 @@ export default async (filePath: string): Promise<returnType> => {
     }),
   );
 
-  return (type: string, message: {}) =>
+  return (type: string, ...argv: $ReadOnlyArray<mixed>) =>
     sendToServer(
       JSON.stringify({
         type,
         filePath,
-        message,
+        argv,
       }),
     );
 };

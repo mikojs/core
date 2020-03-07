@@ -4,11 +4,15 @@ import path from 'path';
 
 import execa from 'execa';
 import getPort from 'get-port';
+import debug from 'debug';
+import findProcess from 'find-process';
 
-import findMainServer from './utils/findMainServer';
 import sendToServer from './utils/sendToServer';
 
 type returnType = (type: string, data: {}) => Promise<void>;
+
+const debugLog = debug('worker');
+let cachePid: number;
 
 /**
  * @example
@@ -19,15 +23,27 @@ type returnType = (type: string, data: {}) => Promise<void>;
  * @return {returnType} - worker function
  */
 export default async (filePath: string): Promise<returnType> => {
-  const mainServer = await findMainServer();
+  const allProcesses = await findProcess(
+    'name',
+    path.resolve(__dirname, './bin/index.js'),
+  );
+  const [mainProcess] = allProcesses;
+  const port = mainProcess?.cmd.split(/ /).slice(-1)[0] || (await getPort());
 
-  if (!mainServer)
-    execa(path.resolve(__dirname, './bin/index.js'), [await getPort()], {
+  if (mainProcess?.pid !== cachePid) {
+    cachePid = mainProcess.pid;
+    debugLog(mainProcess);
+    debugLog(process.pid);
+  }
+
+  if (!mainProcess)
+    execa(path.resolve(__dirname, './bin/index.js'), [port], {
       detached: true,
       stdio: 'ignore',
     }).unref();
 
   await sendToServer(
+    port,
     JSON.stringify({
       type: 'init',
       filePath,
@@ -36,6 +52,7 @@ export default async (filePath: string): Promise<returnType> => {
 
   return (type: string, ...argv: $ReadOnlyArray<mixed>) =>
     sendToServer(
+      port,
       JSON.stringify({
         type,
         filePath,

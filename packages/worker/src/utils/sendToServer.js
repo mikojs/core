@@ -8,7 +8,7 @@ const debugLog = debug('worker:sendToServer');
 
 /**
  * @example
- * sendToServer('{}', () => {})
+ * sendToServer(8000, '{}')
  *
  * @param {number} port - the port of the server
  * @param {string} data - the data which will be sent to the server
@@ -17,16 +17,15 @@ const debugLog = debug('worker:sendToServer');
  */
 const sendToServer = (port: number, data: string) =>
   new Promise<void>(resolve => {
-    const client = net.connect(parseInt(port, 10));
-
-    client.on('error', (err: Error) => {
-      debugLog(err);
-      setTimeout(() => {
-        sendToServer(port, data).then(resolve);
-      }, 10);
-    });
-
-    client.end(data, resolve);
+    net
+      .connect(parseInt(port, 10))
+      .on('error', (err: Error) => {
+        debugLog(err);
+        setTimeout(() => {
+          sendToServer(port, data).then(resolve);
+        }, 10);
+      })
+      .end(data, resolve);
   });
 
 export default sendToServer;

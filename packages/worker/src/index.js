@@ -41,13 +41,13 @@ export default async <+R>(filePath: string): Promise<R> => {
     }).unref();
 
   return [
-    ...(await sendToServer<$ReadOnlyArray<string>>(
+    ...((await sendToServer<$ReadOnlyArray<string>>(
       port,
       JSON.stringify({
         type: 'start',
         filePath,
       }),
-    )),
+    )) || []),
     'end',
   ].reduce(
     (result: R, key: string) => ({

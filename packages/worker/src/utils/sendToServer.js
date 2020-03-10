@@ -22,7 +22,7 @@ const sendToServer = <+R>(
   port: number,
   clientData: string,
   retryTimes?: number = 0,
-): Promise<R> =>
+): Promise<?R> =>
   new Promise((resolve, reject) => {
     if (TIMEOUT / RETRY_TIME < retryTimes) reject(new Error('Timeout'));
     else {
@@ -39,6 +39,10 @@ const sendToServer = <+R>(
           debugLog(serverData);
           client.destroy();
           resolve(JSON.parse(serverData));
+        })
+        .on('close', () => {
+          debugLog({ port, clientData });
+          resolve();
         });
 
       client.write(clientData);

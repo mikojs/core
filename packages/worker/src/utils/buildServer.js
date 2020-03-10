@@ -29,6 +29,7 @@ export default (port: number): net$Server => {
         if (type === 'end') {
           delete cache[filePath];
           delete require.cache[filePath];
+          socket.end();
           timer = setTimeout(() => {
             if (Object.keys(cache).length !== 0) return;
 

@@ -9,11 +9,15 @@ import findProcess from 'find-process';
 import buildWorker from '../index';
 import buildServer from '../utils/buildServer';
 
-import { mockCallback } from './__ignore__/worker';
+import { start, func, end } from './__ignore__/worker';
 
 test('worker', async () => {
   let port: number;
 
+  func
+    .mockReturnValueOnce('test')
+    .mockReturnValueOnce(undefined)
+    .mockReturnValueOnce(null);
   findProcess.mockReturnValue([]);
   execa.mockImplementation((filePath: string, [serverPort]: [number]): {|
     unref: JestMockFn<$ReadOnlyArray<void>, void>,
@@ -31,8 +35,11 @@ test('worker', async () => {
   );
 
   expect(port !== (await getPort({ port }))).toBeTruthy();
-  expect(await worker('test', 'send data')).toBeTruthy();
-  expect(await worker('close')).toBeTruthy();
-  expect(mockCallback).toHaveBeenCalledTimes(1);
-  expect(mockCallback).toHaveBeenCalledWith('send data');
+  expect(await worker.func()).toBe('test');
+  expect(await worker.func()).toBeUndefined();
+  expect(await worker.func()).toBeNull();
+  expect(await worker.end()).toBeUndefined();
+  expect(start).not.toHaveBeenCalled();
+  expect(end).not.toHaveBeenCalled();
+  expect(func).toHaveBeenCalledTimes(3);
 });

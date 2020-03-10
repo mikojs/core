@@ -13,24 +13,36 @@ const RETRY_TIME = 20;
  * sendToServer(8000, '{}')
  *
  * @param {number} port - the port of the server
- * @param {string} data - the data which will be sent to the server
+ * @param {string} clientData - the client data which will be sent to the server
  * @param {number} retryTimes - the times of the server retry
  *
- * @return {void} - not return anything
+ * @return {object} - response from the server
  */
-const sendToServer = (port: number, data: string, retryTimes?: number = 0) =>
-  new Promise<void>((resolve, reject) => {
+const sendToServer = <+R>(
+  port: number,
+  clientData: string,
+  retryTimes?: number = 0,
+): Promise<R> =>
+  new Promise((resolve, reject) => {
     if (TIMEOUT / RETRY_TIME < retryTimes) reject(new Error('Timeout'));
-    else
-      net
-        .connect(parseInt(port, 10))
+    else {
+      const client = net
+        .connect(port)
+        .setEncoding('utf8')
         .on('error', (err: Error) => {
           debugLog(err);
           setTimeout(() => {
-            sendToServer(port, data, retryTimes + 1).then(resolve);
+            sendToServer(port, clientData, retryTimes + 1).then(resolve);
           }, RETRY_TIME);
         })
-        .end(data, resolve);
+        .on('data', (serverData: string) => {
+          debugLog(serverData);
+          client.destroy();
+          resolve(JSON.parse(serverData));
+        });
+
+      client.write(clientData);
+    }
   });
 
 export default sendToServer;

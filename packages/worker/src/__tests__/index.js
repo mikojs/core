@@ -31,8 +31,8 @@ test('worker', async () => {
   );
 
   expect(port !== (await getPort({ port }))).toBeTruthy();
-  expect(await worker('test', 'send data')).toBeUndefined();
-  expect(await worker('close')).toBeUndefined();
+  expect(await worker('test', 'send data')).toBeTruthy();
+  expect(await worker('close')).toBeTruthy();
   expect(mockCallback).toHaveBeenCalledTimes(1);
   expect(mockCallback).toHaveBeenCalledWith('send data');
 });

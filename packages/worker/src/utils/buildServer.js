@@ -4,8 +4,6 @@ import net from 'net';
 
 import debug from 'debug';
 
-import { requireModule } from '@mikojs/utils';
-
 const debugLog = debug('worker:buildServer');
 
 /**
@@ -19,39 +17,45 @@ const debugLog = debug('worker:buildServer');
 export default (port: number): net$Server => {
   const cache = {};
   let timer: TimeoutID;
+  let currentEvent: ?string;
 
   const server = net
     .createServer((socket: net.Socket) => {
       socket.setEncoding('utf8').on('data', (data: string) => {
         const { type, filePath, argv } = JSON.parse(data);
 
-        if (type === 'init') {
-          if (!cache[filePath]) {
-            clearTimeout(timer);
-            cache[filePath] = requireModule(filePath);
-            cache[filePath].on('close', () => {
-              timer = setTimeout(() => {
-                delete cache[filePath];
-                delete require.cache[filePath];
+        currentEvent = filePath;
 
-                if (Object.keys(cache).length !== 0) return;
+        if (type === 'end') {
+          delete cache[filePath];
+          delete require.cache[filePath];
+          timer = setTimeout(() => {
+            if (Object.keys(cache).length !== 0) return;
 
-                server.close(() => {
-                  debugLog('Close server');
-                });
-              }, 5000);
+            server.close(() => {
+              debugLog('Close server');
             });
-          }
-          // FIXME
-          // eslint-disable-next-line flowtype/no-unused-expressions
-        } else cache[filePath]?.emit(type, ...argv);
+          }, 5000);
+        } else {
+          clearTimeout(timer);
+
+          if (!cache[filePath])
+            // $FlowFixMe The parameter passed to require must be a string literal.
+            cache[filePath] = require(filePath);
+
+          if (type === 'start')
+            socket.end(JSON.stringify(Object.keys(cache[filePath])));
+          else socket.end(JSON.stringify(cache[filePath][type](...argv)));
+        }
+
+        currentEvent = undefined;
       });
     })
     .on('error', (err: Error) => {
       debugLog(err);
-      Object.keys(cache).forEach((key: string) => {
-        cache[key].emit('error', err);
-      });
+
+      if (currentEvent && cache[currentEvent] && cache[currentEvent].error)
+        cache[currentEvent].error(err);
     })
     .listen(port, () => {
       debugLog(`(${process.pid}) Open server at ${port}`);

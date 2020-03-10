@@ -9,11 +9,6 @@ import findProcess from 'find-process';
 
 import sendToServer from './utils/sendToServer';
 
-type returnType = (
-  type: string,
-  ...argv: $ReadOnlyArray<mixed>
-) => Promise<void>;
-
 const debugLog = debug('worker');
 let cachePid: number;
 
@@ -23,9 +18,9 @@ let cachePid: number;
  *
  * @param {string} filePath - file path
  *
- * @return {returnType} - worker function
+ * @return {object} - worker functions
  */
-export default async (filePath: string): Promise<returnType> => {
+export default async <+R>(filePath: string): Promise<R> => {
   const allProcesses = await findProcess(
     'name',
     path.resolve(__dirname, './bin/index.js'),
@@ -45,21 +40,29 @@ export default async (filePath: string): Promise<returnType> => {
       stdio: 'ignore',
     }).unref();
 
-  await sendToServer(
-    port,
-    JSON.stringify({
-      type: 'init',
-      filePath,
-    }),
-  );
-
-  return (type: string, ...argv: $ReadOnlyArray<mixed>) =>
-    sendToServer(
+  return [
+    ...(await sendToServer<$ReadOnlyArray<string>>(
       port,
       JSON.stringify({
-        type,
+        type: 'start',
         filePath,
-        argv,
       }),
-    );
+    )),
+    'end',
+  ].reduce(
+    (result: R, key: string) => ({
+      ...result,
+      [key]: (...argv: $ReadOnlyArray<mixed>) =>
+        sendToServer(
+          port,
+          JSON.stringify({
+            type: key,
+            filePath,
+            argv,
+          }),
+        ),
+    }),
+    // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/5332
+    ({}: R),
+  );
 };

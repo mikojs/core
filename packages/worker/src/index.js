@@ -9,7 +9,10 @@ import findProcess from 'find-process';
 
 import sendToServer from './utils/sendToServer';
 
-type returnType = (type: string, data: {}) => Promise<void>;
+type returnType = (
+  type: string,
+  ...argv: $ReadOnlyArray<mixed>
+) => Promise<void>;
 
 const debugLog = debug('worker');
 let cachePid: number;

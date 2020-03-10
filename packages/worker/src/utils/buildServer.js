@@ -13,8 +13,10 @@ const debugLog = debug('worker:buildServer');
  * buildServer(8000)
  *
  * @param {number} port - the port of the server
+ *
+ * @return {object} - net server
  */
-export default (port: number) => {
+export default (port: number): net$Server => {
   const cache = {};
   let timer: TimeoutID;
 
@@ -28,29 +30,32 @@ export default (port: number) => {
             clearTimeout(timer);
             cache[filePath] = requireModule(filePath);
             cache[filePath].on('close', () => {
-              delete cache[filePath];
-              delete require.cache[filePath];
-
-              if (Object.keys(cache).length !== 0) return;
-
               timer = setTimeout(() => {
+                delete cache[filePath];
+                delete require.cache[filePath];
+
+                if (Object.keys(cache).length !== 0) return;
+
                 server.close(() => {
                   debugLog('Close server');
                 });
               }, 5000);
             });
           }
-        } else cache[filePath].emit(type, ...argv);
+          // FIXME
+          // eslint-disable-next-line flowtype/no-unused-expressions
+        } else cache[filePath]?.emit(type, ...argv);
       });
     })
     .on('error', (err: Error) => {
       debugLog(err);
       Object.keys(cache).forEach((key: string) => {
-        if (cache[key].eventNames().includes('error'))
-          cache[key].emit('error', err);
+        cache[key].emit('error', err);
       });
     })
     .listen(port, () => {
       debugLog(`(${process.pid}) Open server at ${port}`);
     });
+
+  return server;
 };

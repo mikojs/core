@@ -16,6 +16,7 @@ describe('worker', () => {
     let port: number;
 
     func
+      .mockReturnValueOnce({ key: 'value' })
       .mockReturnValueOnce('test')
       .mockReturnValueOnce(undefined)
       .mockReturnValueOnce(null);
@@ -36,18 +37,22 @@ describe('worker', () => {
     );
 
     expect(port !== (await getPort({ port }))).toBeTruthy();
+    expect(await worker.func()).toEqual({ key: 'value' });
     expect(await worker.func()).toBe('test');
     expect(await worker.func()).toBeUndefined();
     expect(await worker.func()).toBeNull();
     expect(await worker.end()).toBeUndefined();
     expect(start).not.toHaveBeenCalled();
     expect(end).not.toHaveBeenCalled();
-    expect(func).toHaveBeenCalledTimes(3);
+    expect(func).toHaveBeenCalledTimes(4);
   });
 
   test('not main server', async () => {
-    findProcess.mockReturnValue([{ cmd: `${await getPort()}` }]);
+    findProcess.mockReturnValue([{ cmd: `${await getPort()}`, pid: 1 }]);
 
+    await expect(
+      buildWorker(path.resolve(__dirname, './__ignore__/worker.js'), 40),
+    ).rejects.toThrow('Timeout');
     await expect(
       buildWorker(path.resolve(__dirname, './__ignore__/worker.js'), 40),
     ).rejects.toThrow('Timeout');

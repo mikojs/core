@@ -24,10 +24,11 @@ const sendToServer = <+R>(
   clientData: string,
   timeout?: number = TIMEOUT,
   retryTimes?: number = 0,
-): Promise<?R> =>
+): Promise<R> =>
   new Promise((resolve, reject) => {
     if (timeout / RETRY_TIME < retryTimes) reject(new Error('Timeout'));
     else {
+      let data: R;
       const client = net
         .connect(port)
         .setEncoding('utf8')
@@ -41,12 +42,11 @@ const sendToServer = <+R>(
         })
         .on('data', (serverData: string) => {
           debugLog(serverData);
-          client.destroy();
-          resolve(JSON.parse(serverData));
+          data = JSON.parse(serverData);
         })
         .on('end', () => {
           debugLog({ port, clientData });
-          resolve();
+          resolve(data);
         });
 
       client.write(clientData);

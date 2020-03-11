@@ -11,35 +11,45 @@ import buildServer from '../utils/buildServer';
 
 import { start, func, end } from './__ignore__/worker';
 
-test('worker', async () => {
-  let port: number;
+describe('worker', () => {
+  test('main server', async () => {
+    let port: number;
 
-  func
-    .mockReturnValueOnce('test')
-    .mockReturnValueOnce(undefined)
-    .mockReturnValueOnce(null);
-  findProcess.mockReturnValue([]);
-  execa.mockImplementation((filePath: string, [serverPort]: [number]): {|
-    unref: JestMockFn<$ReadOnlyArray<void>, void>,
-  |} => {
-    buildServer(serverPort).unref();
-    port = serverPort;
+    func
+      .mockReturnValueOnce('test')
+      .mockReturnValueOnce(undefined)
+      .mockReturnValueOnce(null);
+    findProcess.mockReturnValue([]);
+    execa.mockImplementation((filePath: string, [serverPort]: [number]): {|
+      unref: JestMockFn<$ReadOnlyArray<void>, void>,
+    |} => {
+      buildServer(serverPort).unref();
+      port = serverPort;
 
-    return {
-      unref: jest.fn(),
-    };
+      return {
+        unref: jest.fn(),
+      };
+    });
+
+    const worker = await buildWorker(
+      path.resolve(__dirname, './__ignore__/worker.js'),
+    );
+
+    expect(port !== (await getPort({ port }))).toBeTruthy();
+    expect(await worker.func()).toBe('test');
+    expect(await worker.func()).toBeUndefined();
+    expect(await worker.func()).toBeNull();
+    expect(await worker.end()).toBeUndefined();
+    expect(start).not.toHaveBeenCalled();
+    expect(end).not.toHaveBeenCalled();
+    expect(func).toHaveBeenCalledTimes(3);
   });
 
-  const worker = await buildWorker(
-    path.resolve(__dirname, './__ignore__/worker.js'),
-  );
+  test('not main server', async () => {
+    findProcess.mockReturnValue([{ cmd: `${await getPort()}` }]);
 
-  expect(port !== (await getPort({ port }))).toBeTruthy();
-  expect(await worker.func()).toBe('test');
-  expect(await worker.func()).toBeUndefined();
-  expect(await worker.func()).toBeNull();
-  expect(await worker.end()).toBeUndefined();
-  expect(start).not.toHaveBeenCalled();
-  expect(end).not.toHaveBeenCalled();
-  expect(func).toHaveBeenCalledTimes(3);
+    await expect(
+      buildWorker(path.resolve(__dirname, './__ignore__/worker.js'), 40),
+    ).rejects.toThrow('Timeout');
+  });
 });

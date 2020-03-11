@@ -17,10 +17,11 @@ let cachePid: number;
  * worker('/filePath')
  *
  * @param {string} filePath - file path
+ * @param {number} timeout - timeout setting
  *
  * @return {object} - worker functions
  */
-export default async <+R>(filePath: string): Promise<R> => {
+export default async <+R>(filePath: string, timeout?: number): Promise<R> => {
   const allProcesses = await findProcess(
     'name',
     path.resolve(__dirname, './bin/index.js'),
@@ -47,6 +48,7 @@ export default async <+R>(filePath: string): Promise<R> => {
         type: 'start',
         filePath,
       }),
+      timeout,
     )) || []),
     'end',
   ].reduce(
@@ -60,6 +62,7 @@ export default async <+R>(filePath: string): Promise<R> => {
             filePath,
             argv,
           }),
+          timeout,
         ),
     }),
     // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/5332

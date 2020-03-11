@@ -31,9 +31,8 @@ export default (port: number): net$Server => {
             timer = setTimeout(() => {
               if (Object.keys(cache).length !== 0) return;
 
-              server.close(() => {
-                debugLog('Close server');
-              });
+              debugLog('Close server');
+              server.close();
             }, 5000);
           } else {
             clearTimeout(timer);

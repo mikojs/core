@@ -36,7 +36,15 @@ const sendToServer = <+R>(
       let data: R & { hash: string, message: string, stack: string };
 
       const client = net
-        .connect(port)
+        .connect({
+          port,
+          onread: {
+            buffer: Buffer.alloc(4 * 1024),
+            callback: (size: number, buffer: Buffer) => {
+              data = JSON.parse(buffer.toString('utf8', 0, size));
+            },
+          },
+        })
         .setEncoding('utf8')
         .on('error', (err: Error) => {
           debugLog(err);
@@ -45,10 +53,6 @@ const sendToServer = <+R>(
               .then(resolve)
               .catch(reject);
           }, RETRY_TIME);
-        })
-        .on('data', (serverData: string) => {
-          debugLog(serverData);
-          data = JSON.parse(serverData);
         })
         .on('end', () => {
           debugLog({ port, clientData });

@@ -1,6 +1,7 @@
 // @flow
 
 import net from 'net';
+import crypto from 'crypto';
 
 import debug from 'debug';
 
@@ -28,7 +29,11 @@ const sendToServer = <+R>(
   new Promise((resolve, reject) => {
     if (timeout / RETRY_TIME < retryTimes) reject(new Error('Timeout'));
     else {
-      let data: R;
+      let data: R & { hash: string, message: string, stack: string };
+      const hash = crypto
+        .createHash('md5')
+        .update(process.pid.toString())
+        .digest('hex');
       const client = net
         .connect(port)
         .setEncoding('utf8')
@@ -46,10 +51,22 @@ const sendToServer = <+R>(
         })
         .on('end', () => {
           debugLog({ port, clientData });
-          resolve(data);
+
+          if (data?.hash !== hash) resolve(data);
+          else {
+            const error = new Error(data.message);
+
+            error.stack = data.stack;
+            reject(error);
+          }
         });
 
-      client.write(JSON.stringify(clientData));
+      client.write(
+        JSON.stringify({
+          ...clientData,
+          hash,
+        }),
+      );
     }
   });
 

@@ -21,7 +21,7 @@ export default (port: number): net$Server => {
   const server = net
     .createServer((socket: net.Socket) => {
       socket.setEncoding('utf8').on('data', (data: string) => {
-        const { type, filePath, argv } = JSON.parse(data);
+        const { hash, type, filePath, argv } = JSON.parse(data);
 
         try {
           if (type === 'end') {
@@ -49,7 +49,14 @@ export default (port: number): net$Server => {
           // FIXME
           // eslint-disable-next-line flowtype/no-unused-expressions
           cache[filePath]?.error(e);
-          socket.end();
+          socket.end(
+            JSON.stringify({
+              hash,
+              type: 'error',
+              message: e.message,
+              stack: e.stack,
+            }),
+          );
         }
       });
     })

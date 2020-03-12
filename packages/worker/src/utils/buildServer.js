@@ -46,9 +46,6 @@ export default (port: number): net$Server => {
             else socket.end(JSON.stringify(cache[filePath][type](...argv)));
           }
         } catch (e) {
-          // FIXME
-          // eslint-disable-next-line flowtype/no-unused-expressions
-          cache[filePath]?.error(e);
           socket.end(
             JSON.stringify({
               hash,

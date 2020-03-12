@@ -1,7 +1,6 @@
 // @flow
 
 import net from 'net';
-import crypto from 'crypto';
 
 import debug from 'debug';
 
@@ -29,11 +28,8 @@ const sendToServer = <+R>(
   new Promise((resolve, reject) => {
     if (timeout / RETRY_TIME < retryTimes) reject(new Error('Timeout'));
     else {
-      const hash = crypto
-        .createHash('md5')
-        .update(process.pid.toString())
-        .digest('hex');
-      let data: R & { hash: string, message: string, stack: string };
+      let data: R;
+      let type: 'start' | 'end' | 'error' | 'normal' | void;
 
       const client = net
         .connect({
@@ -41,11 +37,38 @@ const sendToServer = <+R>(
           onread: {
             buffer: Buffer.alloc(4 * 1024),
             callback: (size: number, buffer: Buffer) => {
-              data = JSON.parse(buffer.toString('utf8', 0, size));
+              const text = buffer.toString('utf8', 0, size);
+              const matchType = text.match(/\[(start|end|error|normal)\]/)?.[0];
+
+              if (!type)
+                switch (matchType) {
+                  case '[start]':
+                    type = 'start';
+                    break;
+
+                  case '[end]':
+                    type = 'end';
+                    break;
+
+                  case '[error]':
+                    type = 'error';
+                    break;
+
+                  default:
+                    type = 'normal';
+                    break;
+                }
+
+              if (type !== 'end')
+                data = `${data || ''}${text.replace(`[${type}]`, '')}`;
+
+              if (matchType) {
+                data = JSON.parse(data);
+                type = undefined;
+              }
             },
           },
         })
-        .setEncoding('utf8')
         .on('error', (err: Error) => {
           debugLog(err);
           setTimeout(() => {
@@ -56,22 +79,10 @@ const sendToServer = <+R>(
         })
         .on('end', () => {
           debugLog({ port, clientData });
-
-          if (data?.hash !== hash) resolve(data);
-          else {
-            const error = new Error(data.message);
-
-            error.stack = data.stack;
-            reject(error);
-          }
+          resolve(data);
         });
 
-      client.write(
-        JSON.stringify({
-          ...clientData,
-          hash,
-        }),
-      );
+      client.write(JSON.stringify(clientData));
     }
   });
 

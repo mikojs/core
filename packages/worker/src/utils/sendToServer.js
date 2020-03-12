@@ -29,11 +29,12 @@ const sendToServer = <+R>(
   new Promise((resolve, reject) => {
     if (timeout / RETRY_TIME < retryTimes) reject(new Error('Timeout'));
     else {
-      let data: R & { hash: string, message: string, stack: string };
       const hash = crypto
         .createHash('md5')
         .update(process.pid.toString())
         .digest('hex');
+      let data: R & { hash: string, message: string, stack: string };
+
       const client = net
         .connect(port)
         .setEncoding('utf8')

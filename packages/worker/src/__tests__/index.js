@@ -47,8 +47,8 @@ describe('worker', () => {
     await expect(worker.func()).rejects.toThrow('error');
     expect(await worker.end()).toBeUndefined();
     expect(start).not.toHaveBeenCalled();
-    expect(end).not.toHaveBeenCalled();
     expect(func).toHaveBeenCalledTimes(5);
+    expect(end).not.toHaveBeenCalled();
   });
 
   test('not main server', async () => {

@@ -31,7 +31,7 @@ const sendToServer = <+R>(
       let cache: ?string;
       let type: 'start' | 'end' | 'normal' | 'error';
 
-      const client = net
+      net
         .connect({
           port,
           onread: {
@@ -78,9 +78,8 @@ const sendToServer = <+R>(
             error.stack = stack;
             reject(error);
           } else resolve(JSON.parse(cache));
-        });
-
-      client.write(JSON.stringify(clientData));
+        })
+        .write(JSON.stringify(clientData));
     }
   });
 

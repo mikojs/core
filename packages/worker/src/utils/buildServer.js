@@ -34,7 +34,7 @@ export default (port: number): net$Server => {
 
             delete cache[filePath];
             delete require.cache[filePath];
-            socket.end('end');
+            socket.end('end;');
             return;
           }
 
@@ -45,15 +45,15 @@ export default (port: number): net$Server => {
             cache[filePath] = require(filePath);
 
           if (type === 'start') {
-            socket.write('start');
+            socket.write('start;');
             socket.end(JSON.stringify(Object.keys(cache[filePath])));
             return;
           }
 
-          socket.write('normal');
+          socket.write('normal;');
           socket.end(JSON.stringify(cache[filePath][type](...argv)));
         } catch (e) {
-          socket.write('error');
+          socket.write('error;');
           socket.end(
             JSON.stringify({
               message: e.message,

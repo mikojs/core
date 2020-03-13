@@ -9,7 +9,7 @@ import findProcess from 'find-process';
 import buildWorker from '../index';
 import buildServer from '../utils/buildServer';
 
-import { start, func, end, error } from './__ignore__/worker';
+import { start, func, end } from './__ignore__/worker';
 
 describe('worker', () => {
   test('main server', async () => {
@@ -44,13 +44,11 @@ describe('worker', () => {
     expect(await worker.func()).toBe('test');
     expect(await worker.func()).toBeUndefined();
     expect(await worker.func()).toBeNull();
-    expect(await worker.func()).toBeUndefined();
+    await expect(worker.func()).rejects.toThrow('error');
     expect(await worker.end()).toBeUndefined();
     expect(start).not.toHaveBeenCalled();
-    expect(end).not.toHaveBeenCalled();
     expect(func).toHaveBeenCalledTimes(5);
-    expect(error).toHaveBeenCalledTimes(1);
-    expect(error).toHaveBeenCalledWith(new Error('error'));
+    expect(end).not.toHaveBeenCalled();
   });
 
   test('not main server', async () => {

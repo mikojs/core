@@ -25,31 +25,41 @@ export default (port: number): net$Server => {
 
         try {
           if (type === 'end') {
-            delete cache[filePath];
-            delete require.cache[filePath];
-            socket.end();
             timer = setTimeout(() => {
               if (Object.keys(cache).length !== 0) return;
 
               debugLog('Close server');
               server.close();
             }, 5000);
-          } else {
-            clearTimeout(timer);
 
-            if (!cache[filePath])
-              // $FlowFixMe The parameter passed to require must be a string literal.
-              cache[filePath] = require(filePath);
-
-            if (type === 'start')
-              socket.end(JSON.stringify(Object.keys(cache[filePath])));
-            else socket.end(JSON.stringify(cache[filePath][type](...argv)));
+            delete cache[filePath];
+            delete require.cache[filePath];
+            socket.end('end');
+            return;
           }
+
+          clearTimeout(timer);
+
+          if (!cache[filePath])
+            // $FlowFixMe The parameter passed to require must be a string literal.
+            cache[filePath] = require(filePath);
+
+          if (type === 'start') {
+            socket.write('start');
+            socket.end(JSON.stringify(Object.keys(cache[filePath])));
+            return;
+          }
+
+          socket.write('normal');
+          socket.end(JSON.stringify(cache[filePath][type](...argv)));
         } catch (e) {
-          // FIXME
-          // eslint-disable-next-line flowtype/no-unused-expressions
-          cache[filePath]?.error(e);
-          socket.end();
+          socket.write('error');
+          socket.end(
+            JSON.stringify({
+              message: e.message,
+              stack: e.stack,
+            }),
+          );
         }
       });
     })

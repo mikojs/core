@@ -9,20 +9,31 @@ import findProcess from 'find-process';
 import buildWorker from '../index';
 import buildServer from '../utils/buildServer';
 
-import { start, func, end, error } from './__ignore__/worker';
+import { start, func, end } from './__ignore__/worker';
 
 describe('worker', () => {
   test('main server', async () => {
+    const expecteds = [
+      { key: 'value' },
+      ['test'],
+      'test',
+      '-1',
+      '0',
+      '1',
+      -1,
+      0,
+      1,
+      undefined,
+      null,
+    ];
     let port: number;
 
-    func
-      .mockReturnValueOnce({ key: 'value' })
-      .mockReturnValueOnce('test')
-      .mockReturnValueOnce(undefined)
-      .mockReturnValueOnce(null)
-      .mockImplementation(() => {
-        throw new Error('error');
-      });
+    expecteds.forEach((expected: mixed) => {
+      func.mockReturnValueOnce(expected);
+    });
+    func.mockImplementation(() => {
+      throw new Error('error');
+    });
     findProcess.mockReturnValue([]);
     execa.mockImplementation((filePath: string, [serverPort]: [number]): {|
       unref: JestMockFn<$ReadOnlyArray<void>, void>,
@@ -40,17 +51,18 @@ describe('worker', () => {
     );
 
     expect(port !== (await getPort({ port }))).toBeTruthy();
-    expect(await worker.func()).toEqual({ key: 'value' });
-    expect(await worker.func()).toBe('test');
-    expect(await worker.func()).toBeUndefined();
-    expect(await worker.func()).toBeNull();
-    expect(await worker.func()).toBeUndefined();
+    await expecteds.reduce(
+      (result: Promise<void>, expected: mixed) =>
+        result
+          .then(() => worker.func())
+          .then((data: mixed) => expect(data).toEqual(expected)),
+      Promise.resolve(),
+    );
+    await expect(worker.func()).rejects.toThrow('error');
     expect(await worker.end()).toBeUndefined();
     expect(start).not.toHaveBeenCalled();
+    expect(func).toHaveBeenCalledTimes(expecteds.length + 1);
     expect(end).not.toHaveBeenCalled();
-    expect(func).toHaveBeenCalledTimes(5);
-    expect(error).toHaveBeenCalledTimes(1);
-    expect(error).toHaveBeenCalledWith(new Error('error'));
   });
 
   test('not main server', async () => {

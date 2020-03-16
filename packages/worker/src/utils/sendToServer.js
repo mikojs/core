@@ -34,8 +34,15 @@ const sendToServer = <+R>(
   new Promise((resolve, reject) => {
     if (timeout / RETRY_TIME < retryTimes) reject(new Error('Timeout'));
     else {
+      const hasStdout = typeof clientData.argv[0] === 'function';
       let cache: ?string;
-      let type: 'start' | 'end' | 'normal' | 'error';
+      let type:
+        | 'start'
+        | 'end'
+        | 'normal'
+        | 'error'
+        | 'stdout-start'
+        | 'stdout-end';
 
       net
         .connect({
@@ -51,6 +58,8 @@ const sendToServer = <+R>(
                   case 'end':
                   case 'normal':
                   case 'error':
+                  case 'stdout-start':
+                  case 'stdout-end':
                     type = cache;
                     cache = undefined;
                     return;
@@ -58,6 +67,20 @@ const sendToServer = <+R>(
                   default:
                     break;
                 }
+              else if (
+                type === 'stdout-start' &&
+                cache &&
+                cache.length === 'stdout-end;'.length
+              ) {
+                if (cache === 'stdout-end;') cache = undefined;
+                else {
+                  // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/7702
+                  clientData.argv[0](cache[0]);
+                  cache = `${cache.slice(1)}${text}`;
+                }
+
+                return;
+              }
 
               cache = `${cache || ''}${text}`;
             },
@@ -86,7 +109,7 @@ const sendToServer = <+R>(
             reject(error);
           }
         })
-        .write(JSON.stringify(clientData));
+        .write(JSON.stringify({ ...clientData, hasStdout }));
     }
   });
 

@@ -71,13 +71,14 @@ const sendToServer = <+R>(
           if (!cache)
             // $FlowFixMe R should can be void
             resolve(cache);
-          else if (type === 'error') {
+          else if (type !== 'error') resolve(JSON.parse(cache));
+          else {
             const { message, stack } = JSON.parse(cache);
             const error = new Error(message);
 
             error.stack = stack;
             reject(error);
-          } else resolve(JSON.parse(cache));
+          }
         })
         .write(JSON.stringify(clientData));
     }

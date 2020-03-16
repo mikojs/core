@@ -1,6 +1,7 @@
 // @flow
 
 import net from 'net';
+import stream from 'stream';
 
 import debug from 'debug';
 
@@ -34,7 +35,7 @@ const sendToServer = <+R>(
   new Promise((resolve, reject) => {
     if (timeout / RETRY_TIME < retryTimes) reject(new Error('Timeout'));
     else {
-      const hasStdout = typeof clientData.argv[0] === 'function';
+      const hasStdout = clientData.argv[0] instanceof stream.Writable;
       let cache: ?string;
       let type:
         | 'start'
@@ -67,22 +68,25 @@ const sendToServer = <+R>(
                   default:
                     break;
                 }
-              else if (
-                type === 'stdout-start' &&
-                cache &&
-                cache.length === 'stdout-end;'.length
-              ) {
-                if (cache === 'stdout-end;') cache = undefined;
-                else {
-                  // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/7702
-                  clientData.argv[0](cache[0]);
-                  cache = `${cache.slice(1)}${text}`;
-                }
-
-                return;
-              }
 
               cache = `${cache || ''}${text}`;
+
+              if (
+                type === 'stdout-start' &&
+                cache.length === 'stdout-end;'.length
+              ) {
+                if (/stdout-end;$/.test(cache)) {
+                  cache.split('').forEach((str: string) => {
+                    // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/7702
+                    clientData.argv[0].write(str);
+                  });
+                  cache = undefined;
+                } else {
+                  // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/7702
+                  clientData.argv[0].write(cache[0]);
+                  cache = cache.slice(1);
+                }
+              }
             },
           },
         })

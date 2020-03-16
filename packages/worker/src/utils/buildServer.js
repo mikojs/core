@@ -1,6 +1,7 @@
 // @flow
 
 import net from 'net';
+import stream from 'stream';
 
 import debug from 'debug';
 
@@ -51,10 +52,14 @@ export default (port: number): net$Server => {
           }
 
           if (hasStdout) {
+            const stdout = new stream.Writable({
+              write: (chunk: Buffer | string) => {
+                socket.write(chunk);
+              },
+            });
+
             socket.write('stdout-start;');
-            argv[0] = (text: string) => {
-              socket.write(text);
-            };
+            argv[0] = stdout;
           }
 
           const serverData = JSON.stringify(cache[filePath][type](...argv));

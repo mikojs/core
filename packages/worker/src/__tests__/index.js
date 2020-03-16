@@ -1,6 +1,7 @@
 // @flow
 
 import path from 'path';
+import stream from 'stream';
 
 import execa from 'execa';
 import getPort from 'get-port';
@@ -23,6 +24,8 @@ describe('worker', () => {
       -1,
       0,
       1,
+      true,
+      false,
       undefined,
       null,
     ];
@@ -31,9 +34,13 @@ describe('worker', () => {
     expecteds.forEach((expected: mixed) => {
       func.mockReturnValueOnce(expected);
     });
-    func.mockImplementation(() => {
-      throw new Error('error');
-    });
+    func
+      .mockImplementationOnce((stdout: stream$Writable) => {
+        stdout.write('test');
+      })
+      .mockImplementation(() => {
+        throw new Error('error');
+      });
     findProcess.mockReturnValue([]);
     execa.mockImplementation((filePath: string, [serverPort]: [number]): {|
       unref: JestMockFn<$ReadOnlyArray<void>, void>,
@@ -49,6 +56,9 @@ describe('worker', () => {
     const worker = await buildWorker(
       path.resolve(__dirname, './__ignore__/worker.js'),
     );
+    const stdout = new stream.Writable({
+      write: () => {},
+    });
 
     expect(port !== (await getPort({ port }))).toBeTruthy();
     await expecteds.reduce(
@@ -58,10 +68,12 @@ describe('worker', () => {
           .then((data: mixed) => expect(data).toEqual(expected)),
       Promise.resolve(),
     );
+    // TODO: add testing
+    expect(await worker.func(stdout)).toBeUndefined();
     await expect(worker.func()).rejects.toThrow('error');
     expect(await worker.end()).toBeUndefined();
     expect(start).not.toHaveBeenCalled();
-    expect(func).toHaveBeenCalledTimes(expecteds.length + 1);
+    expect(func).toHaveBeenCalledTimes(expecteds.length + 2);
     expect(end).not.toHaveBeenCalled();
   });
 

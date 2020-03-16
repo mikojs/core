@@ -46,6 +46,7 @@ export default async <+R>(filePath: string, timeout?: number): Promise<R> => {
       port,
       {
         type: 'start',
+        argv: [],
         filePath,
       },
       timeout,

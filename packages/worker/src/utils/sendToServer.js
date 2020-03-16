@@ -4,6 +4,12 @@ import net from 'net';
 
 import debug from 'debug';
 
+type clientDataType = {|
+  type: string,
+  filePath: string,
+  argv: $ReadOnlyArray<mixed>,
+|};
+
 const debugLog = debug('worker:sendToServer');
 const TIMEOUT = 5000;
 const RETRY_TIME = 20;
@@ -13,7 +19,7 @@ const RETRY_TIME = 20;
  * sendToServer(8000, '{}')
  *
  * @param {number} port - the port of the server
- * @param {object} clientData - the client data which will be sent to the server
+ * @param {clientDataType} clientData - the client data which will be sent to the server
  * @param {number} timeout - timeout of checking
  * @param {number} retryTimes - the times of the server retry
  *
@@ -21,7 +27,7 @@ const RETRY_TIME = 20;
  */
 const sendToServer = <+R>(
   port: number,
-  clientData: {},
+  clientData: clientDataType,
   timeout?: number = TIMEOUT,
   retryTimes?: number = 0,
 ): Promise<R> =>

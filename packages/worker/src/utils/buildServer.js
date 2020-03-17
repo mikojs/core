@@ -52,7 +52,7 @@ export default (port: number): net$Server => {
           }
 
           if (hasStdout) {
-            socket.write('stdout-start;');
+            socket.write('stdout;');
             argv[0] = new stream.Writable({
               write: (chunk: Buffer | string) => {
                 socket.write(chunk);
@@ -62,7 +62,6 @@ export default (port: number): net$Server => {
 
           const serverData = JSON.stringify(cache[filePath][type](...argv));
 
-          socket.write('stdout-end;');
           socket.write('normal;');
           socket.end(serverData);
         } catch (e) {

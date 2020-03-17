@@ -37,13 +37,7 @@ const sendToServer = <+R>(
     else {
       const hasStdout = clientData.argv[0] instanceof stream.Writable;
       let cache: ?string;
-      let type:
-        | 'start'
-        | 'end'
-        | 'normal'
-        | 'error'
-        | 'stdout-start'
-        | 'stdout-end';
+      let type: 'start' | 'end' | 'normal' | 'error' | 'stdout';
 
       net
         .connect({
@@ -59,8 +53,7 @@ const sendToServer = <+R>(
                   case 'end':
                   case 'normal':
                   case 'error':
-                  case 'stdout-start':
-                  case 'stdout-end':
+                  case 'stdout':
                     type = cache;
                     cache = undefined;
                     return;
@@ -71,10 +64,7 @@ const sendToServer = <+R>(
 
               cache = `${cache || ''}${text}`;
 
-              if (
-                type === 'stdout-start' &&
-                cache.length === 'stdout-end;'.length
-              ) {
+              if (type === 'stdout' && cache.length === 'normal;'.length) {
                 // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/7702
                 clientData.argv[0].write(cache[0]);
                 cache = cache.slice(1);

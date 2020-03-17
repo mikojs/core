@@ -56,11 +56,10 @@ describe('worker', () => {
     const worker = await buildWorker(
       path.resolve(__dirname, './__ignore__/worker.js'),
     );
-    const stdout = new stream.Writable({
-      write: () => {},
-    });
+    const stdout = [];
 
     expect(port !== (await getPort({ port }))).toBeTruthy();
+
     await expecteds.reduce(
       (result: Promise<void>, expected: mixed) =>
         result
@@ -68,13 +67,24 @@ describe('worker', () => {
           .then((data: mixed) => expect(data).toEqual(expected)),
       Promise.resolve(),
     );
-    // TODO: add testing
-    expect(await worker.func(stdout)).toBeUndefined();
+    expect(
+      await worker.func(
+        new stream.Writable({
+          write: (chunk: Buffer, encoding: string, callback: () => void) => {
+            if (Buffer.isBuffer(chunk)) stdout.push(chunk.toString());
+
+            callback();
+          },
+        }),
+      ),
+    ).toBeUndefined();
     await expect(worker.func()).rejects.toThrow('error');
     expect(await worker.end()).toBeUndefined();
+
     expect(start).not.toHaveBeenCalled();
     expect(func).toHaveBeenCalledTimes(expecteds.length + 2);
     expect(end).not.toHaveBeenCalled();
+    expect(stdout).toEqual(['t', 'e', 's', 't']);
   });
 
   test('not main server', async () => {

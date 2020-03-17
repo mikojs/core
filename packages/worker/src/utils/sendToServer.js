@@ -75,17 +75,9 @@ const sendToServer = <+R>(
                 type === 'stdout-start' &&
                 cache.length === 'stdout-end;'.length
               ) {
-                if (/stdout-end;$/.test(cache)) {
-                  cache.split('').forEach((str: string) => {
-                    // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/7702
-                    clientData.argv[0].write(str);
-                  });
-                  cache = undefined;
-                } else {
-                  // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/7702
-                  clientData.argv[0].write(cache[0]);
-                  cache = cache.slice(1);
-                }
+                // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/7702
+                clientData.argv[0].write(cache[0]);
+                cache = cache.slice(1);
               }
             },
           },

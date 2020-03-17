@@ -65,9 +65,10 @@ describe('worker', () => {
 
     test('func with stdout', async () => {
       const output = [];
+      const expected = 'test;foo bar 123';
 
       func.mockImplementationOnce((stdout: stream$Writable) => {
-        stdout.write('test');
+        stdout.write(expected);
       });
 
       expect(
@@ -85,7 +86,7 @@ describe('worker', () => {
           }),
         ),
       ).toBeUndefined();
-      expect(output).toEqual(['t', 'e', 's', 't']);
+      expect(output).toEqual(expected.split(''));
     });
 
     test('func with error', async () => {

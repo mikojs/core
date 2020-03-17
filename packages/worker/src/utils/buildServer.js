@@ -52,14 +52,12 @@ export default (port: number): net$Server => {
           }
 
           if (hasStdout) {
-            const stdout = new stream.Writable({
+            socket.write('stdout-start;');
+            argv[0] = new stream.Writable({
               write: (chunk: Buffer | string) => {
                 socket.write(chunk);
               },
             });
-
-            socket.write('stdout-start;');
-            argv[0] = stdout;
           }
 
           const serverData = JSON.stringify(cache[filePath][type](...argv));

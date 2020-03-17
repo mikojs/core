@@ -1,6 +1,7 @@
 // @flow
 
 import net from 'net';
+import stream from 'stream';
 
 import debug from 'debug';
 
@@ -21,35 +22,56 @@ export default (port: number): net$Server => {
   const server = net
     .createServer((socket: net.Socket) => {
       socket.setEncoding('utf8').on('data', (data: string) => {
-        const { type, filePath, argv } = JSON.parse(data);
+        const { type, filePath, argv, hasStdout } = JSON.parse(data);
 
         try {
           if (type === 'end') {
-            delete cache[filePath];
-            delete require.cache[filePath];
-            socket.end();
             timer = setTimeout(() => {
               if (Object.keys(cache).length !== 0) return;
 
               debugLog('Close server');
               server.close();
             }, 5000);
-          } else {
-            clearTimeout(timer);
 
-            if (!cache[filePath])
-              // $FlowFixMe The parameter passed to require must be a string literal.
-              cache[filePath] = require(filePath);
-
-            if (type === 'start')
-              socket.end(JSON.stringify(Object.keys(cache[filePath])));
-            else socket.end(JSON.stringify(cache[filePath][type](...argv)));
+            delete cache[filePath];
+            delete require.cache[filePath];
+            socket.end('end;');
+            return;
           }
+
+          clearTimeout(timer);
+
+          if (!cache[filePath])
+            // $FlowFixMe The parameter passed to require must be a string literal.
+            cache[filePath] = require(filePath);
+
+          if (type === 'start') {
+            socket.write('start;');
+            socket.end(JSON.stringify(Object.keys(cache[filePath])));
+            return;
+          }
+
+          if (hasStdout) {
+            socket.write('stdout;');
+            argv[0] = new stream.Writable({
+              write: (chunk: Buffer | string) => {
+                socket.write(chunk);
+              },
+            });
+          }
+
+          const serverData = JSON.stringify(cache[filePath][type](...argv));
+
+          socket.write('normal;');
+          socket.end(serverData);
         } catch (e) {
-          // FIXME
-          // eslint-disable-next-line flowtype/no-unused-expressions
-          cache[filePath]?.error(e);
-          socket.end();
+          socket.write('error;');
+          socket.end(
+            JSON.stringify({
+              message: e.message,
+              stack: e.stack,
+            }),
+          );
         }
       });
     })

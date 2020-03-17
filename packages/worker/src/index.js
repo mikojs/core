@@ -44,10 +44,11 @@ export default async <+R>(filePath: string, timeout?: number): Promise<R> => {
   return [
     ...(await sendToServer<$ReadOnlyArray<string>>(
       port,
-      JSON.stringify({
+      {
         type: 'start',
+        argv: [],
         filePath,
-      }),
+      },
       timeout,
     )),
     'end',
@@ -57,11 +58,11 @@ export default async <+R>(filePath: string, timeout?: number): Promise<R> => {
       [key]: (...argv: $ReadOnlyArray<mixed>) =>
         sendToServer(
           port,
-          JSON.stringify({
+          {
             type: key,
             filePath,
             argv,
-          }),
+          },
           timeout,
         ),
     }),

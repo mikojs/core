@@ -1,8 +1,15 @@
 // @flow
 
 import net from 'net';
+import stream from 'stream';
 
 import debug from 'debug';
+
+type clientDataType = {|
+  type: string,
+  filePath: string,
+  argv: $ReadOnlyArray<mixed>,
+|};
 
 const debugLog = debug('worker:sendToServer');
 const TIMEOUT = 5000;
@@ -13,7 +20,7 @@ const RETRY_TIME = 20;
  * sendToServer(8000, '{}')
  *
  * @param {number} port - the port of the server
- * @param {object} clientData - the client data which will be sent to the server
+ * @param {clientDataType} clientData - the client data which will be sent to the server
  * @param {number} timeout - timeout of checking
  * @param {number} retryTimes - the times of the server retry
  *
@@ -21,15 +28,16 @@ const RETRY_TIME = 20;
  */
 const sendToServer = <+R>(
   port: number,
-  clientData: {},
+  clientData: clientDataType,
   timeout?: number = TIMEOUT,
   retryTimes?: number = 0,
 ): Promise<R> =>
   new Promise((resolve, reject) => {
     if (timeout / RETRY_TIME < retryTimes) reject(new Error('Timeout'));
     else {
+      const hasStdout = clientData.argv[0] instanceof stream.Writable;
       let cache: ?string;
-      let type: 'start' | 'end' | 'normal' | 'error';
+      let type: 'start' | 'end' | 'normal' | 'error' | 'stdout';
 
       net
         .connect({
@@ -45,6 +53,7 @@ const sendToServer = <+R>(
                   case 'end':
                   case 'normal':
                   case 'error':
+                  case 'stdout':
                     type = cache;
                     cache = undefined;
                     return;
@@ -54,6 +63,12 @@ const sendToServer = <+R>(
                 }
 
               cache = `${cache || ''}${text}`;
+
+              if (type === 'stdout' && cache.length === 'normal;'.length) {
+                // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/7702
+                clientData.argv[0].write(cache[0]);
+                cache = cache.slice(1);
+              }
             },
           },
         })
@@ -71,15 +86,16 @@ const sendToServer = <+R>(
           if (!cache)
             // $FlowFixMe R should can be void
             resolve(cache);
-          else if (type === 'error') {
+          else if (type !== 'error') resolve(JSON.parse(cache));
+          else {
             const { message, stack } = JSON.parse(cache);
             const error = new Error(message);
 
             error.stack = stack;
             reject(error);
-          } else resolve(JSON.parse(cache));
+          }
         })
-        .write(JSON.stringify(clientData));
+        .write(JSON.stringify({ ...clientData, hasStdout }));
     }
   });
 

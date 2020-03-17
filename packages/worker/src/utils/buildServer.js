@@ -1,6 +1,7 @@
 // @flow
 
 import net from 'net';
+import stream from 'stream';
 
 import debug from 'debug';
 
@@ -21,7 +22,7 @@ export default (port: number): net$Server => {
   const server = net
     .createServer((socket: net.Socket) => {
       socket.setEncoding('utf8').on('data', (data: string) => {
-        const { type, filePath, argv } = JSON.parse(data);
+        const { type, filePath, argv, hasStdout } = JSON.parse(data);
 
         try {
           if (type === 'end') {
@@ -50,8 +51,19 @@ export default (port: number): net$Server => {
             return;
           }
 
+          if (hasStdout) {
+            socket.write('stdout;');
+            argv[0] = new stream.Writable({
+              write: (chunk: Buffer | string) => {
+                socket.write(chunk);
+              },
+            });
+          }
+
+          const serverData = JSON.stringify(cache[filePath][type](...argv));
+
           socket.write('normal;');
-          socket.end(JSON.stringify(cache[filePath][type](...argv)));
+          socket.end(serverData);
         } catch (e) {
           socket.write('error;');
           socket.end(

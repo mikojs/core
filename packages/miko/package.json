@@ -9,7 +9,9 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "core-js": "^3.6.4"
+    "@mikojs/worker": "^1.9.1",
+    "core-js": "^3.6.4",
+    "fbjs": "^1.0.0"
   },
   "devDependencies": {
     "flow-bin": "^0.118.0",

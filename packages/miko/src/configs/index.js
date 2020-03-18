@@ -45,12 +45,29 @@ export type configsType = {
  */
 export default (
   configsArrayOrOne: originalConfigsType | $ReadOnlyArray<originalConfigsType>,
-): configsType =>
-  (configsArrayOrOne instanceof Array
-    ? configsArrayOrOne
-    : [configsArrayOrOne]
-  ).reduce(
-    (result: configsType, configs: originalConfigsType) =>
-      merge(result, walker(configs)),
+): configsType => {
+  const configs = [
+    ...(configsArrayOrOne instanceof Array
+      ? configsArrayOrOne
+      : [configsArrayOrOne]),
+    {
+      install: (): $ReadOnlyArray<string> => {
+        const dependencies = ['yarn', 'install'];
+        const devDependencies = ['yarn', 'install', '--dev'];
+
+        Object.keys(configs).forEach((key: string) => {
+          dependencies.push(...configs[key][1].dependencies);
+          devDependencies.push(...configs[key][1].devDependencies);
+        });
+
+        return [...dependencies, '&&', ...devDependencies];
+      },
+    },
+  ].reduce(
+    (result: configsType, originalConfigs: originalConfigsType) =>
+      merge(result, walker(originalConfigs)),
     {},
   );
+
+  return configs;
+};

@@ -25,7 +25,11 @@ export default (configs: configsType, newConfigs: configsType): configsType => {
   Object.keys(newConfigs).forEach((key: string) => {
     const [prevCommandsFunc, prevConfig] = prevConfigs[key] || [
       emptyFunction.thatReturnsArgument,
-      {},
+      {
+        env: {},
+        dependencies: [],
+        devDependencies: [],
+      },
     ];
     const [newCommandsFunc, newConfig] = newConfigs[key];
 
@@ -47,12 +51,18 @@ export default (configs: configsType, newConfigs: configsType): configsType => {
           prevConfig.env,
         ),
         dependencies: [
-          ...(prevConfig.dependencies || []),
-          ...(newConfig.dependencies || []),
+          ...prevConfig.dependencies,
+          ...(newConfig.dependencies?.filter(
+            (dependencie: string) =>
+              !prevConfig.dependencies.includes(dependencie),
+          ) || []),
         ],
         devDependencies: [
-          ...(prevConfig.devDependencies || []),
-          ...(newConfig.devDependencies || []),
+          ...prevConfig.devDependencies,
+          ...(newConfig.devDependencies?.filter(
+            (devDependencie: string) =>
+              !prevConfig.devDependencies.includes(devDependencie),
+          ) || []),
         ],
       },
     ];

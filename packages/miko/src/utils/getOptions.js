@@ -6,7 +6,6 @@ import chalk from 'chalk';
 import { version } from '../../package.json';
 
 export type optionsType =
-  | false
   | {|
       type: 'start',
       names: $ReadOnlyArray<string>,

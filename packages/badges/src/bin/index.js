@@ -11,7 +11,7 @@ import outputFileSync from 'output-file-sync';
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
 import getOptions from 'utils/getOptions';
-import badges from 'utils/badges';
+import addBadges from 'utils/addBadges';
 
 handleUnhandledRejection();
 
@@ -45,7 +45,7 @@ const logger = createLogger('@mikojs/badges');
         process.exit(1);
       }
 
-      const content = await badges(fs.readFileSync(readmePath, 'utf-8'), {
+      const content = await addBadges(fs.readFileSync(readmePath, 'utf-8'), {
         rootPath,
         pkg,
       });

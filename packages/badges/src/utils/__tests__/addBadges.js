@@ -3,7 +3,7 @@
 import fs from 'fs';
 import execa from 'execa';
 
-import badges from '../badges';
+import addBadges from '../addBadges';
 
 jest.mock('fs');
 
@@ -26,14 +26,14 @@ const ALL_BADGES = [
   'git-search-todo',
 ];
 
-describe('badges', () => {
+describe('add badges', () => {
   test('can not find git remote', async () => {
     const mockLog = jest.fn();
 
     global.console.error = mockLog;
     execa.mockRejectedValue(new Error('can not find git remote'));
 
-    expect(await badges('readme', ctx)).toBeNull();
+    expect(await addBadges('readme', ctx)).toBeNull();
     expect(mockLog).toHaveBeenCalled();
   });
 
@@ -61,15 +61,18 @@ describe('badges', () => {
       // $FlowFixMe jest mock
       fs.existsSync.mockReturnValue(fsExist);
 
-      const result = await badges('<!-- badges.start --><!-- badges.end -->', {
-        ...ctx,
-        pkg: !engines
-          ? {}
-          : {
-              ...ctx.pkg,
-              engines,
-            },
-      });
+      const result = await addBadges(
+        '<!-- badges.start --><!-- badges.end -->',
+        {
+          ...ctx,
+          pkg: !engines
+            ? {}
+            : {
+                ...ctx.pkg,
+                engines,
+              },
+        },
+      );
 
       ALL_BADGES.forEach((key: string) => {
         (expected.includes(key) ? expect(result) : expect(result).not).toMatch(

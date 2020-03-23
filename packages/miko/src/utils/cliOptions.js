@@ -3,13 +3,17 @@
 import commander from 'commander';
 import chalk from 'chalk';
 
-import { createLogger } from '@mikojs/utils';
-
 import { version } from '../../package.json';
 
-export type optionsType = 'start' | 'end' | 'init' | false;
-
-const logger = createLogger('@mikojs/miko');
+export type optionsType =
+  | false
+  | {|
+      type: 'start',
+      names: $ReadOnlyArray<string>,
+    |}
+  | {|
+      type: 'end' | 'init',
+    |};
 
 /**
  * @example
@@ -25,38 +29,38 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       .version(version, '-v, --version')
       .description(
         chalk`Example:
-  miko {cyan start}
+  miko
+  miko {green babel}
+  miko {cyan start} {green babel}
   miko {cyan end}
   miko {cyan init}`,
       )
-      .parse([...argv]);
+      .parse([...argv])
+      .action((...args: $ReadOnlyArray<string>) => {
+        resolve({ type: 'start', names: args.slice(0, -1) });
+      });
 
     program
       .command('start')
       .description('trigger the start event to generate the files')
-      .action(() => {
-        resolve('start');
+      .action((...args: $ReadOnlyArray<string>) => {
+        resolve({ type: 'start', names: args.slice(0, -1) });
       });
 
     program
       .command('end')
       .description('trigger the end event to remove the files')
       .action(() => {
-        resolve('end');
+        resolve({ type: 'end' });
       });
 
     program
       .command('init')
       .description('initialize the scripts of the package.json')
       .action(() => {
-        resolve('init');
+        resolve({ type: 'init' });
       });
 
     if (argv.length !== 2) program.parse([...argv]);
-    else {
-      logger
-        .fail(chalk`Should give an argument at least`)
-        .fail(chalk`Use {green \`--help\`} to get the more information`);
-      resolve(false);
-    }
+    else resolve({ type: 'start', names: [] });
   });

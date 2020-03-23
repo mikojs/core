@@ -4,11 +4,13 @@ import cliOptions, { type optionsType } from '../cliOptions';
 
 describe('cli options', () => {
   test.each`
-    argv         | expected
-    ${[]}        | ${false}
-    ${['start']} | ${'start'}
-    ${['end']}   | ${'end'}
-    ${['init']}  | ${'init'}
+    argv                  | expected
+    ${[]}                 | ${{ type: 'start', names: [] }}
+    ${['babel']}          | ${{ type: 'start', names: ['babel'] }}
+    ${['start']}          | ${{ type: 'start', names: [] }}
+    ${['start', 'babel']} | ${{ type: 'start', names: ['babel'] }}
+    ${['end']}            | ${{ type: 'end' }}
+    ${['init']}           | ${{ type: 'init' }}
   `(
     'run $argv',
     async ({

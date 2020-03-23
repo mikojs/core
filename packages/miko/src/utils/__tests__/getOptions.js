@@ -1,8 +1,8 @@
 // @flow
 
-import cliOptions, { type optionsType } from '../cliOptions';
+import getOptions, { type optionsType } from '../getOptions';
 
-describe('cli options', () => {
+describe('get options', () => {
   test.each`
     argv                  | expected
     ${[]}                 | ${{ type: 'start', names: [] }}
@@ -24,7 +24,7 @@ describe('cli options', () => {
 
       global.console.error = mockLog;
 
-      expect(await cliOptions(['node', 'miko', ...argv])).toEqual(expected);
+      expect(await getOptions(['node', 'miko', ...argv])).toEqual(expected);
       (!expected ? expect(mockLog) : expect(mockLog).not).toHaveBeenCalled();
     },
   );

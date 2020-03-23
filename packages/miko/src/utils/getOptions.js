@@ -17,11 +17,11 @@ export type optionsType =
 
 /**
  * @example
- * cliOptions([])
+ * getOptions([])
  *
  * @param {Array} argv - command line
  *
- * @return {optionsType} - cli options
+ * @return {optionsType} - options
  */
 export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
   new Promise((resolve, reject) => {

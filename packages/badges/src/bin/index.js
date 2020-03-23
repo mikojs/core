@@ -10,7 +10,7 @@ import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
-import cliOptions from 'utils/cliOptions';
+import getOptions from 'utils/getOptions';
 import badges from 'utils/badges';
 
 handleUnhandledRejection();
@@ -18,12 +18,12 @@ handleUnhandledRejection();
 const logger = createLogger('@mikojs/badges');
 
 (async () => {
-  const files = cliOptions(process.argv);
+  const options = getOptions(process.argv);
 
-  if (files.length === 0) process.exit(1);
+  if (options.length === 0) process.exit(1);
 
   await Promise.all(
-    files.map(async (cwd: string) => {
+    options.map(async (cwd: string) => {
       const { path: pkgPath, packageJson: pkg } = await readPkgUp({
         cwd: path.resolve(cwd),
       });

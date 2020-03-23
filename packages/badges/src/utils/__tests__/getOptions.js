@@ -1,12 +1,12 @@
 // @flow
 
-import cliOptions from '../cliOptions';
+import getOptions from '../getOptions';
 
 const defaultArgv = ['node', 'badges'];
 
-describe('cli options', () => {
+describe('get options', () => {
   test('work', () => {
-    expect(cliOptions([...defaultArgv, 'readme-path'])).toEqual([
+    expect(getOptions([...defaultArgv, 'readme-path'])).toEqual([
       'readme-path',
     ]);
   });
@@ -16,7 +16,7 @@ describe('cli options', () => {
 
     global.console.error = mockLog;
 
-    expect(cliOptions(defaultArgv)).toEqual([]);
+    expect(getOptions(defaultArgv)).toEqual([]);
     expect(mockLog).toHaveBeenCalled();
   });
 });

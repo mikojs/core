@@ -29,7 +29,7 @@ type repoType = {|
   projectName: string,
 |};
 
-const debugLog = debug('badges:badges');
+const debugLog = debug('badges:addBadges');
 const logger = createLogger('@mikojs/badges');
 const START_COMMENT = '<!-- badges.start -->';
 const END_COMMENT = '<!-- badges.end -->';
@@ -152,7 +152,7 @@ ${badges
 
 /**
  * @example
- * badges('readme', context)
+ * addBadges('readme', context)
  *
  * @param {string} readme - readme content
  * @param {ctxType} ctx - readme context

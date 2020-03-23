@@ -8,16 +8,16 @@ import { createLogger } from '@mikojs/utils';
 
 import { version } from '../../package.json';
 
-const debugLog = debug('badges:cliOptions');
+const debugLog = debug('badges:getOptions');
 const logger = createLogger('@mikojs/badges');
 
 /**
  * @example
- * cliOptions([])
+ * getOptions([])
  *
  * @param {Array} argv - command line
  *
- * @return {Array<string>} - cli options
+ * @return {Array<string>} - options
  */
 export default (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
   const { args } = new commander.Command('badges')

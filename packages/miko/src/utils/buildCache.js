@@ -7,15 +7,20 @@
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
 import { emptyFunction } from 'fbjs';
+import debug from 'debug';
 
 export type configsType = {
   [string]: (config: {}) => {},
 };
 
 export type returnType = {|
-  get: () => configsType,
-  init: (oneOrArrayConfigs: configsType | $ReadOnlyArray<configsType>) => void,
+  get: (configName: string) => $ElementType<configsType, string>,
+  init: (
+    oneOrArrayConfigs: ?(configsType | $ReadOnlyArray<configsType>),
+  ) => void,
 |};
+
+const debugLog = debug('miko:buildCache');
 
 /**
  * @example
@@ -27,23 +32,27 @@ export default (): returnType => {
   const cache = {};
 
   return {
-    get: () => cache,
+    get: (configName: string) => cache[configName],
 
-    init: (oneOrArrayConfigs: configsType | $ReadOnlyArray<configsType>) => {
+    init: (oneOrArrayConfigs: ?(configsType | $ReadOnlyArray<configsType>)) => {
+      debugLog(oneOrArrayConfigs);
       (oneOrArrayConfigs instanceof Array
         ? oneOrArrayConfigs
         : [oneOrArrayConfigs]
-      ).forEach((configs: configsType) => {
-        Object.keys(configs).forEach((key: string) => {
-          const prevConfig = cache[key];
-          const newConfig = configs[key];
+      )
+        .filter(Boolean)
+        .forEach((configs: configsType) => {
+          Object.keys(configs).forEach((key: string) => {
+            const prevConfig = cache[key];
+            const newConfig = configs[key];
 
-          cache[key] = (configObj: {}) =>
-            configObj
-            |> prevConfig || emptyFunction.thatReturnsArgument
-            |> newConfig || emptyFunction.thatReturnsArgument;
+            cache[key] = (configObj: {}) =>
+              configObj
+              |> prevConfig || emptyFunction.thatReturnsArgument
+              |> newConfig || emptyFunction.thatReturnsArgument;
+          });
         });
-      });
+      debugLog(cache);
     },
   };
 };

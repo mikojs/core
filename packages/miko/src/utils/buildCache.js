@@ -9,7 +9,7 @@
 import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
-export type configsType = {
+type configsType = {
   [string]: {
     filenames?: {|
       config?: string,
@@ -20,14 +20,15 @@ export type configsType = {
   },
 };
 
-export type initialConfigsType = {
+type initialConfigsType = {
   [string]:
     | $NonMaybeType<$PropertyType<$ElementType<configsType, string>, 'config'>>
     | $ElementType<configsType, string>,
 };
 
-export type returnType = {|
+export type cacheType = {|
   get: (configName: string) => $ElementType<configsType, string>,
+  keys: () => $ReadOnlyArray<string>,
   init: (
     oneOrArrayConfigs: ?(
       | initialConfigsType
@@ -42,13 +43,15 @@ const debugLog = debug('miko:buildCache');
  * @example
  * buildCache()
  *
- * @return {returnType} - config cache
+ * @return {cacheType} - config cache
  */
-export default (): returnType => {
+export default (): cacheType => {
   const cache = {};
 
   return {
     get: (configName: string) => cache[configName],
+
+    keys: () => Object.keys(cache),
 
     init: (
       oneOrArrayConfigs: ?(

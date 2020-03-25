@@ -9,14 +9,31 @@
 import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
-export type configsType = {
-  [string]: (config: {}) => {},
+type configsType = {
+  [string]: {|
+    filenames?: {|
+      config?: string,
+      ignore?: string,
+    |},
+    config?: (config: {}) => {},
+    ignore?: (ignore: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
+  |},
 };
 
-export type returnType = {|
+type initialConfigsType = {
+  [string]:
+    | $NonMaybeType<$PropertyType<$ElementType<configsType, string>, 'config'>>
+    | $ElementType<configsType, string>,
+};
+
+export type cacheType = {|
   get: (configName: string) => $ElementType<configsType, string>,
+  keys: () => $ReadOnlyArray<string>,
   init: (
-    oneOrArrayConfigs: ?(configsType | $ReadOnlyArray<configsType>),
+    oneOrArrayConfigs: ?(
+      | initialConfigsType
+      | $ReadOnlyArray<initialConfigsType>
+    ),
   ) => void,
 |};
 
@@ -26,30 +43,50 @@ const debugLog = debug('miko:buildCache');
  * @example
  * buildCache()
  *
- * @return {returnType} - config cache
+ * @return {cacheType} - config cache
  */
-export default (): returnType => {
+export default (): cacheType => {
   const cache = {};
 
   return {
     get: (configName: string) => cache[configName],
 
-    init: (oneOrArrayConfigs: ?(configsType | $ReadOnlyArray<configsType>)) => {
+    keys: () => Object.keys(cache),
+
+    init: (
+      oneOrArrayConfigs: ?(
+        | initialConfigsType
+        | $ReadOnlyArray<initialConfigsType>
+      ),
+    ) => {
       debugLog(oneOrArrayConfigs);
       (oneOrArrayConfigs instanceof Array
         ? oneOrArrayConfigs
         : [oneOrArrayConfigs]
       )
         .filter(Boolean)
-        .forEach((configs: configsType) => {
+        .forEach((configs: initialConfigsType) => {
           Object.keys(configs).forEach((key: string) => {
             const prevConfig = cache[key];
-            const newConfig = configs[key];
+            const newConfig: $ElementType<configsType, string> =
+              typeof configs[key] !== 'function'
+                ? configs[key]
+                : { config: configs[key] };
 
-            cache[key] = (configObj: {}) =>
-              configObj
-              |> prevConfig || emptyFunction.thatReturnsArgument
-              |> newConfig || emptyFunction.thatReturnsArgument;
+            cache[key] = {
+              filenames: {
+                ...prevConfig.filenames,
+                ...newConfig.filenames,
+              },
+              config: (config: {}) =>
+                config
+                |> prevConfig.config || emptyFunction.thatReturnsArgument
+                |> newConfig.config || emptyFunction.thatReturnsArgument,
+              ignore: (ignore: $ReadOnlyArray<string>) =>
+                ignore
+                |> prevConfig.ignore || emptyFunction.thatReturnsArgument
+                |> newConfig.ignore || emptyFunction.thatReturnsArgument,
+            };
           });
         });
       debugLog(cache);

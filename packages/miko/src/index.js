@@ -22,5 +22,5 @@ export default (configName: string): {} => {
   debugLog(config);
   cache.init(config?.config);
 
-  return cache.get(configName)({});
+  return cache.get(configName)?.config?.({}) || {};
 };

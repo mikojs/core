@@ -43,7 +43,7 @@ const debugLog = debug('miko:buildCache');
  * @example
  * buildCache()
  *
- * @return {cacheType} - config cache
+ * @return {cacheType} - configs cache
  */
 export default (): cacheType => {
   const cache = {};

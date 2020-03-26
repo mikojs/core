@@ -12,7 +12,7 @@ export type optionsType =
       names: $ReadOnlyArray<string>,
     |}
   | {|
-      type: 'end' | 'init',
+      type: 'kill' | 'init',
     |};
 
 const debugLog = debug('miko:getOptions');
@@ -34,7 +34,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
   miko
   miko {green babel}
   miko {cyan start} {green babel}
-  miko {cyan end}
+  miko {cyan kill}
   miko {cyan init}`,
       )
       .parse([...argv])
@@ -52,10 +52,10 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       });
 
     program
-      .command('end')
-      .description('trigger the end event to remove the files')
+      .command('kill')
+      .description('kill the all events')
       .action(() => {
-        resolve({ type: 'end' });
+        resolve({ type: 'kill' });
       });
 
     program

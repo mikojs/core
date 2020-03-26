@@ -19,8 +19,9 @@ handleUnhandledRejection();
   );
 
   switch (type) {
-    case 'end':
-      if (await worker.removeTracking()) await worker.end();
+    case 'kill':
+      await worker.killAllEvents();
+      await worker.end();
       break;
 
     case 'init':

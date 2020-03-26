@@ -1,6 +1,6 @@
 // @flow
 
-import isRunning from 'is-running';
+// TODO import isRunning from 'is-running';
 import debug from 'debug';
 
 const debugLog = debug('miko:worker');
@@ -19,25 +19,14 @@ export const addTracking = (configName: string, pid: number) => {
   cache[configName].push(pid);
   debugLog({ configName, pid });
   debugLog(cache);
+
+  // TODO: auto close server
 };
 
 /**
  * @example
- * removeTracking()
- *
- * @return {boolean} - is any pids working or not
+ * killAllEvents()
  */
-export const removeTracking = (): boolean => {
-  const hasWorkingPids = Object.keys(cache).reduce(
-    (result: boolean, configName: string): boolean => {
-      cache[configName] = cache[configName].filter(isRunning);
-
-      return result || cache[configName].length !== 0;
-    },
-    false,
-  );
-
-  debugLog({ hasWorkingPids, cache });
-
-  return !hasWorkingPids;
+export const killAllEvents = () => {
+  // TODO: remove all cache and kill all process
 };

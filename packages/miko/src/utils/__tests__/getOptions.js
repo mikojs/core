@@ -9,7 +9,7 @@ describe('get options', () => {
     ${['babel']}          | ${{ type: 'start', names: ['babel'] }}
     ${['start']}          | ${{ type: 'start', names: [] }}
     ${['start', 'babel']} | ${{ type: 'start', names: ['babel'] }}
-    ${['end']}            | ${{ type: 'end' }}
+    ${['kill']}           | ${{ type: 'kill' }}
     ${['init']}           | ${{ type: 'init' }}
   `(
     'run $argv',

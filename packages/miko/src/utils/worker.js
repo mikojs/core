@@ -10,14 +10,14 @@ const cache = {};
  * @example
  * addTracking('babel', 123)
  *
- * @param {string} configName - config name
  * @param {number} pid - pid number
+ * @param {string} filePath - file path
  */
-export const addTracking = (configName: string, pid: number) => {
-  if (!cache[configName]) cache[configName] = [];
+export const addTracking = (pid: number, filePath: string) => {
+  if (!cache[filePath]) cache[filePath] = [];
 
-  cache[configName].push(pid);
-  debugLog({ configName, pid });
+  cache[filePath].push(pid);
+  debugLog({ filePath, pid });
   debugLog(cache);
 
   // TODO: auto close server

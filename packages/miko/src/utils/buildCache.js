@@ -7,6 +7,7 @@
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
 import { emptyFunction } from 'fbjs';
+import { cosmiconfigSync } from 'cosmiconfig';
 import debug from 'debug';
 
 type configsType = {
@@ -29,12 +30,13 @@ type initialConfigsType = {
 export type cacheType = {|
   get: (configName: string) => $ElementType<configsType, string>,
   keys: () => $ReadOnlyArray<string>,
-  init: (
+  load: () => cacheType,
+  addConfig: (
     oneOrArrayConfigs: ?(
       | initialConfigsType
       | $ReadOnlyArray<initialConfigsType>
     ),
-  ) => void,
+  ) => cacheType,
 |};
 
 const debugLog = debug('miko:buildCache');
@@ -46,20 +48,31 @@ const debugLog = debug('miko:buildCache');
  * @return {cacheType} - configs cache
  */
 export default (): cacheType => {
-  const cache = {};
+  const cache = {
+    cwd: process.cwd(),
+    configs: {},
+  };
+  const result = {
+    get: (configName: string) => cache.configs[configName],
 
-  return {
-    get: (configName: string) => cache[configName],
+    keys: () => Object.keys(cache.configs),
 
-    keys: () => Object.keys(cache),
+    load: (): cacheType => {
+      const { config, filepath } = cosmiconfigSync('miko').search() || {};
 
-    init: (
+      cache.cwd = filepath;
+      debugLog({ config, filepath });
+      debugLog(cache);
+
+      return result.addConfig(config);
+    },
+
+    addConfig: (
       oneOrArrayConfigs: ?(
         | initialConfigsType
         | $ReadOnlyArray<initialConfigsType>
       ),
-    ) => {
-      debugLog(oneOrArrayConfigs);
+    ): cacheType => {
       (oneOrArrayConfigs instanceof Array
         ? oneOrArrayConfigs
         : [oneOrArrayConfigs]
@@ -67,13 +80,13 @@ export default (): cacheType => {
         .filter(Boolean)
         .forEach((configs: initialConfigsType) => {
           Object.keys(configs).forEach((key: string) => {
-            const prevConfig = cache[key];
+            const prevConfig = cache.configs[key];
             const newConfig: $ElementType<configsType, string> =
               typeof configs[key] !== 'function'
                 ? configs[key]
                 : { config: configs[key] };
 
-            cache[key] = {
+            cache.configs[key] = {
               filenames: {
                 ...prevConfig.filenames,
                 ...newConfig.filenames,
@@ -89,7 +102,12 @@ export default (): cacheType => {
             };
           });
         });
+      debugLog(oneOrArrayConfigs);
       debugLog(cache);
+
+      return result;
     },
   };
+
+  return result;
 };

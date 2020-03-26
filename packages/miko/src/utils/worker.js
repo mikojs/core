@@ -39,5 +39,5 @@ export const removeTracking = (): boolean => {
 
   debugLog({ hasWorkingPids, cache });
 
-  return hasWorkingPids;
+  return !hasWorkingPids;
 };

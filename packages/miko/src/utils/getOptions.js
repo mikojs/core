@@ -39,7 +39,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       )
       .parse([...argv])
       .action((...args: $ReadOnlyArray<string>) => {
-        debug(args);
+        debugLog(args);
         resolve({ type: 'start', names: args.slice(0, -1) });
       });
 
@@ -47,7 +47,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       .command('start')
       .description('trigger the start event to generate the files')
       .action((...args: $ReadOnlyArray<string>) => {
-        debug(args);
+        debugLog(args);
         resolve({ type: 'start', names: args.slice(0, -1) });
       });
 

@@ -21,7 +21,10 @@ handleUnhandledRejection();
 
   switch (type) {
     case 'end':
-      if (await worker.removeTracking()) await removeFiles();
+      if (await worker.removeTracking()) {
+        await removeFiles();
+        await worker.end();
+      }
       break;
 
     case 'init':

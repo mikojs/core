@@ -42,7 +42,7 @@ export type cacheType = {|
   ) => cacheType,
 |};
 
-const debugLog = debug('miko:buildCache');
+const debugLog = debug('miko:cache');
 
 /**
  * @example
@@ -65,7 +65,7 @@ export const buildCache = (): cacheType => {
     load: (): cacheType => {
       const { config, filepath } = cosmiconfigSync('miko').search() || {};
 
-      cache.cwd = filepath;
+      cache.cwd = filepath || process.cwd();
       debugLog({ config, filepath });
       debugLog(cache);
 

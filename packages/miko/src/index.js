@@ -16,11 +16,12 @@ import typeof * as workerType from './utils/worker';
  * @return {object} - config object
  */
 export default (configName: string): {} => {
-  buildWorker<workerType>(path.resolve(__dirname, './utils/worker.js')).then(
-    (worker: workerType) => {
-      worker.addTracking(configName, process.pid);
-    },
-  );
+  (buildWorker<workerType>(path.resolve(__dirname, './utils/worker.js')): $Call<
+    typeof buildWorker,
+    string,
+  >).then((worker: workerType) => {
+    worker.addTracking(configName, process.pid);
+  });
 
   return cache.get(configName)?.config?.({}) || {};
 };

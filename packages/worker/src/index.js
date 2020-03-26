@@ -9,6 +9,8 @@ import findProcess from 'find-process';
 
 import sendToServer from './utils/sendToServer';
 
+type addEndType<R> = { ...R, end: () => Promise<void> };
+
 const debugLog = debug('worker');
 let cachePid: number;
 
@@ -21,7 +23,10 @@ let cachePid: number;
  *
  * @return {object} - worker functions
  */
-export default async <+R>(filePath: string, timeout?: number): Promise<R> => {
+export default async <+R>(
+  filePath: string,
+  timeout?: number,
+): Promise<addEndType<R>> => {
   const allProcesses = await findProcess(
     'name',
     path.resolve(__dirname, './bin/index.js'),
@@ -53,7 +58,7 @@ export default async <+R>(filePath: string, timeout?: number): Promise<R> => {
     )),
     'end',
   ].reduce(
-    (result: R, key: string) => ({
+    (result: addEndType<R>, key: string) => ({
       ...result,
       [key]: (...argv: $ReadOnlyArray<mixed>) =>
         sendToServer(
@@ -67,6 +72,6 @@ export default async <+R>(filePath: string, timeout?: number): Promise<R> => {
         ),
     }),
     // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/5332
-    ({}: R),
+    ({}: addEndType<R>),
   );
 };

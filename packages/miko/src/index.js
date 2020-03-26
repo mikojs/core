@@ -4,7 +4,7 @@ import path from 'path';
 
 import buildWorker from '@mikojs/worker';
 
-import buildCache from './utils/buildCache';
+import cache from './utils/cache';
 import typeof * as workerType from './utils/worker';
 
 /**
@@ -22,10 +22,5 @@ export default (configName: string): {} => {
     },
   );
 
-  return (
-    buildCache()
-      .load()
-      .get(configName)
-      ?.config?.({}) || {}
-  );
+  return cache.get(configName)?.config?.({}) || {};
 };

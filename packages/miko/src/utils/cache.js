@@ -6,6 +6,8 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
+import path from 'path';
+
 import { emptyFunction } from 'fbjs';
 import { cosmiconfigSync } from 'cosmiconfig';
 import debug from 'debug';
@@ -30,6 +32,7 @@ type initialConfigsType = {
 export type cacheType = {|
   get: (configName: string) => $ElementType<configsType, string>,
   keys: () => $ReadOnlyArray<string>,
+  resolve: (filePath: string) => string,
   load: () => cacheType,
   addConfig: (
     oneOrArrayConfigs: ?(
@@ -47,7 +50,7 @@ const debugLog = debug('miko:buildCache');
  *
  * @return {cacheType} - configs cache
  */
-export default (): cacheType => {
+export const buildCache = (): cacheType => {
   const cache = {
     cwd: process.cwd(),
     configs: {},
@@ -56,6 +59,8 @@ export default (): cacheType => {
     get: (configName: string) => cache.configs[configName],
 
     keys: () => Object.keys(cache.configs),
+
+    resolve: (filePath: string) => path.resolve(cache.cwd, filePath),
 
     load: (): cacheType => {
       const { config, filepath } = cosmiconfigSync('miko').search() || {};
@@ -111,3 +116,5 @@ export default (): cacheType => {
 
   return result;
 };
+
+export default buildCache().load();

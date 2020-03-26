@@ -1,24 +1,20 @@
 // @flow
 
-import path from 'path';
-
 import rimraf from 'rimraf';
 import debug from 'debug';
 
-import { type cacheType } from './buildCache';
+import cache from './cache';
 
 const debugLog = debug('miko:removeFiles');
 
 /**
  * @example
- * removeFiles('/cwd', cache)
+ * removeFiles()
  *
- * @param {string} cwd - cwd path
- * @param {cacheType} cache - configs cache
+ * @return {Promise} - wait for removing all files
  */
-export default async (cwd: string, cache: cacheType) => {
-  debugLog(cwd);
-  await Promise.all(
+export default () =>
+  Promise.all(
     cache
       .keys()
       .reduce(
@@ -33,12 +29,8 @@ export default async (cwd: string, cache: cacheType) => {
           return [
             ...result,
             ...[
-              !configFilename || !config
-                ? null
-                : path.resolve(cwd, configFilename),
-              !ignoreFilename || !ignore
-                ? null
-                : path.resolve(cwd, ignoreFilename),
+              !configFilename || !config ? null : cache.resolve(configFilename),
+              !ignoreFilename || !ignore ? null : cache.resolve(ignoreFilename),
             ]
               .filter(Boolean)
               .map(
@@ -53,4 +45,3 @@ export default async (cwd: string, cache: cacheType) => {
         [],
       ),
   );
-};

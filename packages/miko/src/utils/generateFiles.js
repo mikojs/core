@@ -9,26 +9,22 @@ import outputFileSync from 'output-file-sync';
 
 import { createLogger } from '@mikojs/utils';
 
-import { type cacheType } from './buildCache';
+import cache from './cache';
 
 const logger = createLogger('@mikojs/miko');
 const debugLog = debug('miko:generateFiles');
 
 /**
  * @example
- * generateFiles('/cwd', cache)
- *
- * @param {string} cwd - cwd path
- * @param {cacheType} cache - configs cache
+ * generateFiles()
  */
-export default (cwd: string, cache: cacheType) => {
-  const gitFilePath = path.resolve(cwd, './.gitignore');
+export default () => {
+  const gitFilePath = cache.resolve('./.gitignore');
   const gitignore = (!fs.existsSync(gitFilePath)
     ? ''
     : fs.readFileSync(gitFilePath, 'utf-8')
   ).replace(/^#.*$/gm, '');
 
-  debugLog(cwd);
   cache.keys().forEach((key: string) => {
     const { filenames, config, ignore } = cache.get(key);
     const configFilename = filenames?.config;
@@ -38,12 +34,12 @@ export default (cwd: string, cache: cacheType) => {
       !configFilename || !config
         ? null
         : [
-            path.resolve(cwd, configFilename),
+            cache.resolve(configFilename),
             `/* eslint-disable */ module.exports = require('@mikojs/miko')('${key}');`,
           ],
       !ignoreFilename || !ignore
         ? null
-        : [path.resolve(cwd, ignoreFilename), ignore([]).join('\n')],
+        : [cache.resolve(ignoreFilename), ignore([]).join('\n')],
     ]
       .filter(Boolean)
       .forEach((argu: [string, string]) => {

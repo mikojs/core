@@ -33,21 +33,9 @@ export default (configNames: $ReadOnlyArray<string>) => {
       configNames.length === 0 ? true : configNames.includes(key),
     )
     .forEach((key: string) => {
-      const { filenames, config, ignore } = cache.get(key);
-      const configFilename = filenames?.config;
-      const ignoreFilename = filenames?.ignore;
+      const { configFile, ignoreFile } = cache.get(key);
 
-      [
-        !configFilename || !config
-          ? null
-          : [
-              cache.resolve(configFilename),
-              `/* eslint-disable */ module.exports = require('@mikojs/miko')('${key}');`,
-            ],
-        !ignoreFilename || !ignore
-          ? null
-          : [cache.resolve(ignoreFilename), ignore([]).join('\n')],
-      ]
+      [configFile, ignoreFile]
         .filter(Boolean)
         .forEach((argu: [string, string]) => {
           const filename = path.basename(argu[0]);

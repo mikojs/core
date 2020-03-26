@@ -30,9 +30,15 @@ type initialConfigsType = {
 };
 
 export type cacheType = {|
-  get: (configName: string) => $ElementType<configsType, string>,
   keys: () => $ReadOnlyArray<string>,
   resolve: (filePath: string) => string,
+  get: (
+    configName: string,
+  ) => {|
+    ...$Diff<$ElementType<configsType, string>, {| filenames: mixed |}>,
+    configFile: ?[string, string],
+    ignoreFile: ?[string, string],
+  |},
   load: () => cacheType,
   addConfig: (
     oneOrArrayConfigs: ?(
@@ -50,17 +56,38 @@ const debugLog = debug('miko:cache');
  *
  * @return {cacheType} - configs cache
  */
-export const buildCache = (): cacheType => {
+const buildCache = (): cacheType => {
   const cache = {
     cwd: process.cwd(),
     configs: {},
   };
   const result = {
-    get: (configName: string) => cache.configs[configName],
-
     keys: () => Object.keys(cache.configs),
-
     resolve: (filePath: string) => path.resolve(cache.cwd, filePath),
+
+    get: (
+      configName: string,
+    ): $Call<$PropertyType<cacheType, 'get'>, string> => {
+      const { filenames, config, ignore } = cache.configs[configName];
+      const configFilename = filenames?.config;
+      const ignoreFilename = filenames?.ignore;
+
+      return {
+        config,
+        ignore,
+        configFile:
+          !configFilename || !config
+            ? null
+            : [
+                result.resolve(configFilename),
+                `/* eslint-disable */ module.exports = require('@mikojs/miko')('${configName}');`,
+              ],
+        ignoreFile:
+          !ignoreFilename || !ignore
+            ? null
+            : [result.resolve(ignoreFilename), ignore([]).join('\n')],
+      };
+    },
 
     load: (): cacheType => {
       const { config, filepath } = cosmiconfigSync('miko').search() || {};

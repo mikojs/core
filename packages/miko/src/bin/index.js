@@ -8,7 +8,6 @@ import buildWorker from '@mikojs/worker';
 
 import getOptions from 'utils/getOptions';
 import generateFiles from 'utils/generateFiles';
-import removeFiles from 'utils/removeFiles';
 import typeof * as workerType from 'utils/worker';
 
 handleUnhandledRejection();
@@ -21,10 +20,7 @@ handleUnhandledRejection();
 
   switch (type) {
     case 'end':
-      if (await worker.removeTracking()) {
-        await removeFiles();
-        await worker.end();
-      }
+      if (await worker.removeTracking()) await worker.end();
       break;
 
     case 'init':

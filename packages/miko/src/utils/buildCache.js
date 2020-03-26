@@ -10,14 +10,14 @@ import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
 type configsType = {
-  [string]: {
+  [string]: {|
     filenames?: {|
       config?: string,
       ignore?: string,
     |},
     config?: (config: {}) => {},
     ignore?: (ignore: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-  },
+  |},
 };
 
 type initialConfigsType = {
@@ -43,7 +43,7 @@ const debugLog = debug('miko:buildCache');
  * @example
  * buildCache()
  *
- * @return {cacheType} - config cache
+ * @return {cacheType} - configs cache
  */
 export default (): cacheType => {
   const cache = {};
@@ -68,15 +68,15 @@ export default (): cacheType => {
         .forEach((configs: initialConfigsType) => {
           Object.keys(configs).forEach((key: string) => {
             const prevConfig = cache[key];
-            const newConfig =
+            const newConfig: $ElementType<configsType, string> =
               typeof configs[key] !== 'function'
                 ? configs[key]
                 : { config: configs[key] };
 
             cache[key] = {
               filenames: {
-                ...prevConfig[key].filenames,
-                ...newConfig[key].filenames,
+                ...prevConfig.filenames,
+                ...newConfig.filenames,
               },
               config: (config: {}) =>
                 config

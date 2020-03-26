@@ -16,6 +16,7 @@
     "cosmiconfig": "^6.0.0",
     "debug": "^4.1.1",
     "fbjs": "^1.0.0",
+    "is-running": "^2.1.0",
     "output-file-sync": "^2.0.1"
   },
   "devDependencies": {

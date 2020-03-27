@@ -5,7 +5,8 @@ import path from 'path';
 import buildWorker from '@mikojs/worker';
 
 import cache from './utils/cache';
-import typeof * as workerType from './utils/worker';
+
+import typeof * as workerType from './worker';
 
 /**
  * @example
@@ -18,7 +19,7 @@ import typeof * as workerType from './utils/worker';
 export default (configName: string): {} => {
   const { config, configFile, ignoreFile } = cache.get(configName);
 
-  (buildWorker<workerType>(path.resolve(__dirname, './utils/worker.js')): $Call<
+  (buildWorker<workerType>(path.resolve(__dirname, './worker/index.js')): $Call<
     typeof buildWorker,
     string,
   >).then((worker: workerType) => {

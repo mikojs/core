@@ -8,14 +8,15 @@ import buildWorker from '@mikojs/worker';
 
 import getOptions from 'utils/getOptions';
 import generateFiles from 'utils/generateFiles';
-import typeof * as workerType from 'utils/worker';
+
+import typeof * as workerType from 'worker';
 
 handleUnhandledRejection();
 
 (async () => {
   const { type, names = [] } = await getOptions(process.argv);
   const worker = await buildWorker<workerType>(
-    path.resolve(__dirname, '../utils/worker'),
+    path.resolve(__dirname, '../worker/index.js'),
   );
 
   switch (type) {

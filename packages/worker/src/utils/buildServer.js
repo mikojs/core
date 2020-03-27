@@ -21,7 +21,7 @@ export default (port: number): net$Server => {
 
   const server = net
     .createServer((socket: net.Socket) => {
-      socket.setEncoding('utf8').on('data', (data: string) => {
+      socket.setEncoding('utf8').on('data', async (data: string) => {
         const { type, filePath, argv, hasStdout } = JSON.parse(data);
 
         try {
@@ -60,7 +60,9 @@ export default (port: number): net$Server => {
             });
           }
 
-          const serverData = JSON.stringify(cache[filePath][type](...argv));
+          const serverData = JSON.stringify(
+            await cache[filePath][type](...argv),
+          );
 
           socket.write('normal;');
           socket.end(serverData);

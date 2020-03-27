@@ -8,11 +8,14 @@ import debug from 'debug';
 import findProcess from 'find-process';
 
 import sendToServer from './utils/sendToServer';
+import endServer from './utils/endServer';
 
 type addEndType<R> = { ...R, end: () => Promise<void> };
 
 const debugLog = debug('worker');
 let cachePid: number;
+
+export const end = endServer;
 
 /**
  * @example
@@ -27,11 +30,10 @@ export default async <+R>(
   filePath: string,
   timeout?: number,
 ): Promise<addEndType<R>> => {
-  const allProcesses = await findProcess(
+  const [mainProcess] = await findProcess(
     'name',
     path.resolve(__dirname, './bin/index.js'),
   );
-  const [mainProcess] = allProcesses;
   const port = mainProcess?.cmd.split(/ /).slice(-1)[0] || (await getPort());
 
   if (mainProcess?.pid !== cachePid) {

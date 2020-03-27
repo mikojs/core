@@ -4,6 +4,8 @@
 import rimraf from 'rimraf';
 import debug from 'debug';
 
+import { end } from '@mikojs/worker';
+
 const debugLog = debug('miko:worker');
 const cache = {};
 
@@ -28,18 +30,24 @@ export const addTracking = (pid: number, filePath: string) => {
  * @example
  * killAllEvents()
  */
-export const killAllEvents = () => {
-  Object.keys(cache).forEach((filePath: string) => {
-    debugLog({
-      filePath,
-      pids: cache[filePath],
-    });
-    cache[filePath].forEach((pid: number) => {
-      process.kill(pid, 0);
-    });
-    rimraf(filePath, () => {
-      delete cache[filePath];
-    });
-  });
-  // TODO: close server
+export const killAllEvents = async () => {
+  await Promise.all(
+    Object.keys(cache).map(
+      (filePath: string) =>
+        new Promise(resolve => {
+          debugLog({
+            filePath,
+            pids: cache[filePath],
+          });
+          cache[filePath].forEach((pid: number) => {
+            process.kill(pid, 0);
+          });
+          rimraf(filePath, () => {
+            delete cache[filePath];
+            resolve();
+          });
+        }),
+    ),
+  );
+  await end(__filename);
 };

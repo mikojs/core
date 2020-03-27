@@ -1,6 +1,6 @@
 // @flow
 
-import { end } from '@mikojs/worker';
+import worker from '@mikojs/worker';
 
 import { type cacheType } from './buildCache';
 
@@ -39,7 +39,7 @@ const checking = (cache: cacheType, checkedTimes: number) => {
 
   if (checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK) {
     clearTimeout(timer);
-    end(__filename);
+    worker.end(__filename);
     return;
   }
 

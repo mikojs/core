@@ -3,12 +3,14 @@
 import fs from 'fs';
 
 import rimraf from 'rimraf';
+import isRunning from 'is-running';
 import debug from 'debug';
 
 type cacheType = {|
   add: (pid: number, filePath: string) => cacheType,
   delete: (filePath: string) => Promise<cacheType>,
   kill: () => Promise<cacheType>,
+  hasWorkingPids: () => boolean,
 |};
 
 const debugLog = debug('miko:worker:buildCache');
@@ -66,6 +68,27 @@ export default (): cacheType => {
 
       return result;
     },
+
+    hasWorkingPids: () =>
+      Object.keys(cache).reduce(
+        (hasWorkingPids: boolean, cacheFilePath: string): boolean => {
+          const newPids = cache[cacheFilePath].filter(isRunning);
+
+          if (newPids.length !== cache[cacheFilePath].length)
+            debugLog(
+              `Cache: ${JSON.stringify(
+                { ...cache, [cacheFilePath]: newPids },
+                null,
+                2,
+              )}`,
+            );
+
+          cache[cacheFilePath] = newPids;
+
+          return hasWorkingPids || newPids.length !== 0;
+        },
+        false,
+      ),
   };
 
   return result;

@@ -15,8 +15,6 @@ type addEndType<R> = { ...R, end: () => Promise<void> };
 const debugLog = debug('worker');
 let cachePid: number;
 
-export const end = endServer;
-
 /**
  * @example
  * worker('/filePath')
@@ -26,7 +24,7 @@ export const end = endServer;
  *
  * @return {object} - worker functions
  */
-export default async <+R>(
+const buildWorker = async <+R>(
   filePath: string,
   timeout?: number,
 ): Promise<addEndType<R>> => {
@@ -77,3 +75,7 @@ export default async <+R>(
     ({}: addEndType<R>),
   );
 };
+
+buildWorker.end = endServer;
+
+export default buildWorker;

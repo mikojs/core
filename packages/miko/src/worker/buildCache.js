@@ -6,7 +6,8 @@ import rimraf from 'rimraf';
 import isRunning from 'is-running';
 import debug from 'debug';
 
-type cacheType = {|
+export type cacheType = {|
+  getFilePaths: () => $ReadOnlyArray<string>,
   add: (pid: number, filePath: string) => cacheType,
   delete: (filePath: string) => Promise<cacheType>,
   kill: () => Promise<cacheType>,
@@ -24,6 +25,8 @@ const debugLog = debug('miko:worker:buildCache');
 export default (): cacheType => {
   const cache = {};
   const result = {
+    getFilePaths: () => Object.keys(cache),
+
     add: (pid: number, filePath: string): cacheType => {
       if (!cache[filePath]) cache[filePath] = [];
 

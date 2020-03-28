@@ -22,7 +22,6 @@ handleUnhandledRejection();
   switch (type) {
     case 'kill':
       await worker.killAllEvents();
-      await worker.end();
       break;
 
     case 'init':

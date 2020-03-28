@@ -29,6 +29,13 @@ type initialConfigsType = {
     | $ElementType<configsType, string>,
 };
 
+type configObjType = {|
+  config:
+    | initialConfigsType
+    | $ReadOnlyArray<initialConfigsType | $ReadOnlyArray<initialConfigsType>>,
+  filepath: string,
+|};
+
 export type cacheType = {|
   keys: () => $ReadOnlyArray<string>,
   resolve: (filePath: string) => string,
@@ -39,13 +46,8 @@ export type cacheType = {|
     configFile: ?[string, string],
     ignoreFile: ?[string, string],
   |},
-  load: () => cacheType,
-  addConfig: (
-    oneOrArrayConfigs: ?(
-      | initialConfigsType
-      | $ReadOnlyArray<initialConfigsType>
-    ),
-  ) => cacheType,
+  load: (configObj: ?configObjType) => cacheType,
+  addConfig: (configsArray: $ReadOnlyArray<initialConfigsType>) => cacheType,
 |};
 
 const debugLog = debug('miko:cache');
@@ -89,52 +91,59 @@ const buildCache = (): cacheType => {
       };
     },
 
-    load: (): cacheType => {
-      const { config, filepath } = cosmiconfigSync('miko').search() || {};
+    load: (configObj: ?configObjType): cacheType => {
+      if (!configObj) return result;
 
-      cache.cwd = filepath || process.cwd();
+      const { config, filepath } = configObj;
+
+      cache.cwd = filepath;
       debugLog({ config, filepath });
       debugLog(cache);
 
-      return result.addConfig(config);
+      return (config instanceof Array ? config : [config]).reduce(
+        (
+          newResult: cacheType,
+          oneOrArrayConfigs:
+            | initialConfigsType
+            | $ReadOnlyArray<initialConfigsType>,
+        ) =>
+          newResult.addConfig(
+            oneOrArrayConfigs instanceof Array
+              ? oneOrArrayConfigs
+              : [oneOrArrayConfigs],
+          ),
+        result,
+      );
     },
 
     addConfig: (
-      oneOrArrayConfigs: ?(
-        | initialConfigsType
-        | $ReadOnlyArray<initialConfigsType>
-      ),
+      configsArray: $ReadOnlyArray<initialConfigsType>,
     ): cacheType => {
-      (oneOrArrayConfigs instanceof Array
-        ? oneOrArrayConfigs
-        : [oneOrArrayConfigs]
-      )
-        .filter(Boolean)
-        .forEach((configs: initialConfigsType) => {
-          Object.keys(configs).forEach((key: string) => {
-            const prevConfig = cache.configs[key];
-            const newConfig: $ElementType<configsType, string> =
-              typeof configs[key] !== 'function'
-                ? configs[key]
-                : { config: configs[key] };
+      configsArray.forEach((configs: initialConfigsType) => {
+        Object.keys(configs).forEach((key: string) => {
+          const prevConfig = cache.configs[key] || {};
+          const newConfig: $ElementType<configsType, string> =
+            typeof configs[key] !== 'function'
+              ? configs[key]
+              : { config: configs[key] };
 
-            cache.configs[key] = {
-              filenames: {
-                ...prevConfig.filenames,
-                ...newConfig.filenames,
-              },
-              config: (config: {}) =>
-                config
-                |> prevConfig.config || emptyFunction.thatReturnsArgument
-                |> newConfig.config || emptyFunction.thatReturnsArgument,
-              ignore: (ignore: $ReadOnlyArray<string>) =>
-                ignore
-                |> prevConfig.ignore || emptyFunction.thatReturnsArgument
-                |> newConfig.ignore || emptyFunction.thatReturnsArgument,
-            };
-          });
+          cache.configs[key] = {
+            filenames: {
+              ...prevConfig.filenames,
+              ...newConfig.filenames,
+            },
+            config: (config: {}) =>
+              config
+              |> prevConfig.config || emptyFunction.thatReturnsArgument
+              |> newConfig.config || emptyFunction.thatReturnsArgument,
+            ignore: (ignore: $ReadOnlyArray<string>) =>
+              ignore
+              |> prevConfig.ignore || emptyFunction.thatReturnsArgument
+              |> newConfig.ignore || emptyFunction.thatReturnsArgument,
+          };
         });
-      debugLog(oneOrArrayConfigs);
+      });
+      debugLog(configsArray);
       debugLog(cache);
 
       return result;
@@ -144,4 +153,4 @@ const buildCache = (): cacheType => {
   return result;
 };
 
-export default buildCache().load();
+export default buildCache().load(cosmiconfigSync('miko').search());

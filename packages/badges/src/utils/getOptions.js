@@ -33,6 +33,7 @@ export default (
   badges {green readmePath1 readmePath2}`,
       )
       .action((readmePaths: $ReadOnlyArray<string>) => {
+        debugLog(readmePaths);
         resolve(readmePaths);
       });
 

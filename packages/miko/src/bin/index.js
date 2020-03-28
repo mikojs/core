@@ -30,6 +30,7 @@ handleUnhandledRejection();
 
     default:
       generateFiles(names);
+      await worker.startTracking();
       break;
   }
 })();

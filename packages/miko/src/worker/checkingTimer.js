@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import worker from '@mikojs/worker';
 
 import { type cacheType } from './buildCache';
@@ -25,7 +27,7 @@ const checking = (cache: cacheType, checkedTimes: number) => {
 
   const [filePath] = cache.getFilePaths();
 
-  if (checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK && !filePath) {
+  if (checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK && filePath) {
     cache.delete(filePath).then(() => {
       timer = setTimeout(
         checking,
@@ -39,7 +41,7 @@ const checking = (cache: cacheType, checkedTimes: number) => {
 
   if (checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK) {
     clearTimeout(timer);
-    worker.end(__filename);
+    worker.end(path.resolve(__dirname, './index.js'));
     return;
   }
 

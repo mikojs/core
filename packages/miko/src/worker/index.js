@@ -9,6 +9,15 @@ const cache = buildCache();
 
 /**
  * @example
+ * startTracking()
+ */
+export const startTracking = () => {
+  checkingTimer.clear();
+  checkingTimer(cache, 0);
+};
+
+/**
+ * @example
  * addTracking('babel', 123)
  *
  * @param {number} pid - pid number
@@ -16,8 +25,7 @@ const cache = buildCache();
  */
 export const addTracking = (pid: number, filePath: string) => {
   cache.add(pid, filePath);
-  checkingTimer.clear();
-  checkingTimer(cache, 0);
+  startTracking();
 };
 
 /**

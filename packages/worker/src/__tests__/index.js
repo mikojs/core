@@ -110,7 +110,9 @@ describe('worker', () => {
   });
 
   test('not main server', async () => {
-    findProcess.mockReturnValue([{ cmd: `${await getPort()}`, pid: 1 }]);
+    findProcess.mockReturnValue([
+      { cmd: (await getPort()).toString(), pid: 1 },
+    ]);
 
     await expect(
       buildWorker<workerType>(

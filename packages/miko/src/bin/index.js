@@ -14,7 +14,7 @@ import typeof * as workerType from 'worker';
 handleUnhandledRejection();
 
 (async () => {
-  const { type, names = [] } = await getOptions(process.argv);
+  const { type, configNames = [] } = await getOptions(process.argv);
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
@@ -29,7 +29,7 @@ handleUnhandledRejection();
       break;
 
     default:
-      generateFiles(names);
+      generateFiles(configNames);
       await worker.startTracking();
       break;
   }

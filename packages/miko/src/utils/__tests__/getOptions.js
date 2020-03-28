@@ -4,13 +4,15 @@ import getOptions, { type optionsType } from '../getOptions';
 
 describe('get options', () => {
   test.each`
-    argv                  | expected
-    ${[]}                 | ${{ type: 'start', names: [] }}
-    ${['babel']}          | ${{ type: 'start', names: ['babel'] }}
-    ${['start']}          | ${{ type: 'start', names: [] }}
-    ${['start', 'babel']} | ${{ type: 'start', names: ['babel'] }}
-    ${['kill']}           | ${{ type: 'kill' }}
-    ${['init']}           | ${{ type: 'init' }}
+    argv                          | expected
+    ${[]}                         | ${{ type: 'start', configNames: [] }}
+    ${['babel']}                  | ${{ type: 'start', configNames: ['babel'] }}
+    ${['babel', 'lint']}          | ${{ type: 'start', configNames: ['babel', 'lint'] }}
+    ${['start']}                  | ${{ type: 'start', configNames: [] }}
+    ${['start', 'babel']}         | ${{ type: 'start', configNames: ['babel'] }}
+    ${['start', 'babel', 'lint']} | ${{ type: 'start', configNames: ['babel', 'lint'] }}
+    ${['kill']}                   | ${{ type: 'kill' }}
+    ${['init']}                   | ${{ type: 'init' }}
   `(
     'run $argv',
     async ({

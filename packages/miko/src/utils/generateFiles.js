@@ -21,11 +21,15 @@ const debugLog = debug('miko:generateFiles');
  * @param {Array} configNames - config names
  */
 export default (configNames: $ReadOnlyArray<string>) => {
-  const gitFilePath = cache.resolve('./.gitignore');
-  const gitignore = (!fs.existsSync(gitFilePath)
-    ? ''
-    : fs.readFileSync(gitFilePath, 'utf-8')
-  ).replace(/^#.*$/gm, '');
+  const gitignore = [cache.resolve, path.resolve]
+    .reduce((result: string, getPath: (filePath: string) => string): string => {
+      const filePath = getPath('./.gitignore');
+
+      return !result && fs.existsSync(filePath)
+        ? fs.readFileSync(filePath, 'utf-8')
+        : result;
+    }, '')
+    .replace(/^#.*$/gm, '');
 
   cache
     .keys()

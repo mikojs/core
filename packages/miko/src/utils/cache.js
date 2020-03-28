@@ -70,6 +70,8 @@ const buildCache = (): cacheType => {
     get: (
       configName: string,
     ): $Call<$PropertyType<cacheType, 'get'>, string> => {
+      if (!cache.configs[configName]) return {};
+
       const { filenames, config, ignore } = cache.configs[configName];
       const configFilename = filenames?.config;
       const ignoreFilename = filenames?.ignore;
@@ -96,7 +98,7 @@ const buildCache = (): cacheType => {
 
       const { config, filepath } = configObj;
 
-      cache.cwd = filepath;
+      cache.cwd = path.dirname(filepath);
       debugLog({ config, filepath });
       debugLog(cache);
 

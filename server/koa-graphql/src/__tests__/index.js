@@ -5,6 +5,7 @@ import path from 'path';
 import Koa from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
+import outputFileSync from 'output-file-sync';
 
 import graphql from '../index';
 
@@ -13,8 +14,8 @@ const { update, middleware, runRelayCompiler, query } = graphql(
 );
 
 describe('graphql', () => {
-  beforeAll(() => {
-    runRelayCompiler([]);
+  beforeEach(() => {
+    outputFileSync.mockClear();
     update(path.resolve(__dirname, './__ignore__/schemaUpdated/index.js'));
   });
 
@@ -47,6 +48,12 @@ describe('graphql', () => {
     });
 
     server.close();
+  });
+
+  test('run relay compiler', () => {
+    runRelayCompiler([]);
+
+    expect(outputFileSync).toHaveBeenCalledTimes(1);
   });
 
   test('query', async () => {

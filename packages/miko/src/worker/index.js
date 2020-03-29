@@ -5,7 +5,7 @@ import worker from '@mikojs/worker';
 import buildCache from './buildCache';
 import checkingTimer from './checkingTimer';
 
-const cache = buildCache();
+export const cache = buildCache();
 
 /**
  * @example

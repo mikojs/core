@@ -9,6 +9,7 @@ import path from 'path';
 import Koa from 'koa';
 import getPort from 'get-port';
 import fetch, { type Response as ResponseType } from 'node-fetch';
+import outputFileSync from 'output-file-sync';
 
 import react, {
   type returnType,
@@ -26,6 +27,7 @@ describe('react', () => {
     ${false}
   `('dev = $dev', ({ dev }: {| dev: boolean |}) => {
     beforeAll(async () => {
+      outputFileSync.mockClear();
       reactObj = await react(
         path.resolve(__dirname, './__ignore__/pages'),
         dev
@@ -47,8 +49,13 @@ describe('react', () => {
               }),
             },
       );
+    });
+
+    test('update', () => {
       reactObj.update(path.resolve(__dirname, './__ignore__/pages/index.js'));
       reactObj.update(path.resolve(__dirname));
+
+      expect(outputFileSync).toHaveBeenCalledTimes(2);
     });
 
     test('middleware', async () => {

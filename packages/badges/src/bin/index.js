@@ -18,7 +18,7 @@ handleUnhandledRejection();
 const logger = createLogger('@mikojs/badges');
 
 (async () => {
-  const options = getOptions(process.argv);
+  const options = await getOptions(process.argv);
 
   if (options.length === 0) process.exit(1);
 

@@ -8,6 +8,9 @@ import debug from 'debug';
 import findProcess from 'find-process';
 
 import sendToServer from './utils/sendToServer';
+import endServer from './utils/endServer';
+
+type addEndType<R> = { ...R, end: () => Promise<void> };
 
 const debugLog = debug('worker');
 let cachePid: number;
@@ -21,12 +24,14 @@ let cachePid: number;
  *
  * @return {object} - worker functions
  */
-export default async <+R>(filePath: string, timeout?: number): Promise<R> => {
-  const allProcesses = await findProcess(
+const buildWorker = async <+R>(
+  filePath: string,
+  timeout?: number,
+): Promise<addEndType<R>> => {
+  const [mainProcess] = await findProcess(
     'name',
     path.resolve(__dirname, './bin/index.js'),
   );
-  const [mainProcess] = allProcesses;
   const port = mainProcess?.cmd.split(/ /).slice(-1)[0] || (await getPort());
 
   if (mainProcess?.pid !== cachePid) {
@@ -53,7 +58,7 @@ export default async <+R>(filePath: string, timeout?: number): Promise<R> => {
     )),
     'end',
   ].reduce(
-    (result: R, key: string) => ({
+    (result: addEndType<R>, key: string) => ({
       ...result,
       [key]: (...argv: $ReadOnlyArray<mixed>) =>
         sendToServer(
@@ -67,6 +72,10 @@ export default async <+R>(filePath: string, timeout?: number): Promise<R> => {
         ),
     }),
     // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/5332
-    ({}: R),
+    ({}: addEndType<R>),
   );
 };
+
+buildWorker.end = endServer;
+
+export default buildWorker;

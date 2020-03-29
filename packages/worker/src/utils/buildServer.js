@@ -21,8 +21,10 @@ export default (port: number): net$Server => {
 
   const server = net
     .createServer((socket: net.Socket) => {
-      socket.setEncoding('utf8').on('data', (data: string) => {
+      socket.setEncoding('utf8').on('data', async (data: string) => {
         const { type, filePath, argv, hasStdout } = JSON.parse(data);
+
+        debugLog(data);
 
         try {
           if (type === 'end') {
@@ -30,6 +32,7 @@ export default (port: number): net$Server => {
               if (Object.keys(cache).length !== 0) return;
 
               debugLog('Close server');
+              clearTimeout(timer);
               server.close();
             }, 5000);
 
@@ -39,11 +42,12 @@ export default (port: number): net$Server => {
             return;
           }
 
-          clearTimeout(timer);
-
           if (!cache[filePath])
             // $FlowFixMe The parameter passed to require must be a string literal.
             cache[filePath] = require(filePath);
+
+          clearTimeout(timer);
+          debugLog(cache);
 
           if (type === 'start') {
             socket.write('start;');
@@ -60,11 +64,15 @@ export default (port: number): net$Server => {
             });
           }
 
-          const serverData = JSON.stringify(cache[filePath][type](...argv));
+          const serverData = JSON.stringify(
+            await cache[filePath][type](...argv),
+          );
 
+          debugLog(serverData);
           socket.write('normal;');
           socket.end(serverData);
         } catch (e) {
+          debugLog(e);
           socket.write('error;');
           socket.end(
             JSON.stringify({

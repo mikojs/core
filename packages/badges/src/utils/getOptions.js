@@ -19,25 +19,31 @@ const logger = createLogger('@mikojs/badges');
  *
  * @return {Array<string>} - options
  */
-export default (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> => {
-  const { args } = new commander.Command('badges')
-    .version(version, '-v, --version')
-    .arguments('[readme-path...]')
-    .usage(chalk`{green [readme-path...]}`)
-    .description(
-      chalk`Example:
-  badges {green readme-path}`,
-    )
-    .parse([...argv]);
+export default (
+  argv: $ReadOnlyArray<string>,
+): Promise<$ReadOnlyArray<string>> =>
+  new Promise(resolve => {
+    const program = new commander.Command('badges')
+      .version(version, '-v, --version')
+      .arguments('[readmePaths...]')
+      .usage(chalk`{green [readmePaths...]}`)
+      .description(
+        chalk`Example:
+  badges {green readmePath},
+  badges {green readmePath1 readmePath2}`,
+      )
+      .action((readmePaths: $ReadOnlyArray<string>) => {
+        debugLog(readmePaths);
+        resolve(readmePaths);
+      });
 
-  if (args.length === 0) {
-    logger
-      .fail(chalk`Must give {green readme path}`)
-      .fail(chalk`Use {green \`--help\`} to get the more information`);
-    return [];
-  }
+    debugLog(argv);
 
-  debugLog(args);
-
-  return args;
-};
+    if (argv.length !== 2) program.parse([...argv]);
+    else {
+      logger
+        .fail(chalk`Must give {green readme path}`)
+        .fail(chalk`Use {green \`--help\`} to get the more information`);
+      resolve([]);
+    }
+  });

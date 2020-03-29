@@ -11,11 +11,12 @@ import buildWorker from '../index';
 import buildServer from '../utils/buildServer';
 
 import { start, func, end } from './__ignore__/worker';
+import typeof * as workerType from './__ignore__/worker';
 
 describe('worker', () => {
   describe('main server', () => {
     let port: number;
-    let worker: {| start: typeof start, func: typeof func, end: typeof end |};
+    let worker: { ...workerType, end: () => Promise<void> };
 
     beforeAll(async () => {
       findProcess.mockReturnValue([]);
@@ -30,7 +31,7 @@ describe('worker', () => {
         };
       });
 
-      worker = await buildWorker(
+      worker = await buildWorker<workerType>(
         path.resolve(__dirname, './__ignore__/worker.js'),
       );
     });
@@ -109,13 +110,21 @@ describe('worker', () => {
   });
 
   test('not main server', async () => {
-    findProcess.mockReturnValue([{ cmd: `${await getPort()}`, pid: 1 }]);
+    findProcess.mockReturnValue([
+      { cmd: (await getPort()).toString(), pid: 1 },
+    ]);
 
     await expect(
-      buildWorker(path.resolve(__dirname, './__ignore__/worker.js'), 40),
+      buildWorker<workerType>(
+        path.resolve(__dirname, './__ignore__/worker.js'),
+        40,
+      ),
     ).rejects.toThrow('Timeout');
     await expect(
-      buildWorker(path.resolve(__dirname, './__ignore__/worker.js'), 40),
+      buildWorker<workerType>(
+        path.resolve(__dirname, './__ignore__/worker.js'),
+        40,
+      ),
     ).rejects.toThrow('Timeout');
   });
 });

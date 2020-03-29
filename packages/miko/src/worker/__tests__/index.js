@@ -74,6 +74,9 @@ describe('worker', () => {
   });
 
   test('killAllEvents', async () => {
+    isRunning.mockReturnValue(true);
+
+    expect(worker.addTracking(1, notExistingFilePath)).toBeUndefined();
     expect(await worker.killAllEvents()).toBeUndefined();
   });
 });

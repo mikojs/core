@@ -5,6 +5,9 @@ import fs from 'fs';
 import rimraf from 'rimraf';
 import isRunning from 'is-running';
 import debug from 'debug';
+import { emptyFunction } from 'fbjs';
+
+import { mockChoice } from '@mikojs/utils';
 
 export type cacheType = {|
   getFilePaths: () => $ReadOnlyArray<string>,
@@ -62,7 +65,11 @@ export default (): cacheType => {
             pids: cache[filePath],
           });
           cache[filePath].forEach((pid: number) => {
-            process.kill(pid, 0);
+            mockChoice(
+              process.env.NODE_ENV === 'test',
+              emptyFunction,
+              process.kill,
+            )(pid, 0);
           });
 
           return result.delete(filePath);

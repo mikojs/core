@@ -29,7 +29,7 @@ export default declare(
           if (
             !t.isIdentifier(path.node, { name: 'require' }) ||
             !t.isCallExpression(path.parentPath.node) ||
-            !pattern.test(path.parentPath.node.arguments[0].value)
+            !pattern.test(path.parentPath.get('arguments.0').node.value)
           )
             return;
 
@@ -40,7 +40,7 @@ export default declare(
                   t.identifier('globalThis'),
                   t.identifier('window'),
                 ),
-                t.stringLiteral(path.parentPath.node.arguments[0].value),
+                t.stringLiteral(path.parentPath.get('arguments.0').node.value),
                 t.stringLiteral(
                   nodePath.relative(
                     nodePath.dirname(filename),

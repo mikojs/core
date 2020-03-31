@@ -16,7 +16,7 @@ const debugLog = debug('miko:generateFiles');
 
 /**
  * @example
- * generateFiles()
+ * generateFiles([])
  *
  * @param {Array} configNames - config names
  *

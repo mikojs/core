@@ -9,23 +9,22 @@ export const cache = buildCache();
 
 /**
  * @example
- * startTracking()
+ * addTracking(123, '/babel.config.js')
+ *
+ * @param {number} pid - process pid
+ * @param {Array} filePaths - file path array or file path string
  */
-export const startTracking = () => {
+export const addTracking = (
+  pid: number,
+  filePaths: string | $ReadOnlyArray<string>,
+) => {
+  (filePaths instanceof Array ? filePaths : [filePaths]).map(
+    (filePath: string) => {
+      cache.add(pid, filePath);
+    },
+  );
   checkingTimer.clear();
   checkingTimer(cache, 0);
-};
-
-/**
- * @example
- * addTracking('babel', 123)
- *
- * @param {number} pid - pid number
- * @param {string} filePath - file path
- */
-export const addTracking = (pid: number, filePath: string) => {
-  cache.add(pid, filePath);
-  startTracking();
 };
 
 /**

@@ -29,8 +29,7 @@ handleUnhandledRejection();
       break;
 
     default:
-      generateFiles(configNames);
-      await worker.startTracking();
+      await worker.addTracking(process.pid, generateFiles(configNames));
       break;
   }
 })();

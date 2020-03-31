@@ -26,7 +26,7 @@ const migrateConfigs = configs =>
         if (config.config) output.config = config.config;
 
         if (config.ignore)
-          output.ignore = ignore => config.ignore({ ignore }).ignore;
+          output.ignore = ignore => config.ignore({ ignore }).ignore || [];
 
         if (config.filenames) output.filenames = config.filenames;
 

@@ -4,6 +4,7 @@
 import path from 'path';
 import readline from 'readline';
 
+import ora from 'ora';
 import chalk from 'chalk';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
@@ -14,7 +15,7 @@ import generateFiles from 'utils/generateFiles';
 
 import typeof * as workerType from 'worker';
 
-const logger = createLogger('@mikojs/miko');
+const logger = createLogger('@mikojs/miko', ora({ discardStdin: false }));
 
 handleUnhandledRejection();
 
@@ -37,7 +38,18 @@ handleUnhandledRejection();
 
     default:
       if (keep) {
+        let count: number = 0;
+
         logger.info(chalk`{gray Use ctrl + c to stop.}`);
+        setInterval(() => {
+          logger.start(
+            `Running${[].constructor
+              .apply({}, new Array(count))
+              .map(() => '.')
+              .join('')}`,
+          );
+          count = count + 1 > 3 ? 0 : count + 1;
+        }, 500);
         readline.createInterface({
           input: process.stdin,
         });

@@ -4,15 +4,15 @@ import getOptions, { type optionsType } from '../getOptions';
 
 describe('get options', () => {
   test.each`
-    argv                          | expected
-    ${[]}                         | ${{ type: 'start', configNames: [] }}
-    ${['babel']}                  | ${{ type: 'start', configNames: ['babel'] }}
-    ${['babel', 'lint']}          | ${{ type: 'start', configNames: ['babel', 'lint'] }}
-    ${['watch']}                  | ${{ type: 'watch', configNames: [] }}
-    ${['watch', 'babel']}         | ${{ type: 'watch', configNames: ['babel'] }}
-    ${['watch', 'babel', 'lint']} | ${{ type: 'watch', configNames: ['babel', 'lint'] }}
-    ${['kill']}                   | ${{ type: 'kill' }}
-    ${['init']}                   | ${{ type: 'init' }}
+    argv                           | expected
+    ${[]}                          | ${{ type: 'start', configNames: [], keep: false }}
+    ${['babel']}                   | ${{ type: 'start', configNames: ['babel'], keep: false }}
+    ${['babel', 'lint']}           | ${{ type: 'start', configNames: ['babel', 'lint'], keep: false }}
+    ${['--keep']}                  | ${{ type: 'start', configNames: [], keep: true }}
+    ${['--keep', 'babel']}         | ${{ type: 'start', configNames: ['babel'], keep: true }}
+    ${['--keep', 'babel', 'lint']} | ${{ type: 'start', configNames: ['babel', 'lint'], keep: true }}
+    ${['kill']}                    | ${{ type: 'kill' }}
+    ${['init']}                    | ${{ type: 'init' }}
   `(
     'run $argv',
     async ({

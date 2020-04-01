@@ -9,6 +9,7 @@ import { version } from '../../package.json';
 export type optionsType = {|
   type: 'start' | 'watch' | 'kill' | 'init',
   configNames?: $ReadOnlyArray<string>,
+  keep?: boolean,
 |};
 
 const debugLog = debug('miko:getOptions');
@@ -29,25 +30,22 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       .description(
         chalk`Example:
   miko
+  miko {gray --keep}
   miko {green babel}
-  miko {cyan watch} {green babel}
+  miko {green babel} {gray --keep}
   miko {cyan kill}
   miko {cyan init}`,
       )
-      .parse([...argv])
-      .action((configNames: $ReadOnlyArray<string>) => {
-        debugLog(configNames);
-        resolve({ type: 'start', configNames });
-      });
-
-    program
-      .command('watch')
-      .arguments('[configNames...]')
-      .description('use watch mode with miko until using ctrl + c to stop')
-      .action((configNames: $ReadOnlyArray<string>) => {
-        debugLog(configNames);
-        resolve({ type: 'watch', configNames });
-      });
+      .option('--keep', 'use to keep server working, not auto close')
+      .action(
+        (
+          configNames: $ReadOnlyArray<string>,
+          { keep = false }: {| keep: boolean |},
+        ) => {
+          debugLog(configNames);
+          resolve({ type: 'start', configNames, keep });
+        },
+      );
 
     program
       .command('kill')
@@ -65,6 +63,8 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
 
     debugLog(argv);
 
-    if (argv.length !== 2) program.parse([...argv]);
-    else resolve({ type: 'start', configNames: [] });
+    if (argv.length === 3 && argv.slice(-1)[0] === '--keep')
+      resolve({ type: 'start', configNames: [], keep: true });
+    else if (argv.length !== 2) program.parse([...argv]);
+    else resolve({ type: 'start', configNames: [], keep: false });
   });

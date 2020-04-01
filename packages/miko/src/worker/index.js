@@ -1,7 +1,5 @@
 // @flow
 
-import worker from '@mikojs/worker';
-
 import buildCache from './buildCache';
 import checkingTimer from './checkingTimer';
 
@@ -33,5 +31,4 @@ export const addTracking = (
  */
 export const killAllEvents = async () => {
   await cache.kill();
-  await worker.end(__filename);
 };

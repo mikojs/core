@@ -4,7 +4,8 @@
   "license": "MIT",
   "workspaces": ["packages/*", "babel/*", "server/*", "components/*"],
   "scripts": {
-    "dev": "make babel-base-changed && configs exec lerna:babel:watch --changed",
+    "build": "make babel-base-all && miko && lerna exec 'babel src -d lib --config-file ../../babel.config.js' --stream",
+    "dev": "make babel-base-changed && miko && lerna exec 'babel src -d lib --config-file ../../babel.config.js -w' --stream --parallel",
     "install:all": "make install-all",
     "prod": "NODE_ENV=production make babel-base-all && configs exec lerna:babel",
     "test": "make babel-base-changed && configs exec lerna:babel --changed && lerna run test --stream && configs test"

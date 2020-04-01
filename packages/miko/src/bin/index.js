@@ -19,20 +19,14 @@ const logger = createLogger('@mikojs/miko');
 handleUnhandledRejection();
 
 (async () => {
-  const { type, configNames = [] } = await getOptions(process.argv);
+  const { type, configNames = [], keep = false } = await getOptions(
+    process.argv,
+  );
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
 
   switch (type) {
-    case 'watch':
-      logger.info(chalk`{gray Use ctrl + c to stop.}`);
-      readline.createInterface({
-        input: process.stdin,
-      });
-      await worker.addTracking(process.pid, generateFiles(configNames));
-      break;
-
     case 'kill':
       await worker.killAllEvents();
       break;
@@ -42,6 +36,13 @@ handleUnhandledRejection();
       break;
 
     default:
+      if (keep) {
+        logger.info(chalk`{gray Use ctrl + c to stop.}`);
+        readline.createInterface({
+          input: process.stdin,
+        });
+      }
+
       await worker.addTracking(process.pid, generateFiles(configNames));
       break;
   }

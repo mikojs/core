@@ -2,7 +2,6 @@
 // @flow
 
 import path from 'path';
-import readline from 'readline';
 
 import ora from 'ora';
 import chalk from 'chalk';
@@ -50,9 +49,6 @@ handleUnhandledRejection();
           );
           count = count + 1 > 3 ? 0 : count + 1;
         }, 500);
-        readline.createInterface({
-          input: process.stdin,
-        });
       }
 
       await worker.addTracking(process.pid, generateFiles(configNames));

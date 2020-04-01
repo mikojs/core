@@ -69,7 +69,7 @@ export default (): cacheType => {
               process.env.NODE_ENV === 'test',
               emptyFunction,
               process.kill,
-            )(pid, 0);
+            )(pid);
           });
 
           return result.delete(filePath);

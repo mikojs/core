@@ -39,7 +39,7 @@ describe('generate files', () => {
 
   test.each`
     configNames  | expected
-    ${[]}        | ${['babel.config.js', 'hasIgnore.js']}
+    ${[]}        | ${['babel.config.js', 'jest.config.js', '.eslintrc.js', '.eslintignore', '.prettierrc.js', '.prettierignore', '.lintstagedrc.js', 'hasIgnore.js']}
     ${['babel']} | ${['babel.config.js']}
   `(
     'generate files with configNames = $configNames',
@@ -54,16 +54,18 @@ describe('generate files', () => {
 
       global.console.warn = mockLog;
 
-      expect(generateFiles(configNames)).toBeUndefined();
-      expect(
-        outputFileSync.mock.calls.map(
-          ([outputFilePath]: [string]) => outputFilePath,
-        ),
-      ).toEqual(
+      const result = generateFiles(configNames);
+
+      expect(result).toEqual(
         expected.map((filePath: string) =>
           path.resolve(process.cwd(), filePath),
         ),
       );
+      expect(
+        outputFileSync.mock.calls.map(
+          ([outputFilePath]: [string]) => outputFilePath,
+        ),
+      ).toEqual(result);
 
       if (expected.includes('hasIgnore.js')) {
         expect(mockLog).toHaveBeenCalledTimes(1);

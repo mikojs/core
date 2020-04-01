@@ -16,11 +16,15 @@ const debugLog = debug('miko:generateFiles');
 
 /**
  * @example
- * generateFiles()
+ * generateFiles([])
  *
  * @param {Array} configNames - config names
+ *
+ * @return {Array} - generating files
  */
-export default (configNames: $ReadOnlyArray<string>) => {
+export default (
+  configNames: $ReadOnlyArray<string>,
+): $ReadOnlyArray<string> => {
   const gitignore = [cache.resolve, path.resolve]
     .reduce((result: string, getPath: (filePath: string) => string): string => {
       const filePath = getPath('./.gitignore');
@@ -31,26 +35,37 @@ export default (configNames: $ReadOnlyArray<string>) => {
     }, '')
     .replace(/^#.*$/gm, '');
 
-  cache
+  return cache
     .keys()
     .filter((key: string) =>
       configNames.length === 0 ? true : configNames.includes(key),
     )
-    .forEach((key: string) => {
-      const { configFile, ignoreFile } = cache.get(key);
+    .reduce(
+      (result: $ReadOnlyArray<string>, key: string): $ReadOnlyArray<string> => {
+        const { configFile, ignoreFile } = cache.get(key);
 
-      [configFile, ignoreFile]
-        .filter(Boolean)
-        .forEach((argu: [string, string]) => {
-          const filename = path.basename(argu[0]);
+        return [configFile, ignoreFile]
+          .filter(Boolean)
+          .reduce(
+            (
+              subResult: $ReadOnlyArray<string>,
+              argu: [string, string],
+            ): $ReadOnlyArray<string> => {
+              const filename = path.basename(argu[0]);
 
-          if (!new RegExp(filename).test(gitignore))
-            logger.warn(
-              chalk`{red ${filename}} should be added in {bold {gray .gitignore}}`,
-            );
+              if (!new RegExp(filename).test(gitignore))
+                logger.warn(
+                  chalk`{red ${filename}} should be added in {bold {gray .gitignore}}`,
+                );
 
-          debugLog(argu);
-          outputFileSync(...argu);
-        });
-    });
+              debugLog(argu);
+              outputFileSync(...argu);
+
+              return [...subResult, argu[0]];
+            },
+            result,
+          );
+      },
+      [],
+    );
 };

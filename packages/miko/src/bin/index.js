@@ -2,14 +2,19 @@
 // @flow
 
 import path from 'path';
+import readline from 'readline';
 
-import { handleUnhandledRejection } from '@mikojs/utils';
+import chalk from 'chalk';
+
+import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import buildWorker from '@mikojs/worker';
 
 import getOptions from 'utils/getOptions';
 import generateFiles from 'utils/generateFiles';
 
 import typeof * as workerType from 'worker';
+
+const logger = createLogger('@mikojs/miko');
 
 handleUnhandledRejection();
 
@@ -20,6 +25,14 @@ handleUnhandledRejection();
   );
 
   switch (type) {
+    case 'watch':
+      logger.info(chalk`{gray Use ctrl + c to stop.}`);
+      readline.createInterface({
+        input: process.stdin,
+      });
+      await worker.addTracking(process.pid, generateFiles(configNames));
+      break;
+
     case 'kill':
       await worker.killAllEvents();
       break;
@@ -29,8 +42,7 @@ handleUnhandledRejection();
       break;
 
     default:
-      generateFiles(configNames);
-      await worker.startTracking();
+      await worker.addTracking(process.pid, generateFiles(configNames));
       break;
   }
 })();

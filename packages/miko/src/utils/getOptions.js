@@ -6,14 +6,10 @@ import debug from 'debug';
 
 import { version } from '../../package.json';
 
-export type optionsType =
-  | {|
-      type: 'start',
-      configNames: $ReadOnlyArray<string>,
-    |}
-  | {|
-      type: 'kill' | 'init',
-    |};
+export type optionsType = {|
+  type: 'start' | 'watch' | 'kill' | 'init',
+  configNames?: $ReadOnlyArray<string>,
+|};
 
 const debugLog = debug('miko:getOptions');
 
@@ -34,7 +30,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
         chalk`Example:
   miko
   miko {green babel}
-  miko {cyan start} {green babel}
+  miko {cyan watch} {green babel}
   miko {cyan kill}
   miko {cyan init}`,
       )
@@ -45,12 +41,12 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       });
 
     program
-      .command('start')
+      .command('watch')
       .arguments('[configNames...]')
-      .description('trigger the start event to generate the files')
+      .description('use watch mode with miko until using ctrl + c to stop')
       .action((configNames: $ReadOnlyArray<string>) => {
         debugLog(configNames);
-        resolve({ type: 'start', configNames });
+        resolve({ type: 'watch', configNames });
       });
 
     program

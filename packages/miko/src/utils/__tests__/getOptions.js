@@ -8,9 +8,9 @@ describe('get options', () => {
     ${[]}                         | ${{ type: 'start', configNames: [] }}
     ${['babel']}                  | ${{ type: 'start', configNames: ['babel'] }}
     ${['babel', 'lint']}          | ${{ type: 'start', configNames: ['babel', 'lint'] }}
-    ${['start']}                  | ${{ type: 'start', configNames: [] }}
-    ${['start', 'babel']}         | ${{ type: 'start', configNames: ['babel'] }}
-    ${['start', 'babel', 'lint']} | ${{ type: 'start', configNames: ['babel', 'lint'] }}
+    ${['watch']}                  | ${{ type: 'watch', configNames: [] }}
+    ${['watch', 'babel']}         | ${{ type: 'watch', configNames: ['babel'] }}
+    ${['watch', 'babel', 'lint']} | ${{ type: 'watch', configNames: ['babel', 'lint'] }}
     ${['kill']}                   | ${{ type: 'kill' }}
     ${['init']}                   | ${{ type: 'init' }}
   `(

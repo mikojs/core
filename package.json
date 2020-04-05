@@ -4,8 +4,8 @@
   "license": "MIT",
   "workspaces": ["packages/*", "babel/*", "server/*", "components/*"],
   "scripts": {
-    "build": "make babel-base-all && miko && lerna exec 'babel src -d lib --config-file ../../babel.config.js' --stream",
-    "dev": "make babel-base-changed && miko && lerna exec 'babel src -d lib --config-file ../../babel.config.js -w' --stream --parallel",
+    "build": "make build",
+    "dev": "make dev",
     "install:all": "make install-all",
     "prod": "NODE_ENV=production make babel-base-all && configs exec lerna:babel",
     "test": "make babel-base-changed && configs exec lerna:babel --changed && lerna run test --stream && configs test"
@@ -45,9 +45,9 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "make babel-base-changed && configs exec husky:pre-commit",
-      "post-merge": "make babel-base-all && configs exec husky:post-merge",
-      "post-checkout": "make babel-base-changed BRANCH=master && configs exec husky:post-checkout"
+      "pre-commit": "yarn dev WATCH='' && configs exec husky:pre-commit",
+      "post-merge": "yarn build && configs exec husky:post-merge",
+      "post-checkout": "yarn dev BRANCH=master WATCH='' && configs exec husky:post-checkout"
     }
   }
 }

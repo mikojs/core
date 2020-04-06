@@ -33,10 +33,12 @@ handleUnhandledRejection();
   );
 
   debugLog({ configNames, keep, commands });
+  logger.start('Running');
 
   switch (type) {
     case 'kill':
       await worker.killAllEvents();
+      logger.succeed('Done.');
       break;
 
     case 'run': {
@@ -61,6 +63,7 @@ handleUnhandledRejection();
       );
 
       debugLog({ argvArray, finallyCommand });
+      logger.info(chalk`{gray $ ${finallyCommand.join(' ')}}`);
 
       await execa(finallyCommand[0], finallyCommand.slice(1), {
         stdout: 'inherit',
@@ -85,6 +88,7 @@ handleUnhandledRejection();
       }
 
       await worker.addTracking(process.pid, generateFiles(configNames));
+      logger.succeed('Done.');
       break;
   }
 })();

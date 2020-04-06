@@ -4,6 +4,9 @@
   "license": "MIT",
   "workspaces": ["packages/*", "babel/*", "server/*", "components/*"],
   "scripts": {
+    "branch": "branch=$(git rev-parse --abbrev-ref HEAD)",
+    "temp": "lerna exec 'ls $argv1' --stream $argv2",
+    "try": "yarn branch; echo $branch; argv1='-al' argv2='--since use-miko --parallel' yarn temp",
     "build": "make build",
     "dev": "make dev",
     "install:all": "make install-all",

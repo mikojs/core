@@ -31,8 +31,8 @@ handleUnhandledRejection();
       await worker.killAllEvents();
       break;
 
-    case 'init':
-      // TODO: initialize commands in package.json
+    case 'run':
+      // TODO: run commands in package.json
       break;
 
     default:

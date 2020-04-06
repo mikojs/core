@@ -5,7 +5,7 @@ import path from 'path';
 
 import ora from 'ora';
 import chalk from 'chalk';
-import execa, { type ExecaPromise as execaPromiseType } from 'execa';
+import execa from 'execa';
 import debug from 'debug';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
@@ -13,6 +13,7 @@ import buildWorker from '@mikojs/worker';
 
 import getOptions from 'utils/getOptions';
 import generateFiles from 'utils/generateFiles';
+import getCommand from 'utils/getCommand';
 
 import typeof * as workerType from 'worker';
 
@@ -42,29 +43,10 @@ handleUnhandledRejection();
       break;
 
     case 'run': {
-      const argvArray = await Promise.all(
-        commands.slice(1).map((command: $ReadOnlyArray<string>) =>
-          execa(command[0], command.slice(1))
-            .then(({ stdout }: execaPromiseType) =>
-              stdout.replace(/^'/, '').replace(/'$/, ''),
-            )
-            .then((stdout: string) =>
-              command[0] !== 'yarn' ? stdout : stdout.replace(/^\$.*\n/, ''),
-            ),
-        ),
-      );
-      const finallyCommand = commands[0].map((command: string) =>
-        command.replace(
-          /\$([\d])+/,
-          (_: string, indexString: string) =>
-            argvArray[parseInt(indexString, 10) - 1],
-        ),
-      );
+      const command = await getCommand(commands);
 
-      debugLog({ argvArray, finallyCommand });
-      logger.info(chalk`{gray $ ${finallyCommand.join(' ')}}`);
-
-      await execa(finallyCommand[0], finallyCommand.slice(1), {
+      logger.info(chalk`{gray $ ${command.join(' ')}}`);
+      await execa(command[0], command.slice(1), {
         stdout: 'inherit',
       });
       break;

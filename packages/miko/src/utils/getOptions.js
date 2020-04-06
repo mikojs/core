@@ -10,7 +10,7 @@ export type optionsType = {|
   type: 'start' | 'kill' | 'run',
   configNames?: $ReadOnlyArray<string>,
   keep?: boolean,
-  commands?: $ReadOnlyArray<$ReadOnlyArray<string>>,
+  commands?: $ReadOnlyArray<string>,
 |};
 
 const debugLog = debug('miko:getOptions');
@@ -59,34 +59,9 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       .command('run')
       .description('the helper to run the scripts in the package.json')
       .action((_: mixed, commands: $ReadOnlyArray<string>) => {
-        let hasStarter: number = 0;
-
         resolve({
           type: 'run',
-          commands: commands.map((command: string) =>
-            command
-              .split(/ /)
-              .reduce(
-                (
-                  result: $ReadOnlyArray<string>,
-                  key: string,
-                ): $ReadOnlyArray<string> => {
-                  if (hasStarter !== 0) {
-                    if (/['"]$/.test(key)) hasStarter -= 1;
-
-                    return [
-                      ...result.slice(0, -1),
-                      `${result[result.length - 1]} ${key}`,
-                    ];
-                  }
-
-                  if (/^['"]/.test(key) && !/['"]$/.test(key)) hasStarter += 1;
-
-                  return [...result, key];
-                },
-                [],
-              ),
-          ),
+          commands,
         });
       });
 

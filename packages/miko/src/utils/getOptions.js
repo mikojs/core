@@ -72,7 +72,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
                   key: string,
                 ): $ReadOnlyArray<string> => {
                   if (hasStarter !== 0) {
-                    if (/'$/.test(key)) hasStarter -= 1;
+                    if (/['"]$/.test(key)) hasStarter -= 1;
 
                     return [
                       ...result.slice(0, -1),
@@ -80,7 +80,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
                     ];
                   }
 
-                  if (/^'/.test(key)) hasStarter += 1;
+                  if (/^['"]/.test(key) && !/['"]$/.test(key)) hasStarter += 1;
 
                   return [...result, key];
                 },

@@ -6,6 +6,7 @@ import path from 'path';
 import ora from 'ora';
 import chalk from 'chalk';
 import execa, { type ExecaPromise as execaPromiseType } from 'execa';
+import debug from 'debug';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import buildWorker from '@mikojs/worker';
@@ -16,6 +17,7 @@ import generateFiles from 'utils/generateFiles';
 import typeof * as workerType from 'worker';
 
 const logger = createLogger('@mikojs/miko', ora({ discardStdin: false }));
+const debugLog = debug('miko:bin');
 
 handleUnhandledRejection();
 
@@ -29,6 +31,8 @@ handleUnhandledRejection();
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
+
+  debugLog({ configNames, keep, commands });
 
   switch (type) {
     case 'kill':
@@ -55,6 +59,8 @@ handleUnhandledRejection();
             argvArray[parseInt(indexString, 10) - 1],
         ),
       );
+
+      debugLog({ argvArray, finallyCommand });
 
       await execa(finallyCommand[0], finallyCommand.slice(1), {
         stdout: 'inherit',

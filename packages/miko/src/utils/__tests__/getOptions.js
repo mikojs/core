@@ -12,11 +12,7 @@ describe('get options', () => {
     ${['--keep', 'babel']}         | ${{ type: 'start', configNames: ['babel'], keep: true }}
     ${['--keep', 'babel', 'lint']} | ${{ type: 'start', configNames: ['babel', 'lint'], keep: true }}
     ${['kill']}                    | ${{ type: 'kill' }}
-    ${['run', 'babel src -d lib']} | ${{ type: 'run', commands: [['babel', 'src', '-d', 'lib']] }}
-    ${['run', "lerna exec 'babel src -d lib $1'", "echo '-w'"]} | ${{ type: 'run', commands: [
-    ['lerna', 'exec', "'babel src -d lib $1'"],
-    ['echo', "'-w'"],
-  ] }}
+    ${['run', 'babel src -d lib']} | ${{ type: 'run', commands: ['babel src -d lib'] }}
   `(
     'run $argv',
     async ({

@@ -43,16 +43,15 @@ handleUnhandledRejection();
 
     case 'run': {
       const argvArray = await Promise.all(
-        commands
-          .slice(1)
-          .map((command: $ReadOnlyArray<string>) =>
-            execa(
-              command[0],
-              command.slice(1),
-            ).then(({ stdout }: execaPromiseType) =>
+        commands.slice(1).map((command: $ReadOnlyArray<string>) =>
+          execa(command[0], command.slice(1))
+            .then(({ stdout }: execaPromiseType) =>
               stdout.replace(/^'/, '').replace(/'$/, ''),
+            )
+            .then((stdout: string) =>
+              command[0] !== 'yarn' ? stdout : stdout.replace(/^\$.*\n/, ''),
             ),
-          ),
+        ),
       );
       const finallyCommand = commands[0].map((command: string) =>
         command.replace(

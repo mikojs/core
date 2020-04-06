@@ -5,6 +5,7 @@ import path from 'path';
 
 import ora from 'ora';
 import chalk from 'chalk';
+import execa, { type ExecaPromise as execaPromiseType } from 'execa';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import buildWorker from '@mikojs/worker';
@@ -19,9 +20,12 @@ const logger = createLogger('@mikojs/miko', ora({ discardStdin: false }));
 handleUnhandledRejection();
 
 (async () => {
-  const { type, configNames = [], keep = false } = await getOptions(
-    process.argv,
-  );
+  const {
+    type,
+    configNames = [],
+    keep = false,
+    commands = [],
+  } = await getOptions(process.argv);
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
@@ -31,9 +35,32 @@ handleUnhandledRejection();
       await worker.killAllEvents();
       break;
 
-    case 'run':
-      // TODO: run commands in package.json
+    case 'run': {
+      const argvArray = await Promise.all(
+        commands
+          .slice(1)
+          .map((command: $ReadOnlyArray<string>) =>
+            execa(
+              command[0],
+              command.slice(1),
+            ).then(({ stdout }: execaPromiseType) =>
+              stdout.replace(/^'/, '').replace(/'$/, ''),
+            ),
+          ),
+      );
+      const finallyCommand = commands[0].map((command: string) =>
+        command.replace(
+          /\$([\d])+/,
+          (_: string, indexString: string) =>
+            argvArray[parseInt(indexString, 10) - 1],
+        ),
+      );
+
+      await execa(finallyCommand[0], finallyCommand.slice(1), {
+        stdout: 'inherit',
+      });
       break;
+    }
 
     default:
       if (keep) {

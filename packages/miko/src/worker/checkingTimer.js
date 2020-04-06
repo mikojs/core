@@ -9,7 +9,7 @@ import worker from '@mikojs/worker';
 import { type cacheType } from './buildCache';
 
 export const TIME_TO_CHECK = 100;
-export const TIME_TO_REMOVE_FILES = 500;
+export const TIME_TO_REMOVE_FILES = 5000;
 export const TIME_TO_CLOSE_SERVER = 5000;
 
 const debugLog = debug('miko:worker:checkingTimer');

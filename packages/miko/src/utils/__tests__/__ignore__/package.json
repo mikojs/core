@@ -1,0 +1,7 @@
+{
+  "name": "example",
+  "scripts": {
+    "temp": "echo \"-w\"",
+    "test": "echo '-w'"
+  }
+}

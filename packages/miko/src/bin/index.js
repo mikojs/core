@@ -33,7 +33,7 @@ handleUnhandledRejection();
     path.resolve(__dirname, '../worker/index.js'),
   );
 
-  debugLog({ configNames, keep, commands });
+  debugLog({ type, configNames, keep, commands });
   logger.start('Running');
 
   switch (type) {
@@ -69,7 +69,9 @@ handleUnhandledRejection();
       }
 
       await worker.addTracking(process.pid, generateFiles(configNames));
-      logger.succeed('Done.');
+
+      if (!keep) logger.succeed('Done.');
+
       break;
   }
 })();

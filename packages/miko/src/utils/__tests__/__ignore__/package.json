@@ -1,7 +1,8 @@
 {
   "name": "example",
   "scripts": {
-    "temp": "echo \"-al\"",
-    "test": "echo '-al'"
+    "test1": "echo \"-al\"",
+    "test2": "echo '-al'",
+    "test3": "echo \"--stream --parallel\""
   }
 }

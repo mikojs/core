@@ -19,14 +19,16 @@ jest.mock('execa', (): ((
 
 describe('get command', () => {
   test.each`
-    commands                                                             | expected
-    ${['babel src -d lib']}                                              | ${['babel', 'src', '-d', 'lib']}
-    ${['lerna exec "ls"']}                                               | ${['lerna', 'exec', '"ls"']}
-    ${['lerna exec "ls $1"', 'echo "-al"']}                              | ${['lerna', 'exec', '"ls -al"']}
-    ${['lerna exec "ls $1"', "echo '-al'"]}                              | ${['lerna', 'exec', '"ls -al"']}
-    ${['lerna exec "ls $1"', 'yarn test']}                               | ${['lerna', 'exec', '"ls -al"']}
-    ${['lerna exec "ls $1"', 'yarn temp']}                               | ${['lerna', 'exec', '"ls -al"']}
-    ${['lerna exec "ls $1 $2"', '', 'miko run "echo "$1"" "yarn temp"']} | ${['lerna', 'exec', '"ls  -al"']}
+    commands                                                | expected
+    ${['babel src -d lib']}                                 | ${['babel', 'src', '-d', 'lib']}
+    ${['lerna exec "ls"']}                                  | ${['lerna', 'exec', '"ls"']}
+    ${['lerna exec "ls $1"', 'echo "-al"']}                 | ${['lerna', 'exec', '"ls -al"']}
+    ${['lerna exec "ls $1"', "echo '-al'"]}                 | ${['lerna', 'exec', '"ls -al"']}
+    ${['lerna exec "ls $1"', 'yarn test1']}                 | ${['lerna', 'exec', '"ls -al"']}
+    ${['lerna exec "ls $1"', 'yarn test2']}                 | ${['lerna', 'exec', '"ls -al"']}
+    ${['lerna exec "ls $1"', '']}                           | ${['lerna', 'exec', '"ls "']}
+    ${['lerna exec "ls" $1', 'echo "--stream --parallel"']} | ${['lerna', 'exec', '"ls"', '--stream', '--parallel']}
+    ${['lerna exec "ls" $1', 'yarn test3']}                 | ${['lerna', 'exec', '"ls"', '--stream', '--parallel']}
   `(
     'run $commands',
     async ({

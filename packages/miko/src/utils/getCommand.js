@@ -51,7 +51,7 @@ export default async (
     commandsArray.slice(1).map((command: $ReadOnlyArray<string>) =>
       execa(command[0], command.slice(1))
         .then(({ stdout }: execaPromiseType) =>
-          stdout.replace(/^'/, '').replace(/'$/, ''),
+          stdout.replace(/^['"]/, '').replace(/['"]$/, ''),
         )
         .then((stdout: string) =>
           command[0] !== 'yarn' ? stdout : stdout.replace(/^\$.*\n/, ''),

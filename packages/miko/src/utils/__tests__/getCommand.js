@@ -23,7 +23,9 @@ describe('get command', () => {
     ${['babel src -d lib']}                              | ${['babel', 'src', '-d', 'lib']}
     ${['lerna exec "babel src -d lib"']}                 | ${['lerna', 'exec', '"babel src -d lib"']}
     ${['lerna exec "babel src -d lib $1"', 'echo "-w"']} | ${['lerna', 'exec', '"babel src -d lib -w"']}
+    ${['lerna exec "babel src -d lib $1"', "echo '-w'"]} | ${['lerna', 'exec', '"babel src -d lib -w"']}
     ${['lerna exec "babel src -d lib $1"', 'yarn test']} | ${['lerna', 'exec', '"babel src -d lib -w"']}
+    ${['lerna exec "babel src -d lib $1"', 'yarn temp']} | ${['lerna', 'exec', '"babel src -d lib -w"']}
   `(
     'run $commands',
     async ({

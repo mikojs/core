@@ -35,7 +35,9 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
   miko {green babel}
   miko {green babel} {gray --keep}
   miko {cyan kill}
-  miko {cyan run} {green babel src -d lib}`,
+  miko {cyan run} {green 'babel src -d lib'}
+  miko {cyan run} {green 'lerna exec "babel src -d lib $1" --stream' 'echo "-w"'}
+  miko {cyan run} {green "lerna exec 'babel src -d lib \\$1' --stream" "echo '-w'"}`,
       )
       .option('--keep', 'use to keep server working, not auto close')
       .action(

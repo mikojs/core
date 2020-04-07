@@ -63,7 +63,7 @@ export default async (
 
   return commandsArray[0].map((command: string) =>
     command.replace(
-      /\$([\d])+/,
+      /\$([\d])+/g,
       (_: string, indexString: string) =>
         commandArguments[parseInt(indexString, 10) - 1],
     ),

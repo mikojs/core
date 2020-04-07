@@ -7,6 +7,38 @@ const debugLog = debug('miko:getCommand');
 
 /**
  * @example
+ * getCommandArray('babel src -d lib')
+ *
+ * @param {string} command - command string
+ *
+ * @return {Array} - command array
+ */
+const getCommandArray = (command: string): $ReadOnlyArray<string> => {
+  let hasStarter: number = 0;
+
+  return command
+    .split(/ /)
+    .reduce(
+      (result: $ReadOnlyArray<string>, key: string): $ReadOnlyArray<string> => {
+        if (hasStarter !== 0) {
+          if (/['"]$/.test(key)) hasStarter -= 1;
+
+          return [
+            ...result.slice(0, -1),
+            `${result[result.length - 1]} ${key}`,
+          ];
+        }
+
+        if (/^['"]/.test(key) && !/['"]$/.test(key)) hasStarter += 1;
+
+        return [...result, key];
+      },
+      [],
+    );
+};
+
+/**
+ * @example
  * getCommand(['babel src -d lib $1', 'echo "-w"'])
  *
  * @param {Array} commands - originial commands
@@ -18,32 +50,7 @@ export default async (
 ): Promise<$ReadOnlyArray<string>> => {
   debugLog(commands);
 
-  let hasStarter: number = 0;
-  const commandsArray = commands.map(
-    (command: string): $ReadOnlyArray<string> =>
-      command
-        .split(/ /)
-        .reduce(
-          (
-            result: $ReadOnlyArray<string>,
-            key: string,
-          ): $ReadOnlyArray<string> => {
-            if (hasStarter !== 0) {
-              if (/['"]$/.test(key)) hasStarter -= 1;
-
-              return [
-                ...result.slice(0, -1),
-                `${result[result.length - 1]} ${key}`,
-              ];
-            }
-
-            if (/^['"]/.test(key) && !/['"]$/.test(key)) hasStarter += 1;
-
-            return [...result, key];
-          },
-          [],
-        ),
-  );
+  const commandsArray = commands.map(getCommandArray);
 
   debugLog(commandsArray);
 
@@ -63,11 +70,17 @@ export default async (
 
   debugLog(commandArguments);
 
-  return commandsArray[0].map((command: string) =>
-    command.replace(
-      /\$([\d])+/g,
-      (_: string, indexString: string) =>
-        commandArguments[parseInt(indexString, 10) - 1],
-    ),
+  return commandsArray[0].reduce(
+    (result: $ReadOnlyArray<string>, command: string) => [
+      ...result,
+      ...getCommandArray(
+        command.replace(
+          /\$([\d])+/g,
+          (_: string, indexString: string) =>
+            commandArguments[parseInt(indexString, 10) - 1],
+        ),
+      ),
+    ],
+    [],
   );
 };

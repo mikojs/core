@@ -26,7 +26,7 @@ describe('get command', () => {
     ${['lerna exec "ls $1"', "echo '-al'"]}                              | ${['lerna', 'exec', '"ls -al"']}
     ${['lerna exec "ls $1"', 'yarn test']}                               | ${['lerna', 'exec', '"ls -al"']}
     ${['lerna exec "ls $1"', 'yarn temp']}                               | ${['lerna', 'exec', '"ls -al"']}
-    ${['lerna exec "ls $1 $2"', '', 'miko run "echo "$1"" "yarn temp"']} | ${['lerna', 'exec', '"ls -al"']}
+    ${['lerna exec "ls $1 $2"', '', 'miko run "echo "$1"" "yarn temp"']} | ${['lerna', 'exec', '"ls  -al"']}
   `(
     'run $commands',
     async ({

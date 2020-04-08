@@ -5,7 +5,6 @@ import path from 'path';
 
 import ora from 'ora';
 import chalk from 'chalk';
-import execa from 'execa';
 import debug from 'debug';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
@@ -13,7 +12,6 @@ import buildWorker from '@mikojs/worker';
 
 import getOptions from 'utils/getOptions';
 import generateFiles from 'utils/generateFiles';
-import getCommand from 'utils/getCommand';
 
 import typeof * as workerType from 'worker';
 
@@ -23,17 +21,14 @@ const debugLog = debug('miko:bin');
 handleUnhandledRejection();
 
 (async () => {
-  const {
-    type,
-    configNames = [],
-    keep = false,
-    commands = [],
-  } = await getOptions(process.argv);
+  const { type, configNames = [], keep = false } = await getOptions(
+    process.argv,
+  );
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
 
-  debugLog({ type, configNames, keep, commands });
+  debugLog({ type, configNames, keep });
   logger.start('Running');
 
   switch (type) {
@@ -41,16 +36,6 @@ handleUnhandledRejection();
       await worker.killAllEvents();
       logger.succeed('Done.');
       break;
-
-    case 'run': {
-      const command = await getCommand(commands);
-
-      logger.info(chalk`{gray $ ${command.join(' ')}}`);
-      await execa(command[0], command.slice(1), {
-        stdout: 'inherit',
-      });
-      break;
-    }
 
     default:
       if (keep) {

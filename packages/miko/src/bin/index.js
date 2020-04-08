@@ -31,10 +31,6 @@ handleUnhandledRejection();
       await worker.killAllEvents();
       break;
 
-    case 'init':
-      // TODO: initialize commands in package.json
-      break;
-
     default:
       if (keep) {
         let count: number = 0;

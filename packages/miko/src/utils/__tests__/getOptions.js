@@ -12,7 +12,6 @@ describe('get options', () => {
     ${['--keep', 'babel']}         | ${{ type: 'start', configNames: ['babel'], keep: true }}
     ${['--keep', 'babel', 'lint']} | ${{ type: 'start', configNames: ['babel', 'lint'], keep: true }}
     ${['kill']}                    | ${{ type: 'kill' }}
-    ${['init']}                    | ${{ type: 'init' }}
   `(
     'run $argv',
     async ({

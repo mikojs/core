@@ -7,7 +7,7 @@ import debug from 'debug';
 import { version } from '../../package.json';
 
 export type optionsType = {|
-  type: 'start' | 'watch' | 'kill' | 'init',
+  type: 'start' | 'kill',
   configNames?: $ReadOnlyArray<string>,
   keep?: boolean,
 |};
@@ -33,8 +33,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
   miko {gray --keep}
   miko {green babel}
   miko {green babel} {gray --keep}
-  miko {cyan kill}
-  miko {cyan init}`,
+  miko {cyan kill}`,
       )
       .option('--keep', 'use to keep server working, not auto close')
       .action(
@@ -52,13 +51,6 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       .description('kill the all events')
       .action(() => {
         resolve({ type: 'kill' });
-      });
-
-    program
-      .command('init')
-      .description('initialize the scripts of the package.json')
-      .action(() => {
-        resolve({ type: 'init' });
       });
 
     debugLog(argv);

@@ -38,7 +38,9 @@ export default (
   return cache
     .keys()
     .filter((key: string) =>
-      configNames.length === 0 ? true : configNames.includes(key),
+      key === 'miko'
+        ? false
+        : configNames.length === 0 || configNames.includes(key),
     )
     .reduce(
       (result: $ReadOnlyArray<string>, key: string): $ReadOnlyArray<string> => {

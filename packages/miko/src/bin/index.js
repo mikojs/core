@@ -5,6 +5,7 @@ import path from 'path';
 
 import ora from 'ora';
 import chalk from 'chalk';
+import debug from 'debug';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import buildWorker from '@mikojs/worker';
@@ -15,6 +16,7 @@ import generateFiles from 'utils/generateFiles';
 import typeof * as workerType from 'worker';
 
 const logger = createLogger('@mikojs/miko', ora({ discardStdin: false }));
+const debugLog = debug('miko:bin');
 
 handleUnhandledRejection();
 
@@ -26,9 +28,13 @@ handleUnhandledRejection();
     path.resolve(__dirname, '../worker/index.js'),
   );
 
+  debugLog({ type, configNames, keep });
+  logger.start('Running');
+
   switch (type) {
     case 'kill':
       await worker.killAllEvents();
+      logger.succeed('Done.');
       break;
 
     default:
@@ -48,6 +54,9 @@ handleUnhandledRejection();
       }
 
       await worker.addTracking(process.pid, generateFiles(configNames));
+
+      if (!keep) logger.succeed('Done.');
+
       break;
   }
 })();

@@ -7,10 +7,9 @@ import debug from 'debug';
 import { version } from '../../package.json';
 
 export type optionsType = {|
-  type: 'start' | 'kill' | 'run',
+  type: 'start' | 'watch' | 'kill' | 'init',
   configNames?: $ReadOnlyArray<string>,
   keep?: boolean,
-  commands?: $ReadOnlyArray<string>,
 |};
 
 const debugLog = debug('miko:getOptions');
@@ -35,9 +34,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
   miko {green babel}
   miko {green babel} {gray --keep}
   miko {cyan kill}
-  miko {cyan run} {green 'babel src -d lib'}
-  miko {cyan run} {green 'lerna exec "babel src -d lib $1" --stream' 'echo "-w"'}
-  miko {cyan run} {green "lerna exec 'babel src -d lib \\$1' --stream" "echo '-w'"}`,
+  miko {cyan init}`,
       )
       .option('--keep', 'use to keep server working, not auto close')
       .action(
@@ -58,13 +55,10 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       });
 
     program
-      .command('run')
-      .description('the helper to run the scripts in the package.json')
-      .action((_: mixed, commands: $ReadOnlyArray<string>) => {
-        resolve({
-          type: 'run',
-          commands,
-        });
+      .command('init')
+      .description('initialize the scripts of the package.json')
+      .action(() => {
+        resolve({ type: 'init' });
       });
 
     debugLog(argv);

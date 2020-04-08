@@ -1,6 +1,52 @@
 # CHANGELOG
 
-## v1.9.1 (2020-03-04)
+## 1.9.2 (2020-04-08)
+
+#### :rocket: New Feature
+
+- `miko`
+  - [#579](https://github.com/mikojs/core/pull/579) (@mikos/miko) Add run command ([@HsuTing](https://github.com/HsuTing))
+  - [#576](https://github.com/mikojs/core/pull/576) (@mikojs/miko) Use keep options ([@HsuTing](https://github.com/HsuTing))
+  - [#575](https://github.com/mikojs/core/pull/575) (@mikojs/miko) Add live mode ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `miko`, `worker`
+  - [#572](https://github.com/mikojs/core/pull/572) (@mikojs/miko) Add new package ([@HsuTing](https://github.com/HsuTing))
+- `worker`
+  - [#571](https://github.com/mikojs/core/pull/571) (@mikojs/worker) Can send message ([@HsuTing](https://github.com/HsuTing))
+  - [#569](https://github.com/mikojs/core/pull/569) (@mikojs/worker) Support reject error ([@HsuTing](https://github.com/HsuTing))
+  - [#566](https://github.com/mikojs/core/pull/566) (@mikojs/worker) Add new package ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#564](https://github.com/mikojs/core/pull/564) (@mikojs/configs) Modify config filepath ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#561](https://github.com/mikojs/core/pull/561) (@mikojs/configs) Use @mikojs/configs-base and @mikojs/configs-exec ([@HsuTing](https://github.com/HsuTing))
+  - [#559](https://github.com/mikojs/core/pull/559) (@mikojs/configs-base) Copy configs files ([@HsuTing](https://github.com/HsuTing))
+- `utils`
+  - [#560](https://github.com/mikojs/core/pull/560) (@mikojs/configs-exec) Add new package ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `miko`
+  - [#580](https://github.com/mikojs/core/pull/580) (@mikojs/miko) Fix miko detail error ([@HsuTing](https://github.com/HsuTing))
+  - [#578](https://github.com/mikojs/core/pull/578) (@mikojs/miko) Fix timer time ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#570](https://github.com/mikojs/core/pull/570) chore(deps): bump acorn from 6.1.0 to 6.4.1 ([@dependabot[bot]](https://github.com/apps/dependabot))
+
+#### :house: Internal
+
+- `miko`
+  - [#581](https://github.com/mikojs/core/pull/581) (@mikojs/miko) Revert run command ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#574](https://github.com/mikojs/core/pull/574) (@mikojs/babel-plugin-import-css) Modify code style ([@HsuTing](https://github.com/HsuTing))
+  - [#558](https://github.com/mikojs/core/pull/558) (@mikojs/configs) Add configs workspace ([@HsuTing](https://github.com/HsuTing))
+- `badges`
+  - [#573](https://github.com/mikojs/core/pull/573) (@mikojs/badges) Rename filenames ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `utils`
+  - [#563](https://github.com/mikojs/core/pull/563) (@mikojs/configs) Revert commit ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.9.1 (2020-03-04)
 
 #### :boom: Breaking Change
 

@@ -1,8 +1,27 @@
 // @flow
 
+import path from 'path';
+
 import getOptions, { type optionsType } from '../getOptions';
+import cache from '../cache';
 
 describe('get options', () => {
+  beforeAll(() => {
+    cache.load({
+      filepath: path.resolve('.mikorc.js'),
+      config: [
+        {
+          miko: () => ({
+            install: {
+              command: 'yarn install && yarn lerna bootstrap',
+              description: 'install the packages in the monorepo',
+            },
+          }),
+        },
+      ],
+    });
+  });
+
   test.each`
     argv                           | expected
     ${[]}                          | ${{ type: 'start', configNames: [], keep: false }}
@@ -12,6 +31,7 @@ describe('get options', () => {
     ${['--keep', 'babel']}         | ${{ type: 'start', configNames: ['babel'], keep: true }}
     ${['--keep', 'babel', 'lint']} | ${{ type: 'start', configNames: ['babel', 'lint'], keep: true }}
     ${['kill']}                    | ${{ type: 'kill' }}
+    ${['install']}                 | ${{ type: 'command', command: 'yarn install && yarn lerna bootstrap' }}
   `(
     'run $argv',
     async ({

@@ -40,6 +40,12 @@ const migrateConfigs = configs =>
 
 module.exports = [
   {
+    miko: () => ({
+      install: {
+        command: 'yarn install && yarn lerna bootstrap',
+        description: 'install the packages in the monorepo',
+      },
+    }),
     babel: {
       filenames: {
         config: 'babel.config.js',

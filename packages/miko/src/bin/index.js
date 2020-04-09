@@ -21,20 +21,24 @@ const debugLog = debug('miko:bin');
 handleUnhandledRejection();
 
 (async () => {
-  const { type, configNames = [], keep = false } = await getOptions(
+  const { type, configNames = [], keep = false, command } = await getOptions(
     process.argv,
   );
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
 
-  debugLog({ type, configNames, keep });
+  debugLog({ type, configNames, keep, command });
   logger.start('Running');
 
   switch (type) {
     case 'kill':
       await worker.killAllEvents();
       logger.succeed('Done.');
+      break;
+
+    case 'command':
+      logger.info(chalk`{gray Run command: ${command}}`);
       break;
 
     default:

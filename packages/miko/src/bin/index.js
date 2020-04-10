@@ -26,13 +26,13 @@ handleUnhandledRejection();
     configNames = [],
     keep = false,
     otherArgs = [],
-    getCommand,
+    getCommands,
   } = await getOptions(process.argv);
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
 
-  debugLog({ type, configNames, keep, getCommand });
+  debugLog({ type, configNames, keep, getCommands });
   logger.start('Running');
 
   switch (type) {
@@ -42,14 +42,17 @@ handleUnhandledRejection();
       break;
 
     case 'command':
-      const command = getCommand?.() || [[]];
+      const commands = getCommands?.() || [[]];
 
+      await worker.addTracking(process.pid, generateFiles(configNames));
       logger.info(
-        chalk`{gray Run command: ${command
+        chalk`{gray Run command: ${commands
           .map(
-            (key: $ReadOnlyArray<string>, index: number) =>
-              `${key.join(' ')}${
-                index !== command.length - 1 ? '' : ['', ...otherArgs].join(' ')
+            (command: $ReadOnlyArray<string>, index: number) =>
+              `${command.join(' ')}${
+                index !== commands.length - 1
+                  ? ''
+                  : ['', ...otherArgs].join(' ')
               }`,
           )
           .join(' && ')}}`,

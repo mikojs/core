@@ -59,13 +59,13 @@ describe('get options', () => {
 
       global.console.error = mockLog;
 
-      const { getCommand, ...options } = await getOptions([
+      const { getCommands, ...options } = await getOptions([
         'node',
         'miko',
         ...argv,
       ]);
 
-      expect({ ...options, command: getCommand?.() }).toEqual(expected);
+      expect({ ...options, command: getCommands?.() }).toEqual(expected);
       (!expected ? expect(mockLog) : expect(mockLog).not).toHaveBeenCalled();
     },
   );

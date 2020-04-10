@@ -12,9 +12,16 @@ describe('get options', () => {
       config: [
         {
           miko: () => ({
-            install: {
+            cmdString: {
               command: 'yarn install && yarn lerna bootstrap',
-              description: 'install the packages in the monorepo',
+              description: 'cmd string',
+            },
+            cmdFunc: {
+              command: () => [
+                ['yarn', 'install'],
+                ['yarn', 'lerna', 'bootstrap'],
+              ],
+              description: 'cmd func',
             },
           }),
         },
@@ -31,7 +38,14 @@ describe('get options', () => {
     ${['--keep', 'babel']}         | ${{ type: 'start', configNames: ['babel'], keep: true }}
     ${['--keep', 'babel', 'lint']} | ${{ type: 'start', configNames: ['babel', 'lint'], keep: true }}
     ${['kill']}                    | ${{ type: 'kill' }}
-    ${['install']}                 | ${{ type: 'command', command: 'yarn install && yarn lerna bootstrap' }}
+    ${['cmdString']} | ${{ type: 'command', command: [
+    ['yarn', 'install'],
+    ['yarn', 'lerna', 'bootstrap'],
+  ] }}
+    ${['cmdFunc']} | ${{ type: 'command', command: [
+    ['yarn', 'install'],
+    ['yarn', 'lerna', 'bootstrap'],
+  ] }}
   `(
     'run $argv',
     async ({
@@ -45,7 +59,13 @@ describe('get options', () => {
 
       global.console.error = mockLog;
 
-      expect(await getOptions(['node', 'miko', ...argv])).toEqual(expected);
+      const { getCommand, ...options } = await getOptions([
+        'node',
+        'miko',
+        ...argv,
+      ]);
+
+      expect({ ...options, command: getCommand?.() }).toEqual(expected);
       (!expected ? expect(mockLog) : expect(mockLog).not).toHaveBeenCalled();
     },
   );

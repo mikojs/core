@@ -7,13 +7,15 @@ import { invariant } from 'fbjs';
 
 import { version } from '../../package.json';
 
+import getCommand from './getCommand';
+
 import cache from './cache';
 
 export type optionsType = {|
   type: 'start' | 'kill' | 'command',
   configNames?: $ReadOnlyArray<string>,
   keep?: boolean,
-  command?: string,
+  getCommand?: () => $ReadOnlyArray<$ReadOnlyArray<string>>,
 |};
 
 const debugLog = debug('miko:getOptions');
@@ -69,7 +71,11 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
         .command(key)
         .description(description)
         .action(() => {
-          resolve({ type: 'command', command });
+          resolve({
+            type: 'command',
+            getCommand:
+              typeof command === 'string' ? () => getCommand(command) : command,
+          });
         });
     });
 

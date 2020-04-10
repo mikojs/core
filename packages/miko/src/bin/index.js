@@ -21,14 +21,14 @@ const debugLog = debug('miko:bin');
 handleUnhandledRejection();
 
 (async () => {
-  const { type, configNames = [], keep = false, command } = await getOptions(
+  const { type, configNames = [], keep = false, getCommand } = await getOptions(
     process.argv,
   );
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
 
-  debugLog({ type, configNames, keep, command });
+  debugLog({ type, configNames, keep, getCommand });
   logger.start('Running');
 
   switch (type) {
@@ -38,7 +38,13 @@ handleUnhandledRejection();
       break;
 
     case 'command':
-      logger.info(chalk`{gray Run command: ${command}}`);
+      const command = getCommand?.() || [[]];
+
+      logger.info(
+        chalk`{gray Run command: ${command
+          .map((key: $ReadOnlyArray<string>) => key.join(' '))
+          .join('&&')}}`,
+      );
       break;
 
     default:

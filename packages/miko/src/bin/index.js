@@ -6,6 +6,7 @@ import path from 'path';
 import ora from 'ora';
 import chalk from 'chalk';
 import debug from 'debug';
+import execa from 'execa';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import buildWorker from '@mikojs/worker';
@@ -56,6 +57,15 @@ handleUnhandledRejection();
               }`,
           )
           .join(' && ')}}`,
+      );
+      await commands.reduce(
+        (result: Promise<void>, command: $ReadOnlyArray<string>) =>
+          result.then(() =>
+            execa(command[0], command.slice(1), {
+              stdout: 'inherit',
+            }),
+          ),
+        Promise.resolve(),
       );
       break;
 

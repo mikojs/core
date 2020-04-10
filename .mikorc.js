@@ -41,9 +41,13 @@ const migrateConfigs = configs =>
 module.exports = [
   {
     miko: () => ({
-      install: {
-        command: 'yarn install && yarn lerna bootstrap',
-        description: 'install the packages in the monorepo',
+      test1: {
+        command: 'ls && ls -a',
+        description: 'test',
+      },
+      test2: {
+        command: () => [['ls'], ['ls', '-a']],
+        description: 'test',
       },
     }),
     babel: {

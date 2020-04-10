@@ -21,9 +21,13 @@ const debugLog = debug('miko:bin');
 handleUnhandledRejection();
 
 (async () => {
-  const { type, configNames = [], keep = false, getCommand } = await getOptions(
-    process.argv,
-  );
+  const {
+    type,
+    configNames = [],
+    keep = false,
+    otherArgs = [],
+    getCommand,
+  } = await getOptions(process.argv);
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
@@ -42,8 +46,13 @@ handleUnhandledRejection();
 
       logger.info(
         chalk`{gray Run command: ${command
-          .map((key: $ReadOnlyArray<string>) => key.join(' '))
-          .join('&&')}}`,
+          .map(
+            (key: $ReadOnlyArray<string>, index: number) =>
+              `${key.join(' ')}${
+                index !== command.length - 1 ? '' : ['', ...otherArgs].join(' ')
+              }`,
+          )
+          .join(' && ')}}`,
       );
       break;
 

@@ -15,6 +15,7 @@ export type optionsType = {|
   type: 'start' | 'kill' | 'command',
   configNames?: $ReadOnlyArray<string>,
   keep?: boolean,
+  otherArgs?: $ReadOnlyArray<string>,
   getCommand?: () => $ReadOnlyArray<$ReadOnlyArray<string>>,
 |};
 
@@ -70,13 +71,23 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       program
         .command(key)
         .description(description)
-        .action(() => {
-          resolve({
-            type: 'command',
-            getCommand:
-              typeof command === 'string' ? () => getCommand(command) : command,
-          });
-        });
+        .allowUnknownOption()
+        .action(
+          ({
+            parent: { rawArgs },
+          }: {
+            parent: { rawArgs: $ReadOnlyArray<string> },
+          }) => {
+            resolve({
+              type: 'command',
+              otherArgs: rawArgs.slice(3),
+              getCommand:
+                typeof command === 'string'
+                  ? () => getCommand(command)
+                  : command,
+            });
+          },
+        );
     });
 
     debugLog(argv);

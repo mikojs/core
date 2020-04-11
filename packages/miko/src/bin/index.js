@@ -58,15 +58,21 @@ handleUnhandledRejection();
           )
           .join(' && ')}}`,
       );
-      await commands.reduce(
-        (result: Promise<void>, command: $ReadOnlyArray<string>) =>
-          result.then(() =>
-            execa(command[0], command.slice(1), {
-              stdout: 'inherit',
-            }),
-          ),
-        Promise.resolve(),
-      );
+
+      try {
+        await commands.reduce(
+          (result: Promise<void>, command: $ReadOnlyArray<string>) =>
+            result.then(() =>
+              execa(command[0], command.slice(1), {
+                stdio: 'inherit',
+              }),
+            ),
+          Promise.resolve(),
+        );
+      } catch (e) {
+        debugLog(e);
+        process.exit(e.code);
+      }
       break;
 
     default:

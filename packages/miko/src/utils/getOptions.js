@@ -65,7 +65,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       const { command, description } = configs[key];
 
       invariant(
-        !['kill'].includes(key),
+        !program.commands.some(({ _name }: { _name: string }) => _name === key),
         `Can not set the existing command: ${key}`,
       );
       program

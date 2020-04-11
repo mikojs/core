@@ -5,6 +5,11 @@ import path from 'path';
 import getOptions, { type optionsType } from '../getOptions';
 import cache from '../cache';
 
+const expectedCommand = [
+  ['yarn', 'install'],
+  ['yarn', 'lerna', 'bootstrap'],
+];
+
 describe('get options', () => {
   beforeAll(() => {
     cache.load({
@@ -38,14 +43,8 @@ describe('get options', () => {
     ${['--keep', 'babel']}         | ${{ type: 'start', configNames: ['babel'], keep: true }}
     ${['--keep', 'babel', 'lint']} | ${{ type: 'start', configNames: ['babel', 'lint'], keep: true }}
     ${['kill']}                    | ${{ type: 'kill' }}
-    ${['cmdString']} | ${{ type: 'command', command: [
-    ['yarn', 'install'],
-    ['yarn', 'lerna', 'bootstrap'],
-  ] }}
-    ${['cmdFunc']} | ${{ type: 'command', command: [
-    ['yarn', 'install'],
-    ['yarn', 'lerna', 'bootstrap'],
-  ] }}
+    ${['cmdString']}               | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
+    ${['cmdFunc']}                 | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
   `(
     'run $argv',
     async ({

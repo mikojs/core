@@ -36,8 +36,8 @@ export default () => ({
     description: 'run jest without generating the coverage',
   },
   test: {
-    command: 'jest --slient',
-    description: 'run jest in the slient mode',
+    command: 'jest --silent',
+    description: 'run jest in the silent mode',
   },
   'flow-typed': {
     command: 'flow-typed install --verbose',

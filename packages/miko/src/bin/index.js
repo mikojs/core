@@ -6,6 +6,7 @@ import path from 'path';
 import ora from 'ora';
 import chalk from 'chalk';
 import debug from 'debug';
+import execa from 'execa';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import buildWorker from '@mikojs/worker';
@@ -21,20 +22,51 @@ const debugLog = debug('miko:bin');
 handleUnhandledRejection();
 
 (async () => {
-  const { type, configNames = [], keep = false } = await getOptions(
-    process.argv,
-  );
+  const {
+    type,
+    configNames = [],
+    keep = false,
+    otherArgs = [],
+    getCommands,
+  } = await getOptions(process.argv);
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
 
-  debugLog({ type, configNames, keep });
+  debugLog({ type, configNames, keep, getCommands });
   logger.start('Running');
 
   switch (type) {
     case 'kill':
       await worker.killAllEvents();
       logger.succeed('Done.');
+      break;
+
+    case 'command':
+      const commands = getCommands?.() || [[]];
+
+      await worker.addTracking(process.pid, generateFiles(configNames));
+      logger.info(
+        chalk`{gray Run command: ${commands
+          .map(
+            (command: $ReadOnlyArray<string>, index: number) =>
+              `${command.join(' ')}${
+                index !== commands.length - 1
+                  ? ''
+                  : ['', ...otherArgs].join(' ')
+              }`,
+          )
+          .join(' && ')}}`,
+      );
+      await commands.reduce(
+        (result: Promise<void>, command: $ReadOnlyArray<string>) =>
+          result.then(() =>
+            execa(command[0], command.slice(1), {
+              stdout: 'inherit',
+            }),
+          ),
+        Promise.resolve(),
+      );
       break;
 
     default:

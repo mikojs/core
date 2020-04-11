@@ -40,6 +40,16 @@ const migrateConfigs = configs =>
 
 module.exports = [
   {
+    miko: () => ({
+      test1: {
+        command: 'ls && ls -a',
+        description: 'test',
+      },
+      test2: {
+        command: () => [['ls'], ['ls', '-a']],
+        description: 'test',
+      },
+    }),
     babel: {
       filenames: {
         config: 'babel.config.js',

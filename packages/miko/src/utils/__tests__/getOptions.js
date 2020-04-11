@@ -1,8 +1,39 @@
 // @flow
 
+import path from 'path';
+
 import getOptions, { type optionsType } from '../getOptions';
+import cache from '../cache';
+
+const expectedCommand = [
+  ['yarn', 'install'],
+  ['yarn', 'lerna', 'bootstrap'],
+];
 
 describe('get options', () => {
+  beforeAll(() => {
+    cache.load({
+      filepath: path.resolve('.mikorc.js'),
+      config: [
+        {
+          miko: () => ({
+            cmdString: {
+              command: 'yarn install && yarn lerna bootstrap',
+              description: 'cmd string',
+            },
+            cmdFunc: {
+              command: () => [
+                ['yarn', 'install'],
+                ['yarn', 'lerna', 'bootstrap'],
+              ],
+              description: 'cmd func',
+            },
+          }),
+        },
+      ],
+    });
+  });
+
   test.each`
     argv                           | expected
     ${[]}                          | ${{ type: 'start', configNames: [], keep: false }}
@@ -12,6 +43,9 @@ describe('get options', () => {
     ${['--keep', 'babel']}         | ${{ type: 'start', configNames: ['babel'], keep: true }}
     ${['--keep', 'babel', 'lint']} | ${{ type: 'start', configNames: ['babel', 'lint'], keep: true }}
     ${['kill']}                    | ${{ type: 'kill' }}
+    ${['cmdString']}               | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
+    ${['cmdFunc']}                 | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
+    ${['cmdFunc', '-a']}           | ${{ type: 'command', otherArgs: ['-a'], command: expectedCommand }}
   `(
     'run $argv',
     async ({
@@ -25,7 +59,13 @@ describe('get options', () => {
 
       global.console.error = mockLog;
 
-      expect(await getOptions(['node', 'miko', ...argv])).toEqual(expected);
+      const { getCommands, ...options } = await getOptions([
+        'node',
+        'miko',
+        ...argv,
+      ]);
+
+      expect({ ...options, command: getCommands?.() }).toEqual(expected);
       (!expected ? expect(mockLog) : expect(mockLog).not).toHaveBeenCalled();
     },
   );

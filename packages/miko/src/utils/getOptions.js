@@ -3,13 +3,20 @@
 import commander from 'commander';
 import chalk from 'chalk';
 import debug from 'debug';
+import { invariant } from 'fbjs';
 
 import { version } from '../../package.json';
 
+import getCommands from './getCommands';
+
+import cache from './cache';
+
 export type optionsType = {|
-  type: 'start' | 'kill',
+  type: 'start' | 'kill' | 'command',
   configNames?: $ReadOnlyArray<string>,
   keep?: boolean,
+  otherArgs?: $ReadOnlyArray<string>,
+  getCommands?: () => $ReadOnlyArray<$ReadOnlyArray<string>>,
 |};
 
 const debugLog = debug('miko:getOptions');
@@ -24,6 +31,7 @@ const debugLog = debug('miko:getOptions');
  */
 export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
   new Promise((resolve, reject) => {
+    const configs = cache.get('miko').config?.({}) || {};
     const program = new commander.Command('miko')
       .version(version, '-v, --version')
       .arguments('[configNames...]')
@@ -52,6 +60,35 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       .action(() => {
         resolve({ type: 'kill' });
       });
+
+    Object.keys(configs).forEach((key: string) => {
+      const { command, description } = configs[key];
+
+      invariant(
+        !program.commands.some(({ _name }: { _name: string }) => _name === key),
+        `Can not set the existing command: ${key}`,
+      );
+      program
+        .command(key)
+        .description(description)
+        .allowUnknownOption()
+        .action(
+          ({
+            parent: { rawArgs },
+          }: {
+            parent: { rawArgs: $ReadOnlyArray<string> },
+          }) => {
+            resolve({
+              type: 'command',
+              otherArgs: rawArgs.slice(3),
+              getCommands:
+                typeof command === 'string'
+                  ? () => getCommands(command)
+                  : command,
+            });
+          },
+        );
+    });
 
     debugLog(argv);
 

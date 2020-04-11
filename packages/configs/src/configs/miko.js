@@ -20,7 +20,7 @@ export default () => ({
     description: 'run prettier with `--write` option',
   },
   lint: {
-    command: 'lint --cache',
+    command: 'eslint --cache',
     description: 'run eslint with generating the cache',
   },
   'lint:watch': {

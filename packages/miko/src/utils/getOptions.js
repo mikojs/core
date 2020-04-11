@@ -70,7 +70,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
       );
       program
         .command(key)
-        .description(description)
+        .description(chalk`{gray (custom)} ${description}`)
         .allowUnknownOption()
         .action(
           ({

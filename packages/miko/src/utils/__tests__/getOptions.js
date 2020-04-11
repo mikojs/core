@@ -7,7 +7,7 @@ import cache from '../cache';
 
 const expectedCommand = [
   ['yarn', 'install'],
-  ['yarn', 'lerna', 'bootstrap'],
+  ['lerna', 'bootstrap'],
 ];
 
 describe('get options', () => {
@@ -18,13 +18,13 @@ describe('get options', () => {
         {
           miko: () => ({
             cmdString: {
-              command: 'yarn install && yarn lerna bootstrap',
+              command: 'yarn install && lerna bootstrap',
               description: 'cmd string',
             },
             cmdFunc: {
               command: () => [
                 ['yarn', 'install'],
-                ['yarn', 'lerna', 'bootstrap'],
+                ['lerna', 'bootstrap'],
               ],
               description: 'cmd func',
             },

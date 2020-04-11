@@ -7,24 +7,28 @@
  * @return {object} - miko default config
  */
 export default () => ({
-  dev: {
-    command: 'babel src -d lib --verbose -w',
-    description: 'run babel in the dev mode',
-  },
   build: {
     command: 'babel src -d lib --verbose',
     description: 'run babel in the build mode',
+  },
+  dev: {
+    command: 'miko build -w',
+    description: 'run babel in the dev mode',
+  },
+  prod: {
+    command: 'NODE_ENV=production miko build',
+    description: 'run babel in the production mode',
   },
   prettier: {
     command: 'prettier --write',
     description: 'run prettier with `--write` option',
   },
   lint: {
-    command: 'eslint --cache',
+    command: 'esw --cache --color',
     description: 'run eslint with generating the cache',
   },
   'lint:watch': {
-    command: 'esw --cache --color -w --quiet --rule "prettier/prettier: off"',
+    command: 'miko lint -w --quiet --rule "prettier/prettier: off"',
     description: 'run eslint in the watch mode',
   },
   jest: {

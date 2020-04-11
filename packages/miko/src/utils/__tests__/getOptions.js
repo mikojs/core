@@ -45,6 +45,7 @@ describe('get options', () => {
     ${['kill']}                    | ${{ type: 'kill' }}
     ${['cmdString']}               | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
     ${['cmdFunc']}                 | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
+    ${['cmdFunc', '-a']}           | ${{ type: 'command', otherArgs: ['-a'], command: expectedCommand }}
   `(
     'run $argv',
     async ({

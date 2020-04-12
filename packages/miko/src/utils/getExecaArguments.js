@@ -26,7 +26,11 @@ export default (commands: $ElementType<commandsType, number>): resultType => {
       if (!hasEnv) {
         return result[0] === ''
           ? [command, result[1], result[2]]
-          : [result[0], [...result[1], command], result[2]];
+          : [
+              result[0],
+              [...result[1], command.replace(/^['"]/, '').replace(/['"]$/, '')],
+              result[2],
+            ];
       }
 
       const [key, value] = command.split(/=/);
@@ -43,6 +47,6 @@ export default (commands: $ElementType<commandsType, number>): resultType => {
         },
       ];
     },
-    ['', [''], { stdio: 'inherit', env: {} }],
+    ['', [], { stdio: 'inherit', env: {} }],
   );
 };

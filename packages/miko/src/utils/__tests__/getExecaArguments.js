@@ -5,9 +5,9 @@ import { type commandsType } from '../getCommands';
 
 describe('get execa arguments', () => {
   test.each`
-    commands                                   | env                           | expected
-    ${['NODE_ENV=production', 'echo', 'test']} | ${{ NODE_ENV: 'production' }} | ${['echo', ['test']]}
-    ${['echo', 'test', 'NODE_ENV=production']} | ${{}}                         | ${['echo', ['test', 'NODE_ENV=production']]}
+    commands                                     | env                           | expected
+    ${['NODE_ENV=production', 'echo', '"test"']} | ${{ NODE_ENV: 'production' }} | ${['echo', ['test']]}
+    ${['echo', '"test"', 'NODE_ENV=production']} | ${{}}                         | ${['echo', ['test', 'NODE_ENV=production']]}
   `(
     'run $commands',
     ({

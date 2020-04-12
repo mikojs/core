@@ -13,7 +13,6 @@ export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
  * @param {Array} otherArgs - other arguments
  *
  * @return {commandsType} - commands array
- *
  */
 const getCommands = (
   command: string | (() => commandsType),

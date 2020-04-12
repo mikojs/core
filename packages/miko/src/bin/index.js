@@ -46,6 +46,7 @@ handleUnhandledRejection();
     case 'command':
       const commands = getCommands?.() || [[]];
 
+      debugLog(commands);
       await worker.addTracking(process.pid, generateFiles(configNames));
       logger.info(
         chalk`{gray Run command: ${commands

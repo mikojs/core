@@ -14,6 +14,7 @@ import buildWorker from '@mikojs/worker';
 import getOptions from 'utils/getOptions';
 import generateFiles from 'utils/generateFiles';
 import { type commandsType } from 'utils/getCommands';
+import getExecaArguments from 'utils/getExecaArguments';
 
 import typeof * as workerType from 'worker';
 
@@ -68,12 +69,7 @@ handleUnhandledRejection();
           (
             result: Promise<void>,
             command: $ElementType<commandsType, number>,
-          ) =>
-            result.then(() =>
-              execa(command[0], command.slice(1), {
-                stdio: 'inherit',
-              }),
-            ),
+          ) => result.then(() => execa(...getExecaArguments(command))),
           Promise.resolve(),
         );
       } catch (e) {

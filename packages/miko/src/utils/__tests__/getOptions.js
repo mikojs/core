@@ -32,6 +32,10 @@ describe('get options', () => {
               command: 'miko cmdString -a',
               description: 'merge cmd',
             },
+            mergeEnv: {
+              command: 'NODE_ENV=production miko cmdString',
+              description: 'merge env',
+            },
           }),
         },
       ],
@@ -51,6 +55,7 @@ describe('get options', () => {
     ${['cmdFunc']}                 | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
     ${['cmdFunc', '-a']}           | ${{ type: 'command', otherArgs: ['-a'], command: expectedCommand }}
     ${['mergeCmd']}                | ${{ type: 'command', otherArgs: [], command: [expectedCommand[0], [...expectedCommand[1], '-a']] }}
+    ${['mergeEnv']}                | ${{ type: 'command', otherArgs: [], command: [['NODE_ENV=production', ...expectedCommand[0]], expectedCommand[1]] }}
   `(
     'run $argv',
     async ({

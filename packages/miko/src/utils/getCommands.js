@@ -46,12 +46,40 @@ const getCommandsArray = (command: string): commandsType => {
  * @return {commandsType} - commands array
  *
  */
-export default (
+const getCommands = (
   command: string | (() => commandsType),
   configs: {},
-): commandsType => {
-  const commandsArray =
-    typeof command === 'string' ? getCommandsArray(command) : command();
+): commandsType =>
+  (typeof command === 'string' ? getCommandsArray(command) : command()).reduce(
+    (
+      result: commandsType,
+      commands: $ElementType<commandsType, number>,
+    ): commandsType => {
+      const mikoCommandIndex = commands.findIndex(
+        (key: string, index: number) =>
+          index !== 0 && commands[index - 1] === 'miko',
+      );
 
-  return commandsArray;
-};
+      if (mikoCommandIndex !== -1) {
+        const mikoCommand = [
+          ...getCommands(configs[commands[mikoCommandIndex]].command, configs),
+        ];
+
+        mikoCommand[0] = [
+          ...commands.slice(0, mikoCommandIndex - 1),
+          ...mikoCommand[0],
+        ];
+        mikoCommand[mikoCommand.length - 1] = [
+          ...mikoCommand[mikoCommand.length - 1],
+          ...commands.slice(mikoCommandIndex + 1),
+        ];
+
+        return [...result, ...mikoCommand];
+      }
+
+      return [...result, commands];
+    },
+    [],
+  );
+
+export default getCommands;

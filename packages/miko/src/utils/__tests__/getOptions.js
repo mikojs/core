@@ -7,9 +7,9 @@ import cache from '../cache';
 
 const expectedCommand = [
   ['yarn', 'install'],
-  ['lerna', 'exec', 'echo "test"'],
-  ['echo', 'test'],
-  ['echo', 'test test'],
+  ['lerna', 'exec', '\'echo "test"\''],
+  ['echo', '"test"'],
+  ['echo', '"test test"'],
 ];
 
 describe('get options', () => {
@@ -27,9 +27,9 @@ describe('get options', () => {
             cmdFunc: {
               command: () => [
                 ['yarn', 'install'],
-                ['lerna', 'exec', 'echo "test"'],
-                ['echo', 'test'],
-                ['echo', 'test test'],
+                ['lerna', 'exec', '\'echo "test"\''],
+                ['echo', '"test"'],
+                ['echo', '"test test"'],
               ],
               description: 'cmd func',
             },

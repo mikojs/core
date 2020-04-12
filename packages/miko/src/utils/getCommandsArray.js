@@ -16,19 +16,6 @@ const quotationEnd = /['"]$/;
 export default (command: string): commandsType => {
   let hasQuotation: number = 0;
 
-  /**
-   * @example
-   * replaceQuotation('"test"')
-   *
-   * @param {string} str - replaced string
-   *
-   * @return {string} - new string
-   */
-  const replaceQuotation = (str: string) =>
-    hasQuotation !== 0
-      ? str
-      : str.replace(quotationStart, '').replace(quotationEnd, '');
-
   return command.split(/ /).reduce(
     (result: commandsType, key: string): commandsType => {
       const [lastResult] = result.slice(-1);
@@ -40,17 +27,14 @@ export default (command: string): commandsType => {
 
         return [
           ...result.slice(0, -1),
-          [
-            ...lastResult.slice(0, -1),
-            replaceQuotation(`${lastResult.slice(-1)[0]} ${key}`),
-          ],
+          [...lastResult.slice(0, -1), `${lastResult.slice(-1)[0]} ${key}`],
         ];
       }
 
       if (quotationStart.test(key) && !quotationEnd.test(key))
         hasQuotation += 1;
 
-      return [...result.slice(0, -1), [...lastResult, replaceQuotation(key)]];
+      return [...result.slice(0, -1), [...lastResult, key]];
     },
     [[]],
   );

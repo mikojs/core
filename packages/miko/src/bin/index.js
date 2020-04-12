@@ -67,7 +67,17 @@ handleUnhandledRejection();
           (
             result: Promise<void>,
             command: $ElementType<commandsType, number>,
-          ) => result.then(() => execa(...getExecaArguments(command))),
+            index: number,
+          ) =>
+            result.then(() =>
+              execa(
+                ...getExecaArguments(
+                  index !== commands.length - 1
+                    ? command
+                    : [...command, ...otherArgs],
+                ),
+              ),
+            ),
           Promise.resolve(),
         );
       } catch (e) {

@@ -23,7 +23,7 @@ export default (commands: $ElementType<commandsType, number>): resultType => {
     (result: resultType, command: string): resultType => {
       if (hasEnv && !/=/.test(command)) hasEnv = false;
 
-      if (!hasEnv) {
+      if (!hasEnv)
         return result[0] === ''
           ? [command, result[1], result[2]]
           : [
@@ -31,7 +31,6 @@ export default (commands: $ElementType<commandsType, number>): resultType => {
               [...result[1], command.replace(/^['"]/, '').replace(/['"]$/, '')],
               result[2],
             ];
-      }
 
       const [key, value] = command.split(/=/);
 

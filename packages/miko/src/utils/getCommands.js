@@ -33,7 +33,8 @@ const getCommands = (
           : [...commands, ...otherArgs];
       const mikoCommandIndex = currentCommands.findIndex(
         (key: string, currentCommandIndex: number) =>
-          index !== 0 && currentCommands[currentCommandIndex - 1] === 'miko',
+          currentCommandIndex !== 0 &&
+          currentCommands[currentCommandIndex - 1] === 'miko',
       );
 
       if (mikoCommandIndex !== -1) {

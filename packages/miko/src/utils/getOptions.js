@@ -15,7 +15,6 @@ export type optionsType = {|
   type: 'start' | 'kill' | 'command',
   configNames?: $ReadOnlyArray<string>,
   keep?: boolean,
-  otherArgs?: $ReadOnlyArray<string>,
   getCommands?: () => commandsType,
 |};
 
@@ -80,8 +79,8 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
           }) => {
             resolve({
               type: 'command',
-              otherArgs: rawArgs.slice(3),
-              getCommands: () => getCommands(command, configs),
+              getCommands: () =>
+                getCommands(command, configs, rawArgs.slice(3)),
             });
           },
         );

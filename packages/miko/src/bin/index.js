@@ -28,7 +28,6 @@ handleUnhandledRejection();
     type,
     configNames = [],
     keep = false,
-    otherArgs = [],
     getCommands,
   } = await getOptions(process.argv);
   const worker = await buildWorker<workerType>(
@@ -51,13 +50,8 @@ handleUnhandledRejection();
       await worker.addTracking(process.pid, generateFiles(configNames));
       logger.info(
         chalk`{gray Run command: ${commands
-          .map(
-            (command: $ElementType<commandsType, number>, index: number) =>
-              `${command.join(' ')}${
-                index !== commands.length - 1
-                  ? ''
-                  : ['', ...otherArgs].join(' ')
-              }`,
+          .map((command: $ElementType<commandsType, number>, index: number) =>
+            command.join(' '),
           )
           .join(' && ')}}`,
       );
@@ -68,16 +62,7 @@ handleUnhandledRejection();
             result: Promise<void>,
             command: $ElementType<commandsType, number>,
             index: number,
-          ) =>
-            result.then(() =>
-              execa(
-                ...getExecaArguments(
-                  index !== commands.length - 1
-                    ? command
-                    : [...command, ...otherArgs],
-                ),
-              ),
-            ),
+          ) => result.then(() => execa(...getExecaArguments(command))),
           Promise.resolve(),
         );
       } catch (e) {

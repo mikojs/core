@@ -6,6 +6,8 @@ import getOptions, { type optionsType } from '../getOptions';
 import cache from '../cache';
 
 const expectedCommand = [
+  ['yarn', 'install'],
+  ['lerna', 'exec', 'echo "test"'],
   ['echo', 'test'],
   ['echo', 'test test'],
 ];
@@ -18,11 +20,14 @@ describe('get options', () => {
         {
           miko: () => ({
             cmdString: {
-              command: 'echo "test" && echo "test test"',
+              command:
+                'yarn install && lerna exec \'echo "test"\' && echo "test" && echo "test test"',
               description: 'cmd string',
             },
             cmdFunc: {
               command: () => [
+                ['yarn', 'install'],
+                ['lerna', 'exec', 'echo "test"'],
                 ['echo', 'test'],
                 ['echo', 'test test'],
               ],
@@ -54,8 +59,8 @@ describe('get options', () => {
     ${['cmdString']}               | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
     ${['cmdFunc']}                 | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
     ${['cmdFunc', '-a']}           | ${{ type: 'command', otherArgs: ['-a'], command: expectedCommand }}
-    ${['mergeCmd']}                | ${{ type: 'command', otherArgs: [], command: [expectedCommand[0], [...expectedCommand[1], '-a']] }}
-    ${['mergeEnv']}                | ${{ type: 'command', otherArgs: [], command: [['NODE_ENV=production', ...expectedCommand[0]], expectedCommand[1]] }}
+    ${['mergeCmd']}                | ${{ type: 'command', otherArgs: [], command: [...expectedCommand.slice(0, -1), [...expectedCommand.slice(-1)[0], '-a']] }}
+    ${['mergeEnv']}                | ${{ type: 'command', otherArgs: [], command: [['NODE_ENV=production', ...expectedCommand[0]], ...expectedCommand.slice(1)] }}
   `(
     'run $argv',
     async ({

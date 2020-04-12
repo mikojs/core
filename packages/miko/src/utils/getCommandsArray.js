@@ -2,6 +2,9 @@
 
 import { type commandsType } from './getCommands';
 
+const quotationStart = /^['"]/;
+const quotationEnd = /['"]$/;
+
 /**
  * @example
  * getComandsArray('yarn install')
@@ -11,7 +14,20 @@ import { type commandsType } from './getCommands';
  * @return {commandsType} - commands array
  */
 export default (command: string): commandsType => {
-  let hasStarter: number = 0;
+  let hasQuotation: number = 0;
+
+  /**
+   * @example
+   * replaceQuotation('"test"')
+   *
+   * @param {string} str - replaced string
+   *
+   * @return {string} - new string
+   */
+  const replaceQuotation = (str: string) =>
+    hasQuotation !== 0
+      ? str
+      : str.replace(quotationStart, '').replace(quotationEnd, '');
 
   return command.split(/ /).reduce(
     (result: commandsType, key: string): commandsType => {
@@ -19,18 +35,22 @@ export default (command: string): commandsType => {
 
       if (key === '&&') return [...result, []];
 
-      if (hasStarter !== 0) {
-        if (/['"]$/.test(key)) hasStarter -= 1;
+      if (hasQuotation !== 0) {
+        if (quotationEnd.test(key)) hasQuotation -= 1;
 
         return [
           ...result.slice(0, -1),
-          [...lastResult.slice(0, -1), `${lastResult.slice(-1)[0]} ${key}`],
+          [
+            ...lastResult.slice(0, -1),
+            replaceQuotation(`${lastResult.slice(-1)[0]} ${key}`),
+          ],
         ];
       }
 
-      if (/^['"]/.test(key) && !/['"]$/.test(key)) hasStarter += 1;
+      if (quotationStart.test(key) && !quotationEnd.test(key))
+        hasQuotation += 1;
 
-      return [...result.slice(0, -1), [...lastResult, key]];
+      return [...result.slice(0, -1), [...lastResult, replaceQuotation(key)]];
     },
     [[]],
   );

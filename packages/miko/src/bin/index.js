@@ -52,7 +52,9 @@ handleUnhandledRejection();
         chalk`{gray Run command: ${commands
           .map(
             (command: $ElementType<commandsType, number>, index: number) =>
-              `${command.join(' ')}${
+              `${command
+                .map((key: string) => (!/ /.test(key) ? key : `'${key}'`))
+                .join(' ')}${
                 index !== commands.length - 1
                   ? ''
                   : ['', ...otherArgs].join(' ')

@@ -7,7 +7,9 @@ import cache from '../cache';
 
 const expectedCommand = [
   ['yarn', 'install'],
-  ['yarn', 'lerna', 'bootstrap'],
+  ['lerna', 'exec', '\'echo "test"\''],
+  ['echo', '"test"'],
+  ['echo', '"test test"'],
 ];
 
 describe('get options', () => {
@@ -18,15 +20,26 @@ describe('get options', () => {
         {
           miko: () => ({
             cmdString: {
-              command: 'yarn install && yarn lerna bootstrap',
+              command:
+                'yarn install && lerna exec \'echo "test"\' && echo "test" && echo "test test"',
               description: 'cmd string',
             },
             cmdFunc: {
               command: () => [
                 ['yarn', 'install'],
-                ['yarn', 'lerna', 'bootstrap'],
+                ['lerna', 'exec', '\'echo "test"\''],
+                ['echo', '"test"'],
+                ['echo', '"test test"'],
               ],
               description: 'cmd func',
+            },
+            mergeCmd: {
+              command: 'miko cmdString -a',
+              description: 'merge cmd',
+            },
+            mergeEnv: {
+              command: 'NODE_ENV=production miko cmdString',
+              description: 'merge env',
             },
           }),
         },
@@ -43,9 +56,11 @@ describe('get options', () => {
     ${['--keep', 'babel']}         | ${{ type: 'start', configNames: ['babel'], keep: true }}
     ${['--keep', 'babel', 'lint']} | ${{ type: 'start', configNames: ['babel', 'lint'], keep: true }}
     ${['kill']}                    | ${{ type: 'kill' }}
-    ${['cmdString']}               | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
-    ${['cmdFunc']}                 | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
-    ${['cmdFunc', '-a']}           | ${{ type: 'command', otherArgs: ['-a'], command: expectedCommand }}
+    ${['cmdString']}               | ${{ type: 'command', command: expectedCommand }}
+    ${['cmdFunc']}                 | ${{ type: 'command', command: expectedCommand }}
+    ${['cmdFunc', '-a']}           | ${{ type: 'command', command: [...expectedCommand.slice(0, -1), [...expectedCommand.slice(-1)[0], '-a']] }}
+    ${['mergeCmd']}                | ${{ type: 'command', command: [...expectedCommand.slice(0, -1), [...expectedCommand.slice(-1)[0], '-a']] }}
+    ${['mergeEnv']}                | ${{ type: 'command', command: [['NODE_ENV=production', ...expectedCommand[0]], ...expectedCommand.slice(1)] }}
   `(
     'run $argv',
     async ({

@@ -8,7 +8,10 @@ describe('configs', () => {
   describe.each(Object.keys(configs).map((key: string) => [key]))(
     '%s',
     (configKey: string) => {
-      const config = configs[configKey];
+      const config =
+        typeof configs[configKey] === 'function'
+          ? { config: configs[configKey] }
+          : configs[configKey];
 
       test.each(Object.keys(config).map((key: string) => [key]))(
         '%s',

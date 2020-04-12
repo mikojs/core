@@ -9,8 +9,11 @@ import lint from './lint';
 import lintStaged from './lintStaged';
 import jest from './jest';
 import server from './server';
+import miko from './miko';
 
 export default ({
+  miko,
+
   // custom command
   exec,
 

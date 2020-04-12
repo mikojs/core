@@ -13,6 +13,8 @@ import buildWorker from '@mikojs/worker';
 
 import getOptions from 'utils/getOptions';
 import generateFiles from 'utils/generateFiles';
+import { type commandsType } from 'utils/getCommands';
+import getExecaArguments from 'utils/getExecaArguments';
 
 import typeof * as workerType from 'worker';
 
@@ -26,7 +28,6 @@ handleUnhandledRejection();
     type,
     configNames = [],
     keep = false,
-    otherArgs = [],
     getCommands,
   } = await getOptions(process.argv);
   const worker = await buildWorker<workerType>(
@@ -45,28 +46,28 @@ handleUnhandledRejection();
     case 'command':
       const commands = getCommands?.() || [[]];
 
+      debugLog(commands);
       await worker.addTracking(process.pid, generateFiles(configNames));
       logger.info(
         chalk`{gray Run command: ${commands
-          .map(
-            (command: $ReadOnlyArray<string>, index: number) =>
-              `${command.join(' ')}${
-                index !== commands.length - 1
-                  ? ''
-                  : ['', ...otherArgs].join(' ')
-              }`,
+          .map((command: $ElementType<commandsType, number>) =>
+            command.join(' '),
           )
           .join(' && ')}}`,
       );
-      await commands.reduce(
-        (result: Promise<void>, command: $ReadOnlyArray<string>) =>
-          result.then(() =>
-            execa(command[0], command.slice(1), {
-              stdout: 'inherit',
-            }),
-          ),
-        Promise.resolve(),
-      );
+
+      try {
+        await commands.reduce(
+          (
+            result: Promise<void>,
+            command: $ElementType<commandsType, number>,
+          ) => result.then(() => execa(...getExecaArguments(command))),
+          Promise.resolve(),
+        );
+      } catch (e) {
+        debugLog(e);
+        process.exit(e.code);
+      }
       break;
 
     default:

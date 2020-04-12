@@ -28,6 +28,10 @@ describe('get options', () => {
               ],
               description: 'cmd func',
             },
+            mergeCmd: {
+              command: 'miko cmdString -a',
+              description: 'merge cmd',
+            },
           }),
         },
       ],
@@ -46,6 +50,7 @@ describe('get options', () => {
     ${['cmdString']}               | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
     ${['cmdFunc']}                 | ${{ type: 'command', otherArgs: [], command: expectedCommand }}
     ${['cmdFunc', '-a']}           | ${{ type: 'command', otherArgs: ['-a'], command: expectedCommand }}
+    ${['mergeCmd']}                | ${{ type: 'command', otherArgs: [], command: [expectedCommand[0], [...expectedCommand[1], '-a']] }}
   `(
     'run $argv',
     async ({

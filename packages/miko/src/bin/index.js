@@ -13,6 +13,7 @@ import buildWorker from '@mikojs/worker';
 
 import getOptions from 'utils/getOptions';
 import generateFiles from 'utils/generateFiles';
+import { type commandsType } from 'utils/getCommands';
 
 import typeof * as workerType from 'worker';
 
@@ -49,7 +50,7 @@ handleUnhandledRejection();
       logger.info(
         chalk`{gray Run command: ${commands
           .map(
-            (command: $ReadOnlyArray<string>, index: number) =>
+            (command: $ElementType<commandsType, number>, index: number) =>
               `${command.join(' ')}${
                 index !== commands.length - 1
                   ? ''
@@ -61,7 +62,10 @@ handleUnhandledRejection();
 
       try {
         await commands.reduce(
-          (result: Promise<void>, command: $ReadOnlyArray<string>) =>
+          (
+            result: Promise<void>,
+            command: $ElementType<commandsType, number>,
+          ) =>
             result.then(() =>
               execa(command[0], command.slice(1), {
                 stdio: 'inherit',

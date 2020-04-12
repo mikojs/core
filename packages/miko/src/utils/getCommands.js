@@ -1,21 +1,20 @@
 // @flow
 
+export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
+
 /**
  * @example
- * getComand('yarn install')
+ * getComandsArray('yarn install')
  *
  * @param {string} command - command string
  *
- * @return {Array} - command array
+ * @return {commandsType} - commands array
  */
-export default (command: string): $ReadOnlyArray<$ReadOnlyArray<string>> => {
+const getCommandsArray = (command: string): commandsType => {
   let hasStarter: number = 0;
 
   return command.split(/ /).reduce(
-    (
-      result: $ReadOnlyArray<$ReadOnlyArray<string>>,
-      key: string,
-    ): $ReadOnlyArray<$ReadOnlyArray<string>> => {
+    (result: commandsType, key: string): commandsType => {
       const [lastResult] = result.slice(-1);
 
       if (key === '&&') return [...result, []];
@@ -35,4 +34,24 @@ export default (command: string): $ReadOnlyArray<$ReadOnlyArray<string>> => {
     },
     [[]],
   );
+};
+
+/**
+ * @example
+ * getCommands('yarn install')
+ *
+ * @param {any} command - command string or command function
+ * @param {object} configs - miko configs
+ *
+ * @return {commandsType} - commands array
+ *
+ */
+export default (
+  command: string | (() => commandsType),
+  configs: {},
+): commandsType => {
+  const commandsArray =
+    typeof command === 'string' ? getCommandsArray(command) : command();
+
+  return commandsArray;
 };

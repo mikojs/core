@@ -50,7 +50,7 @@ handleUnhandledRejection();
       await worker.addTracking(process.pid, generateFiles(configNames));
       logger.info(
         chalk`{gray Run command: ${commands
-          .map((command: $ElementType<commandsType, number>, index: number) =>
+          .map((command: $ElementType<commandsType, number>) =>
             command.join(' '),
           )
           .join(' && ')}}`,
@@ -61,7 +61,6 @@ handleUnhandledRejection();
           (
             result: Promise<void>,
             command: $ElementType<commandsType, number>,
-            index: number,
           ) => result.then(() => execa(...getExecaArguments(command))),
           Promise.resolve(),
         );

@@ -25,12 +25,8 @@ describe('get options', () => {
               description: 'cmd string',
             },
             cmdFunc: {
-              command: () => [
-                ['yarn', 'install'],
-                ['lerna', 'exec', '\'echo "test"\''],
-                ['echo', '"test"'],
-                ['echo', '"test test"'],
-              ],
+              command: () =>
+                'yarn install && lerna exec \'echo "test"\' && echo "test" && echo "test test"',
               description: 'cmd func',
             },
             mergeCmd: {

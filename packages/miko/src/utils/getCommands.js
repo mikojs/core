@@ -8,18 +8,18 @@ export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
  * @example
  * getCommands('yarn install')
  *
- * @param {any} command - command string or command function
+ * @param {string} command - command string or command function
  * @param {object} configs - miko configs
  * @param {Array} otherArgs - other arguments
  *
  * @return {commandsType} - commands array
  */
 const getCommands = (
-  command: string | (() => commandsType),
+  command: string | (() => string),
   configs: {},
   otherArgs: $ReadOnlyArray<string>,
 ): commandsType =>
-  (typeof command === 'string' ? getCommandsArray(command) : command()).reduce(
+  getCommandsArray(typeof command === 'string' ? command : command()).reduce(
     (
       result: commandsType,
       commands: $ElementType<commandsType, number>,

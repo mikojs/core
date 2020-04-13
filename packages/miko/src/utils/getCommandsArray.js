@@ -20,7 +20,7 @@ export default (command: string): commandsType => {
     (result: commandsType, key: string): commandsType => {
       const [lastResult] = result.slice(-1);
 
-      if (key === '&&') return [...result, []];
+      if (key === '&&' && hasQuotation === 0) return [...result, []];
 
       if (hasQuotation !== 0) {
         if (QUOTATION_END.test(key)) hasQuotation -= 1;

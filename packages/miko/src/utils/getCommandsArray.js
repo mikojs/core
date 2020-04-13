@@ -2,8 +2,8 @@
 
 import { type commandsType } from './getCommands';
 
-const quotationStart = /^['"]/;
-const quotationEnd = /['"]$/;
+export const QUOTATION_START = /^['"]/;
+export const QUOTATION_END = /['"]$/;
 
 /**
  * @example
@@ -23,7 +23,7 @@ export default (command: string): commandsType => {
       if (key === '&&') return [...result, []];
 
       if (hasQuotation !== 0) {
-        if (quotationEnd.test(key)) hasQuotation -= 1;
+        if (QUOTATION_END.test(key)) hasQuotation -= 1;
 
         return [
           ...result.slice(0, -1),
@@ -31,7 +31,7 @@ export default (command: string): commandsType => {
         ];
       }
 
-      if (quotationStart.test(key) && !quotationEnd.test(key))
+      if (QUOTATION_START.test(key) && !QUOTATION_END.test(key))
         hasQuotation += 1;
 
       return [...result.slice(0, -1), [...lastResult, key]];

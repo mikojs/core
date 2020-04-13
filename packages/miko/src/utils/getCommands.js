@@ -1,6 +1,9 @@
 // @flow
 
-import getCommandsArray from './getCommandsArray';
+import getCommandsArray, {
+  QUOTATION_START,
+  QUOTATION_END,
+} from './getCommandsArray';
 
 export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
 
@@ -26,12 +29,26 @@ const getCommands = (
       index: number,
       commandsArray: commandsType,
     ): commandsType => {
-      const currentCommands =
-        commandsArray.length - 1 !== index
-          ? commands
-          : [...commands, ...otherArgs];
+      const currentCommands = (commandsArray.length - 1 !== index
+        ? commands
+        : [...commands, ...otherArgs]
+      ).map((currentCommand: string) =>
+        QUOTATION_START.test(currentCommand) &&
+        QUOTATION_END.test(currentCommand) &&
+        /miko/.test(currentCommand)
+          ? currentCommand.replace(
+              /miko (\w+)/g,
+              (match: string, key: string) =>
+                getCommands(configs[key].command, configs, [])
+                  .map((eachCommands: $ReadOnlyArray<string>) =>
+                    eachCommands.join(' '),
+                  )
+                  .join(' && '),
+            )
+          : currentCommand,
+      );
       const mikoCommandIndex = currentCommands.findIndex(
-        (key: string, currentCommandIndex: number) =>
+        (currentCommand: string, currentCommandIndex: number) =>
           currentCommandIndex !== 0 &&
           currentCommands[currentCommandIndex - 1] === 'miko',
       );

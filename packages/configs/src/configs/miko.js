@@ -39,7 +39,7 @@ export default () => ({
     command: 'jest --silent',
     description: 'run `jest` in the silent mode',
   },
-  'flow-typed': {
+  'flow-typed:install': {
     command: 'flow-typed install --verbose',
     description: 'flow-typed install',
   },
@@ -58,5 +58,17 @@ export default () => ({
   release: {
     command: 'standard-version',
     description: 'set the tag and release a new version',
+  },
+  clean: {
+    command: [
+      'rm',
+      '-rf',
+      './flow-typed/npm',
+      './coverage',
+      './.eslintcache',
+      './*.log',
+      './node_modules',
+    ].join(' '),
+    description: 'clean the built files',
   },
 });

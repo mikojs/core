@@ -2,8 +2,10 @@
 
 import { type commandsType } from './getCommands';
 
-const quotationStart = /^['"]/;
-const quotationEnd = /['"]$/;
+export const QUOTATION_START = /^['"]/;
+export const QUOTATION_END = /['"]$/;
+const QUOTATION_START_ALL = /^['"]+/;
+const QUOTATION_END_ALL = /['"]+$/;
 
 /**
  * @example
@@ -14,25 +16,29 @@ const quotationEnd = /['"]$/;
  * @return {commandsType} - commands array
  */
 export default (command: string): commandsType => {
-  let hasQuotation: number = 0;
+  let quotationCount: number = 0;
 
   return command.split(/ /).reduce(
     (result: commandsType, key: string): commandsType => {
       const [lastResult] = result.slice(-1);
+      const [quotationStart] = key.match(QUOTATION_START_ALL) || [];
+      const [quotationEnd] = key.match(QUOTATION_END_ALL) || [];
 
-      if (key === '&&') return [...result, []];
+      if (key === '&&' && quotationCount === 0) return [...result, []];
 
-      if (hasQuotation !== 0) {
-        if (quotationEnd.test(key)) hasQuotation -= 1;
+      if (quotationStart) quotationCount += quotationStart.length;
 
-        return [
-          ...result.slice(0, -1),
-          [...lastResult.slice(0, -1), `${lastResult.slice(-1)[0]} ${key}`],
-        ];
+      if (quotationCount !== 0) {
+        const [lastKey] = lastResult.slice(-1);
+
+        if (quotationEnd) quotationCount -= quotationEnd.length;
+
+        if (QUOTATION_START.test(lastKey))
+          return [
+            ...result.slice(0, -1),
+            [...lastResult.slice(0, -1), `${lastKey} ${key}`],
+          ];
       }
-
-      if (quotationStart.test(key) && !quotationEnd.test(key))
-        hasQuotation += 1;
 
       return [...result.slice(0, -1), [...lastResult, key]];
     },

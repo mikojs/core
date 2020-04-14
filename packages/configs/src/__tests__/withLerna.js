@@ -8,7 +8,12 @@ describe('with lerna', () => {
   describe.each(Object.keys(withLerna).map((key: string) => [key]))(
     '%s',
     (configName: string | 'exec' | 'babel' | 'server') => {
-      test.each(Object.keys(withLerna[configName]).map((key: string) => [key]))(
+      const config =
+        typeof withLerna[configName] === 'function'
+          ? { config: withLerna[configName] }
+          : withLerna[configName];
+
+      test.each(Object.keys(config).map((key: string) => [key]))(
         '%s',
         (eventName: string) => {
           switch (eventName) {
@@ -33,7 +38,7 @@ describe('with lerna', () => {
               break;
 
             default:
-              expect(withLerna[configName][eventName]([])).toEqual(
+              expect(config[eventName]([])).toEqual(
                 configName === 'exec'
                   ? ['lerna', 'lerna-changelog', 'git-branch', 'flow-mono-cli']
                   : ['-W'],

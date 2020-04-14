@@ -1,6 +1,7 @@
 // @flow
 
 import { type commandsType } from './getCommands';
+import { QUOTATION_START, QUOTATION_END } from './getCommandsArray';
 
 type resultType = [
   string,
@@ -28,7 +29,10 @@ export default (commands: $ElementType<commandsType, number>): resultType => {
           ? [command, result[1], result[2]]
           : [
               result[0],
-              [...result[1], command.replace(/^['"]/, '').replace(/['"]$/, '')],
+              [
+                ...result[1],
+                command.replace(QUOTATION_START, '').replace(QUOTATION_END, ''),
+              ],
               result[2],
             ];
 

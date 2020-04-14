@@ -1,6 +1,9 @@
 // @flow
 
-import getCommandsArray from './getCommandsArray';
+import getCommandsArray, {
+  QUOTATION_START,
+  QUOTATION_END,
+} from './getCommandsArray';
 
 export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
 
@@ -8,30 +11,44 @@ export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
  * @example
  * getCommands('yarn install')
  *
- * @param {any} command - command string or command function
+ * @param {string} command - command string or command function
  * @param {object} configs - miko configs
  * @param {Array} otherArgs - other arguments
  *
  * @return {commandsType} - commands array
  */
 const getCommands = (
-  command: string | (() => commandsType),
+  command: string | (() => string),
   configs: {},
   otherArgs: $ReadOnlyArray<string>,
 ): commandsType =>
-  (typeof command === 'string' ? getCommandsArray(command) : command()).reduce(
+  getCommandsArray(typeof command === 'string' ? command : command()).reduce(
     (
       result: commandsType,
       commands: $ElementType<commandsType, number>,
       index: number,
       commandsArray: commandsType,
     ): commandsType => {
-      const currentCommands =
-        commandsArray.length - 1 !== index
-          ? commands
-          : [...commands, ...otherArgs];
+      const currentCommands = (commandsArray.length - 1 !== index
+        ? commands
+        : [...commands, ...otherArgs]
+      ).map((currentCommand: string) =>
+        QUOTATION_START.test(currentCommand) &&
+        QUOTATION_END.test(currentCommand) &&
+        /miko/.test(currentCommand)
+          ? currentCommand.replace(
+              /miko (\w+)/g,
+              (match: string, key: string) =>
+                getCommands(configs[key].command, configs, [])
+                  .map((eachCommands: $ReadOnlyArray<string>) =>
+                    eachCommands.join(' '),
+                  )
+                  .join(' && '),
+            )
+          : currentCommand,
+      );
       const mikoCommandIndex = currentCommands.findIndex(
-        (key: string, currentCommandIndex: number) =>
+        (currentCommand: string, currentCommandIndex: number) =>
           currentCommandIndex !== 0 &&
           currentCommands[currentCommandIndex - 1] === 'miko',
       );

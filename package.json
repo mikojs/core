@@ -48,5 +48,8 @@
       "post-merge": "make babel-base-all && configs exec husky:post-merge",
       "post-checkout": "make babel-base-changed BRANCH=master && configs exec husky:post-checkout"
     }
+  },
+  "resolutions": {
+    "semver": "7.2.3"
   }
 }

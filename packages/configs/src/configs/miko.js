@@ -32,12 +32,12 @@ export default () => ({
     description: 'run `eslint` in the watch mode',
   },
   jest: {
-    command: 'jest --coverage=false',
-    description: 'run `jest` without generating the coverage',
-  },
-  test: {
     command: 'jest --silent',
     description: 'run `jest` in the silent mode',
+  },
+  'jest:watch': {
+    command: 'jest --coverage=false --watchAll',
+    description: 'run `jest` without generating the coverage',
   },
   'flow-typed:install': {
     command: 'flow-typed install --verbose',

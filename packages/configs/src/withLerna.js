@@ -70,7 +70,11 @@ const newConfigs = {
     },
     dev: {
       ...config.dev,
-      command: 'lerna exec "miko babel -w" --stream',
+      command: (): string => {
+        const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'master';
+
+        return `lerna exec "miko babel -w" --stream --since ${branch}`;
+      },
     },
     prod: {
       ...config.prod,

@@ -5,7 +5,7 @@ install-all:
 	@yarn install
 	@yarn lerna bootstrap
 	@make babel-base-all
-	@yarn configs exec lerna:babel
+	@yarn miko build
 
 babel-base-all:
 	@$(call babel-build)
@@ -23,10 +23,10 @@ define babel-build
 		--parallel \
 		--stream \
 		--include-dependencies \
+		--scope @mikojs/miko \
 		--scope @mikojs/configs \
 		--scope @mikojs/babel-* \
 		$(1)
-	ln -snf $(ROOT)/packages/configs/lib/bin/index.js ./node_modules/.bin/configs
 	ln -snf $(ROOT)/packages/miko/lib/bin/index.js ./node_modules/.bin/miko
 	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
 	ln -snf $(ROOT)/server/server/lib/bin/index.js ./node_modules/.bin/server

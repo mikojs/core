@@ -8,11 +8,6 @@
   "repository": "https://github.com/mikojs/core/tree/master/website/website",
   "version": "1.9.2",
   "main": "./lib/index.js",
-  "scripts": {
-    "dev": "configs server -w",
-    "start": "NODE_ENV=production configs server",
-    "test": "BUILD=true configs server"
-  },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
     "@mikojs/koa-base": "^1.9.1",

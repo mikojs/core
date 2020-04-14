@@ -36,6 +36,3 @@ __generated__
 
 # lerna-changelog
 .changelog
-
-# configs
-.execrc.js

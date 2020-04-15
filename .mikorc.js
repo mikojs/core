@@ -38,8 +38,25 @@ const migrateConfigs = configs =>
     }
   }, {});
 
+const miko = ({ clean, ...config }) => ({
+  ...config,
+  clean: {
+    ...clean,
+    command: clean.replace(/ \.flowconfig'/, `' && lerna exec 'rm -rf .flowconfig' --ignore ${[
+      '@mikojs/eslint-config-base',
+      '@mikojs/miko',
+      '@mikojs/koa-react',
+      '@mikojs/koa-graphql',
+      '@mikojs/use-css',
+      '@mikojs/use-less',
+      '@mikojs/website',
+    ].join(' --ignore ')}`),
+  },
+});
+
 module.exports = [
   {
+    miko,
     babel: {
       filenames: {
         config: 'babel.config.js',

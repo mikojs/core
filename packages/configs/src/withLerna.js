@@ -110,7 +110,7 @@ const newConfigs = {
     },
     clean: {
       ...config.clean,
-      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' && lerna clearn && ${config.clean.command} ./.changelog`,
+      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' && lerna clean && ${config.clean.command} ./.changelog`,
     },
   }),
   exec: {

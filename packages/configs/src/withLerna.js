@@ -94,7 +94,7 @@ const newConfigs = {
     },
     'husky:post-checkout': {
       ...config['husky:post-checkout'],
-      command: 'mikod build --since master',
+      command: 'miko build --since master',
     },
     release: {
       ...config.release,

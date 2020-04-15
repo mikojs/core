@@ -67,7 +67,7 @@ handleUnhandledRejection();
         );
       } catch (e) {
         debugLog(e);
-        process.exit(e.code);
+        process.exit(e.code || 1);
       }
       break;
 

@@ -42,15 +42,18 @@ const miko = ({ clean, ...config }) => ({
   ...config,
   clean: {
     ...clean,
-    command: clean.command.replace(/ \.flowconfig'/, `' && lerna exec 'rm -rf .flowconfig' --ignore ${[
-      '@mikojs/eslint-config-base',
-      '@mikojs/miko',
-      '@mikojs/koa-react',
-      '@mikojs/koa-graphql',
-      '@mikojs/use-css',
-      '@mikojs/use-less',
-      '@mikojs/website',
-    ].join(' --ignore ')}`),
+    command: clean.command.replace(
+      / \.flowconfig'/,
+      `' && lerna exec 'rm -rf .flowconfig' --ignore ${[
+        '@mikojs/eslint-config-base',
+        '@mikojs/miko',
+        '@mikojs/koa-react',
+        '@mikojs/koa-graphql',
+        '@mikojs/use-css',
+        '@mikojs/use-less',
+        '@mikojs/website',
+      ].join(' --ignore ')}`,
+    ),
   },
 });
 
@@ -78,7 +81,7 @@ module.exports = [
         ignore: '.prettierignore',
       },
     },
-    lintStaged: {
+    'lint-staged': {
       filenames: {
         config: '.lintstagedrc.js',
       },

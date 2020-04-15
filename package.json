@@ -4,8 +4,9 @@
   "license": "MIT",
   "workspaces": ["packages/*", "babel/*", "server/*", "components/*"],
   "scripts": {
+    "build": "make babel-base-all && miko build",
     "dev": "make babel-base-changed && miko dev",
-    "install:all": "make install-all",
+    "install:all": "yarn install && lerna bootstrap && yarn build",
     "prod": "NODE_ENV=production make babel-base-all && miko prod",
     "test": "make babel-base-changed && miko test"
   },

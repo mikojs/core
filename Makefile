@@ -1,12 +1,6 @@
 ROOT=$(shell pwd)
 BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
 
-install-all:
-	@yarn install
-	@yarn lerna bootstrap
-	@make babel-base-all
-	@yarn miko build
-
 babel-base-all:
 	@$(call babel-build)
 

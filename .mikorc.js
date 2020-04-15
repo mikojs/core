@@ -42,7 +42,7 @@ const miko = ({ clean, ...config }) => ({
   ...config,
   clean: {
     ...clean,
-    command: clean.replace(/ \.flowconfig'/, `' && lerna exec 'rm -rf .flowconfig' --ignore ${[
+    command: clean.command.replace(/ \.flowconfig'/, `' && lerna exec 'rm -rf .flowconfig' --ignore ${[
       '@mikojs/eslint-config-base',
       '@mikojs/miko',
       '@mikojs/koa-react',
@@ -56,7 +56,6 @@ const miko = ({ clean, ...config }) => ({
 
 module.exports = [
   {
-    miko,
     babel: {
       filenames: {
         config: 'babel.config.js',
@@ -87,6 +86,9 @@ module.exports = [
   },
   defaultConfigs,
   ...extendConfigs,
+  {
+    miko,
+  },
 ].map(config =>
   config instanceof Array ? config.map(migrateConfigs) : migrateConfigs(config),
 );

@@ -5,7 +5,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 
 /* eslint-disable import/no-extraneous-dependencies */
-const defaultConfigs = require('@mikojs/configs/lib/configs');
+const defaultConfigs = require('@mikojs/configs');
 /* eslint-enable import/no-extraneous-dependencies */
 
 const extendConfigs = require('./.catrc');
@@ -15,7 +15,6 @@ const migrateConfigs = configs =>
     switch (key) {
       case 'lint:watch':
       case 'test':
-      case 'server':
         return result;
 
       default: {

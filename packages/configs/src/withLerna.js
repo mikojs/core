@@ -4,7 +4,7 @@ import gitBranch from 'git-branch';
 import { cosmiconfigSync } from 'cosmiconfig';
 import { emptyFunction } from 'fbjs';
 
-import configs from './configs';
+import configs from './index';
 
 const cosmiconfigOptions = {
   loaders: {
@@ -17,14 +17,6 @@ const newConfigs = {
       ...install,
       '-W',
     ],
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
-      [
-        ...argv,
-        '--config-file',
-        cosmiconfigSync('babel', cosmiconfigOptions).search()?.filepath,
-      ].filter(Boolean),
-  },
-  server: {
     run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
       [
         ...argv,

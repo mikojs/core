@@ -1,14 +1,13 @@
 // @flow
 
-import { type configsType } from '../types';
+import { type configsType } from './types';
 
-import babel from './babel';
-import prettier from './prettier';
-import lint from './lint';
-import lintStaged from './lintStaged';
-import jest from './jest';
-import server from './server';
-import miko from './miko';
+import babel from './configs/babel';
+import prettier from './configs/prettier';
+import lint from './configs/lint';
+import lintStaged from './configs/lintStaged';
+import jest from './configs/jest';
+import miko from './configs/miko';
 
 export default ({
   miko,
@@ -43,7 +42,4 @@ export default ({
     alias: 'jest',
     run: (argv: $ReadOnlyArray<string>) => [...argv, '--silent'],
   },
-
-  // @mikojs/server
-  server,
 }: configsType);

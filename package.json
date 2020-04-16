@@ -4,10 +4,11 @@
   "license": "MIT",
   "workspaces": ["packages/*", "babel/*", "server/*", "components/*"],
   "scripts": {
-    "dev": "make babel-base-changed && configs exec lerna:babel:watch --changed",
-    "install:all": "make install-all",
-    "prod": "NODE_ENV=production make babel-base-all && configs exec lerna:babel",
-    "test": "make babel-base-changed && configs exec lerna:babel --changed && lerna run test --stream && configs test"
+    "build": "make babel-base-all && miko build",
+    "dev": "make babel-base-changed && miko dev",
+    "install:all": "yarn install && lerna bootstrap && yarn build",
+    "prod": "NODE_ENV=production make babel-base-all && miko prod",
+    "test": "lerna run test --stream && miko jest"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -44,9 +45,9 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "make babel-base-changed && configs exec husky:pre-commit",
-      "post-merge": "make babel-base-all && configs exec husky:post-merge",
-      "post-checkout": "make babel-base-changed BRANCH=master && configs exec husky:post-checkout"
+      "pre-commit": "make babel-base-changed && miko husky:pre-commit",
+      "post-merge": "make babel-base-all && miko husky:post-merge",
+      "post-checkout": "make babel-base-changed BRANCH=master && miko husky:post-checkout"
     }
   },
   "resolutions": {

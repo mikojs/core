@@ -46,6 +46,8 @@ export default (
       (result: $ReadOnlyArray<string>, key: string): $ReadOnlyArray<string> => {
         const { configFile, ignoreFile } = cache.get(key);
 
+        debugLog({ key, configFile, ignoreFile });
+
         return [configFile, ignoreFile]
           .filter(Boolean)
           .reduce(

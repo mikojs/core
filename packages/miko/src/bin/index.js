@@ -44,10 +44,11 @@ handleUnhandledRejection();
       break;
 
     case 'command':
+      await worker.addTracking(process.pid, generateFiles([]));
+
       const commands = getCommands?.() || [[]];
 
       debugLog(commands);
-      await worker.addTracking(process.pid, generateFiles([]));
       logger.info(
         chalk`{gray Run command: ${commands
           .map((command: $ElementType<commandsType, number>) =>
@@ -66,7 +67,7 @@ handleUnhandledRejection();
         );
       } catch (e) {
         debugLog(e);
-        process.exit(e.code);
+        process.exit(e.code || 1);
       }
       break;
 

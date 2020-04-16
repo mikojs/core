@@ -70,7 +70,11 @@ const newConfigs = {
     },
     dev: {
       ...config.dev,
-      command: 'lerna exec "miko babel -w" --stream',
+      command: (): string => {
+        const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'master';
+
+        return `lerna exec "miko babel -w" --stream --since ${branch}`;
+      },
     },
     prod: {
       ...config.prod,
@@ -90,7 +94,7 @@ const newConfigs = {
     },
     'husky:post-checkout': {
       ...config['husky:post-checkout'],
-      command: 'mikod build --since master',
+      command: 'miko build --since master',
     },
     release: {
       ...config.release,
@@ -106,7 +110,7 @@ const newConfigs = {
     },
     clean: {
       ...config.clean,
-      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' && lerna clearn && ${config.clean.command} ./.changelog`,
+      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' && lerna clean && ${config.clean.command} ./.changelog`,
     },
   }),
   exec: {

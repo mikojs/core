@@ -36,12 +36,12 @@ jobs:
       - run:
           name: Flow
           command: |
-            yarn configs exec lerna:flow-typed:install
-            yarn configs exec lerna:flow
+            yarn miko flow-typed:install
+            yarn miko flow
 
       - run:
           name: Check code style
-          command: yarn configs lint .
+          command: yarn miko lint
 
   normal-test:
     <<: *defaults

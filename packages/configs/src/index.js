@@ -1,51 +1,45 @@
-/**
- * fixme-flow-file-annotation
- *
- * Flow not support @babel/plugin-proposal-pipeline-operator
- * https://github.com/facebook/flow/issues/5443
- */
-/* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
+// @flow
 
-import debug from 'debug';
-import { emptyFunction } from 'fbjs';
+import { type configsType } from './types';
 
-import { handleUnhandledRejection } from '@mikojs/utils';
+import babel from './configs/babel';
+import prettier from './configs/prettier';
+import lint from './configs/lint';
+import lintStaged from './configs/lintStaged';
+import jest from './configs/jest';
+import miko from './configs/miko';
 
-import configs from './utils/configs';
-import sendToServer from './utils/sendToServer';
+export default ({
+  miko,
 
-const debugLog = debug('configs:config');
+  // babel
+  babel,
 
-handleUnhandledRejection();
+  // prettier
+  prettier,
 
-/**
- * @example
- * config('cli', '/file-path')
- *
- * @param {string} cliName - cli name
- * @param {string} filePath - file path
- * @param {string} ignoreFilePath - ignore file path
- *
- * @return {object} - cli config
- */
-export default (
-  cliName: string,
-  filePath: string,
-  ignoreFilePath?: string,
-): {} => {
-  debugLog({ cliName, filePath, ignoreFilePath });
+  // eslint
+  lint,
+  'lint:watch': {
+    ...lint,
+    alias: 'esw',
+    run: (argv: $ReadOnlyArray<string>) => [
+      ...lint.run(argv),
+      '-w',
+      '--rule',
+      'prettier/prettier: off',
+      '--quiet',
+    ],
+  },
 
-  sendToServer(JSON.stringify({ pid: process.pid, filePath }), () => {
-    debugLog(`${filePath} has been sent to the server`);
-  }).catch(debugLog);
+  // lint-staged
+  'lint-staged': lintStaged,
 
-  if (ignoreFilePath)
-    sendToServer(
-      JSON.stringify({ pid: process.pid, filePath: ignoreFilePath }),
-      () => {
-        debugLog(`${ignoreFilePath} has been sent to the server`);
-      },
-    ).catch(debugLog);
-
-  return {} |> configs.get(cliName).config || emptyFunction.thatReturnsArgument;
-};
+  // jest
+  jest,
+  test: {
+    ...jest,
+    alias: 'jest',
+    run: (argv: $ReadOnlyArray<string>) => [...argv, '--silent'],
+  },
+}: configsType);

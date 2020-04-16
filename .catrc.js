@@ -70,28 +70,6 @@ const jest = {
   },
 };
 
-const exec = ({ clean, ...config }) => ({
-  ...config,
-  clean: [
-    ...clean.slice(0, 2),
-    '"rm -rf lib flow-typed/npm"',
-    '&&',
-    'lerna',
-    'exec',
-    '"rm -rf .flowconfig"',
-    ...[
-      '@mikojs/eslint-config-base',
-      '@mikojs/miko',
-      '@mikojs/koa-react',
-      '@mikojs/koa-graphql',
-      '@mikojs/use-css',
-      '@mikojs/use-less',
-      '@mikojs/website',
-    ].reduce((result, key) => [...result, '--ignore', key], []),
-    ...clean.slice(3),
-  ],
-});
-
 module.exports = (() => {
   if (/babel$/.test(process.argv[1]) && process.env.USE_DEFAULT_BABEL)
     return babel({
@@ -161,9 +139,6 @@ module.exports = (() => {
       // jest
       jest,
       test: jest,
-
-      // exec
-      exec,
     },
   ];
 })();

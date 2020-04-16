@@ -65,19 +65,13 @@ export default [
     }) => ({
       ...config,
       testPathIgnorePatterns: [
-        ...testPathIgnorePatterns,
+        ...(testPathIgnorePatterns || []),
         '__tests__/__generated__',
       ],
       coveragePathIgnorePatterns: [
-        ...coveragePathIgnorePatterns,
+        ...(coveragePathIgnorePatterns || []),
         '__generated__',
       ],
-    }),
-
-    // exec:
-    exec: ({ grep, ...config }: { grep: $ReadOnlyArray<string> }) => ({
-      ...config,
-      grep: [...grep, '--exclude', '**/__generated__/**'],
     }),
   },
 ];

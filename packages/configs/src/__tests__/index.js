@@ -1,36 +1,74 @@
 // @flow
 
-import path from 'path';
+import defaultConfigs from '../index';
+import withCss from '../withCss';
+import withLess from '../withLess';
+import withReact from '../withReact';
+import withRelay from '../withRelay';
+import withLerna from '../withLerna';
+import withServer from '../withServer';
 
-import getConfig from '../index';
+const configs = {
+  defaultConfigs,
+  withCss,
+  withLess,
+  withReact,
+  withRelay,
+  withLerna,
+  withServer,
+};
 
-import configs from 'utils/configs';
+describe.each(
+  Object.keys(configs).map((key: string) => [
+    key,
+    configs[key] instanceof Array ? configs[key].slice(-1)[0] : configs[key],
+  ]),
+)('%s', (configsKey: string, testingConfig: {}) => {
+  describe.each(Object.keys(testingConfig).map((key: string) => [key]))(
+    '%s',
+    (configKey: string) => {
+      const config =
+        typeof testingConfig[configKey] === 'function'
+          ? { config: testingConfig[configKey] }
+          : testingConfig[configKey];
 
-jest.mock(
-  '../utils/sendToServer',
-  () => async (data: mixed, callback: () => void) => {
-    callback();
-  },
-);
+      test.each(Object.keys(config).map((key: string) => [key]))(
+        '%s',
+        (key: string) => {
+          const value = config[key];
 
-describe('configs', () => {
-  beforeAll(() => {
-    configs.loadConfig({
-      config: {
-        getConfig: {},
-      },
-      filepath: path.resolve(process.cwd(), './.catrc.js'),
-    });
-  });
+          switch (key) {
+            case 'alias':
+              expect(value).toBeTruthy();
+              break;
 
-  test.each`
-    filePath      | ignorePath
-    ${'filePath'} | ${undefined}
-    ${'filePath'} | ${'ignorePath'}
-  `(
-    'get config with filePath = $filePath and ignorePath = $ignorePath',
-    ({ filePath, ignorePath }: {| filePath: string, ignorePath: string |}) => {
-      expect(getConfig('getConfig', filePath, ignorePath)).toEqual({});
+            case 'ignore':
+              (['prettier', 'lint', 'lint:watch'].includes(configKey)
+                ? expect(value().name).not
+                : expect(value())
+              ).toBeUndefined();
+              break;
+
+            case 'install':
+            case 'run':
+              expect(value([])).not.toHaveLength(0);
+              break;
+
+            case 'config':
+              expect(Object.keys(value({}))).not.toBe(0);
+              break;
+
+            case 'env':
+            case 'configsFiles':
+              expect(Object.keys(value)).not.toBe(0);
+              break;
+
+            default:
+              expect(value).toBeUndefined();
+              break;
+          }
+        },
+      );
     },
   );
 });

@@ -65,11 +65,11 @@ export default [
     }) => ({
       ...config,
       testPathIgnorePatterns: [
-        ...testPathIgnorePatterns,
+        ...(testPathIgnorePatterns || []),
         '__tests__/__generated__',
       ],
       coveragePathIgnorePatterns: [
-        ...coveragePathIgnorePatterns,
+        ...(coveragePathIgnorePatterns || []),
         '__generated__',
       ],
     }),

@@ -43,10 +43,12 @@ const newConfigs = {
     'flow-typed:install': {
       ...config['flow-typed:install'],
       command: [
-        config['flow-typed:install'].command,
+        config['flow-typed:install']?.command,
         'flow-mono create-symlinks .flowconfig',
         'flow-mono install-types ----ignoreDeps=peer',
-      ].join(' && '),
+      ]
+        .filter(Boolean)
+        .join(' && '),
     },
     babel: {
       command: () =>
@@ -102,7 +104,8 @@ const newConfigs = {
     },
     clean: {
       ...config.clean,
-      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' && lerna clean && ${config.clean.command} ./.changelog`,
+      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' && lerna clean && ${config
+        .clean?.command || 'rm -rf'} ./.changelog`,
     },
   }),
 };

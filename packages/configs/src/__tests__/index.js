@@ -1,15 +1,36 @@
 // @flow
 
-import configs from '../index';
+import defaultConfigs from '../index';
+import withCss from '../withCss';
+import withLess from '../withLess';
+import withReact from '../withReact';
+import withRelay from '../withRelay';
+import withLerna from '../withLerna';
+import withServer from '../withServer';
 
-describe('configs', () => {
-  describe.each(Object.keys(configs).map((key: string) => [key]))(
+const configs = {
+  defaultConfigs,
+  withCss,
+  withLess,
+  withReact,
+  withRelay,
+  withLerna,
+  withServer,
+};
+
+describe.each(
+  Object.keys(configs).map((key: string) => [
+    key,
+    configs[key] instanceof Array ? configs[key].slice(-1)[0] : configs[key],
+  ]),
+)('%s', (configsKey: string, testingConfig: {}) => {
+  describe.each(Object.keys(testingConfig).map((key: string) => [key]))(
     '%s',
     (configKey: string) => {
       const config =
-        typeof configs[configKey] === 'function'
-          ? { config: configs[configKey] }
-          : configs[configKey];
+        typeof testingConfig[configKey] === 'function'
+          ? { config: testingConfig[configKey] }
+          : testingConfig[configKey];
 
       test.each(Object.keys(config).map((key: string) => [key]))(
         '%s',

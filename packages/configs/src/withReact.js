@@ -81,6 +81,6 @@ export default {
     setupFiles: $ReadOnlyArray<string>,
   }) => ({
     ...config,
-    setupFiles: [...setupFiles, '@mikojs/jest/lib/react'],
+    setupFiles: [...(setupFiles || []), '@mikojs/jest/lib/react'],
   }),
 };

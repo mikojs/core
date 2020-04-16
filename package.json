@@ -8,7 +8,7 @@
     "dev": "make babel-base-changed && miko dev",
     "install:all": "yarn install && lerna bootstrap && yarn build",
     "prod": "NODE_ENV=production make babel-base-all && miko prod",
-    "test": "make babel-base-changed && miko jest"
+    "test": "lerna run test --stream && miko jest"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

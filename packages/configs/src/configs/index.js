@@ -2,7 +2,6 @@
 
 import { type configsType } from '../types';
 
-import exec from './exec';
 import babel from './babel';
 import prettier from './prettier';
 import lint from './lint';
@@ -13,9 +12,6 @@ import miko from './miko';
 
 export default ({
   miko,
-
-  // custom command
-  exec,
 
   // babel
   babel,

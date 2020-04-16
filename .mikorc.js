@@ -13,7 +13,6 @@ const extendConfigs = require('./.catrc');
 const migrateConfigs = configs =>
   Object.keys(configs).reduce((result, key) => {
     switch (key) {
-      case 'exec':
       case 'lint:watch':
       case 'test':
       case 'server':

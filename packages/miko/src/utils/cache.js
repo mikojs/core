@@ -23,7 +23,7 @@ type configsType = {
   |},
 };
 
-type initialConfigsType = {
+export type initialConfigsType = {
   [string]:
     | $NonMaybeType<$PropertyType<$ElementType<configsType, string>, 'config'>>
     | $ElementType<configsType, string>,

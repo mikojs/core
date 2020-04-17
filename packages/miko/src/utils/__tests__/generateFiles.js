@@ -54,17 +54,17 @@ describe('generate files', () => {
 
       global.console.warn = mockLog;
 
-      const result = generateFiles(configNames);
+      const result = generateFiles(configNames).sort();
 
       expect(result).toEqual(
-        expected.map((filePath: string) =>
-          path.resolve(process.cwd(), filePath),
-        ),
+        expected
+          .sort()
+          .map((filePath: string) => path.resolve(process.cwd(), filePath)),
       );
       expect(
-        outputFileSync.mock.calls.map(
-          ([outputFilePath]: [string]) => outputFilePath,
-        ),
+        outputFileSync.mock.calls
+          .map(([outputFilePath]: [string]) => outputFilePath)
+          .sort(),
       ).toEqual(result);
 
       if (expected.includes('hasIgnore.js')) {

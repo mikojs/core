@@ -58,7 +58,7 @@ export default {
       command: (): string => {
         const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'master';
 
-        return `miko build --since ${branch} && lint-staged && miko flow --since ${branch}`;
+        return `miko build --since ${branch} && miko flow --since ${branch} && lint-staged`;
       },
     },
     'husky:post-merge': {

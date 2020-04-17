@@ -44,7 +44,7 @@ export default () => ({
     description: 'flow-typed install',
   },
   'husky:pre-commit': {
-    command: 'miko build && miko lint-staged && flow',
+    command: 'miko build && flow && miko lint-staged',
     description: 'checking the code style before running `git commit`',
   },
   'husky:post-merge': {

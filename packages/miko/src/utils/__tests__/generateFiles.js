@@ -54,10 +54,10 @@ describe('generate files', () => {
 
       global.console.warn = mockLog;
 
-      const result = generateFiles(configNames).sort();
+      const result = [...generateFiles(configNames)].sort();
 
       expect(result).toEqual(
-        expected
+        [...expected]
           .sort()
           .map((filePath: string) => path.resolve(process.cwd(), filePath)),
       );

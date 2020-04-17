@@ -27,6 +27,7 @@ const miko = ({ clean, ...config }) => ({
 const babel = ({ plugins, ...config }) => ({
   ...config,
   plugins: [
+    ...plugins,
     'add-module-exports',
     [
       'transform-imports',

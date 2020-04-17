@@ -38,33 +38,16 @@ describe.each(
           const value = config[key];
 
           switch (key) {
-            case 'alias':
-              expect(value).toBeTruthy();
-              break;
-
             case 'ignore':
-              (['prettier', 'lint', 'lint:watch'].includes(configKey)
-                ? expect(value().name).not
-                : expect(value())
-              ).toBeUndefined();
-              break;
-
-            case 'install':
-            case 'run':
-              expect(value([])).not.toHaveLength(0);
+              expect(Object.keys(value([]))).not.toBe(0);
               break;
 
             case 'config':
               expect(Object.keys(value({}))).not.toBe(0);
               break;
 
-            case 'env':
-            case 'configsFiles':
-              expect(Object.keys(value)).not.toBe(0);
-              break;
-
             default:
-              expect(value).toBeUndefined();
+              expect(value.config).not.toBeUndefined();
               break;
           }
         },

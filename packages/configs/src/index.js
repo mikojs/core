@@ -2,12 +2,12 @@
 
 import { type configsType } from '@mikojs/miko/lib/types';
 
-import babel from './configs/babel';
-import prettier from './configs/prettier';
-import lint from './configs/lint';
-import lintStaged from './configs/lintStaged';
-import jest from './configs/jest';
-import miko from './configs/miko';
+import babel from './defaultConfigs/babel';
+import prettier from './defaultConfigs/prettier';
+import lint from './defaultConfigs/lint';
+import lintStaged from './defaultConfigs/lintStaged';
+import jest from './defaultConfigs/jest';
+import miko from './defaultConfigs/miko';
 
 export default ({
   // miko

@@ -24,28 +24,26 @@ const miko = ({ clean, ...config }) => ({
   },
 });
 
-const babel = config => {
-  if (!config.plugins) config.plugins = [];
-
-  if (!config.overrides) config.overrides = [];
-
-  config.plugins.push('add-module-exports', [
-    'transform-imports',
-    {
-      '@mikojs/utils': {
-        transform: '@mikojs/utils/lib/${member}',
+const babel = ({ plugins, ...config }) => ({
+  ...config,
+  plugins: [
+    'add-module-exports',
+    [
+      'transform-imports',
+      {
+        '@mikojs/utils': {
+          transform: '@mikojs/utils/lib/${member}',
+        },
+        fbjs: {
+          transform: 'fbjs/lib/${member}',
+        },
+        validator: {
+          transform: 'validator/lib/${member}',
+        },
       },
-      fbjs: {
-        transform: 'fbjs/lib/${member}',
-      },
-      validator: {
-        transform: 'validator/lib/${member}',
-      },
-    },
-  ]);
-
-  return config;
-};
+    ],
+  ],
+});
 
 const lint = {
   config: config => ({

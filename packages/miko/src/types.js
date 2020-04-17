@@ -2,4 +2,4 @@
 
 import { type initialConfigsType } from './utils/cache';
 
-export type confgisType = initialConfigsType;
+export type configsType = initialConfigsType;

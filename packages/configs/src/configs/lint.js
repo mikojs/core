@@ -1,13 +1,10 @@
 // @flow
 
 export default {
-  alias: 'esw',
-  install: (install: $ReadOnlyArray<string>) => [
-    ...install,
-    '@mikojs/eslint-config-base',
-    'eslint',
-    'eslint-watch',
-  ],
+  filenames: {
+    config: '.eslintrc.js',
+    ignore: '.eslintignore',
+  },
   config: () => ({
     extends: '@mikojs/base',
     rules: {
@@ -19,32 +16,20 @@ export default {
       ],
     },
   }),
-  ignore: () => ({
-    name: '.eslintignore',
-    ignore: [
-      // node
-      'node_modules',
+  ignore: () => [
+    // node
+    'node_modules',
 
-      // babel
-      'lib',
+    // babel
+    'lib',
 
-      // flow
-      '**/flow-typed/npm',
+    // flow
+    '**/flow-typed/npm',
 
-      // jest
-      'coverage',
+    // jest
+    'coverage',
 
-      // add checking other configs
-      '!.*',
-    ],
-  }),
-  run: (argv: $ReadOnlyArray<string>) => [...argv, '--cache', '--color'],
-  env: {
-    NODE_ENV: 'test',
-  },
-  configsFiles: {
-    lint: '.eslintrc.js',
-    babel: true,
-    prettier: true,
-  },
+    // add checking other configs
+    '!.*',
+  ],
 };

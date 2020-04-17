@@ -2,28 +2,8 @@
 
 import gitBranch from 'git-branch';
 import { cosmiconfigSync } from 'cosmiconfig';
-import { emptyFunction } from 'fbjs';
 
-import configs from './index';
-
-const cosmiconfigOptions = {
-  loaders: {
-    '.js': emptyFunction.thatReturnsArgument,
-  },
-};
-const newConfigs = {
-  babel: {
-    install: (install: $ReadOnlyArray<string>): $ReadOnlyArray<string> => [
-      ...install,
-      '-W',
-    ],
-    run: (argv: $ReadOnlyArray<string>): $ReadOnlyArray<string> =>
-      [
-        ...argv,
-        '--config-file',
-        cosmiconfigSync('babel', cosmiconfigOptions).search()?.filepath,
-      ].filter(Boolean),
-  },
+export default {
   miko: <
     C: {
       [string]: {| command: string | (() => string), description: string |},
@@ -54,7 +34,6 @@ const newConfigs = {
       command: () =>
         `${config.build.command} --config-file ${cosmiconfigSync(
           'babel',
-          cosmiconfigOptions,
         ).search()?.filepath || 'babel.config.js'}`,
       description: 'run `babel` in the package of the monorepo',
     },
@@ -109,24 +88,3 @@ const newConfigs = {
     },
   }),
 };
-
-export default Object.keys(configs).reduce(
-  (
-    result: {
-      [string]: {
-        install: (install: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
-      },
-      ...typeof newConfigs,
-    },
-    key: $Keys<typeof configs>,
-  ) =>
-    Object.keys(result).includes(key)
-      ? result
-      : {
-          ...result,
-          [key]: {
-            install: (install: $ReadOnlyArray<string>) => [...install, '-W'],
-          },
-        },
-  newConfigs,
-);

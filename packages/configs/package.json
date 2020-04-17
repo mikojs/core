@@ -25,6 +25,7 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
+    "@mikojs/miko": "^1.9.2",
     "flow-bin": "^0.118.0",
     "flow-typed": "^3.0.0",
     "git-branch": "^2.0.1"

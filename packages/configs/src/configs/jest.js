@@ -1,12 +1,9 @@
 // @flow
 
 export default {
-  install: (install: $ReadOnlyArray<string>) => [
-    ...install,
-    'jest',
-    '@mikojs/jest',
-  ],
-  run: (argv: $ReadOnlyArray<string>) => [...argv, '--coverage=false'],
+  filenames: {
+    config: 'jest.config.js',
+  },
   config: () => ({
     setupFiles: ['@mikojs/jest'],
     testPathIgnorePatterns: ['__tests__/__ignore__'],
@@ -28,8 +25,4 @@ export default {
       },
     },
   }),
-  configsFiles: {
-    jest: 'jest.config.js',
-    babel: true,
-  },
 };

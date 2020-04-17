@@ -1,12 +1,9 @@
 // @flow
 
 export default {
-  install: (install: $ReadOnlyArray<string>) => [
-    ...install,
-    'lint-staged',
-    'prettier-package-json',
-    '@mikojs/badges',
-  ],
+  filenames: {
+    config: '.lintstagedrc.js',
+  },
   config: () => ({
     '*.js': ['miko prettier', 'miko lint'],
     '*.js.flow': ['miko prettier --parser flow'],
@@ -17,9 +14,4 @@ export default {
       'miko prettier --parser json',
     ],
   }),
-  configsFiles: {
-    'lint-staged': '.lintstagedrc.js',
-    prettier: true,
-    lint: true,
-  },
 };

@@ -1,16 +1,12 @@
 // @flow
 
 export default {
-  install: (install: $ReadOnlyArray<string>) => [...install, 'prettier'],
+  filenames: {
+    config: '.prettierrc.js',
+    ignore: '.prettierignore',
+  },
   config: () => ({
     singleQuote: true,
     trailingComma: 'all',
   }),
-  ignore: () => ({
-    name: '.prettierignore',
-  }),
-  run: (argv: $ReadOnlyArray<string>) => [...argv, '--write'],
-  configsFiles: {
-    prettier: '.prettierrc.js',
-  },
 };

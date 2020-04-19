@@ -39,7 +39,7 @@ describe('generate files', () => {
 
   test.each`
     configNames  | expected
-    ${[]}        | ${['babel.config.js', 'jest.config.js', '.eslintrc.js', '.eslintignore', '.prettierrc.js', '.prettierignore', '.lintstagedrc.js', 'hasIgnore.js']}
+    ${[]}        | ${['babel.config.js', 'jest.config.js', '.eslintrc.js', '.eslintignore', '.prettierrc.js', '.lintstagedrc.js', 'hasIgnore.js']}
     ${['babel']} | ${['babel.config.js']}
   `(
     'generate files with configNames = $configNames',

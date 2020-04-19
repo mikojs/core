@@ -29,9 +29,9 @@ describe('worker', () => {
     });
 
     test.each`
-      info                               | filePath               | expected
+      info                               | filePaths              | expected
       ${'add existing file path'}        | ${__filename}          | ${[__filename]}
-      ${'add existing file path twice'}  | ${__filename}          | ${[__filename]}
+      ${'add existing file path twice'}  | ${[__filename]}        | ${[__filename]}
       ${'add not existing file path'}    | ${notExistingFilePath} | ${[__filename, notExistingFilePath]}
       ${'remove existing file path'}     | ${undefined}           | ${[notExistingFilePath]}
       ${'remove not existing file path'} | ${undefined}           | ${[]}
@@ -40,14 +40,14 @@ describe('worker', () => {
       '$info',
       ({
         info,
-        filePath,
+        filePaths,
         expected,
       }: {|
         info: string,
-        filePath: ?string,
+        filePaths: ?string,
         expected: $ReadOnlyArray<string>,
       |}) => {
-        if (!filePath) {
+        if (!filePaths) {
           isRunning.mockReturnValue(false);
           jest.advanceTimersByTime(TIME_TO_CHECK + TIME_TO_REMOVE_FILES);
           rimraf.mock.calls.forEach(([, callback]: [string, () => void]) => {
@@ -66,7 +66,7 @@ describe('worker', () => {
               path.resolve(__dirname, '../index.js'),
             );
           }
-        } else expect(worker.addTracking(1, filePath)).toBeUndefined();
+        } else expect(worker.addTracking(1, filePaths)).toBeUndefined();
 
         expect(worker.cache.getFilePaths()).toEqual(expected);
       },

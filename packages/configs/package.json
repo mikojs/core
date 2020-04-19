@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/configs",
-  "description": "Use to manage the multiple configs.",
+  "description": "Use to manage the miko configs.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/configs",
@@ -25,6 +25,7 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
+    "@mikojs/miko": "^1.9.2",
     "flow-bin": "^0.118.0",
     "flow-typed": "^3.0.0",
     "git-branch": "^2.0.1"

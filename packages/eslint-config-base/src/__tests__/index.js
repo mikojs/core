@@ -16,6 +16,13 @@ import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
  */
 import configs from '../index';
 
+// use to mock worker in @miko/miko/src/index.js
+jest.mock('@mikojs/worker', () =>
+  jest.fn().mockResolvedValue({
+    addTracking: jest.fn(),
+  }),
+);
+
 type eslintInfoType = {|
   line: number,
   ruleId: string,

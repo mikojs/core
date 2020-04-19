@@ -17,7 +17,6 @@ lib
 
 # prettier
 .prettierrc.js
-.prettierignore
 
 # flow
 **/flow-typed/npm

@@ -13,7 +13,6 @@ test('babel-preset-base', () => {
       {},
     ),
   ).toEqual({
-    // shoud be equal to .catrc
     presets: [
       [
         '@babel/env',

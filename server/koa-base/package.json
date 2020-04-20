@@ -8,13 +8,13 @@
   "version": "1.9.1",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.8.4",
+    "@babel/runtime": "^7.9.2",
     "@mikojs/utils": "^1.9.1",
-    "core-js": "^3.6.4",
+    "core-js": "^3.6.5",
     "fbjs": "^1.0.0",
-    "koa-bodyparser": "^4.2.1",
+    "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",
-    "koa-compress": "^3.0.0",
+    "koa-compress": "^3.1.0",
     "koa-etag": "^3.0.0",
     "koa-helmet": "^5.2.0",
     "koa-morgan": "^1.0.1"
@@ -23,8 +23,8 @@
     "koa": ">=2.0.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.118.0",
-    "flow-typed": "^3.0.0",
+    "flow-bin": "^0.123.0",
+    "flow-typed": "^3.1.0",
     "get-port": "^5.1.1",
     "koa": "^2.11.0",
     "node-fetch": "^2.6.0"

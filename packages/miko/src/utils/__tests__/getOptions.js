@@ -86,4 +86,19 @@ describe('get options', () => {
       (!expected ? expect(mockLog) : expect(mockLog).not).toHaveBeenCalled();
     },
   );
+
+  test('empty miko config', async () => {
+    cache.load({
+      filepath: path.resolve('.mikorc.js'),
+      config: [
+        {
+          miko: () => null,
+        },
+      ],
+    });
+
+    await expect(getOptions(['node', 'miko', 'cmdString'])).rejects.toThrow(
+      "Can not find 'cmdString' in the config",
+    );
+  });
 });

@@ -49,7 +49,18 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
           { keep = false }: {| keep: boolean |},
         ) => {
           debugLog(configNames);
-          resolve({ type: 'start', configNames, keep });
+
+          if (
+            configNames.some(
+              (configName: string) => !cache.keys().includes(configName),
+            )
+          )
+            reject(
+              new Error(
+                `Can not find '${configNames.join(', ')}' in the config`,
+              ),
+            );
+          else resolve({ type: 'start', configNames, keep });
         },
       );
 

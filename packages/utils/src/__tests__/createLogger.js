@@ -55,9 +55,7 @@ describe('createLogger', () => {
     const mockLog = jest.fn();
 
     global.console.log = mockLog;
-    createLogger('test')
-      .start('messageA')
-      .log('messageB');
+    createLogger('test').start('messageA').log('messageB');
 
     expect(mockLog).toHaveBeenCalledTimes(2);
     expect(mockLog).toHaveBeenCalledWith(

@@ -8,10 +8,10 @@
   "version": "1.9.1",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.8.4",
+    "@babel/runtime": "^7.9.2",
     "@mikojs/utils": "^1.9.1",
-    "babel-jest": "^25.1.0",
-    "core-js": "^3.6.4",
+    "babel-jest": "^25.4.0",
+    "core-js": "^3.6.5",
     "enzyme": "^3.11.0",
     "fbjs": "^1.0.0"
   },
@@ -20,10 +20,10 @@
   },
   "devDependencies": {
     "enzyme-adapter-react-16": "^1.15.2",
-    "flow-bin": "^0.118.0",
-    "flow-typed": "^3.0.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "flow-bin": "^0.123.0",
+    "flow-typed": "^3.1.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "keywords": ["jest", "mikojs"],
   "publishConfig": {

@@ -11,9 +11,15 @@ test('get config', () => {
   cache.addPage(path.resolve(__dirname, './0.js'));
   cache.addPage(path.resolve(__dirname, './1.js'));
 
-  expect(
-    // $FlowFixMe
-    getConfig(__dirname, {}, cache, __dirname).optimization.splitChunks
-      .cacheGroups.commons.minChunks,
-  ).toBe(1.5);
+  expect(getConfig(__dirname, {}, cache, __dirname)).toMatchObject({
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          commons: {
+            minChunks: 1.5,
+          },
+        },
+      },
+    },
+  });
 });

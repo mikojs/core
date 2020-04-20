@@ -32,9 +32,9 @@ export default {
     },
     babel: {
       command: () =>
-        `${config.build.command} --config-file ${cosmiconfigSync(
-          'babel',
-        ).search()?.filepath || 'babel.config.js'}`,
+        `${config.build.command} --config-file ${
+          cosmiconfigSync('babel').search()?.filepath || 'babel.config.js'
+        }`,
       description: 'run `babel` in the package of the monorepo',
     },
     build: {
@@ -83,8 +83,9 @@ export default {
     },
     clean: {
       ...config.clean,
-      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' && lerna clean && ${config
-        .clean?.command || 'rm -rf'} ./.changelog`,
+      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' && lerna clean && ${
+        config.clean?.command || 'rm -rf'
+      } ./.changelog`,
     },
   }),
 };

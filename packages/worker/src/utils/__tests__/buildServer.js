@@ -35,10 +35,7 @@ test('build server', async () => {
       result.then(
         () =>
           new Promise(resolve => {
-            net
-              .connect(port)
-              .on('data', resolve)
-              .write(JSON.stringify(data));
+            net.connect(port).on('data', resolve).write(JSON.stringify(data));
           }),
       ),
     Promise.resolve(),

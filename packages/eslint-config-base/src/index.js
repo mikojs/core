@@ -74,9 +74,9 @@ export default [
           case 'settings':
             return {
               ...result,
-              // $FlowFixMe https://github.com/facebook/flow/issues/8243
               settings: {
                 ...result.settings,
+                // $FlowFixMe https://github.com/facebook/flow/issues/8243
                 ...otherConfig.settings,
               },
             };
@@ -84,9 +84,9 @@ export default [
           case 'rules':
             return {
               ...result,
-              // $FlowFixMe https://github.com/facebook/flow/issues/8243
               rules: {
                 ...result.rules,
+                // $FlowFixMe https://github.com/facebook/flow/issues/8243
                 ...otherConfig.rules,
               },
             };

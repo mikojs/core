@@ -13,6 +13,7 @@ test('get config', () => {
 
   expect(
     // $FlowFixMe
+    // $FlowFixMe
     getConfig(__dirname, {}, cache, __dirname).optimization.splitChunks
       .cacheGroups.commons.minChunks,
   ).toBe(1.5);

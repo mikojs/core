@@ -2,6 +2,8 @@
 
 import path from 'path';
 
+import chalk from 'chalk';
+
 import getOptions, { type optionsType } from '../getOptions';
 import cache from '../cache';
 
@@ -86,4 +88,20 @@ describe('get options', () => {
       (!expected ? expect(mockLog) : expect(mockLog).not).toHaveBeenCalled();
     },
   );
+
+  test('empty miko config', async () => {
+    cache.load({
+      filepath: path.resolve('.mikorc.js'),
+      config: [
+        {
+          miko: () => null,
+        },
+      ],
+    });
+
+    expect(await getOptions(['node', 'miko', 'cmdString'])).toEqual({
+      type: 'error',
+      errorMessage: chalk`Can not find {red cmdString} in the config`,
+    });
+  });
 });

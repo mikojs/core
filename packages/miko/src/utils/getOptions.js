@@ -12,10 +12,11 @@ import getCommands, { type commandsType } from './getCommands';
 import cache from './cache';
 
 export type optionsType = {|
-  type: 'start' | 'kill' | 'command',
+  type: 'error' | 'start' | 'kill' | 'command',
   configNames?: $ReadOnlyArray<string>,
   keep?: boolean,
   getCommands?: () => commandsType,
+  errorMessage?: string,
 |};
 
 const debugLog = debug('miko:getOptions');
@@ -29,7 +30,7 @@ const debugLog = debug('miko:getOptions');
  * @return {optionsType} - options
  */
 export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
-  new Promise((resolve, reject) => {
+  new Promise(resolve => {
     const configs = cache.get('miko').config?.({}) || {};
     const program = new commander.Command('miko')
       .version(version, '-v, --version')
@@ -49,7 +50,19 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
           { keep = false }: {| keep: boolean |},
         ) => {
           debugLog(configNames);
-          resolve({ type: 'start', configNames, keep });
+
+          if (
+            configNames.some(
+              (configName: string) => !cache.keys().includes(configName),
+            )
+          )
+            resolve({
+              type: 'error',
+              errorMessage: chalk`Can not find {red ${configNames.join(
+                ', ',
+              )}} in the config`,
+            });
+          else resolve({ type: 'start', configNames, keep });
         },
       );
 

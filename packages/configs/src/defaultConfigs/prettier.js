@@ -6,6 +6,7 @@ export default {
   },
   config: () => ({
     singleQuote: true,
+    arrowParens: 'avoid',
     trailingComma: 'all',
   }),
 };

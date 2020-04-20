@@ -6,10 +6,7 @@ describe('build chokidar', () => {
   test('run', async () => {
     const chokidar = buildChokidar();
 
-    chokidar
-      .on('add', jest.fn())
-      .add('pathOne')
-      .add('pathTwo');
+    chokidar.on('add', jest.fn()).add('pathOne').add('pathTwo');
 
     expect(chokidar.run()).toBeUndefined();
     expect(await chokidar.watcher()?.close()).toBeUndefined();

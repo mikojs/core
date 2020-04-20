@@ -24,10 +24,7 @@ client.on('data', async (data: string) => {
 
   if (isWatching)
     process.stdin.on('data', (inputData: Buffer) => {
-      const str = inputData
-        .toString()
-        .trim()
-        .toLowerCase();
+      const str = inputData.toString().trim().toLowerCase();
 
       if (str === 'rs') client.end('restart');
       else if (str === 'close') client.end('close');

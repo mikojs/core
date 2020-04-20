@@ -18,9 +18,11 @@ import * as styles from './styles';
 const Example = React.forwardRef(
   ({ children, ...props }: { children?: NodeType }, forwardedRef) => (
     <div {...props} ref={forwardedRef}>
-      {/* istanbul ignore next */ React.Children.count(children) === 0
-        ? 'test'
-        : children}
+      {
+        /* istanbul ignore next */ React.Children.count(children) === 0
+          ? 'test'
+          : children
+      }
     </div>
   ),
 );

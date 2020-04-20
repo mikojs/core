@@ -2,6 +2,8 @@
 
 import path from 'path';
 
+import chalk from 'chalk';
+
 import getOptions, { type optionsType } from '../getOptions';
 import cache from '../cache';
 
@@ -97,8 +99,9 @@ describe('get options', () => {
       ],
     });
 
-    await expect(getOptions(['node', 'miko', 'cmdString'])).rejects.toThrow(
-      "Can not find 'cmdString' in the config",
-    );
+    expect(await getOptions(['node', 'miko', 'cmdString'])).toEqual({
+      type: 'error',
+      errorMessage: chalk`Can not find {red cmdString} in the config`,
+    });
   });
 });

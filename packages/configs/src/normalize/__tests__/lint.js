@@ -1,12 +1,12 @@
 // @flow
 
-import lint, { type rulesType } from '../lint';
+import lint, { type rulesType, type lintType } from '../lint';
 
 test.each`
   rules
   ${{ 'jsdoc/check-tag-names': 'error' }}
   ${{ 'jsdoc/check-tag-names': ['error'] }}
-`('lint', ({ rules }: {| rules: $ReadOnlyArray<string> |}) => {
+`('lint', ({ rules }: {| rules: $PropertyType<lintType, 'rules'> |}) => {
   expect(
     lint.rules(rules, {
       'jsdoc/check-tag-names': ([rule]: $NonMaybeType<

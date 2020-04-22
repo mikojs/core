@@ -4,8 +4,7 @@ import { type commandsType } from './getCommands';
 
 export const QUOTATION_START = /^['"]/;
 export const QUOTATION_END = /['"]$/;
-const QUOTATION_START_ALL = /^['"]+/;
-const QUOTATION_END_ALL = /['"]+$/;
+const QUOTATION_ALL = /['"]/g;
 
 /**
  * @example
@@ -16,22 +15,28 @@ const QUOTATION_END_ALL = /['"]+$/;
  * @return {commandsType} - commands array
  */
 export default (command: string): commandsType => {
-  let quotationCount: number = 0;
+  const quotationCache = [];
 
   return command.split(/ /).reduce(
     (result: commandsType, key: string): commandsType => {
       const [lastResult] = result.slice(-1);
-      const [quotationStart] = key.match(QUOTATION_START_ALL) || [];
-      const [quotationEnd] = key.match(QUOTATION_END_ALL) || [];
+      const [quotationStart] = key.match(QUOTATION_START) || [];
 
-      if (key === '&&' && quotationCount === 0) return [...result, []];
+      if (key === '&&' && quotationCache.length === 0) return [...result, []];
 
-      if (quotationStart) quotationCount += quotationStart.length;
+      if (quotationStart) quotationCache.push(quotationStart);
 
-      if (quotationCount !== 0) {
+      if (quotationCache.length !== 0) {
         const [lastKey] = lastResult.slice(-1);
+        const allQuotations = key.match(QUOTATION_ALL);
 
-        if (quotationEnd) quotationCount -= quotationEnd.length;
+        if (key.match(QUOTATION_END) && allQuotations)
+          allQuotations.forEach((quotation: string, index: number) => {
+            if (quotationStart && index === 0) return;
+
+            if (quotationCache.slice(-1)[0] === quotation) quotationCache.pop();
+            else quotationCache.push(quotation);
+          });
 
         if (QUOTATION_START.test(lastKey))
           return [

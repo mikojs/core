@@ -1,5 +1,44 @@
 # CHANGELOG
 
+## 1.10.0 (2020-04-22)
+
+#### :boom: Breaking Change
+
+- `configs`
+  - [#586](https://github.com/mikojs/core/pull/586) (@mikojs/configs) Remove not used files ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `eslint-config-base`, `jest`, `miko`, `utils`, `website`, `worker`
+  - [#591](https://github.com/mikojs/core/pull/591) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `eslint-config-base`, `miko`
+  - [#588](https://github.com/mikojs/core/pull/588) (@mikojs/configs) Remove the old configs, use miko configs ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `miko`, `website`
+  - [#585](https://github.com/mikojs/core/pull/585) (@mikojs/core) Remove configs cli ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `miko`
+  - [#584](https://github.com/mikojs/core/pull/584) (@mikojs/miko) Add lerna commands ([@HsuTing](https://github.com/HsuTing))
+  - [#583](https://github.com/mikojs/core/pull/583) (@mikojs/miko) Fix miko command ([@HsuTing](https://github.com/HsuTing))
+- `miko`
+  - [#582](https://github.com/mikojs/core/pull/582) (@mikojs/miko) Can add the custom command ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `miko`
+  - [#592](https://github.com/mikojs/core/pull/592) (@mikojs/miko) Fix commands parse error ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#587](https://github.com/mikojs/core/pull/587) chore(deps): bump https-proxy-agent from 2.2.1 to 2.2.4 ([@dependabot[bot]](https://github.com/apps/dependabot))
+
+#### :house: Internal
+
+- `configs`
+  - [#590](https://github.com/mikojs/core/pull/590) (@mikojs/core) Add more testing ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `miko`
+  - [#589](https://github.com/mikojs/core/pull/589) (@mikojs/core) Add more testing ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.9.2 (2020-04-08)
 
 #### :rocket: New Feature

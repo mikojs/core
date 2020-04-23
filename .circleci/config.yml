@@ -65,7 +65,7 @@ jobs:
 
       - run:
           name: Test
-          command: echo "TODO: yarn miko jest -i ./packages/website --root-dir ./packages/website"
+          command: echo "yarn miko jest -i ./packages/website --root-dir ./packages/website"
 
   deploy-beta:
     <<: *defaults

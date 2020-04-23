@@ -56,6 +56,17 @@ jobs:
       - store_artifacts:
           path: coverage
 
+  website-test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore-cache
+      - run: *install
+
+      - run:
+          name: Test
+          command: echo "TODO: yarn miko jest -i ./packages/website --root-dir ./packages/website"
+
   deploy-beta:
     <<: *defaults
     steps:
@@ -99,10 +110,18 @@ workflows:
             tags:
               only: /.*/
 
+      - website-test:
+          requires:
+            - basic
+          filters:
+            tags:
+              only: /.*/
+
       - deploy-beta:
           context: global-env
           requires:
             - normal-test
+            - website-test
           filters:
             branches:
               ignore: /.*/
@@ -113,6 +132,7 @@ workflows:
           context: global-env
           requires:
             - normal-test
+            - website-test
           filters:
             branches:
               ignore: /.*/

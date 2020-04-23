@@ -19,28 +19,40 @@ const miko = ({ clean, ...config }) => ({
   },
 });
 
-const babel = ({ plugins, ...config }) => ({
-  ...config,
-  plugins: [
-    ...plugins,
-    'add-module-exports',
-    ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
-    [
-      'transform-imports',
-      {
-        '@mikojs/utils': {
-          transform: '@mikojs/utils/lib/${member}',
+const babel = ({ presets, plugins, ...config }) => {
+  if (!process.env.USE_DEFAULT_BABEL) {
+    const basePreset = presets.find(preset => preset[0] === '@mikojs/base');
+
+    basePreset[1]['@mikojs/transform-flow'] = {
+      ...basePreset[1]['@mikojs/transform-flow'],
+      plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
+    };
+  }
+
+  return {
+    ...config,
+    presets,
+    plugins: [
+      ...plugins,
+      'add-module-exports',
+      ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
+      [
+        'transform-imports',
+        {
+          '@mikojs/utils': {
+            transform: '@mikojs/utils/lib/${member}',
+          },
+          fbjs: {
+            transform: 'fbjs/lib/${member}',
+          },
+          validator: {
+            transform: 'validator/lib/${member}',
+          },
         },
-        fbjs: {
-          transform: 'fbjs/lib/${member}',
-        },
-        validator: {
-          transform: 'validator/lib/${member}',
-        },
-      },
+      ],
     ],
-  ],
-});
+  };
+};
 
 const lint = {
   config: config => ({

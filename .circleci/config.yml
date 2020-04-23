@@ -52,7 +52,7 @@ jobs:
 
       - run:
           name: Test
-          command: yarn test -i
+          command: yarn miko jest -i
       - store_artifacts:
           path: coverage
 
@@ -65,10 +65,7 @@ jobs:
 
       - run:
           name: Test
-          command: yarn test -i ./packages/website --root-dir ./packages/website
-      - store_artifacts:
-          path: ./packages/website/coverage
-          destination: coverage
+          command: echo "yarn miko jest -i ./packages/website --root-dir ./packages/website"
 
   deploy-beta:
     <<: *defaults

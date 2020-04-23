@@ -6,7 +6,6 @@ import withLess from '../withLess';
 import withReact from '../withReact';
 import withRelay from '../withRelay';
 import withLerna from '../withLerna';
-import withServer from '../withServer';
 
 const configs = {
   defaultConfigs,
@@ -15,7 +14,6 @@ const configs = {
   withReact,
   withRelay,
   withLerna,
-  withServer,
 };
 
 describe.each(

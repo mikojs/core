@@ -14,37 +14,45 @@ const miko = ({ clean, ...config }) => ({
         '@mikojs/miko',
         '@mikojs/configs',
         '@mikojs/eslint-config-base',
-        '@mikojs/koa-react',
-        '@mikojs/koa-graphql',
-        '@mikojs/use-css',
-        '@mikojs/use-less',
-        '@mikojs/website',
       ].join(' --ignore ')}`,
     ),
   },
 });
 
-const babel = ({ plugins, ...config }) => ({
-  ...config,
-  plugins: [
-    ...plugins,
-    'add-module-exports',
-    [
-      'transform-imports',
-      {
-        '@mikojs/utils': {
-          transform: '@mikojs/utils/lib/${member}',
+const babel = ({ presets, plugins, ...config }) => {
+  if (!process.env.USE_DEFAULT_BABEL) {
+    const basePreset = presets.find(preset => preset[0] === '@mikojs/base');
+
+    basePreset[1]['@mikojs/transform-flow'] = {
+      ...basePreset[1]['@mikojs/transform-flow'],
+      plugins: [['@babel/proposal-pipeline-operator', { proposal: 'minimal' }]],
+    };
+  }
+
+  return {
+    ...config,
+    presets,
+    plugins: [
+      ...plugins,
+      'add-module-exports',
+      ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
+      [
+        'transform-imports',
+        {
+          '@mikojs/utils': {
+            transform: '@mikojs/utils/lib/${member}',
+          },
+          fbjs: {
+            transform: 'fbjs/lib/${member}',
+          },
+          validator: {
+            transform: 'validator/lib/${member}',
+          },
         },
-        fbjs: {
-          transform: 'fbjs/lib/${member}',
-        },
-        validator: {
-          transform: 'validator/lib/${member}',
-        },
-      },
+      ],
     ],
-  ],
-});
+  };
+};
 
 const lint = {
   config: config => ({
@@ -119,7 +127,6 @@ module.exports = (() => {
             loose: true,
           },
         ],
-        ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
       ],
       ignore:
         process.env.NODE_ENV === 'test'
@@ -131,7 +138,6 @@ module.exports = (() => {
     /* eslint-disable import/no-extraneous-dependencies */
     require('@mikojs/configs'),
     require('@mikojs/configs/lib/withRelay'),
-    require('@mikojs/configs/lib/withServer'),
     require('@mikojs/configs/lib/withLess'),
     require('@mikojs/configs/lib/withLerna'),
     /* eslint-enable import/no-extraneous-dependencies */

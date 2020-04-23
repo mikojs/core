@@ -56,20 +56,6 @@ jobs:
       - store_artifacts:
           path: coverage
 
-  website-test:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache: *restore-cache
-      - run: *install
-
-      - run:
-          name: Test
-          command: yarn test -i ./packages/website --root-dir ./packages/website
-      - store_artifacts:
-          path: ./packages/website/coverage
-          destination: coverage
-
   deploy-beta:
     <<: *defaults
     steps:
@@ -113,18 +99,10 @@ workflows:
             tags:
               only: /.*/
 
-      - website-test:
-          requires:
-            - basic
-          filters:
-            tags:
-              only: /.*/
-
       - deploy-beta:
           context: global-env
           requires:
             - normal-test
-            - website-test
           filters:
             branches:
               ignore: /.*/
@@ -135,7 +113,6 @@ workflows:
           context: global-env
           requires:
             - normal-test
-            - website-test
           filters:
             branches:
               ignore: /.*/

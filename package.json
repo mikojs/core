@@ -7,8 +7,7 @@
     "build": "make babel-base-all && miko build",
     "dev": "make babel-base-changed && miko dev",
     "install:all": "yarn install && lerna bootstrap && yarn build",
-    "prod": "NODE_ENV=production make babel-base-all && miko prod",
-    "test": "lerna run test --stream && miko jest"
+    "prod": "NODE_ENV=production make babel-base-all && miko prod"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -28,7 +27,6 @@
     "graphql": "^15.0.0",
     "husky": "^4.2.5",
     "jest": "^25.4.0",
-    "koa": "^2.11.0",
     "lerna": "^3.20.2",
     "lerna-changelog": "^1.0.1",
     "lint-staged": "^10.1.6",

@@ -14,11 +14,6 @@ const miko = ({ clean, ...config }) => ({
         '@mikojs/miko',
         '@mikojs/configs',
         '@mikojs/eslint-config-base',
-        '@mikojs/koa-react',
-        '@mikojs/koa-graphql',
-        '@mikojs/use-css',
-        '@mikojs/use-less',
-        '@mikojs/website',
       ].join(' --ignore ')}`,
     ),
   },
@@ -68,17 +63,9 @@ const lint = {
   ],
 };
 
-const jest = ({ collectCoverageFrom, testPathIgnorePatterns, ...config }) => ({
+const jest = ({ collectCoverageFrom, ...config }) => ({
   ...config,
-  collectCoverageFrom: [
-    ...collectCoverageFrom,
-    '!**/packages/jest/**',
-    '!**/packages/website/**',
-  ],
-  testPathIgnorePatterns: [
-    ...testPathIgnorePatterns,
-    '<rootDir>/packages/website/',
-  ],
+  collectCoverageFrom: [...collectCoverageFrom, '!**/packages/jest/**'],
 });
 
 module.exports = (() => {

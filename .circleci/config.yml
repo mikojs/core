@@ -52,7 +52,7 @@ jobs:
 
       - run:
           name: Test
-          command: yarn test -i
+          command: yarn miko jest -i
       - store_artifacts:
           path: coverage
 

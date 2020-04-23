@@ -24,6 +24,7 @@ const babel = ({ plugins, ...config }) => ({
   plugins: [
     ...plugins,
     'add-module-exports',
+    ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
     [
       'transform-imports',
       {
@@ -106,7 +107,6 @@ module.exports = (() => {
             loose: true,
           },
         ],
-        ['@babel/proposal-pipeline-operator', { proposal: 'minimal' }],
       ],
       ignore:
         process.env.NODE_ENV === 'test'

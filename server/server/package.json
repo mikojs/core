@@ -9,6 +9,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.9.2",
+    "@mikojs/utils": "^1.10.0",
     "core-js": "^3.6.5"
   },
   "devDependencies": {

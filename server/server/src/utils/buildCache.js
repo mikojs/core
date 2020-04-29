@@ -3,11 +3,13 @@
 import path from 'path';
 
 import { d3DirTree } from '@mikojs/utils';
-import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
+import {
+  type d3DirTreeOptionsType,
+  type d3DirTreeNodeType,
+} from '@mikojs/utils/lib/d3DirTree';
 
 type optionsType = {|
-  extensions?: RegExp,
-  exclude?: RegExp,
+  ...$Diff<d3DirTreeOptionsType, {| normalizePath: mixed |}>,
   dev?: boolean,
 |};
 
@@ -23,14 +25,13 @@ type eventType =
   | 'error';
 
 type dataType = {|
-  filePath: string,
-  name: string,
-  extension: mixed,
+  filePath: $PropertyType<$PropertyType<d3DirTreeNodeType, 'data'>, 'path'>,
+  name: $PropertyType<$PropertyType<d3DirTreeNodeType, 'data'>, 'name'>,
+  extension: $PropertyType<
+    $PropertyType<d3DirTreeNodeType, 'data'>,
+    'extension',
+  >,
 |};
-
-type returnType<R> = {
-  [string]: R,
-};
 
 /**
  * @example
@@ -39,44 +40,34 @@ type returnType<R> = {
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
  * @param {Function} callback - callback function
- *
- * @return {returnType} - cache
  */
-export default <R>(
+export default (
   folderPath: string,
   { extensions, exclude, dev }: optionsType,
-  callback: (event: eventType, data: dataType) => R,
-): returnType<R> => {
-  const cache = d3DirTree(folderPath, {
+  callback: (event: eventType, data: dataType) => void,
+) => {
+  d3DirTree(folderPath, {
     extensions,
     exclude,
   })
     .leaves()
-    .reduce(
-      (
-        result: returnType<R>,
-        { data: { path: filePath, name, extension } }: d3DirTreeNodeType,
-      ) => ({
-        ...result,
-        [filePath]: callback('init', {
+    .forEach(
+      ({ data: { path: filePath, name, extension } }: d3DirTreeNodeType) =>
+        callback('init', {
           filePath,
           name,
           extension,
         }),
-      }),
-      {},
     );
 
   if (dev)
     require('chokidar')
       .watch(folderPath)
-      .on('all', (event: eventType, filePath: string) => {
-        cache[filePath] = callback(event, {
+      .on('all', (event: eventType, filePath: string) =>
+        callback(event, {
           filePath,
           name: path.basename(filePath),
           extension: path.extname(filePath),
-        });
-      });
-
-  return cache;
+        }),
+      );
 };

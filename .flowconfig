@@ -16,6 +16,7 @@ esproposal.optional_chaining=enable
 [strict]
 
 [declarations]
+.*/node_modules/graphql/error/GraphQLError.js.flow
 .*/packages/.*
 .*/babel/.*
 .*/server/.*

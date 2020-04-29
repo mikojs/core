@@ -16,7 +16,9 @@ export default {
     ...config,
     flow: {
       command: (): string => {
-        const flow = `flow --quiet${process.env.CI ? ' && flow stop' : ''}`;
+        const flow = `flow --quiet${
+          process.env.CI === 'true' ? ' && flow stop' : ''
+        }`;
 
         return `${flow} && lerna exec '${flow}' --stream --concurrency 1`;
       },

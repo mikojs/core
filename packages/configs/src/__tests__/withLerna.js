@@ -9,19 +9,26 @@ jest.mock('cosmiconfig', () => ({
 }));
 
 describe('with lerna', () => {
-  beforeAll(() => {
-    process.env.CI = 'true';
-  });
-
   test.each`
-    cliName               | expected
-    ${'flow'}             | ${"lerna exec 'flow --quiet && flow stop' --stream --concurrency 1"}
-    ${'babel'}            | ${' --config-file babel.config.js'}
-    ${'dev'}              | ${'lerna exec "miko babel -w" --stream --since master'}
-    ${'husky:pre-commit'} | ${'miko build --since master && miko flow --since master && lint-staged'}
+    cliName               | ci         | expected
+    ${'flow'}             | ${'true'}  | ${"flow --quiet && flow stop && lerna exec 'flow --quiet && flow stop' --stream --concurrency 1"}
+    ${'flow'}             | ${'false'} | ${"flow --quiet && lerna exec 'flow --quiet' --stream --concurrency 1"}
+    ${'babel'}            | ${'true'}  | ${' --config-file babel.config.js'}
+    ${'dev'}              | ${'true'}  | ${'lerna exec "miko babel -w" --stream --since master'}
+    ${'husky:pre-commit'} | ${'true'}  | ${'miko build --since master && miko flow --since master && lint-staged'}
   `(
     'run miko with cliName = $cliName',
-    ({ cliName, expected }: {| cliName: string, expected: string |}) => {
+    ({
+      cliName,
+      ci,
+      expected,
+    }: {|
+      cliName: string,
+      ci: string,
+      expected: string,
+    |}) => {
+      process.env.CI = ci;
+
       const { command } = withLerna.miko({
         clean: { command: '', description: '' },
         build: { command: '', description: '' },

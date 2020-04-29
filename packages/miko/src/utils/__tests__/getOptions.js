@@ -8,11 +8,11 @@ import getOptions, { type optionsType } from '../getOptions';
 import cache from '../cache';
 
 const command =
-  'yarn install && lerna exec \'echo "test" && echo "test test"\' --stream && echo "test test \'test\'test" && echo "test"';
+  'yarn install && lerna exec \'echo "test" && echo "test test"\' --stream && echo "test test \'"test"test\'test" && echo "test"';
 const expectedCommand = [
   ['yarn', 'install'],
   ['lerna', 'exec', '\'echo "test" && echo "test test"\'', '--stream'],
-  ['echo', '"test test \'test\'test"'],
+  ['echo', '"test test \'"test"test\'test"'],
   ['echo', '"test"'],
 ];
 

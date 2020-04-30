@@ -1,6 +1,7 @@
 // @flow
 
 import path from 'path';
+import http from 'http';
 
 import { d3DirTree } from '@mikojs/utils';
 import {
@@ -10,8 +11,15 @@ import {
 
 type optionsType = {|
   ...$Diff<d3DirTreeOptionsType, {| normalizePath: mixed |}>,
+  useMiddleware?: boolean,
   dev?: boolean,
+  port?: number,
 |};
+
+type middlewareType = (
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+) => void;
 
 type eventType =
   | 'init'
@@ -33,19 +41,25 @@ type dataType = {|
   >,
 |};
 
+type updateCacheType = (event: eventType, data: dataType) => void;
+
 /**
  * @example
- * buildCache({ folderPath: '/', callback: () => {} })
+ * buildCache({ folderPath: '/', updateCache: () => {} })
  *
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
- * @param {Function} callback - callback function
+ * @param {Function} updateCache - update cache function
+ * @param {middlewareType} middleware - middleware function
+ *
+ * @return {middlewareType} - middleware
  */
 export default (
   folderPath: string,
-  { extensions, exclude, dev }: optionsType,
-  callback: (event: eventType, data: dataType) => void,
-) => {
+  { extensions, exclude, useMiddleware, dev, port }: optionsType,
+  updateCache: updateCacheType,
+  middleware: middlewareType,
+): middlewareType => {
   d3DirTree(folderPath, {
     extensions,
     exclude,
@@ -53,7 +67,7 @@ export default (
     .leaves()
     .forEach(
       ({ data: { path: filePath, name, extension } }: d3DirTreeNodeType) =>
-        callback('init', {
+        updateCache('init', {
           filePath,
           name,
           extension,
@@ -64,10 +78,20 @@ export default (
     require('chokidar')
       .watch(folderPath)
       .on('all', (event: eventType, filePath: string) =>
-        callback(event, {
+        updateCache(event, {
           filePath,
           name: path.basename(filePath),
           extension: path.extname(filePath),
         }),
       );
+
+  if (useMiddleware) return middleware;
+
+  http.createServer(middleware).listen(port || 8000);
+
+  return () => {
+    throw new Error(
+      'If you want to use middleware, use should use `useMiddleware` option.',
+    );
+  };
 };

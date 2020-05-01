@@ -14,3 +14,10 @@ module.system.node.root_relative_dirname=./src
 esproposal.optional_chaining=enable
 
 [strict]
+
+[declarations]
+.*/node_modules/graphql/error/GraphQLError.js.flow
+.*/packages/.*
+.*/babel/.*
+.*/server/.*
+.*/components/.*

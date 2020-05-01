@@ -15,9 +15,13 @@ export default {
   ): C => ({
     ...config,
     flow: {
-      command: `lerna exec 'flow --quiet${
-        process.env.CI ? ' && flow stop' : ''
-      }' --stream --concurrency 1`,
+      command: (): string => {
+        const flow = `flow --quiet${
+          process.env.CI === 'true' ? ' && flow stop' : ''
+        }`;
+
+        return `${flow} && lerna exec '${flow}' --stream --concurrency 1`;
+      },
       description: 'run `flow` with the lerna command',
     },
     'flow-typed:install': {

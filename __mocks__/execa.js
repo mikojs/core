@@ -1,3 +1,6 @@
 // @flow
 
-export default jest.fn().mockResolvedValue({ stdout: '' });
+export default (jest.fn().mockResolvedValue({ stdout: '' }): JestMockFn<
+  $ReadOnlyArray<void>,
+  Promise<{| stdout: string |}>,
+>);

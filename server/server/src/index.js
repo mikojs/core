@@ -2,12 +2,18 @@
 
 import path from 'path';
 
+import { requireModule } from '@mikojs/utils';
+
 import buildCache, {
   type optionsType,
   type eventType,
   type dataType,
   type middlewareType,
 } from './utils/buildCache';
+
+type cacheType = {
+  [string]: string,
+};
 
 /**
  * @example
@@ -18,13 +24,12 @@ import buildCache, {
  *
  * @return {middlewareType} - middleware function
  */
-export default (folderPath: string, options: optionsType): middlewareType => {
-  const cache = {};
-
-  return buildCache(
+export default (folderPath: string, options: optionsType): middlewareType =>
+  buildCache<cacheType>(
     folderPath,
     options,
-    (event: eventType, { filePath }: dataType) => {
+    {},
+    (event: eventType, cache: cacheType, { filePath }: dataType) => {
       const pathname = path.relative(folderPath, filePath);
 
       switch (event) {
@@ -42,18 +47,20 @@ export default (folderPath: string, options: optionsType): middlewareType => {
           break;
       }
     },
-    (req: http.IncomingMessage, res: http.ServerResponse) => {
+    (cache: cacheType) => (
+      req: http.IncomingMessage,
+      res: http.ServerResponse,
+    ) => {
       const middlewareKey = Object.keys(cache).find(
         (pathname: string) => pathname === req.path,
       );
 
       if (!middlewareKey) return;
 
-      const middleware = cache[middlewareKey];
+      const middlewarePath = cache[middlewareKey];
 
-      if (!middleware) return;
+      if (!middlewarePath) return;
 
-      middleware(req, res);
+      requireModule(middlewarePath)(req, res);
     },
   );
-};

@@ -36,29 +36,33 @@ export type dataType = {|
   >,
 |};
 
-type updateCacheType = (event: eventType, data: dataType) => void;
+type updateCacheType<C> = (event: eventType, cache: C, data: dataType) => void;
 
 export type middlewareType = (
   req: http.IncomingMessage,
   res: http.ServerResponse,
 ) => void;
 
+type getMiddlewareType<C> = (cache: C) => middlewareType;
+
 /**
  * @example
- * buildCache({ folderPath: '/', updateCache: () => {} })
+ * buildCache('/', options, cache, () => {}, () => {})
  *
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
+ * @param {any} cache - cache
  * @param {Function} updateCache - update cache function
- * @param {middlewareType} middleware - middleware function
+ * @param {Function} getMiddleware - get middleware function
  *
  * @return {middlewareType} - middleware
  */
-export default (
+export default <C>(
   folderPath: string,
   { extensions, exclude, useMiddleware, dev, port }: optionsType,
-  updateCache: updateCacheType,
-  middleware: middlewareType,
+  cache: C,
+  updateCache: updateCacheType<C>,
+  getMiddleware: getMiddlewareType<C>,
 ): middlewareType => {
   d3DirTree(folderPath, {
     extensions,
@@ -67,7 +71,7 @@ export default (
     .leaves()
     .forEach(
       ({ data: { path: filePath, name, extension } }: d3DirTreeNodeType) =>
-        updateCache('init', {
+        updateCache('init', cache, {
           filePath,
           name,
           extension,
@@ -78,16 +82,16 @@ export default (
     require('chokidar')
       .watch(folderPath)
       .on('all', (event: eventType, filePath: string) =>
-        updateCache(event, {
+        updateCache(event, cache, {
           filePath,
           name: path.basename(filePath),
           extension: path.extname(filePath),
         }),
       );
 
-  if (useMiddleware) return middleware;
+  if (useMiddleware) return getMiddleware(cache);
 
-  http.createServer(middleware).listen(port || 8000);
+  http.createServer(getMiddleware(cache)).listen(port || 8000);
 
   return () => {
     throw new Error(

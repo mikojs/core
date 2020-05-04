@@ -4,7 +4,7 @@ import path from 'path';
 
 import { requireModule } from '@mikojs/utils';
 
-import buildMiddleware, {
+import build, {
   type optionsType,
   type eventType,
   type dataType,
@@ -14,6 +14,8 @@ import buildMiddleware, {
 type cacheType = {
   [string]: string,
 };
+
+export const buildMiddleware = build;
 
 /**
  * @example
@@ -30,7 +32,7 @@ export default (folderPath: string, options: optionsType): middlewareType =>
     options,
     {},
     (event: eventType, cache: cacheType, { filePath }: dataType) => {
-      const pathname = path.relative(folderPath, filePath);
+      const pathname = `/${path.relative(folderPath, filePath)}`;
 
       switch (event) {
         case 'init':

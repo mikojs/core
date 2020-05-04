@@ -9,19 +9,14 @@ import {
   type d3DirTreeNodeType,
 } from '@mikojs/utils/lib/d3DirTree';
 
-type optionsType = {|
+export type optionsType = {|
   ...$Diff<d3DirTreeOptionsType, {| normalizePath: mixed |}>,
   useMiddleware?: boolean,
   dev?: boolean,
   port?: number,
 |};
 
-type middlewareType = (
-  req: http.IncomingMessage,
-  res: http.ServerResponse,
-) => void;
-
-type eventType =
+export type eventType =
   | 'init'
   | 'add'
   | 'addDir'
@@ -32,7 +27,7 @@ type eventType =
   | 'raw'
   | 'error';
 
-type dataType = {|
+export type dataType = {|
   filePath: $PropertyType<$PropertyType<d3DirTreeNodeType, 'data'>, 'path'>,
   name: $PropertyType<$PropertyType<d3DirTreeNodeType, 'data'>, 'name'>,
   extension: $PropertyType<
@@ -42,6 +37,11 @@ type dataType = {|
 |};
 
 type updateCacheType = (event: eventType, data: dataType) => void;
+
+export type middlewareType = (
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+) => void;
 
 /**
  * @example

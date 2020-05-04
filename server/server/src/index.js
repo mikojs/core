@@ -4,12 +4,12 @@ import path from 'path';
 
 import { requireModule } from '@mikojs/utils';
 
-import buildCache, {
+import buildMiddleware, {
   type optionsType,
   type eventType,
   type dataType,
   type middlewareType,
-} from './utils/buildCache';
+} from './utils/buildMiddleware';
 
 type cacheType = {
   [string]: string,
@@ -25,7 +25,7 @@ type cacheType = {
  * @return {middlewareType} - middleware function
  */
 export default (folderPath: string, options: optionsType): middlewareType =>
-  buildCache<cacheType>(
+  buildMiddleware<cacheType>(
     folderPath,
     options,
     {},

@@ -45,7 +45,7 @@ type getMiddlewareType<C> = (cache: C) => middlewareType;
 
 /**
  * @example
- * buildCache('/', options, cache, () => {}, () => {})
+ * buildMiddleware('/', options, cache, () => {}, () => {})
  *
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options

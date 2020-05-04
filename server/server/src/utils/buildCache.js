@@ -11,9 +11,7 @@ import {
 
 export type optionsType = {|
   ...$Diff<d3DirTreeOptionsType, {| normalizePath: mixed |}>,
-  useMiddleware?: boolean,
   dev?: boolean,
-  port?: number,
 |};
 
 export type eventType =
@@ -59,7 +57,7 @@ type getMiddlewareType<C> = (cache: C) => middlewareType;
  */
 export default <C>(
   folderPath: string,
-  { extensions, exclude, useMiddleware, dev, port }: optionsType,
+  { extensions, exclude, dev }: optionsType,
   cache: C,
   updateCache: updateCacheType<C>,
   getMiddleware: getMiddlewareType<C>,
@@ -89,13 +87,5 @@ export default <C>(
         }),
       );
 
-  if (useMiddleware) return getMiddleware(cache);
-
-  http.createServer(getMiddleware(cache)).listen(port || 8000);
-
-  return () => {
-    throw new Error(
-      'If you want to use middleware, use should use `useMiddleware` option.',
-    );
-  };
+  return getMiddleware(cache);
 };

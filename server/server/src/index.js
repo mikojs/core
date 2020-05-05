@@ -26,13 +26,15 @@ export const buildMiddleware = build;
  *
  * @return {middlewareType} - middleware function
  */
-export default (folderPath: string, options: optionsType): middlewareType =>
+export default (folderPath: string, options?: optionsType): middlewareType =>
   buildMiddleware<cacheType>(
     folderPath,
     options,
     {},
-    (event: eventType, cache: cacheType, { filePath }: dataType) => {
-      const pathname = `/${path.relative(folderPath, filePath)}`;
+    (event: eventType, cache: cacheType, { filePath, extension }: dataType) => {
+      const pathname = `/${path
+        .relative(folderPath, filePath)
+        .replace(extension, '')}`;
 
       switch (event) {
         case 'init':
@@ -54,7 +56,7 @@ export default (folderPath: string, options: optionsType): middlewareType =>
       res: http.ServerResponse,
     ) => {
       const middlewareKey = Object.keys(cache).find(
-        (pathname: string) => pathname === req.path,
+        (pathname: string) => pathname === req.url,
       );
 
       if (!middlewareKey) return;

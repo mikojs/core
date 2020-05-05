@@ -57,7 +57,7 @@ type getMiddlewareType<C> = (cache: C) => middlewareType;
  */
 export default <C>(
   folderPath: string,
-  { extensions, exclude, dev }: optionsType,
+  { extensions, exclude, dev }: optionsType = {},
   cache: C,
   updateCache: updateCacheType<C>,
   getMiddleware: getMiddlewareType<C>,

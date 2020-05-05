@@ -2,5 +2,6 @@
 
 /** @middleware get middleware */
 export default (req: http.IncomingMessage, res: http.ServerResponse) => {
-  res.json({ key: 'value' });
+  res.write(JSON.stringify({ key: 'value' }));
+  res.end();
 };

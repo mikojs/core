@@ -9,7 +9,7 @@ export type d3DirTreeNodeType = {|
     name: string,
     size: number,
     type: 'directory' | 'file',
-    extension: mixed,
+    extension: string,
   |},
   depth: number,
   height: number,

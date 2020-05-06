@@ -2,17 +2,17 @@
 
 /**
  * @example
- * throwMessageInIndex('package name')
+ * importError('package name')
  *
  * @param {string} packageName - package name
  */
-const throwMessageInIndex = (packageName: string) => {
+const importError = (packageName: string) => {
   throw new Error(
     `Do not import module with \`${packageName}\`. Use \`${packageName}/lib/<module>\`.`,
   );
 };
 
-throwMessageInIndex.test = (packageName: string, requireFunc: () => mixed) => {
+importError.test = (packageName: string, requireFunc: () => mixed) => {
   test(`can not import ${packageName}`, () => {
     expect(() => {
       requireFunc();
@@ -22,4 +22,4 @@ throwMessageInIndex.test = (packageName: string, requireFunc: () => mixed) => {
   });
 };
 
-export default throwMessageInIndex;
+export default importError;

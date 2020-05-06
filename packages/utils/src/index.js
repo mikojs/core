@@ -1,5 +1,5 @@
 // @flow
 
-import throwMessageInIndex from './throwMessageInIndex';
+import importError from './importError';
 
-throwMessageInIndex('@mikojs/utils');
+importError('@mikojs/utils');

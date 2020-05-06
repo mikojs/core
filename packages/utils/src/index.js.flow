@@ -2,6 +2,7 @@
 
 // Use for babel-plugins-transform-imports
 export { default as d3DirTree } from './d3DirTree';
+export * from './d3DirTree';
 export { default as importError } from './importError';
 export { default as handleUnhandledRejection } from './handleUnhandledRejection';
 export { default as mockChoice } from './mockChoice';

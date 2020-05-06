@@ -8,7 +8,7 @@ import { ExecutionEnvironment } from 'fbjs';
  *
  * @param {any} error - any error message
  */
-export const defaultErrorCallback = (error: mixed) => {
+const defaultErrorCallback = (error: mixed) => {
   throw error;
 };
 

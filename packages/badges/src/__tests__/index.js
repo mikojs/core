@@ -1,5 +1,5 @@
 // @flow
 
-import { throwMessageInIndex } from '@mikojs/utils';
+import { importError } from '@mikojs/utils';
 
-throwMessageInIndex.test('@mikojs/badges', () => require('../index'));
+importError.test('@mikojs/badges', () => require('../index'));

@@ -19,6 +19,6 @@ it('test d3DirTree', () => {
     'index.js.flow',
     'mockChoice.js',
     'requireModule.js',
-    'throwMessageInIndex.js',
+    'importError.js',
   ]);
 });

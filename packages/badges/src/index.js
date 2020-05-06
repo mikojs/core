@@ -1,5 +1,5 @@
 // @flow
 
-import { throwMessageInIndex } from '@mikojs/utils';
+import { importError } from '@mikojs/utils';
 
-throwMessageInIndex('@mikojs/badges');
+importError('@mikojs/badges');

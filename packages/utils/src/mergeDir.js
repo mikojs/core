@@ -49,6 +49,7 @@ export default (
 ) => {
   d3DirTree(folderPath, options)
     .leaves()
+    .filter(({ data: { type } }: d3DirTreeNodeType) => type === 'file')
     .forEach(
       ({ data: { path: filePath, name, extension } }: d3DirTreeNodeType) =>
         callback('init', {

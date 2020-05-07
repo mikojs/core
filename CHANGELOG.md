@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## 1.10.1 (2020-05-07)
+
+#### :boom: Breaking Change
+
+- `configs`, `website`
+  - [#593](https://github.com/mikojs/core/pull/593) (@mikojs/core) Remove server ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `configs`, `miko`, `utils`
+  - [#597](https://github.com/mikojs/core/pull/597) (@mikojs/utils) Add merge dir ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `utils`
+  - [#595](https://github.com/mikojs/core/pull/595) (@mikojs/utils) Rename utils ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `configs`, `miko`
+  - [#594](https://github.com/mikojs/core/pull/594) (@mikojs/core) Add more type checking ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.10.0 (2020-04-22)
 
 #### :boom: Breaking Change

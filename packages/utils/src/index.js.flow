@@ -1,11 +1,12 @@
 // @flow
 
 // Use for babel-plugins-transform-imports
-export { default as d3DirTree } from './d3DirTree';
-export * from './d3DirTree';
-export { default as importError } from './importError';
-export { default as handleUnhandledRejection } from './handleUnhandledRejection';
-export { default as mockChoice } from './mockChoice';
-export { default as requireModule } from './requireModule';
 export { default as chainingLogger } from './chainingLogger';
 export { default as createLogger } from './createLogger';
+export { default as d3DirTree } from './d3DirTree';
+export * from './d3DirTree';
+export { default as handleUnhandledRejection } from './handleUnhandledRejection';
+export { default as importError } from './importError';
+export { default as mergeDir } from './mergeDir';
+export { default as mockChoice } from './mockChoice';
+export { default as requireModule } from './requireModule';

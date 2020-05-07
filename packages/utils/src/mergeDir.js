@@ -7,12 +7,12 @@ import d3DirTree, {
   type d3DirTreeNodeType,
 } from './d3DirTree';
 
-export type optionsType = {|
+export type mergeDirOptionsType = {|
   ...d3DirTreeOptionsType,
   watch: boolean,
 |};
 
-export type eventType =
+export type mergeDirEventType =
   | 'init'
   | 'add'
   | 'addDir'
@@ -23,7 +23,7 @@ export type eventType =
   | 'raw'
   | 'error';
 
-export type dataType = {|
+export type mergeDirDataType = {|
   filePath: $PropertyType<$PropertyType<d3DirTreeNodeType, 'data'>, 'path'>,
   name: $PropertyType<$PropertyType<d3DirTreeNodeType, 'data'>, 'name'>,
   extension: $PropertyType<
@@ -32,19 +32,19 @@ export type dataType = {|
   >,
 |};
 
-type callbackType = (event: eventType, data: dataType) => void;
+type callbackType = (event: mergeDirEventType, data: mergeDirDataType) => void;
 
 /**
  * @example
  * mergeDir('/', options, callback)
  *
  * @param {string} folderPath - folder path
- * @param {optionsType} options - options
+ * @param {mergeDirOptionsType} options - options
  * @param {callbackType} callback - callback function
  */
 export default (
   folderPath: string,
-  { watch, ...options }: optionsType = {},
+  { watch, ...options }: mergeDirOptionsType,
   callback: callbackType,
 ) => {
   d3DirTree(folderPath, options)
@@ -62,7 +62,7 @@ export default (
   if (watch)
     require('chokidar')
       .watch(folderPath)
-      .on('all', (event: eventType, filePath: string) =>
+      .on('all', (event: mergeDirEventType, filePath: string) =>
         callback(event, {
           filePath,
           name: path.basename(filePath),

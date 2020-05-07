@@ -1,6 +1,6 @@
 // @flow
 
-import { type configsType } from '@mikojs/miko/lib/types';
+import { type configsType } from '@mikojs/miko';
 
 import babel from './defaultConfigs/babel';
 import prettier from './defaultConfigs/prettier';

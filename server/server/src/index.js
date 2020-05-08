@@ -14,10 +14,10 @@ type optionsType = {|
   dev?: boolean,
 |};
 
-type middlewareType = (
-  req: http.IncomingMessage,
-  res: http.ServerResponse,
-) => void;
+export type middlewareType<
+  Req = http.IncomingMessage,
+  Res = http.ServerResponse,
+> = (req: Req, res: Res) => void;
 
 /**
  * @example
@@ -31,7 +31,7 @@ type middlewareType = (
 export default (
   folderPath: string,
   { dev, ...options }: optionsType = {},
-): middlewareType => {
+): middlewareType<> => {
   const cache = {};
 
   mergeDir(

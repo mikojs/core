@@ -12,7 +12,9 @@ describe('require module', () => {
     ${'module.js'}
   `('require $moduleName', ({ moduleName }: {| moduleName: string |}) => {
     expect(
-      requireModule(path.resolve(__dirname, './__ignore__', moduleName)),
+      requireModule(
+        path.resolve(__dirname, './__ignore__/requireModule', moduleName),
+      ),
     ).toEqual({ key: 'value' });
   });
 });

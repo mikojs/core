@@ -2,28 +2,33 @@
 
 import { ExecutionEnvironment } from 'fbjs';
 
-import handleUnhandledRejection, {
-  defaultErrorCallback,
-} from '../handleUnhandledRejection';
-
-test('default error callback', () => {
-  expect(() => {
-    defaultErrorCallback('test default error');
-  }).toThrow('test default error');
-});
+import handleUnhandledRejection from '../handleUnhandledRejection';
 
 describe('handle unhandleRejection', () => {
-  test('node', () => {
-    ExecutionEnvironment.canUseEventListeners = false;
-    expect(handleUnhandledRejection).not.toThrow();
-  });
+  test('default error callback', () => {
+    const mockAddEventListener = jest.fn();
 
-  test('brwoser', () => {
+    window.addEventListener = mockAddEventListener;
     ExecutionEnvironment.canUseEventListeners = true;
-    expect(handleUnhandledRejection).not.toThrow();
+    handleUnhandledRejection();
+
+    expect(mockAddEventListener).toHaveBeenCalled();
+
+    const [[, callback]] = mockAddEventListener.mock.calls;
+
+    expect(callback).not.toBeUndefined();
+    expect(() => callback(new Error('error'))).toThrow('error');
   });
 
-  afterEach(() => {
-    ExecutionEnvironment.canUseEventListeners = false;
-  });
+  test.each`
+    isBrowser
+    ${false}
+    ${true}
+  `(
+    'env with isBrowser = $isBrowser',
+    ({ isBrowser }: {| isBrowser: boolean |}) => {
+      ExecutionEnvironment.canUseEventListeners = isBrowser;
+      expect(handleUnhandledRejection()).toBeUndefined();
+    },
+  );
 });

@@ -43,19 +43,20 @@ export default {
     },
     build: {
       ...config.build,
-      command: 'lerna exec "miko babel" --stream',
+      command: 'lerna exec "miko babel" --parallel --stream',
     },
     dev: {
       ...config.dev,
       command: (): string => {
         const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'master';
 
-        return `lerna exec "miko babel -w" --stream --since ${branch}`;
+        return `lerna exec "miko babel -w" --parallel --stream --since ${branch}`;
       },
     },
     prod: {
       ...config.prod,
-      command: 'NODE_ENV=production && lerna exec "miko babel" --stream',
+      command:
+        'NODE_ENV=production && lerna exec "miko babel" --parallel --stream',
     },
     'husky:pre-commit': {
       ...config['husky:pre-commit'],
@@ -87,7 +88,7 @@ export default {
     },
     clean: {
       ...config.clean,
-      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' && lerna clean && ${
+      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' --parallel && lerna clean && ${
         config.clean?.command || 'rm -rf'
       } ./.changelog`,
     },

@@ -1,10 +1,5 @@
 // @flow
 
-import throwMessageInIndex from '../throwMessageInIndex';
+import importError from '../importError';
 
-/**
- * FIXME:
- * Owing to jest coverage, can not remove index
- * Remove it after upgrading jest
- */
-throwMessageInIndex.test('@mikojs/utils', () => require('../index'));
+importError.test('@mikojs/utils', () => require('../index'));

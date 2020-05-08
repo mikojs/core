@@ -14,7 +14,7 @@ describe('with lerna', () => {
     ${'flow'}             | ${'true'}  | ${"flow --quiet && flow stop && lerna exec 'flow --quiet && flow stop' --stream --concurrency 1"}
     ${'flow'}             | ${'false'} | ${"flow --quiet && lerna exec 'flow --quiet' --stream --concurrency 1"}
     ${'babel'}            | ${'true'}  | ${' --config-file babel.config.js'}
-    ${'dev'}              | ${'true'}  | ${'lerna exec "miko babel -w" --stream --since master'}
+    ${'dev'}              | ${'true'}  | ${'lerna exec "miko babel -w" --parallel --stream --since master'}
     ${'husky:pre-commit'} | ${'true'}  | ${'miko build --since master && miko flow --since master && lint-staged'}
   `(
     'run miko with cliName = $cliName',

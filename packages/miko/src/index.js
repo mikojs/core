@@ -4,9 +4,11 @@ import path from 'path';
 
 import buildWorker from '@mikojs/worker';
 
-import cache from './utils/cache';
+import cache, { type initialConfigsType } from './utils/cache';
 
 import typeof * as workerType from './worker';
+
+export type configsType = initialConfigsType;
 
 /**
  * @example

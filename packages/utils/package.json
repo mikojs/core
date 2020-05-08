@@ -5,11 +5,12 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/utils",
   "repository": "https://github.com/mikojs/core/tree/master/packages/utils",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.9.2",
     "chalk": "^4.0.0",
+    "chokidar": "^3.4.0",
     "core-js": "^3.6.5",
     "d3-hierarchy": "^1.1.9",
     "directory-tree": "^2.2.4",

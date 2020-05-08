@@ -15,10 +15,11 @@ it('test d3DirTree', () => {
     'createLogger.js',
     'd3DirTree.js',
     'handleUnhandledRejection.js',
+    'importError.js',
     'index.js',
     'index.js.flow',
+    'mergeDir.js',
     'mockChoice.js',
     'requireModule.js',
-    'throwMessageInIndex.js',
   ]);
 });

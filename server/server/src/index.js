@@ -73,6 +73,6 @@ export default (
 
     if (!middlewarePath) return;
 
-    requireModule(middlewarePath)(req, res);
+    requireModule<middlewareType<>>(middlewarePath)(req, res);
   };
 };

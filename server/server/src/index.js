@@ -2,20 +2,22 @@
 
 import path from 'path';
 
-import { requireModule } from '@mikojs/utils';
+import { requireModule, mergeDir } from '@mikojs/utils';
+import {
+  type mergeDirOptionsType,
+  type mergeDirEventType,
+  type mergeDirDataType,
+} from '@mikojs/utils/lib/mergeDir';
 
-import build, {
-  type optionsType,
-  type eventType,
-  type dataType,
-  type middlewareType,
-} from './utils/buildMiddleware';
+type optionsType = {|
+  ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
+  dev?: boolean,
+|};
 
-type cacheType = {
-  [string]: string,
-};
-
-export const buildMiddleware = build;
+type middlewareType = (
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+) => void;
 
 /**
  * @example
@@ -26,12 +28,19 @@ export const buildMiddleware = build;
  *
  * @return {middlewareType} - middleware function
  */
-export default (folderPath: string, options?: optionsType): middlewareType =>
-  buildMiddleware<cacheType>(
+export default (
+  folderPath: string,
+  { dev, ...options }: optionsType = {},
+): middlewareType => {
+  const cache = {};
+
+  mergeDir(
     folderPath,
-    options,
-    {},
-    (event: eventType, cache: cacheType, { filePath, extension }: dataType) => {
+    {
+      ...options,
+      watch: dev,
+    },
+    (event: mergeDirEventType, { filePath, extension }: mergeDirDataType) => {
       const pathname = `/${path
         .relative(folderPath, filePath)
         .replace(extension, '')}`;
@@ -51,20 +60,19 @@ export default (folderPath: string, options?: optionsType): middlewareType =>
           break;
       }
     },
-    (cache: cacheType) => (
-      req: http.IncomingMessage,
-      res: http.ServerResponse,
-    ) => {
-      const middlewareKey = Object.keys(cache).find(
-        (pathname: string) => pathname === req.url,
-      );
-
-      if (!middlewareKey) return;
-
-      const middlewarePath = cache[middlewareKey];
-
-      if (!middlewarePath) return;
-
-      requireModule(middlewarePath)(req, res);
-    },
   );
+
+  return (req: http.IncomingMessage, res: http.ServerResponse) => {
+    const middlewareKey = Object.keys(cache).find(
+      (pathname: string) => pathname === req.url,
+    );
+
+    if (!middlewareKey) return;
+
+    const middlewarePath = cache[middlewareKey];
+
+    if (!middlewarePath) return;
+
+    requireModule(middlewarePath)(req, res);
+  };
+};

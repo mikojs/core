@@ -6,12 +6,12 @@ import http from 'http';
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
-import buildServer from '../index';
+import buildApi from '../index';
 
 describe('server', () => {
   test('work', async () => {
     const server = http.createServer(
-      buildServer(path.resolve(__dirname, './__ignore__')),
+      buildApi(path.resolve(__dirname, './__ignore__')),
     );
     const port = await getPort();
 

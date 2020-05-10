@@ -9,7 +9,10 @@ import fetch, { type Body as BodyType } from 'node-fetch';
 import buildApi from '../index';
 
 describe('server', () => {
-  test('work', async () => {
+  test.each`
+    pathname
+    ${'/api'}
+  `('fetch $pathname', async ({ pathname }: {| pathname: string |}) => {
     const server = http.createServer(
       buildApi(path.resolve(__dirname, './__ignore__')),
     );
@@ -18,7 +21,7 @@ describe('server', () => {
     server.listen(port);
 
     expect(
-      await fetch(`http://localhost:${port}/get`).then((res: BodyType) =>
+      await fetch(`http://localhost:${port}${pathname}`).then((res: BodyType) =>
         res.json(),
       ),
     ).toEqual({ key: 'value' });

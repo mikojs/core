@@ -63,8 +63,8 @@ export default (
   );
 
   return (req: http.IncomingMessage, res: http.ServerResponse) => {
-    const middlewareKey = Object.keys(cache).find(
-      (pathname: string) => pathname === req.url,
+    const middlewareKey = Object.keys(cache).find((pathname: string) =>
+      new RegExp(pathname).test(req.url),
     );
 
     if (middlewareKey && cache[middlewareKey]) {

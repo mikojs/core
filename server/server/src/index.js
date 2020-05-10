@@ -67,12 +67,14 @@ export default (
       (pathname: string) => pathname === req.url,
     );
 
-    if (!middlewareKey) return;
+    if (middlewareKey && cache[middlewareKey]) {
+      requireModule<middlewareType<>>(cache[middlewareKey])(req, res);
+      return;
+    }
 
-    const middlewarePath = cache[middlewareKey];
-
-    if (!middlewarePath) return;
-
-    requireModule<middlewareType<>>(middlewarePath)(req, res);
+    res.statusCode = 404;
+    res.statusMessage = 'Not found';
+    res.write('Not found');
+    res.end();
   };
 };

@@ -10,22 +10,29 @@ import buildApi from '../index';
 
 describe('server', () => {
   test.each`
-    pathname
-    ${'/api'}
-  `('fetch $pathname', async ({ pathname }: {| pathname: string |}) => {
-    const server = http.createServer(
-      buildApi(path.resolve(__dirname, './__ignore__')),
-    );
-    const port = await getPort();
+    pathname             | canFind
+    ${'/api'}            | ${true}
+    ${'/id'}             | ${true}
+    ${'/test/not-found'} | ${false}
+    ${'/test/api'}       | ${true}
+  `(
+    'fetch $pathname',
+    async ({ pathname, canFind }: {| pathname: string, canFind: boolean |}) => {
+      const server = http.createServer(
+        buildApi(path.resolve(__dirname, './__ignore__')),
+      );
+      const port = await getPort();
+      const url = `http://localhost:${port}${pathname}`;
 
-    server.listen(port);
+      server.listen(port);
 
-    expect(
-      await fetch(`http://localhost:${port}${pathname}`).then((res: BodyType) =>
-        res.json(),
-      ),
-    ).toEqual({ key: 'value' });
+      expect(
+        await fetch(url).then((res: BodyType) =>
+          canFind ? res.json() : res.text(),
+        ),
+      ).toEqual(canFind ? { key: 'value' } : 'Not found');
 
-    server.close();
-  });
+      server.close();
+    },
+  );
 });

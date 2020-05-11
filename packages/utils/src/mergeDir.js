@@ -40,7 +40,7 @@ export const mockUpdate = {
   clear: () => {
     mockUpdate.cache = [];
   },
-  watch: (folderPath: string) => ({
+  watch: (folderPath: string, options: {| ignoreInitial: boolean |}) => ({
     on: (
       event: 'all',
       callback: (event: mergeDirEventType, filePath: string) => void,
@@ -77,7 +77,7 @@ export default (
 
   if (watch)
     mockChoice(process.env.NODE_ENV !== 'test', require('chokidar'), mockUpdate)
-      .watch(folderPath)
+      .watch(folderPath, { ignoreInitial: true })
       .on('all', (event: mergeDirEventType, filePath: string) =>
         callback(event, {
           filePath,

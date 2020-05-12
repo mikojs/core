@@ -2,6 +2,8 @@
 
 import path from 'path';
 
+import debug from 'debug';
+
 import { requireModule, mergeDir } from '@mikojs/utils';
 import {
   type mergeDirOptionsType,
@@ -18,6 +20,8 @@ export type middlewareType<
   Req = http.IncomingMessage,
   Res = http.ServerResponse,
 > = (req: Req, res: Res) => void;
+
+const debugLog = debug('server');
 
 /**
  * @example
@@ -45,6 +49,8 @@ export default (
         .relative(folderPath, filePath)
         .replace(extension, '')}`;
 
+      debugLog({ event, filePath });
+
       switch (event) {
         case 'init':
         case 'add':
@@ -59,6 +65,8 @@ export default (
         default:
           break;
       }
+
+      debugLog({ cache });
     },
   );
 
@@ -66,6 +74,8 @@ export default (
     const middlewareKey = Object.keys(cache).find((pathname: string) =>
       new RegExp(pathname).test(req.url),
     );
+
+    debugLog(middlewareKey && cache[middlewareKey]);
 
     if (middlewareKey && cache[middlewareKey]) {
       requireModule<middlewareType<>>(cache[middlewareKey])(req, res);

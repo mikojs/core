@@ -12,7 +12,8 @@
     "@mikojs/utils": "^1.10.0",
     "chalk": "^4.0.0",
     "commander": "^5.0.0",
-    "core-js": "^3.6.5"
+    "core-js": "^3.6.5",
+    "debug": "^4.1.1"
   },
   "devDependencies": {
     "flow-bin": "^0.123.0",

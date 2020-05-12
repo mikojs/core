@@ -2,11 +2,20 @@
 
 import http from 'http';
 
+import ora from 'ora';
+import chalk from 'chalk';
+
+import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
+
 import getOptions, { type optionsType } from './utils/getOptions';
 import {
   type optionsType as serverOptionsType,
   type middlewareType,
 } from './index';
+
+const logger = createLogger('@mikojs/miko', ora({ discardStdin: false }));
+
+handleUnhandledRejection();
 
 /**
  * @example
@@ -24,15 +33,23 @@ export default <
 >(
   argv: $ReadOnlyArray<string>,
   callback: C,
-) =>
-  getOptions(argv).then(({ port, folderPath }: optionsType): http.Server => {
-    const server = http.createServer(
-      callback(folderPath, {
-        dev: process.env.NODE_ENV !== 'production',
-      }),
-    );
+): Promise<http.Server> => {
+  logger.start('Server start');
 
-    server.listen(port);
+  return getOptions(argv).then(
+    ({ port, folderPath }: optionsType): http.Server => {
+      const server = http.createServer(
+        callback(folderPath, {
+          dev: process.env.NODE_ENV !== 'production',
+        }),
+      );
 
-    return server;
-  });
+      server.listen(port);
+      logger.succeed(
+        chalk`Running server at port: {gray {bold ${port.toString()}}}`,
+      );
+
+      return server;
+    },
+  );
+};

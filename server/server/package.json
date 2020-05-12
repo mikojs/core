@@ -10,6 +10,8 @@
   "dependencies": {
     "@babel/runtime": "^7.9.2",
     "@mikojs/utils": "^1.10.0",
+    "chalk": "^4.0.0",
+    "commander": "^5.0.0",
     "core-js": "^3.6.5"
   },
   "devDependencies": {

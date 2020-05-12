@@ -23,4 +23,5 @@ define babel-build
 		$(1)
 	ln -snf $(ROOT)/packages/miko/lib/bin/index.js ./node_modules/.bin/miko
 	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
+	ln -snf $(ROOT)/server/server/lib/bin/index.js ./node_modules/.bin/server
 endef

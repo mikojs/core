@@ -9,6 +9,7 @@ import fetch, { type Body as BodyType } from 'node-fetch';
 import { mockUpdate, type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 
 import buildApi from '../index';
+import buildCli from '../buildCli';
 
 describe('server', () => {
   beforeEach(() => {
@@ -35,16 +36,16 @@ describe('server', () => {
       updateEvent: mergeDirEventType,
     |}) => {
       const folderPath = path.resolve(__dirname, './__ignore__');
-      const server = http.createServer(
-        buildApi(
-          folderPath,
-          updateEvent === 'init' ? undefined : { dev: true },
-        ),
-      );
       const port = await getPort();
       const url = `http://localhost:${port}${pathname}`;
+      const server = await (updateEvent !== 'init'
+        ? buildCli(['node', 'server', '-f', folderPath, '-p', port], buildApi)
+        : new Promise(resolve => {
+            const runningServer = http.createServer(buildApi(folderPath));
 
-      server.listen(port);
+            runningServer.listen(port);
+            resolve(runningServer);
+          }));
 
       if (updateEvent !== 'init') {
         expect(mockUpdate.cache).toHaveLength(1);

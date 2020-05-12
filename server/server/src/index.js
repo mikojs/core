@@ -11,7 +11,7 @@ import {
   type mergeDirDataType,
 } from '@mikojs/utils/lib/mergeDir';
 
-type optionsType = {|
+export type optionsType = {|
   ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
   dev?: boolean,
 |};

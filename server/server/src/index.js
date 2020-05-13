@@ -2,6 +2,7 @@
 
 import path from 'path';
 
+import chalk from 'chalk';
 import debug from 'debug';
 
 import { requireModule, mergeDir } from '@mikojs/utils';
@@ -10,10 +11,12 @@ import {
   type mergeDirEventType,
   type mergeDirDataType,
 } from '@mikojs/utils/lib/mergeDir';
+import typeof createLoggerType from '@mikojs/utils/lib/createLogger';
 
 export type optionsType = {|
   ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
   dev?: boolean,
+  logger?: $Call<createLoggerType, string>,
 |};
 
 export type middlewareType<
@@ -34,7 +37,7 @@ const debugLog = debug('server');
  */
 export default (
   folderPath: string,
-  { dev, ...options }: optionsType = {},
+  { dev, logger, ...options }: optionsType = {},
 ): middlewareType<> => {
   const cache = {};
 
@@ -50,6 +53,9 @@ export default (
         .replace(extension, '')}`;
 
       debugLog({ event, filePath });
+
+      if (['add', 'change', 'unlink'].includes(event) && logger)
+        logger.start(chalk`{gray [${event}]} Server updating`);
 
       switch (event) {
         case 'init':
@@ -67,6 +73,9 @@ export default (
       }
 
       debugLog({ cache });
+
+      if (['add', 'change', 'unlink'].includes(event) && logger)
+        logger.succeed(chalk`{gray [${event}]} Server updated`);
     },
   );
 

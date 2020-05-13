@@ -41,6 +41,7 @@ export default <
       const server = http.createServer(
         callback(folderPath, {
           dev: process.env.NODE_ENV !== 'production',
+          logger,
         }),
       );
 

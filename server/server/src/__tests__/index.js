@@ -23,8 +23,9 @@ describe('server', () => {
     ${'/api'}            | ${true}  | ${'init'}
     ${'/id'}             | ${true}  | ${'init'}
     ${'/test/not-found'} | ${false} | ${'init'}
+    ${'/test'}           | ${true}  | ${'init'}
     ${'/test/api'}       | ${true}  | ${'init'}
-    ${'/api'}            | ${false} | ${'unlink'}
+    ${'/test/api'}       | ${false} | ${'unlink'}
     ${'/api'}            | ${true}  | ${'error'}
   `(
     'fetch $pathname',
@@ -64,7 +65,7 @@ describe('server', () => {
         countLog += 1;
         mockUpdate.cache[0](
           updateEvent,
-          path.resolve(folderPath, `.${pathname}`),
+          path.resolve(folderPath, `.${pathname}.js`),
         );
 
         if (updateEvent === 'unlink') countLog += 1;

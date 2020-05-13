@@ -3,6 +3,7 @@
 import path from 'path';
 
 import chalk from 'chalk';
+import { pathToRegexp } from 'path-to-regexp';
 import debug from 'debug';
 
 import { requireModule, mergeDir } from '@mikojs/utils';
@@ -47,12 +48,21 @@ export default (
       ...options,
       watch: dev,
     },
-    (event: mergeDirEventType, { filePath, extension }: mergeDirDataType) => {
-      const pathname = `/${path
-        .relative(folderPath, filePath)
-        .replace(extension, '')}`;
+    (
+      event: mergeDirEventType,
+      { filePath, name, extension }: mergeDirDataType,
+    ) => {
+      const pathname = `/${[
+        path.relative(folderPath, path.dirname(filePath)),
+        name
+          .replace(extension, '')
+          .replace(/^index$/, '')
+          .replace(/\[([^[\]]*)\]/g, ':$1'),
+      ]
+        .filter(Boolean)
+        .join('/')}`;
 
-      debugLog({ event, filePath });
+      debugLog({ event, filePath, pathname });
 
       if (['add', 'change', 'unlink'].includes(event) && logger)
         logger.start(chalk`{gray [${event}]} Server updating`);
@@ -81,7 +91,7 @@ export default (
 
   return (req: http.IncomingMessage, res: http.ServerResponse) => {
     const middlewareKey = Object.keys(cache).find((pathname: string) =>
-      new RegExp(pathname).test(req.url),
+      pathToRegexp(pathname).exec(req.url),
     );
 
     debugLog(middlewareKey && cache[middlewareKey]);

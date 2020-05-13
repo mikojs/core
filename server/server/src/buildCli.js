@@ -22,6 +22,7 @@ handleUnhandledRejection();
  * TODO: should use async/await after flow fix error
  *
  * @param {Array} argv - command line
+ * @param {string} defaultFolder - default folder
  * @param {createLoggerType} logger - logger function
  * @param {Function} callback - use to build the middleware
  *
@@ -31,12 +32,13 @@ export default <
   C: (folderPath: string, options: serverOptionsType) => middlewareType<>,
 >(
   argv: $ReadOnlyArray<string>,
+  defaultFolder: string,
   logger: $Call<createLoggerType, string>,
   callback: C,
 ): Promise<http.Server> => {
   logger.start('Server start');
 
-  return getOptions(argv).then(
+  return getOptions(argv, defaultFolder).then(
     ({ port, folderPath }: optionsType): http.Server => {
       const server = http.createServer(
         callback(folderPath, {

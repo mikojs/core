@@ -17,7 +17,9 @@ describe('get options', () => {
       argv: $ReadOnlyArray<string>,
       expected: optionsType,
     |}) => {
-      expect(await getOptions(['node', 'server', ...argv])).toEqual(expected);
+      expect(await getOptions(['node', 'server', ...argv], __filename)).toEqual(
+        expected,
+      );
     },
   );
 });

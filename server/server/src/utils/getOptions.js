@@ -10,21 +10,24 @@ export type optionsType = {|
   folderPath: string,
 |};
 
-const defaultOptions = {
-  port: 8000,
-  folderPath: './',
-};
-
 /**
  * @example
  * getOptions([])
  *
  * @param {Array} argv - command line
+ * @param {string} defaultFolder - default folder
  *
  * @return {optionsType} - options
  */
-export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
+export default (
+  argv: $ReadOnlyArray<string>,
+  defaultFolder: string,
+): Promise<optionsType> =>
   new Promise(resolve => {
+    const defaultOptions = {
+      port: 8000,
+      folderPath: defaultFolder,
+    };
     const program = new commander.Command('server')
       .version(version, '-v, --version')
       .arguments('[configNames...]')

@@ -50,6 +50,7 @@ describe('server', () => {
       const server = await (updateEvent !== 'init'
         ? buildCli(
             ['node', 'server', '-f', folderPath, '-p', port],
+            folderPath,
             { ...chainingLogger, start: jest.fn() },
             buildApi,
           )

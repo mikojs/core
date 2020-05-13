@@ -36,6 +36,11 @@ describe('server', () => {
       canFind: boolean,
       updateEvent: mergeDirEventType,
     |}) => {
+      const mockLog = jest.fn();
+      let countLog: number = 0;
+
+      global.console.log = mockLog;
+
       const folderPath = path.resolve(__dirname, './__ignore__');
       const port = await getPort();
       const url = `http://localhost:${port}${pathname}`;
@@ -54,12 +59,17 @@ describe('server', () => {
 
       if (updateEvent !== 'init') {
         expect(mockUpdate.cache).toHaveLength(1);
+
+        countLog += 1;
         mockUpdate.cache[0](
           updateEvent,
           path.resolve(folderPath, `.${pathname}`),
         );
+
+        if (updateEvent === 'unlink') countLog += 1;
       }
 
+      expect(mockLog).toHaveBeenCalledTimes(countLog);
       expect(
         await fetch(url).then((res: BodyType) =>
           canFind ? res.json() : res.text(),

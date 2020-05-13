@@ -1,5 +1,7 @@
 // @flow
 
-import api from './api';
-
-export default api;
+/** @middleware get middleware */
+export default (req: http.IncomingMessage, res: http.ServerResponse) => {
+  res.write(JSON.stringify({ key: 'value' }));
+  res.end();
+};

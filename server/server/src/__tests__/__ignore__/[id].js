@@ -1,5 +1,5 @@
 // @flow
 
-import api from './api';
+import api from './index';
 
 export default api;

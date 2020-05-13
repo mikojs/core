@@ -30,6 +30,13 @@ export type middlewareType<
   Res = http.ServerResponse,
 > = (req: Req, res: Res) => void;
 
+type cacheType = {|
+  filePath: string,
+  pathname: string,
+  regExp: $Call<typeof pathToRegexp, string, $ReadOnlyArray<string>>,
+  getUrlQuery: (pathname: string | null) => QueryParametersType,
+|};
+
 const debugLog = debug('server');
 
 /**
@@ -45,13 +52,7 @@ export default (
   folderPath: string,
   { dev, logger, ...options }: optionsType = {},
 ): middlewareType<> => {
-  const cache: {
-    [string]: {
-      filePath: string,
-      regExp: $Call<typeof pathToRegexp, string, $ReadOnlyArray<string>>,
-      getUrlQuery: (pathname: string | null) => QueryParametersType,
-    },
-  } = {};
+  let cache: $ReadOnlyArray<cacheType> = [];
 
   mergeDir(
     folderPath,
@@ -63,17 +64,7 @@ export default (
       event: mergeDirEventType,
       { filePath, name, extension }: mergeDirDataType,
     ) => {
-      const pathname = `/${[
-        path.relative(folderPath, path.dirname(filePath)),
-        name
-          .replace(extension, '')
-          .replace(/^index$/, '')
-          .replace(/\[([^[\]]*)\]/g, ':$1'),
-      ]
-        .filter(Boolean)
-        .join('/')}`;
-
-      debugLog({ event, filePath, pathname });
+      debugLog({ event, filePath });
 
       if (['add', 'change', 'unlink'].includes(event) && logger)
         logger.start(chalk`{gray [${event}]} Server updating`);
@@ -83,21 +74,42 @@ export default (
         case 'add':
         case 'change':
           const keys = [];
+          const pathname = `/${[
+            path.relative(folderPath, path.dirname(filePath)),
+            name
+              .replace(extension, '')
+              .replace(/^index$/, '')
+              .replace(/\[([^[\]]*)\]/g, ':$1'),
+          ]
+            .filter(Boolean)
+            .join('/')}`;
 
-          cache[pathname] = {
-            filePath,
-            regExp: pathToRegexp(pathname, keys),
-            getUrlQuery: (currentPathname: string | null) =>
-              keys.length === 0
-                ? {}
-                : match(pathname, { decode: decodeURIComponent })(
-                    currentPathname,
-                  ).params,
-          };
+          debugLog(pathname);
+          cache = [
+            ...cache,
+            {
+              filePath,
+              pathname,
+              regExp: pathToRegexp(pathname, keys),
+              getUrlQuery: (currentPathname: string | null) =>
+                keys.length === 0
+                  ? {}
+                  : match(pathname, { decode: decodeURIComponent })(
+                      currentPathname,
+                    ).params,
+            },
+          ].sort((a: cacheType, b: cacheType): number => {
+            if (path.dirname(a.pathname) !== path.dirname(b.pathname)) return 0;
+
+            return /\/:([^[\]]*)$/.test(a.pathname) ? 1 : -1;
+          });
           break;
 
         case 'unlink':
-          delete cache[pathname];
+          cache = cache.filter(
+            ({ filePath: currentFilePath }: cacheType) =>
+              currentFilePath !== filePath,
+          );
           break;
 
         default:
@@ -113,14 +125,12 @@ export default (
 
   return (req: http.IncomingMessage, res: http.ServerResponse) => {
     const { pathname, query } = url.parse(req.url);
-    const cacheKey = Object.keys(cache).find((key: string) =>
-      cache[key].regExp.exec(pathname),
-    );
+    const data = cache.find(({ regExp }: cacheType) => regExp.exec(pathname));
 
-    debugLog(cacheKey && cache[cacheKey]);
+    debugLog(data);
 
-    if (cacheKey && cache[cacheKey]) {
-      const { getUrlQuery, filePath } = cache[cacheKey];
+    if (data) {
+      const { getUrlQuery, filePath } = data;
 
       req.query = {
         ...parse(query || ''),

@@ -19,6 +19,7 @@ describe('server', () => {
 
   test.each`
     pathname             | canFind  | updateEvent
+    ${'/'}               | ${true}  | ${'init'}
     ${'/api'}            | ${true}  | ${'init'}
     ${'/id'}             | ${true}  | ${'init'}
     ${'/test/not-found'} | ${false} | ${'init'}

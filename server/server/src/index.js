@@ -5,7 +5,10 @@ import url from 'url';
 
 import chalk from 'chalk';
 import { pathToRegexp, match } from 'path-to-regexp';
-import { parse } from 'query-string';
+import {
+  parse,
+  type QueryParameters as QueryParametersType,
+} from 'query-string';
 import debug from 'debug';
 
 import { requireModule, mergeDir } from '@mikojs/utils';
@@ -42,7 +45,13 @@ export default (
   folderPath: string,
   { dev, logger, ...options }: optionsType = {},
 ): middlewareType<> => {
-  const cache = {};
+  const cache: {
+    [string]: {
+      filePath: string,
+      regExp: $Call<typeof pathToRegexp, string, $ReadOnlyArray<string>>,
+      getUrlQuery: (pathname: string | null) => QueryParametersType,
+    },
+  } = {};
 
   mergeDir(
     folderPath,
@@ -73,7 +82,18 @@ export default (
         case 'init':
         case 'add':
         case 'change':
-          cache[pathname] = filePath;
+          const keys = [];
+
+          cache[pathname] = {
+            filePath,
+            regExp: pathToRegexp(pathname, keys),
+            getUrlQuery: (currentPathname: string | null) =>
+              keys.length === 0
+                ? {}
+                : match(pathname, { decode: decodeURIComponent })(
+                    currentPathname,
+                  ).params,
+          };
           break;
 
         case 'unlink':
@@ -93,22 +113,20 @@ export default (
 
   return (req: http.IncomingMessage, res: http.ServerResponse) => {
     const { pathname, query } = url.parse(req.url);
-    const keys = [];
-    const middlewareKey = Object.keys(cache).find((key: string) =>
-      pathToRegexp(key, keys).exec(pathname),
+    const cacheKey = Object.keys(cache).find((key: string) =>
+      cache[key].regExp.exec(pathname),
     );
 
-    debugLog(middlewareKey && cache[middlewareKey]);
+    debugLog(cacheKey && cache[cacheKey]);
 
-    if (middlewareKey && cache[middlewareKey]) {
+    if (cacheKey && cache[cacheKey]) {
+      const { getUrlQuery, filePath } = cache[cacheKey];
+
       req.query = {
         ...parse(query || ''),
-        ...(keys.length === 0
-          ? {}
-          : match(middlewareKey, { decode: decodeURIComponent })(pathname)
-              .params),
+        ...getUrlQuery(pathname),
       };
-      requireModule<middlewareType<>>(cache[middlewareKey])(req, res);
+      requireModule<middlewareType<>>(filePath)(req, res);
       return;
     }
 

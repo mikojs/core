@@ -6,6 +6,7 @@ import http from 'http';
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
+import { chainingLogger } from '@mikojs/utils';
 import { mockUpdate, type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 
 import buildApi from '../index';
@@ -39,7 +40,11 @@ describe('server', () => {
       const port = await getPort();
       const url = `http://localhost:${port}${pathname}`;
       const server = await (updateEvent !== 'init'
-        ? buildCli(['node', 'server', '-f', folderPath, '-p', port], buildApi)
+        ? buildCli(
+            ['node', 'server', '-f', folderPath, '-p', port],
+            { ...chainingLogger, start: jest.fn() },
+            buildApi,
+          )
         : new Promise(resolve => {
             const runningServer = http.createServer(buildApi(folderPath));
 

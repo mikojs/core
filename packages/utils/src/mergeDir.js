@@ -9,7 +9,7 @@ import d3DirTree, {
 
 export type mergeDirOptionsType = {|
   ...d3DirTreeOptionsType,
-  watch: boolean,
+  watch?: boolean,
 |};
 
 export type mergeDirEventType =

@@ -6,6 +6,7 @@ import d3DirTree, {
   type d3DirTreeOptionsType,
   type d3DirTreeNodeType,
 } from './d3DirTree';
+import mockChoice from './mockChoice';
 
 export type mergeDirOptionsType = {|
   ...d3DirTreeOptionsType,
@@ -34,6 +35,21 @@ export type mergeDirDataType = {|
 
 type callbackType = (event: mergeDirEventType, data: mergeDirDataType) => void;
 
+export const mockUpdate = {
+  cache: [],
+  clear: () => {
+    mockUpdate.cache = [];
+  },
+  watch: (folderPath: string, options: {| ignoreInitial: boolean |}) => ({
+    on: (
+      event: 'all',
+      callback: (event: mergeDirEventType, filePath: string) => void,
+    ) => {
+      mockUpdate.cache.push(callback);
+    },
+  }),
+};
+
 /**
  * @example
  * mergeDir('/', options, callback)
@@ -60,8 +76,8 @@ export default (
     );
 
   if (watch)
-    require('chokidar')
-      .watch(folderPath)
+    mockChoice(process.env.NODE_ENV !== 'test', require('chokidar'), mockUpdate)
+      .watch(folderPath, { ignoreInitial: true })
       .on('all', (event: mergeDirEventType, filePath: string) =>
         callback(event, {
           filePath,

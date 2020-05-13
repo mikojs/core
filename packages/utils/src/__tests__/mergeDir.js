@@ -2,18 +2,15 @@
 
 import path from 'path';
 
-import chokidar from 'chokidar';
-
 import mergeDir, {
+  mockUpdate,
   type mergeDirEventType,
   type mergeDirDataType,
 } from '../mergeDir';
 
-const { on: mockCallback } = chokidar.watch('/');
-
 describe('merge dir', () => {
   beforeEach(() => {
-    mockCallback.mockClear();
+    mockUpdate.clear();
   });
 
   test.each`
@@ -33,7 +30,10 @@ describe('merge dir', () => {
       },
     );
 
-    if (watch) mockCallback.mock.calls[0][1]('add', '/c.js');
+    if (watch) {
+      expect(mockUpdate.cache).toHaveLength(1);
+      mockUpdate.cache[0]('add', '/c.js');
+    }
 
     expect(cache).toEqual({
       init: ['a.js', 'b.js'],

@@ -1,18 +1,18 @@
 // @flow
 
 import defaultConfigs from '../index';
-import withCss from '../withCss';
-import withLess from '../withLess';
 import withReact from '../withReact';
 import withRelay from '../withRelay';
+import withCss from '../withCss';
+import withLess from '../withLess';
 import withLerna from '../withLerna';
 
 const configs = {
   defaultConfigs,
-  withCss,
-  withLess,
   withReact,
   withRelay,
+  withCss,
+  withLess,
   withLerna,
 };
 

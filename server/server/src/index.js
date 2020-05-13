@@ -1,9 +1,11 @@
 // @flow
 
 import path from 'path';
+import url from 'url';
 
 import chalk from 'chalk';
-import { pathToRegexp } from 'path-to-regexp';
+import { pathToRegexp, match } from 'path-to-regexp';
+import { parse } from 'query-string';
 import debug from 'debug';
 
 import { requireModule, mergeDir } from '@mikojs/utils';
@@ -90,13 +92,22 @@ export default (
   );
 
   return (req: http.IncomingMessage, res: http.ServerResponse) => {
-    const middlewareKey = Object.keys(cache).find((pathname: string) =>
-      pathToRegexp(pathname).exec(req.url),
+    const { pathname, query } = url.parse(req.url);
+    const keys = [];
+    const middlewareKey = Object.keys(cache).find((key: string) =>
+      pathToRegexp(key, keys).exec(pathname),
     );
 
     debugLog(middlewareKey && cache[middlewareKey]);
 
     if (middlewareKey && cache[middlewareKey]) {
+      req.query = {
+        ...parse(query || ''),
+        ...(keys.length === 0
+          ? {}
+          : match(middlewareKey, { decode: decodeURIComponent })(pathname)
+              .params),
+      };
       requireModule<middlewareType<>>(cache[middlewareKey])(req, res);
       return;
     }

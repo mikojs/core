@@ -20,8 +20,9 @@ describe('server', () => {
   test.each`
     pathname             | canFind  | updateEvent
     ${'/'}               | ${true}  | ${'init'}
+    ${'/?key=value'}     | ${true}  | ${'init'}
     ${'/api'}            | ${true}  | ${'init'}
-    ${'/id'}             | ${true}  | ${'init'}
+    ${'/value'}          | ${true}  | ${'init'}
     ${'/test/not-found'} | ${false} | ${'init'}
     ${'/test'}           | ${true}  | ${'init'}
     ${'/test/api'}       | ${true}  | ${'init'}

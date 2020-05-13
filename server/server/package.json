@@ -16,7 +16,8 @@
     "core-js": "^3.6.5",
     "debug": "^4.1.1",
     "ora": "^4.0.3",
-    "path-to-regexp": "^6.1.0"
+    "path-to-regexp": "^6.1.0",
+    "query-string": "^6.12.1"
   },
   "devDependencies": {
     "flow-bin": "^0.123.0",

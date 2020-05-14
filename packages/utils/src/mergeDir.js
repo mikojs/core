@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { invariant } from 'fbjs';
+import { type optionsType } from 'chokidar';
 
 import d3DirTree, {
   type d3DirTreeOptionsType,
@@ -13,6 +14,7 @@ import mockChoice from './mockChoice';
 
 export type mergeDirOptionsType = {|
   ...d3DirTreeOptionsType,
+  exclude?: RegExp,
   watch?: boolean,
 |};
 
@@ -43,7 +45,7 @@ export const mockUpdate = {
   clear: () => {
     mockUpdate.cache = [];
   },
-  watch: (folderPath: string, options: {| ignoreInitial: boolean |}) => ({
+  watch: (folderPath: string, options: optionsType) => ({
     on: (
       event: 'all',
       callback: (event: mergeDirEventType, filePath: string) => void,
@@ -66,6 +68,8 @@ export default (
   { watch, ...options }: mergeDirOptionsType,
   callback: callbackType,
 ) => {
+  const { extensions, exclude } = options;
+
   invariant(
     fs.existsSync(folderPath),
     `Can not find the folder: ${path.relative(process.cwd(), folderPath)}`,
@@ -84,12 +88,14 @@ export default (
 
   if (watch)
     mockChoice(process.env.NODE_ENV !== 'test', require('chokidar'), mockUpdate)
-      .watch(folderPath, { ignoreInitial: true })
-      .on('all', (event: mergeDirEventType, filePath: string) =>
+      .watch(folderPath, { ignored: exclude, ignoreInitial: true })
+      .on('all', (event: mergeDirEventType, filePath: string) => {
+        if (!extensions?.test(filePath) || exclude?.test(filePath)) return;
+
         callback(event, {
           filePath,
           name: path.basename(filePath),
           extension: path.extname(filePath),
-        }),
-      );
+        });
+      });
 };

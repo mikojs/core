@@ -1,6 +1,9 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
+
+import { invariant } from 'fbjs';
 
 import d3DirTree, {
   type d3DirTreeOptionsType,
@@ -63,6 +66,10 @@ export default (
   { watch, ...options }: mergeDirOptionsType,
   callback: callbackType,
 ) => {
+  invariant(
+    fs.existsSync(folderPath),
+    `Can not find the folder: ${path.relative(process.cwd(), folderPath)}`,
+  );
   d3DirTree(folderPath, options)
     .leaves()
     .filter(({ data: { type } }: d3DirTreeNodeType) => type === 'file')

@@ -1,7 +1,9 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
+import { invariant } from 'fbjs';
 import { type optionsType } from 'chokidar';
 
 import d3DirTree, {
@@ -68,6 +70,10 @@ export default (
 ) => {
   const { extensions, exclude } = options;
 
+  invariant(
+    fs.existsSync(folderPath),
+    `Can not find the folder: ${path.relative(process.cwd(), folderPath)}`,
+  );
   d3DirTree(folderPath, options)
     .leaves()
     .filter(({ data: { type } }: d3DirTreeNodeType) => type === 'file')

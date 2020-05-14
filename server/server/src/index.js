@@ -64,10 +64,14 @@ export default (
       event: mergeDirEventType,
       { filePath, name, extension }: mergeDirDataType,
     ) => {
+      const relativePath = path.relative(folderPath, filePath);
+
       debugLog({ event, filePath });
 
       if (['add', 'change', 'unlink'].includes(event) && logger)
-        logger.start(chalk`{gray [${event}]} Server updating`);
+        logger.start(
+          chalk`{gray [${event}]} Server updating (${relativePath})`,
+        );
 
       switch (event) {
         case 'init':
@@ -75,7 +79,7 @@ export default (
         case 'change':
           const keys = [];
           const pathname = `/${[
-            path.relative(folderPath, path.dirname(filePath)),
+            path.dirname(relativePath),
             name
               .replace(extension, '')
               .replace(/^index$/, '')
@@ -119,7 +123,9 @@ export default (
       debugLog({ cache });
 
       if (['add', 'change', 'unlink'].includes(event) && logger)
-        logger.succeed(chalk`{gray [${event}]} Server updated`);
+        logger.succeed(
+          chalk`{gray [${event}]} Server updated (${relativePath})`,
+        );
     },
   );
 

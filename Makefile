@@ -21,6 +21,4 @@ define babel-build
 		--scope @mikojs/configs \
 		--scope @mikojs/babel-* \
 		$(1)
-	ln -snf $(ROOT)/packages/miko/lib/bin/index.js ./node_modules/.bin/miko
-	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
 endef

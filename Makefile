@@ -3,6 +3,7 @@ BRANCH=$(shell git branch | grep \* | cut -d ' ' -f2)
 
 babel-base-all:
 	@$(call babel-build)
+	@yarn lerna link
 
 babel-base-changed:
 ifeq ($(shell printenv CI), true)

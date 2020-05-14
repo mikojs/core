@@ -22,7 +22,7 @@ describe('merge dir', () => {
 
     mergeDir(
       path.resolve(__dirname, './__ignore__/mergeDir'),
-      { watch },
+      { watch, extensions: /\.js$/, exclude: /e\.js$/ },
       (event: mergeDirEventType, { name }: mergeDirDataType) => {
         if (!cache[event]) cache[event] = [];
 
@@ -33,6 +33,8 @@ describe('merge dir', () => {
     if (watch) {
       expect(mockUpdate.cache).toHaveLength(1);
       mockUpdate.cache[0]('add', '/c.js');
+      mockUpdate.cache[0]('add', '/d.py');
+      mockUpdate.cache[0]('add', '/e.js');
     }
 
     expect(cache).toEqual({

@@ -92,7 +92,10 @@ export default (
 
           debugLog(pathname);
           cache = [
-            ...cache,
+            ...cache.filter(
+              ({ filePath: currentFilePath }: cacheType) =>
+                currentFilePath !== filePath,
+            ),
             {
               filePath,
               pathname,

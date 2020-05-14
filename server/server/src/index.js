@@ -59,6 +59,7 @@ export default (
     {
       ...options,
       watch: dev,
+      extensions: /\.js$/,
     },
     (
       event: mergeDirEventType,

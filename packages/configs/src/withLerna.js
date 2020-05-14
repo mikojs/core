@@ -68,11 +68,11 @@ export default {
     },
     'husky:post-merge': {
       ...config['husky:post-merge'],
-      command: 'miko build',
+      command: 'miko build && lerna link',
     },
     'husky:post-checkout': {
       ...config['husky:post-checkout'],
-      command: 'miko build --since master',
+      command: 'miko build --since master && lerna link',
     },
     release: {
       ...config.release,

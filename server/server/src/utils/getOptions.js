@@ -24,10 +24,6 @@ export default (
   defaultFolder: string,
 ): Promise<optionsType> =>
   new Promise(resolve => {
-    const defaultOptions = {
-      port: 8000,
-      folderPath: defaultFolder,
-    };
     const program = new commander.Command('server')
       .version(version, '-v, --version')
       .arguments('[configNames...]')
@@ -48,12 +44,12 @@ export default (
           { port, folderPath }: {| port: string, folderPath: string |},
         ) => {
           resolve({
-            port: !port ? defaultOptions.port : parseInt(port, 10),
-            folderPath: !folderPath ? defaultOptions.folderPath : folderPath,
+            port: !port ? 8000 : parseInt(port, 10),
+            folderPath: !folderPath ? defaultFolder : folderPath,
           });
         },
       );
 
     if (argv.length !== 2) program.parse([...argv]);
-    else resolve(defaultOptions);
+    else resolve({ port: 8000, folderPath: defaultFolder });
   });

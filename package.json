@@ -6,7 +6,7 @@
   "scripts": {
     "build": "make babel-base-all && miko build",
     "dev": "make babel-base-changed && miko dev",
-    "install:all": "yarn install && lerna bootstrap && yarn build",
+    "install:all": "yarn install && lerna bootstrap && yarn build && lerna link",
     "prod": "NODE_ENV=production make babel-base-all && miko prod"
   },
   "devDependencies": {

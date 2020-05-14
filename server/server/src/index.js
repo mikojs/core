@@ -79,8 +79,9 @@ export default (
         case 'add':
         case 'change':
           const keys = [];
+          const dirPath = path.dirname(relativePath);
           const pathname = `/${[
-            path.dirname(relativePath),
+            dirPath === '.' ? '' : dirPath,
             name
               .replace(extension, '')
               .replace(/^index$/, '')

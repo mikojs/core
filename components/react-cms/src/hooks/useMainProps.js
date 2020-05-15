@@ -5,9 +5,6 @@ import { DndContext } from 'react-dnd-cjs';
 import { FrameContext } from 'react-frame-component';
 
 /**
- * @example
- * useMainProps()
- *
  * @return {object} - the props of the main
  */
 const useMainProps = (): {} => {

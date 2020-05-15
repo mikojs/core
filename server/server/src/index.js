@@ -40,9 +40,6 @@ type cacheType = {|
 const debugLog = debug('server');
 
 /**
- * @example
- * server('/', options)
- *
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
  *
@@ -79,9 +76,8 @@ export default (
         case 'add':
         case 'change':
           const keys = [];
-          const dirPath = path.dirname(relativePath);
           const pathname = `/${[
-            dirPath === '.' ? '' : dirPath,
+            path.dirname(relativePath).replace(/^\./, ''),
             name
               .replace(extension, '')
               .replace(/^index$/, '')

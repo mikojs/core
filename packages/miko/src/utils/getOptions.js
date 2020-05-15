@@ -22,9 +22,6 @@ export type optionsType = {|
 const debugLog = debug('miko:getOptions');
 
 /**
- * @example
- * getOptions([])
- *
  * @param {Array} argv - command line
  *
  * @return {optionsType} - options

@@ -30,9 +30,6 @@ type stateType = {|
 |};
 
 /**
- * @example
- * getUpdateType('drop', current, target)
- *
  * @param {actionType} type - the originial type of updating the source
  * @param {itemType} current - the current item
  * @param {itemType} target - the target item
@@ -60,9 +57,6 @@ const getUpdateType = (
 };
 
 /**
- * @example
- * sourceReducer(prevState, { type: 'add', current: current, target: target } })
- *
  * @param {stateType} state - the prevState of the source data
  * @param {object} action - the action data to trigger the reducer
  *
@@ -146,9 +140,6 @@ const sourceReducer = (
 };
 
 /**
- * @example
- * useSource([])
- *
  * @param {sourceType} initialSource - the initial source
  *
  * @return {object} - the source data and the methods to modify the source

@@ -56,9 +56,6 @@ export const mockUpdate = {
 };
 
 /**
- * @example
- * mergeDir('/', options, callback)
- *
  * @param {string} folderPath - folder path
  * @param {mergeDirOptionsType} options - options
  * @param {callbackType} callback - callback function

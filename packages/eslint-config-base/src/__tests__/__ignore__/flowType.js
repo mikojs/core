@@ -40,9 +40,6 @@ requireVariableType += 1;
 
 // $expectError flowtype/require-return-type
 /**
- * @example
- * requireReturnType('test');
- *
  * @param {any} argu - any
  * @return {any} - any
  */
@@ -54,9 +51,6 @@ const requireReturnType = (argu: string) => {
 
 // $expectError flowtype/require-parameter-type
 /**
- * @example
- * requireReturnType('test');
- *
  * @param {any} argu - any
  * @return {any} - any
  */
@@ -67,9 +61,6 @@ const requireParameterType = (argu): string => {
 };
 
 /**
- * @example
- * requireReturnType('test');
- *
  * @param {any} argu - any
  */
 const promiseIngore = async (argu: string) => {
@@ -80,9 +71,6 @@ const promiseIngore = async (argu: string) => {
 };
 
 /**
- * @example
- * expressionsOnly()
- *
  * @return {string} - 'string'
  */
 const expressionsOnly = () => 'string';

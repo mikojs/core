@@ -7,9 +7,6 @@ export const QUOTATION_END = /['"]$/;
 const QUOTATION_ALL = /['"]/g;
 
 /**
- * @example
- * getComandsArray('yarn install')
- *
  * @param {string} command - command string
  *
  * @return {commandsType} - commands array

@@ -5,9 +5,6 @@ import chalk from 'chalk';
 import chainingLogger from './chainingLogger';
 
 /**
- * @example
- * createLogger('test')
- *
  * @param {string} name - logger name
  * @param {object} logger - logger function
  * @param {object} names - logger names mapping

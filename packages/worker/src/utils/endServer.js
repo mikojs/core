@@ -7,9 +7,6 @@ import findProcess from 'find-process';
 import sendToServer from './sendToServer';
 
 /**
- * @example
- * endServer('/filePath')
- *
  * @param {string} filePath - file path
  * @param {number} timeout - timeout setting
  */

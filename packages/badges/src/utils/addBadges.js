@@ -35,9 +35,6 @@ const START_COMMENT = '<!-- badges.start -->';
 const END_COMMENT = '<!-- badges.end -->';
 
 /**
- * @example
- * getRepo()
- *
  * @return {Promise<repoType>} - user name and project name
  */
 const getRepo = async (): Promise<?repoType> => {
@@ -63,9 +60,6 @@ const getRepo = async (): Promise<?repoType> => {
 };
 
 /**
- * @example
- * getBadges(ctx, repo)
- *
  * @param {ctxType} ctx - context
  * @param {repoType} repo - repo data
  *
@@ -151,9 +145,6 @@ ${badges
 };
 
 /**
- * @example
- * addBadges('readme', context)
- *
  * @param {string} readme - readme content
  * @param {ctxType} ctx - readme context
  *

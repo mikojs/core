@@ -4,7 +4,6 @@
  * extends eslint-plugin-flowType
  * repo: https://github.com/gajus/eslint-plugin-flowtype
  */
-
 export default {
   extends: ['plugin:flowtype/recommended'],
   rules: {

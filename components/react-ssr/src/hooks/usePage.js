@@ -13,9 +13,6 @@ import { type ctxType } from 'hooks/useCtx';
 export type returnType = $Diff<getPageReturnType, {| chunkName: mixed |}>;
 
 /**
- * @example
- * usePage(initialState, Main, routesData, ctx, true)
- *
  * @param {returnType} initialState - initail state
  * @param {ComponentType} Main - main component
  * @param {routesDataType} routesData - routes data

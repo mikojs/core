@@ -10,9 +10,6 @@ type resultType = [
 ];
 
 /**
- * @example
- * getExecaArguments(['echo', 'test'])
- *
  * @param {Array} commands - commands array
  *
  * @return {resultType} - execa arguments

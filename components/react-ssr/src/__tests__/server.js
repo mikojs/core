@@ -21,9 +21,6 @@ import testings, {
 const errorCallback = jest.fn();
 
 /**
- * @example
- * renderServer()
- *
  * @return {string} - render string
  */
 const renderServer = () =>

@@ -24,11 +24,8 @@ const OTHER_ORG_DEFAULT_RE = /^(@(?!babel$)[^/]+)$/;
 /**
  * https://github.com/babel/babel/blob/e85faec47d5d3ef940b7a85d48fa24e6e1cc32ab/packages/babel-core/src/config/files/plugins.js
  *
- * @example
- * standardizeName('preset', '@babel/presets-env');
- *
- * @param {string} type - plugin or preset
- * @param {string} presetOrPlugin - name of plugin or preset
+ * @param {string} type - preset or plugin
+ * @param {string} presetOrPlugin - name of preset or plugin
  *
  * @return {string} - standardize name
  */
@@ -55,9 +52,6 @@ const standardizeName = (
 };
 
 /**
- * @example
- * removeEmptyOption(['pluginName'])
- *
  * @param {presetOrPluginType} presetOrPlugin - preset or plugin
  *
  * @return {stringPresetOrPluginType} - new preset or plugin

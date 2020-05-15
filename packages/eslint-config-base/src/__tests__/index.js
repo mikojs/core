@@ -9,11 +9,6 @@ import { hyphenate } from 'fbjs';
 import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
-/**
- * FIXME:
- * Owing to jest coverage, can not remove index
- * Remove it after upgrading jest
- */
 import configs from '../index';
 
 // use to mock worker in @miko/miko/src/index.js

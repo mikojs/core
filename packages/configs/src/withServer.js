@@ -16,15 +16,6 @@ export default {
           definedTags: [...(options.definedTags || []), 'middleware'],
         },
       ],
-      'jsdoc/require-example': ([rule, options]: $NonMaybeType<
-        $PropertyType<rulesType, 'jsdoc/require-example'>,
-      >) => [
-        rule || 'error',
-        {
-          ...options,
-          exemptedBy: [...(options.exemptedBy || []), 'middleware'],
-        },
-      ],
       'jsdoc/require-param': ([rule, options]: $NonMaybeType<
         $PropertyType<rulesType, 'jsdoc/require-param'>,
       >) => [

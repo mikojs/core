@@ -15,9 +15,6 @@ const logger = createLogger('@mikojs/miko');
 const debugLog = debug('miko:generateFiles');
 
 /**
- * @example
- * generateFiles([])
- *
  * @param {Array} configNames - config names
  *
  * @return {Array} - generating files

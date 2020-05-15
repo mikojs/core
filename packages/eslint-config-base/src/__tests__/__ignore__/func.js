@@ -1,18 +1,12 @@
 // @flow
 
 /**
- * @example
- * correct();
- *
  * @param {string} argu - any
  * @return {'value'} - value
  */
 export const correct = (argu: string) => 'value';
 
 /**
- * @example
- * correctNotDirectReturn();
- *
  * @param {string} argu - any
  * @return {'test'} - value
  */
@@ -24,9 +18,6 @@ const correctNotDirectReturn = (argu: string): string => {
 
 // $expectError arrow-body-style
 /**
- * @example
- * shouldDirectReturn();
- *
  * @param {string} argu - any
  * @return {'value'} - value
  */

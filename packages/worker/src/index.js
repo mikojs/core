@@ -16,9 +16,6 @@ const debugLog = debug('worker');
 let cachePid: number;
 
 /**
- * @example
- * worker('/filePath')
- *
  * @param {string} filePath - file path
  * @param {number} timeout - timeout setting
  *

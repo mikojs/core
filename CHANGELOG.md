@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.10.2 (2020-05-15)
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `eslint-config-base`, `jest`, `miko`, `utils`, `worker`
+  - [#603](https://github.com/mikojs/core/pull/603) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `configs`, `eslint-config-base`, `miko`, `utils`, `worker`
+  - [#602](https://github.com/mikojs/core/pull/602) (@mikojs/core) Remove @example in jsDoc ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `utils`
+  - [#596](https://github.com/mikojs/core/pull/596) (@mikojs/server) Add the new package ([@HsuTing](https://github.com/HsuTing))
+  - [#599](https://github.com/mikojs/core/pull/599) (@mikojs/utils) Add mock update ([@HsuTing](https://github.com/HsuTing))
+- `utils`
+  - [#601](https://github.com/mikojs/core/pull/601) (@mikojs/utils) Add extensions and exclude ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.10.1 (2020-05-07)
 
 #### :boom: Breaking Change

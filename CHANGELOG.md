@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.10.3 (2020-05-15)
+
+#### :rocket: New Feature
+
+- `eslint-config-base`
+  - [#604](https://github.com/mikojs/core/pull/604) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.10.2 (2020-05-15)
 
 #### :rocket: New Feature

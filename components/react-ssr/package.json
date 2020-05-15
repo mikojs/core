@@ -29,11 +29,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
-  "keywords": [
-    "mikojs",
-    "react",
-    "react-ssr"
-  ],
+  "keywords": ["mikojs", "react", "react-ssr"],
   "publishConfig": {
     "access": "public"
   }

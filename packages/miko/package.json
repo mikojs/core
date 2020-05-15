@@ -28,10 +28,7 @@
     "flow-bin": "^0.124.0",
     "flow-typed": "^3.1.0"
   },
-  "keywords": [
-    "miko",
-    "mikojs"
-  ],
+  "keywords": ["miko", "mikojs"],
   "publishConfig": {
     "access": "public"
   }

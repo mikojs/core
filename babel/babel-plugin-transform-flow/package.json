@@ -21,11 +21,7 @@
     "flow-bin": "^0.124.0",
     "flow-typed": "^3.1.0"
   },
-  "keywords": [
-    "babel plugin",
-    "mikojs",
-    "transform flow files"
-  ],
+  "keywords": ["babel plugin", "mikojs", "transform flow files"],
   "publishConfig": {
     "access": "public"
   }

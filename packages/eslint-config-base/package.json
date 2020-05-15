@@ -37,10 +37,7 @@
     "flow-typed": "^3.1.0",
     "react": "^16.13.1"
   },
-  "keywords": [
-    "eslint",
-    "mikojs"
-  ],
+  "keywords": ["eslint", "mikojs"],
   "publishConfig": {
     "access": "public"
   }

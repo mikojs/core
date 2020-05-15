@@ -25,10 +25,7 @@
     "get-port": "^5.1.1",
     "node-fetch": "^2.6.0"
   },
-  "keywords": [
-    "mikojs",
-    "server"
-  ],
+  "keywords": ["mikojs", "server"],
   "publishConfig": {
     "access": "public"
   }

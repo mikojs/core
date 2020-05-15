@@ -31,7 +31,7 @@
   "devDependencies": {
     "@mikojs/utils": "^1.10.2",
     "babel-plugin-module-resolver": "^4.0.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.0.0",
     "fbjs": "^1.0.0",
     "flow-bin": "^0.124.0",
     "flow-typed": "^3.1.0",

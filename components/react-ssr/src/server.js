@@ -23,9 +23,6 @@ export type documentComponentType<C, P> = ComponentType<P> & {
 };
 
 /**
- * @example
- * server(ctx, { Document, Main, Error, routesData }, <scripts />, ctx.res.end)
- *
  * @param {object} ctx - ctx object
  * @param {object} options - components and routes data
  * @param {NodeType} scripts - scripts dom

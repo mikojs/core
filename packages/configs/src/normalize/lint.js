@@ -11,9 +11,6 @@ export type lintType = {
 };
 
 /**
- * @example
- * removeEmptyOption(['error'])
- *
  * @param {Array} rule - rule option
  *
  * @return {string | Array} - new rule option

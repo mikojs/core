@@ -40,9 +40,6 @@ type cacheType = {|
 const debugLog = debug('server');
 
 /**
- * @example
- * server('/', options)
- *
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
  *

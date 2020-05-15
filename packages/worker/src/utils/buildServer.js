@@ -8,9 +8,6 @@ import debug from 'debug';
 const debugLog = debug('worker:buildServer');
 
 /**
- * @example
- * buildServer(8000)
- *
  * @param {number} port - the port of the server
  *
  * @return {object} - net server

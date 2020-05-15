@@ -12,9 +12,6 @@ const debugLog = debug('badges:getOptions');
 const logger = createLogger('@mikojs/badges');
 
 /**
- * @example
- * getOptions([])
- *
  * @param {Array} argv - command line
  *
  * @return {Array<string>} - options

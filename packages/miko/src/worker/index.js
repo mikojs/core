@@ -6,9 +6,6 @@ import checkingTimer from './checkingTimer';
 export const cache = buildCache();
 
 /**
- * @example
- * addTracking(123, '/babel.config.js')
- *
  * @param {number} pid - process pid
  * @param {Array} filePaths - file path array or file path string
  */
@@ -26,8 +23,6 @@ export const addTracking = (
 };
 
 /**
- * @example
- * killAllEvents()
  */
 export const killAllEvents = async () => {
   await cache.kill();

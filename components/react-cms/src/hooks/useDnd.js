@@ -30,9 +30,6 @@ const CAN_DROP_TYPE: $ReadOnlyArray<$PropertyType<itemType, 'type'>> = [
 ];
 
 /**
- * @example
- * useDnd({ id: 'id', type: 'drag-and-drop', component: 'div' })
- *
  * @param {itemType} item - the item for dnd
  *
  * @return {object} - the new props of the component has been injected

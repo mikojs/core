@@ -56,9 +56,6 @@ export type returnType = {|
 |};
 
 /**
- * @example
- * getPage(Main, routesData, { path }, true)
- *
  * @param {ComponentType} Main - Main Component
  * @param {routesDataType} routesData - routes data
  * @param {object} ctx - ctx object

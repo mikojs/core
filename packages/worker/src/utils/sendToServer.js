@@ -16,9 +16,6 @@ const TIMEOUT = 5000;
 const RETRY_TIME = 20;
 
 /**
- * @example
- * sendToServer(8000, '{}')
- *
  * @param {number} port - the port of the server
  * @param {clientDataType} clientData - the client data which will be sent to the server
  * @param {number} timeout - timeout of checking

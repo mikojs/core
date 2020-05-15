@@ -11,9 +11,6 @@ export type optionsType = {|
 |};
 
 /**
- * @example
- * getOptions([])
- *
  * @param {Array} argv - command line
  * @param {string} defaultFolder - default folder
  *

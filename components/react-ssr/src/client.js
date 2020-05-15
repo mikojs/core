@@ -7,9 +7,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Root, { type propsType } from './index';
 
 /**
- * @example
- * client({ Main, Loading, Error, routesData })
- *
  * @param {propsType} options - components and routes data
  */
 export default async ({

@@ -20,9 +20,6 @@ export type cacheType = {|
 const debugLog = debug('miko:worker:buildCache');
 
 /**
- * @example
- * buildCache()
- *
  * @return {cacheType} - cache object
  */
 export default (): cacheType => {

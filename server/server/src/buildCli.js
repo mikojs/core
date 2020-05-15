@@ -16,9 +16,6 @@ import {
 handleUnhandledRejection();
 
 /**
- * @example
- * buildCli(argv, callback)
- *
  * TODO: should use async/await after flow fix error
  *
  * @param {Array} argv - command line

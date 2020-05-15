@@ -11,9 +11,6 @@ type memoComponentType = ComponentType<*> & {|
 /**
  * After `react-is@>=16.12`, `isMemo` is used to check the component which is created by react.createElement.
  *
- * @example
- * isMemo(Component)
- *
  * @param {memoComponentType} Component - component type
  *
  * @return {boolean} - is the memo component
@@ -21,9 +18,6 @@ type memoComponentType = ComponentType<*> & {|
 const isMemo = (Component: memoComponentType) => Component?.$$typeof === Memo;
 
 /**
- * @example
- * getStatic(Component)
- *
  * @param {ComponentType} Component - component type
  *
  * @return {object} - the properties of the component

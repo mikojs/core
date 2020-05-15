@@ -11,9 +11,6 @@ export type ctxType = {|
 |};
 
 /**
- * @example
- * useCtx()
- *
  * @return {ctxType} - ctx object
  */
 export default (): ctxType => {

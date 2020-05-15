@@ -8,9 +8,6 @@ import getCommandsArray, {
 export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
 
 /**
- * @example
- * getCommands('yarn install')
- *
  * @param {string} command - command string or command function
  * @param {object} configs - miko configs
  * @param {Array} otherArgs - other arguments

@@ -1,9 +1,6 @@
 // @flow
 
 /**
- * @example
- * miko()
- *
  * @return {object} - miko default config
  */
 export default () => ({

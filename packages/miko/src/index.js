@@ -11,9 +11,6 @@ import typeof * as workerType from './worker';
 export type configsType = initialConfigsType;
 
 /**
- * @example
- * miko('babel')
- *
  * @param {string} configName - config name
  *
  * @return {object} - config object

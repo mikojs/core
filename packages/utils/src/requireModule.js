@@ -1,9 +1,6 @@
 // @flow
 
 /**
- * @example
- * requireModule('module')
- *
  * @param {string} moduleName - module name
  *
  * @return {any} - module

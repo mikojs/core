@@ -16,9 +16,6 @@ const debugLog = debug('miko:worker:checkingTimer');
 let timer: TimeoutID;
 
 /**
- * @example
- * checking(cache, 0)
- *
  * @param {cacheType} cache - cache
  * @param {number} checkedTimes - checked times
  */

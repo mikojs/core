@@ -1,9 +1,6 @@
 // @flow
 
 /**
- * @example
- * importError('package name')
- *
  * @param {string} packageName - package name
  */
 const importError = (packageName: string) => {

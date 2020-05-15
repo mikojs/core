@@ -4,7 +4,6 @@
  * extends eslint-plugin-jsdoc
  * repo: https://github.com/gajus/eslint-plugin-jsdoc
  */
-
 export default {
   extends: ['plugin:jsdoc/recommended'],
   settings: {

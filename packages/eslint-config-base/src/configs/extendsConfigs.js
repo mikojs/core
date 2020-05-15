@@ -6,7 +6,6 @@
  *       https://github.com/google/eslint-config-google
  *       https://github.com/prettier/eslint-config-prettier
  */
-
 export default {
   extends: [
     'fbjs/strict',

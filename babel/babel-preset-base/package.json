@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-preset-base",
   "repository": "https://github.com/mikojs/core/tree/master/babel/babel-preset-base",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.8.3",
@@ -15,8 +15,8 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-flow": "^7.9.0",
     "@babel/runtime": "^7.9.6",
-    "@mikojs/babel-plugin-transform-flow": "^1.10.0",
-    "@mikojs/utils": "^1.10.1",
+    "@mikojs/babel-plugin-transform-flow": "^1.10.2",
+    "@mikojs/utils": "^1.10.2",
     "babel-plugin-module-resolver": "^4.0.0",
     "core-js": "^3.6.5",
     "fbjs": "^1.0.0"

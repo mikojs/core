@@ -6,7 +6,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/react-cms",
   "repository": "https://github.com/mikojs/core/tree/master/components/react-cms",
-  "version": "1.10.0",
+  "version": "1.10.2",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.9.6",

@@ -43,15 +43,6 @@ export default {
           definedTags: [...(options.definedTags || []), 'react'],
         },
       ],
-      'jsdoc/require-example': ([rule, options]: $NonMaybeType<
-        $PropertyType<rulesType, 'jsdoc/require-example'>,
-      >) => [
-        rule || 'error',
-        {
-          ...options,
-          exemptedBy: [...(options.exemptedBy || []), 'react'],
-        },
-      ],
       'jsdoc/require-param': ([rule, options]: $NonMaybeType<
         $PropertyType<rulesType, 'jsdoc/require-param'>,
       >) => [

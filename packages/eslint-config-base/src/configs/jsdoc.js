@@ -25,7 +25,6 @@ export default {
     'jsdoc/check-types': 'error',
     'jsdoc/no-undefined-types': 'error',
     'jsdoc/newline-after-description': 'error',
-    'jsdoc/require-example': 'error',
     'jsdoc/require-hyphen-before-param-description': 'error',
     'jsdoc/require-jsdoc': [
       'error',

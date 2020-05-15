@@ -2,7 +2,6 @@
 
 export type rulesType = {
   'jsdoc/check-tag-names'?: [string, { definedTags?: $ReadOnlyArray<string> }],
-  'jsdoc/require-example'?: [string, { exemptedBy?: $ReadOnlyArray<string> }],
   'jsdoc/require-param'?: [string, { exemptedBy?: $ReadOnlyArray<string> }],
   'jsdoc/require-returns'?: [string, { exemptedBy?: $ReadOnlyArray<string> }],
 };

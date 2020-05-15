@@ -19,7 +19,6 @@ const correctFunction = (argu: string) => 10;
  */
 const undefinedTypes = (argu: string) => 10;
 
-// $expectError jsdoc/require-example
 // $expectError jsdoc/newline-after-description
 /**
  * desc

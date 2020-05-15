@@ -10,7 +10,7 @@ import useSource, {
   type actionType,
 } from '../useSource';
 
-jest.mock('uuid/v4', () => () => 'current');
+jest.mock('uuid', () => ({ v4: () => 'current' }));
 
 const sourceRef = React.createRef<$Call<typeof useSource, sourceType>>();
 const defaultExpected = { id: 'current', parentId: 'target', component: 'div' };
@@ -54,7 +54,7 @@ describe('use source', () => {
       targetType,
       expected,
     }: {|
-      type: actionType,
+      type: $PropertyType<actionType, 'type'>,
       currentId: string,
       targetType: $PropertyType<itemType, 'type'>,
       expected: sourceType,

@@ -3,7 +3,7 @@
 import { useMemo, useReducer, type ComponentType } from 'react';
 import memoizeOne from 'memoize-one';
 import { areEqual, invariant } from 'fbjs';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 export type itemType = {|
   id: string,
@@ -22,7 +22,11 @@ export type sourceType = $ReadOnlyArray<{|
   parentId: string | null,
 |}>;
 
-export type actionType = 'drop' | 'hover';
+export type actionType = {|
+  type: 'drop' | 'hover',
+  current: itemType,
+  target: itemType,
+|};
 
 type stateType = {|
   previewId: false | string,
@@ -30,17 +34,19 @@ type stateType = {|
 |};
 
 /**
- * @param {actionType} type - the originial type of updating the source
- * @param {itemType} current - the current item
- * @param {itemType} target - the target item
+ * @param {actionType} action - the action data to trigger the reducer
  *
  * @return {string} - the type of updating the source
  */
-const getUpdateType = (
-  type: actionType,
-  current: itemType,
-  target: itemType,
-): 'none' | 'add-preview-component' | 'add-component' | 'remove-component' => {
+const getUpdateType = ({
+  type,
+  current,
+  target,
+}: actionType):
+  | 'none'
+  | 'add-preview-component'
+  | 'add-component'
+  | 'remove-component' => {
   if (
     ['only-drop-to-add', 'only-drop-to-remove', 'none'].includes(
       current.type,
@@ -58,23 +64,15 @@ const getUpdateType = (
 
 /**
  * @param {stateType} state - the prevState of the source data
- * @param {object} action - the action data to trigger the reducer
+ * @param {actionType} action - the action data to trigger the reducer
  *
  * @return {stateType} - the new state of the source data
  */
 const sourceReducer = (
   { previewId, source }: stateType,
-  {
-    type,
-    current,
-    target,
-  }: {|
-    type: actionType,
-    current: itemType,
-    target: itemType,
-  |},
+  { type, current, target }: actionType,
 ): stateType => {
-  switch (getUpdateType(type, current, target)) {
+  switch (getUpdateType({ type, current, target })) {
     case 'add-preview-component': {
       if (!previewId) {
         const id = uuid();
@@ -148,11 +146,7 @@ const useSource = (
   initialSource: sourceType,
 ): ({|
   source: sourceType,
-  updateSource: (action: {|
-    type: actionType,
-    current: itemType,
-    target: itemType,
-  |}) => void,
+  updateSource: (action: actionType) => void,
 |}) => {
   const [{ source }, sourceDispatch] = useReducer(sourceReducer, {
     previewId: false,

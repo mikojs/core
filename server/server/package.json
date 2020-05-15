@@ -9,18 +9,18 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.9.2",
+    "@babel/runtime": "^7.9.6",
     "@mikojs/utils": "^1.10.0",
     "chalk": "^4.0.0",
-    "commander": "^5.0.0",
+    "commander": "^5.1.0",
     "core-js": "^3.6.5",
     "debug": "^4.1.1",
-    "ora": "^4.0.3",
+    "ora": "^4.0.4",
     "path-to-regexp": "^6.1.0",
     "query-string": "^6.12.1"
   },
   "devDependencies": {
-    "flow-bin": "^0.123.0",
+    "flow-bin": "^0.124.0",
     "flow-typed": "^3.1.0",
     "get-port": "^5.1.1",
     "node-fetch": "^2.6.0"

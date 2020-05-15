@@ -22,9 +22,14 @@ export type documentComponentType<C, P> = ComponentType<P> & {
   }) => P,
 };
 
+type optionsType<-C> = {|
+  ...$Diff<propsType, {| Loading: mixed, initialState: mixed |}>,
+  Document: documentComponentType<C, *>,
+|};
+
 /**
  * @param {object} ctx - ctx object
- * @param {object} options - components and routes data
+ * @param {optionsType} options - components and routes data
  * @param {NodeType} scripts - scripts dom
  * @param {Function} errorCallback - error callback
  *
@@ -32,15 +37,7 @@ export type documentComponentType<C, P> = ComponentType<P> & {
  */
 export default async <-C>(
   ctx: C & { url: string, path: string },
-  {
-    Document,
-    Main,
-    Error: ErrorComponent,
-    routesData,
-  }: {|
-    ...$Diff<propsType, {| Loading: mixed, initialState: mixed |}>,
-    Document: documentComponentType<C, *>,
-  |},
+  { Document, Main, Error: ErrorComponent, routesData }: optionsType<C>,
   scripts: NodeType,
   errorCallback: (errorHtml: string) => void,
 ): Promise<ReadableType> => {

@@ -54,7 +54,7 @@ describe('use source', () => {
       targetType,
       expected,
     }: {|
-      type: actionType,
+      type: $PropertyType<actionType, 'type'>,
       currentId: string,
       targetType: $PropertyType<itemType, 'type'>,
       expected: sourceType,

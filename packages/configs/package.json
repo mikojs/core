@@ -8,7 +8,7 @@
   "version": "1.10.1",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.9.2",
+    "@babel/runtime": "^7.9.6",
     "@mikojs/utils": "^1.10.1",
     "core-js": "^3.6.5",
     "cosmiconfig": "^6.0.0",
@@ -16,10 +16,13 @@
   },
   "devDependencies": {
     "@mikojs/miko": "^1.10.1",
-    "flow-bin": "^0.123.0",
+    "flow-bin": "^0.124.0",
     "flow-typed": "^3.1.0"
   },
-  "keywords": ["configs", "mikojs"],
+  "keywords": [
+    "configs",
+    "mikojs"
+  ],
   "publishConfig": {
     "access": "public"
   }

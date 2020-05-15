@@ -3,7 +3,7 @@
 import { useMemo, useReducer, type ComponentType } from 'react';
 import memoizeOne from 'memoize-one';
 import { areEqual, invariant } from 'fbjs';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 export type itemType = {|
   id: string,

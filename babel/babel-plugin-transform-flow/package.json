@@ -8,9 +8,9 @@
   "version": "1.10.0",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/core": "^7.9.0",
+    "@babel/core": "^7.9.6",
     "@babel/helper-plugin-utils": "^7.8.3",
-    "@babel/runtime": "^7.9.2",
+    "@babel/runtime": "^7.9.6",
     "core-js": "^3.6.5",
     "output-file-sync": "^2.0.1"
   },
@@ -18,10 +18,14 @@
     "@babel/core": ">=7.0.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.123.0",
+    "flow-bin": "^0.124.0",
     "flow-typed": "^3.1.0"
   },
-  "keywords": ["babel plugin", "mikojs", "transform flow files"],
+  "keywords": [
+    "babel plugin",
+    "mikojs",
+    "transform flow files"
+  ],
   "publishConfig": {
     "access": "public"
   }

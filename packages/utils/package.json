@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/utils",
   "repository": "https://github.com/mikojs/core/tree/master/packages/utils",
-  "version": "1.10.2",
+  "version": "1.10.4",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.9.6",

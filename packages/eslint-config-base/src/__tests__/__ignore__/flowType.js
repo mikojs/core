@@ -5,9 +5,9 @@ type correctType = {|
   b: string,
 |};
 
-// $expectError flowtype/no-dupe-keys
 type dupeKeysType = {|
   a: string,
+  // $expectError flowtype/no-dupe-keys
   a: string,
 |};
 
@@ -38,22 +38,22 @@ type typeIdMatch = string;
 let requireVariableType = 1;
 requireVariableType += 1;
 
-// $expectError flowtype/require-return-type
 /**
  * @param {any} argu - any
  * @return {any} - any
  */
+// $expectError flowtype/require-return-type
 const requireReturnType = (argu: string) => {
   const test = `test: ${argu}`;
 
   return test;
 };
 
-// $expectError flowtype/require-parameter-type
 /**
  * @param {any} argu - any
  * @return {any} - any
  */
+// $expectError flowtype/require-parameter-type
 const requireParameterType = (argu): string => {
   const test = `test: ${argu}`;
 

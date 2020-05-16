@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { CLIEngine } from 'eslint';
+import { ESLint, type LintResult as LintResultType } from 'eslint';
 import { hyphenate } from 'fbjs';
 
 import { d3DirTree } from '@mikojs/utils';
@@ -11,100 +11,103 @@ import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import configs from '../index';
 
-// use to mock worker in @miko/miko/src/index.js
+type messageType = $ElementType<
+  $PropertyType<LintResultType, 'messages'>,
+  number,
+>;
+
+// use to mock worker in @mikojs/miko/src/index.js
 jest.mock('@mikojs/worker', () =>
   jest.fn().mockResolvedValue({
     addTracking: jest.fn(),
   }),
 );
 
-type eslintInfoType = {|
-  line: number,
-  ruleId: string,
-  message: string,
-|};
-
-type testTaskType = [number, string, string, ?string];
-
-type testDataType = [string, $ReadOnlyArray<testTaskType>, boolean];
-
 const root = path.resolve(__dirname, './__ignore__');
-
-const eslintResult = new CLIEngine({
-  cwd: root,
-  ignore: false,
-  rules: {
-    'no-unused-vars': 'off',
-    'no-warning-comments': 'off',
-    'prettier/prettier': 'off',
-  },
-})
-  .executeOnFiles(['.'])
-  .results.filter(
-    ({ messages }: {| messages: $ReadOnlyArray<string> |}) =>
-      messages.length !== 0,
-  );
-
-const ruleIds = [];
-
-const testData = d3DirTree(root, {
+const expectErrorRegExp = /^[ ]*(\/\/|\*|\/\*\*) \$expectError /;
+const expectedCache = {};
+const testings = d3DirTree(root, {
   extensions: /\.js$/,
 })
   .leaves()
-  .map(
-    ({ data: { path: filePath, name } }: d3DirTreeNodeType): testDataType => {
-      const { messages = [] } =
-        eslintResult.find(
-          ({ filePath: eslintFilePath }: {| filePath: string |}) =>
-            filePath === eslintFilePath,
-        ) || {};
+  .map(({ data: { path: filePath, name } }: d3DirTreeNodeType) => [
+    hyphenate(name.replace(/.js/, '')),
+    filePath,
+    fs
+      .readFileSync(filePath, 'utf-8')
+      .split(/\n/g)
+      .map((text: string, index: number) => [index + 1, text])
+      .filter(([line, text]: [number, string]) => expectErrorRegExp.test(text))
+      .reduce(
+        (
+          result: $ReadOnlyArray<[number, string]>,
+          [line, text]: [number, string],
+        ) => [
+          ...result,
+          ...text
+            .replace(expectErrorRegExp, '')
+            .split(/, /)
+            .map((key: string) => [
+              /flowtype\/require-valid-file-annotation/.test(text)
+                ? 1
+                : line + 1,
+              key,
+            ]),
+        ],
+        [],
+      ),
+  ]);
 
-      const expectErrors = fs
-        .readFileSync(filePath, 'utf-8')
-        .split(/\n/g)
-        .filter((text: string) => /^[ ]*\/\/ \$expectError /.test(text))
-        .map((text: string) => text.replace(/^[ ]*\/\/ \$expectError /, ''));
-
-      const testTasks = messages
-        .sort((a: eslintInfoType, b: eslintInfoType) =>
+describe('eslint', () => {
+  beforeAll(async () => {
+    (
+      await new ESLint({
+        cwd: root,
+        ignore: false,
+      }).lintFiles([root])
+    ).forEach(({ filePath, messages }: LintResultType) => {
+      expectedCache[filePath] = messages
+        .filter(
+          ({ ruleId }: messageType) =>
+            ![
+              'no-unused-vars',
+              'no-warning-comments',
+              'prettier/prettier',
+            ].includes(ruleId),
+        )
+        .sort((a: messageType, b: messageType) =>
           a.line === b.line
             ? a.ruleId.localeCompare(b.ruleId)
             : a.line - b.line,
-        )
-        .map(
-          (
-            { ruleId, line, message }: eslintInfoType,
-            index: number,
-          ): testTaskType => {
-            if (!ruleIds.includes(ruleId)) ruleIds.push(ruleId);
-
-            return [line, ruleId, message, expectErrors[index] || null];
-          },
         );
+    });
+  });
 
-      return [
-        hyphenate(name.replace(/.js/, '')),
-        testTasks,
-        expectErrors.length === messages.length,
-      ];
-    },
-  );
-
-describe('eslint', () => {
-  test('check amount of test files', () => {
-    expect(eslintResult.length).toBe(testData.length);
+  test('check amount of the testing files', () => {
+    expect(testings.length).toBe(Object.keys(expectedCache).length);
   });
 
   test('check amount of rules', () => {
-    const testRules = Object.keys(configs?.rules || {})
+    const expected = Object.keys(expectedCache)
+      .reduce(
+        (result: $ReadOnlyArray<string>, filePath: string) =>
+          expectedCache[filePath].reduce(
+            (subResult: $ReadOnlyArray<string>, { ruleId }: messageType) =>
+              subResult.includes(ruleId) ? subResult : [...subResult, ruleId],
+            result,
+          ),
+        [],
+      )
+      .sort();
+    const rules = Object.keys(configs?.rules || {})
       .filter((ruleName: string): boolean => {
         if (configs?.rules?.[ruleName] === 'warn') return false;
 
         switch (ruleName) {
           case 'arrow-parens':
-            return !ruleIds.includes('flowtype/require-parameter-type');
+            return !expected.includes('flowtype/require-parameter-type');
           case 'require-jsdoc':
-            return !ruleIds.includes('jsdoc/require-jsdoc');
+            return !expected.includes('jsdoc/require-jsdoc');
           case 'flowtype/no-flow-fix-me-comments':
           case 'flowtype/generic-spacing':
           case 'no-warning-comments':
@@ -118,29 +121,36 @@ describe('eslint', () => {
       })
       .sort();
 
-    expect(ruleIds.sort()).toEqual(testRules);
+    expect(rules).toEqual(expected);
   });
 
-  describe.each(testData)(
+  describe.each(testings)(
     '%s',
     (
-      testName: string,
-      testTasks: $ReadOnlyArray<testTaskType>,
-      checkErrorAmount: boolean,
+      name: string,
+      filePath: string,
+      rules: $ReadOnlyArray<[number, string]>,
     ) => {
-      ([testName, testTasks, checkErrorAmount]: testDataType);
+      let cacheIndex: number = 0;
 
-      test.each(testTasks)(
-        '[line: %d, rule: %s] %s',
-        (line: number, ruleId: string, message: string, expected: string) => {
-          ([line, ruleId, message, expected]: testTaskType);
-
-          expect(ruleId).toBe(expected);
+      test.each(rules)(
+        'line: %d, ruleId: %s',
+        (line: number, ruleId: string) => {
+          expect(expectedCache[filePath][cacheIndex]).toEqual(
+            expect.objectContaining({
+              line,
+              ruleId,
+            }),
+          );
         },
       );
 
-      test('check error amount', () => {
-        expect(checkErrorAmount).toBeTruthy();
+      test('check rules amount', () => {
+        expect(rules.length).toBe(expectedCache[filePath].length);
+      });
+
+      afterEach(() => {
+        cacheIndex += 1;
       });
     },
   );

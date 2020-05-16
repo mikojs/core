@@ -16,11 +16,11 @@ const correctNotDirectReturn = (argu: string): string => {
   return a;
 };
 
-// $expectError arrow-body-style
 /**
  * @param {string} argu - any
  * @return {'value'} - value
  */
+// $expectError arrow-body-style
 const shouldDirectReturn = (argu: string): string => {
   return 'value';
 };

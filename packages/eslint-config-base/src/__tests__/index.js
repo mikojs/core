@@ -11,6 +11,11 @@ import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import configs from '../index';
 
+type messageType = $ElementType<
+  $PropertyType<LintResultType, 'messages'>,
+  number,
+>;
+
 // use to mock worker in @mikojs/miko/src/index.js
 jest.mock('@mikojs/worker', () =>
   jest.fn().mockResolvedValue({
@@ -19,7 +24,7 @@ jest.mock('@mikojs/worker', () =>
 );
 
 const root = path.resolve(__dirname, './__ignore__');
-const expectErrorRegExp = /^[ ]*\/\/ \$expectError /;
+const expectErrorRegExp = /^[ ]*(\/\/|\*|\/\*\*) \$expectError /;
 const expectedCache = {};
 const testings = d3DirTree(root, {
   extensions: /\.js$/,
@@ -33,10 +38,24 @@ const testings = d3DirTree(root, {
       .split(/\n/g)
       .map((text: string, index: number) => [index + 1, text])
       .filter(([line, text]: [number, string]) => expectErrorRegExp.test(text))
-      .map(([line, text]: [number, string]) => [
-        line + 1,
-        text.replace(expectErrorRegExp, ''),
-      ]),
+      .reduce(
+        (
+          result: $ReadOnlyArray<[number, string]>,
+          [line, text]: [number, string],
+        ) => [
+          ...result,
+          ...text
+            .replace(expectErrorRegExp, '')
+            .split(/, /)
+            .map((key: string) => [
+              /flowtype\/require-valid-file-annotation/.test(text)
+                ? 1
+                : line + 1,
+              key,
+            ]),
+        ],
+        [],
+      ),
   ]);
 
 describe('eslint', () => {
@@ -47,16 +66,20 @@ describe('eslint', () => {
         ignore: false,
       }).lintFiles([root])
     ).forEach(({ filePath, messages }: LintResultType) => {
-      expectedCache[filePath] = messages.filter(
-        ({
-          ruleId,
-        }: $ElementType<$PropertyType<LintResultType, 'messages'>, number>) =>
-          ![
-            'no-unused-vars',
-            'no-warning-comments',
-            'prettier/prettier',
-          ].includes(ruleId),
-      );
+      expectedCache[filePath] = messages
+        .filter(
+          ({ ruleId }: messageType) =>
+            ![
+              'no-unused-vars',
+              'no-warning-comments',
+              'prettier/prettier',
+            ].includes(ruleId),
+        )
+        .sort((a: messageType, b: messageType) =>
+          a.line === b.line
+            ? a.ruleId.localeCompare(b.ruleId)
+            : a.line - b.line,
+        );
     });
   });
 
@@ -69,15 +92,7 @@ describe('eslint', () => {
       .reduce(
         (result: $ReadOnlyArray<string>, filePath: string) =>
           expectedCache[filePath].reduce(
-            (
-              subResult: $ReadOnlyArray<string>,
-              {
-                ruleId,
-              }: $ElementType<
-                $PropertyType<LintResultType, 'messages'>,
-                number,
-              >,
-            ) =>
+            (subResult: $ReadOnlyArray<string>, { ruleId }: messageType) =>
               subResult.includes(ruleId) ? subResult : [...subResult, ruleId],
             result,
           ),

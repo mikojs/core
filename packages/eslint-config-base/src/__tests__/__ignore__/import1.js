@@ -8,20 +8,16 @@ import fbjs from 'fbjs';
 // $expectError import/no-extraneous-dependencies
 import babel from '@babel/core/lib';
 
-// $expectError import/no-unresolved
-// $expectError import/no-useless-path-segments
+// $expectError import/no-unresolved, import/no-useless-path-segments
 import noUnresolver from './../test';
 
-// $expectError import/no-absolute-path
-// $expectError import/no-unresolved
+// $expectError import/no-absolute-path, import/no-unresolved
 import noAbsolutePath from '/etc';
 
-// $expectError import/default
-// $expectError import/no-duplicates
+// $expectError import/default, import/no-duplicates
 import arrowFunc from './import2';
 
-// $expectError import/default
-// $expectError import/no-duplicates
+// $expectError import/default, import/no-duplicates
 import noDuplicates from './import2';
 
 // $expectError import/no-named-default
@@ -29,9 +25,7 @@ import func, { default as noNamedDefault } from './func';
 
 fbjs();
 
-// $expectError import/first
-// $expectError import/newline-after-import
-// $expectError import/no-self-import
+// $expectError import/first, import/newline-after-import, import/no-self-import
 import * as namespace from './import1';
 fbjs();
 

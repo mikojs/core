@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 1.10.4 (2020-05-16)
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `eslint-config-base`, `jest`, `miko`, `utils`, `worker`
+  - [#605](https://github.com/mikojs/core/pull/605) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `eslint-config-base`
+  - [#606](https://github.com/mikojs/core/pull/606) (@mikojs/eslint-config-base) Use new eslint testing ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.10.3 (2020-05-15)
 
 #### :rocket: New Feature

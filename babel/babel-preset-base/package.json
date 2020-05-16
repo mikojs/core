@@ -25,7 +25,7 @@
     "@babel/core": ">=7.0.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.124.0",
+    "flow-bin": "^0.125.1",
     "flow-typed": "^3.1.0"
   },
   "keywords": ["babel preset", "base", "mikojs"],

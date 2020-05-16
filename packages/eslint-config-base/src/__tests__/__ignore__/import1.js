@@ -18,11 +18,11 @@ import noAbsolutePath from '/etc';
 
 // $expectError import/default
 // $expectError import/no-duplicates
-import arrowFunc from './import-2';
+import arrowFunc from './import2';
 
 // $expectError import/default
 // $expectError import/no-duplicates
-import noDuplicates from './import-2';
+import noDuplicates from './import2';
 
 // $expectError import/no-named-default
 import func, { default as noNamedDefault } from './func';
@@ -32,7 +32,7 @@ fbjs();
 // $expectError import/first
 // $expectError import/newline-after-import
 // $expectError import/no-self-import
-import * as namespace from './import-1';
+import * as namespace from './import1';
 fbjs();
 
 fbjs();

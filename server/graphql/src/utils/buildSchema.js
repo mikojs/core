@@ -124,33 +124,29 @@ export default (
 
       debugLog({ typeDefs, resolvers });
 
-      switch (event) {
-        case 'init':
+      if (['init', 'add', 'change', 'unlink'].includes(event)) {
+        cache.schemas = cache.schemas.filter(
+          ({ filePath: currentFilePath }: schemaType) =>
+            currentFilePath !== filePath,
+        );
+
+        if (event !== 'unlink')
           cache.schemas = [
-            ...cache.schemas.filter(
-              ({ filePath: currentFilePath }: schemaType) =>
-                currentFilePath !== filePath,
-            ),
+            ...cache.schemas,
             {
               filePath,
               typeDefs,
               resolvers,
             },
           ];
-          break;
 
-        case 'add':
-        case 'change':
-        case 'unlink':
-          break;
-
-        default:
-          break;
+        if (event !== 'init') cache.build();
       }
 
       debugLog(cache);
     },
   );
+  cache.build();
 
   return cache;
 };

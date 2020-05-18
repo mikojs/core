@@ -16,12 +16,24 @@ import { type optionsType as serverOptionsType } from '@mikojs/server';
 
 export type optionsType = {|
   ...serverOptionsType,
-  makeExecutableSchemaOptions: makeExecutableSchemaOptionsType,
+  makeExecutableSchemaOptions: $Diff<
+    makeExecutableSchemaOptionsType,
+    {|
+      resolvers: mixed,
+      typeDefs: mixed,
+    |},
+  >,
+|};
+
+type schemaType = {|
+  filePath: string,
+  resolvers: $PropertyType<makeExecutableSchemaOptionsType, 'resolvers'>,
+  typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
 |};
 
 type cacheType = {|
-  resolvers: $PropertyType<makeExecutableSchemaOptionsType, 'resolvers'>,
-  typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
+  schemas: $ReadOnlyArray<schemaType>,
+  build: () => void,
   cache?: GraphQLSchemaType,
 |};
 
@@ -48,11 +60,52 @@ export default (
   }: optionsType,
 ): cacheType => {
   const cache: cacheType = {
-    typeDefs:
-      additionalTypeDefs instanceof Array
-        ? additionalTypeDefs
-        : [additionalTypeDefs],
-    resolvers: additionalResolvers,
+    schemas: [],
+    build: () => {
+      cache.cache = makeExecutableSchema(
+        [
+          {
+            filePath: 'additional',
+            typeDefs: additionalTypeDefs,
+            resolvers: additionalResolvers,
+          },
+          ...cache.schemas,
+        ].reduce(
+          (
+            result: makeExecutableSchemaOptionsType,
+            { typeDefs, resolvers }: schemaType,
+          ) => ({
+            ...result,
+            typeDefs: [
+              ...result.typeDefs,
+              ...(typeDefs instanceof Array ? typeDefs : [typeDefs]),
+            ],
+            resolvers: Object.keys(resolvers).reduce(
+              (
+                prevResolvers: $PropertyType<schemaType, 'resolvers'>,
+                key: string,
+              ) => ({
+                ...prevResolvers,
+                [key]: {
+                  ...prevResolvers[key],
+                  ...resolvers[key],
+                },
+              }),
+              result.resolvers,
+            ),
+          }),
+          {
+            ...makeExecutableSchemaOptions,
+            resolverValidationOptions: {
+              ...resolverValidationOptions,
+              requireResolversForResolveType: false,
+            },
+            typeDefs: [],
+            resolvers: {},
+          },
+        ),
+      );
+    },
   };
 
   debugLog(cache);
@@ -64,22 +117,31 @@ export default (
       extensions: /\.js$/,
     },
     (event: mergeDirEventType, { filePath }: mergeDirDataType) => {
-      const { typeDefs, ...resolvers } = requireModule<{
-        [string]: $PropertyType<cacheType, 'resolvers'>,
-        typeDefs: $PropertyType<cacheType, 'typeDefs'>,
-      }>(filePath);
+      const { typeDefs, ...resolvers } = requireModule<{|
+        [string]: $PropertyType<schemaType, 'resolvers'>,
+        typeDefs: $PropertyType<schemaType, 'typeDefs'>,
+      |}>(filePath);
 
       debugLog({ typeDefs, resolvers });
 
       switch (event) {
         case 'init':
-          cache.typeDefs = [...cache.typeDefs, typeDefs];
-          Object.keys(resolvers).forEach((resolverName: string) => {
-            cache.resolvers[resolverName] = {
-              ...cache.resolvers[resolverName],
-              ...resolvers[resolverName],
-            };
-          });
+          cache.schemas = [
+            ...cache.schemas.filter(
+              ({ filePath: currentFilePath }: schemaType) =>
+                currentFilePath !== filePath,
+            ),
+            {
+              filePath,
+              typeDefs,
+              resolvers,
+            },
+          ];
+          break;
+
+        case 'add':
+        case 'change':
+        case 'unlink':
           break;
 
         default:
@@ -89,15 +151,6 @@ export default (
       debugLog(cache);
     },
   );
-  cache.cache = makeExecutableSchema({
-    ...makeExecutableSchema,
-    resolverValidationOptions: {
-      ...resolverValidationOptions,
-      requireResolversForResolveType: false,
-    },
-    typeDefs: cache.typeDefs,
-    resolvers: cache.resolvers,
-  });
 
   return cache;
 };

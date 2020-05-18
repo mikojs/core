@@ -21,7 +21,7 @@ export type optionsType = {|
   logger?: $Call<createLoggerType, string>,
 |};
 
-type routesType = {|
+type routeType = {|
   filePath: string,
   pathname: string,
   regExp: $Call<typeof pathToRegexp, string, $ReadOnlyArray<string>>,
@@ -29,8 +29,8 @@ type routesType = {|
 |};
 
 type cacheType = {|
-  routes: $ReadOnlyArray<routesType>,
-  find: (pathname: ?string) => ?routesType,
+  routes: $ReadOnlyArray<routeType>,
+  find: (pathname: ?string) => ?routeType,
 |};
 
 const debugLog = debug('server:buildRoutes');
@@ -48,7 +48,7 @@ export default (
   const cache: cacheType = {
     routes: [],
     find: (pathname: ?string) =>
-      cache.routes.find(({ regExp }: routesType) => regExp.exec(pathname)),
+      cache.routes.find(({ regExp }: routeType) => regExp.exec(pathname)),
   };
 
   mergeDir(
@@ -89,7 +89,7 @@ export default (
           debugLog(pathname);
           cache.routes = [
             ...cache.routes.filter(
-              ({ filePath: currentFilePath }: routesType) =>
+              ({ filePath: currentFilePath }: routeType) =>
                 currentFilePath !== filePath,
             ),
             {
@@ -103,7 +103,7 @@ export default (
                       currentPathname,
                     ).params,
             },
-          ].sort((a: routesType, b: routesType): number => {
+          ].sort((a: routeType, b: routeType): number => {
             if (path.dirname(a.pathname) !== path.dirname(b.pathname)) return 0;
 
             return /\/:([^[\]]*)$/.test(a.pathname) ? 1 : -1;
@@ -112,7 +112,7 @@ export default (
 
         case 'unlink':
           cache.routes = cache.routes.filter(
-            ({ filePath: currentFilePath }: routesType) =>
+            ({ filePath: currentFilePath }: routeType) =>
               currentFilePath !== filePath,
           );
           break;

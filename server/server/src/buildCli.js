@@ -38,10 +38,12 @@ export default <
   return getOptions(argv, defaultFolder).then(
     ({ port, folderPath }: optionsType): http.Server => {
       const server = http.createServer(
-        callback(folderPath, {
-          dev: process.env.NODE_ENV !== 'production',
-          logger,
-        }),
+        (req: http.IncomingMessage, res: http.ServerResponse) => {
+          callback(folderPath, {
+            dev: process.env.NODE_ENV !== 'production',
+            logger,
+          })(req, res);
+        },
       );
 
       server.listen(port);

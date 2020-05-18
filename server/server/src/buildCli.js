@@ -21,7 +21,7 @@ handleUnhandledRejection();
  * @param {Array} argv - command line
  * @param {string} defaultFolder - default folder
  * @param {createLoggerType} logger - logger function
- * @param {Function} callback - use to build the middleware
+ * @param {Function} buildMiddleware - use to build the middleware
  *
  * @return {any} - http server
  */
@@ -31,18 +31,19 @@ export default <
   argv: $ReadOnlyArray<string>,
   defaultFolder: string,
   logger: $Call<createLoggerType, string>,
-  callback: C,
+  buildMiddleware: C,
 ): Promise<http.Server> => {
   logger.start('Server start');
 
   return getOptions(argv, defaultFolder).then(
     ({ port, folderPath }: optionsType): http.Server => {
+      const middleware = buildMiddleware(folderPath, {
+        dev: process.env.NODE_ENV !== 'production',
+        logger,
+      });
       const server = http.createServer(
         (req: http.IncomingMessage, res: http.ServerResponse) => {
-          callback(folderPath, {
-            dev: process.env.NODE_ENV !== 'production',
-            logger,
-          })(req, res);
+          middleware(req, res);
         },
       );
 

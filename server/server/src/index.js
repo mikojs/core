@@ -63,6 +63,6 @@ export default (
       return;
     }
 
-    notFound(req, req);
+    notFound(req, res);
   };
 };

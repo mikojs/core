@@ -63,18 +63,22 @@ export default (
       { filePath, name, extension }: mergeDirDataType,
     ) => {
       const relativePath = path.relative(folderPath, filePath);
+      const shouldLog = ['add', 'change', 'unlink'].includes(event);
 
       debugLog({ event, filePath });
 
-      if (['add', 'change', 'unlink'].includes(event) && logger)
+      if (shouldLog && logger)
         logger.start(
           chalk`{gray [${event}]} Server updating (${relativePath})`,
         );
 
-      switch (event) {
-        case 'init':
-        case 'add':
-        case 'change':
+      if (['init', 'add', 'change', 'unlink'].includes(event)) {
+        cache.routes = cache.routes.filter(
+          ({ filePath: currentFilePath }: routeType) =>
+            currentFilePath !== filePath,
+        );
+
+        if (event !== 'unlink') {
           const keys = [];
           const pathname = `/${[
             path.dirname(relativePath).replace(/^\./, ''),
@@ -88,10 +92,7 @@ export default (
 
           debugLog(pathname);
           cache.routes = [
-            ...cache.routes.filter(
-              ({ filePath: currentFilePath }: routeType) =>
-                currentFilePath !== filePath,
-            ),
+            ...cache.routes,
             {
               filePath,
               pathname,
@@ -108,22 +109,12 @@ export default (
 
             return /\/:([^[\]]*)$/.test(a.pathname) ? 1 : -1;
           });
-          break;
-
-        case 'unlink':
-          cache.routes = cache.routes.filter(
-            ({ filePath: currentFilePath }: routeType) =>
-              currentFilePath !== filePath,
-          );
-          break;
-
-        default:
-          break;
+        }
       }
 
       debugLog(cache);
 
-      if (['add', 'change', 'unlink'].includes(event) && logger)
+      if (shouldLog && logger)
         logger.succeed(
           chalk`{gray [${event}]} Server updated (${relativePath})`,
         );

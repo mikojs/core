@@ -25,7 +25,7 @@ type routesType = {|
   filePath: string,
   pathname: string,
   regExp: $Call<typeof pathToRegexp, string, $ReadOnlyArray<string>>,
-  getUrlQuery: (pathname: string | null) => QueryParametersType,
+  getUrlQuery: (pathname: ?string) => QueryParametersType,
 |};
 
 type cacheType = {|
@@ -39,7 +39,7 @@ const debugLog = debug('server:buildRoutes');
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
  *
- * @return {routesType} - routes array
+ * @return {cacheType} - routes cache
  */
 export default (
   folderPath: string,
@@ -96,7 +96,7 @@ export default (
               filePath,
               pathname,
               regExp: pathToRegexp(pathname, keys),
-              getUrlQuery: (currentPathname: string | null) =>
+              getUrlQuery: (currentPathname: ?string) =>
                 keys.length === 0
                   ? {}
                   : match(pathname, { decode: decodeURIComponent })(

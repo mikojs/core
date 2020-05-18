@@ -1,41 +1,22 @@
 // @flow
 
-import path from 'path';
 import url from 'url';
 
-import chalk from 'chalk';
-import { pathToRegexp, match } from 'path-to-regexp';
-import {
-  parse,
-  type QueryParameters as QueryParametersType,
-} from 'query-string';
+import { parse } from 'query-string';
 import debug from 'debug';
 
-import { requireModule, mergeDir } from '@mikojs/utils';
-import {
-  type mergeDirOptionsType,
-  type mergeDirEventType,
-  type mergeDirDataType,
-} from '@mikojs/utils/lib/mergeDir';
-import typeof createLoggerType from '@mikojs/utils/lib/createLogger';
+import { requireModule } from '@mikojs/utils';
 
-export type optionsType = {|
-  ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
-  dev?: boolean,
-  logger?: $Call<createLoggerType, string>,
-|};
+import buildRoutes, {
+  type optionsType as buildRoutesOptionsType,
+} from './utils/buildRoutes';
+
+export type optionsType = buildRoutesOptionsType;
 
 export type middlewareType<
   Req = http.IncomingMessage,
   Res = http.ServerResponse,
 > = (req: Req, res: Res) => void;
-
-type cacheType = {|
-  filePath: string,
-  pathname: string,
-  regExp: $Call<typeof pathToRegexp, string, $ReadOnlyArray<string>>,
-  getUrlQuery: (pathname: string | null) => QueryParametersType,
-|};
 
 const debugLog = debug('server');
 
@@ -47,97 +28,18 @@ const debugLog = debug('server');
  */
 export default (
   folderPath: string,
-  { dev, logger, ...options }: optionsType = {},
+  options: ?optionsType,
 ): middlewareType<> => {
-  let cache: $ReadOnlyArray<cacheType> = [];
-
-  mergeDir(
-    folderPath,
-    {
-      ...options,
-      watch: dev,
-      extensions: /\.js$/,
-    },
-    (
-      event: mergeDirEventType,
-      { filePath, name, extension }: mergeDirDataType,
-    ) => {
-      const relativePath = path.relative(folderPath, filePath);
-
-      debugLog({ event, filePath });
-
-      if (['add', 'change', 'unlink'].includes(event) && logger)
-        logger.start(
-          chalk`{gray [${event}]} Server updating (${relativePath})`,
-        );
-
-      switch (event) {
-        case 'init':
-        case 'add':
-        case 'change':
-          const keys = [];
-          const pathname = `/${[
-            path.dirname(relativePath).replace(/^\./, ''),
-            name
-              .replace(extension, '')
-              .replace(/^index$/, '')
-              .replace(/\[([^[\]]*)\]/g, ':$1'),
-          ]
-            .filter(Boolean)
-            .join('/')}`;
-
-          debugLog(pathname);
-          cache = [
-            ...cache.filter(
-              ({ filePath: currentFilePath }: cacheType) =>
-                currentFilePath !== filePath,
-            ),
-            {
-              filePath,
-              pathname,
-              regExp: pathToRegexp(pathname, keys),
-              getUrlQuery: (currentPathname: string | null) =>
-                keys.length === 0
-                  ? {}
-                  : match(pathname, { decode: decodeURIComponent })(
-                      currentPathname,
-                    ).params,
-            },
-          ].sort((a: cacheType, b: cacheType): number => {
-            if (path.dirname(a.pathname) !== path.dirname(b.pathname)) return 0;
-
-            return /\/:([^[\]]*)$/.test(a.pathname) ? 1 : -1;
-          });
-          break;
-
-        case 'unlink':
-          cache = cache.filter(
-            ({ filePath: currentFilePath }: cacheType) =>
-              currentFilePath !== filePath,
-          );
-          break;
-
-        default:
-          break;
-      }
-
-      debugLog({ cache });
-
-      if (['add', 'change', 'unlink'].includes(event) && logger)
-        logger.succeed(
-          chalk`{gray [${event}]} Server updated (${relativePath})`,
-        );
-    },
-  );
+  const routes = buildRoutes(folderPath, options || {});
 
   return (req: http.IncomingMessage, res: http.ServerResponse) => {
     const { pathname, query } = url.parse(req.url);
-    const data = cache.find(({ regExp }: cacheType) => regExp.exec(pathname));
+    const route = routes.find(pathname);
 
-    debugLog(data);
+    debugLog(route);
 
-    if (data) {
-      const { getUrlQuery, filePath } = data;
+    if (route) {
+      const { getUrlQuery, filePath } = route;
 
       req.query = {
         ...parse(query || ''),

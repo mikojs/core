@@ -1,6 +1,6 @@
 // @flow
 
-import graphqlHTTP, {
+import graphql, {
   type OptionsData as expressGraphqlOptionsType,
 } from 'express-graphql';
 
@@ -33,7 +33,7 @@ export default (
       return;
     }
 
-    await graphqlHTTP({
+    await graphql({
       ...graphqlOptions,
       schema: schema.cache,
     })(req, res);

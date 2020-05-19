@@ -12,7 +12,7 @@ import buildSchema, {
 
 type optionsType = {|
   ...buildSchemaOptionsType,
-  graphqlOptions: expressGraphqlOptionsType,
+  graphqlOptions?: expressGraphqlOptionsType,
 |};
 
 /**

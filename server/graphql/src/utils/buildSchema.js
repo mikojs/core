@@ -16,7 +16,7 @@ import { type optionsType as serverOptionsType } from '@mikojs/server';
 
 export type optionsType = {|
   ...serverOptionsType,
-  makeExecutableSchemaOptions: $Diff<
+  makeExecutableSchemaOptions?: $Diff<
     makeExecutableSchemaOptionsType,
     {|
       resolvers: mixed,
@@ -55,7 +55,7 @@ export default (
       resolvers: additionalResolvers = {},
       resolverValidationOptions,
       ...makeExecutableSchemaOptions
-    },
+    } = {},
     ...options
   }: optionsType,
 ): cacheType => {

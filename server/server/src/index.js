@@ -21,6 +21,20 @@ export type middlewareType<
 const debugLog = debug('server');
 
 /**
+ * @param {any} req - nodeJs IncomingMessage
+ * @param {any} res - nodeJs ServerResponse
+ */
+export const notFound = (
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+) => {
+  res.statusCode = 404;
+  res.statusMessage = 'Not found';
+  res.write('Not found');
+  res.end();
+};
+
+/**
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
  *
@@ -49,9 +63,6 @@ export default (
       return;
     }
 
-    res.statusCode = 404;
-    res.statusMessage = 'Not found';
-    res.write('Not found');
-    res.end();
+    notFound(req, res);
   };
 };

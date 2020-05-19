@@ -15,15 +15,15 @@
     "commander": "^5.1.0",
     "core-js": "^3.6.5",
     "debug": "^4.1.1",
+    "get-port": "^5.1.1",
+    "node-fetch": "^2.6.0",
     "ora": "^4.0.4",
     "path-to-regexp": "^6.1.0",
     "query-string": "^6.12.1"
   },
   "devDependencies": {
     "flow-bin": "^0.125.1",
-    "flow-typed": "^3.1.0",
-    "get-port": "^5.1.1",
-    "node-fetch": "^2.6.0"
+    "flow-typed": "^3.1.0"
   },
   "keywords": ["mikojs", "server"],
   "publishConfig": {

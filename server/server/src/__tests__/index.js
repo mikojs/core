@@ -4,7 +4,6 @@ import path from 'path';
 
 import { type Body as BodyType } from 'node-fetch';
 
-import { chainingLogger } from '@mikojs/utils';
 import { mockUpdate, type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 
 import buildApi from '../index';
@@ -12,18 +11,10 @@ import testingServer from '../testingServer';
 
 const server = testingServer();
 const folderPath = path.resolve(__dirname, './__ignore__');
-const mockLog = jest.fn();
-const logger = {
-  ...chainingLogger,
-  start: mockLog,
-  succeed: mockLog,
-  fail: mockLog,
-};
 
 describe('server', () => {
   beforeEach(() => {
     mockUpdate.clear();
-    mockLog.mockClear();
   });
 
   test.each`
@@ -48,12 +39,7 @@ describe('server', () => {
       canFind: boolean,
       updateEvent: mergeDirEventType,
     |}) => {
-      await server.run(
-        buildApi(folderPath, {
-          dev: true,
-          logger,
-        }),
-      );
+      await server.run(buildApi(folderPath));
 
       if (updateEvent === 'unlink') {
         expect(mockUpdate.cache).toHaveLength(1);
@@ -62,9 +48,7 @@ describe('server', () => {
           updateEvent,
           path.resolve(folderPath, `.${pathname}.js`),
         );
-
-        expect(mockLog).toHaveBeenCalledTimes(2);
-      } else expect(mockLog).toHaveBeenCalledTimes(0);
+      }
 
       expect(
         await server

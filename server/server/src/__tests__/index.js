@@ -12,6 +12,12 @@ import { mockUpdate, type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 import buildApi from '../index';
 import buildCli from '../buildCli';
 
+const folderPath = path.resolve(__dirname, './__ignore__');
+const logger = {
+  ...chainingLogger,
+  start: jest.fn(),
+};
+
 describe('server', () => {
   beforeEach(() => {
     mockUpdate.clear();
@@ -44,18 +50,21 @@ describe('server', () => {
 
       global.console.log = mockLog;
 
-      const folderPath = path.resolve(__dirname, './__ignore__');
       const port = await getPort();
       const url = `http://localhost:${port}${pathname}`;
       const server = await (updateEvent !== 'init'
-        ? buildCli(
-            ['node', 'server', '-f', folderPath, '-p', port],
-            folderPath,
-            { ...chainingLogger, start: jest.fn() },
-            buildApi,
+        ? buildCli(['node', 'server', '-p', port], folderPath, logger, () =>
+            buildApi(folderPath, {
+              dev: true,
+              logger,
+            }),
           )
         : new Promise(resolve => {
-            const runningServer = http.createServer(buildApi(folderPath));
+            const runningServer = http.createServer(
+              (req: http.IncomingMessage, res: http.ServerResponse) => {
+                buildApi(folderPath)(req, res);
+              },
+            );
 
             runningServer.listen(port);
             resolve(runningServer);

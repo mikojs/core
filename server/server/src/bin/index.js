@@ -16,7 +16,16 @@ const debugLog = debug('server:bin');
 
 (async () => {
   try {
-    await buildCli(process.argv, path.resolve('./api'), logger, buildApi);
+    await buildCli(
+      process.argv,
+      path.resolve('./api'),
+      logger,
+      (folderPath: string) =>
+        buildApi(folderPath, {
+          dev: process.env.NODE_ENV !== 'production',
+          logger,
+        }),
+    );
   } catch (e) {
     debugLog(e);
     logger.fail(e.message);

@@ -5,6 +5,7 @@ import {
   makeExecutableSchema,
   type makeExecutableSchemaOptionsType,
 } from 'graphql-tools';
+import chalk from 'chalk';
 import debug from 'debug';
 
 import { requireModule, mergeDir } from '@mikojs/utils';
@@ -116,13 +117,21 @@ export default (
       watch: dev,
       extensions: /\.js$/,
     },
-    (event: mergeDirEventType, { filePath }: mergeDirDataType) => {
+    (
+      event: mergeDirEventType,
+      { filePath, name, extension }: mergeDirDataType,
+    ) => {
+      const shouldLog = ['add', 'change', 'unlink'].includes(event);
+      const outputName = name.replace(extension, '');
       const { typeDefs, ...resolvers } = requireModule<{|
         [string]: $PropertyType<schemaType, 'resolvers'>,
         typeDefs: $PropertyType<schemaType, 'typeDefs'>,
       |}>(filePath);
 
       debugLog({ typeDefs, resolvers });
+
+      if (shouldLog && logger)
+        logger.start(chalk`{gray [${event}]} Server updating (${outputName})`);
 
       if (['init', 'add', 'change', 'unlink'].includes(event)) {
         cache.schemas = cache.schemas.filter(
@@ -142,6 +151,9 @@ export default (
 
         if (event !== 'init') cache.build();
       }
+
+      if (shouldLog && logger)
+        logger.succeed(chalk`{gray [${event}]} Server updated (${outputName})`);
 
       debugLog(cache);
     },

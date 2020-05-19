@@ -12,6 +12,7 @@
     "@babel/runtime": "^7.9.6",
     "@mikojs/server": "^1.10.4",
     "@mikojs/utils": "^1.10.4",
+    "chalk": "^4.0.0",
     "core-js": "^3.6.5",
     "debug": "^4.1.1",
     "express-graphql": "^0.9.0",

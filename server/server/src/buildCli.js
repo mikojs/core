@@ -8,10 +8,7 @@ import { handleUnhandledRejection } from '@mikojs/utils';
 import typeof createLoggerType from '@mikojs/utils/lib/createLogger';
 
 import getOptions, { type optionsType } from './utils/getOptions';
-import {
-  type optionsType as serverOptionsType,
-  type middlewareType,
-} from './index';
+import { type middlewareType } from './index';
 
 handleUnhandledRejection();
 
@@ -21,28 +18,21 @@ handleUnhandledRejection();
  * @param {Array} argv - command line
  * @param {string} defaultFolder - default folder
  * @param {createLoggerType} logger - logger function
- * @param {Function} callback - use to build the middleware
+ * @param {Function} buildMiddleware - use to build the middleware
  *
  * @return {any} - http server
  */
-export default <
-  C: (folderPath: string, options: serverOptionsType) => middlewareType<>,
->(
+export default (
   argv: $ReadOnlyArray<string>,
   defaultFolder: string,
   logger: $Call<createLoggerType, string>,
-  callback: C,
+  buildMiddleware: (folderPath: string) => middlewareType<>,
 ): Promise<http.Server> => {
   logger.start('Server start');
 
   return getOptions(argv, defaultFolder).then(
     ({ port, folderPath }: optionsType): http.Server => {
-      const server = http.createServer(
-        callback(folderPath, {
-          dev: process.env.NODE_ENV !== 'production',
-          logger,
-        }),
-      );
+      const server = http.createServer(buildMiddleware(folderPath));
 
       server.listen(port);
       logger.succeed(

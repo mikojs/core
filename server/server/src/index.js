@@ -16,7 +16,7 @@ export type optionsType = buildRoutesOptionsType;
 export type middlewareType<
   Req = http.IncomingMessage,
   Res = http.ServerResponse,
-> = (req: Req, res: Res) => void;
+> = (req: Req, res: Res) => Promise<void> | void;
 
 const debugLog = debug('server');
 

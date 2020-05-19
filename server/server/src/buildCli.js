@@ -32,7 +32,12 @@ export default (
 
   return getOptions(argv, defaultFolder).then(
     ({ port, folderPath }: optionsType): http.Server => {
-      const server = http.createServer(buildMiddleware(folderPath));
+      const middleware = buildMiddleware(folderPath);
+      const server = http.createServer(
+        (req: http.IncomingMessage, res: http.ServerResponse) => {
+          middleware(req, res);
+        },
+      );
 
       server.listen(port);
       logger.succeed(

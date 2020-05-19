@@ -55,7 +55,11 @@ describe('server', () => {
             buildApi,
           )
         : new Promise(resolve => {
-            const runningServer = http.createServer(buildApi(folderPath));
+            const runningServer = http.createServer(
+              (req: http.IncomingMessage, res: http.ServerResponse) => {
+                buildApi(folderPath)(req, res);
+              },
+            );
 
             runningServer.listen(port);
             resolve(runningServer);

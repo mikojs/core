@@ -13,14 +13,18 @@ import buildApi from '../index';
 import buildCli from '../buildCli';
 
 const folderPath = path.resolve(__dirname, './__ignore__');
+const mockLog = jest.fn();
 const logger = {
   ...chainingLogger,
-  start: jest.fn(),
+  start: mockLog,
+  succeed: mockLog,
+  fail: mockLog,
 };
 
 describe('server', () => {
   beforeEach(() => {
     mockUpdate.clear();
+    mockLog.mockClear();
   });
 
   test.each`
@@ -45,41 +49,43 @@ describe('server', () => {
       canFind: boolean,
       updateEvent: mergeDirEventType,
     |}) => {
-      const mockLog = jest.fn();
-      let countLog: number = 0;
-
-      global.console.log = mockLog;
-
       const port = await getPort();
       const url = `http://localhost:${port}${pathname}`;
-      const server = await (updateEvent !== 'init'
-        ? buildCli(['node', 'server', '-p', port], folderPath, logger, () =>
-            buildApi(folderPath, {
-              dev: true,
+      const server =
+        updateEvent !== 'init'
+          ? await buildCli(
+              ['node', 'server', '-p', port],
+              folderPath,
               logger,
-            }),
-          )
-        : new Promise(resolve => {
-            const runningServer = http.createServer(
-              (req: http.IncomingMessage, res: http.ServerResponse) => {
-                buildApi(folderPath)(req, res);
-              },
-            );
+              () =>
+                buildApi(folderPath, {
+                  dev: true,
+                  logger,
+                }),
+            )
+          : ((): http.Server => {
+              const runningServer = http.createServer(
+                (req: http.IncomingMessage, res: http.ServerResponse) => {
+                  buildApi(folderPath)(req, res);
+                },
+              );
 
-            runningServer.listen(port);
-            resolve(runningServer);
-          }));
+              runningServer.listen(port);
+
+              return runningServer;
+            })();
+      let countLog: number = 0;
 
       if (updateEvent !== 'init') {
         expect(mockUpdate.cache).toHaveLength(1);
 
-        countLog += 1;
+        countLog += 2;
         mockUpdate.cache[0](
           updateEvent,
           path.resolve(folderPath, `.${pathname}.js`),
         );
 
-        if (updateEvent === 'unlink') countLog += 1;
+        if (updateEvent === 'unlink') countLog += 2;
       }
 
       expect(mockLog).toHaveBeenCalledTimes(countLog);

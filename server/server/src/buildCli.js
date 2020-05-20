@@ -14,7 +14,7 @@ import getOptions from './utils/getOptions';
 
 import { type middlewareType, type optionsType } from './index';
 
-export type loggerType = $PropertyType<optionsType, 'logger'>;
+export type loggerType = $NonMaybeType<$PropertyType<optionsType, 'logger'>>;
 
 const debugLog = debug('server:buildCli');
 
@@ -42,6 +42,8 @@ export default async (
       folderPath,
       (type: 'start' | 'end', event: mergeDirEventType, filePath: string) => {
         const relativePath = path.relative(folderPath, filePath);
+
+        if (!['add', 'change', 'unlink'].includes(event)) return;
 
         if (type === 'start') {
           logger.start(

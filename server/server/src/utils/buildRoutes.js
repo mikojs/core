@@ -2,9 +2,9 @@
 
 import path from 'path';
 
-import chalk from 'chalk';
 import { pathToRegexp, match } from 'path-to-regexp';
 import { type QueryParameters as QueryParametersType } from 'query-string';
+import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
 import { mergeDir } from '@mikojs/utils';
@@ -13,12 +13,15 @@ import {
   type mergeDirEventType,
   type mergeDirDataType,
 } from '@mikojs/utils/lib/mergeDir';
-import typeof createLoggerType from '@mikojs/utils/lib/createLogger';
 
 export type optionsType = {|
   ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
   dev?: boolean,
-  logger?: $Call<createLoggerType, string>,
+  logger?: (
+    type: 'start' | 'end',
+    event: mergeDirEventType,
+    filePath: string,
+  ) => void,
 |};
 
 type routeType = {|
@@ -43,8 +46,14 @@ const debugLog = debug('server:buildRoutes');
  */
 export default (
   folderPath: string,
-  { dev, logger, ...options }: optionsType,
+  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
+  options?: optionsType = {},
 ): cacheType => {
+  const {
+    dev = process.env.NODE_ENV !== 'production',
+    logger = emptyFunction,
+    ...mergeDirOptions
+  } = options;
   const cache: cacheType = {
     routes: [],
     find: (pathname: ?string) =>
@@ -54,7 +63,7 @@ export default (
   mergeDir(
     folderPath,
     {
-      ...options,
+      ...mergeDirOptions,
       watch: dev,
       extensions: /\.js$/,
     },
@@ -63,14 +72,9 @@ export default (
       { filePath, name, extension }: mergeDirDataType,
     ) => {
       const relativePath = path.relative(folderPath, filePath);
-      const shouldLog = ['add', 'change', 'unlink'].includes(event);
 
       debugLog({ event, filePath });
-
-      if (shouldLog && logger)
-        logger.start(
-          chalk`{gray [${event}]} Server updating (${relativePath})`,
-        );
+      logger('start', event, filePath);
 
       if (['init', 'add', 'change', 'unlink'].includes(event)) {
         cache.routes = cache.routes.filter(
@@ -113,11 +117,7 @@ export default (
       }
 
       debugLog(cache);
-
-      if (shouldLog && logger)
-        logger.succeed(
-          chalk`{gray [${event}]} Server updated (${relativePath})`,
-        );
+      logger('end', event, filePath);
     },
   );
 

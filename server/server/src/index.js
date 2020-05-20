@@ -42,9 +42,9 @@ export const notFound = (
  */
 export default (
   folderPath: string,
-  options: ?optionsType,
+  options?: optionsType,
 ): middlewareType<> => {
-  const routes = buildRoutes(folderPath, options || {});
+  const routes = buildRoutes(folderPath, options);
 
   return (req: http.IncomingMessage, res: http.ServerResponse) => {
     const { pathname, query } = url.parse(req.url);

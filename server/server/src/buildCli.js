@@ -12,12 +12,9 @@ import typeof createLoggerType from '@mikojs/utils/lib/createLogger';
 
 import getOptions from './utils/getOptions';
 
-import {
-  type middlewareType,
-  type optionsType as serverOptionsType,
-} from './index';
+import { type middlewareType, type optionsType } from './index';
 
-export type loggerType = $PropertyType<serverOptionsType, 'logger'>;
+export type loggerType = $PropertyType<optionsType, 'logger'>;
 
 const debugLog = debug('server:buildCli');
 
@@ -35,10 +32,7 @@ export default async (
   argv: $ReadOnlyArray<string>,
   defaultFolder: string,
   logger: $Call<createLoggerType, string>,
-  buildMiddleware: (
-    folderPath: string,
-    logger: $PropertyType<serverOptionsType, 'logger'>,
-  ) => middlewareType<>,
+  buildMiddleware: (folderPath: string, logger: loggerType) => middlewareType<>,
 ): Promise<http.Server> => {
   logger.start('Server start');
 

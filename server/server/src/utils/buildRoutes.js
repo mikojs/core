@@ -17,7 +17,6 @@ import typeof createLoggerType from '@mikojs/utils/lib/createLogger';
 
 export type optionsType = {|
   ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
-  dev?: boolean,
   logger?: $Call<createLoggerType, string>,
 |};
 
@@ -37,13 +36,15 @@ const debugLog = debug('server:buildRoutes');
 
 /**
  * @param {string} folderPath - folder path
+ * @param {boolean} dev - dev or not
  * @param {optionsType} options - options
  *
  * @return {cacheType} - routes cache
  */
 export default (
   folderPath: string,
-  { dev, logger, ...options }: optionsType,
+  dev: boolean,
+  { logger, ...options }: optionsType,
 ): cacheType => {
   const cache: cacheType = {
     routes: [],

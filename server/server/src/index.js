@@ -11,7 +11,10 @@ import buildRoutes, {
   type optionsType as buildRoutesOptionsType,
 } from './utils/buildRoutes';
 
-export type optionsType = buildRoutesOptionsType;
+export type optionsType = {|
+  ...buildRoutesOptionsType,
+  dev?: boolean,
+|};
 
 export type middlewareType<
   Req = http.IncomingMessage,
@@ -42,11 +45,14 @@ export const notFound = (
  */
 export default (
   folderPath: string,
-  options?: optionsType = {
-    dev: process.env.NODE_ENV !== 'production',
-  },
+  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
+  options?: optionsType = {},
 ): middlewareType<> => {
-  const routes = buildRoutes(folderPath, options);
+  const {
+    dev = process.env.NODE_ENV !== 'production',
+    ...buildRoutesOptions
+  } = options;
+  const routes = buildRoutes(folderPath, dev, buildRoutesOptions);
 
   return (req: http.IncomingMessage, res: http.ServerResponse) => {
     const { pathname, query } = url.parse(req.url);

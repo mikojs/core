@@ -1,30 +1,18 @@
 // @flow
 
 import path from 'path';
-import http from 'http';
 
-import getPort from 'get-port';
-import fetch, { type Body as BodyType } from 'node-fetch';
-
-import { chainingLogger } from '@mikojs/utils';
 import { mockUpdate, type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 
 import buildApi from '../index';
-import buildCli from '../buildCli';
+import testingServer, { type fetchResultType } from '../testingServer';
 
+const server = testingServer();
 const folderPath = path.resolve(__dirname, './__ignore__');
-const mockLog = jest.fn();
-const logger = {
-  ...chainingLogger,
-  start: mockLog,
-  succeed: mockLog,
-  fail: mockLog,
-};
 
 describe('server', () => {
   beforeEach(() => {
     mockUpdate.clear();
-    mockLog.mockClear();
   });
 
   test.each`
@@ -49,53 +37,26 @@ describe('server', () => {
       canFind: boolean,
       updateEvent: mergeDirEventType,
     |}) => {
-      const port = await getPort();
-      const url = `http://localhost:${port}${pathname}`;
-      const server =
-        updateEvent !== 'init'
-          ? await buildCli(
-              ['node', 'server', '-p', port],
-              folderPath,
-              logger,
-              () =>
-                buildApi(folderPath, {
-                  dev: true,
-                  logger,
-                }),
-            )
-          : ((): http.Server => {
-              const runningServer = http.createServer(
-                (req: http.IncomingMessage, res: http.ServerResponse) => {
-                  buildApi(folderPath)(req, res);
-                },
-              );
-
-              runningServer.listen(port);
-
-              return runningServer;
-            })();
-      let countLog: number = 0;
+      await server.run(buildApi(folderPath));
 
       if (updateEvent !== 'init') {
         expect(mockUpdate.cache).toHaveLength(1);
 
-        countLog += 2;
         mockUpdate.cache[0](
           updateEvent,
           path.resolve(folderPath, `.${pathname}.js`),
         );
-
-        if (updateEvent === 'unlink') countLog += 2;
       }
 
-      expect(mockLog).toHaveBeenCalledTimes(countLog);
       expect(
-        await fetch(url).then((res: BodyType) =>
-          canFind ? res.json() : res.text(),
-        ),
+        await server
+          .fetch(pathname)
+          .then((res: fetchResultType) => (canFind ? res.json() : res.text())),
       ).toEqual(canFind ? { key: 'value' } : 'Not found');
-
-      server.close();
     },
   );
+
+  afterAll(() => {
+    server.close();
+  });
 });

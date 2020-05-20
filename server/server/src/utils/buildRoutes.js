@@ -2,7 +2,6 @@
 
 import path from 'path';
 
-import chalk from 'chalk';
 import { pathToRegexp, match } from 'path-to-regexp';
 import { type QueryParameters as QueryParametersType } from 'query-string';
 import debug from 'debug';
@@ -13,12 +12,14 @@ import {
   type mergeDirEventType,
   type mergeDirDataType,
 } from '@mikojs/utils/lib/mergeDir';
-import typeof createLoggerType from '@mikojs/utils/lib/createLogger';
 
-export type optionsType = {|
-  ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
-  logger?: $Call<createLoggerType, string>,
-|};
+export type loggerType = (
+  type: 'start' | 'end',
+  event: mergeDirEventType,
+  filePath: string,
+) => void;
+
+export type optionsType = $Diff<mergeDirOptionsType, {| watch: mixed |}>;
 
 type routeType = {|
   filePath: string,
@@ -37,6 +38,7 @@ const debugLog = debug('server:buildRoutes');
 /**
  * @param {string} folderPath - folder path
  * @param {boolean} dev - dev or not
+ * @param {loggerType} logger - logger function
  * @param {optionsType} options - options
  *
  * @return {cacheType} - routes cache
@@ -44,7 +46,8 @@ const debugLog = debug('server:buildRoutes');
 export default (
   folderPath: string,
   dev: boolean,
-  { logger, ...options }: optionsType,
+  logger: loggerType,
+  options: optionsType,
 ): cacheType => {
   const cache: cacheType = {
     routes: [],
@@ -64,14 +67,9 @@ export default (
       { filePath, name, extension }: mergeDirDataType,
     ) => {
       const relativePath = path.relative(folderPath, filePath);
-      const shouldLog = ['add', 'change', 'unlink'].includes(event);
 
       debugLog({ event, filePath });
-
-      if (shouldLog && logger)
-        logger.start(
-          chalk`{gray [${event}]} Server updating (${relativePath})`,
-        );
+      logger('start', event, filePath);
 
       if (['init', 'add', 'change', 'unlink'].includes(event)) {
         cache.routes = cache.routes.filter(
@@ -114,11 +112,7 @@ export default (
       }
 
       debugLog(cache);
-
-      if (shouldLog && logger)
-        logger.succeed(
-          chalk`{gray [${event}]} Server updated (${relativePath})`,
-        );
+      logger('end', event, filePath);
     },
   );
 

@@ -23,7 +23,6 @@ const debugLog = debug('server:bin');
       (folderPath: string) =>
         buildApi(folderPath, {
           dev: process.env.NODE_ENV !== 'production',
-          logger,
         }),
     );
   } catch (e) {

@@ -17,9 +17,9 @@ import {
   type optionsType as serverOptionsType,
 } from './index';
 
-const debugLog = debug('server:buildCli');
-
 export type loggerType = $PropertyType<serverOptionsType, 'logger'>;
+
+const debugLog = debug('server:buildCli');
 
 handleUnhandledRejection();
 

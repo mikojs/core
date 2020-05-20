@@ -2,12 +2,10 @@
 
 import path from 'path';
 
-import { type Body as BodyType } from 'node-fetch';
-
 import { mockUpdate, type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 
 import buildApi from '../index';
-import testingServer from '../testingServer';
+import testingServer, { type fetchResultType } from '../testingServer';
 
 const server = testingServer();
 const folderPath = path.resolve(__dirname, './__ignore__');
@@ -53,7 +51,7 @@ describe('server', () => {
       expect(
         await server
           .fetch(pathname)
-          .then((res: BodyType) => (canFind ? res.json() : res.text())),
+          .then((res: fetchResultType) => (canFind ? res.json() : res.text())),
       ).toEqual(canFind ? { key: 'value' } : 'Not found');
     },
   );

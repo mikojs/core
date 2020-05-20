@@ -19,6 +19,8 @@ import {
 
 const debugLog = debug('server:buildCli');
 
+export type loggerType = $PropertyType<serverOptionsType, 'logger'>;
+
 handleUnhandledRejection();
 
 /**

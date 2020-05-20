@@ -7,8 +7,8 @@ import ora from 'ora';
 
 import { createLogger } from '@mikojs/utils';
 
-import buildApi, { type optionsType } from '../index';
-import buildCli from '../buildCli';
+import buildApi from '../index';
+import buildCli, { type loggerType } from '../buildCli';
 
 (async () => {
   try {
@@ -16,9 +16,8 @@ import buildCli from '../buildCli';
       process.argv,
       path.resolve('./api'),
       createLogger('@mikojs/server', ora({ discardStdin: false })),
-      (folderPath: string, logger: $PropertyType<optionsType, 'logger'>) =>
+      (folderPath: string, logger: loggerType) =>
         buildApi(folderPath, {
-          dev: process.env.NODE_ENV !== 'production',
           logger,
         }),
     );

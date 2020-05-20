@@ -7,6 +7,8 @@ import fetch, { type Body as BodyType } from 'node-fetch';
 
 import { type middlewareType } from './index';
 
+export type fetchResultType = BodyType;
+
 type cacheType = {|
   port: number,
   server?: http.Server,

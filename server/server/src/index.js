@@ -3,21 +3,15 @@
 import url from 'url';
 
 import { parse } from 'query-string';
-import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
 import { requireModule } from '@mikojs/utils';
 
 import buildRoutes, {
   type optionsType as buildRoutesOptionsType,
-  type loggerType,
 } from './utils/buildRoutes';
 
-export type optionsType = {|
-  ...buildRoutesOptionsType,
-  dev?: boolean,
-  logger?: loggerType,
-|};
+export type optionsType = buildRoutesOptionsType;
 
 export type middlewareType<
   Req = http.IncomingMessage,
@@ -48,15 +42,9 @@ export const notFound = (
  */
 export default (
   folderPath: string,
-  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
-  options?: optionsType = {},
+  options?: optionsType,
 ): middlewareType<> => {
-  const {
-    dev = process.env.NODE_ENV !== 'production',
-    logger = emptyFunction,
-    ...buildRoutesOptions
-  } = options;
-  const routes = buildRoutes(folderPath, dev, logger, buildRoutesOptions);
+  const routes = buildRoutes(folderPath, options);
 
   return (req: http.IncomingMessage, res: http.ServerResponse) => {
     const { pathname, query } = url.parse(req.url);

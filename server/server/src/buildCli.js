@@ -10,9 +10,11 @@ import { type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 import typeof createLoggerType from '@mikojs/utils/lib/createLogger';
 
 import getOptions, { type optionsType } from './utils/getOptions';
-import { type loggerType } from './utils/buildRoutes';
 
-import { type middlewareType } from './index';
+import {
+  type middlewareType,
+  type optionsType as serverOptionsType,
+} from './index';
 
 handleUnhandledRejection();
 
@@ -30,7 +32,10 @@ export default (
   argv: $ReadOnlyArray<string>,
   defaultFolder: string,
   logger: $Call<createLoggerType, string>,
-  buildMiddleware: (folderPath: string, logger: loggerType) => middlewareType<>,
+  buildMiddleware: (
+    folderPath: string,
+    logger: $PropertyType<serverOptionsType, 'logger'>,
+  ) => middlewareType<>,
 ): Promise<http.Server> => {
   logger.start('Server start');
 

@@ -4,6 +4,7 @@ import path from 'path';
 
 import { pathToRegexp, match } from 'path-to-regexp';
 import { type QueryParameters as QueryParametersType } from 'query-string';
+import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
 import { mergeDir } from '@mikojs/utils';
@@ -13,13 +14,15 @@ import {
   type mergeDirDataType,
 } from '@mikojs/utils/lib/mergeDir';
 
-export type loggerType = (
-  type: 'start' | 'end',
-  event: mergeDirEventType,
-  filePath: string,
-) => void;
-
-export type optionsType = $Diff<mergeDirOptionsType, {| watch: mixed |}>;
+export type optionsType = {|
+  ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
+  dev?: boolean,
+  logger?: (
+    type: 'start' | 'end',
+    event: mergeDirEventType,
+    filePath: string,
+  ) => void,
+|};
 
 type routeType = {|
   filePath: string,
@@ -37,18 +40,20 @@ const debugLog = debug('server:buildRoutes');
 
 /**
  * @param {string} folderPath - folder path
- * @param {boolean} dev - dev or not
- * @param {loggerType} logger - logger function
  * @param {optionsType} options - options
  *
  * @return {cacheType} - routes cache
  */
 export default (
   folderPath: string,
-  dev: boolean,
-  logger: loggerType,
-  options: optionsType,
+  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
+  options?: optionsType = {},
 ): cacheType => {
+  const {
+    dev = process.env.NODE_ENV !== 'production',
+    logger = emptyFunction,
+    ...mergeDirOptions
+  } = options;
   const cache: cacheType = {
     routes: [],
     find: (pathname: ?string) =>
@@ -58,7 +63,7 @@ export default (
   mergeDir(
     folderPath,
     {
-      ...options,
+      ...mergeDirOptions,
       watch: dev,
       extensions: /\.js$/,
     },

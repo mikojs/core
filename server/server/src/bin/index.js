@@ -8,10 +8,8 @@ import debug from 'debug';
 
 import { createLogger } from '@mikojs/utils';
 
-import buildApi from '../index';
+import buildApi, { type optionsType } from '../index';
 import buildCli from '../buildCli';
-
-import { type loggerType } from 'utils/buildRoutes';
 
 const debugLog = debug('server:bin');
 
@@ -21,7 +19,7 @@ const debugLog = debug('server:bin');
       process.argv,
       path.resolve('./api'),
       createLogger('@mikojs/server', ora({ discardStdin: false })),
-      (folderPath: string, logger: loggerType) =>
+      (folderPath: string, logger: $PropertyType<optionsType, 'logger'>) =>
         buildApi(folderPath, {
           dev: process.env.NODE_ENV !== 'production',
           logger,

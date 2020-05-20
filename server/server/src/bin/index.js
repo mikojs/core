@@ -4,14 +4,11 @@
 import path from 'path';
 
 import ora from 'ora';
-import debug from 'debug';
 
 import { createLogger } from '@mikojs/utils';
 
 import buildApi, { type optionsType } from '../index';
 import buildCli from '../buildCli';
-
-const debugLog = debug('server:bin');
 
 (async () => {
   try {
@@ -26,7 +23,6 @@ const debugLog = debug('server:bin');
         }),
     );
   } catch (e) {
-    debugLog(e);
     process.exit(1);
   }
 })();

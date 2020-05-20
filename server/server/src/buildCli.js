@@ -4,6 +4,7 @@ import path from 'path';
 import http from 'http';
 
 import chalk from 'chalk';
+import debug from 'debug';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 import { type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
@@ -15,6 +16,8 @@ import {
   type middlewareType,
   type optionsType as serverOptionsType,
 } from './index';
+
+const debugLog = debug('server:buildCli');
 
 handleUnhandledRejection();
 
@@ -64,6 +67,7 @@ export default (
         },
       );
 
+      debugLog({ port, folderPath, middleware, server });
       server.listen(port);
       logger.succeed(
         chalk`Running server at port: {gray {bold ${port.toString()}}}`,
@@ -72,6 +76,7 @@ export default (
       return server;
     })
     .catch((e: Error) => {
+      debugLog(e);
       logger.fail(e.message);
       throw e;
     });

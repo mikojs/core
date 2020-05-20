@@ -41,7 +41,7 @@ describe('server', () => {
     |}) => {
       await server.run(buildApi(folderPath));
 
-      if (updateEvent === 'unlink') {
+      if (updateEvent !== 'init') {
         expect(mockUpdate.cache).toHaveLength(1);
 
         mockUpdate.cache[0](

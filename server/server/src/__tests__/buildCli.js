@@ -6,18 +6,24 @@ import fetch, { type Body as BodyType } from 'node-fetch';
 import { type middlewareType } from '../index';
 import buildCli, { type loggerType } from '../buildCli';
 
+const mockLog = jest.fn();
+const mockLogger = {
+  start: mockLog,
+  succeed: mockLog,
+  fail: mockLog,
+};
+
 describe('build cli', () => {
-  test('work', async () => {
-    const mockLog = jest.fn();
+  beforeEach(() => {
+    mockLog.mockClear();
+  });
+
+  test('succeed', async () => {
     const port = await getPort();
     const server = await buildCli(
       ['node', 'server', '-p', port],
       __dirname,
-      {
-        start: mockLog,
-        succeed: mockLog,
-        fail: mockLog,
-      },
+      mockLogger,
       (folderPath: string, logger: loggerType): middlewareType<> => {
         logger('start', 'init', folderPath);
         logger('start', 'add', folderPath);
@@ -38,5 +44,13 @@ describe('build cli', () => {
     ).toBe('work');
 
     server.close();
+  });
+
+  test('fail', async () => {
+    await expect(
+      buildCli(['node', 'server'], __dirname, mockLogger, () => {
+        throw new Error('error');
+      }),
+    ).rejects.toThrow('error');
   });
 });

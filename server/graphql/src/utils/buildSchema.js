@@ -46,11 +46,7 @@ const debugLog = debug('graphql:buildSchema');
  *
  * @return {cacheType} - schema cache
  */
-export default (
-  folderPath: string,
-  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
-  options?: optionsType = {},
-): cacheType => {
+export default (folderPath: string, options: optionsType): cacheType => {
   const {
     dev = process.env.NODE_ENV !== 'production',
     logger = emptyFunction,

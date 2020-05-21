@@ -14,6 +14,7 @@ const miko = ({ clean, ...config }) => ({
         '@mikojs/miko',
         '@mikojs/configs',
         '@mikojs/eslint-config-base',
+        '@mikojs/graphql',
       ].join(' --ignore ')}`,
     ),
   },

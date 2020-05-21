@@ -8,7 +8,6 @@ import buildApi from '../index';
 import testingServer, { type fetchResultType } from '../testingServer';
 
 const server = testingServer();
-const folderPath = path.resolve(__dirname, './__ignore__');
 
 describe('server', () => {
   beforeEach(() => {
@@ -37,6 +36,8 @@ describe('server', () => {
       canFind: boolean,
       updateEvent: mergeDirEventType,
     |}) => {
+      const folderPath = path.resolve(__dirname, './__ignore__');
+
       await server.run(buildApi(folderPath));
 
       if (updateEvent !== 'init') {

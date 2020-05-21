@@ -1,17 +1,17 @@
 // @flow
 
 import path from 'path';
-import http from 'http';
-
-import getPort from 'get-port';
-import fetch, { type Body as BodyType } from 'node-fetch';
 
 import { mockUpdate } from '@mikojs/utils/lib/mergeDir';
+import testingServer, {
+  type fetchResultType,
+} from '@mikojs/server/lib/testingServer';
 
 import buildGraphql from '../index';
 
 import testings from './__ignore__/testings';
 
+const server = testingServer();
 const folderPath = path.resolve(__dirname, './__ignore__/graphql');
 
 describe('graphql', () => {
@@ -20,29 +20,26 @@ describe('graphql', () => {
   });
 
   test.each(testings)('%s', async (query: string, expected: {}) => {
-    const port = await getPort();
-    const server = http.createServer(
-      (req: http.IncomingMessage, res: http.ServerResponse) => {
-        buildGraphql(folderPath)(req, res);
-      },
-    );
-
-    server.listen(port);
+    await server.run(buildGraphql(folderPath));
 
     expect(
-      await fetch(`http://localhost:${port}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query,
-        }),
-      }).then((res: BodyType) => res.json()),
+      await server
+        .fetch('/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query,
+          }),
+        })
+        .then((res: fetchResultType) => res.json()),
     ).toEqual({
       data: expected,
     });
+  });
 
+  afterAll(() => {
     server.close();
   });
 });

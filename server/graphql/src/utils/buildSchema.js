@@ -5,7 +5,7 @@ import {
   makeExecutableSchema,
   type makeExecutableSchemaOptionsType,
 } from 'graphql-tools';
-import chalk from 'chalk';
+import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
 import { requireModule, mergeDir } from '@mikojs/utils';
@@ -48,18 +48,20 @@ const debugLog = debug('graphql:buildSchema');
  */
 export default (
   folderPath: string,
-  {
-    dev,
-    logger,
+  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
+  options?: optionsType = {},
+): cacheType => {
+  const {
+    dev = process.env.NODE_ENV === 'production',
+    logger = emptyFunction,
     makeExecutableSchemaOptions: {
       typeDefs: additionalTypeDefs = [],
       resolvers: additionalResolvers = {},
       resolverValidationOptions,
       ...makeExecutableSchemaOptions
     } = {},
-    ...options
-  }: optionsType,
-): cacheType => {
+    ...mergeDirOptions
+  } = options;
   const cache: cacheType = {
     schemas: [],
     build: () => {
@@ -113,7 +115,7 @@ export default (
   mergeDir(
     folderPath,
     {
-      ...options,
+      ...mergeDirOptions,
       watch: dev,
       extensions: /\.js$/,
     },
@@ -121,17 +123,13 @@ export default (
       event: mergeDirEventType,
       { filePath, name, extension }: mergeDirDataType,
     ) => {
-      const shouldLog = ['add', 'change', 'unlink'].includes(event);
-      const outputName = name.replace(extension, '');
       const { typeDefs, ...resolvers } = requireModule<{|
         [string]: $PropertyType<schemaType, 'resolvers'>,
         typeDefs: $PropertyType<schemaType, 'typeDefs'>,
       |}>(filePath);
 
       debugLog({ typeDefs, resolvers });
-
-      if (shouldLog && logger)
-        logger.start(chalk`{gray [${event}]} Server updating (${outputName})`);
+      logger('start', event, filePath);
 
       if (['init', 'add', 'change', 'unlink'].includes(event)) {
         cache.schemas = cache.schemas.filter(
@@ -152,10 +150,8 @@ export default (
         if (event !== 'init') cache.build();
       }
 
-      if (shouldLog && logger)
-        logger.succeed(chalk`{gray [${event}]} Server updated (${outputName})`);
-
       debugLog(cache);
+      logger('end', event, filePath);
     },
   );
   cache.build();

@@ -2,42 +2,73 @@
 
 import path from 'path';
 
-import { mockUpdate } from '@mikojs/utils/lib/mergeDir';
+import { mockUpdate, type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 import testingServer, {
   type fetchResultType,
 } from '@mikojs/server/lib/testingServer';
 
 import buildGraphql from '../index';
 
-import testings from './__ignore__/testings';
-
 const server = testingServer();
-const folderPath = path.resolve(__dirname, './__ignore__/graphql');
 
 describe('graphql', () => {
   beforeEach(() => {
     mockUpdate.clear();
   });
 
-  test.each(testings)('%s', async (query: string, expected: {}) => {
-    await server.run(buildGraphql(folderPath));
+  test.each`
+    updateEvent | canQuery
+    ${'init'}   | ${true}
+    ${'unlink'} | ${false}
+  `(
+    'update event: $updateEvent',
+    async ({
+      updateEvent,
+      canQuery,
+    }: {|
+      updateEvent: mergeDirEventType,
+      canQuery: boolean,
+    |}) => {
+      const folderPath = path.resolve(__dirname, './__ignore__');
 
-    expect(
-      await server
-        .fetch('/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            query,
-          }),
-        })
-        .then((res: fetchResultType) => res.json()),
-    ).toEqual({
-      data: expected,
-    });
-  });
+      await server.run(buildGraphql(folderPath));
+
+      if (updateEvent !== 'init') {
+        expect(mockUpdate.cache).toHaveLength(1);
+
+        mockUpdate.cache[0](
+          updateEvent,
+          path.resolve(folderPath, `./index.js`),
+        );
+      }
+
+      expect(
+        await server
+          .fetch('/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              query: `
+                {
+                  version
+                }
+              `,
+            }),
+          })
+          .then((res: fetchResultType) => (canQuery ? res.json() : res.text())),
+      ).toEqual(
+        !canQuery
+          ? 'Not found'
+          : {
+              data: {
+                version: '1.0.0',
+              },
+            },
+      );
+    },
+  );
 
   afterAll(() => {
     server.close();

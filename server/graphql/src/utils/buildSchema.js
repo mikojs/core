@@ -52,7 +52,7 @@ export default (
   options?: optionsType = {},
 ): cacheType => {
   const {
-    dev = process.env.NODE_ENV === 'production',
+    dev = process.env.NODE_ENV !== 'production',
     logger = emptyFunction,
     makeExecutableSchemaOptions: {
       typeDefs: additionalTypeDefs = [],
@@ -65,7 +65,10 @@ export default (
   const cache: cacheType = {
     schemas: [],
     build: () => {
-      if (additionalTypeDefs.length === 0 && cache.schemas.length === 0) return;
+      if (additionalTypeDefs.length === 0 && cache.schemas.length === 0) {
+        delete cache.cache;
+        return;
+      }
 
       cache.cache = makeExecutableSchema(
         [

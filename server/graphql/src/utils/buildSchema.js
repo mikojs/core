@@ -65,6 +65,8 @@ export default (
   const cache: cacheType = {
     schemas: [],
     build: () => {
+      if (additionalTypeDefs.length === 0 && cache.schemas.length === 0) return;
+
       cache.cache = makeExecutableSchema(
         [
           {

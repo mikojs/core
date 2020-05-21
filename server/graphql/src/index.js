@@ -23,9 +23,11 @@ type optionsType = {|
  */
 export default (
   folderPath: string,
-  { graphqlOptions, ...options }: optionsType = {},
+  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
+  options?: optionsType = {},
 ): middlewareType<> => {
-  const schema = buildSchema(folderPath, options);
+  const { graphqlOptions, ...buildSchemaOptions } = options;
+  const schema = buildSchema(folderPath, buildSchemaOptions);
 
   return async (req: http.IncomingMessage, res: http.ServerResponse) => {
     if (!schema.cache) {

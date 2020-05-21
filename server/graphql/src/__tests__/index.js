@@ -20,6 +20,7 @@ describe('graphql', () => {
     updateEvent | canQuery
     ${'init'}   | ${true}
     ${'unlink'} | ${false}
+    ${'error'}  | ${true}
   `(
     'update event: $updateEvent',
     async ({

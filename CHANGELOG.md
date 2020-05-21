@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.10.5 (2020-05-21)
+
+#### :rocket: New Feature
+
+- Other
+  - [#609](https://github.com/mikojs/core/pull/609) (@mijojs/graphql) Add new package ([@HsuTing](https://github.com/HsuTing))
+  - [#610](https://github.com/mikojs/core/pull/610) (@mikojs/server) Modify server detail ([@HsuTing](https://github.com/HsuTing))
+- `jest`
+  - [#611](https://github.com/mikojs/core/pull/611) (@mikojs/server) Add testing server ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- [#607](https://github.com/mikojs/core/pull/607) (@mikojs/server) Fix code style ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.10.4 (2020-05-16)
 
 #### :rocket: New Feature

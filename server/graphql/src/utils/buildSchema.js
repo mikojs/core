@@ -33,9 +33,10 @@ type schemaType = {|
 |};
 
 type cacheType = {|
-  schemas: $ReadOnlyArray<schemaType>,
+  cache: $ReadOnlyArray<schemaType>,
+  get: () => ?GraphQLSchemaType,
   build: () => void,
-  cache?: GraphQLSchemaType,
+  schemas?: GraphQLSchemaType,
 |};
 
 const debugLog = debug('graphql:buildSchema');
@@ -59,21 +60,22 @@ export default (folderPath: string, options: optionsType): cacheType => {
     ...mergeDirOptions
   } = options;
   const cache: cacheType = {
-    schemas: [],
+    cache: [],
+    get: () => cache.schemas,
     build: () => {
-      if (additionalTypeDefs.length === 0 && cache.schemas.length === 0) {
-        delete cache.cache;
+      if (additionalTypeDefs.length === 0 && cache.cache.length === 0) {
+        delete cache.schemas;
         return;
       }
 
-      cache.cache = makeExecutableSchema(
+      cache.schemas = makeExecutableSchema(
         [
           {
             filePath: 'additional',
             typeDefs: additionalTypeDefs,
             resolvers: additionalResolvers,
           },
-          ...cache.schemas,
+          ...cache.cache,
         ].reduce(
           (
             result: makeExecutableSchemaOptionsType,
@@ -133,14 +135,14 @@ export default (folderPath: string, options: optionsType): cacheType => {
       logger('start', event, filePath);
 
       if (['init', 'add', 'change', 'unlink'].includes(event)) {
-        cache.schemas = cache.schemas.filter(
+        cache.cache = cache.cache.filter(
           ({ filePath: currentFilePath }: schemaType) =>
             currentFilePath !== filePath,
         );
 
         if (event !== 'unlink')
-          cache.schemas = [
-            ...cache.schemas,
+          cache.cache = [
+            ...cache.cache,
             {
               filePath,
               typeDefs,

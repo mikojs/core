@@ -12,6 +12,7 @@ import { notFound, type middlewareType } from '@mikojs/server';
 import buildSchema, {
   type optionsType as buildSchemaOptionsType,
 } from './utils/buildSchema';
+import buildRelayCompiler from './utils/buildRelayCompiler';
 
 type optionsType = {|
   ...buildSchemaOptionsType,
@@ -23,6 +24,7 @@ type queryOptionsType = $Diff<GraphQLArgsType, { schema: mixed }>;
 type returnType = {|
   middleware: middlewareType<>,
   query: (graphqlArgs: queryOptionsType) => Promise<ExecutionResultType>,
+  relayCompiler: (argv: $ReadOnlyArray<string>) => void,
 |};
 
 /**
@@ -67,5 +69,7 @@ export default (
             schema: currentSchema,
           });
     },
+
+    relayCompiler: buildRelayCompiler(schema),
   };
 };

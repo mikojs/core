@@ -3,19 +3,15 @@
 
 import path from 'path';
 
-import ora from 'ora';
-
-import { createLogger } from '@mikojs/utils';
-
 import buildApi from '../index';
 import buildCli, { type loggerType } from '../buildCli';
 
 (async () => {
   try {
     await buildCli(
+      '@mikojs/server',
       process.argv,
       path.resolve('./api'),
-      createLogger('@mikojs/server', ora({ discardStdin: false })),
       (folderPath: string, logger: loggerType) =>
         buildApi(folderPath, {
           logger,

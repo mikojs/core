@@ -48,15 +48,20 @@ describe('graphql', () => {
       };
 
       await server.run(graphql.middleware);
-      graphql.relayCompiler([]);
 
       if (updateEvent !== 'init') {
         expect(mockUpdate.cache).toHaveLength(1);
 
-        ['add', updateEvent].forEach((event: mergeDirEventType) => {
-          mockUpdate.cache[0](event, path.resolve(folderPath, `./index.js`));
-        });
+        mockUpdate.cache[0](
+          updateEvent,
+          path.resolve(folderPath, `./index.js`),
+        );
       }
+
+      graphql.relayCompiler([]);
+
+      if (updateEvent !== 'unlink')
+        mockUpdate.cache[0]('add', path.resolve(folderPath, `./index.js`));
 
       expect(
         await server
@@ -78,18 +83,20 @@ describe('graphql', () => {
               errors: [new GraphQLError('Must provide a schema.')],
             },
       );
-      expect(execa).toHaveBeenCalledTimes(updateEvent === 'init' ? 1 : 2);
-      expect(execa).toHaveBeenCalledWith(
-        'relay-compiler',
-        [
-          '--schema',
-          path.resolve('./node_modules/.cache/graphql/schema.graphql'),
-        ],
-        {
-          preferLocal: true,
-          stdio: 'inherit',
-        },
-      );
+      expect(execa).toHaveBeenCalledTimes(updateEvent === 'unlink' ? 0 : 2);
+
+      if (updateEvent !== 'unlink')
+        expect(execa).toHaveBeenCalledWith(
+          'relay-compiler',
+          [
+            '--schema',
+            path.resolve('./node_modules/.cache/graphql/schema.graphql'),
+          ],
+          {
+            preferLocal: true,
+            stdio: 'inherit',
+          },
+        );
     },
   );
 

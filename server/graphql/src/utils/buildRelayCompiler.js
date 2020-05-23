@@ -24,8 +24,9 @@ export default (schema: schemaType) => (argv: $ReadOnlyArray<string>) => {
   );
   let subprocess: ExecaPromiseType;
 
-  debugLog(schemaFilePath);
-  schema.events.on('build', () => {
+  /**
+   */
+  const run = () => {
     const currentSchema = schema.get();
 
     debugLog(currentSchema);
@@ -44,5 +45,9 @@ export default (schema: schemaType) => (argv: $ReadOnlyArray<string>) => {
         preferLocal: true,
       },
     );
-  });
+  };
+
+  debugLog(schemaFilePath);
+  run();
+  schema.events.on('build', run);
 };

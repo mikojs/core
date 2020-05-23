@@ -61,7 +61,6 @@ export default (
     build: () => {
       if (additionalTypeDefs.length === 0 && cache.files.length === 0) {
         delete schema.cache;
-        schema.events.emit('build');
         return;
       }
 

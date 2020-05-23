@@ -1,6 +1,9 @@
 // @flow
 
-import graphql, {
+import { graphql, type GraphQLArgs as GraphQLArgsType } from 'graphql';
+import { type ExecutionResult as ExecutionResultType } from 'graphql/execution/execute';
+import { GraphQLError } from 'graphql/error/GraphQLError';
+import graphqlHTTP, {
   type OptionsData as expressGraphqlOptionsType,
 } from 'express-graphql';
 
@@ -15,6 +18,13 @@ type optionsType = {|
   graphqlOptions?: expressGraphqlOptionsType,
 |};
 
+type queryOptionsType = $Diff<GraphQLArgsType, { schema: mixed }>;
+
+type returnType = {|
+  middleware: middlewareType<>,
+  query: (graphqlArgs: queryOptionsType) => Promise<ExecutionResultType>,
+|};
+
 /**
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
@@ -25,20 +35,37 @@ export default (
   folderPath: string,
   // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
   options?: optionsType = {},
-): middlewareType<> => {
+): returnType => {
   const { graphqlOptions, ...buildSchemaOptions } = options;
   const schema = buildSchema(folderPath, buildSchemaOptions);
 
-  return async (req: http.IncomingMessage, res: http.ServerResponse) => {
-    if (!schema.cache) {
-      notFound(req, res);
-      return;
-    }
+  return {
+    middleware: async (req: http.IncomingMessage, res: http.ServerResponse) => {
+      const currentSchema = schema.get();
 
-    await graphql({
-      ...graphqlOptions,
-      schema: schema.cache,
-    })(req, res);
-    res.statusCode = 200;
+      if (!currentSchema) {
+        notFound(req, res);
+        return;
+      }
+
+      await graphqlHTTP({
+        ...graphqlOptions,
+        schema: currentSchema,
+      })(req, res);
+      res.statusCode = 200;
+    },
+
+    query: (graphqlArgs: queryOptionsType): Promise<ExecutionResultType> => {
+      const currentSchema = schema.get();
+
+      return !currentSchema
+        ? Promise.resolve({
+            errors: [new GraphQLError('Must provide a schema.')],
+          })
+        : graphql({
+            ...graphqlArgs,
+            schema: currentSchema,
+          });
+    },
   };
 };

@@ -16,7 +16,7 @@ import buildGraphql from '../index';
       (folderPath: string, logger: loggerType) =>
         buildGraphql(folderPath, {
           logger,
-        }),
+        }).middleware,
     );
   } catch (e) {
     process.exit(1);

@@ -26,14 +26,14 @@ export type optionsType = {|
   >,
 |};
 
-type schemaType = {|
+type schemaFileType = {|
   filePath: string,
   resolvers: $PropertyType<makeExecutableSchemaOptionsType, 'resolvers'>,
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
 |};
 
-type cacheType = {|
-  schemas: $ReadOnlyArray<schemaType>,
+type schemaType = {|
+  schemas: $ReadOnlyArray<schemaFileType>,
   get: () => ?GraphQLSchemaType,
   build: () => void,
   cache?: GraphQLSchemaType,
@@ -45,9 +45,9 @@ const debugLog = debug('graphql:buildSchema');
  * @param {string} folderPath - folder path
  * @param {optionsType} options - build schema options
  *
- * @return {cacheType} - schema cache
+ * @return {schemaType} - schema cache
  */
-export default (folderPath: string, options: optionsType): cacheType => {
+export default (folderPath: string, options: optionsType): schemaType => {
   const {
     dev = process.env.NODE_ENV !== 'production',
     logger = emptyFunction,
@@ -59,7 +59,7 @@ export default (folderPath: string, options: optionsType): cacheType => {
     } = {},
     ...mergeDirOptions
   } = options;
-  const cache: cacheType = {
+  const cache: schemaType = {
     schemas: [],
     get: () => cache.cache,
     build: () => {
@@ -79,7 +79,7 @@ export default (folderPath: string, options: optionsType): cacheType => {
         ].reduce(
           (
             result: makeExecutableSchemaOptionsType,
-            { typeDefs, resolvers }: schemaType,
+            { typeDefs, resolvers }: schemaFileType,
           ) => ({
             ...result,
             typeDefs: [
@@ -88,7 +88,7 @@ export default (folderPath: string, options: optionsType): cacheType => {
             ],
             resolvers: Object.keys(resolvers).reduce(
               (
-                prevResolvers: $PropertyType<schemaType, 'resolvers'>,
+                prevResolvers: $PropertyType<schemaFileType, 'resolvers'>,
                 key: string,
               ) => ({
                 ...prevResolvers,
@@ -127,8 +127,8 @@ export default (folderPath: string, options: optionsType): cacheType => {
       { filePath, name, extension }: mergeDirDataType,
     ) => {
       const { typeDefs, ...resolvers } = requireModule<{|
-        [string]: $PropertyType<schemaType, 'resolvers'>,
-        typeDefs: $PropertyType<schemaType, 'typeDefs'>,
+        [string]: $PropertyType<schemaFileType, 'resolvers'>,
+        typeDefs: $PropertyType<schemaFileType, 'typeDefs'>,
       |}>(filePath);
 
       debugLog({ typeDefs, resolvers });
@@ -136,7 +136,7 @@ export default (folderPath: string, options: optionsType): cacheType => {
 
       if (['init', 'add', 'change', 'unlink'].includes(event)) {
         cache.schemas = cache.schemas.filter(
-          ({ filePath: currentFilePath }: schemaType) =>
+          ({ filePath: currentFilePath }: schemaFileType) =>
             currentFilePath !== filePath,
         );
 

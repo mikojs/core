@@ -31,8 +31,9 @@ describe('graphql', () => {
       canQuery: boolean,
     |}) => {
       const folderPath = path.resolve(__dirname, './__ignore__');
+      const graphql = buildGraphql(folderPath);
 
-      await server.run(buildGraphql(folderPath));
+      await server.run(graphql.middleware);
 
       if (updateEvent !== 'init') {
         expect(mockUpdate.cache).toHaveLength(1);

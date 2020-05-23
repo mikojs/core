@@ -4,11 +4,11 @@ import path from 'path';
 import http from 'http';
 
 import chalk from 'chalk';
+import ora from 'ora';
 import debug from 'debug';
 
-import { handleUnhandledRejection } from '@mikojs/utils';
+import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import { type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
-import typeof createLoggerType from '@mikojs/utils/lib/createLogger';
 
 import getOptions from './utils/getOptions';
 
@@ -21,19 +21,21 @@ const debugLog = debug('server:buildCli');
 handleUnhandledRejection();
 
 /**
+ * @param {string} name - logger name
  * @param {Array} argv - command line
  * @param {string} defaultFolder - default folder
- * @param {createLoggerType} logger - logger function
  * @param {Function} buildMiddleware - use to build the middleware
  *
  * @return {any} - http server
  */
 export default async (
+  name: string,
   argv: $ReadOnlyArray<string>,
   defaultFolder: string,
-  logger: $Call<createLoggerType, string>,
   buildMiddleware: (folderPath: string, logger: loggerType) => middlewareType<>,
 ): Promise<http.Server> => {
+  const logger = createLogger(name, ora({ discardStdin: false }));
+
   logger.start('Server start');
 
   try {

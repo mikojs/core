@@ -1,17 +1,13 @@
 // @flow
 
+import ora from 'ora';
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
 import { type middlewareType } from '../index';
 import buildCli, { type loggerType } from '../buildCli';
 
-const mockLog = jest.fn();
-const mockLogger = {
-  start: mockLog,
-  succeed: mockLog,
-  fail: mockLog,
-};
+const { start: mockLog } = ora();
 
 describe('build cli', () => {
   beforeEach(() => {
@@ -21,9 +17,9 @@ describe('build cli', () => {
   test('succeed', async () => {
     const port = await getPort();
     const server = await buildCli(
+      'test',
       ['node', 'server', '-p', port],
       __dirname,
-      mockLogger,
       (folderPath: string, logger: loggerType): middlewareType<> => {
         logger('start', 'init', folderPath);
         logger('start', 'add', folderPath);
@@ -48,7 +44,7 @@ describe('build cli', () => {
 
   test('fail', async () => {
     await expect(
-      buildCli(['node', 'server'], __dirname, mockLogger, () => {
+      buildCli('test', ['node', 'server'], __dirname, () => {
         throw new Error('error');
       }),
     ).rejects.toThrow('error');

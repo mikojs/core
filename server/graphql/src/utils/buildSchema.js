@@ -1,5 +1,7 @@
 // @flow
 
+import EventEmitter from 'events';
+
 import { type GraphQLSchema as GraphQLSchemaType } from 'graphql';
 import {
   makeExecutableSchema,
@@ -32,8 +34,9 @@ type schemaFileType = {|
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
 |};
 
-type schemaType = {|
+export type schemaType = {|
   cache: $ReadOnlyArray<schemaFileType>,
+  events: EventEmitter,
   get: () => ?GraphQLSchemaType,
   build: () => void,
   schemas?: GraphQLSchemaType,
@@ -61,10 +64,12 @@ export default (folderPath: string, options: optionsType): schemaType => {
   } = options;
   const cache: schemaType = {
     cache: [],
+    events: new EventEmitter(),
     get: () => cache.schemas,
     build: () => {
       if (additionalTypeDefs.length === 0 && cache.cache.length === 0) {
         delete cache.schemas;
+        cache.events.emit('build');
         return;
       }
 
@@ -111,6 +116,7 @@ export default (folderPath: string, options: optionsType): schemaType => {
           },
         ),
       );
+      cache.events.emit('build');
     },
   };
 

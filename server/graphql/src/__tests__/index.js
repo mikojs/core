@@ -3,6 +3,7 @@
 import path from 'path';
 
 import { GraphQLError } from 'graphql/error/GraphQLError';
+import execa from 'execa';
 
 import { mockUpdate, type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 import testingServer, {
@@ -16,6 +17,7 @@ const server = testingServer();
 describe('graphql', () => {
   beforeEach(() => {
     mockUpdate.clear();
+    execa.mockClear();
   });
 
   test.each`
@@ -46,14 +48,14 @@ describe('graphql', () => {
       };
 
       await server.run(graphql.middleware);
+      graphql.relayCompiler([]);
 
       if (updateEvent !== 'init') {
         expect(mockUpdate.cache).toHaveLength(1);
 
-        mockUpdate.cache[0](
-          updateEvent,
-          path.resolve(folderPath, `./index.js`),
-        );
+        ['add', updateEvent].forEach((event: mergeDirEventType) => {
+          mockUpdate.cache[0](event, path.resolve(folderPath, `./index.js`));
+        });
       }
 
       expect(
@@ -75,6 +77,18 @@ describe('graphql', () => {
           : {
               errors: [new GraphQLError('Must provide a schema.')],
             },
+      );
+      expect(execa).toHaveBeenCalledTimes(updateEvent === 'init' ? 1 : 2);
+      expect(execa).toHaveBeenCalledWith(
+        'relay-compiler',
+        [
+          '--schema',
+          path.resolve('./node_modules/.cache/graphql/schema.graphql'),
+        ],
+        {
+          preferLocal: true,
+          stdio: 'inherit',
+        },
       );
     },
   );

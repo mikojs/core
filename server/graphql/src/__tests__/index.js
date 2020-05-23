@@ -2,6 +2,8 @@
 
 import path from 'path';
 
+import { GraphQLError } from 'graphql/error/GraphQLError';
+
 import { mockUpdate, type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 import testingServer, {
   type fetchResultType,
@@ -32,6 +34,16 @@ describe('graphql', () => {
     |}) => {
       const folderPath = path.resolve(__dirname, './__ignore__');
       const graphql = buildGraphql(folderPath);
+      const query = `
+        {
+          version
+        }
+      `;
+      const expected = {
+        data: {
+          version: '1.0.0',
+        },
+      };
 
       await server.run(graphql.middleware);
 
@@ -52,21 +64,16 @@ describe('graphql', () => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              query: `
-                {
-                  version
-                }
-              `,
+              query,
             }),
           })
           .then((res: fetchResultType) => (canQuery ? res.json() : res.text())),
-      ).toEqual(
-        !canQuery
-          ? 'Not found'
+      ).toEqual(canQuery ? expected : 'Not found');
+      expect(await graphql.query({ source: query })).toEqual(
+        canQuery
+          ? expected
           : {
-              data: {
-                version: '1.0.0',
-              },
+              errors: [new GraphQLError('Must provide a schema.')],
             },
       );
     },

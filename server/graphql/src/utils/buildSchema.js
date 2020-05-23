@@ -34,6 +34,7 @@ type schemaType = {|
 
 type cacheType = {|
   schemas: $ReadOnlyArray<schemaType>,
+  get: () => ?GraphQLSchemaType,
   build: () => void,
   cache?: GraphQLSchemaType,
 |};
@@ -60,6 +61,7 @@ export default (folderPath: string, options: optionsType): cacheType => {
   } = options;
   const cache: cacheType = {
     schemas: [],
+    get: () => cache.cache,
     build: () => {
       if (additionalTypeDefs.length === 0 && cache.schemas.length === 0) {
         delete cache.cache;

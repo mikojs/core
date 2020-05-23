@@ -1,6 +1,9 @@
 // @flow
 
-import graphql, {
+import { graphql, type GraphQLArgs as GraphQLArgsType } from 'graphql';
+import { type ExecutionResult as ExecutionResultType } from 'graphql/execution/execute';
+import { GraphQLError } from 'graphql/error/GraphQLError';
+import graphqlHTTP, {
   type OptionsData as expressGraphqlOptionsType,
 } from 'express-graphql';
 
@@ -15,8 +18,11 @@ type optionsType = {|
   graphqlOptions?: expressGraphqlOptionsType,
 |};
 
+type queryOptionsType = $Diff<GraphQLArgsType, { schema: mixed }>;
+
 type returnType = {|
   middleware: middlewareType<>,
+  query: (graphqlArgs: queryOptionsType) => Promise<ExecutionResultType>,
 |};
 
 /**
@@ -35,16 +41,31 @@ export default (
 
   return {
     middleware: async (req: http.IncomingMessage, res: http.ServerResponse) => {
-      if (!schema.cache) {
+      const currentSchema = schema.get();
+
+      if (!currentSchema) {
         notFound(req, res);
         return;
       }
 
-      await graphql({
+      await graphqlHTTP({
         ...graphqlOptions,
-        schema: schema.cache,
+        schema: currentSchema,
       })(req, res);
       res.statusCode = 200;
+    },
+
+    query: (graphqlArgs: queryOptionsType): Promise<ExecutionResultType> => {
+      const currentSchema = schema.get();
+
+      return !currentSchema
+        ? Promise.resolve({
+            errors: [new GraphQLError('Must provide a schema.')],
+          })
+        : graphql({
+            ...graphqlArgs,
+            schema: currentSchema,
+          });
     },
   };
 };

@@ -1,8 +1,5 @@
 // @flow
 
-import EventEmitter from 'events';
-
-import { type GraphQLSchema as GraphQLSchemaType } from 'graphql';
 import {
   makeExecutableSchema,
   type makeExecutableSchemaOptionsType,
@@ -16,6 +13,8 @@ import {
   type mergeDirDataType,
 } from '@mikojs/utils/lib/mergeDir';
 import { type optionsType as serverOptionsType } from '@mikojs/server';
+
+import { type schemaType } from '../index';
 
 export type optionsType = {|
   ...serverOptionsType,
@@ -34,23 +33,18 @@ type schemaFileType = {|
   typeDefs: $PropertyType<makeExecutableSchemaOptionsType, 'typeDefs'>,
 |};
 
-export type schemaType = {|
-  cache: $ReadOnlyArray<schemaFileType>,
-  events: EventEmitter,
-  get: () => ?GraphQLSchemaType,
-  build: () => void,
-  schemas?: GraphQLSchemaType,
-|};
-
 const debugLog = debug('graphql:buildSchema');
 
 /**
+ * @param {schemaType} schema - schema cache
  * @param {string} folderPath - folder path
  * @param {optionsType} options - build schema options
- *
- * @return {schemaType} - schema cache
  */
-export default (folderPath: string, options: optionsType): schemaType => {
+export default (
+  schema: schemaType,
+  folderPath: string,
+  options: optionsType,
+) => {
   const {
     dev = process.env.NODE_ENV !== 'production',
     logger = emptyFunction,
@@ -62,25 +56,23 @@ export default (folderPath: string, options: optionsType): schemaType => {
     } = {},
     ...mergeDirOptions
   } = options;
-  const cache: schemaType = {
-    cache: [],
-    events: new EventEmitter(),
-    get: () => cache.schemas,
+  const cache = {
+    files: [],
     build: () => {
-      if (additionalTypeDefs.length === 0 && cache.cache.length === 0) {
-        delete cache.schemas;
-        cache.events.emit('build');
+      if (additionalTypeDefs.length === 0 && cache.files.length === 0) {
+        delete schema.cache;
+        schema.events.emit('build');
         return;
       }
 
-      cache.schemas = makeExecutableSchema(
+      schema.cache = makeExecutableSchema(
         [
           {
             filePath: 'additional',
             typeDefs: additionalTypeDefs,
             resolvers: additionalResolvers,
           },
-          ...cache.cache,
+          ...cache.files,
         ].reduce(
           (
             result: makeExecutableSchemaOptionsType,
@@ -116,7 +108,7 @@ export default (folderPath: string, options: optionsType): schemaType => {
           },
         ),
       );
-      cache.events.emit('build');
+      schema.events.emit('build');
     },
   };
 
@@ -141,14 +133,14 @@ export default (folderPath: string, options: optionsType): schemaType => {
       logger('start', event, filePath);
 
       if (['init', 'add', 'change', 'unlink'].includes(event)) {
-        cache.cache = cache.cache.filter(
+        cache.files = cache.files.filter(
           ({ filePath: currentFilePath }: schemaFileType) =>
             currentFilePath !== filePath,
         );
 
         if (event !== 'unlink')
-          cache.cache = [
-            ...cache.cache,
+          cache.files = [
+            ...cache.files,
             {
               filePath,
               typeDefs,
@@ -164,6 +156,4 @@ export default (folderPath: string, options: optionsType): schemaType => {
     },
   );
   cache.build();
-
-  return cache;
 };

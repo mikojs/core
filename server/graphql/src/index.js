@@ -1,6 +1,12 @@
 // @flow
 
-import { graphql, type GraphQLArgs as GraphQLArgsType } from 'graphql';
+import EventEmitter from 'events';
+
+import {
+  graphql,
+  type GraphQLArgs as GraphQLArgsType,
+  type GraphQLSchema as GraphQLSchemaType,
+} from 'graphql';
 import { type ExecutionResult as ExecutionResultType } from 'graphql/execution/execute';
 import { GraphQLError } from 'graphql/error/GraphQLError';
 import graphqlHTTP, {
@@ -17,6 +23,12 @@ import buildRelayCompiler from './utils/buildRelayCompiler';
 type optionsType = {|
   ...buildSchemaOptionsType,
   graphqlOptions?: expressGraphqlOptionsType,
+|};
+
+export type schemaType = {|
+  events: EventEmitter,
+  get: () => ?GraphQLSchemaType,
+  cache?: GraphQLSchemaType,
 |};
 
 type queryOptionsType = $Diff<GraphQLArgsType, { schema: mixed }>;
@@ -38,8 +50,13 @@ export default (
   // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
   options?: optionsType = {},
 ): returnType => {
+  const schema: schemaType = {
+    events: new EventEmitter(),
+    get: () => schema.cache,
+  };
   const { graphqlOptions, ...buildSchemaOptions } = options;
-  const schema = buildSchema(folderPath, buildSchemaOptions);
+
+  buildSchema(schema, folderPath, buildSchemaOptions);
 
   return {
     middleware: async (req: http.IncomingMessage, res: http.ServerResponse) => {

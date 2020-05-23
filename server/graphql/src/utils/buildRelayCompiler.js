@@ -8,7 +8,7 @@ import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
 import debug from 'debug';
 
-import { type schemaType } from './buildSchema';
+import { type schemaType } from '../index';
 
 const debugLog = debug('graphql:buildRelayCompiler');
 

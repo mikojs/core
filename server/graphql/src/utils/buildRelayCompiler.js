@@ -8,16 +8,16 @@ import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
 import debug from 'debug';
 
-import { type cacheType } from './buildSchema';
+import { type schemaType } from './buildSchema';
 
 const debugLog = debug('graphql:buildRelayCompiler');
 
 /**
- * @param {cacheType} cache - schema cache
+ * @param {schemaType} schema - schema cache
  *
  * @return {Function} - relay compiler running command
  */
-export default (cache: cacheType) => (argv: $ReadOnlyArray<string>) => {
+export default (schema: schemaType) => (argv: $ReadOnlyArray<string>) => {
   const schemaFilePath = path.resolve(
     findCacheDir({ name: 'graphql' }),
     './schema.graphql',
@@ -25,8 +25,8 @@ export default (cache: cacheType) => (argv: $ReadOnlyArray<string>) => {
   let subprocess: ExecaPromiseType;
 
   debugLog(schemaFilePath);
-  cache.events.on('build', () => {
-    const currentSchema = cache.get();
+  schema.events.on('build', () => {
+    const currentSchema = schema.get();
 
     debugLog(currentSchema);
 

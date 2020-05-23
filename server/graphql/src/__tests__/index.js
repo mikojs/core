@@ -53,10 +53,9 @@ describe('graphql', () => {
       if (updateEvent !== 'init') {
         expect(mockUpdate.cache).toHaveLength(1);
 
-        mockUpdate.cache[0](
-          updateEvent,
-          path.resolve(folderPath, `./index.js`),
-        );
+        ['add', updateEvent].forEach((event: mergeDirEventType) => {
+          mockUpdate.cache[0](event, path.resolve(folderPath, `./index.js`));
+        });
       }
 
       expect(
@@ -79,7 +78,7 @@ describe('graphql', () => {
               errors: [new GraphQLError('Must provide a schema.')],
             },
       );
-      expect(execa).toHaveBeenCalledTimes(2);
+      expect(execa).toHaveBeenCalledTimes(updateEvent === 'init' ? 1 : 2);
       expect(execa).toHaveBeenCalledWith(
         'relay-compiler',
         [

@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 1.10.6 (2020-05-23)
+
+#### :rocket: New Feature
+
+- [#612](https://github.com/mikojs/core/pull/612) (@mikojs/graphql) Add relay compiler and query ([@HsuTing](https://github.com/HsuTing))
+- [#614](https://github.com/mikojs/core/pull/614) (@mikojs/graphql) Add query ([@HsuTing](https://github.com/HsuTing))
+- [#613](https://github.com/mikojs/core/pull/613) (@mikojs/server) Remove logger ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- [#616](https://github.com/mikojs/core/pull/616) (@mikojs/graphql) Improve events ([@HsuTing](https://github.com/HsuTing))
+- [#615](https://github.com/mikojs/core/pull/615) (@mikojs/graphql) Use new schema cache ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.10.5 (2020-05-21)
 
 #### :rocket: New Feature

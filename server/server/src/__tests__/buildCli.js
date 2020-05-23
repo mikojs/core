@@ -1,8 +1,8 @@
 // @flow
 
+import ora from 'ora';
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
-import ora from 'ora';
 
 import { type middlewareType } from '../index';
 import buildCli, { type loggerType } from '../buildCli';

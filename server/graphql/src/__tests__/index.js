@@ -79,8 +79,18 @@ describe('graphql', () => {
               errors: [new GraphQLError('Must provide a schema.')],
             },
       );
-      expect(execa).toHaveBeenCalledTimes(canQuery ? 1 : 2);
-      expect(execa).toHaveBeenCalledWith('relay-compiler');
+      expect(execa).toHaveBeenCalledTimes(2);
+      expect(execa).toHaveBeenCalledWith(
+        'relay-compiler',
+        [
+          '--schema',
+          path.resolve('./node_modules/.cache/graphql/schema.graphql'),
+        ],
+        {
+          preferLocal: true,
+          stdio: 'inherit',
+        },
+      );
     },
   );
 

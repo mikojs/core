@@ -17,8 +17,7 @@
     "express-graphql": "^0.9.0",
     "fbjs": "^1.0.0",
     "graphql": "^15.0.0",
-    "graphql-tools": "^5.0.0",
-    "ora": "^4.0.4"
+    "graphql-tools": "^5.0.0"
   },
   "devDependencies": {
     "flow-bin": "^0.125.1",

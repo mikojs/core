@@ -1,0 +1,23 @@
+{
+  "name": "@mikojs/pages",
+  "description": "A website pages.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/pages",
+  "repository": "https://github.com/mikojs/core/tree/master/server/pages",
+  "version": "1.10.6",
+  "main": "./lib/index.js",
+  "bin": "./lib/bin/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.9.6",
+    "core-js": "^3.6.5"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.125.1",
+    "flow-typed": "^3.1.0"
+  },
+  "keywords": ["mikojs", "pages", "server"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

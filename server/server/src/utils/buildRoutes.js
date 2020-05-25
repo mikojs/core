@@ -16,6 +16,7 @@ import {
 
 export type optionsType = {|
   ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
+  basename?: string,
   dev?: boolean,
   logger?: (
     type: 'start' | 'end',
@@ -52,6 +53,7 @@ export default (
   const {
     dev = process.env.NODE_ENV !== 'production',
     logger = emptyFunction,
+    basename,
     ...mergeDirOptions
   } = options;
   const cache: cacheType = {
@@ -85,6 +87,7 @@ export default (
         if (event !== 'unlink') {
           const keys = [];
           const pathname = `/${[
+            basename,
             path.dirname(relativePath).replace(/^\./, ''),
             name
               .replace(extension, '')

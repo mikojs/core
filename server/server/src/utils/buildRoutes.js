@@ -1,7 +1,5 @@
 // @flow
 
-import path from 'path';
-
 import { pathToRegexp, match } from 'path-to-regexp';
 import { type QueryParameters as QueryParametersType } from 'query-string';
 import { emptyFunction } from 'fbjs';
@@ -13,6 +11,8 @@ import {
   type mergeDirEventType,
   type mergeDirDataType,
 } from '@mikojs/utils/lib/mergeDir';
+
+import getPathname from './getPathname';
 
 export type optionsType = {|
   ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
@@ -71,11 +71,8 @@ export default (
     },
     (
       event: mergeDirEventType,
-      { filePath, name, extension }: mergeDirDataType,
+      { filePath, ...mergeDirData }: mergeDirDataType,
     ) => {
-      const relativePath = path.relative(folderPath, filePath);
-
-      debugLog({ event, filePath });
       logger('start', event, filePath);
 
       if (['init', 'add', 'change', 'unlink'].includes(event)) {
@@ -86,16 +83,10 @@ export default (
 
         if (event !== 'unlink') {
           const keys = [];
-          const pathname = `/${[
-            basename,
-            path.dirname(relativePath).replace(/^\./, ''),
-            name
-              .replace(extension, '')
-              .replace(/^index$/, '')
-              .replace(/\[([^[\]]*)\]/g, ':$1'),
-          ]
-            .filter(Boolean)
-            .join('/')}`;
+          const pathname = getPathname(folderPath, basename, {
+            ...mergeDirData,
+            filePath,
+          });
 
           debugLog(pathname);
           cache.routes = [

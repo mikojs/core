@@ -6,6 +6,7 @@
  */
 export default {
   extends: ['plugin:flowtype/recommended'],
+  plugins: ['flowtype-comment'],
   rules: {
     'flowtype/no-dupe-keys': 'error',
     'flowtype/no-flow-fix-me-comments': 'warn',

@@ -5479,6 +5479,11 @@ eslint-plugin-babel@^5.3.0:
   dependencies:
     eslint-rule-composer "^0.3.0"
 
+eslint-plugin-flowtype-comment@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-flowtype-comment/-/eslint-plugin-flowtype-comment-1.0.0.tgz#25af1ff121edcdebb608a6e895f0fb7e49885ce1"
+  integrity sha512-nYAIUurhs53OOfJeFjaIRSiRkwbV80GdGbuiiq4sAob3dkLIMRp72Wb1J9+zJoMOhmxOL9+mBRoRkzrCWJIQBQ==
+
 eslint-plugin-flowtype@^5.0.3:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-flowtype/-/eslint-plugin-flowtype-5.0.3.tgz#eff9c2b01df3f182f6d6984565e5c1dd73a7c6ad"

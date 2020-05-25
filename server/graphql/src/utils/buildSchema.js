@@ -17,7 +17,7 @@ import { type optionsType as serverOptionsType } from '@mikojs/server';
 import { type schemaType } from '../index';
 
 export type optionsType = {|
-  ...serverOptionsType,
+  ...$Diff<serverOptionsType, {| basename: mixed |}>,
   makeExecutableSchemaOptions?: $Diff<
     makeExecutableSchemaOptionsType,
     {|

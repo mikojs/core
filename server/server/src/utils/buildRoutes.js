@@ -16,6 +16,7 @@ import {
 
 export type optionsType = {|
   ...$Diff<mergeDirOptionsType, {| watch: mixed |}>,
+  basename?: string,
   dev?: boolean,
   logger?: (
     type: 'start' | 'end',
@@ -52,6 +53,7 @@ export default (
   const {
     dev = process.env.NODE_ENV !== 'production',
     logger = emptyFunction,
+    basename,
     ...mergeDirOptions
   } = options;
   const cache: cacheType = {
@@ -85,6 +87,7 @@ export default (
         if (event !== 'unlink') {
           const keys = [];
           const pathname = `/${[
+            basename,
             path.dirname(relativePath).replace(/^\./, ''),
             name
               .replace(extension, '')
@@ -109,9 +112,13 @@ export default (
                     ).params,
             },
           ].sort((a: routeType, b: routeType): number => {
-            if (path.dirname(a.pathname) !== path.dirname(b.pathname)) return 0;
+            const pathnameALength = [...a.pathname.matchAll(/\//g)].length;
+            const pathnameBLength = [...b.pathname.matchAll(/\//g)].length;
 
-            return /\/:([^[\]]*)$/.test(a.pathname) ? 1 : -1;
+            if (pathnameALength !== pathnameBLength)
+              return pathnameALength > pathnameBLength ? -1 : 1;
+
+            return !/\/:([^[\]]*)/.test(a.pathname) ? -1 : 1;
           });
         }
       }

@@ -112,9 +112,13 @@ export default (
                     ).params,
             },
           ].sort((a: routeType, b: routeType): number => {
-            if (path.dirname(a.pathname) !== path.dirname(b.pathname)) return 0;
+            const pathnameALength = [...a.pathname.matchAll(/\//g)].length;
+            const pathnameBLength = [...b.pathname.matchAll(/\//g)].length;
 
-            return /\/:([^[\]]*)$/.test(a.pathname) ? 1 : -1;
+            if (pathnameALength !== pathnameBLength)
+              return pathnameALength > pathnameBLength ? -1 : 1;
+
+            return !/\/:([^[\]]*)/.test(a.pathname) ? -1 : 1;
           });
         }
       }

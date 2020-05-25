@@ -74,3 +74,8 @@ const promiseIngore = async (argu: string) => {
  * @return {string} - 'string'
  */
 const expressionsOnly = () => 'string';
+
+/**
+ * @param {number} argu - any
+ */
+const flowCommentType = (argu /* : number */) => {};

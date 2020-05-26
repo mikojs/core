@@ -63,7 +63,8 @@ describe('eslint', () => {
     (
       await new ESLint({
         cwd: root,
-        ignore: false,
+        baseConfig: configs,
+        useEslintrc: false,
       }).lintFiles([root])
     ).forEach(({ filePath, messages }: LintResultType) => {
       expectedCache[filePath] = messages

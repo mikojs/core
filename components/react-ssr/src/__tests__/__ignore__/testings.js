@@ -60,7 +60,7 @@ export const chunkName = '/';
 export const routesData = [
   {
     exact: true,
-    path: [chunkName],
+    path: chunkName,
     component: {
       chunkName,
       loader: async () => ({ default: Page }),
@@ -68,7 +68,7 @@ export const routesData = [
   },
   {
     exact: true,
-    path: ['/two'],
+    path: '/two',
     component: {
       chunkName: '/two',
       loader: async () => ({ default: Page }),

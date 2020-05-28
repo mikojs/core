@@ -15,7 +15,7 @@ import testings, {
   ErrorComponent,
   pageRender,
   chunkName,
-  routesData,
+  routes,
 } from './__ignore__/testings';
 
 const errorCallback = jest.fn();
@@ -26,7 +26,7 @@ const errorCallback = jest.fn();
 const renderServer = () =>
   server(
     { url: chunkName, path: chunkName },
-    { Document, Main, Error: ErrorComponent, routesData },
+    { Document, Main, Error: ErrorComponent, routes },
     <script />,
     errorCallback,
   ).then(

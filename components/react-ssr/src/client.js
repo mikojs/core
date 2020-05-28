@@ -9,7 +9,7 @@ import { type routeType } from './utils/getPage';
 import Root, { type propsType } from './index';
 
 /**
- * @param {propsType} options - components and routes data
+ * @param {propsType} options - components and routes array
  */
 export default async ({
   Main,

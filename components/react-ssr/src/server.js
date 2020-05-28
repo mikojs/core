@@ -29,7 +29,7 @@ type optionsType<-C> = {|
 
 /**
  * @param {object} ctx - ctx object
- * @param {optionsType} options - components and routes data
+ * @param {optionsType} options - components and routes array
  * @param {NodeType} scripts - scripts dom
  * @param {Function} errorCallback - error callback
  *

@@ -15,7 +15,7 @@ export type returnType = $Diff<getPageReturnType, {| chunkName: mixed |}>;
 /**
  * @param {returnType} initialState - initail state
  * @param {ComponentType} Main - main component
- * @param {routeType} routes - routes data
+ * @param {routeType} routes - routes array
  * @param {ctxType.ctx} ctx - ctx object
  * @param {ctxType.isServer} isServer - isServer or not
  *
@@ -36,10 +36,10 @@ export default (
 
     if (!isServer && isMountedRef.current)
       getPage(Main, routes, ctx, isServer).then(
-        (newPageData: getPageReturnType) => {
+        (newPage: getPageReturnType) => {
           if (cancel) return;
 
-          updatePage(newPageData);
+          updatePage(newPage);
         },
       );
 

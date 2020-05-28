@@ -39,7 +39,7 @@ export type mainComponentType<C, P> = ComponentType<{
 
 export type routesDataType = $ReadOnlyArray<{|
   exact: true,
-  path: $ReadOnlyArray<string>,
+  path: string,
   component: {|
     chunkName: string,
     loader: () => Promise<{|

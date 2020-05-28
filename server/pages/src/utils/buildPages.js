@@ -19,7 +19,7 @@ import {
 
 import templates from 'templates';
 
-type pageType = {|
+type routeDataType = {|
   ...$ElementType<$PropertyType<ssrPropsType, 'routesData'>, number>,
   filePath: string,
 |};
@@ -29,8 +29,8 @@ type cacheType = {|
   main: string,
   loading: string,
   error: string,
-  pages: $ReadOnlyArray<pageType>,
-  addPage: (event: mergeDirEventType, options: mergeDirDataType) => void,
+  routesData: $ReadOnlyArray<routeDataType>,
+  addRouteData: (event: mergeDirEventType, options: mergeDirDataType) => void,
 |};
 
 const debugLog = debug('pages:buildPages');
@@ -50,8 +50,8 @@ export default (folderPath: string, options: optionsType) => {
   } = options;
   const cache: cacheType = {
     ...templates,
-    pages: [],
-    addPage: (
+    routesData: [],
+    addRouteData: (
       event: mergeDirEventType,
       { filePath, name, extension }: mergeDirDataType,
     ) => {
@@ -61,17 +61,17 @@ export default (folderPath: string, options: optionsType) => {
         extension,
       });
 
-      cache.pages = cache.pages.filter(
-        ({ filePath: currentFilePath }: pageType) =>
+      cache.routesData = cache.routesData.filter(
+        ({ filePath: currentFilePath }: routeDataType) =>
           currentFilePath !== filePath,
       );
 
       if (event !== 'unlink')
-        cache.pages = [
-          ...cache.pages,
+        cache.routesData = [
+          ...cache.routesData,
           {
             exact: true,
-            path: [pathname],
+            path: pathname,
             component: {
               chunkName: `pages${pathname.replace(/\*$/, 'notFound')}`,
               loader: async () => ({
@@ -80,7 +80,17 @@ export default (folderPath: string, options: optionsType) => {
             },
             filePath,
           },
-        ];
+        ].sort((a: routeDataType, b: routeDataType): number => {
+          if ((/\*$/, test(a.path))) return -1;
+
+          const pathALength = [...a.path.matchAll(/\//g)].length;
+          const pathBLength = [...b.path.matchAll(/\//g)].length;
+
+          if (pathALength !== pathBLength)
+            return pathALength > pathBLength ? -1 : 1;
+
+          return !/\/:([^[\]]*)/.test(a.path) ? -1 : 1;
+        });
     },
   };
 
@@ -111,13 +121,13 @@ export default (folderPath: string, options: optionsType) => {
               break;
 
             case 'notfound':
-              cache.addPage(event, { filePath, name: '*.js', extension });
+              cache.addRouteData(event, { filePath, name: '*.js', extension });
               break;
 
             default:
               break;
           }
-        }
+        } else cache.addRouteData(event, { filePath, name, extension });
       }
 
       debugLog(cache);

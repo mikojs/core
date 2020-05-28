@@ -50,6 +50,8 @@ const checking = (cache: cacheType, checkedTimes: number) => {
   timer = setTimeout(checking, TIME_TO_CHECK, cache, checkedTimes + 1);
 };
 
+/**
+ */
 checking.clear = () => {
   debugLog('clear');
   clearTimeout(timer);

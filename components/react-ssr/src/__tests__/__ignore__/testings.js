@@ -57,7 +57,7 @@ Page.getInitialProps = jest.fn();
 
 export const chunkName = '/';
 
-export const routesData = [
+export const routes = [
   {
     exact: true,
     path: chunkName,

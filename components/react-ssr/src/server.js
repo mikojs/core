@@ -29,7 +29,7 @@ type optionsType<-C> = {|
 
 /**
  * @param {object} ctx - ctx object
- * @param {optionsType} options - components and routes data
+ * @param {optionsType} options - components and routes array
  * @param {NodeType} scripts - scripts dom
  * @param {Function} errorCallback - error callback
  *
@@ -37,7 +37,7 @@ type optionsType<-C> = {|
  */
 export default async <-C>(
   ctx: C & { url: string, path: string },
-  { Document, Main, Error: ErrorComponent, routesData }: optionsType<C>,
+  { Document, Main, Error: ErrorComponent, routes }: optionsType<C>,
   scripts: NodeType,
   errorCallback: (errorHtml: string) => void,
 ): Promise<ReadableType> => {
@@ -56,7 +56,7 @@ export default async <-C>(
     mainProps: mainInitialProps,
     pageProps: pageInitialProps,
     chunkName,
-  } = await getPage(Main, routesData, ctx, true);
+  } = await getPage(Main, routes, ctx, true);
 
   // preload scripts
   renderToStaticMarkup(
@@ -101,7 +101,7 @@ export default async <-C>(
           Main={Main}
           Loading={emptyFunction.thatReturnsNull}
           Error={ErrorComponent}
-          routesData={routesData}
+          routes={routes}
           initialState={{
             Page: InitialPage,
             mainProps: mainInitialProps,

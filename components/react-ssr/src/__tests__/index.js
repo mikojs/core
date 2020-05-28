@@ -19,7 +19,7 @@ import {
   pageRender,
   Page,
   chunkName,
-  routesData,
+  routes,
 } from './__ignore__/testings';
 
 pageRender.mockReturnValue(<Link to="/two" />);
@@ -37,7 +37,7 @@ const wrapper = mount(
       Main={Main}
       Loading={Loading}
       Error={ErrorComponent}
-      routesData={routesData}
+      routes={routes}
       initialState={{
         Page,
         mainProps: {},

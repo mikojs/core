@@ -19,8 +19,8 @@ import {
 
 import templates from 'templates';
 
-type routeDataType = {|
-  ...$ElementType<$PropertyType<ssrPropsType, 'routesData'>, number>,
+type routeType = {|
+  ...$ElementType<$PropertyType<ssrPropsType, 'routes'>, number>,
   filePath: string,
 |};
 
@@ -29,11 +29,11 @@ type cacheType = {|
   main: string,
   loading: string,
   error: string,
-  routesData: $ReadOnlyArray<routeDataType>,
-  addRouteData: (event: mergeDirEventType, options: mergeDirDataType) => void,
+  routes: $ReadOnlyArray<routeType>,
+  addRoute: (event: mergeDirEventType, options: mergeDirDataType) => void,
 |};
 
-const debugLog = debug('pages:buildPages');
+const debugLog = debug('pages:buildRoutes');
 
 /**
  * @param {string} folderPath - folder path
@@ -50,8 +50,8 @@ export default (folderPath: string, options: optionsType) => {
   } = options;
   const cache: cacheType = {
     ...templates,
-    routesData: [],
-    addRouteData: (
+    routes: [],
+    addRoute: (
       event: mergeDirEventType,
       { filePath, name, extension }: mergeDirDataType,
     ) => {
@@ -61,14 +61,14 @@ export default (folderPath: string, options: optionsType) => {
         extension,
       });
 
-      cache.routesData = cache.routesData.filter(
-        ({ filePath: currentFilePath }: routeDataType) =>
+      cache.routes = cache.routes.filter(
+        ({ filePath: currentFilePath }: routeType) =>
           currentFilePath !== filePath,
       );
 
       if (event !== 'unlink')
-        cache.routesData = [
-          ...cache.routesData,
+        cache.routes = [
+          ...cache.routes,
           {
             exact: true,
             path: pathname,
@@ -80,7 +80,7 @@ export default (folderPath: string, options: optionsType) => {
             },
             filePath,
           },
-        ].sort((a: routeDataType, b: routeDataType): number => {
+        ].sort((a: routeType, b: routeType): number => {
           if ((/\*$/, test(a.path))) return -1;
 
           const pathALength = [...a.path.matchAll(/\//g)].length;
@@ -121,13 +121,13 @@ export default (folderPath: string, options: optionsType) => {
               break;
 
             case 'notfound':
-              cache.addRouteData(event, { filePath, name: '*.js', extension });
+              cache.addRoute(event, { filePath, name: '*.js', extension });
               break;
 
             default:
               break;
           }
-        } else cache.addRouteData(event, { filePath, name, extension });
+        } else cache.addRoute(event, { filePath, name, extension });
       }
 
       debugLog(cache);

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, type ComponentType } from 'react';
 
 import getPage, {
   type mainComponentType,
-  type routesDataType,
+  type routeType,
   type returnType as getPageReturnType,
 } from 'utils/getPage';
 
@@ -15,7 +15,7 @@ export type returnType = $Diff<getPageReturnType, {| chunkName: mixed |}>;
 /**
  * @param {returnType} initialState - initail state
  * @param {ComponentType} Main - main component
- * @param {routesDataType} routesData - routes data
+ * @param {routeType} routes - routes array
  * @param {ctxType.ctx} ctx - ctx object
  * @param {ctxType.isServer} isServer - isServer or not
  *
@@ -24,7 +24,7 @@ export type returnType = $Diff<getPageReturnType, {| chunkName: mixed |}>;
 export default (
   initialState: returnType,
   Main: mainComponentType<*, *>,
-  routesData: routesDataType,
+  routes: $ReadOnlyArray<routeType>,
   ctx: $PropertyType<ctxType, 'ctx'>,
   isServer: $PropertyType<ctxType, 'isServer'>,
 ): returnType => {
@@ -35,11 +35,11 @@ export default (
     let cancel: boolean = false;
 
     if (!isServer && isMountedRef.current)
-      getPage(Main, routesData, ctx, isServer).then(
-        (newPageData: getPageReturnType) => {
+      getPage(Main, routes, ctx, isServer).then(
+        (newPage: getPageReturnType) => {
           if (cancel) return;
 
-          updatePage(newPageData);
+          updatePage(newPage);
         },
       );
 

@@ -37,16 +37,16 @@ export type mainComponentType<C, P> = ComponentType<{
   getInitialProps?: (argu: mainInitialArguType<C>) => P,
 };
 
-export type routesDataType = $ReadOnlyArray<{|
+export type routeType = {|
   exact: true,
-  path: $ReadOnlyArray<string>,
+  path: string,
   component: {|
     chunkName: string,
     loader: () => Promise<{|
       default: pageComponentType<*, *>,
     |}>,
   |},
-|}>;
+|};
 
 export type returnType = {|
   Page: pageComponentType<*, *>,
@@ -57,7 +57,7 @@ export type returnType = {|
 
 /**
  * @param {ComponentType} Main - Main Component
- * @param {routesDataType} routesData - routes data
+ * @param {routeType} routes - routes array
  * @param {object} ctx - ctx object
  * @param {boolean} isServer - is server or not
  *
@@ -65,11 +65,11 @@ export type returnType = {|
  */
 export default async <-C>(
   Main: ComponentType<*>,
-  routesData: routesDataType,
+  routes: $ReadOnlyArray<routeType>,
   ctx: C & { path: string },
   isServer: boolean,
 ): Promise<returnType> => {
-  const [matchRoute] = matchRoutes(routesData, ctx.path);
+  const [matchRoute] = matchRoutes(routes, ctx.path);
 
   invariant(matchRoute, 'Can not find the match route');
 

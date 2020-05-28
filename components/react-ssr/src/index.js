@@ -13,7 +13,7 @@ import {
   type pageComponentType as pageType,
   type mainInitialArguType as mainArguType,
   type mainComponentType as mainType,
-  type routesDataType,
+  type routeType,
 } from 'utils/getPage';
 import getStatic from 'utils/getStatic';
 
@@ -32,7 +32,7 @@ export type propsType = {|
   Main: mainType<*, *>,
   Loading: ComponentType<{||}>,
   Error: $PropertyType<errorCatchPropsType, 'Error'>,
-  routesData: routesDataType,
+  routes: $ReadOnlyArray<routeType>,
   initialState: usePageReturnType,
 |};
 export type documentComponentType<C, P> = documentType<C, P>;
@@ -42,14 +42,14 @@ const Root = ({
   Main,
   Loading,
   Error,
-  routesData,
+  routes,
   initialState,
 }: propsType): NodeType => {
   const { ctx, isLoading, isServer } = useCtx();
   const { Page, mainProps, pageProps } = usePage(
     initialState,
     Main,
-    routesData,
+    routes,
     ctx,
     isServer,
   );

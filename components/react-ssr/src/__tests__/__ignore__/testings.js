@@ -57,10 +57,10 @@ Page.getInitialProps = jest.fn();
 
 export const chunkName = '/';
 
-export const routesData = [
+export const routes = [
   {
     exact: true,
-    path: [chunkName],
+    path: chunkName,
     component: {
       chunkName,
       loader: async () => ({ default: Page }),
@@ -68,7 +68,7 @@ export const routesData = [
   },
   {
     exact: true,
-    path: ['/two'],
+    path: '/two',
     component: {
       chunkName: '/two',
       loader: async () => ({ default: Page }),

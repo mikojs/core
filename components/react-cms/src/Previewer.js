@@ -6,6 +6,8 @@ import * as d3 from 'd3-hierarchy';
 import SourceContext from './SourceContext';
 import Renderer from './Renderer';
 
+type propsType = {||};
+
 const parse = d3
   .stratify()
   .id(({ id }: {| id: string |}) => id)
@@ -19,4 +21,4 @@ const Previewer = (): NodeType => {
   return <Renderer source={data} />;
 };
 
-export default React.memo<{||}>(Previewer);
+export default React.memo<propsType>(Previewer);

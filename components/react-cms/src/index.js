@@ -14,6 +14,8 @@ import useMainProps from './hooks/useMainProps';
 
 import * as styles from './styles';
 
+type propsType = {||};
+
 /* eslint-disable */
 const Example = React.forwardRef(
   ({ children, ...props }: { children?: NodeType }, forwardedRef) => (
@@ -66,4 +68,4 @@ const Cms = () => (
   </DndProvider>
 );
 
-export default React.memo<{||}>(Cms);
+export default React.memo<propsType>(Cms);

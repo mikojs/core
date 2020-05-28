@@ -4,16 +4,18 @@ import React from 'react';
 import { hydrate } from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { type routeType } from './utils/getPage';
+
 import Root, { type propsType } from './index';
 
 /**
- * @param {propsType} options - components and routes data
+ * @param {propsType} options - components and routes array
  */
 export default async ({
   Main,
   Loading,
   Error: ErrorComponent,
-  routesData,
+  routes,
 }: $Diff<propsType, {| initialState: mixed |}>) => {
   const {
     mainInitialProps,
@@ -25,10 +27,8 @@ export default async ({
   const {
     component: { loader },
   } =
-    routesData.find(
-      ({
-        component: { chunkName: componentChunkName },
-      }: $ElementType<$PropertyType<propsType, 'routesData'>, number>) =>
+    routes.find(
+      ({ component: { chunkName: componentChunkName } }: routeType) =>
         chunkName === componentChunkName,
     ) ||
     (() => {
@@ -43,7 +43,7 @@ export default async ({
         Main={Main}
         Loading={Loading}
         Error={ErrorComponent}
-        routesData={routesData}
+        routes={routes}
         initialState={{
           Page: InitialPage,
           mainProps: mainInitialProps,

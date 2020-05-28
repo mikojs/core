@@ -7,7 +7,7 @@ import testings, {
   Loading,
   ErrorComponent,
   chunkName,
-  routesData,
+  routes,
 } from './__ignore__/testings';
 
 describe('client', () => {
@@ -29,7 +29,7 @@ describe('client', () => {
       Main,
       Loading,
       Error: ErrorComponent,
-      routesData,
+      routes,
     });
 
     expect(mockLog).not.toHaveBeenCalled();
@@ -41,7 +41,7 @@ describe('client', () => {
         Main,
         Loading,
         Error: ErrorComponent,
-        routesData: [],
+        routes: [],
       }),
     ).rejects.toThrow('Can not find page component');
   });
@@ -54,7 +54,7 @@ describe('client', () => {
         Main,
         Loading,
         Error: ErrorComponent,
-        routesData,
+        routes,
       }),
     ).rejects.toThrow('Can not find main HTMLElement');
   });

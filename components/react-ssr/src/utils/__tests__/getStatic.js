@@ -7,6 +7,8 @@ import getStatic from '../getStatic';
 /** @react test Component */
 const Component = () => <div>test</div>;
 
+/**
+ */
 Component.getInitialProps = () => {};
 
 describe('get static', () => {

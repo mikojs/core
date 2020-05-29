@@ -19,10 +19,7 @@ import {
 
 import templates from 'templates';
 
-type routeType = {|
-  ...$ElementType<$PropertyType<ssrPropsType, 'routes'>, number>,
-  filePath: string,
-|};
+type routeType = $ElementType<$PropertyType<ssrPropsType, 'routes'>, number>;
 
 export type routesType = {|
   document: string,
@@ -30,6 +27,10 @@ export type routesType = {|
   loading: string,
   error: string,
   routes: $ReadOnlyArray<routeType>,
+  filePaths: {
+    [string]: string,
+  },
+  getFilePath: (pathname: string) => string,
   addRoute: (event: mergeDirEventType, options: mergeDirDataType) => void,
 |};
 
@@ -51,6 +52,8 @@ export default (folderPath: string, options: optionsType) => {
   const cache: routesType = {
     ...templates,
     routes: [],
+    filePaths: {},
+    getFilePath: (pathname: string) => cache.filePaths[pathname],
     addRoute: (
       event: mergeDirEventType,
       { filePath, name, extension }: mergeDirDataType,
@@ -62,9 +65,9 @@ export default (folderPath: string, options: optionsType) => {
       });
 
       cache.routes = cache.routes.filter(
-        ({ filePath: currentFilePath }: routeType) =>
-          currentFilePath !== filePath,
+        ({ path: currentPathname }: routeType) => currentPathname !== pathname,
       );
+      cache.filePaths[pathname] = filePath;
 
       if (event !== 'unlink')
         cache.routes = [
@@ -78,7 +81,6 @@ export default (folderPath: string, options: optionsType) => {
                 default: requireModule<pageComponentType<*, *>>(filePath),
               }),
             },
-            filePath,
           },
         ].sort((a: routeType, b: routeType): number => {
           if ((/\*$/, test(a.path))) return -1;

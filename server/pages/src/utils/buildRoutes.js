@@ -24,7 +24,7 @@ type routeType = {|
   filePath: string,
 |};
 
-type cacheType = {|
+export type routesType = {|
   document: string,
   main: string,
   loading: string,
@@ -39,7 +39,7 @@ const debugLog = debug('pages:buildRoutes');
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
  *
- * @return {cacheType} - routes cache
+ * @return {routesType} - routes cache
  */
 export default (folderPath: string, options: optionsType) => {
   const {
@@ -48,7 +48,7 @@ export default (folderPath: string, options: optionsType) => {
     basename,
     ...mergeDirOptions
   } = options;
-  const cache: cacheType = {
+  const cache: routesType = {
     ...templates,
     routes: [],
     addRoute: (

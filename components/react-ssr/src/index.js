@@ -12,7 +12,6 @@ import {
 } from 'utils/getPage';
 import getStatic from 'utils/getStatic';
 
-import useCtx from 'hooks/useCtx';
 import usePage, { type returnType as usePageReturnType } from 'hooks/usePage';
 
 export type {
@@ -30,7 +29,7 @@ export type propsType = {|
   Loading: ComponentType<{||}>,
   Error: $PropertyType<errorCatchPropsType, 'Error'>,
   routes: $ReadOnlyArray<routeType>,
-  initialState: usePageReturnType,
+  initialState: $Diff<usePageReturnType, {| isLoading: boolean |}>,
 |};
 
 /** @react use to control page */
@@ -41,12 +40,10 @@ const Root = ({
   routes,
   initialState,
 }: propsType): NodeType => {
-  const { ctx, isLoading } = useCtx();
-  const { Page, mainProps, pageProps } = usePage(
+  const { Page, mainProps, pageProps, isLoading } = usePage(
     initialState,
     Main,
     routes,
-    ctx,
   );
 
   return (

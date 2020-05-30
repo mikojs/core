@@ -89,6 +89,7 @@ export default (
       .on('all', (event: mergeDirEventType, filePath: string) => {
         if (!extensions?.test(filePath) || exclude?.test(filePath)) return;
 
+        delete require.cache[filePath];
         callback(event, {
           filePath,
           name: path.basename(filePath),

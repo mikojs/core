@@ -19,7 +19,7 @@ export const mainRender: JestMockFn<
   );
 
 /** @react main component */
-export const Main: mainComponentType<{}, {}> = (props: {
+export const Main: mainComponentType<> = (props: {
   children: () => NodeType,
 }) => mainRender(props);
 
@@ -51,7 +51,7 @@ export const pageRender: JestMockFn<
 > = jest.fn().mockReturnValue(<div>Page</div>);
 
 /** @react page component */
-export const Page: pageComponentType<{}, {}> = () => pageRender();
+export const Page: pageComponentType<> = () => pageRender();
 
 Page.getInitialProps = jest.fn();
 

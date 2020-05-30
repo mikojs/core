@@ -7,7 +7,7 @@ import reactHooks from './configs/reactHooks';
 import extendsConfig from './configs/extendsConfigs';
 
 type configType = {
-  extends?: $ReadOnlyArray<string>,
+  extends: $ReadOnlyArray<string>,
   plugins?: $ReadOnlyArray<string>,
   parser?: 'babel-eslint',
   env?: {|
@@ -56,10 +56,7 @@ export default [
           case 'extends':
             return {
               ...result,
-              extends: [
-                ...(result.extends || []),
-                ...(otherConfig.extends || []),
-              ],
+              extends: [...result.extends, ...otherConfig.extends],
             };
 
           case 'plugins':
@@ -100,5 +97,5 @@ export default [
       },
       config,
     ),
-  ({}: configType),
+  ({ extends: [] }: configType),
 );

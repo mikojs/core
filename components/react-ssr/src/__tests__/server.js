@@ -25,7 +25,7 @@ const errorCallback = jest.fn();
  */
 const renderServer = () =>
   server(
-    { url: chunkName, path: chunkName },
+    { url: chunkName, pathname: chunkName },
     { Document, Main, Error: ErrorComponent, routes },
     <script />,
     errorCallback,

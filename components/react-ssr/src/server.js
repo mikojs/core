@@ -36,7 +36,7 @@ type optionsType<-C> = {|
  * @return {ReadableType} - rendering stream
  */
 export default async <-C>(
-  ctx: C & { url: string, path: string },
+  ctx: C & { url: string, pathname: string },
   { Document, Main, Error: ErrorComponent, routes }: optionsType<C>,
   scripts: NodeType,
   errorCallback: (errorHtml: string) => void,

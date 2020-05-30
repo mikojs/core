@@ -66,10 +66,10 @@ export type returnType = {|
 export default async <-C>(
   Main: ComponentType<*>,
   routes: $ReadOnlyArray<routeType>,
-  ctx: C & { path: string },
+  ctx: C & { pathname: string },
   isServer: boolean,
 ): Promise<returnType> => {
-  const [matchRoute] = matchRoutes(routes, ctx.path);
+  const [matchRoute] = matchRoutes(routes, ctx.pathname);
 
   invariant(matchRoute, 'Can not find the match route');
 

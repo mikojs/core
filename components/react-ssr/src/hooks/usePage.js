@@ -48,7 +48,7 @@ export default (
     return () => {
       cancel = true;
     };
-  }, [ctx.originalUrl]);
+  }, [ctx.pathname]);
 
   return {
     Page,

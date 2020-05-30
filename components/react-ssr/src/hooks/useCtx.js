@@ -15,30 +15,18 @@ export type ctxType = {|
  */
 export default (): ctxType => {
   const isServer = !ExecutionEnvironment.canUseEventListeners;
-  const { pathname, search } = useLocation();
-  const ctx = isServer
-    ? {}
-    : {
-        path: pathname,
-        querystring: search.replace(/\?/, ''),
-        originalUrl: `${pathname}${search}`,
-        origin: window.location.origin,
-        href: window.location.href,
-        host: window.location.host,
-        hostname: window.location.hostname,
-        protocol: window.location.protocol,
-      };
+  const ctx = useLocation();
   const prevCtxRef = useRef(ctx);
 
   useEffect(() => {
     prevCtxRef.current = ctx;
-  }, [ctx.originalUrl]);
+  }, [ctx.pathname]);
 
   const { current: prevCtx } = prevCtxRef;
 
   return {
     ctx,
-    isLoading: prevCtx.originalUrl !== ctx.originalUrl,
+    isLoading: prevCtx.pathname !== ctx.pathname,
     isServer,
   };
 };

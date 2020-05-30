@@ -85,7 +85,7 @@ export default (folderPath: string, options: optionsType): routesType => {
             },
           },
         ].sort((a: routeType, b: routeType): number => {
-          if ((/\*$/, test(a.path))) return -1;
+          if (/\*$/.test(a.path)) return -1;
 
           const pathALength = [...a.path.matchAll(/\//g)].length;
           const pathBLength = [...b.path.matchAll(/\//g)].length;

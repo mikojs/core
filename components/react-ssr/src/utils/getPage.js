@@ -7,20 +7,20 @@ import { invariant } from 'fbjs';
 
 import getStatic from 'utils/getStatic';
 
-export type pageInitialArguType<C> = {|
+export type pageInitialArguType<C = {}> = {|
   ctx: C,
   isServer: boolean,
   match: { url: string },
 |};
 
-export type pageComponentType<C, P, EP = {}> = ComponentType<{
+export type pageComponentType<C = {}, P = {}, EP = {}> = ComponentType<{
   ...P,
   ...EP,
 }> & {
   getInitialProps?: (argu: pageInitialArguType<C>) => P,
 };
 
-export type mainInitialArguType<C, P = pageComponentType<C, *>> = {|
+export type mainInitialArguType<C = {}, P = pageComponentType<C, *>> = {|
   ctx: C,
   isServer: boolean,
   Page: P,
@@ -30,7 +30,7 @@ export type mainInitialArguType<C, P = pageComponentType<C, *>> = {|
   >,
 |};
 
-export type mainComponentType<C, P> = ComponentType<{
+export type mainComponentType<C = {}, P = {}> = ComponentType<{
   ...P,
   children: () => NodeType,
 }> & {

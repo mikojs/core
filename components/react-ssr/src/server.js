@@ -15,7 +15,7 @@ import Root, { type propsType } from './index';
 import getStatic from 'utils/getStatic';
 import getPage from 'utils/getPage';
 
-export type documentComponentType<C, P> = ComponentType<P> & {
+export type documentComponentType<C = {}, P = {}> = ComponentType<P> & {
   getInitialProps?: ({
     ctx: C,
     isServer: boolean,

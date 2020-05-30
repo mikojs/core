@@ -6,7 +6,7 @@ import buildRoutes from './utils/buildRoutes';
 import buildServer from './utils/buildServer';
 
 type returnType = {|
-  middleare: middlewareType<>,
+  middleware: middlewareType<>,
   server: middlewareType<>,
 |};
 
@@ -25,7 +25,7 @@ export default (
   const server = buildServer(routes);
 
   return {
-    middleare: async (req: http.IncomingMessage, res: http.ServerResponse) => {
+    middleware: async (req: http.IncomingMessage, res: http.ServerResponse) => {
       await server(req, res);
     },
     server,

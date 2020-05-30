@@ -43,7 +43,7 @@ type returnType = {|
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
  *
- * @return {returnType} - middleware object
+ * @return {returnType} - graphql object
  */
 export default (
   folderPath: string,

@@ -3,6 +3,7 @@
 import { type ComponentType, type Node as NodeType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
+import { type ContextRouter } from 'react-router-dom';
 import { invariant, ExecutionEnvironment } from 'fbjs';
 
 import getStatic from 'utils/getStatic';
@@ -65,7 +66,7 @@ export type returnType = {|
 export default async <-C>(
   Main: ComponentType<*>,
   routes: $ReadOnlyArray<routeType>,
-  ctx: C & { pathname: string },
+  ctx: C & $PropertyType<ContextRouter, 'location'>,
 ): Promise<returnType> => {
   const isServer = !ExecutionEnvironment.canUseEventListeners;
   const [matchRoute] = matchRoutes(routes, ctx.pathname);

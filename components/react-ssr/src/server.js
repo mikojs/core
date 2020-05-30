@@ -5,7 +5,7 @@ import stream, { type Readable as ReadableType } from 'stream';
 
 import React, { type Node as NodeType, type ComponentType } from 'react';
 import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
-import { StaticRouter as Router } from 'react-router-dom';
+import { StaticRouter as Router, type ContextRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Multistream from 'multistream';
 import { emptyFunction } from 'fbjs';
@@ -25,20 +25,21 @@ export type documentComponentType<C = {}, P = {}> = ComponentType<P> & {
 type optionsType<-C> = {|
   ...$Diff<propsType, {| Loading: mixed, initialState: mixed |}>,
   Document: documentComponentType<C, *>,
+  scripts: NodeType,
 |};
 
 /**
+ * @param {string} url - url string
  * @param {object} ctx - ctx object
  * @param {optionsType} options - components and routes array
- * @param {NodeType} scripts - scripts dom
  * @param {Function} errorCallback - error callback
  *
  * @return {ReadableType} - rendering stream
  */
 export default async <-C>(
-  ctx: C & { url: string, pathname: string },
-  { Document, Main, Error: ErrorComponent, routes }: optionsType<C>,
-  scripts: NodeType,
+  url: string,
+  ctx: C & $PropertyType<ContextRouter, 'location'>,
+  { Document, Main, Error: ErrorComponent, routes, scripts }: optionsType<C>,
   errorCallback: (errorHtml: string) => void,
 ): Promise<ReadableType> => {
   // [start] preload
@@ -49,6 +50,7 @@ export default async <-C>(
       ctx,
       isServer: true,
     })) || {};
+
   renderToStaticMarkup(documentHead || null);
 
   const {
@@ -96,7 +98,7 @@ export default async <-C>(
   return new Multistream([
     upperDocumentStream,
     renderToNodeStream(
-      <Router location={ctx.url} context={{}}>
+      <Router location={url} context={{}}>
         <Root
           Main={Main}
           Loading={emptyFunction.thatReturnsNull}

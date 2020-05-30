@@ -3,7 +3,7 @@
 import { type ComponentType, type Node as NodeType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
-import { invariant } from 'fbjs';
+import { invariant, ExecutionEnvironment } from 'fbjs';
 
 import getStatic from 'utils/getStatic';
 
@@ -59,7 +59,6 @@ export type returnType = {|
  * @param {ComponentType} Main - Main Component
  * @param {routeType} routes - routes array
  * @param {object} ctx - ctx object
- * @param {boolean} isServer - is server or not
  *
  * @return {object} - page object
  */
@@ -67,8 +66,8 @@ export default async <-C>(
   Main: ComponentType<*>,
   routes: $ReadOnlyArray<routeType>,
   ctx: C & { pathname: string },
-  isServer: boolean,
 ): Promise<returnType> => {
+  const isServer = !ExecutionEnvironment.canUseEventListeners;
   const [matchRoute] = matchRoutes(routes, ctx.pathname);
 
   invariant(matchRoute, 'Can not find the match route');

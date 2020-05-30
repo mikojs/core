@@ -17,7 +17,6 @@ export type returnType = $Diff<getPageReturnType, {| chunkName: mixed |}>;
  * @param {ComponentType} Main - main component
  * @param {routeType} routes - routes array
  * @param {ctxType.ctx} ctx - ctx object
- * @param {ctxType.isServer} isServer - isServer or not
  *
  * @return {returnType} - return page object
  */
@@ -26,7 +25,6 @@ export default (
   Main: mainComponentType<*, *>,
   routes: $ReadOnlyArray<routeType>,
   ctx: $PropertyType<ctxType, 'ctx'>,
-  isServer: $PropertyType<ctxType, 'isServer'>,
 ): returnType => {
   const [{ Page, mainProps, pageProps }, updatePage] = useState(initialState);
   const isMountedRef = useRef(false);
@@ -34,14 +32,12 @@ export default (
   useEffect((): (() => void) => {
     let cancel: boolean = false;
 
-    if (!isServer && isMountedRef.current)
-      getPage(Main, routes, ctx, isServer).then(
-        (newPage: getPageReturnType) => {
-          if (cancel) return;
+    if (isMountedRef.current)
+      getPage(Main, routes, ctx).then((newPage: getPageReturnType) => {
+        if (cancel) return;
 
-          updatePage(newPage);
-        },
-      );
+        updatePage(newPage);
+      });
 
     isMountedRef.current = true;
 

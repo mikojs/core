@@ -41,13 +41,12 @@ const Root = ({
   routes,
   initialState,
 }: propsType): NodeType => {
-  const { ctx, isLoading, isServer } = useCtx();
+  const { ctx, isLoading } = useCtx();
   const { Page, mainProps, pageProps } = usePage(
     initialState,
     Main,
     routes,
     ctx,
-    isServer,
   );
 
   return (

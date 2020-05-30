@@ -56,7 +56,7 @@ export default async <-C>(
     mainProps: mainInitialProps,
     pageProps: pageInitialProps,
     chunkName,
-  } = await getPage(Main, routes, ctx, true);
+  } = await getPage(Main, routes, ctx);
 
   // preload scripts
   renderToStaticMarkup(

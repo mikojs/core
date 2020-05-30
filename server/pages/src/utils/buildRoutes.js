@@ -30,6 +30,7 @@ export type routesType = {|
   filePaths: {
     [string]: string,
   },
+  get: () => $ReadOnlyArray<routeType>,
   getFilePath: (pathname: string) => string,
   addRoute: (event: mergeDirEventType, options: mergeDirDataType) => void,
 |};
@@ -53,6 +54,7 @@ export default (folderPath: string, options: optionsType) => {
     ...templates,
     routes: [],
     filePaths: {},
+    get: () => cache.routes,
     getFilePath: (pathname: string) => cache.filePaths[pathname],
     addRoute: (
       event: mergeDirEventType,

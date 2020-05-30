@@ -43,7 +43,7 @@ const debugLog = debug('pages:buildRoutes');
  *
  * @return {routesType} - routes cache
  */
-export default (folderPath: string, options: optionsType) => {
+export default (folderPath: string, options: optionsType): routesType => {
   const {
     dev = process.env.NODE_ENV !== 'production',
     logger = emptyFunction,
@@ -138,4 +138,6 @@ export default (folderPath: string, options: optionsType) => {
       logger('end', event, filePath);
     },
   );
+
+  return cache;
 };

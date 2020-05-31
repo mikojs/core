@@ -61,13 +61,11 @@ export default async <-C>(
   renderToStaticMarkup(
     <Helmet>
       <script>
-        var __MIKOJS_DATA__ ={' '}
-        {JSON.stringify({
+        {`var __MIKOJS_DATA__ = ${JSON.stringify({
           mainInitialProps,
           pageInitialProps,
           chunkName,
-        })}
-        ;
+        })};`}
       </script>
     </Helmet>,
   );

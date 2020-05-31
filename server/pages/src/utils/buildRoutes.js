@@ -90,13 +90,15 @@ export default (folderPath: string, options: optionsType): routesType => {
             },
           },
         ].sort((a: routeType, b: routeType): number => {
-          if (/\*$/.test(a.path)) return -1;
-
-          const pathALength = [...a.path.matchAll(/\//g)].length;
-          const pathBLength = [...b.path.matchAll(/\//g)].length;
+          const pathALength = [...a.path.replace(/\/\*$/, '').matchAll(/\//g)]
+            .length;
+          const pathBLength = [...b.path.replace(/\/\*$/, '').matchAll(/\//g)]
+            .length;
 
           if (pathALength !== pathBLength)
             return pathALength > pathBLength ? -1 : 1;
+
+          if (/\*$/.test(a.path)) return -1;
 
           return !/\/:([^[\]]*)/.test(a.path) ? -1 : 1;
         });

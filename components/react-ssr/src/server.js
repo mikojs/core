@@ -32,7 +32,6 @@ type optionsType<-C> = {|
  * @param {string} url - url string
  * @param {object} ctx - ctx object
  * @param {optionsType} options - components and routes array
- * @param {Function} errorCallback - error callback
  *
  * @return {ReadableType} - rendering stream
  */
@@ -40,7 +39,6 @@ export default async <-C>(
   url: string,
   ctx: C & $PropertyType<ContextRouter, 'location'>,
   { Document, Main, Error: ErrorComponent, routes, scripts }: optionsType<C>,
-  errorCallback: (errorHtml: string) => void,
 ): Promise<ReadableType> => {
   // [start] preload
   // preload Document, Main, Page
@@ -63,11 +61,15 @@ export default async <-C>(
   // preload scripts
   renderToStaticMarkup(
     <Helmet>
-      <script>{`var __MIKOJS_DATA__ = ${JSON.stringify({
-        mainInitialProps,
-        pageInitialProps,
-        chunkName,
-      })};`}</script>
+      <script>
+        var __MIKOJS_DATA__ ={' '}
+        {JSON.stringify({
+          mainInitialProps,
+          pageInitialProps,
+          chunkName,
+        })}
+        ;
+      </script>
 
       {scripts}
     </Helmet>,

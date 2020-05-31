@@ -1,5 +1,7 @@
 // @flow
 
+import { URL } from 'url';
+
 import { type ComponentType } from 'react';
 
 import { requireModule } from '@mikojs/utils';
@@ -21,9 +23,15 @@ export default (routes: routesType) => async (
   req: http.IncomingMessage,
   res: http.ServerResponse,
 ) => {
+  const { href, pathname, search, hash } = new URL(
+    req.url,
+    `http://${req.headers.host}`,
+  );
+
   (
     await server(
-      { req, res, url: req.url, path: req.path },
+      href,
+      { req, res, pathname, search, hash },
       {
         Document: requireModule<documentComponentType<*, *>>(routes.document),
         Main: requireModule<mainComponentType<*, *>>(routes.main),
@@ -31,10 +39,6 @@ export default (routes: routesType) => async (
           routes.error,
         ),
         routes: routes.get(),
-      },
-      null,
-      (errorHtml: string) => {
-        res.end(errorHtml);
       },
     )
   ).pipe(res);

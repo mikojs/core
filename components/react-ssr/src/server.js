@@ -7,13 +7,13 @@ import React, { type Node as NodeType, type ComponentType } from 'react';
 import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
 import { StaticRouter as Router, type ContextRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import Multistream from 'multistream';
 import { emptyFunction } from 'fbjs';
 
-import Root, { type propsType } from './index';
+import getStatic from './utils/getStatic';
+import getPage from './utils/getPage';
+import CustomMultistream from './utils/CustomMultistream';
 
-import getStatic from 'utils/getStatic';
-import getPage from 'utils/getPage';
+import Root, { type propsType } from './index';
 
 export type documentComponentType<C = {}, P = {}> = ComponentType<P> & {
   getInitialProps?: ({
@@ -76,26 +76,26 @@ export default async <-C>(
 
   // make document scream
   const hash = crypto.createHmac('sha256', '@mikojs/react-ssr').digest('hex');
+  const errorStream = new stream.Readable();
   const [
-    [upperDocumentStream],
-    [lowerDocumentStream, lowerDocument],
+    upperDocumentStream,
+    lowerDocumentStream,
   ] = `<!DOCTYPE html>${renderToStaticMarkup(
     <Document {...documentInitialProps} helmet={Helmet.renderStatic()}>
       <main id="__MIKOJS__">{hash}</main>
     </Document>,
   )}`
     .split(hash)
-    .map((docmentText: string): [ReadableType, string] => {
+    .map((text: string): ReadableType => {
       const docmentStream = new stream.Readable();
 
-      docmentStream.push(docmentText);
+      docmentStream.push(text);
       docmentStream.push(null);
 
-      return [docmentStream, docmentText];
+      return docmentStream;
     });
 
-  // render page
-  return new Multistream([
+  return new CustomMultistream([
     upperDocumentStream,
     renderToNodeStream(
       <Router location={url} context={{}}>
@@ -111,13 +111,18 @@ export default async <-C>(
           }}
         />
       </Router>,
-    ),
+    ).on('error', (error: Error) => {
+      errorStream.push(
+        renderToStaticMarkup(
+          <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
+        ),
+      );
+    }),
+    (): ReadableType => {
+      errorStream.push(null);
+
+      return errorStream;
+    },
     lowerDocumentStream,
-  ]).on('error', (error: Error) => {
-    errorCallback(
-      `${renderToStaticMarkup(
-        <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
-      )}${lowerDocument}`,
-    );
-  });
+  ]);
 };

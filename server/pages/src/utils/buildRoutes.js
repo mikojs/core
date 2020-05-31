@@ -60,11 +60,14 @@ export default (folderPath: string, options: optionsType): routesType => {
       event: mergeDirEventType,
       { filePath, name, extension }: mergeDirDataType,
     ) => {
-      const pathname = getPathname(folderPath, basename, {
-        filePath,
-        name,
-        extension,
-      });
+      const pathname =
+        name.replace(extension, '') === 'NotFound'
+          ? [basename, '*'].filter(Boolean).join('/')
+          : getPathname(folderPath, basename, {
+              filePath,
+              name,
+              extension,
+            });
 
       cache.routes = cache.routes.filter(
         ({ path: currentPathname }: routeType) => currentPathname !== pathname,
@@ -112,7 +115,7 @@ export default (folderPath: string, options: optionsType): routesType => {
       logger('start', event, filePath);
 
       if (['init', 'add', 'change', 'unlink'].includes(event)) {
-        if (/^\.templates/.test(path.resolve(folderPath, filePath))) {
+        if (/^\.templates/.test(path.relative(folderPath, filePath))) {
           const filename = name.replace(extension, '').toLowerCase();
 
           switch (filename) {
@@ -125,7 +128,7 @@ export default (folderPath: string, options: optionsType): routesType => {
               break;
 
             case 'notfound':
-              cache.addRoute(event, { filePath, name: '*.js', extension });
+              cache.addRoute(event, { filePath, name, extension });
               break;
 
             default:

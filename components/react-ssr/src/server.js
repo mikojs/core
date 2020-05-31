@@ -3,17 +3,17 @@
 import crypto from 'crypto';
 import stream, { type Readable as ReadableType } from 'stream';
 
-import React, { type Node as NodeType, type ComponentType } from 'react';
+import React, { type ComponentType } from 'react';
 import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
-import { StaticRouter as Router } from 'react-router-dom';
+import { StaticRouter as Router, type ContextRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import Multistream from 'multistream';
 import { emptyFunction } from 'fbjs';
 
-import Root, { type propsType } from './index';
+import getStatic from './utils/getStatic';
+import getPage from './utils/getPage';
+import CustomMultistream from './utils/CustomMultistream';
 
-import getStatic from 'utils/getStatic';
-import getPage from 'utils/getPage';
+import Root, { type propsType } from './index';
 
 export type documentComponentType<C = {}, P = {}> = ComponentType<P> & {
   getInitialProps?: ({
@@ -28,27 +28,24 @@ type optionsType<-C> = {|
 |};
 
 /**
+ * @param {string} url - url string
  * @param {object} ctx - ctx object
  * @param {optionsType} options - components and routes array
- * @param {NodeType} scripts - scripts dom
- * @param {Function} errorCallback - error callback
  *
  * @return {ReadableType} - rendering stream
  */
 export default async <-C>(
-  ctx: C & { url: string, path: string },
+  url: string,
+  ctx: C & $PropertyType<ContextRouter, 'location'>,
   { Document, Main, Error: ErrorComponent, routes }: optionsType<C>,
-  scripts: NodeType,
-  errorCallback: (errorHtml: string) => void,
 ): Promise<ReadableType> => {
-  // [start] preload
-  // preload Document, Main, Page
   const { head: documentHead, ...documentInitialProps } =
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
     (await getStatic(Document).getInitialProps?.({
       ctx,
       isServer: true,
     })) || {};
+
   renderToStaticMarkup(documentHead || null);
 
   const {
@@ -56,47 +53,44 @@ export default async <-C>(
     mainProps: mainInitialProps,
     pageProps: pageInitialProps,
     chunkName,
-  } = await getPage(Main, routes, ctx, true);
+  } = await getPage(Main, routes, ctx);
 
-  // preload scripts
   renderToStaticMarkup(
     <Helmet>
-      <script>{`var __MIKOJS_DATA__ = ${JSON.stringify({
-        mainInitialProps,
-        pageInitialProps,
-        chunkName,
-      })};`}</script>
-
-      {scripts}
+      <script>
+        {`var __MIKOJS_DATA__ = ${JSON.stringify({
+          mainInitialProps,
+          pageInitialProps,
+          chunkName,
+        })};`}
+      </script>
     </Helmet>,
   );
-  // [end] preload
 
-  // make document scream
   const hash = crypto.createHmac('sha256', '@mikojs/react-ssr').digest('hex');
+  const errorStream = new stream.Readable();
   const [
-    [upperDocumentStream],
-    [lowerDocumentStream, lowerDocument],
+    upperDocumentStream,
+    lowerDocumentStream,
   ] = `<!DOCTYPE html>${renderToStaticMarkup(
     <Document {...documentInitialProps} helmet={Helmet.renderStatic()}>
       <main id="__MIKOJS__">{hash}</main>
     </Document>,
   )}`
     .split(hash)
-    .map((docmentText: string): [ReadableType, string] => {
+    .map((text: string): ReadableType => {
       const docmentStream = new stream.Readable();
 
-      docmentStream.push(docmentText);
+      docmentStream.push(text);
       docmentStream.push(null);
 
-      return [docmentStream, docmentText];
+      return docmentStream;
     });
 
-  // render page
-  return new Multistream([
+  return new CustomMultistream([
     upperDocumentStream,
     renderToNodeStream(
-      <Router location={ctx.url} context={{}}>
+      <Router location={url} context={{}}>
         <Root
           Main={Main}
           Loading={emptyFunction.thatReturnsNull}
@@ -109,13 +103,18 @@ export default async <-C>(
           }}
         />
       </Router>,
-    ),
+    ).on('error', (error: Error) => {
+      errorStream.push(
+        renderToStaticMarkup(
+          <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
+        ),
+      );
+    }),
+    (): ReadableType => {
+      errorStream.push(null);
+
+      return errorStream;
+    },
     lowerDocumentStream,
-  ]).on('error', (error: Error) => {
-    errorCallback(
-      `${renderToStaticMarkup(
-        <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
-      )}${lowerDocument}`,
-    );
-  });
+  ]);
 };

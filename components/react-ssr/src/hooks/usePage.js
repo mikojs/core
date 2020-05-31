@@ -1,6 +1,7 @@
 // @flow
 
 import { useState, useRef, useEffect, type ComponentType } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import getPage, {
   type mainComponentType,
@@ -8,51 +9,52 @@ import getPage, {
   type returnType as getPageReturnType,
 } from 'utils/getPage';
 
-import { type ctxType } from 'hooks/useCtx';
-
-export type returnType = $Diff<getPageReturnType, {| chunkName: mixed |}>;
+export type returnType = {|
+  ...$Diff<getPageReturnType, {| chunkName: mixed |}>,
+  isLoading: boolean,
+|};
 
 /**
  * @param {returnType} initialState - initail state
  * @param {ComponentType} Main - main component
  * @param {routeType} routes - routes array
- * @param {ctxType.ctx} ctx - ctx object
- * @param {ctxType.isServer} isServer - isServer or not
  *
  * @return {returnType} - return page object
  */
 export default (
-  initialState: returnType,
+  initialState: $Diff<returnType, {| isLoading: boolean |}>,
   Main: mainComponentType<*, *>,
   routes: $ReadOnlyArray<routeType>,
-  ctx: $PropertyType<ctxType, 'ctx'>,
-  isServer: $PropertyType<ctxType, 'isServer'>,
 ): returnType => {
+  const ctx = useLocation();
+  const prevCtxRef = useRef(ctx);
   const [{ Page, mainProps, pageProps }, updatePage] = useState(initialState);
   const isMountedRef = useRef(false);
 
   useEffect((): (() => void) => {
     let cancel: boolean = false;
 
-    if (!isServer && isMountedRef.current)
-      getPage(Main, routes, ctx, isServer).then(
-        (newPage: getPageReturnType) => {
-          if (cancel) return;
+    if (isMountedRef.current)
+      getPage(Main, routes, ctx).then((newPage: getPageReturnType) => {
+        if (cancel) return;
 
-          updatePage(newPage);
-        },
-      );
+        updatePage(newPage);
+      });
 
     isMountedRef.current = true;
+    prevCtxRef.current = ctx;
 
     return () => {
       cancel = true;
     };
-  }, [ctx.originalUrl]);
+  }, [ctx.pathname]);
+
+  const { current: prevCtx } = prevCtxRef;
 
   return {
     Page,
     mainProps,
     pageProps,
+    isLoading: prevCtx.pathname !== ctx.pathname,
   };
 };

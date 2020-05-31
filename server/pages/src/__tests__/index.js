@@ -13,7 +13,7 @@ import testingServer, {
 
 import buildPages from '../index';
 
-import testings from './__ignore__/testings';
+import { getPage, getNotFound } from './__ignore__/testings';
 
 const server = testingServer();
 
@@ -22,20 +22,46 @@ describe('pages', () => {
     mockUpdate.clear();
   });
 
-  test.each(testings)(
-    '%s',
-    async (url: string, basename: ?string, expected: string) => {
-      const folderPath = path.resolve(__dirname, './__ignore__/pages');
-      const pages = buildPages(
-        folderPath,
-        !basename ? undefined : { basename },
+  describe.each`
+    useBasename
+    ${true}
+    ${false}
+  `(
+    'use basename = $useBasename',
+    ({ useBasename }: {| useBasename: boolean |}) => {
+      test.each`
+        pathname       | getContent
+        ${'/'}         | ${getPage}
+        ${'/notFound'} | ${getNotFound}
+      `(
+        'fetch $pathname',
+        async ({
+          pathname,
+          getContent,
+        }: {|
+          pathname: string,
+          getContent: (basename?: string) => string,
+        |}) => {
+          const folderPath = path.resolve(__dirname, './__ignore__/pages');
+          const pages = buildPages(
+            folderPath,
+            !useBasename ? undefined : { basename: 'basename' },
+          );
+
+          await server.run(pages.middleware);
+
+          expect(
+            await server
+              .fetch(`${!useBasename ? '' : '/basename'}${pathname}`)
+              .then((res: fetchResultType) => res.text()),
+          ).toEqual(
+            [
+              '<!DOCTYPE html>',
+              ...getContent(!useBasename ? undefined : 'basename'),
+            ].join(''),
+          );
+        },
       );
-
-      await server.run(pages.middleware);
-
-      expect(
-        await server.fetch(url).then((res: fetchResultType) => res.text()),
-      ).toEqual(expected);
     },
   );
 

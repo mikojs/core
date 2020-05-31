@@ -1,6 +1,5 @@
 // @flow
 
-const doctype = '<!DOCTYPE html>';
 // const upperDocument = '<html lang="en"><head><meta data-react-helmet="true" charSet="utf-8"/><meta data-react-helmet="true" name="viewport" content="width=device-width, initial-scale=1"/><title data-react-helmet="true">mikojs</title><link data-react-helmet="true" rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"/></head><body>';
 
 // const lowerDocument = '</body></html>';
@@ -10,7 +9,7 @@ const doctype = '<!DOCTYPE html>';
  *
  * @return {string} - page
  */
-const getPage = (basename?: string) => [
+export const getPage = (basename?: string) => [
   '<main id="__MIKOJS__"><div>',
   'Home',
   '<!-- -->',
@@ -36,7 +35,7 @@ const getPage = (basename?: string) => [
  *
  * @return {string} - not found
  */
-const getNotFound = (basename?: string) => [
+export const getNotFound = (basename?: string) => [
   '<main id="__MIKOJS__"><div>',
   'NotFound',
   '<!-- -->{}',
@@ -54,15 +53,4 @@ const getNotFound = (basename?: string) => [
     chunkName: ['pages', basename, 'notFound'].filter(Boolean).join('/'),
   }),
   ';</script>',
-];
-
-export default [
-  ['/', undefined, [doctype, ...getPage()].join('')],
-  ['/notFound', undefined, [doctype, ...getNotFound()].join('')],
-  ['/basname', 'basename', [doctype, ...getPage()].join('')],
-  [
-    '/basename/notFound',
-    'basename',
-    [doctype, ...getNotFound('basename')].join(''),
-  ],
 ];

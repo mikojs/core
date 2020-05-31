@@ -4,7 +4,6 @@
  * @flow
  */
 
-import React from 'react';
 import type MultistreamType from 'multistream';
 
 import server from '../server';
@@ -25,7 +24,7 @@ const renderServer = () =>
   server(
     `https://localhost${chunkName}`,
     { pathname: chunkName, hash: '', search: '' },
-    { Document, Main, Error: ErrorComponent, routes, scripts: <script /> },
+    { Document, Main, Error: ErrorComponent, routes },
   ).then(
     (stream: MultistreamType) =>
       new Promise(resolve => {

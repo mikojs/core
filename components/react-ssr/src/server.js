@@ -3,7 +3,7 @@
 import crypto from 'crypto';
 import stream, { type Readable as ReadableType } from 'stream';
 
-import React, { type Node as NodeType, type ComponentType } from 'react';
+import React, { type ComponentType } from 'react';
 import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
 import { StaticRouter as Router, type ContextRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -25,7 +25,6 @@ export type documentComponentType<C = {}, P = {}> = ComponentType<P> & {
 type optionsType<-C> = {|
   ...$Diff<propsType, {| Loading: mixed, initialState: mixed |}>,
   Document: documentComponentType<C, *>,
-  scripts: NodeType,
 |};
 
 /**
@@ -38,7 +37,7 @@ type optionsType<-C> = {|
 export default async <-C>(
   url: string,
   ctx: C & $PropertyType<ContextRouter, 'location'>,
-  { Document, Main, Error: ErrorComponent, routes, scripts }: optionsType<C>,
+  { Document, Main, Error: ErrorComponent, routes }: optionsType<C>,
 ): Promise<ReadableType> => {
   // [start] preload
   // preload Document, Main, Page
@@ -70,8 +69,6 @@ export default async <-C>(
         })}
         ;
       </script>
-
-      {scripts}
     </Helmet>,
   );
   // [end] preload

@@ -39,8 +39,6 @@ export default async <-C>(
   ctx: C & $PropertyType<ContextRouter, 'location'>,
   { Document, Main, Error: ErrorComponent, routes }: optionsType<C>,
 ): Promise<ReadableType> => {
-  // [start] preload
-  // preload Document, Main, Page
   const { head: documentHead, ...documentInitialProps } =
     // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
     (await getStatic(Document).getInitialProps?.({
@@ -57,7 +55,6 @@ export default async <-C>(
     chunkName,
   } = await getPage(Main, routes, ctx);
 
-  // preload scripts
   renderToStaticMarkup(
     <Helmet>
       <script>
@@ -69,9 +66,7 @@ export default async <-C>(
       </script>
     </Helmet>,
   );
-  // [end] preload
 
-  // make document scream
   const hash = crypto.createHmac('sha256', '@mikojs/react-ssr').digest('hex');
   const errorStream = new stream.Readable();
   const [

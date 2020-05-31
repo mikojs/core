@@ -62,7 +62,7 @@ export default (folderPath: string, options: optionsType): routesType => {
     ) => {
       const pathname =
         name.replace(extension, '') === 'NotFound'
-          ? [basename, '*'].filter(Boolean).join('/')
+          ? `/${[basename, '*'].filter(Boolean).join('/')}`
           : getPathname(folderPath, basename, {
               filePath,
               name,
@@ -81,7 +81,9 @@ export default (folderPath: string, options: optionsType): routesType => {
             exact: true,
             path: pathname,
             component: {
-              chunkName: `pages${pathname.replace(/\*$/, 'notFound')}`,
+              chunkName: `pages${pathname
+                .replace(/\*$/, 'notFound')
+                .replace(/\/$/, '/index')}`,
               loader: async () => ({
                 default: requireModule<pageComponentType<*, *>>(filePath),
               }),

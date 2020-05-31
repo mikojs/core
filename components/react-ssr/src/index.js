@@ -9,17 +9,17 @@ import ErrorCatch, {
 import {
   type mainComponentType as mainType,
   type routeType,
-} from 'utils/getPage';
-import getStatic from 'utils/getStatic';
+} from './utils/getPage';
+import getStatic from './utils/getStatic';
 
-import usePage, { type returnType as usePageReturnType } from 'hooks/usePage';
+import usePage, { type returnType as usePageReturnType } from './hooks/usePage';
 
 export type {
   pageInitialArguType,
   pageComponentType,
   mainInitialArguType,
   mainComponentType,
-} from 'utils/getPage';
+} from './utils/getPage';
 
 export type { errorPropsType as errorComponentPropsType } from './ErrorCatch';
 export type { documentComponentType } from './server';

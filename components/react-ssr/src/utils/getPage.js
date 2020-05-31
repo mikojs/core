@@ -6,7 +6,7 @@ import { matchRoutes } from 'react-router-config';
 import { type ContextRouter } from 'react-router-dom';
 import { invariant, ExecutionEnvironment } from 'fbjs';
 
-import getStatic from 'utils/getStatic';
+import getStatic from './getStatic';
 
 export type pageInitialArguType<C = {}> = {|
   ctx: C,

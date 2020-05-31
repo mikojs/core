@@ -22,16 +22,22 @@ describe('pages', () => {
     mockUpdate.clear();
   });
 
-  test.each(testings)('%s', async (pathname: string, expected: string) => {
-    const folderPath = path.resolve(__dirname, './__ignore__/pages');
-    const pages = buildPages(folderPath);
+  test.each(testings)(
+    '%s',
+    async (url: string, basename: ?string, expected: string) => {
+      const folderPath = path.resolve(__dirname, './__ignore__/pages');
+      const pages = buildPages(
+        folderPath,
+        !basename ? undefined : { basename },
+      );
 
-    await server.run(pages.middleware);
+      await server.run(pages.middleware);
 
-    expect(
-      await server.fetch(pathname).then((res: fetchResultType) => res.text()),
-    ).toEqual(expected);
-  });
+      expect(
+        await server.fetch(url).then((res: fetchResultType) => res.text()),
+      ).toEqual(expected);
+    },
+  );
 
   afterAll(() => {
     server.close();

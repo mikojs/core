@@ -1,9 +1,15 @@
-// @flow
+/**
+ * @jest-environment node
+ *
+ * @flow
+ */
 
 import path from 'path';
 
 import { mockUpdate } from '@mikojs/utils/lib/mergeDir';
-import testingServer from '@mikojs/server/lib/testingServer';
+import testingServer, {
+  type fetchResultType,
+} from '@mikojs/server/lib/testingServer';
 
 import buildPages from '../index';
 
@@ -16,11 +22,15 @@ describe('pages', () => {
     mockUpdate.clear();
   });
 
-  test.each(testings)('%s', async (pathname: string) => {
+  test.each(testings)('%s', async (pathname: string, expected: string) => {
     const folderPath = path.resolve(__dirname, './__ignore__/pages');
     const pages = buildPages(folderPath);
 
     await server.run(pages.middleware);
+
+    expect(
+      await server.fetch(pathname).then((res: fetchResultType) => res.text()),
+    ).toEqual(expected);
   });
 
   afterAll(() => {

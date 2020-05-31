@@ -14,7 +14,7 @@ type returnType = {|
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
  *
- * @return {middlewareType} - middleware function
+ * @return {returnType} - pages object
  */
 export default (
   folderPath: string,

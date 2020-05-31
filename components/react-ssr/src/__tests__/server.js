@@ -4,7 +4,6 @@
  * @flow
  */
 
-import React from 'react';
 import type MultistreamType from 'multistream';
 
 import server from '../server';
@@ -18,17 +17,14 @@ import testings, {
   routes,
 } from './__ignore__/testings';
 
-const errorCallback = jest.fn();
-
 /**
  * @return {string} - render string
  */
 const renderServer = () =>
   server(
-    { url: chunkName, path: chunkName },
+    `https://localhost${chunkName}`,
+    { pathname: chunkName, hash: '', search: '' },
     { Document, Main, Error: ErrorComponent, routes },
-    <script />,
-    errorCallback,
   ).then(
     (stream: MultistreamType) =>
       new Promise(resolve => {
@@ -37,7 +33,6 @@ const renderServer = () =>
         stream.on('data', (chunk: string) => {
           output = `${output}${chunk}`;
         });
-        stream.on('error', () => resolve(output));
         stream.on('end', () => resolve(output));
       }),
   );
@@ -54,10 +49,8 @@ describe('server', () => {
       throw new Error('Render error');
     });
 
-    expect(await renderServer()).toBe('<!DOCTYPE html><main id="__MIKOJS__">');
-    expect(errorCallback).toHaveBeenCalledTimes(1);
-    expect(errorCallback).toHaveBeenCalledWith(
-      '<div>Render error</div></main>',
+    expect(await renderServer()).toBe(
+      '<!DOCTYPE html><main id="__MIKOJS__"><div>Render error</div></main>',
     );
   });
 });

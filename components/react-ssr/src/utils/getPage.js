@@ -3,9 +3,10 @@
 import { type ComponentType, type Node as NodeType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
-import { invariant } from 'fbjs';
+import { type ContextRouter } from 'react-router-dom';
+import { invariant, ExecutionEnvironment } from 'fbjs';
 
-import getStatic from 'utils/getStatic';
+import getStatic from './getStatic';
 
 export type pageInitialArguType<C = {}> = {|
   ctx: C,
@@ -59,17 +60,16 @@ export type returnType = {|
  * @param {ComponentType} Main - Main Component
  * @param {routeType} routes - routes array
  * @param {object} ctx - ctx object
- * @param {boolean} isServer - is server or not
  *
  * @return {object} - page object
  */
 export default async <-C>(
   Main: ComponentType<*>,
   routes: $ReadOnlyArray<routeType>,
-  ctx: C & { path: string },
-  isServer: boolean,
+  ctx: C & $PropertyType<ContextRouter, 'location'>,
 ): Promise<returnType> => {
-  const [matchRoute] = matchRoutes(routes, ctx.path);
+  const isServer = !ExecutionEnvironment.canUseEventListeners;
+  const [matchRoute] = matchRoutes(routes, ctx.pathname);
 
   invariant(matchRoute, 'Can not find the match route');
 

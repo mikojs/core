@@ -5,16 +5,11 @@ import React from 'react';
 import { type pageInitialArguType } from '@mikojs/react-ssr';
 
 type propsType = {|
-  url: string,
-  path: string,
+  pathname: string,
 |};
 
 /** @react Home Component */
-const Home = ({ url, path }: propsType) => (
-  <div>
-    {url},{path}
-  </div>
-);
+const Home = ({ pathname }: propsType) => <div>{pathname}</div>;
 
 /**
  * @param {pageInitialArguType} context - context data
@@ -23,9 +18,8 @@ const Home = ({ url, path }: propsType) => (
  */
 Home.getInitialProps = ({
   ctx,
-}: pageInitialArguType<{| url: string, path: string |}>) => ({
-  url: ctx.url,
-  path: ctx.path,
+}: pageInitialArguType<{| pathname: string |}>) => ({
+  pathname: ctx.pathname,
 });
 
 export default React.memo<propsType>(Home);

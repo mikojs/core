@@ -103,7 +103,9 @@ export default (folderPath: string, options: optionsType): routesType => {
           if (pathALength !== pathBLength)
             return pathALength > pathBLength ? -1 : 1;
 
-          if (/\*$/.test(a.path)) return -1;
+          if (/\*$/.test(a.path)) return 1;
+
+          if (/\*$/.test(b.path)) return -1;
 
           return !/\/:([^[\]]*)/.test(a.path) ? -1 : 1;
         });

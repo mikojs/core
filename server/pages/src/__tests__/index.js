@@ -6,7 +6,7 @@
 
 import path from 'path';
 
-import { mockUpdate } from '@mikojs/utils/lib/mergeDir';
+import { mockUpdate, type mergeDirEventType } from '@mikojs/utils/lib/mergeDir';
 import testingServer, {
   type fetchResultType,
 } from '@mikojs/server/lib/testingServer';
@@ -30,17 +30,27 @@ describe('pages', () => {
     'use basename = $useBasename',
     ({ useBasename }: {| useBasename: boolean |}) => {
       test.each`
-        pathname       | getContent
-        ${'/'}         | ${getPage}
-        ${'/notFound'} | ${getNotFound}
+        pathname             | getContent     | updateEvent
+        ${'/'}               | ${getPage}     | ${'init'}
+        ${'/notFound'}       | ${getNotFound} | ${'init'}
+        ${'/?key=value'}     | ${getPage}     | ${'init'}
+        ${'/page'}           | ${getPage}     | ${'init'}
+        ${'/value'}          | ${getPage}     | ${'init'}
+        ${'/test/not-found'} | ${getNotFound} | ${'init'}
+        ${'/test'}           | ${getPage}     | ${'init'}
+        ${'/test/page'}      | ${getPage}     | ${'init'}
+        ${'/test/page'}      | ${getPage}     | ${'unlink'}
+        ${'/page'}           | ${getPage}     | ${'error'}
       `(
         'fetch $pathname',
         async ({
           pathname,
           getContent,
+          updateEvent,
         }: {|
           pathname: string,
           getContent: (basename?: string) => string,
+          updateEvent: mergeDirEventType,
         |}) => {
           const folderPath = path.resolve(__dirname, './__ignore__/pages');
           const pages = buildPages(
@@ -49,6 +59,15 @@ describe('pages', () => {
           );
 
           await server.run(pages.middleware);
+
+          if (updateEvent !== 'init') {
+            expect(mockUpdate.cache).toHaveLength(1);
+
+            mockUpdate.cache[0](
+              updateEvent,
+              path.resolve(folderPath, `.${pathname}.js`),
+            );
+          }
 
           expect(
             await server

@@ -31,15 +31,15 @@ describe('pages', () => {
     ({ useBasename }: {| useBasename: boolean |}) => {
       test.each`
         pathname             | getContent     | updateEvent | chunkName
-        ${'/'}               | ${getPage}     | ${'init'}   | ${'pages/index'}
-        ${'/?key=value'}     | ${getPage}     | ${'init'}   | ${'pages/index'}
-        ${'/page'}           | ${getPage}     | ${'init'}   | ${'pages/page'}
-        ${'/value'}          | ${getValue}    | ${'init'}   | ${'pages/:key'}
-        ${'/test/not-found'} | ${getNotFound} | ${'init'}   | ${'template/notFound'}
-        ${'/test'}           | ${getPage}     | ${'init'}   | ${'pages/test'}
-        ${'/test/page'}      | ${getPage}     | ${'init'}   | ${'pages/test/page'}
-        ${'/test/page'}      | ${getNotFound} | ${'unlink'} | ${'template/notFound'}
-        ${'/page'}           | ${getPage}     | ${'error'}  | ${'pages/page'}
+        ${'/'}               | ${getPage}     | ${'init'}   | ${!useBasename ? 'pages/index' : 'pages/basename'}
+        ${'/?key=value'}     | ${getPage}     | ${'init'}   | ${!useBasename ? 'pages/index' : 'pages/basename'}
+        ${'/page'}           | ${getPage}     | ${'init'}   | ${!useBasename ? 'pages/page' : 'pages/basename/page'}
+        ${'/value'}          | ${getValue}    | ${'init'}   | ${!useBasename ? 'pages/:key' : 'pages/basename/:key'}
+        ${'/test/not-found'} | ${getNotFound} | ${'init'}   | ${!useBasename ? 'template/notFound' : 'template/basename/notFound'}
+        ${'/test'}           | ${getPage}     | ${'init'}   | ${!useBasename ? 'pages/test' : 'pages/basename/test'}
+        ${'/test/page'}      | ${getPage}     | ${'init'}   | ${!useBasename ? 'pages/test/page' : 'pages/basename/test/page'}
+        ${'/test/page'}      | ${getNotFound} | ${'unlink'} | ${!useBasename ? 'template/notFound' : 'template/basename/notFound'}
+        ${'/page'}           | ${getPage}     | ${'error'}  | ${!useBasename ? 'pages/page' : 'pages/basename/page'}
       `(
         'fetch $pathname',
         async ({
@@ -53,6 +53,7 @@ describe('pages', () => {
           updateEvent: mergeDirEventType,
           chunkName: string,
         |}) => {
+          const newPathname = `${!useBasename ? '' : '/basename'}${pathname}`;
           const folderPath = path.resolve(__dirname, './__ignore__/pages');
           const pages = buildPages(
             folderPath,
@@ -72,9 +73,9 @@ describe('pages', () => {
 
           expect(
             await server
-              .fetch(`${!useBasename ? '' : '/basename'}${pathname}`)
+              .fetch(newPathname)
               .then((res: fetchResultType) => res.text()),
-          ).toEqual(getContent(chunkName, pathname.replace(/\?.*$/, '')));
+          ).toEqual(getContent(chunkName, newPathname.replace(/\?.*$/, '')));
         },
       );
     },

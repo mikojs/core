@@ -13,7 +13,7 @@ import testingServer, {
 
 import buildPages from '../index';
 
-import { getPage, getNotFound } from './__ignore__/testings';
+import { getPage, getNotFound, getValue } from './__ignore__/testings';
 
 const server = testingServer();
 
@@ -34,11 +34,11 @@ describe('pages', () => {
         ${'/'}               | ${getPage}     | ${'init'}   | ${'pages/index'}
         ${'/?key=value'}     | ${getPage}     | ${'init'}   | ${'pages/index'}
         ${'/page'}           | ${getPage}     | ${'init'}   | ${'pages/page'}
-        ${'/value'}          | ${getPage}     | ${'init'}   | ${'pages/[key]'}
-        ${'/test/not-found'} | ${getNotFound} | ${'init'}   | ${'pages/notFound'}
+        ${'/value'}          | ${getValue}    | ${'init'}   | ${'pages/:key'}
+        ${'/test/not-found'} | ${getNotFound} | ${'init'}   | ${'template/notFound'}
         ${'/test'}           | ${getPage}     | ${'init'}   | ${'pages/test'}
         ${'/test/page'}      | ${getPage}     | ${'init'}   | ${'pages/test/page'}
-        ${'/test/page'}      | ${getPage}     | ${'unlink'} | ${'pages/test/page'}
+        ${'/test/page'}      | ${getNotFound} | ${'unlink'} | ${'template/notFound'}
         ${'/page'}           | ${getPage}     | ${'error'}  | ${'pages/page'}
       `(
         'fetch $pathname',

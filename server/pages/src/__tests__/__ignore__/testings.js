@@ -56,3 +56,28 @@ export const getNotFound = (pathname: string, chunkName: string) => [
   }),
   ';</script>',
 ];
+
+/**
+ * @param {string} pathname - pathname
+ * @param {string} chunkName - chunk name
+ *
+ * @return {string} - not found
+ */
+export const getValue = (pathname: string, chunkName: string) => [
+  '<main id="__MIKOJS__"><div>',
+  'Key',
+  '<!-- -->{}',
+  '<div></div></div></main>',
+  '<script data-react-helmet="true">',
+  'var __MIKOJS_DATA__ = ',
+  JSON.stringify({
+    mainInitialProps: {
+      value: 'test data',
+      name: 'Key',
+      pageProps: {},
+    },
+    pageInitialProps: {},
+    chunkName,
+  }),
+  ';</script>',
+];

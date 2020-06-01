@@ -5,41 +5,39 @@
 // const lowerDocument = '</body></html>';
 
 /**
- * @param {string} basename - basename
+ * @param {string} pathname - pathname
+ * @param {string} chunkName - chunk name
  *
  * @return {string} - page
  */
-export const getPage = (basename?: string): string => {
-  const newPathname = !basename ? '/' : `/${basename}/`;
-
-  return [
-    '<main id="__MIKOJS__"><div>',
-    'Home',
-    '<!-- -->',
-    JSON.stringify({ pathname: newPathname }).replace(/"/g, '&quot;'),
-    `<div>${newPathname}</div>`,
-    '</div></main>',
-    '<script data-react-helmet="true">',
-    'var __MIKOJS_DATA__ = ',
-    JSON.stringify({
-      mainInitialProps: {
-        value: 'test data',
-        name: 'Home',
-        pageProps: { pathname: newPathname },
-      },
-      pageInitialProps: { pathname: newPathname },
-      chunkName: !basename ? 'pages/index' : `pages/${basename}`,
-    }),
-    ';</script>',
-  ];
-};
+export const getPage = (pathname: string, chunkName: string) => [
+  '<main id="__MIKOJS__"><div>',
+  'Home',
+  '<!-- -->',
+  JSON.stringify({ pathname }).replace(/"/g, '&quot;'),
+  `<div>${pathname}</div>`,
+  '</div></main>',
+  '<script data-react-helmet="true">',
+  'var __MIKOJS_DATA__ = ',
+  JSON.stringify({
+    mainInitialProps: {
+      value: 'test data',
+      name: 'Home',
+      pageProps: { pathname },
+    },
+    pageInitialProps: { pathname },
+    chunkName,
+  }),
+  ';</script>',
+];
 
 /**
- * @param {string} basename - basename
+ * @param {string} pathname - pathname
+ * @param {string} chunkName - chunk name
  *
  * @return {string} - not found
  */
-export const getNotFound = (basename?: string) => [
+export const getNotFound = (pathname: string, chunkName: string) => [
   '<main id="__MIKOJS__"><div>',
   'NotFound',
   '<!-- -->{}',
@@ -54,7 +52,7 @@ export const getNotFound = (basename?: string) => [
       pageProps: {},
     },
     pageInitialProps: {},
-    chunkName: ['pages', basename, 'notFound'].filter(Boolean).join('/'),
+    chunkName,
   }),
   ';</script>',
 ];

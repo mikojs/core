@@ -30,26 +30,28 @@ describe('pages', () => {
     'use basename = $useBasename',
     ({ useBasename }: {| useBasename: boolean |}) => {
       test.each`
-        pathname             | getContent     | updateEvent
-        ${'/'}               | ${getPage}     | ${'init'}
-        ${'/?key=value'}     | ${getPage}     | ${'init'}
-        ${'/page'}           | ${getPage}     | ${'init'}
-        ${'/value'}          | ${getPage}     | ${'init'}
-        ${'/test/not-found'} | ${getNotFound} | ${'init'}
-        ${'/test'}           | ${getPage}     | ${'init'}
-        ${'/test/page'}      | ${getPage}     | ${'init'}
-        ${'/test/page'}      | ${getPage}     | ${'unlink'}
-        ${'/page'}           | ${getPage}     | ${'error'}
+        pathname             | getContent     | updateEvent | chunkName
+        ${'/'}               | ${getPage}     | ${'init'}   | ${'pages/index'}
+        ${'/?key=value'}     | ${getPage}     | ${'init'}   | ${'pages/index'}
+        ${'/page'}           | ${getPage}     | ${'init'}   | ${'pages/page'}
+        ${'/value'}          | ${getPage}     | ${'init'}   | ${'pages/[key]'}
+        ${'/test/not-found'} | ${getNotFound} | ${'init'}   | ${'pages/notFound'}
+        ${'/test'}           | ${getPage}     | ${'init'}   | ${'pages/test'}
+        ${'/test/page'}      | ${getPage}     | ${'init'}   | ${'pages/test/page'}
+        ${'/test/page'}      | ${getPage}     | ${'unlink'} | ${'pages/test/page'}
+        ${'/page'}           | ${getPage}     | ${'error'}  | ${'pages/page'}
       `(
         'fetch $pathname',
         async ({
           pathname,
           getContent,
           updateEvent,
+          chunkName,
         }: {|
           pathname: string,
-          getContent: (basename?: string) => string,
+          getContent: (pathname: string, chunkName: string) => string,
           updateEvent: mergeDirEventType,
+          chunkName: string,
         |}) => {
           const folderPath = path.resolve(__dirname, './__ignore__/pages');
           const pages = buildPages(
@@ -73,10 +75,7 @@ describe('pages', () => {
               .fetch(`${!useBasename ? '' : '/basename'}${pathname}`)
               .then((res: fetchResultType) => res.text()),
           ).toEqual(
-            [
-              '<!DOCTYPE html>',
-              ...getContent(!useBasename ? undefined : 'basename'),
-            ].join(''),
+            ['<!DOCTYPE html>', ...getContent(pathname, chunkName)].join(''),
           );
         },
       );

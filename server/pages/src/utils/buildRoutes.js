@@ -32,7 +32,11 @@ export type routesType = {|
   },
   get: () => $ReadOnlyArray<routeType>,
   getFilePath: (pathname: string) => string,
-  addRoute: (event: mergeDirEventType, options: mergeDirDataType) => void,
+  addRoute: (
+    event: mergeDirEventType,
+    options: mergeDirDataType,
+    isNotFound: boolean,
+  ) => void,
 |};
 
 const debugLog = debug('pages:buildRoutes');
@@ -59,15 +63,15 @@ export default (folderPath: string, options: optionsType): routesType => {
     addRoute: (
       event: mergeDirEventType,
       { filePath, name, extension }: mergeDirDataType,
+      isNotFound: boolean,
     ) => {
-      const pathname =
-        name.replace(extension, '') === 'NotFound'
-          ? `/${[basename, '*'].filter(Boolean).join('/')}`
-          : getPathname(folderPath, basename, {
-              filePath,
-              name,
-              extension,
-            });
+      const pathname = isNotFound
+        ? `/${[basename, '*'].filter(Boolean).join('/')}`
+        : getPathname(folderPath, basename, {
+            filePath,
+            name,
+            extension,
+          });
 
       cache.routes = cache.routes.filter(
         ({ path: currentPathname }: routeType) => currentPathname !== pathname,
@@ -81,9 +85,10 @@ export default (folderPath: string, options: optionsType): routesType => {
             exact: true,
             path: pathname,
             component: {
-              chunkName: `pages${pathname
-                .replace(/\*$/, 'notFound')
-                .replace(/\/$/, '/index')}`,
+              chunkName: [
+                isNotFound ? 'template' : 'pages',
+                pathname.replace(/\*$/, 'notFound').replace(/\/$/, '/index'),
+              ].join(''),
               loader: async () => ({
                 default: requireModule<pageComponentType<*, *>>(filePath),
               }),
@@ -132,13 +137,13 @@ export default (folderPath: string, options: optionsType): routesType => {
               break;
 
             case 'notfound':
-              cache.addRoute(event, { filePath, name, extension });
+              cache.addRoute(event, { filePath, name, extension }, true);
               break;
 
             default:
               break;
           }
-        } else cache.addRoute(event, { filePath, name, extension });
+        } else cache.addRoute(event, { filePath, name, extension }, false);
       }
 
       debugLog(cache);

@@ -74,9 +74,7 @@ describe('pages', () => {
             await server
               .fetch(`${!useBasename ? '' : '/basename'}${pathname}`)
               .then((res: fetchResultType) => res.text()),
-          ).toEqual(
-            ['<!DOCTYPE html>', ...getContent(pathname, chunkName)].join(''),
-          );
+          ).toEqual(getContent(chunkName, pathname));
         },
       );
     },

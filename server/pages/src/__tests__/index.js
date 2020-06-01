@@ -32,7 +32,6 @@ describe('pages', () => {
       test.each`
         pathname             | getContent     | updateEvent
         ${'/'}               | ${getPage}     | ${'init'}
-        ${'/notFound'}       | ${getNotFound} | ${'init'}
         ${'/?key=value'}     | ${getPage}     | ${'init'}
         ${'/page'}           | ${getPage}     | ${'init'}
         ${'/value'}          | ${getPage}     | ${'init'}

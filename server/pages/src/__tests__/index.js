@@ -74,7 +74,7 @@ describe('pages', () => {
             await server
               .fetch(`${!useBasename ? '' : '/basename'}${pathname}`)
               .then((res: fetchResultType) => res.text()),
-          ).toEqual(getContent(chunkName, pathname));
+          ).toEqual(getContent(chunkName, pathname.replace(/\?.*$/, '')));
         },
       );
     },

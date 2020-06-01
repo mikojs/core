@@ -5,7 +5,10 @@ import stream, { type Readable as ReadableType } from 'stream';
 
 import React, { type ComponentType } from 'react';
 import { renderToStaticMarkup, renderToNodeStream } from 'react-dom/server';
-import { StaticRouter as Router, type ContextRouter } from 'react-router-dom';
+import {
+  StaticRouter as Router,
+  type Location as LocationType,
+} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { emptyFunction } from 'fbjs';
 
@@ -36,7 +39,7 @@ type optionsType<-C> = {|
  */
 export default async <-C>(
   url: string,
-  ctx: C & $PropertyType<ContextRouter, 'location'>,
+  ctx: C & LocationType,
   { Document, Main, Error: ErrorComponent, routes }: optionsType<C>,
 ): Promise<ReadableType> => {
   const { head: documentHead, ...documentInitialProps } =

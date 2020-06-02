@@ -13,7 +13,12 @@ import testingServer, {
 
 import buildPages from '../index';
 
-import { getPage, getNotFound, getValue } from './__ignore__/testings';
+import {
+  getPage,
+  getNotFound,
+  getValue,
+  getError,
+} from './__ignore__/testings';
 
 const folderPath = path.resolve(__dirname, './__ignore__/pages');
 const server = testingServer();
@@ -39,6 +44,7 @@ describe('pages', () => {
         ${'/test/not-found'} | ${getNotFound} | ${'init'}   | ${!useBasename ? 'template/notFound' : 'template/basename/notFound'}
         ${'/test'}           | ${getPage}     | ${'init'}   | ${!useBasename ? 'pages/test' : 'pages/basename/test'}
         ${'/test/page'}      | ${getPage}     | ${'init'}   | ${!useBasename ? 'pages/test/page' : 'pages/basename/test/page'}
+        ${'/error'}          | ${getError}    | ${'init'}   | ${!useBasename ? 'template/error' : 'template/basename/test/error'}
         ${'/test/page'}      | ${getNotFound} | ${'unlink'} | ${!useBasename ? 'template/notFound' : 'template/basename/notFound'}
         ${'/page'}           | ${getPage}     | ${'error'}  | ${!useBasename ? 'pages/page' : 'pages/basename/page'}
       `(

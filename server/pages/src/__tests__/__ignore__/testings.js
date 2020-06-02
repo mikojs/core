@@ -120,3 +120,20 @@ export const getValue = (
     chunkName,
     isDefaultTemplates,
   );
+
+/**
+ * @param {string} chunkName - chunk name
+ * @param {string} pathname - pathname
+ * @param {boolean} isDefaultTemplates - is default templates or not
+ *
+ * @return {string} - value page
+ */
+export const getError = (
+  chunkName: string,
+  pathname: string,
+  isDefaultTemplates: boolean,
+) =>
+  getContent('ErrorPage', {}, '', chunkName, isDefaultTemplates).replace(
+    /<main id="__MIKOJS__">.*<\/main>/,
+    '<main id="__MIKOJS__"><div>error</div></main>',
+  );

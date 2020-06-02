@@ -112,6 +112,15 @@ export default async <-C>(
           <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
         ),
       );
+      errorStream.push(
+        renderToStaticMarkup(
+          <script>
+            {`var errorProps = { error: new Error(${error.message}), errorInfo: { componentStack: '' } }
+if (!__MIKOJS_DATA__) var __MIKOJS_DATA__ = { errorProps };
+else __MIKOJS_DATA__.errorProps = errorProps;`}
+          </script>,
+        ),
+      );
     }),
     (): ReadableType => {
       errorStream.push(null);

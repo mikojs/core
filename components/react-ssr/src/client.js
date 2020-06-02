@@ -45,12 +45,12 @@ export default async ({
         Loading={Loading}
         Error={ErrorComponent}
         routes={routes}
+        errorProps={errorProps}
         initialState={{
           Page: InitialPage,
           mainProps: mainInitialProps,
           pageProps: pageInitialProps,
         }}
-        errorProps={errorProps}
       />
     </Router>,
     document.getElementById('__MIKOJS__') ||

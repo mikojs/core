@@ -30,8 +30,8 @@ export type propsType = {|
   Loading: ComponentType<{||}>,
   Error: $PropertyType<errorCatchPropsType, 'Error'>,
   routes: $ReadOnlyArray<routeType>,
-  initialState: $Diff<usePageReturnType, {| isLoading: boolean |}>,
   errorProps?: errorPropsType,
+  initialState: $Diff<usePageReturnType, {| isLoading: boolean |}>,
 |};
 
 /** @react use to control page */
@@ -40,8 +40,8 @@ const Root = ({
   Loading,
   Error,
   routes,
-  initialState,
   errorProps,
+  initialState,
 }: propsType): NodeType => {
   const { Page, mainProps, pageProps, isLoading } = usePage(
     initialState,

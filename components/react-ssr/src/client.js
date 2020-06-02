@@ -21,6 +21,7 @@ export default async ({
     mainInitialProps,
     pageInitialProps,
     chunkName,
+    errorProps,
   } = window.__MIKOJS_DATA__;
 
   // preload page
@@ -44,6 +45,7 @@ export default async ({
         Loading={Loading}
         Error={ErrorComponent}
         routes={routes}
+        errorProps={errorProps}
         initialState={{
           Page: InitialPage,
           mainProps: mainInitialProps,

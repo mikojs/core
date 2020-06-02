@@ -45,12 +45,18 @@ describe('server', () => {
   });
 
   test('render error', async () => {
+    const error = new Error('Render error');
+
     pageRender.mockImplementation(() => {
-      throw new Error('Render error');
+      throw error;
     });
 
     expect(await renderServer()).toBe(
-      '<!DOCTYPE html><main id="__MIKOJS__"><div>Render error</div></main>',
+      `<!DOCTYPE html><main id="__MIKOJS__"><div>Render error</div><script>var errorProps = { error: new Error(Render error), errorInfo: { componentStack: &#x27;${error.stack
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')}&#x27; } }
+if (!__MIKOJS_DATA__) var __MIKOJS_DATA__ = { errorProps };
+else __MIKOJS_DATA__.errorProps = errorProps;</script></main>`,
     );
   });
 });

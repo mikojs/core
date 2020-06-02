@@ -45,6 +45,8 @@ export const errorRender: JestMockFn<
 /** @react error component */
 export const ErrorComponent = (props: errorPropsType) => errorRender(props);
 
+export const errorTestings = '<div>error</div>';
+
 export const pageRender: JestMockFn<
   $ReadOnlyArray<void>,
   NodeType,

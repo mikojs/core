@@ -50,7 +50,7 @@ describe('pages', () => {
           chunkName,
         }: {|
           pathname: string,
-          getContent: (pathname: string, chunkName: string) => string,
+          getContent: typeof getPage,
           updateEvent: mergeDirEventType,
           chunkName: string,
         |}) => {
@@ -75,49 +75,35 @@ describe('pages', () => {
             await server
               .fetch(newPathname)
               .then((res: fetchResultType) => res.text()),
-          ).toEqual(getContent(chunkName, newPathname.replace(/\?.*$/, '')));
+          ).toEqual(
+            getContent(chunkName, newPathname.replace(/\?.*$/, ''), false),
+          );
+
+          [
+            'Document.js',
+            'Error.js',
+            'Loading.js',
+            'Main.js',
+            'NotFound.js',
+            'Others.js',
+          ].forEach((filename: string) => {
+            mockUpdate.cache[0](
+              'unlink',
+              path.resolve(folderPath, '.templates', filename),
+            );
+          });
+
+          expect(
+            await server
+              .fetch(newPathname)
+              .then((res: fetchResultType) => res.text()),
+          ).toEqual(
+            getContent(chunkName, newPathname.replace(/\?.*$/, ''), true),
+          );
         },
       );
     },
   );
-
-  test('default templates', async () => {
-    const pages = buildPages(folderPath);
-
-    await server.run(pages.middleware);
-
-    [
-      'Document.js',
-      'Error.js',
-      'Loading.js',
-      'Main.js',
-      'NotFound.js',
-      'Others.js',
-    ].forEach((filename: string) => {
-      mockUpdate.cache[0](
-        'unlink',
-        path.resolve(folderPath, '.templates', filename),
-      );
-    });
-
-    expect(
-      await server.fetch('/').then((res: fetchResultType) => res.text()),
-    ).toEqual(
-      [
-        '<!DOCTYPE html>',
-        '<html lang="en"><head>',
-        '<meta data-react-helmet="true" charSet="utf-8"/>',
-        '<meta data-react-helmet="true" name="viewport" content="width=device-width, initial-scale=1"/>',
-        '<title data-react-helmet="true">mikojs</title>',
-        '<link data-react-helmet="true" rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"/>',
-        '</head><body>',
-        '<main id="__MIKOJS__"><div>/</div></main>',
-        '<script data-react-helmet="true">',
-        'var __MIKOJS_DATA__ = {"mainInitialProps":{},"pageInitialProps":{"pathname":"/"},"chunkName":"pages/index"};',
-        '</script></body></html>',
-      ].join(''),
-    );
-  });
 
   afterAll(() => {
     server.close();

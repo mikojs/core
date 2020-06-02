@@ -107,15 +107,17 @@ export default async <-C>(
         />
       </Router>,
     ).on('error', (error: Error) => {
+      const componentStack = error.stack;
+
       errorStream.push(
         renderToStaticMarkup(
-          <ErrorComponent error={error} errorInfo={{ componentStack: '' }} />,
+          <ErrorComponent error={error} errorInfo={{ componentStack }} />,
         ),
       );
       errorStream.push(
         renderToStaticMarkup(
           <script>
-            {`var errorProps = { error: new Error(${error.message}), errorInfo: { componentStack: '' } }
+            {`var errorProps = { error: new Error(${error.message}), errorInfo: { componentStack: '${componentStack}' } }
 if (!__MIKOJS_DATA__) var __MIKOJS_DATA__ = { errorProps };
 else __MIKOJS_DATA__.errorProps = errorProps;`}
           </script>,

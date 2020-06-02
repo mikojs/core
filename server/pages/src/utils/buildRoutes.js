@@ -78,7 +78,7 @@ export default (folderPath: string, options: optionsType): routesType => {
       );
       cache.filePaths[pathname] = filePath;
 
-      if (event !== 'unlink')
+      if (event !== 'unlink' || isNotFound)
         cache.routes = [
           ...cache.routes,
           {

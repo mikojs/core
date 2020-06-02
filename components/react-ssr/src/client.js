@@ -21,6 +21,7 @@ export default async ({
     mainInitialProps,
     pageInitialProps,
     chunkName,
+    errorProps,
   } = window.__MIKOJS_DATA__;
 
   // preload page
@@ -49,6 +50,7 @@ export default async ({
           mainProps: mainInitialProps,
           pageProps: pageInitialProps,
         }}
+        errorProps={errorProps}
       />
     </Router>,
     document.getElementById('__MIKOJS__') ||

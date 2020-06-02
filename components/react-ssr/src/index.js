@@ -4,6 +4,7 @@ import React, { type ComponentType, type Node as NodeType } from 'react';
 
 import ErrorCatch, {
   type propsType as errorCatchPropsType,
+  type errorPropsType,
 } from './ErrorCatch';
 
 import {
@@ -30,6 +31,7 @@ export type propsType = {|
   Error: $PropertyType<errorCatchPropsType, 'Error'>,
   routes: $ReadOnlyArray<routeType>,
   initialState: $Diff<usePageReturnType, {| isLoading: boolean |}>,
+  errorProps?: errorPropsType,
 |};
 
 /** @react use to control page */
@@ -39,6 +41,7 @@ const Root = ({
   Error,
   routes,
   initialState,
+  errorProps,
 }: propsType): NodeType => {
   const { Page, mainProps, pageProps, isLoading } = usePage(
     initialState,
@@ -47,7 +50,7 @@ const Root = ({
   );
 
   return (
-    <ErrorCatch Error={Error}>
+    <ErrorCatch Error={Error} errorProps={errorProps}>
       <Main {...mainProps} Page={getStatic(Page)}>
         {(props?: {}) =>
           isLoading ? <Loading /> : <Page {...props} {...pageProps} />

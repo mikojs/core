@@ -118,10 +118,12 @@ export const getNotFound = (
   getContent(
     'NotFound',
     {},
-    '<div>Page not found</div>',
+    !isDefaultTemplates
+      ? '<div>Page not found</div>'
+      : '<div><h1>404</h1><h2>Page not found</h2></div>',
     chunkName,
     isDefaultTemplates,
-  );
+  ).replace(/mikojs/, '404 | Page not found');
 
 /**
  * @param {string} chunkName - chunk name

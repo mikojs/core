@@ -104,7 +104,7 @@ describe('pages', () => {
               .fetch(newPathname)
               .then((res: fetchResultType) => res.text())
               .then((html: string) =>
-                html.replace(/ style="[\w:;%#\- ]*"/g, ''),
+                html.replace(/ style="[\w:;%#\-(),. ]*"/g, ''),
               ),
           ).toEqual(
             getContent(chunkName, newPathname.replace(/\?.*$/, ''), true),

@@ -10,8 +10,9 @@ export type errorPropsType = {|
 |};
 
 export type propsType = {|
+  error?: $PropertyType<errorPropsType, 'error'>,
+  errorInfo?: $PropertyType<errorPropsType, 'errorInfo'>,
   Error: ComponentType<errorPropsType>,
-  errorProps?: errorPropsType,
   children: NodeType,
 |};
 
@@ -23,8 +24,8 @@ export default class ErrorCatch extends React.PureComponent<
   stateType,
 > {
   state = {
-    error: this.props.errorProps?.error,
-    errorInfo: this.props.errorProps?.errorInfo,
+    error: this.props.error,
+    errorInfo: this.props.errorInfo,
   };
 
   /** @react */

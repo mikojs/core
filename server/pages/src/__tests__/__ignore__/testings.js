@@ -84,26 +84,6 @@ export const getPage = (
  * @param {string} pathname - pathname
  * @param {boolean} isDefaultTemplates - is default templates or not
  *
- * @return {string} - not found page
- */
-export const getNotFound = (
-  chunkName: string,
-  pathname: string,
-  isDefaultTemplates: boolean,
-) =>
-  getContent(
-    'NotFound',
-    {},
-    '<div>Page not found</div>',
-    chunkName,
-    isDefaultTemplates,
-  );
-
-/**
- * @param {string} chunkName - chunk name
- * @param {string} pathname - pathname
- * @param {boolean} isDefaultTemplates - is default templates or not
- *
  * @return {string} - value page
  */
 export const getValue = (
@@ -119,6 +99,26 @@ export const getValue = (
       },
     },
     `<div>${JSON.stringify({ key: 'value' }).replace(/"/g, '&quot;')}</div>`,
+    chunkName,
+    isDefaultTemplates,
+  );
+
+/**
+ * @param {string} chunkName - chunk name
+ * @param {string} pathname - pathname
+ * @param {boolean} isDefaultTemplates - is default templates or not
+ *
+ * @return {string} - not found page
+ */
+export const getNotFound = (
+  chunkName: string,
+  pathname: string,
+  isDefaultTemplates: boolean,
+) =>
+  getContent(
+    'NotFound',
+    {},
+    '<div>Page not found</div>',
     chunkName,
     isDefaultTemplates,
   );

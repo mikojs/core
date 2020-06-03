@@ -1,5 +1,7 @@
 // @flow
 
+import { error } from './pages/error';
+
 /**
  * @param {string} name - page name
  * @param {object} pageProps - page props
@@ -135,5 +137,25 @@ export const getError = (
 ) =>
   getContent('ErrorPage', {}, '', chunkName, isDefaultTemplates).replace(
     /<main id="__MIKOJS__">.*<\/main>/,
-    '<main id="__MIKOJS__"><div>error</div></main>',
+    `<main id="__MIKOJS__">${
+      !isDefaultTemplates
+        ? '<div>error</div>'
+        : [
+            '<div><div><h1>😞😱🔨 Error</h1>',
+            `<p>${error.message}</p>`,
+            error.stack
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .split(/\n/)
+              .map((text: string) => `<p>${text}</p>`)
+              .join(''),
+            '</div></div>',
+          ].join('')
+    }<script>var errorProps = { error: new Error(&#x27;${
+      error.message
+    }&#x27;), errorInfo: { componentStack: &#x27;${error.stack
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')}&#x27; } }
+if (!__MIKOJS_DATA__) var __MIKOJS_DATA__ = { errorProps };
+else __MIKOJS_DATA__.errorProps = errorProps;</script></main>`,
   );

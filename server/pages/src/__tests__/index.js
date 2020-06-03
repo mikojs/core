@@ -44,7 +44,7 @@ describe('pages', () => {
         ${'/test/not-found'} | ${getNotFound} | ${'init'}   | ${!useBasename ? 'template/notFound' : 'template/basename/notFound'}
         ${'/test'}           | ${getPage}     | ${'init'}   | ${!useBasename ? 'pages/test' : 'pages/basename/test'}
         ${'/test/page'}      | ${getPage}     | ${'init'}   | ${!useBasename ? 'pages/test/page' : 'pages/basename/test/page'}
-        ${'/error'}          | ${getError}    | ${'init'}   | ${!useBasename ? 'template/error' : 'template/basename/test/error'}
+        ${'/error'}          | ${getError}    | ${'init'}   | ${!useBasename ? 'pages/error' : 'pages/basename/error'}
         ${'/test/page'}      | ${getNotFound} | ${'unlink'} | ${!useBasename ? 'template/notFound' : 'template/basename/notFound'}
         ${'/page'}           | ${getPage}     | ${'error'}  | ${!useBasename ? 'pages/page' : 'pages/basename/page'}
       `(
@@ -102,7 +102,10 @@ describe('pages', () => {
           expect(
             await server
               .fetch(newPathname)
-              .then((res: fetchResultType) => res.text()),
+              .then((res: fetchResultType) => res.text())
+              .then((html: string) =>
+                html.replace(/ style="[\w:;%#\- ]*"/g, ''),
+              ),
           ).toEqual(
             getContent(chunkName, newPathname.replace(/\?.*$/, ''), true),
           );

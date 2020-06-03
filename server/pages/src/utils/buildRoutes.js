@@ -40,6 +40,11 @@ export type routesType = {|
 |};
 
 const debugLog = debug('pages:buildRoutes');
+const defaultNotFountMergeData = {
+  filePath: path.resolve(__dirname, '../templates/NotFound.js'),
+  name: 'NotFound.js',
+  extension: '.js',
+};
 
 /**
  * @param {string} folderPath - folder path
@@ -112,6 +117,7 @@ export default (folderPath: string, options: optionsType): routesType => {
     },
   };
 
+  cache.addRoute('add', defaultNotFountMergeData, true);
   mergeDir(
     folderPath,
     {
@@ -139,7 +145,13 @@ export default (folderPath: string, options: optionsType): routesType => {
               break;
 
             case 'notfound':
-              cache.addRoute(event, { filePath, name, extension }, true);
+              cache.addRoute(
+                event,
+                event !== 'unlink'
+                  ? defaultNotFountMergeData
+                  : { filePath, name, extension },
+                true,
+              );
               break;
 
             default:

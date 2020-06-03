@@ -147,7 +147,7 @@ export default (folderPath: string, options: optionsType): routesType => {
             case 'notfound':
               cache.addRoute(
                 event,
-                event !== 'unlink'
+                event === 'unlink'
                   ? defaultNotFountMergeData
                   : { filePath, name, extension },
                 true,

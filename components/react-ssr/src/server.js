@@ -117,7 +117,7 @@ export default async <-C>(
       errorStream.push(
         renderToStaticMarkup(
           <script>
-            {`var errorProps = { error: new Error(${error.message}), errorInfo: { componentStack: '${componentStack}' } }
+            {`var errorProps = { error: new Error('${error.message}'), errorInfo: { componentStack: '${componentStack}' } }
 if (!__MIKOJS_DATA__) var __MIKOJS_DATA__ = { errorProps };
 else __MIKOJS_DATA__.errorProps = errorProps;`}
           </script>,

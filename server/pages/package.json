@@ -10,9 +10,9 @@
   "bin": "./lib/bin/index.js",
   "dependencies": {
     "@babel/runtime": "^7.9.6",
+    "@mikojs/react-ssr": "^1.10.4",
     "@mikojs/server": "^1.10.6",
     "@mikojs/utils": "^1.10.4",
-    "@mikojs/react-ssr": "^1.10.4",
     "core-js": "^3.6.5",
     "debug": "^4.1.1",
     "fbjs": "^1.0.0",
@@ -24,6 +24,7 @@
     "react-dom": ">=16.0.0"
   },
   "devDependencies": {
+    "enzyme": "^3.11.0",
     "flow-bin": "^0.125.1",
     "flow-typed": "^3.1.0",
     "react": "^16.13.1",

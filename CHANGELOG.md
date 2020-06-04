@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## 1.10.7 (2020-06-04)
+
+#### :rocket: New Feature
+
+- Other
+  - [#620](https://github.com/mikojs/core/pull/620) (@mikojs/pages) Add new package ([@HsuTing](https://github.com/HsuTing))
+  - [#624](https://github.com/mikojs/core/pull/624) (@mikojs/react-ssr) Fix error component ([@HsuTing](https://github.com/HsuTing))
+  - [#617](https://github.com/mikojs/core/pull/617) (@mikojs/server) Add basename ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-base`, `utils`
+  - [#622](https://github.com/mikojs/core/pull/622) (@mikojs/react-ssr) Simplify types ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `miko`, `utils`
+  - [#621](https://github.com/mikojs/core/pull/621) (@mikojs/react-ssr) Rename routes data to routes ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-base`
+  - [#619](https://github.com/mikojs/core/pull/619) (@mikojs/eslint-config-base) Modify code style ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- [#625](https://github.com/mikojs/core/pull/625) (@mikojs/react-ssr) Modify props ([@HsuTing](https://github.com/HsuTing))
+- [#623](https://github.com/mikojs/core/pull/623) (@mikojs/react-ssr) Rewrite ctx ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.10.6 (2020-05-23)
 
 #### :rocket: New Feature

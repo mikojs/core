@@ -5,11 +5,16 @@ import React from 'react';
 import { type pageInitialArguType } from '@mikojs/react-ssr';
 
 type propsType = {|
+  name?: string,
   pathname: string,
 |};
 
 /** @react Home Component */
-const Home = ({ pathname }: propsType) => <div>{pathname}</div>;
+const Home = ({ name = 'Home', pathname }: propsType) => (
+  <div>
+    {name}:{pathname}
+  </div>
+);
 
 /**
  * @param {pageInitialArguType} context - context data

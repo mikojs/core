@@ -5,11 +5,19 @@ import React from 'react';
 import { type pageInitialArguType } from '@mikojs/react-ssr';
 
 type propsType = {|
-  params: {},
+  name?: string,
+  params: $PropertyType<
+    $PropertyType<pageInitialArguType<>, 'match'>,
+    'params',
+  >,
 |};
 
 /** @react Key Component */
-const Key = ({ params }: propsType) => <div>{JSON.stringify(params)}</div>;
+const Key = ({ name = 'Key', params }: propsType) => (
+  <div>
+    {name}:{JSON.stringify(params)}
+  </div>
+);
 
 /**
  * @param {pageInitialArguType} context - context data

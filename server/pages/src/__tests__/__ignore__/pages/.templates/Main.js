@@ -5,30 +5,20 @@ import React, { type Node as NodeType } from 'react';
 import { type mainInitialArguType } from '@mikojs/react-ssr';
 
 type propsType = {|
-  value: string,
-  name: ?string,
-  pageProps: {},
-  children: ({ value: string }) => NodeType,
+  name: string,
+  children: ({ name: string }) => NodeType,
 |};
 
 /** @react Main Component */
-const Main = ({ value, name, pageProps, children }: propsType) => (
-  <div>
-    {name}
-    {JSON.stringify(pageProps)}
-    {children({ value })}
-  </div>
-);
+const Main = ({ name, children }: propsType) => children({ name });
 
 /**
  * @param {mainInitialArguType} context - context data
  *
  * @return {propsType} - initial props
  */
-Main.getInitialProps = ({ Page, pageProps }: mainInitialArguType<>) => ({
-  value: 'test data',
+Main.getInitialProps = ({ Page }: mainInitialArguType<>) => ({
   name: Page.name,
-  pageProps,
 });
 
 export default React.memo<propsType>(Main);

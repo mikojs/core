@@ -10,10 +10,12 @@ type propsType = {|
 
 /** @react render the html */
 const Document = ({ helmet, children }: propsType) => (
-  <>
-    {children}
-    {helmet.script.toComponent()}
-  </>
+  <html lang="en">
+    <body>
+      {children}
+      {helmet.script.toComponent()}
+    </body>
+  </html>
 );
 
 export default React.memo<propsType>(Document);

@@ -7,9 +7,11 @@ import { type errorComponentPropsType } from '@mikojs/react-ssr';
 /** @react render the error page */
 const Error = ({ error: { message } }: errorComponentPropsType) => (
   <div>
-    <h1>😞😱🔨 Error</h1>
+    <div>
+      <h1>😞😱🔨 Error</h1>
 
-    <p>{message}</p>
+      <p>{message}</p>
+    </div>
   </div>
 );
 

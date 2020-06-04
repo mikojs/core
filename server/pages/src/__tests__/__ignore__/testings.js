@@ -3,60 +3,39 @@
 import { error } from './pages/error';
 
 /**
- * @param {string} name - page name
- * @param {object} pageProps - page props
- * @param {string} content - page content
- * @param {string} chunkName - chunk name
- * @param {boolean} isDefaultTemplates - is default templates or not
+ * @param {string} title - title
+ *
+ * @return {string} - title
+ */
+const getHead = (title?: string = 'mikojs') =>
+  [
+    '<head>',
+    '<meta data-react-helmet="true" charSet="utf-8"/>',
+    '<meta data-react-helmet="true" name="viewport" content="width=device-width, initial-scale=1"/>',
+    `<title data-react-helmet="true">${title}</title>`,
+    '<link data-react-helmet="true" rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"/>',
+    '</head>',
+  ].join('');
+
+/**
+ * @param {string} head - head
+ * @param {string} content - content
+ * @param {object} data - mikojs data
  *
  * @return {string} - content
  */
-const getContent = (
-  name: string,
-  pageProps: {},
-  content: string,
-  chunkName: string,
-  isDefaultTemplates: boolean,
-) =>
+const getContent = (head: string, content: string, data: {}) =>
   [
-    '<!DOCTYPE html>',
-    ...(!isDefaultTemplates
-      ? []
-      : [
-          '<html lang="en"><head>',
-          '<meta data-react-helmet="true" charSet="utf-8"/>',
-          '<meta data-react-helmet="true" name="viewport" content="width=device-width, initial-scale=1"/>',
-          '<title data-react-helmet="true">mikojs</title>',
-          '<link data-react-helmet="true" rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"/>',
-          '</head><body>',
-        ]),
+    '<!DOCTYPE html><html lang="en">',
+    head,
+    '<body>',
     '<main id="__MIKOJS__">',
-    ...(!isDefaultTemplates
-      ? [
-          '<div>',
-          name,
-          '<!-- -->',
-          JSON.stringify(pageProps).replace(/"/g, '&quot;'),
-          content,
-          '</div>',
-        ]
-      : [content]),
+    content,
     '</main>',
     '<script data-react-helmet="true">',
     'var __MIKOJS_DATA__ = ',
-    JSON.stringify({
-      mainInitialProps: !isDefaultTemplates
-        ? {
-            value: 'test data',
-            name,
-            pageProps,
-          }
-        : {},
-      pageInitialProps: pageProps,
-      chunkName,
-    }),
-    ';</script>',
-    ...(!isDefaultTemplates ? [] : ['</body></html>']),
+    JSON.stringify(data),
+    ';</script></body></html>',
   ].join('');
 
 /**
@@ -72,11 +51,13 @@ export const getPage = (
   isDefaultTemplates: boolean,
 ) =>
   getContent(
-    'Home',
-    { pathname },
-    `<div>${pathname}</div>`,
-    chunkName,
-    isDefaultTemplates,
+    !isDefaultTemplates ? '' : getHead(),
+    `<div>Home<!-- -->:<!-- -->${pathname}</div>`,
+    {
+      mainInitialProps: !isDefaultTemplates ? { name: 'Home' } : {},
+      pageInitialProps: { pathname },
+      chunkName,
+    },
   );
 
 /**
@@ -92,15 +73,20 @@ export const getValue = (
   isDefaultTemplates: boolean,
 ) =>
   getContent(
-    'Key',
+    !isDefaultTemplates ? '' : getHead(),
+    `<div>Key<!-- -->:<!-- -->${JSON.stringify({ key: 'value' }).replace(
+      /"/g,
+      '&quot;',
+    )}</div>`,
     {
-      params: {
-        key: 'value',
+      mainInitialProps: !isDefaultTemplates ? { name: 'Key' } : {},
+      pageInitialProps: {
+        params: {
+          key: 'value',
+        },
       },
+      chunkName,
     },
-    `<div>${JSON.stringify({ key: 'value' }).replace(/"/g, '&quot;')}</div>`,
-    chunkName,
-    isDefaultTemplates,
   );
 
 /**
@@ -116,14 +102,14 @@ export const getNotFound = (
   isDefaultTemplates: boolean,
 ) =>
   getContent(
-    'NotFound',
-    {},
-    !isDefaultTemplates
-      ? '<div>Page not found</div>'
-      : '<div><h1>404</h1><h2>Page not found</h2></div>',
-    chunkName,
-    isDefaultTemplates,
-  ).replace(/mikojs/, '404 | Page not found');
+    !isDefaultTemplates ? '' : getHead('404 | Page not found'),
+    '<div><h1>404</h1><h2>Page not found</h2></div>',
+    {
+      mainInitialProps: !isDefaultTemplates ? { name: 'NotFound' } : {},
+      pageInitialProps: {},
+      chunkName,
+    },
+  );
 
 /**
  * @param {string} chunkName - chunk name
@@ -137,27 +123,31 @@ export const getError = (
   pathname: string,
   isDefaultTemplates: boolean,
 ) =>
-  getContent('ErrorPage', {}, '', chunkName, isDefaultTemplates).replace(
-    /<main id="__MIKOJS__">.*<\/main>/,
-    `<main id="__MIKOJS__">${
+  getContent(
+    !isDefaultTemplates ? '' : getHead(),
+    [
+      '<div><div><h1>😞😱🔨 Error</h1>',
+      `<p>${error.message}</p>`,
       !isDefaultTemplates
-        ? '<div>error</div>'
-        : [
-            '<div><div><h1>😞😱🔨 Error</h1>',
-            `<p>${error.message}</p>`,
-            error.stack
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-              .split(/\n/)
-              .map((text: string) => `<p>${text}</p>`)
-              .join(''),
-            '</div></div>',
-          ].join('')
-    }<script>var errorProps = { error: new Error(&#x27;${
-      error.message
-    }&#x27;), errorInfo: { componentStack: &#x27;${error.stack
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')}&#x27; } }
+        ? ''
+        : error.stack
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .split(/\n/)
+            .map((text: string) => `<p>${text}</p>`)
+            .join(''),
+      '</div></div>',
+      `<script>var errorProps = { error: new Error(&#x27;${
+        error.message
+      }&#x27;), errorInfo: { componentStack: &#x27;${error.stack
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')}&#x27; } }
 if (!__MIKOJS_DATA__) var __MIKOJS_DATA__ = { errorProps };
-else __MIKOJS_DATA__.errorProps = errorProps;</script></main>`,
+else __MIKOJS_DATA__.errorProps = errorProps;</script>`,
+    ].join(''),
+    {
+      mainInitialProps: !isDefaultTemplates ? { name: 'ErrorPage' } : {},
+      pageInitialProps: {},
+      chunkName,
+    },
   );

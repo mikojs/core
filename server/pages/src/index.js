@@ -3,11 +3,11 @@
 import { type optionsType, type middlewareType } from '@mikojs/server';
 
 import buildRoutes from './utils/buildRoutes';
-import buildServer from './utils/buildServer';
+import buildSSR from './utils/buildSSR';
 
 type returnType = {|
   middleware: middlewareType<>,
-  server: middlewareType<>,
+  ssr: middlewareType<>,
 |};
 
 /**
@@ -22,12 +22,12 @@ export default (
   options?: optionsType = {},
 ): returnType => {
   const routes = buildRoutes(folderPath, options);
-  const server = buildServer(routes);
+  const ssr = buildSSR(routes);
 
   return {
     middleware: async (req: http.IncomingMessage, res: http.ServerResponse) => {
-      await server(req, res);
+      await ssr(req, res);
     },
-    server,
+    ssr,
   };
 };

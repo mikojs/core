@@ -3,13 +3,13 @@
 import { type optionsType, type middlewareType } from '@mikojs/server';
 
 import buildRoutes from './utils/buildRoutes';
-import buildSSR from './utils/buildSSR';
 import buildWebpack from './utils/buildWebpack';
+import buildSSR from './utils/buildSSR';
 
 type returnType = {|
   middleware: middlewareType<>,
-  ssr: middlewareType<>,
   webpack: middlewareType<>,
+  ssr: middlewareType<>,
 |};
 
 /**
@@ -24,15 +24,15 @@ export default async (
   options?: optionsType = {},
 ): Promise<returnType> => {
   const routes = buildRoutes(folderPath, options);
-  const ssr = buildSSR(routes);
   const webpack = await buildWebpack();
+  const ssr = buildSSR(routes);
 
   return {
     middleware: async (req: http.IncomingMessage, res: http.ServerResponse) => {
-      await ssr(req, res);
       await webpack(req, res);
+      await ssr(req, res);
     },
-    ssr,
     webpack,
+    ssr,
   };
 };

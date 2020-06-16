@@ -138,6 +138,7 @@ export default (
         } else cache.addRoute(event, { filePath, name, extension }, false);
       }
 
+      debugLog(routes.templates);
       debugLog(routes.cache);
       logger('end', event, filePath);
     },

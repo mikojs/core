@@ -1,9 +1,24 @@
 // @flow
 
 import { type optionsType, type middlewareType } from '@mikojs/server';
+import { type propsType as ssrPropsType } from '@mikojs/react-ssr';
+
+import templates from './templates';
 
 import buildRoutes from './utils/buildRoutes';
 import buildSSR from './utils/buildSSR';
+
+export type routesType = {|
+  get: () => $PropertyType<routesType, 'cache'>,
+  getTamplate: (name: $Keys<$PropertyType<routesType, 'templates'>>) => string,
+  cache: $PropertyType<ssrPropsType, 'routes'>,
+  templates: {|
+    document: string,
+    main: string,
+    loading: string,
+    error: string,
+  |},
+|};
 
 type returnType = {|
   middleware: middlewareType<>,
@@ -21,8 +36,16 @@ export default (
   // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
   options?: optionsType = {},
 ): returnType => {
-  const routes = buildRoutes(folderPath, options);
+  const routes = {
+    get: () => routes.cache,
+    getTamplate: (name: $Keys<$PropertyType<routesType, 'templates'>>) =>
+      routes.templates[name],
+    cache: [],
+    templates: { ...templates },
+  };
   const ssr = buildSSR(routes);
+
+  buildRoutes(routes, folderPath, options);
 
   return {
     middleware: async (req: http.IncomingMessage, res: http.ServerResponse) => {

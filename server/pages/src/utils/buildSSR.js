@@ -12,7 +12,7 @@ import {
 } from '@mikojs/react-ssr';
 import server from '@mikojs/react-ssr/lib/server';
 
-import { type routesType } from './buildRoutes';
+import { type routesType } from '../index';
 
 /**
  * @param {routesType} routes - routes cache
@@ -33,10 +33,14 @@ export default (routes: routesType) => async (
       href,
       { req, res, pathname, search, hash },
       {
-        Document: requireModule<documentComponentType<*, *>>(routes.document),
-        Main: requireModule<mainComponentType<*, *>>(routes.main),
+        Document: requireModule<documentComponentType<*, *>>(
+          routes.getTamplate('document'),
+        ),
+        Main: requireModule<mainComponentType<*, *>>(
+          routes.getTamplate('main'),
+        ),
         Error: requireModule<ComponentType<errorComponentPropsType>>(
-          routes.error,
+          routes.getTamplate('error'),
         ),
         routes: routes.get(),
       },

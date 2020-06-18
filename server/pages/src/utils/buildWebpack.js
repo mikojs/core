@@ -8,13 +8,23 @@ import { type middlewareType } from '@mikojs/server';
 /**
  * @return {middlewareType} - webpack middleware
  */
-export default async (): Promise<middlewareType<>> => {
+export default (): middlewareType<> => {
   const compiler = webpack({});
   const middleware = webpackDevMiddleware(compiler);
+  let isDone: boolean = false;
 
-  await new Promise(resolve => middleware.waitUntilValid(resolve));
+  middleware.waitUntilValid(() => {
+    isDone = true;
+  });
 
   return async (req: http.IncomingMessage, res: http.ServerResponse) => {
-    await middleware(req, res);
+    if (isDone) {
+      await middleware(req, res);
+      return;
+    }
+
+    // TODO: should auto reload
+    res.write('Waitting for webpack');
+    res.end();
   };
 };

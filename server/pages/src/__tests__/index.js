@@ -61,7 +61,7 @@ describe('pages', () => {
           chunkName: string,
         |}) => {
           const newPathname = `${!useBasename ? '' : '/basename'}${pathname}`;
-          const pages = await buildPages(
+          const pages = buildPages(
             folderPath,
             !useBasename ? undefined : { basename: 'basename' },
           );

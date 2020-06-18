@@ -37,11 +37,11 @@ type returnType = {|
  *
  * @return {returnType} - pages object
  */
-export default async (
+export default (
   folderPath: string,
   // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
   options?: optionsType = {},
-): Promise<returnType> => {
+): returnType => {
   const routes = {
     get: () => routes.cache,
     getTamplate: (name: $Keys<$PropertyType<routesType, 'templates'>>) =>
@@ -51,7 +51,7 @@ export default async (
     templates: { ...templates },
     filePaths: {},
   };
-  const webpack = await buildWebpack();
+  const webpack = buildWebpack();
   const ssr = buildSSR(routes);
 
   buildRoutes(routes, folderPath, options);

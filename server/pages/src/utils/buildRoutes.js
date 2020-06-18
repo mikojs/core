@@ -60,6 +60,7 @@ export default (
       routes.cache = routes.cache.filter(
         ({ path: currentPathname }: routeType) => currentPathname !== pathname,
       );
+      routes.filePaths[pathname] = filePath;
 
       if (event !== 'unlink' || isNotFound)
         routes.cache = [

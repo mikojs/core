@@ -33,9 +33,9 @@ export default (routes: routesType): string => {
 import handleUnhandledRejection from '@mikojs/utils/lib/handleUnhandledRejection';
 import client from '@mikojs/react-ssr/lib/client';
 
-import Main from '${routes.main}';
-import Loading from '${routes.loading}';
-import Error from '${routes.error}';
+import Main from '${routes.getTamplate('main')}';
+import Loading from '${routes.getTamplate('loading')}';
+import Error from '${routes.getTamplate('error')}';
 
 handleUnhandledRejection();
 setConfig({
@@ -51,7 +51,7 @@ client({
       ({
         path,
         component: { chunkName },
-      }: $ElementType<$PropertyType<routesType, 'routes'>, number>) =>
+      }: $ElementType<$PropertyType<routesType, 'cache'>, number>) =>
         `{ ${[
           'exact: true',
           `path: '${path}'`,

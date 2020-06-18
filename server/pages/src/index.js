@@ -12,6 +12,7 @@ import buildSSR from './utils/buildSSR';
 export type routesType = {|
   get: () => $PropertyType<routesType, 'cache'>,
   getTamplate: (name: $Keys<$PropertyType<routesType, 'templates'>>) => string,
+  getFilePath: (pathname: string) => string,
   cache: $PropertyType<ssrPropsType, 'routes'>,
   templates: {|
     document: string,
@@ -19,6 +20,9 @@ export type routesType = {|
     loading: string,
     error: string,
   |},
+  filePaths: {
+    [string]: string,
+  },
 |};
 
 type returnType = {|
@@ -42,8 +46,10 @@ export default async (
     get: () => routes.cache,
     getTamplate: (name: $Keys<$PropertyType<routesType, 'templates'>>) =>
       routes.templates[name],
+    getFilePath: (pathname: string) => routes.filePaths[pathname],
     cache: [],
     templates: { ...templates },
+    filePaths: {},
   };
   const webpack = await buildWebpack();
   const ssr = buildSSR(routes);

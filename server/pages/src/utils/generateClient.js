@@ -6,7 +6,7 @@ import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
 import debug from 'debug';
 
-import { type routesType } from './buildRoutes';
+import { type routesType } from '../index';
 
 const debugLog = debug('pages:generateClient');
 

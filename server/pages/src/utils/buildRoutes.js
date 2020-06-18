@@ -12,32 +12,13 @@ import {
 } from '@mikojs/utils/lib/mergeDir';
 import { type optionsType } from '@mikojs/server';
 import getPathname from '@mikojs/server/lib/utils/getPathname';
-import {
-  type pageComponentType,
-  type propsType as ssrPropsType,
-} from '@mikojs/react-ssr';
+import { type pageComponentType } from '@mikojs/react-ssr';
+
+import { type routesType } from '../index';
 
 import templates from 'templates';
 
-type routeType = $ElementType<$PropertyType<ssrPropsType, 'routes'>, number>;
-
-export type routesType = {|
-  document: string,
-  main: string,
-  loading: string,
-  error: string,
-  routes: $ReadOnlyArray<routeType>,
-  filePaths: {
-    [string]: string,
-  },
-  get: () => $ReadOnlyArray<routeType>,
-  getFilePath: (pathname: string) => string,
-  addRoute: (
-    event: mergeDirEventType,
-    options: mergeDirDataType,
-    isNotFound: boolean,
-  ) => void,
-|};
+type routeType = $ElementType<$PropertyType<routesType, 'cache'>, number>;
 
 const debugLog = debug('pages:buildRoutes');
 const defaultNotFountMergeData = {
@@ -47,24 +28,22 @@ const defaultNotFountMergeData = {
 };
 
 /**
+ * @param {routesType} routes - routes
  * @param {string} folderPath - folder path
  * @param {optionsType} options - options
- *
- * @return {routesType} - routes cache
  */
-export default (folderPath: string, options: optionsType): routesType => {
+export default (
+  routes: routesType,
+  folderPath: string,
+  options: optionsType,
+) => {
   const {
     dev = process.env.NODE_ENV !== 'production',
     logger = emptyFunction,
     basename,
     ...mergeDirOptions
   } = options;
-  const cache: routesType = {
-    ...templates,
-    routes: [],
-    filePaths: {},
-    get: () => cache.routes,
-    getFilePath: (pathname: string) => cache.filePaths[pathname],
+  const cache = {
     addRoute: (
       event: mergeDirEventType,
       { filePath, name, extension }: mergeDirDataType,
@@ -78,14 +57,13 @@ export default (folderPath: string, options: optionsType): routesType => {
             extension,
           });
 
-      cache.routes = cache.routes.filter(
+      routes.cache = routes.cache.filter(
         ({ path: currentPathname }: routeType) => currentPathname !== pathname,
       );
-      cache.filePaths[pathname] = filePath;
 
       if (event !== 'unlink' || isNotFound)
-        cache.routes = [
-          ...cache.routes,
+        routes.cache = [
+          ...routes.cache,
           {
             exact: true,
             path: pathname,
@@ -140,7 +118,7 @@ export default (folderPath: string, options: optionsType): routesType => {
             case 'main':
             case 'loading':
             case 'error':
-              cache[filename] =
+              routes.templates[filename] =
                 event !== 'unlink' ? filePath : templates[filename];
               break;
 
@@ -160,10 +138,9 @@ export default (folderPath: string, options: optionsType): routesType => {
         } else cache.addRoute(event, { filePath, name, extension }, false);
       }
 
-      debugLog(cache);
+      debugLog(routes.templates);
+      debugLog(routes.cache);
       logger('end', event, filePath);
     },
   );
-
-  return cache;
 };

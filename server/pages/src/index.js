@@ -1,5 +1,7 @@
 // @flow
 
+import EventEmitter from 'events';
+
 import { type optionsType, type middlewareType } from '@mikojs/server';
 import { type propsType as ssrPropsType } from '@mikojs/react-ssr';
 
@@ -10,6 +12,7 @@ import buildWebpack from './utils/buildWebpack';
 import buildSSR from './utils/buildSSR';
 
 export type routesType = {|
+  events: EventEmitter,
   get: () => $PropertyType<routesType, 'cache'>,
   getTamplate: (name: $Keys<$PropertyType<routesType, 'templates'>>) => string,
   getFilePath: (pathname: string) => string,
@@ -43,6 +46,7 @@ export default (
   options?: optionsType = {},
 ): returnType => {
   const routes = {
+    events: new EventEmitter(),
     get: () => routes.cache,
     getTamplate: (name: $Keys<$PropertyType<routesType, 'templates'>>) =>
       routes.templates[name],
@@ -51,7 +55,7 @@ export default (
     templates: { ...templates },
     filePaths: {},
   };
-  const webpack = buildWebpack();
+  const webpack = buildWebpack(routes);
   const ssr = buildSSR(routes);
 
   buildRoutes(routes, folderPath, options);

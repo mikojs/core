@@ -137,6 +137,8 @@ export default (
               break;
           }
         } else cache.addRoute(event, { filePath, name, extension }, false);
+
+        if (event !== 'init') routes.events.emit('build');
       }
 
       debugLog(routes.templates);
@@ -144,4 +146,5 @@ export default (
       logger('end', event, filePath);
     },
   );
+  routes.events.emit('build');
 };

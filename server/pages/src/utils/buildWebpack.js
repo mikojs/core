@@ -9,6 +9,10 @@ import debug from 'debug';
 
 import { type middlewareType } from '@mikojs/server';
 
+import { type routesType } from '../index';
+
+import generateClient from './generateClient';
+
 const debugLog = debug('pages:buildWebpack');
 const chunkHash = crypto
   .createHmac('sha256', `@mikojs/pages ${new Date().toString()}`)
@@ -20,14 +24,17 @@ const clientPath = findCacheDir({
 })('client.js');
 
 /**
+ * @param {routesType} routes - routes
+ *
  * @return {middlewareType} - webpack middleware
  */
-export default (): middlewareType<> => {
+export default (routes: routesType): middlewareType<> => {
   const compiler = webpack({});
   const middleware = webpackDevMiddleware(compiler);
   let isDone: boolean = false;
 
   debugLog({ chunkHash, clientPath });
+  generateClient(routes, clientPath);
   middleware.waitUntilValid(() => {
     isDone = true;
   });

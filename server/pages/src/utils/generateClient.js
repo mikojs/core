@@ -1,31 +1,14 @@
 // @flow
 
-import crypto from 'crypto';
-
-import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
-import debug from 'debug';
 
 import { type routesType } from '../index';
 
-const debugLog = debug('pages:generateClient');
-
 /**
  * @param {routesType} routes - routes cache
- *
- * @return {string} - client path
+ * @param {string} clientPath - client path
  */
-export default (routes: routesType): string => {
-  const cacheDir = findCacheDir({
-    name: crypto
-      .createHmac('sha256', `@mikojs/pages ${new Date().toString()}`)
-      .digest('hex')
-      .slice(0, 8),
-    thunk: true,
-  });
-  const clientPath = cacheDir('client.js');
-
-  debugLog(clientPath);
+export default (routes: routesType, clientPath: string) => {
   outputFileSync(
     clientPath,
     `import { setConfig } from 'react-hot-loader';
@@ -66,6 +49,4 @@ client({
     .join(',')}],
 });`,
   );
-
-  return clientPath;
 };

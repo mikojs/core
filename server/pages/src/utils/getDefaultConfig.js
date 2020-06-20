@@ -2,80 +2,87 @@
 
 import path from 'path';
 
+import { type WebpackOptions as WebpackOptionsType } from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 
+import { type optionsType } from '@mikojs/server';
+
+import { type routesType } from '../index';
+
 /**
- * @param {boolean} dev - dev mode or not
+ * @param {routesType} routes - routes
+ * @param {string} folderPath - folder path
+ * @param {optionsType} options - options
+ * @param {string} chunkHash - chunk hash
  * @param {string} clientName - client name
  * @param {string} clientPath - client path
- * @param {string} chunkHash - chunk hash of the file
  * @param {string} commonsName - commons name
- * @param {number} minChunks - min chunks
- * @param {RegExp} extensions - file extensions
- * @param {string} folderPath - folder path
  *
- * @return {object} - webpack default config
+ * @return {WebpackOptionsType} - webpack default config
  */
 export default (
-  dev: boolean,
+  routes: routesType,
+  folderPath: string,
+  options: optionsType,
+  chunkHash: string,
   clientName: string,
   clientPath: string,
-  chunkHash: string,
   commonsName: string,
-  minChunks: number,
-  extensions: RegExp,
-  folderPath: string,
-) => ({
-  mode: dev ? 'development' : 'production',
-  devtool: dev ? 'eval' : false,
-  entry: {
-    [clientName]: ['react-hot-loader/patch', clientPath],
-  },
-  output: {
-    path: dev ? undefined : path.resolve('./public/js'),
-    publicPath: dev ? '/assets/' : '/public/js/',
-    filename: dev ? '[name].js' : `[name].${chunkHash}.min.js`,
-    chunkFilename: dev ? '[name].js' : `[name].${chunkHash}.min.js`,
-  },
-  optimization: {
-    minimize: !dev,
-    minimizer: [
-      new TerserPlugin({
-        parallel: true,
-        sourceMap: false,
-        cache: true,
-      }),
-    ],
-    splitChunks: {
-      chunks: 'all',
-      cacheGroups: {
-        default: false,
-        vendors: false,
-        commons: {
-          name: commonsName,
-          chunks: 'all',
-          minChunks,
+): WebpackOptionsType => {
+  const { dev = process.env.NODE_ENV !== 'production', extensions } = options;
+
+  return {
+    mode: dev ? 'development' : 'production',
+    devtool: dev ? 'eval' : false,
+    entry: {
+      [clientName]: ['react-hot-loader/patch', clientPath],
+    },
+    output: {
+      path: dev ? undefined : path.resolve('./public/js'),
+      publicPath: dev ? '/assets/' : '/public/js/',
+      filename: dev ? '[name].js' : `[name].${chunkHash}.min.js`,
+      chunkFilename: dev ? '[name].js' : `[name].${chunkHash}.min.js`,
+    },
+    optimization: {
+      minimize: !dev,
+      minimizer: [
+        new TerserPlugin({
+          parallel: true,
+          sourceMap: false,
+          cache: true,
+        }),
+      ],
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          commons: {
+            name: commonsName,
+            chunks: 'all',
+            minChunks: routes.get().length > 2 ? routes.get().length : 2,
+          },
         },
       },
     },
-  },
-  plugins: [new ProgressBarPlugin()],
-  module: {
-    rules: [
-      {
-        test: extensions,
-        include: [clientPath, folderPath],
-        loader: 'babel-loader',
-        options: {
-          plugins: ['react-hot-loader/babel'],
+    plugins: [new ProgressBarPlugin()],
+    module: {
+      rules: [
+        {
+          test: extensions,
+          include: [clientPath, folderPath],
+          loader: 'babel-loader',
+          options: {
+            plugins: ['react-hot-loader/babel'],
+          },
         },
-      },
-    ],
-  },
-  resolve: {
-    alias: {
-      'react-dom': '@hot-loader/react-dom',
+      ],
     },
-  },
-});
+    resolve: {
+      alias: {
+        'react-dom': '@hot-loader/react-dom',
+      },
+    },
+  };
+};

@@ -55,7 +55,7 @@ export default (
     templates: { ...templates },
     filePaths: {},
   };
-  const webpack = buildWebpack(routes);
+  const webpack = buildWebpack(routes, folderPath, options);
   const ssr = buildSSR(routes);
 
   buildRoutes(routes, folderPath, options);

@@ -20,8 +20,8 @@ import getDefaultConfig, {
 import generateClient from './generateClient';
 
 export type optionsType = {|
+  ...serverOptionsType,
   ...getDefaultConfigOptionsType,
-  basename?: $PropertyType<serverOptionsType, 'basename'>,
 |};
 
 const debugLog = debug('pages:buildWebpack');

@@ -10,11 +10,7 @@ import { type optionsType as serverOptionsType } from '@mikojs/server';
 
 import { type routesType } from '../index';
 
-export type optionsType = {|
-  ...serverOptionsType,
-  dev?: $PropertyType<serverOptionsType, 'dev'>,
-  extensions?: $PropertyType<serverOptionsType, 'extensions'>,
-|};
+export type optionsType = serverOptionsType;
 
 /**
  * @param {routesType} routes - routes

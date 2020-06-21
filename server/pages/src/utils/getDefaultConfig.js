@@ -6,9 +6,15 @@ import { type WebpackOptions as WebpackOptionsType } from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 
-import { type optionsType } from '@mikojs/server';
+import { type optionsType as serverOptionsType } from '@mikojs/server';
 
 import { type routesType } from '../index';
+
+export type optionsType = {|
+  ...serverOptionsType,
+  dev?: $PropertyType<serverOptionsType, 'dev'>,
+  extensions?: $PropertyType<serverOptionsType, 'extensions'>,
+|};
 
 /**
  * @param {routesType} routes - routes

@@ -2,14 +2,23 @@
 
 import EventEmitter from 'events';
 
-import { type optionsType, type middlewareType } from '@mikojs/server';
+import { type middlewareType } from '@mikojs/server';
 import { type propsType as ssrPropsType } from '@mikojs/react-ssr';
 
 import templates from './templates';
 
-import buildRoutes from './utils/buildRoutes';
-import buildWebpack from './utils/buildWebpack';
+import buildRoutes, {
+  type optionsType as buildRoutesOptionsType,
+} from './utils/buildRoutes';
+import buildWebpack, {
+  type optionsType as buildWebpackOptionsType,
+} from './utils/buildWebpack';
 import buildSSR from './utils/buildSSR';
+
+type optionsType = {|
+  ...buildRoutesOptionsType,
+  ...buildWebpackOptionsType,
+|};
 
 export type routesType = {|
   events: EventEmitter,

@@ -10,13 +10,15 @@ import {
   type mergeDirEventType,
   type mergeDirDataType,
 } from '@mikojs/utils/lib/mergeDir';
-import { type optionsType } from '@mikojs/server';
+import { type optionsType as serverOptionsType } from '@mikojs/server';
 import getPathname from '@mikojs/server/lib/utils/getPathname';
 import { type pageComponentType } from '@mikojs/react-ssr';
 
 import { type routesType } from '../index';
 
 import templates from 'templates';
+
+export type optionsType = serverOptionsType;
 
 type routeType = $ElementType<$PropertyType<routesType, 'cache'>, number>;
 

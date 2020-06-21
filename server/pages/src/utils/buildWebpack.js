@@ -7,12 +7,22 @@ import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import debug from 'debug';
 
-import { type optionsType, type middlewareType } from '@mikojs/server';
+import {
+  type optionsType as serverOptionsType,
+  type middlewareType,
+} from '@mikojs/server';
 
 import { type routesType } from '../index';
 
-import getDefaultConfig from './getDefaultConfig';
+import getDefaultConfig, {
+  type optionsType as getDefaultConfigOptionsType,
+} from './getDefaultConfig';
 import generateClient from './generateClient';
+
+export type optionsType = {|
+  ...getDefaultConfigOptionsType,
+  basename?: $PropertyType<serverOptionsType, 'basename'>,
+|};
 
 const debugLog = debug('pages:buildWebpack');
 const chunkHash = crypto
@@ -36,14 +46,14 @@ export default (
   folderPath: string,
   options: optionsType,
 ): middlewareType<> => {
-  const { basename } = options;
+  const { basename, ...webpackOptions } = options;
   const clientName = [basename, 'client.js'].filter(Boolean).join('/');
   const clientPath = cacheDir(clientName);
   const compiler = webpack(
     getDefaultConfig(
       routes,
       folderPath,
-      options,
+      webpackOptions,
       chunkHash,
       clientName,
       clientPath,

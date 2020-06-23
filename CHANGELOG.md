@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 1.11.0 (2020-06-23)
+
+#### :boom: Breaking Change
+
+- `configs`
+  - [#631](https://github.com/mikojs/core/pull/631) (@mikojs/core) Remove server ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- [#630](https://github.com/mikojs/core/pull/630) (@mikojs/pages) Move routes to main file ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- [#626](https://github.com/mikojs/core/pull/626) (@mikojs/pages) Rename server to ssr ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.10.7 (2020-06-04)
 
 #### :rocket: New Feature

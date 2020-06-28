@@ -35,17 +35,18 @@ export type dirDataType = {|
 
 /**
  * @param {string} folderPath - folder path
- * @param {boolean} watch - watch mode or not
  * @param {d3DirTreeOptionsType} options - d3 dir tree options
+ * @param {EventEmitter} events - events
+ * @param {boolean} watch - watch mode or not
  *
  * @return {EventEmitter} - events
  */
 export default (
   folderPath: string,
-  watch: boolean,
   options: d3DirTreeOptionsType,
+  events: EventEmitter,
+  watch: boolean,
 ): EventEmitter => {
-  const events = new EventEmitter();
   const { extensions, exclude } = options;
 
   invariant(

@@ -13,7 +13,7 @@ import {
   type d3DirTreeNodeType,
 } from '@mikojs/utils/lib/d3DirTree';
 
-export type dirEventsType =
+type dirEventsType =
   | 'init'
   | 'add'
   | 'addDir'
@@ -23,15 +23,6 @@ export type dirEventsType =
   | 'ready'
   | 'raw'
   | 'error';
-
-export type dirDataType = {|
-  filePath: $PropertyType<$PropertyType<d3DirTreeNodeType, 'data'>, 'filePath'>,
-  name: $PropertyType<$PropertyType<d3DirTreeNodeType, 'data'>, 'name'>,
-  extension: $PropertyType<
-    $PropertyType<d3DirTreeNodeType, 'data'>,
-    'extension',
-  >,
-|};
 
 /**
  * @param {string} folderPath - folder path
@@ -46,7 +37,7 @@ export default (
   options: d3DirTreeOptionsType,
   events: EventEmitter,
   watch: boolean,
-): EventEmitter => {
+) => {
   const { extensions, exclude } = options;
 
   invariant(
@@ -80,6 +71,4 @@ export default (
           extension: path.extname(filePath),
         });
       });
-
-  return events;
 };

@@ -13,7 +13,7 @@ import {
   type d3DirTreeNodeType,
 } from '@mikojs/utils/lib/d3DirTree';
 
-type dirEventsType =
+export type dirEventsType =
   | 'init'
   | 'add'
   | 'addDir'
@@ -23,6 +23,15 @@ type dirEventsType =
   | 'ready'
   | 'raw'
   | 'error';
+
+export type dirDataType = {|
+  filePath: $PropertyType<$PropertyType<d3DirTreeNodeType, 'data'>, 'path'>,
+  name: $PropertyType<$PropertyType<d3DirTreeNodeType, 'data'>, 'name'>,
+  extension: $PropertyType<
+    $PropertyType<d3DirTreeNodeType, 'data'>,
+    'extension',
+  >,
+|};
 
 /**
  * @param {string} folderPath - folder path

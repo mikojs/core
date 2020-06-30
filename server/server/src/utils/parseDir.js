@@ -13,6 +13,13 @@ import {
   type d3DirTreeNodeType,
 } from '@mikojs/utils/lib/d3DirTree';
 
+import initializeData from './initializeData';
+
+export type optionsType = {|
+  ...d3DirTreeOptionsType,
+  basename?: string,
+|};
+
 export type dirEventsType =
   | 'init'
   | 'add'
@@ -31,6 +38,7 @@ export type dirDataType = {|
     $PropertyType<d3DirTreeNodeType, 'data'>,
     'extension',
   >,
+  pathname: string,
 |};
 
 /**
@@ -43,7 +51,7 @@ export type dirDataType = {|
  */
 export default (
   folderPath: string,
-  options: d3DirTreeOptionsType,
+  { basename, ...options }: optionsType,
   events: EventEmitter,
   watch: boolean,
 ) => {
@@ -58,11 +66,16 @@ export default (
     .filter(({ data: { type } }: d3DirTreeNodeType) => type === 'file')
     .forEach(
       ({ data: { path: filePath, name, extension } }: d3DirTreeNodeType) =>
-        events.emit('init', {
-          filePath,
-          name,
-          extension,
-        }),
+        events.emit(
+          'init',
+          initializeData({
+            folderPath,
+            basename,
+            filePath,
+            name,
+            extension,
+          }),
+        ),
     );
 
   if (watch)
@@ -74,10 +87,15 @@ export default (
         if (!extensions?.test(filePath)) return;
 
         delete require.cache[filePath];
-        events.emit(event, {
-          filePath,
-          name: path.basename(filePath),
-          extension: path.extname(filePath),
-        });
+        events.emit(
+          event,
+          initializeData({
+            folderPath,
+            basename,
+            filePath,
+            name: path.basename(filePath),
+            extension: path.extname(filePath),
+          }),
+        );
       });
 };

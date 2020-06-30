@@ -4,9 +4,7 @@ import EventEmitter from 'events';
 
 import { emptyFunction } from 'fbjs';
 
-import { type d3DirTreeOptionsType } from '@mikojs/utils/lib/d3DirTree';
-
-import parseDir from './utils/parseDir';
+import parseDir, { type optionsType } from './utils/parseDir';
 
 type returnType = {|
   dev: () => void,
@@ -16,13 +14,14 @@ type returnType = {|
 
 /**
  * @param {string} folderPath - folder path
- * @param {d3DirTreeOptionsType} options - server options
+ * @param {optionsType} options - server options
  *
  * @return {returnType} - server object
  */
 export default (
   folderPath: string,
-  options: d3DirTreeOptionsType,
+  // $FlowFixMe FIXME https://github.com/facebook/flow/issues/2977
+  options?: optionsType = {},
 ): returnType => {
   const events = new EventEmitter();
 

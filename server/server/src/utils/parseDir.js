@@ -21,7 +21,6 @@ export type optionsType = {|
 |};
 
 export type dirEventsType =
-  | 'init'
   | 'add'
   | 'addDir'
   | 'change'
@@ -61,28 +60,29 @@ export default (
     fs.existsSync(folderPath),
     `Can not find the folder: ${path.relative(process.cwd(), folderPath)}`,
   );
-  d3DirTree(folderPath, options)
-    .leaves()
-    .filter(({ data: { type } }: d3DirTreeNodeType) => type === 'file')
-    .forEach(
-      ({ data: { path: filePath, name, extension } }: d3DirTreeNodeType) =>
-        events.emit(
-          'init',
-          initializeData({
-            folderPath,
-            basename,
-            filePath,
-            name,
-            extension,
-          }),
-        ),
-    );
 
-  if (watch)
+  if (!watch)
+    d3DirTree(folderPath, options)
+      .leaves()
+      .filter(({ data: { type } }: d3DirTreeNodeType) => type === 'file')
+      .forEach(
+        ({ data: { path: filePath, name, extension } }: d3DirTreeNodeType) =>
+          events.emit(
+            'ready',
+            initializeData({
+              folderPath,
+              basename,
+              filePath,
+              name,
+              extension,
+            }),
+          ),
+      );
+  else
     mockChoice(process.env.NODE_ENV !== 'test', require('chokidar'), {
       watch: emptyFunction.thatReturns(events),
     })
-      .watch(folderPath, { ignored: exclude, ignoreInitial: true })
+      .watch(folderPath, { ignored: exclude })
       .on('all', (event: dirEventsType, filePath: string) => {
         if (!extensions?.test(filePath)) return;
 

@@ -15,7 +15,7 @@ import {
 
 import initializeData from './initializeData';
 
-export type contextType = {|
+export type configType = {|
   ...d3DirTreeOptionsType,
   folderPath: string,
   watch: boolean,
@@ -44,13 +44,13 @@ export type dirDataType = {|
 
 /**
  * @param {EventEmitter} events - events
- * @param {contextType} context - contextType
+ * @param {configType} config - configType
  *
  * @return {EventEmitter} - events
  */
 export default (
   events: EventEmitter,
-  { folderPath, watch, basename, ...options }: contextType,
+  { folderPath, watch, basename, ...options }: configType,
 ) => {
   const { extensions, exclude } = options;
 

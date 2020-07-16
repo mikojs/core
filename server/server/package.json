@@ -11,7 +11,8 @@
   "dependencies": {
     "@babel/runtime": "^7.9.6",
     "chokidar": "^3.4.0",
-    "core-js": "^3.6.5"
+    "core-js": "^3.6.5",
+    "fbjs": "^1.0.0"
   },
   "devDependencies": {
     "flow-bin": "^0.125.1",

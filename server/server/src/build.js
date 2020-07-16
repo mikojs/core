@@ -1,5 +1,7 @@
 // @flow
 
+import { emptyFunction } from 'fbjs';
+
 import buildDev, {
   type returnType as buildDevReturnType,
 } from './utils/buildDev';
@@ -10,32 +12,56 @@ import buildTesting, {
   type optionsType as buildTestingOptionsType,
   type returnType as buildTestingReturnType,
 } from './utils/buildTesting';
+import {
+  type callbackType,
+  type optionsType as readFilesOptionsType,
+} from './utils/readFiles';
 
-type optionsType = buildTestingOptionsType;
+type middlewareType = (
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+) => Promise<void> | void;
 
-type returnType = {|
-  dev: buildDevReturnType,
-  prod: buildProdReturnType,
-  testing: buildTestingReturnType,
-  setConfig: (config: { [string]: mixed }) => void,
+type optionsType = {|
+  ...buildTestingOptionsType,
+  dev: callbackType,
+  prod: callbackType,
+  middleware: middlewareType,
 |};
 
-const config = {
-  folderPath: process.cwd(),
+type returnType = middlewareType & {
+  ready: buildDevReturnType | buildProdReturnType,
+  testing: buildTestingReturnType,
 };
 
 /**
  * @param {optionsType} options - build options
  *
- * @return {returnType} - server functions
+ * @return {returnType} - middleware
  */
-export default ({ dev, prod }: buildTestingOptionsType): returnType => ({
-  dev: buildDev(dev, config),
-  prod: buildProd(prod, config),
-  testing: buildTesting({ dev, prod }),
-  setConfig: (newConfig: { [string]: mixed }) => {
-    Object.keys(newConfig).forEach((key: string) => {
-      config[key] = newConfig[key];
-    });
-  },
-});
+export default ({
+  dev,
+  prod,
+  middleware: originialMiddleware,
+}: optionsType) => (config: readFilesOptionsType): returnType => {
+  /**
+   * @param {object} req - http request
+   * @param {object} res - http response
+   */
+  const middleware = async (
+    req: http.IncomingMessage,
+    res: http.ServerResponse,
+  ) => {
+    await originialMiddleware(req, res);
+  };
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  middleware.ready = isProduction
+    ? buildProd(prod, config)
+    : buildDev(dev, config);
+  middleware.testing = isProduction
+    ? emptyFunction
+    : buildTesting({ dev, prod });
+
+  return middleware;
+};

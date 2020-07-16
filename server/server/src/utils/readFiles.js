@@ -4,7 +4,7 @@ import path from 'path';
 
 import chokidar from 'chokidar';
 
-type optionsType = {|
+export type optionsType = {|
   folderPath: string,
   basename?: string,
   ignored?: RegExp,

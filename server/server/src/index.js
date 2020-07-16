@@ -1,5 +1,8 @@
 // @flow
 
+import buildDev, {
+  type returnType as buildDevReturnType,
+} from './utils/buildDev';
 import buildTesting, {
   type optionsType as buildTestingOptionsType,
   type returnType as buildTestingReturnType,
@@ -8,6 +11,7 @@ import buildTesting, {
 type optionsType = buildTestingOptionsType;
 
 type returnType = {|
+  dev: buildDevReturnType,
   testing: buildTestingReturnType,
 |};
 
@@ -17,5 +21,6 @@ type returnType = {|
  * @return {returnType} - server functions
  */
 export default ({ dev, prod }: buildTestingOptionsType): returnType => ({
+  dev: buildDev(dev),
   testing: buildTesting({ dev, prod }),
 });

@@ -2,14 +2,9 @@
 
 import { emptyFunction } from 'fbjs';
 
-import buildDev, {
-  type returnType as buildDevReturnType,
-} from './utils/buildDev';
-import buildProd, {
-  type returnType as buildProdReturnType,
-} from './utils/buildProd';
+import buildDev from './utils/buildDev';
+import buildProd from './utils/buildProd';
 import buildTesting, {
-  type optionsType as buildTestingOptionsType,
   type returnType as buildTestingReturnType,
 } from './utils/buildTesting';
 import {
@@ -23,16 +18,19 @@ type middlewareType = (
 ) => Promise<void> | void;
 
 type optionsType = {|
-  ...buildTestingOptionsType,
   dev: callbackType,
   prod: callbackType,
   middleware: middlewareType,
 |};
 
+type runningType = 'dev' | 'prod' | 'start';
+
 type returnType = middlewareType & {
-  ready: buildDevReturnType | buildProdReturnType,
+  ready: (type: runningType) => Promise<void>,
   testing: buildTestingReturnType,
 };
+
+let running: runningType;
 
 /**
  * @param {optionsType} options - build options
@@ -55,10 +53,18 @@ export default ({
     await originialMiddleware(req, res);
   };
   const isProduction = process.env.NODE_ENV === 'production';
+  const run = isProduction ? buildProd(prod, config) : buildDev(dev, config);
 
-  middleware.ready = isProduction
-    ? buildProd(prod, config)
-    : buildDev(dev, config);
+  /**
+   * @param {runningType} type - running type
+   */
+  middleware.ready = async (type: runningType) => {
+    running = running || type;
+
+    if (running === 'start') return;
+
+    await run();
+  };
   middleware.testing = isProduction
     ? emptyFunction
     : buildTesting({ dev, prod });

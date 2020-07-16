@@ -4,7 +4,7 @@ import EventEmitter from 'events';
 
 import { type eventsType, type callbackType } from './readFiles';
 
-export type optionsType = {|
+type optionsType = {|
   dev: callbackType,
   prod: callbackType,
 |};

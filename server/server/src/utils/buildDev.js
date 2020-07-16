@@ -2,7 +2,7 @@
 
 import readFiles, { type optionsType, type callbackType } from './readFiles';
 
-export type returnType = (options: optionsType) => void;
+type returnType = () => void;
 
 const callbacks = [];
 

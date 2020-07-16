@@ -8,17 +8,16 @@ const callbacks = [];
 
 /**
  * @param {callbackType} dev - originial dev function
+ * @param {optionsType} options - read files options
  *
  * @return {returnType} - dev function
  */
-export default (dev: callbackType): returnType => {
-  callbacks.push((options: optionsType) => {
+export default (dev: callbackType, options: optionsType): returnType => {
+  callbacks.push(() => {
     readFiles(options, dev);
   });
 
-  return (options: optionsType) => {
-    callbacks.map((callback: (options: optionsType) => void) =>
-      callback(options),
-    );
+  return () => {
+    callbacks.map((callback: () => void) => callback());
   };
 };

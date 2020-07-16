@@ -17,7 +17,12 @@ type returnType = {|
   dev: buildDevReturnType,
   prod: buildProdReturnType,
   testing: buildTestingReturnType,
+  setConfig: (config: { [string]: mixed }) => void,
 |};
+
+const config = {
+  folderPath: process.cwd(),
+};
 
 /**
  * @param {optionsType} options - build options
@@ -25,7 +30,12 @@ type returnType = {|
  * @return {returnType} - server functions
  */
 export default ({ dev, prod }: buildTestingOptionsType): returnType => ({
-  dev: buildDev(dev),
-  prod: buildProd(prod),
+  dev: buildDev(dev, config),
+  prod: buildProd(prod, config),
   testing: buildTesting({ dev, prod }),
+  setConfig: (newConfig: { [string]: mixed }) => {
+    Object.keys(newConfig).forEach((key: string) => {
+      config[key] = newConfig[key];
+    });
+  },
 });

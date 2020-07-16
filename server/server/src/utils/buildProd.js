@@ -8,12 +8,13 @@ const callbacks = [];
 
 /**
  * @param {callbackType} prod - originial prod function
+ * @param {optionsType} options - read files options
  *
  * @return {returnType} - prod function
  */
-export default (prod: callbackType): returnType => {
+export default (prod: callbackType, options: optionsType): returnType => {
   callbacks.push(
-    (options: optionsType) =>
+    () =>
       new Promise(resolve => {
         const watcher = readFiles(options, prod);
 
@@ -24,11 +25,9 @@ export default (prod: callbackType): returnType => {
       }),
   );
 
-  return async (options: optionsType) => {
+  return async () => {
     await Promise.all(
-      callbacks.map((callback: (options: optionsType) => Promise<void>) =>
-        callback(options),
-      ),
+      callbacks.map((callback: () => Promise<void>) => callback()),
     );
   };
 };

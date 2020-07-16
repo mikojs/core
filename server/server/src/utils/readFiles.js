@@ -11,7 +11,7 @@ type optionsType = {|
   extensions?: RegExp,
 |};
 
-type eventsType =
+export type eventsType =
   | 'add'
   | 'addDir'
   | 'change'
@@ -21,7 +21,7 @@ type eventsType =
   | 'raw'
   | 'error';
 
-type callbackType = (
+export type callbackType = (
   event: eventsType,
   data: {|
     name: string,

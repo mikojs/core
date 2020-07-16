@@ -3,6 +3,9 @@
 import buildDev, {
   type returnType as buildDevReturnType,
 } from './utils/buildDev';
+import buildProd, {
+  type returnType as buildProdReturnType,
+} from './utils/buildProd';
 import buildTesting, {
   type optionsType as buildTestingOptionsType,
   type returnType as buildTestingReturnType,
@@ -12,6 +15,7 @@ type optionsType = buildTestingOptionsType;
 
 type returnType = {|
   dev: buildDevReturnType,
+  prod: buildProdReturnType,
   testing: buildTestingReturnType,
 |};
 
@@ -22,5 +26,6 @@ type returnType = {|
  */
 export default ({ dev, prod }: buildTestingOptionsType): returnType => ({
   dev: buildDev(dev),
+  prod: buildProd(prod),
   testing: buildTesting({ dev, prod }),
 });

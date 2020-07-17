@@ -2,15 +2,13 @@
 
 import { emptyFunction } from 'fbjs';
 
-import buildDev from './utils/buildDev';
-import buildProd from './utils/buildProd';
-import buildTesting, {
-  type returnType as buildTestingReturnType,
-} from './utils/buildTesting';
-import {
+import readFiles, {
   type callbackType,
   type optionsType as readFilesOptionsType,
 } from './utils/readFiles';
+import buildTesting, {
+  type returnType as buildTestingReturnType,
+} from './utils/buildTesting';
 
 type middlewareType = (
   req: http.IncomingMessage,
@@ -53,7 +51,7 @@ export default ({
     await originialMiddleware(req, res);
   };
   const isProduction = process.env.NODE_ENV === 'production';
-  const run = isProduction ? buildProd(prod, config) : buildDev(dev, config);
+  const run = readFiles(config, isProduction ? prod : dev);
 
   /**
    * @param {runningType} type - running type

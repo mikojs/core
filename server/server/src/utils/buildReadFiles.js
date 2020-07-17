@@ -36,10 +36,10 @@ type returnType = () => Promise<void>;
 const cache = [];
 
 /**
- * @param {optionsType} options - read files options
+ * @param {optionsType} options - build read files options
  * @param {callbackType} callback - callback
  *
- * @return {returnType} - read file function
+ * @return {returnType} - read files function
  */
 export default (
   { folderPath, basename, ignored, extensions }: optionsType,

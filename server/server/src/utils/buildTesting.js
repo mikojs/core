@@ -2,7 +2,7 @@
 
 import EventEmitter from 'events';
 
-import { type eventsType, type callbackType } from './readFiles';
+import { type eventsType, type callbackType } from './buildReadFiles';
 
 type optionsType = {|
   dev: callbackType,

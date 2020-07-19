@@ -84,14 +84,14 @@ export default async <-C>(
   } = matchRoute;
   const { default: Page } = await loader();
   const { head: pageHead, ...pageProps } =
-    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+    // $FlowFixMe can not extend component
     (await getStatic(Page).getInitialProps?.({
       ctx,
       isServer,
       match,
     })) || {};
   const { head: mainHead, ...mainProps } =
-    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+    // $FlowFixMe can not extend component
     (await getStatic(Main).getInitialProps?.({
       ctx,
       isServer,

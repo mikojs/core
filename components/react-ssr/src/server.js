@@ -43,7 +43,7 @@ export default async <-C>(
   { Document, Main, Error: ErrorComponent, routes }: optionsType<C>,
 ): Promise<ReadableType> => {
   const { head: documentHead, ...documentInitialProps } =
-    // $FlowFixMe TODO: Flow does not yet support method or property calls in optional chains.
+    // $FlowFixMe can not extend component
     (await getStatic(Document).getInitialProps?.({
       ctx,
       isServer: true,

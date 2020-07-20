@@ -9,6 +9,7 @@ import { type eventsType } from './buildEvents';
 
 type optionsType = {|
   folderPath: string,
+  watch: boolean,
   basename?: string,
   ignored?: RegExp,
   extensions?: RegExp,
@@ -20,7 +21,7 @@ type optionsType = {|
  */
 export default (
   events: EventEmitter,
-  { folderPath, basename, ignored, extensions }: optionsType,
+  { folderPath, watch, basename, ignored, extensions }: optionsType,
 ) => {
   const watcher = chokidar.watch(folderPath, {
     ignored,
@@ -49,4 +50,10 @@ export default (
         .join('/')}`,
     });
   });
+
+  if (!watch)
+    watcher.on('ready', async () => {
+      await watcher.close();
+      events.emit('close');
+    });
 };

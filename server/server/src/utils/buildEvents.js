@@ -10,7 +10,8 @@ export type eventsType =
   | 'unlinkDir'
   | 'ready'
   | 'raw'
-  | 'error';
+  | 'error'
+  | 'close';
 
 export type callbackType = (
   event: eventsType,
@@ -39,6 +40,7 @@ export default (callback: callbackType): EventEmitter => {
     'ready',
     'raw',
     'error',
+    'close',
   ].forEach((event: eventsType) => {
     events.on(event, callback);
   });

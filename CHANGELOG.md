@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 1.11.1 (2020-07-20)
+
+#### :bug: Bug Fix
+
+- [#634](https://github.com/mikojs/core/pull/634) chore(deps): bump lodash from 4.17.14 to 4.17.19 ([@dependabot[bot]](https://github.com/apps/dependabot))
+
+#### :house: Internal
+
+- `utils`
+  - [#632](https://github.com/mikojs/core/pull/632) (@mikojs/utils) Remove not used function ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.11.0 (2020-06-23)
 
 #### :boom: Breaking Change

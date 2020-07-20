@@ -5,22 +5,14 @@ import EventEmitter from 'events';
 
 import chokidar from 'chokidar';
 
+import { type eventsType } from './buildEvents';
+
 type optionsType = {|
   folderPath: string,
   basename?: string,
   ignored?: RegExp,
   extensions?: RegExp,
 |};
-
-type eventsType =
-  | 'add'
-  | 'addDir'
-  | 'change'
-  | 'unlink'
-  | 'unlinkDir'
-  | 'ready'
-  | 'raw'
-  | 'error';
 
 /**
  * @param {EventEmitter} events - events

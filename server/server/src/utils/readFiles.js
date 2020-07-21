@@ -7,7 +7,7 @@ import chokidar from 'chokidar';
 
 import { type eventsType } from './buildEvents';
 
-type optionsType = {|
+export type optionsType = {|
   folderPath: string,
   watch: boolean,
   basename?: string,

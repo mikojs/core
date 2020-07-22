@@ -1,5 +1,7 @@
 // @flow
 
+import EventEmitter from 'events';
+
 import buildEvents, { type callbackType } from './utils/buildEvents';
 import readFiles, {
   type optionsType as readFilesOptionsType,
@@ -22,6 +24,7 @@ type contextType = {|
 |};
 
 type enhancedMiddlewareType = middlewareType & {
+  build: (type: $PropertyType<contextType, 'type'>) => EventEmitter,
   ready: () => Promise<void>,
 };
 
@@ -51,7 +54,7 @@ export default ({ dev, prod, middleware }: optionsType) => (
   /**
    * @param {contextType} type - context type
    *
-   * @return {buildEvents} - events;
+   * @return {buildEvents} - events
    */
   const build = (type: $PropertyType<contextType, 'type'>) =>
     buildEvents({ dev, prod }[type || 'dev']);

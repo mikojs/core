@@ -34,7 +34,7 @@ export default (
     const extension = path.extname(filePath);
 
     delete require.cache[filePath];
-    events.on(event, {
+    events.emit(event, {
       name,
       extension,
       filePath,

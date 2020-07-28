@@ -24,7 +24,7 @@ type contextType = {|
 |};
 
 type enhancedMiddlewareType = middlewareType & {
-  build: (type: $PropertyType<contextType, 'type'>) => EventEmitter,
+  getEvents: (type: $PropertyType<contextType, 'type'>) => EventEmitter,
   ready: () => Promise<void>,
 };
 
@@ -56,7 +56,7 @@ export default ({ dev, prod, middleware }: optionsType) => (
    *
    * @return {buildEvents} - events
    */
-  const build = (type: $PropertyType<contextType, 'type'>) =>
+  const getEvents = (type: $PropertyType<contextType, 'type'>) =>
     buildEvents({ dev, prod }[type || 'dev']);
 
   /**
@@ -73,13 +73,13 @@ export default ({ dev, prod, middleware }: optionsType) => (
     ...context.callbacks,
     () =>
       new Promise(resolve => {
-        const events = build(context.type);
+        const events = getEvents(context.type);
 
         readFiles(events, config);
         events.on('close', resolve);
       }),
   ];
-  enhancedMiddleware.build = build;
+  enhancedMiddleware.getEvents = getEvents;
   enhancedMiddleware.ready = ready;
 
   return enhancedMiddleware;

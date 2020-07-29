@@ -20,18 +20,18 @@ type optionsType<C> = {|
   build: (cache: C) => middlewareType,
 |};
 
-type contextType = {|
+type cacheType = {|
   type?: 'dev' | 'prod',
   callbacks: $ReadOnlyArray<() => Promise<void>>,
   middlewares: { [string]: middlewareType },
 |};
 
 type enhancedMiddlewareType = middlewareType & {
-  getEvents: (type: $PropertyType<contextType, 'type'>) => EventEmitter,
+  getEvents: (type: $PropertyType<cacheType, 'type'>) => EventEmitter,
   ready: () => Promise<void>,
 };
 
-const context: contextType = {
+const cache: cacheType = {
   callbacks: [],
   middlewares: {},
 };
@@ -55,36 +55,36 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => (
     req: http.IncomingMessage,
     res: http.ServerResponse,
   ) => {
-    await context.middlewares[cacheId](req, res);
+    await cache.middlewares[cacheId](req, res);
   };
 
   /**
-   * @param {contextType} type - context type
+   * @param {cacheType} type - cache type
    *
    * @return {buildEvents} - events
    */
-  middleware.getEvents = (type: $PropertyType<contextType, 'type'>) =>
+  middleware.getEvents = (type: $PropertyType<cacheType, 'type'>) =>
     buildEvents({ dev, prod }[type || 'dev']);
 
   /**
-   * @param {contextType} type - type for initialize context type
+   * @param {cacheType} type - type for initialize cache type
    */
-  middleware.ready = async (type: $PropertyType<contextType, 'type'>) => {
-    context.type = context.type || type;
+  middleware.ready = async (type: $PropertyType<cacheType, 'type'>) => {
+    cache.type = cache.type || type;
     await Promise.all(
-      context.callbacks.map((callback: () => Promise<void>) => callback()),
+      cache.callbacks.map((callback: () => Promise<void>) => callback()),
     );
   };
 
-  context.callbacks = [
-    ...context.callbacks,
+  cache.callbacks = [
+    ...cache.callbacks,
     () =>
       new Promise(resolve => {
-        const events = middleware.getEvents(context.type);
+        const events = middleware.getEvents(cache.type);
 
         readFiles(events, cachePath, config);
         events.on('update-cache', () => {
-          context.middlewares[cacheId] = build(requireModule<C>(cachePath));
+          cache.middlewares[cacheId] = build(requireModule<C>(cachePath));
         });
         events.on('close', resolve);
       }),

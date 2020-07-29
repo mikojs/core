@@ -41,47 +41,34 @@ export default ({ dev, prod, middleware }: optionsType) => (
   config: readFilesOptionsType,
 ): enhancedMiddlewareType => {
   const cacheDir = 'todo';
-  /**
-   * @param {object} req - http request
-   * @param {object} res - http response
-   */
-  const enhancedMiddleware = async (
-    req: http.IncomingMessage,
-    res: http.ServerResponse,
-  ) => {
-    await middleware(req, res);
-  };
+  const cache = {
+    middleware: async (req: http.IncomingMessage, res: http.ServerResponse) => {
+      await middleware(req, res);
+    },
 
-  /**
-   * @param {contextType} type - context type
-   *
-   * @return {buildEvents} - events
-   */
-  const getEvents = (type: $PropertyType<contextType, 'type'>) =>
-    buildEvents({ dev, prod }[type || 'dev']);
+    getEvents: (type: $PropertyType<contextType, 'type'>) =>
+      buildEvents({ dev, prod }[type || 'dev']),
 
-  /**
-   * @param {contextType} type - type for initialize context type
-   */
-  const ready = async (type: $PropertyType<contextType, 'type'>) => {
-    context.type = context.type || type;
-    await Promise.all(
-      context.callbacks.map((callback: () => Promise<void>) => callback()),
-    );
+    ready: async (type: $PropertyType<contextType, 'type'>) => {
+      context.type = context.type || type;
+      await Promise.all(
+        context.callbacks.map((callback: () => Promise<void>) => callback()),
+      );
+    },
   };
 
   context.callbacks = [
     ...context.callbacks,
     () =>
       new Promise(resolve => {
-        const events = getEvents(context.type);
+        const events = cache.getEvents(context.type);
 
         readFiles(events, cacheDir, config);
         events.on('close', resolve);
       }),
   ];
-  enhancedMiddleware.getEvents = getEvents;
-  enhancedMiddleware.ready = ready;
+  cache.middleware.getEvents = cache.getEvents;
+  cache.middleware.ready = cache.ready;
 
-  return enhancedMiddleware;
+  return cache.middleware;
 };

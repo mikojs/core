@@ -11,6 +11,7 @@ export type eventsType =
   | 'ready'
   | 'raw'
   | 'error'
+  | 'update-cache'
   | 'close';
 
 export type callbackType = (
@@ -40,7 +41,6 @@ export default (callback: callbackType): EventEmitter => {
     'ready',
     'raw',
     'error',
-    'close',
   ].forEach((event: eventsType) => {
     events.on(event, callback);
   });

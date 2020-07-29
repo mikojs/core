@@ -2,6 +2,8 @@
 
 import EventEmitter from 'events';
 
+import { requireModule } from '@mikojs/utils';
+
 import buildEvents, { type callbackType } from './utils/buildEvents';
 import readFiles, {
   type optionsType as readFilesOptionsType,
@@ -12,15 +14,16 @@ type middlewareType = (
   res: http.ServerResponse,
 ) => Promise<void> | void;
 
-type optionsType = {|
+type optionsType<C> = {|
   dev: callbackType,
   prod: callbackType,
-  middleware: middlewareType,
+  build: (cache: C) => middlewareType,
 |};
 
 type contextType = {|
   type?: 'dev' | 'prod',
   callbacks: $ReadOnlyArray<() => Promise<void>>,
+  middlewares: { [string]: middlewareType },
 |};
 
 type enhancedMiddlewareType = middlewareType & {
@@ -30,6 +33,7 @@ type enhancedMiddlewareType = middlewareType & {
 
 const context: contextType = {
   callbacks: [],
+  middlewares: {},
 };
 
 /**
@@ -37,38 +41,54 @@ const context: contextType = {
  *
  * @return {Function} - middleware function
  */
-export default ({ dev, prod, middleware }: optionsType) => (
+export default <+C>({ dev, prod, build }: optionsType<C>) => (
   config: readFilesOptionsType,
 ): enhancedMiddlewareType => {
-  const cacheDir = 'todo';
-  const cache = {
-    middleware: async (req: http.IncomingMessage, res: http.ServerResponse) => {
-      await middleware(req, res);
-    },
+  const cacheId = 'uuid';
+  const cachePath = 'todo';
 
-    getEvents: (type: $PropertyType<contextType, 'type'>) =>
-      buildEvents({ dev, prod }[type || 'dev']),
+  /**
+   * @param {object} req - http request
+   * @param {object} res - http response
+   */
+  const middleware = async (
+    req: http.IncomingMessage,
+    res: http.ServerResponse,
+  ) => {
+    await context.middlewares[cacheId](req, res);
+  };
 
-    ready: async (type: $PropertyType<contextType, 'type'>) => {
-      context.type = context.type || type;
-      await Promise.all(
-        context.callbacks.map((callback: () => Promise<void>) => callback()),
-      );
-    },
+  /**
+   * @param {contextType} type - context type
+   *
+   * @return {buildEvents} - events
+   */
+  middleware.getEvents = (type: $PropertyType<contextType, 'type'>) =>
+    buildEvents({ dev, prod }[type || 'dev']);
+
+  /**
+   * @param {contextType} type - type for initialize context type
+   */
+  middleware.ready = async (type: $PropertyType<contextType, 'type'>) => {
+    context.type = context.type || type;
+    await Promise.all(
+      context.callbacks.map((callback: () => Promise<void>) => callback()),
+    );
   };
 
   context.callbacks = [
     ...context.callbacks,
     () =>
       new Promise(resolve => {
-        const events = cache.getEvents(context.type);
+        const events = middleware.getEvents(context.type);
 
-        readFiles(events, cacheDir, config);
+        readFiles(events, cachePath, config);
+        events.on('update-cache', () => {
+          context.middlewares[cacheId] = build(requireModule<C>(cachePath));
+        });
         events.on('close', resolve);
       }),
   ];
-  cache.middleware.getEvents = cache.getEvents;
-  cache.middleware.ready = cache.ready;
 
-  return cache.middleware;
+  return middleware;
 };

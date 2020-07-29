@@ -51,7 +51,10 @@ export default <+C>(
       ]
         .filter(Boolean)
         .join('/')}`,
-      setCache: (cache: C) => outputFileSync(cachePath, JSON.stringify(cache)),
+      setCache: (cache: C) => {
+        outputFileSync(cachePath, JSON.stringify(cache));
+        events.emit('update-cache');
+      },
     });
   });
 

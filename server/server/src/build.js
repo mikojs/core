@@ -40,6 +40,7 @@ const context: contextType = {
 export default ({ dev, prod, middleware }: optionsType) => (
   config: readFilesOptionsType,
 ): enhancedMiddlewareType => {
+  const cacheDir = 'todo';
   /**
    * @param {object} req - http request
    * @param {object} res - http response
@@ -75,7 +76,7 @@ export default ({ dev, prod, middleware }: optionsType) => (
       new Promise(resolve => {
         const events = getEvents(context.type);
 
-        readFiles(events, config);
+        readFiles(events, cacheDir, config);
         events.on('close', resolve);
       }),
   ];

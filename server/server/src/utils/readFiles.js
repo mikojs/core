@@ -3,6 +3,7 @@
 import path from 'path';
 import EventEmitter from 'events';
 
+import outputFileSync from 'output-file-sync';
 import chokidar from 'chokidar';
 
 import { type eventsType } from './buildEvents';
@@ -17,10 +18,12 @@ export type optionsType = {|
 
 /**
  * @param {EventEmitter} events - events
+ * @param {string} cachePath - cache path
  * @param {optionsType} options - build read files options
  */
-export default (
+export default <+C>(
   events: EventEmitter,
+  cachePath: string,
   { folderPath, watch, basename, ignored, extensions }: optionsType,
 ) => {
   const watcher = chokidar.watch(folderPath, {
@@ -48,6 +51,7 @@ export default (
       ]
         .filter(Boolean)
         .join('/')}`,
+      setCache: (cache: C) => outputFileSync(cachePath, JSON.stringify(cache)),
     });
   });
 

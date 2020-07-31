@@ -2,6 +2,9 @@
 
 import EventEmitter from 'events';
 
+import { v4 as uuid } from 'uuid';
+import findCacheDir from 'find-cache-dir';
+
 import { requireModule } from '@mikojs/utils';
 
 import buildEvents, { type callbackType } from './utils/buildEvents';
@@ -31,6 +34,7 @@ type enhancedMiddlewareType = middlewareType & {
   ready: () => Promise<void>,
 };
 
+const cacheDir = findCacheDir({ name: 'mikojs', thunk: true });
 const cache: cacheType = {
   callbacks: [],
   middlewares: {},
@@ -44,8 +48,8 @@ const cache: cacheType = {
 export default <+C>({ dev, prod, build }: optionsType<C>) => (
   config: readFilesOptionsType,
 ): enhancedMiddlewareType => {
-  const cacheId = 'uuid';
-  const cachePath = 'todo';
+  const cacheId = uuid();
+  const cachePath = cacheDir(cacheId);
 
   /**
    * @param {object} req - http request

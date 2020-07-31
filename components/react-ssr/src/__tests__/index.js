@@ -49,14 +49,19 @@ const wrapper = mount(
 
 describe('react-ssr', () => {
   beforeEach(() => {
+    const mainGetInitialProps = Main.getInitialProps;
+    const pageGetInitialProps = Page.getInitialProps;
+
     mainRender.mockClear();
-    // $FlowFixMe TODO: jest mock
-    Main.getInitialProps?.mockClear(); // eslint-disable-line flowtype/no-unused-expressions
     pageRender.mockClear();
-    // $FlowFixMe jest mock
-    Page.getInitialProps?.mockClear(); // eslint-disable-line flowtype/no-unused-expressions
     loadingRender.mockClear();
     errorRender.mockClear();
+
+    // $FlowFixMe jest mock
+    if (mainGetInitialProps) mainGetInitialProps.mockClear();
+
+    // $FlowFixMe jest mock
+    if (pageGetInitialProps) pageGetInitialProps.mockClear();
   });
 
   test.each`

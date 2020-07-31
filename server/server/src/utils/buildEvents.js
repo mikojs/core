@@ -11,6 +11,7 @@ export type eventsType =
   | 'ready'
   | 'raw'
   | 'error'
+  // custom events
   | 'update-cache'
   | 'close';
 

@@ -63,24 +63,26 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => (
    *
    * @return {buildEvents} - events
    */
-  middleware.getEvents = (type: $PropertyType<cacheType, 'type'>) =>
+  const getEvents = (type: $PropertyType<cacheType, 'type'>) =>
     buildEvents({ dev, prod }[type || 'dev']);
 
   /**
    * @param {cacheType} type - type for initialize cache type
    */
-  middleware.ready = async (type: $PropertyType<cacheType, 'type'>) => {
+  const ready = async (type: $PropertyType<cacheType, 'type'>) => {
     cache.type = cache.type || type;
     await Promise.all(
       cache.callbacks.map((callback: () => Promise<void>) => callback()),
     );
   };
 
+  middleware.getEvents = getEvents;
+  middleware.ready = ready;
   cache.callbacks = [
     ...cache.callbacks,
     () =>
       new Promise(resolve => {
-        const events = middleware.getEvents(cache.type);
+        const events = getEvents(cache.type);
 
         readFiles(events, cachePath, config);
         events.on('update-cache', () => {

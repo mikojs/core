@@ -2,7 +2,6 @@
 
 import EventEmitter from 'events';
 
-import { v4 as uuid } from 'uuid';
 import findCacheDir from 'find-cache-dir';
 
 import { requireModule } from '@mikojs/utils';
@@ -21,6 +20,11 @@ type optionsType<C> = {|
   dev: callbackType,
   prod: callbackType,
   build: (cache: C) => middlewareType,
+|};
+
+type configType = {|
+  ...readFilesOptionsType,
+  key?: string,
 |};
 
 type cacheType = {|
@@ -45,11 +49,11 @@ const cache: cacheType = {
  *
  * @return {Function} - middleware function
  */
-export default <+C>({ dev, prod, build }: optionsType<C>) => (
-  config: readFilesOptionsType,
-): enhancedMiddlewareType => {
-  const cacheId = uuid();
-  const cachePath = cacheDir(cacheId);
+export default <+C>({ dev, prod, build }: optionsType<C>) => ({
+  key = build.name,
+  ...config
+}: configType): enhancedMiddlewareType => {
+  const cachePath = cacheDir(key);
 
   /**
    * @param {object} req - http request
@@ -59,7 +63,7 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => (
     req: http.IncomingMessage,
     res: http.ServerResponse,
   ) => {
-    await cache.middlewares[cacheId](req, res);
+    await cache.middlewares[key](req, res);
   };
 
   /**
@@ -90,7 +94,7 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => (
 
         readFiles(events, cachePath, config);
         events.on('update-cache', () => {
-          cache.middlewares[cacheId] = build(requireModule<C>(cachePath));
+          cache.middlewares[key] = build(requireModule<C>(cachePath));
         });
         events.on('close', resolve);
       }),

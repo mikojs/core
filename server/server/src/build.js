@@ -28,15 +28,16 @@ type configType = {|
   key?: string,
 |};
 
+type serverEventType = 'dev' | 'prod' | 'start';
+
 type cacheType = {|
-  type?: 'dev' | 'prod' | 'start',
-  callbacks: $ReadOnlyArray<() => Promise<void>>,
+  callbacks: $ReadOnlyArray<(serverEvent: serverEventType) => Promise<void>>,
   middlewares: { [string]: middlewareType },
 |};
 
 type enhancedMiddlewareType = middlewareType & {
-  getEvents: (type: $PropertyType<cacheType, 'type'>) => EventEmitter,
-  ready: () => Promise<void>,
+  getEvents: (serverEvent: serverEventType) => EventEmitter,
+  ready: (serverEvent: serverEventType) => Promise<void>,
 };
 
 const cacheDir = findCacheDir({ name: 'mikojs', thunk: true });
@@ -68,12 +69,12 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => ({
   };
 
   /**
-   * @param {cacheType} type - cache type
+   * @param {serverEventType} serverEvent - server event
    *
    * @return {buildEvents} - events
    */
-  const getEvents = (type: $PropertyType<cacheType, 'type'>) =>
-    buildEvents({ dev, prod, start: emptyFunction }[type || 'dev']);
+  const getEvents = (serverEvent: serverEventType) =>
+    buildEvents({ dev, prod, start: emptyFunction }[serverEvent]);
 
   /** */
   const buildMiddleware = () => {
@@ -81,14 +82,19 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => ({
   };
 
   /**
-   * @param {cacheType} type - type for initialize cache type
+   * @param {serverEventType} serverEvent - server event
    */
-  const ready = async (type: $PropertyType<cacheType, 'type'>) => {
-    cache.type = cache.type || type;
-
-    if (cache.type !== 'start')
+  const ready = async (serverEvent: serverEventType) => {
+    if (serverEvent !== 'start')
       await Promise.all(
-        cache.callbacks.map((callback: () => Promise<void>) => callback()),
+        cache.callbacks.map(
+          (
+            callback: $ElementType<
+              $PropertyType<cacheType, 'callbacks'>,
+              number,
+            >,
+          ) => callback(serverEvent),
+        ),
       );
     else buildMiddleware();
   };
@@ -97,9 +103,9 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => ({
   middleware.ready = ready;
   cache.callbacks = [
     ...cache.callbacks,
-    () =>
+    (serverEvent: serverEventType) =>
       new Promise(resolve => {
-        const events = getEvents(cache.type);
+        const events = getEvents(serverEvent);
 
         readFiles(events, cachePath, config);
         events.on('update-cache', buildMiddleware);

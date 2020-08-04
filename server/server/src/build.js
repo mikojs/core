@@ -2,6 +2,7 @@
 
 import EventEmitter from 'events';
 
+import { emptyFunction } from 'fbjs';
 import findCacheDir from 'find-cache-dir';
 
 import { requireModule } from '@mikojs/utils';
@@ -28,7 +29,7 @@ type configType = {|
 |};
 
 type cacheType = {|
-  type?: 'dev' | 'prod',
+  type?: 'dev' | 'prod' | 'start',
   callbacks: $ReadOnlyArray<() => Promise<void>>,
   middlewares: { [string]: middlewareType },
 |};
@@ -72,16 +73,24 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => ({
    * @return {buildEvents} - events
    */
   const getEvents = (type: $PropertyType<cacheType, 'type'>) =>
-    buildEvents({ dev, prod }[type || 'dev']);
+    buildEvents({ dev, prod, start: emptyFunction }[type || 'dev']);
+
+  /** */
+  const buildMiddleware = () => {
+    cache.middlewares[key] = build(requireModule<C>(cachePath));
+  };
 
   /**
    * @param {cacheType} type - type for initialize cache type
    */
   const ready = async (type: $PropertyType<cacheType, 'type'>) => {
     cache.type = cache.type || type;
-    await Promise.all(
-      cache.callbacks.map((callback: () => Promise<void>) => callback()),
-    );
+
+    if (cache.type !== 'start')
+      await Promise.all(
+        cache.callbacks.map((callback: () => Promise<void>) => callback()),
+      );
+    else buildMiddleware();
   };
 
   middleware.getEvents = getEvents;
@@ -93,9 +102,7 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => ({
         const events = getEvents(cache.type);
 
         readFiles(events, cachePath, config);
-        events.on('update-cache', () => {
-          cache.middlewares[key] = build(requireModule<C>(cachePath));
-        });
+        events.on('update-cache', buildMiddleware);
         events.on('close', resolve);
       }),
   ];

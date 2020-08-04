@@ -12,10 +12,7 @@ import readFiles, {
   type optionsType as readFilesOptionsType,
 } from './utils/readFiles';
 
-type middlewareType = (
-  req: http.IncomingMessage,
-  res: http.ServerResponse,
-) => Promise<void> | void;
+import { type middlewareType } from './types';
 
 type optionsType<C> = {|
   dev: callbackType,

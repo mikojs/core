@@ -31,6 +31,7 @@ type configType = {|
 type serverEventType = 'dev' | 'prod' | 'start';
 
 type cacheType = {|
+  isInitialized: boolean,
   callbacks: $ReadOnlyArray<(serverEvent: serverEventType) => Promise<void>>,
   middlewares: { [string]: middlewareType },
 |};
@@ -42,6 +43,7 @@ type enhancedMiddlewareType = middlewareType & {
 
 const cacheDir = findCacheDir({ name: 'mikojs', thunk: true });
 const cache: cacheType = {
+  isInitialized: false,
   callbacks: [],
   middlewares: {},
 };
@@ -85,7 +87,11 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => ({
    * @param {serverEventType} serverEvent - server event
    */
   const ready = async (serverEvent: serverEventType) => {
-    if (serverEvent !== 'start')
+    if (!cache.isInitialized) cache.isInitialized = true;
+    else throw new Error('Can not initialize middlewares twice');
+
+    if (serverEvent === 'start') buildMiddleware();
+    else
       await Promise.all(
         cache.callbacks.map(
           (
@@ -96,7 +102,6 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => ({
           ) => callback(serverEvent),
         ),
       );
-    else buildMiddleware();
   };
 
   middleware.getEvents = getEvents;

@@ -12,7 +12,7 @@ export type eventsType =
   | 'raw'
   | 'error'
   // custom events
-  | 'update-cache'
+  | 'generate'
   | 'close';
 
 export type callbackType = (

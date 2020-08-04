@@ -4,6 +4,7 @@ import EventEmitter from 'events';
 
 import { emptyFunction } from 'fbjs';
 import findCacheDir from 'find-cache-dir';
+import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
@@ -109,8 +110,11 @@ export default <+C>({ dev, prod, build }: optionsType<C>) => ({
       new Promise(resolve => {
         const events = getEvents(serverEvent);
 
-        readFiles(events, cachePath, config);
-        events.on('update-cache', buildMiddleware);
+        readFiles(events, config);
+        events.on('generate', (cacheStr: string) => {
+          outputFileSync(cachePath, cacheStr);
+          buildMiddleware();
+        });
         events.on('close', resolve);
       }),
   ];

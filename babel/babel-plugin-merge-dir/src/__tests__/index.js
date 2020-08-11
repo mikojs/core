@@ -2,18 +2,39 @@
 
 import path from 'path';
 
-import { transformSync } from '@babel/core';
+import { transformFileSync, transformSync } from '@babel/core';
 
 import babelPluginMergeDir from '../index';
 
-test('babel-plugin-merge-dir', () => {
-  expect(
-    transformSync('', {
-      filename: path.resolve(__dirname, './src/filename.js'),
-      presets: ['@babel/env'],
-      plugins: [babelPluginMergeDir],
-      babelrc: false,
-      configFile: false,
-    }).code,
-  ).toMatch('');
+const options = {
+  presets: ['@babel/env'],
+  plugins: [babelPluginMergeDir],
+  babelrc: false,
+  configFile: false,
+};
+
+describe('babel-plugin-merge-dir', () => {
+  test('can generate cache', () => {
+    expect(
+      transformFileSync(
+        path.resolve(__dirname, './__ignore__/index.js'),
+        options,
+      ).code,
+    ).toBe(`// @flow
+"use strict";`);
+  });
+
+  test('can import merged dir and remove the all relative path', () => {
+    expect(
+      transformSync(
+        `import './__ignore__';
+import './__ignore__/a';`,
+        {
+          ...options,
+          filename: path.resolve(__dirname, './index.js'),
+        },
+      ).code,
+    ).toBe(`"use strict";
+require("./__ignore__/uuid");`);
+  });
 });

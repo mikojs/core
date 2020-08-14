@@ -8,7 +8,9 @@ import babelPluginMergeDir from '../index';
 
 const options = {
   presets: ['@babel/env'],
-  plugins: [babelPluginMergeDir],
+  plugins: [
+    [babelPluginMergeDir, { dir: path.resolve(__dirname, './__ignore__') }],
+  ],
   babelrc: false,
   configFile: false,
 };
@@ -26,14 +28,10 @@ describe('babel-plugin-merge-dir', () => {
 
   test('can import merged dir and remove the all relative path', () => {
     expect(
-      transformSync(
-        `import './__ignore__';
-import './__ignore__/a';`,
-        {
-          ...options,
-          filename: path.resolve(__dirname, './index.js'),
-        },
-      ).code,
+      transformSync(`import './__ignore__';`, {
+        ...options,
+        filename: path.resolve(__dirname, './index.js'),
+      }).code,
     ).toBe(`"use strict";
 require("./__ignore__/.mergeDir");`);
   });

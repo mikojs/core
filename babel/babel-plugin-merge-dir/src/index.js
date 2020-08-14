@@ -1,6 +1,6 @@
 // @flow
 
-import path from 'path';
+import nodePath from 'path';
 
 import { declare } from '@babel/helper-plugin-utils';
 import type nodePathType from '@babel/traverse';
@@ -17,12 +17,39 @@ export default declare(
       callback: (filenames: $ReadOnlyArray<string>) => string,
     |},
   ): {} => {
-    const cacheFilePath = path.resolve(dir, './.mergeDir');
+    const cacheFilePath = nodePath.resolve(dir, './.mergeDir');
     const cache = {};
 
     assertVersion(7);
 
     return {
+      visitor: {
+        Identifier: (
+          path: nodePathType,
+          {
+            file: {
+              opts: { filename },
+            },
+          }: {|
+            file: {|
+              opts: {| filename: string |},
+            |},
+          |},
+        ) => {
+          if (
+            !t.isIdentifier(path.node, { name: 'require' }) ||
+            !t.isCallExpression(path.parentPath.node)
+          )
+            return;
+
+          const modulePath = nodePath.resolve(
+            nodePath.dirname(filename),
+            path.parentPath.get('arguments.0').node.value,
+          );
+
+          if (modulePath !== dir) return;
+        },
+      },
       post: ({
         opts: { filename },
       }: {|
@@ -32,7 +59,7 @@ export default declare(
       |}) => {
         if (!filename.includes(dir) || !callback) return;
 
-        cache[filename] = `./${path.relative(dir, filename)}`;
+        cache[filename] = nodePath.relative(dir, filename);
         outputFileSync(cacheFilePath, callback(Object.values(cache[filename])));
       },
     };

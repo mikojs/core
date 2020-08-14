@@ -35,6 +35,6 @@ import './__ignore__/a';`,
         },
       ).code,
     ).toBe(`"use strict";
-require("./__ignore__/uuid");`);
+require("./__ignore__/.mergeDir");`);
   });
 });

@@ -33,6 +33,7 @@ describe('babel-plugin-merge-dir', () => {
         filename: path.resolve(__dirname, './index.js'),
       }).code,
     ).toBe(`"use strict";
-require("./__ignore__/.mergeDir");`);
+
+require("__ignore__/.mergeDir");`);
   });
 });

@@ -48,6 +48,14 @@ export default declare(
           );
 
           if (modulePath !== dir) return;
+
+          path.parentPath.replaceWith(
+            t.callExpression(path.node, [
+              t.stringLiteral(
+                nodePath.relative(nodePath.dirname(filename), cacheFilePath),
+              ),
+            ]),
+          );
         },
       },
       post: ({

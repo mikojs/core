@@ -6,13 +6,21 @@ import { declare } from '@babel/helper-plugin-utils';
 import type nodePathType from '@babel/traverse';
 import outputFileSync from 'output-file-sync';
 
+import { d3DirTree } from '@mikojs/utils';
+import {
+  type d3DirTreeNodeType,
+  type d3DirTreeOptionsType,
+} from '@mikojs/utils/lib/d3DirTree';
+
 export default declare(
   (
     { assertVersion, types: t }: nodePathType,
     {
       dir = '.',
       callback,
+      ...options
     }: {|
+      ...d3DirTreeOptionsType,
       dir?: string,
       callback: (filenames: $ReadOnlyArray<string>) => string,
     |},
@@ -21,6 +29,12 @@ export default declare(
     const cache = {};
 
     assertVersion(7);
+    d3DirTree(dir, options)
+      .leaves()
+      .forEach(({ data: { path: filename } }: d3DirTreeNodeType) => {
+        cache[filename] = nodePath.relative(dir, filename);
+      });
+    outputFileSync(cacheFilePath, callback?.(Object.values(cache)) || '');
 
     return {
       visitor: {
@@ -65,10 +79,10 @@ export default declare(
           filename: string,
         |},
       |}) => {
-        if (!filename.includes(dir) || !callback) return;
+        if (!filename.includes(dir)) return;
 
         cache[filename] = nodePath.relative(dir, filename);
-        outputFileSync(cacheFilePath, callback(Object.values(cache[filename])));
+        outputFileSync(cacheFilePath, callback?.(Object.values(cache)) || '');
       },
     };
   },

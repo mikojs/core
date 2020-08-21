@@ -1,39 +1,26 @@
 // @flow
 
-import path from 'path';
+import { transformSync } from '@babel/core';
+import outputFileSync from 'output-file-sync';
 
-import { transformFileSync, transformSync } from '@babel/core';
-
-import babelPluginMergeDir from '../index';
-
-const options = {
-  presets: ['@babel/env'],
-  plugins: [
-    [babelPluginMergeDir, { dir: path.resolve(__dirname, './__ignore__') }],
-  ],
-  babelrc: false,
-  configFile: false,
-};
+import testings from './__ignore__/testings';
 
 describe('babel-plugin-merge-dir', () => {
-  test('can generate cache', () => {
-    expect(
-      transformFileSync(
-        path.resolve(__dirname, './__ignore__/index.js'),
-        options,
-      ).code,
-    ).toBe(`// @flow
-"use strict";`);
+  beforeEach(() => {
+    outputFileSync.mockClear();
   });
 
-  test('can import merged dir and remove the all relative path', () => {
-    expect(
-      transformSync(`import './__ignore__';`, {
-        ...options,
-        filename: path.resolve(__dirname, './index.js'),
-      }).code,
-    ).toBe(`"use strict";
+  test.each(testings)(
+    '%s',
+    (
+      info: string,
+      options: {},
+      content: string,
+      expected: [string, string],
+    ) => {
+      transformSync(content, options);
 
-require("__ignore__/.mergeDir");`);
-  });
+      expect(outputFileSync.mock.calls[0]).toEqual(expected);
+    },
+  );
 });

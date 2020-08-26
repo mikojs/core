@@ -14,7 +14,7 @@ export default declare(
 
     return {
       visitor: {
-        Identifier: (
+        CallExpression: (
           path: nodePathType,
           {
             file: {
@@ -27,20 +27,20 @@ export default declare(
           |},
         ) => {
           if (
-            !t.isIdentifier(path.node, { name: 'require' }) ||
-            !t.isCallExpression(path.parentPath.node) ||
-            !pattern.test(path.parentPath.get('arguments.0').node.value)
+            !t.isIdentifier(path.get('callee').node, { name: 'require' }) ||
+            !pattern.test(path.get('arguments.0').node.value)
           )
             return;
 
-          path.parentPath.replaceWith(
-            t.callExpression(path.node, [
+          path
+            .get('arguments.0')
+            .replaceWith(
               t.conditionalExpression(
                 t.memberExpression(
                   t.identifier('globalThis'),
                   t.identifier('window'),
                 ),
-                t.stringLiteral(path.parentPath.get('arguments.0').node.value),
+                t.stringLiteral(path.get('arguments.0').node.value),
                 t.stringLiteral(
                   nodePath.relative(
                     nodePath.dirname(filename),
@@ -48,8 +48,7 @@ export default declare(
                   ),
                 ),
               ),
-            ]),
-          );
+            );
         },
       },
     };

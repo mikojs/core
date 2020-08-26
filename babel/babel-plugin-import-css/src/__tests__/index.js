@@ -29,7 +29,16 @@ const a = 'test';`,
         configFile: false,
       },
     ).code,
-  ).toMatch(
-    /globalThis\.window \? "\.\/styles.css" : "\.\.\/\.\.\/emptyCssFile\.js"/,
+  ).toBe(
+    `"use strict";
+
+var _test = _interopRequireDefault(require("test"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+require(globalThis.window ? "./styles.css" : "../../emptyCssFile.js");
+
+var styles = {};
+var a = 'test';`,
   );
 });

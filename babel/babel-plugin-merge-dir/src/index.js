@@ -25,20 +25,21 @@ export default declare(
       callback: (filenames: $ReadOnlyArray<string>) => string,
     |},
   ): {} => {
-    const cacheFilePath = nodePath.resolve(dir, './.mergeDir');
+    const rootDir = nodePath.resolve(process.cwd(), dir);
+    const cacheFilePath = nodePath.resolve(rootDir, './.mergeDir');
     const cache = {};
 
     assertVersion(7);
-    d3DirTree(dir, options)
+    d3DirTree(rootDir, options)
       .leaves()
       .forEach(({ data: { path: filename } }: d3DirTreeNodeType) => {
-        cache[filename] = nodePath.relative(dir, filename);
+        cache[filename] = filename;
       });
     outputFileSync(cacheFilePath, callback?.(Object.values(cache)) || '');
 
     return {
       visitor: {
-        Identifier: (
+        CallExpression: (
           path: nodePathType,
           {
             file: {
@@ -50,26 +51,26 @@ export default declare(
             |},
           |},
         ) => {
-          if (
-            !t.isIdentifier(path.node, { name: 'require' }) ||
-            !t.isCallExpression(path.parentPath.node)
-          )
+          if (!t.isIdentifier(path.get('callee').node, { name: 'require' }))
             return;
 
           const modulePath = nodePath.resolve(
             nodePath.dirname(filename),
-            path.parentPath.get('arguments.0').node.value,
+            path.get('arguments.0').node.value,
           );
 
-          if (modulePath !== dir) return;
+          if (modulePath !== rootDir) {
+            if (modulePath.includes(rootDir)) path.remove();
+            return;
+          }
 
-          path.parentPath.replaceWith(
-            t.callExpression(path.node, [
+          path
+            .get('arguments.0')
+            .replaceWith(
               t.stringLiteral(
                 nodePath.relative(nodePath.dirname(filename), cacheFilePath),
               ),
-            ]),
-          );
+            );
         },
       },
       post: ({
@@ -79,9 +80,9 @@ export default declare(
           filename: string,
         |},
       |}) => {
-        if (!filename.includes(dir)) return;
+        if (!filename.includes(rootDir)) return;
 
-        cache[filename] = nodePath.relative(dir, filename);
+        cache[filename] = filename;
         outputFileSync(cacheFilePath, callback?.(Object.values(cache)) || '');
       },
     };

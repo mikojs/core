@@ -42,7 +42,7 @@ export default [
     [filePath, ''],
   ],
   [
-    'should transform import',
+    'should transform import module',
     {
       ...options,
       filename: path.resolve(__dirname, '../index.js'),
@@ -50,12 +50,33 @@ export default [
     `// @flow
 
 import './__ignore__/a';
-import './a'`,
+import './__ignore';
+import './a';`,
     [
       filePath,
       `// @flow
 
-import './a'`,
+import './__ignore__/.mergeDir';
+import './a';`,
+    ],
+  ],
+  [
+    'should transform require module',
+    {
+      ...options,
+      filename: path.resolve(__dirname, '../index.js'),
+    },
+    `// @flow
+
+require('./__ignore__/a');
+require('./__ignore');
+require('./a');`,
+    [
+      filePath,
+      `// @flow
+
+require('./__ignore/.mergeDir');
+require('./a');`,
     ],
   ],
 ];

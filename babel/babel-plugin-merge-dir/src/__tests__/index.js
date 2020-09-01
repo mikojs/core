@@ -16,9 +16,10 @@ describe('babel-plugin-merge-dir', () => {
       info: string,
       options: {},
       content: string,
+      code: string,
       expected: [string, string] | null,
     ) => {
-      transformSync(content, options);
+      expect(transformSync(content, options).code).toBe(code);
 
       if (expected) expect(outputFileSync.mock.calls[0]).toEqual(expected);
       else expect(outputFileSync).not.toHaveBeenCalled();

@@ -29,6 +29,7 @@ export default [
       plugins: [babelPluginMergeDir],
     },
     `// @flow`,
+    '',
     // for load plugin
     [path.resolve(process.cwd(), './.mergeDir'), ''],
   ],
@@ -39,6 +40,7 @@ export default [
       filename: path.resolve(__dirname, '../index.js'),
     },
     `// @flow`,
+    '',
     // for load plugin
     [path.resolve(__dirname, './.mergeDir'), ''],
   ],
@@ -55,6 +57,7 @@ import './__ignore__';
 import a from './a';
 
 a();`,
+    '',
     null,
   ],
   [
@@ -70,6 +73,7 @@ require('./__ignore__');
 const a = require('./a');
 
 a();`,
+    '',
     null,
   ],
 ];

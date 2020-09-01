@@ -52,7 +52,9 @@ export default [
 
 import './__ignore__/a';
 import './__ignore__';
-import './a';`,
+import a from './a';
+
+a();`,
     null,
   ],
   [
@@ -65,7 +67,9 @@ import './a';`,
 
 require('./__ignore__/a');
 require('./__ignore__');
-require('./a');`,
+const a = require('./a');
+
+a();`,
     null,
   ],
 ];

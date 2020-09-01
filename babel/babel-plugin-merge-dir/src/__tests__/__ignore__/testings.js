@@ -28,8 +28,8 @@ export default [
       ...options,
       plugins: [babelPluginMergeDir],
     },
-    `// @flow`,
-    '',
+    '// @flow',
+    '// @flow',
     // for load plugin
     [path.resolve(process.cwd(), './.mergeDir'), ''],
   ],
@@ -39,8 +39,8 @@ export default [
       ...options,
       filename: path.resolve(__dirname, '../index.js'),
     },
-    `// @flow`,
-    '',
+    '// @flow',
+    '// @flow',
     // for load plugin
     [path.resolve(__dirname, './.mergeDir'), ''],
   ],
@@ -54,10 +54,19 @@ export default [
 
 import './__ignore__/a';
 import './__ignore__';
-import a from './a';
+import './a';
 
-a();`,
-    '',
+import mergeDir from './__ignore__';
+
+mergeDir();`,
+    `// @flow
+
+import './__ignore__/.mergeDir';
+import './a';
+
+import mergeDir from './__ignore__/.mergeDir';
+
+mergeDir();`,
     null,
   ],
   [
@@ -70,10 +79,19 @@ a();`,
 
 require('./__ignore__/a');
 require('./__ignore__');
-const a = require('./a');
+require('./a');
 
-a();`,
-    '',
+const mergeDir = require('./__ignore__');
+
+mergeDir();`,
+    `// @flow
+
+require('./__ignore__/.mergeDir');
+require('./a');
+
+const mergeDir = require('./__ignore__/.mergeDir');
+
+mergeDir();`,
     null,
   ],
 ];

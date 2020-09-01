@@ -16,11 +16,12 @@ describe('babel-plugin-merge-dir', () => {
       info: string,
       options: {},
       content: string,
-      expected: [string, string],
+      expected: [string, string] | null,
     ) => {
       transformSync(content, options);
 
-      expect(outputFileSync.mock.calls[0]).toEqual(expected);
+      if (expected) expect(outputFileSync.mock.calls[0]).toEqual(expected);
+      else expect(outputFileSync).not.toHaveBeenCalled();
     },
   );
 });

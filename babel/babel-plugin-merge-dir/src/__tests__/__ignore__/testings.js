@@ -20,7 +20,6 @@ const options = {
   babelrc: false,
   configFile: false,
 };
-const filePath = path.resolve(__dirname, './.mergeDir');
 
 export default [
   [
@@ -30,6 +29,7 @@ export default [
       plugins: [babelPluginMergeDir],
     },
     `// @flow`,
+    // for load plugin
     [path.resolve(process.cwd(), './.mergeDir'), ''],
   ],
   [
@@ -39,7 +39,8 @@ export default [
       filename: path.resolve(__dirname, '../index.js'),
     },
     `// @flow`,
-    [filePath, ''],
+    // for load plugin
+    [path.resolve(__dirname, './.mergeDir'), ''],
   ],
   [
     'should transform import module',
@@ -50,15 +51,9 @@ export default [
     `// @flow
 
 import './__ignore__/a';
-import './__ignore';
+import './__ignore__';
 import './a';`,
-    [
-      filePath,
-      `// @flow
-
-import './__ignore__/.mergeDir';
-import './a';`,
-    ],
+    null,
   ],
   [
     'should transform require module',
@@ -69,14 +64,8 @@ import './a';`,
     `// @flow
 
 require('./__ignore__/a');
-require('./__ignore');
+require('./__ignore__');
 require('./a');`,
-    [
-      filePath,
-      `// @flow
-
-require('./__ignore/.mergeDir');
-require('./a');`,
-    ],
+    null,
   ],
 ];

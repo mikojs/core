@@ -39,6 +39,37 @@ export default declare(
 
     return {
       visitor: {
+        ImportDeclaration: (
+          path: nodePathType,
+          {
+            file: {
+              opts: { filename },
+            },
+          }: {|
+            file: {|
+              opts: {| filename: string |},
+            |},
+          |},
+        ) => {
+          const modulePath = nodePath.resolve(
+            nodePath.dirname(filename),
+            path.get('source').node.value,
+          );
+
+          if (modulePath !== rootDir) {
+            if (modulePath.includes(rootDir)) path.remove();
+            return;
+          }
+
+          path
+            .get('source')
+            .replaceWith(
+              t.stringLiteral(
+                nodePath.relative(nodePath.dirname(filename), cacheFilePath),
+              ),
+            );
+        },
+
         CallExpression: (
           path: nodePathType,
           {

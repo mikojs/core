@@ -61,11 +61,8 @@ import mergeDir from './__ignore__';
 mergeDir();`,
     `// @flow
 import "__ignore__/.mergeDir";
-
 import './a';
-
 import mergeDir from "__ignore__/.mergeDir";
-
 mergeDir();`,
     null,
   ],

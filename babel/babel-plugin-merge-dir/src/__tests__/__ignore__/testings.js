@@ -4,7 +4,15 @@ import path from 'path';
 
 import babelPluginMergeDir from '../../index';
 
-export const callback = jest.fn<$ReadOnlyArray<string>, void>();
+export const callback = jest
+  .fn<$ReadOnlyArray<string>, void>()
+  .mockImplementation(
+    (filenames: $ReadOnlyArray<string>) => `module.exports = {
+${filenames
+  .map((filename: string, index: number) => `  m${index}: ${filename},`)
+  .join('\n')}
+};`,
+  );
 
 const options = {
   filename: path.resolve(__dirname, './index.js'),
@@ -13,6 +21,7 @@ const options = {
       babelPluginMergeDir,
       {
         dir: __dirname,
+        extensions: /\.js$/,
         callback,
       },
     ],
@@ -42,7 +51,17 @@ export default [
     '// @flow',
     '// @flow',
     // for loading plugin
-    [path.resolve(__dirname, './.mergeDir'), ''],
+    [
+      path.resolve(__dirname, './.mergeDir'),
+      `module.exports = {
+${['a.js', 'b/a.js', 'b/index.js', 'index.js', 'testings.js']
+  .map(
+    (filename: string, index: number) =>
+      `  m${index}: ${path.resolve(__dirname, filename)},`,
+  )
+  .join('\n')}
+};`,
+    ],
   ],
   [
     'should transform import module',

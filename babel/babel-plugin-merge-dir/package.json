@@ -1,0 +1,30 @@
+{
+  "name": "@mikojs/babel-plugin-merge-dir",
+  "description": "Use to merge the files in the directory.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/babel-plugin-merge-dir",
+  "repository": "https://github.com/mikojs/core/tree/master/babel/babel-plugin-merge-dir",
+  "version": "1.10.4",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/helper-plugin-utils": "^7.8.3",
+    "@babel/runtime": "^7.9.6",
+    "@mikojs/utils": "^1.11.1",
+    "core-js": "^3.6.5",
+    "output-file-sync": "^2.0.1"
+  },
+  "peerDependencies": {
+    "@babel/core": ">=7.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/traverse": "^7.9.6",
+    "flow-bin": "^0.125.1",
+    "flow-typed": "^3.1.0"
+  },
+  "keywords": ["babel plugin", "merge dir", "mikojs"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

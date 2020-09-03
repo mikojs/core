@@ -12,6 +12,12 @@ import {
   type d3DirTreeOptionsType,
 } from '@mikojs/utils/lib/d3DirTree';
 
+type optionType = {|
+  file: {|
+    opts: {| filename: string |},
+  |},
+|};
+
 export default declare(
   (
     { assertVersion, types: t }: nodePathType,
@@ -29,6 +35,39 @@ export default declare(
     const cacheFilePath = nodePath.resolve(rootDir, './.mergeDir');
     const cache = {};
 
+    /**
+     * @param {string} nodeKey - use to find the file path
+     * @param {nodePathType} path - babel node path
+     * @param {optionType} option - babel option
+     */
+    const replaceWithCacheFile = (
+      nodeKey: string,
+      path: nodePathType,
+      {
+        file: {
+          opts: { filename },
+        },
+      }: optionType,
+    ) => {
+      const modulePath = nodePath.resolve(
+        nodePath.dirname(filename),
+        path.get(nodeKey).node.value,
+      );
+
+      if (modulePath !== rootDir) {
+        if (modulePath.includes(rootDir)) path.remove();
+        return;
+      }
+
+      path
+        .get(nodeKey)
+        .replaceWith(
+          t.stringLiteral(
+            nodePath.relative(nodePath.dirname(filename), cacheFilePath),
+          ),
+        );
+    };
+
     assertVersion(7);
     d3DirTree(rootDir, options)
       .leaves()
@@ -39,78 +78,18 @@ export default declare(
 
     return {
       visitor: {
-        ImportDeclaration: (
-          path: nodePathType,
-          {
-            file: {
-              opts: { filename },
-            },
-          }: {|
-            file: {|
-              opts: {| filename: string |},
-            |},
-          |},
-        ) => {
-          const modulePath = nodePath.resolve(
-            nodePath.dirname(filename),
-            path.get('source').node.value,
-          );
-
-          if (modulePath !== rootDir) {
-            if (modulePath.includes(rootDir)) path.remove();
-            return;
-          }
-
-          path
-            .get('source')
-            .replaceWith(
-              t.stringLiteral(
-                nodePath.relative(nodePath.dirname(filename), cacheFilePath),
-              ),
-            );
+        ImportDeclaration: (path: nodePathType, option: optionType) => {
+          replaceWithCacheFile('source', path, option);
         },
 
-        CallExpression: (
-          path: nodePathType,
-          {
-            file: {
-              opts: { filename },
-            },
-          }: {|
-            file: {|
-              opts: {| filename: string |},
-            |},
-          |},
-        ) => {
+        CallExpression: (path: nodePathType, option: optionType) => {
           if (!t.isIdentifier(path.get('callee').node, { name: 'require' }))
             return;
 
-          const modulePath = nodePath.resolve(
-            nodePath.dirname(filename),
-            path.get('arguments.0').node.value,
-          );
-
-          if (modulePath !== rootDir) {
-            if (modulePath.includes(rootDir)) path.remove();
-            return;
-          }
-
-          path
-            .get('arguments.0')
-            .replaceWith(
-              t.stringLiteral(
-                nodePath.relative(nodePath.dirname(filename), cacheFilePath),
-              ),
-            );
+          replaceWithCacheFile('arguments.0', path, option);
         },
       },
-      post: ({
-        opts: { filename },
-      }: {|
-        opts: {|
-          filename: string,
-        |},
-      |}) => {
+      post: ({ opts: { filename } }: $PropertyType<optionType, 'file'>) => {
         if (!filename.includes(rootDir)) return;
 
         cache[filename] = filename;

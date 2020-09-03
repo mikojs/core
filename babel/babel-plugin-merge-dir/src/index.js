@@ -74,7 +74,7 @@ export default declare(
       .forEach(({ data: { path: filename } }: d3DirTreeNodeType) => {
         cache[filename] = filename;
       });
-    outputFileSync(cacheFilePath, callback?.(Object.values(cache)) || '');
+    outputFileSync(cacheFilePath, callback?.(Object.keys(cache)) || '');
 
     return {
       visitor: {
@@ -93,7 +93,7 @@ export default declare(
         if (!filename.includes(rootDir)) return;
 
         cache[filename] = filename;
-        outputFileSync(cacheFilePath, callback?.(Object.values(cache)) || '');
+        outputFileSync(cacheFilePath, callback?.(Object.keys(cache)) || '');
       },
     };
   },

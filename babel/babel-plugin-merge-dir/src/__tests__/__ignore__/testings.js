@@ -4,7 +4,7 @@ import path from 'path';
 
 import babelPluginMergeDir from '../../index';
 
-export const callback = jest.fn();
+export const callback = jest.fn<$ReadOnlyArray<string>, void>();
 
 const options = {
   filename: path.resolve(__dirname, './index.js'),

@@ -4,15 +4,16 @@ import path from 'path';
 
 import babelPluginMergeDir from '../../index';
 
-export const callback = jest
-  .fn<$ReadOnlyArray<string>, void>()
-  .mockImplementation(
-    (filenames: $ReadOnlyArray<string>) => `module.exports = {
+export const callback: JestMockFn<
+  [$ReadOnlyArray<string>],
+  string,
+> = jest.fn().mockImplementation(
+  (filenames: $ReadOnlyArray<string>) => `module.exports = {
 ${filenames
   .map((filename: string, index: number) => `  m${index}: ${filename},`)
   .join('\n')}
 };`,
-  );
+);
 
 const options = {
   filename: path.resolve(__dirname, './index.js'),

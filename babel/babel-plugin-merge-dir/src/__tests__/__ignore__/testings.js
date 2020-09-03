@@ -30,7 +30,7 @@ export default [
     },
     '// @flow',
     '// @flow',
-    // for load plugin
+    // for loading plugin
     [path.resolve(process.cwd(), './.mergeDir'), ''],
   ],
   [
@@ -41,7 +41,7 @@ export default [
     },
     '// @flow',
     '// @flow',
-    // for load plugin
+    // for loading plugin
     [path.resolve(__dirname, './.mergeDir'), ''],
   ],
   [

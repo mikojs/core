@@ -15,13 +15,13 @@ Use to merge the files in the directory.
 #### In
 
 ```js
-// TODO
+import mergeDir from './mergeDir';
 ```
 
 #### Out
 
 ```js
-// TODO
+import mergeDir from './mergeDir/.mergeDir';
 ```
 
 ````
@@ -38,7 +38,17 @@ yarn add @mikojs/babel-plugin-merge-dir --dev
 ...
   plugins: [
     ...
-    '@mikojs/merge-dir',
+    [
+      '@mikojs/merge-dir',
+      {
+        dir: './mergeDir',
+        callback: filenames => `${filenames.map((filename, index) => `const m${index} = require('${filename}');`)}
+
+module.exports = {
+${filenames.map((filename, index) => `  m${index},`)}
+};`,
+      },
+    ],
     ...
   ],
 ...

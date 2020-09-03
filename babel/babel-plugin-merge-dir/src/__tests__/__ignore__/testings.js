@@ -60,11 +60,11 @@ import mergeDir from './__ignore__';
 
 mergeDir();`,
     `// @flow
+import "__ignore__/.mergeDir";
 
-import './__ignore__/.mergeDir';
 import './a';
 
-import mergeDir from './__ignore__/.mergeDir';
+import mergeDir from "__ignore__/.mergeDir";
 
 mergeDir();`,
     null,
@@ -85,11 +85,11 @@ const mergeDir = require('./__ignore__');
 
 mergeDir();`,
     `// @flow
+require("__ignore__/.mergeDir");
 
-require('./__ignore__/.mergeDir');
 require('./a');
 
-const mergeDir = require('./__ignore__/.mergeDir');
+const mergeDir = require("__ignore__/.mergeDir");
 
 mergeDir();`,
     null,

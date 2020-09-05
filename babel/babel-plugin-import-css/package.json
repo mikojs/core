@@ -19,7 +19,7 @@
     "@babel/core": "^7.9.6",
     "@babel/traverse": "^7.9.6",
     "flow-bin": "^0.125.1",
-    "flow-typed": "^3.1.0"
+    "flow-typed": "^3.2.1"
   },
   "keywords": [
     "babel plugin",

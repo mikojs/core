@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "flow-bin": "^0.125.1",
-    "flow-typed": "^3.1.0"
+    "flow-typed": "^3.2.1"
   },
   "keywords": ["babel preset", "base", "mikojs"],
   "publishConfig": {

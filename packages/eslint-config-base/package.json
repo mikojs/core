@@ -34,7 +34,7 @@
     "eslint": "^7.0.0",
     "fbjs": "^1.0.0",
     "flow-bin": "^0.125.1",
-    "flow-typed": "^3.1.0",
+    "flow-typed": "^3.2.1",
     "react": "^16.13.1"
   },
   "keywords": ["eslint", "mikojs"],

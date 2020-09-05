@@ -3,7 +3,7 @@
 import nodePath from 'path';
 
 import { declare } from '@babel/helper-plugin-utils';
-import type nodePathType from '@babel/traverse';
+import typeof nodePathType from '@babel/traverse';
 
 export default declare(
   (

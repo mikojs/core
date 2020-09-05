@@ -8,11 +8,11 @@
   "version": "1.11.1",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.9.6",
+    "@babel/runtime": "^7.11.2",
     "@mikojs/utils": "^1.11.1",
     "core-js": "^3.6.5",
     "debug": "^4.1.1",
-    "execa": "^4.0.1",
+    "execa": "^4.0.3",
     "find-process": "^1.4.3",
     "get-port": "^5.1.1"
   },

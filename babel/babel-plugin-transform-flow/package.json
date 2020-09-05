@@ -18,7 +18,7 @@
     "@babel/core": ">=7.0.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.125.1",
+    "flow-bin": "^0.133.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["babel plugin", "mikojs", "transform flow files"],

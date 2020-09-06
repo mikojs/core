@@ -91,6 +91,12 @@ const getBadges = (
       filePath: './.npmignore',
       badgeName: 'github-size',
       image: `https://img.shields.io/github/repo-size/${username}/${projectName}.svg`,
+
+      /**
+       * @param {boolean} result - use function or not
+       *
+       * @return {boolean} - the result of the checking
+       */
       filterFunc: (result: boolean) => !result,
     },
     ...Object.keys(engines).map((key: string) => ({

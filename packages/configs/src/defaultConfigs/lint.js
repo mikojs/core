@@ -5,6 +5,10 @@ export default {
     config: '.eslintrc.js',
     ignore: '.eslintignore',
   },
+
+  /**
+   * @return {object} - lint config
+   */
   config: () => ({
     extends: '@mikojs/base',
     rules: {
@@ -16,6 +20,10 @@ export default {
       ],
     },
   }),
+
+  /**
+   * @return {Array} - lint ignore
+   */
   ignore: () => [
     // node
     'node_modules',

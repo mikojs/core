@@ -4,6 +4,11 @@ import gitBranch from 'git-branch';
 import { cosmiconfigSync } from 'cosmiconfig';
 
 export default {
+  /**
+   * @param {object} config - prev miko config
+   *
+   * @return {object} - new miko config
+   */
   miko: <
     C: {
       [string]: {| command: string | (() => string), description: string |},
@@ -15,6 +20,9 @@ export default {
   ): C => ({
     ...config,
     flow: {
+      /**
+       * @return {string} - command string
+       */
       command: (): string => {
         const flow = `flow --quiet${
           process.env.CI === 'true' ? ' && flow stop' : ''
@@ -35,6 +43,9 @@ export default {
         .join(' && '),
     },
     babel: {
+      /**
+       * @return {string} - command string
+       */
       command: () =>
         `${config.build.command} --config-file ${
           cosmiconfigSync('babel').search()?.filepath || 'babel.config.js'
@@ -47,6 +58,10 @@ export default {
     },
     dev: {
       ...config.dev,
+
+      /**
+       * @return {string} - command string
+       */
       command: (): string => {
         const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'master';
 
@@ -60,6 +75,10 @@ export default {
     },
     'husky:pre-commit': {
       ...config['husky:pre-commit'],
+
+      /**
+       * @return {string} - command string
+       */
       command: (): string => {
         const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'master';
 

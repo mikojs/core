@@ -7,16 +7,36 @@ import normalizeBabel, {
 import normalizeLint, { type rulesType, type lintType } from './normalize/lint';
 
 export default {
-  // babel
+  /**
+   * @param {object} config - prev babel config
+   * @param {Array} config.presets - babel presets array
+   * @param {Array} config.plugins - babel plugins array
+   *
+   * @return {object} - new babel config
+   */
   babel: ({ presets, plugins, ...config }: babelType) => ({
     ...config,
     presets: normalizeBabel.presetOrPlugin('preset', presets, {
+      /**
+       * @param {Array} option - prev babel preset options
+       * @param {string} option.0 - babel preset name
+       * @param {object} option.1 - babel preset options
+       *
+       * @return {Array} - new babel preset options
+       */
       '@babel/react': ([preset, options]: presetOrPluginType) => [
         preset,
         options,
       ],
     }),
     plugins: normalizeBabel.presetOrPlugin('plugin', plugins, {
+      /**
+       * @param {Array} option - prev babel plugin options
+       * @param {string} option.0 - babel plugin name
+       * @param {object} option.1 - babel plugin options
+       *
+       * @return {Array} - new babel plugin options
+       */
       '@babel/proposal-class-properties': ([
         plugin,
         options,
@@ -30,10 +50,22 @@ export default {
     }),
   }),
 
-  // lint
+  /**
+   * @param {object} config - prev lint config
+   * @param {Array} config.rules - lint rules options
+   *
+   * @return {object} - new lint config
+   */
   lint: ({ rules, ...config }: lintType) => ({
     ...config,
     rules: normalizeLint.rules(rules, {
+      /**
+       * @param {Array} option - prev lint rule options
+       * @param {string} option.0 - lint rule name
+       * @param {object} option.1 - lint rule options
+       *
+       * @return {Array} - new lint rule options
+       */
       'jsdoc/check-tag-names': ([rule, options]: $NonMaybeType<
         $PropertyType<rulesType, 'jsdoc/check-tag-names'>,
       >) => [
@@ -43,6 +75,14 @@ export default {
           definedTags: [...(options.definedTags || []), 'react'],
         },
       ],
+
+      /**
+       * @param {Array} option - prev lint rule options
+       * @param {string} option.0 - lint rule name
+       * @param {object} option.1 - lint rule options
+       *
+       * @return {Array} - new lint rule options
+       */
       'jsdoc/require-param': ([rule, options]: $NonMaybeType<
         $PropertyType<rulesType, 'jsdoc/require-param'>,
       >) => [
@@ -52,6 +92,14 @@ export default {
           exemptedBy: [...(options.exemptedBy || []), 'react'],
         },
       ],
+
+      /**
+       * @param {Array} option - prev lint rule options
+       * @param {string} option.0 - lint rule name
+       * @param {object} option.1 - lint rule options
+       *
+       * @return {Array} - new lint rule options
+       */
       'jsdoc/require-returns': ([rule, options]: $NonMaybeType<
         $PropertyType<rulesType, 'jsdoc/require-returns'>,
       >) => [
@@ -64,7 +112,12 @@ export default {
     }),
   }),
 
-  // jest
+  /**
+   * @param {object} config - prev jest config
+   * @param {Array} config.setupFiles - jest setupFiles options
+   *
+   * @return {object} - new jest config
+   */
   jest: ({
     setupFiles,
     ...config

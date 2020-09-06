@@ -9,6 +9,9 @@ const config = {
     filenames: {
       config: 'testConfig.config.js',
     },
+    /**
+     * @return {object} - config object
+     */
     config: () => ({ key: 'value' }),
   },
 };

@@ -19,6 +19,12 @@ const removeEmptyOption = (rule: [string, {}]) =>
   Object.keys(rule[1] || {}).length === 0 ? rule[0] : rule;
 
 export default {
+  /**
+   * @param {rulesType} rules - prev lint rules
+   * @param {Function} newRulesCallback - use to build the new lint rules
+   *
+   * @return {rulesType} - new lint rules
+   */
   rules: <-C: {}>(
     rules: $PropertyType<lintType, 'rules'>,
     newRulesCallback: C,

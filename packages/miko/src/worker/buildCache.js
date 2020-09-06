@@ -25,8 +25,17 @@ const debugLog = debug('miko:worker:buildCache');
 export default (): cacheType => {
   const cache = {};
   const result = {
+    /**
+     * @return {Array} - file path array
+     */
     getFilePaths: () => Object.keys(cache),
 
+    /**
+     * @param {number} pid - process id
+     * @param {string} filePath - file path
+     *
+     * @return {cacheType} - cahce object
+     */
     add: (pid: number, filePath: string): cacheType => {
       if (!cache[filePath]) cache[filePath] = [];
 
@@ -37,6 +46,11 @@ export default (): cacheType => {
       return result;
     },
 
+    /**
+     * @param {string} filePath - file path
+     *
+     * @return {cacheType} - cahce object
+     */
     delete: (filePath: string) =>
       new Promise<cacheType>(resolve => {
         if (fs.existsSync(filePath))
@@ -54,6 +68,9 @@ export default (): cacheType => {
         }
       }),
 
+    /**
+     * @return {cacheType} - cahce object
+     */
     kill: async (): Promise<cacheType> => {
       await Promise.all(
         Object.keys(cache).map((filePath: string): Promise<cacheType> => {
@@ -76,6 +93,9 @@ export default (): cacheType => {
       return result;
     },
 
+    /**
+     * @return {boolean} - has working pids or not
+     */
     hasWorkingPids: () =>
       Object.keys(cache).reduce(
         (hasWorkingPids: boolean, cacheFilePath: string): boolean => {

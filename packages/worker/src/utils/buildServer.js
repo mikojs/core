@@ -55,6 +55,9 @@ export default (port: number): net$Server => {
           if (hasStdout) {
             socket.write('stdout;');
             argv[0] = new stream.Writable({
+              /**
+               * @param {Buffer} chunk - pipline chunk
+               */
               write: (chunk: Buffer | string) => {
                 socket.write(chunk);
               },

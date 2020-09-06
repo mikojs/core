@@ -65,6 +65,10 @@ export const routes = [
     path: chunkName,
     component: {
       chunkName,
+
+      /**
+       * @return {object} - load page
+       */
       loader: async () => ({ default: Page }),
     },
   },
@@ -73,6 +77,10 @@ export const routes = [
     path: '/two',
     component: {
       chunkName: '/two',
+
+      /**
+       * @return {object} - load page
+       */
       loader: async () => ({ default: Page }),
     },
   },

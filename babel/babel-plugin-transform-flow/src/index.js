@@ -31,6 +31,14 @@ export default declare(
     assertVersion(7);
 
     return {
+      /**
+       * @param {object} options - babel options
+       * @param {object} options.opts - babel opts options
+       * @param {string} options.opts.cwd - babel cwd option
+       * @param {string} options.opts.filename - babel filename option
+       * @param {object} options.opts.parserOpts - babel parserOpts options
+       * @param {string} options.code - compiled code
+       */
       post: ({
         opts: { cwd, filename, parserOpts },
         code: content,

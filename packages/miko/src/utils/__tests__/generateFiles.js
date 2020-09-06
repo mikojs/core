@@ -17,12 +17,20 @@ cache.load({
         filenames: {
           config: 'babel.config.js',
         },
+
+        /**
+         * @return {object} - config object
+         */
         config: () => ({ key: 'value' }),
       },
       hasIgnore: {
         filenames: {
           ignore: 'hasIgnore.js',
         },
+
+        /**
+         * @return {Array} - ignore array
+         */
         ignore: () => [],
       },
     },

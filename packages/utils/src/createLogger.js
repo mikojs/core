@@ -30,6 +30,12 @@ const createLogger = (
   Object.keys(names).reduce(
     (result: {}, key: string) => ({
       ...result,
+
+      /**
+       * @param {string} message - logger message
+       *
+       * @return {object} - logger object
+       */
       [key]: (
         message: string,
       ): $Call<typeof createLogger, string, typeof chainingLogger> => {

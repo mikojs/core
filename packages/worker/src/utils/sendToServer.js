@@ -41,6 +41,11 @@ const sendToServer = <+R>(
           port,
           onread: {
             buffer: Buffer.alloc(1),
+
+            /**
+             * @param {number} size - buffer size
+             * @param {Buffer} buffer - buffer array
+             */
             callback: (size: number, buffer: Buffer) => {
               const text = buffer.toString('utf8', 0, size);
 

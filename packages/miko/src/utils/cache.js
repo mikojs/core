@@ -61,9 +61,23 @@ const buildCache = (): cacheType => {
     configs: {},
   };
   const result = {
+    /**
+     * @return {Array} - configs array
+     */
     keys: () => Object.keys(cache.configs),
+
+    /**
+     * @param {string} filePath - config file path
+     *
+     * @return {string} - absolute config file path
+     */
     resolve: (filePath: string) => path.resolve(cache.cwd, filePath),
 
+    /**
+     * @param {string} configName - config name
+     *
+     * @return {object} - config object
+     */
     get: (
       configName: string,
     ): $Call<$PropertyType<cacheType, 'get'>, string> => {
@@ -90,6 +104,11 @@ const buildCache = (): cacheType => {
       };
     },
 
+    /**
+     * @param {configObjType} configObj - config object
+     *
+     * @return {cacheType} - cache object
+     */
     load: (configObj: ?configObjType): cacheType => {
       if (!configObj) return result;
 
@@ -115,6 +134,11 @@ const buildCache = (): cacheType => {
       );
     },
 
+    /**
+     * @param {initialConfigsType} configsArray - configs array
+     *
+     * @return {cacheType} - cache object
+     */
     addConfig: (
       configsArray: $ReadOnlyArray<initialConfigsType>,
     ): cacheType => {
@@ -131,10 +155,22 @@ const buildCache = (): cacheType => {
               ...prevConfig.filenames,
               ...newConfig.filenames,
             },
+
+            /**
+             * @param {object} config - prev config
+             *
+             * @return {object} - new config
+             */
             config: (config: {}) =>
               config
               |> prevConfig.config || emptyFunction.thatReturnsArgument
               |> newConfig.config || emptyFunction.thatReturnsArgument,
+
+            /**
+             * @param {Array} ignore - prev ignore array
+             *
+             * @return {Array} - new ignore array
+             */
             ignore: (ignore: $ReadOnlyArray<string>) =>
               ignore
               |> prevConfig.ignore || emptyFunction.thatReturnsArgument

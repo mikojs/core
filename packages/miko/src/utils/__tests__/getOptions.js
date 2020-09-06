@@ -22,12 +22,18 @@ describe('get options', () => {
       filepath: path.resolve('.mikorc.js'),
       config: [
         {
+          /**
+           * @return {object} - miko config object
+           */
           miko: () => ({
             cmdString: {
               command,
               description: 'cmd string',
             },
             cmdFunc: {
+              /**
+               * @return {string} - command string
+               */
               command: () => command,
               description: 'cmd func',
             },
@@ -94,6 +100,9 @@ describe('get options', () => {
       filepath: path.resolve('.mikorc.js'),
       config: [
         {
+          /**
+           * @return {null} - empty miko config
+           */
           miko: () => null,
         },
       ],

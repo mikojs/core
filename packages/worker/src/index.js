@@ -57,6 +57,12 @@ const buildWorker = async <+R>(
   ].reduce(
     (result: addEndType<R>, key: string) => ({
       ...result,
+
+      /**
+       * @param {Array} argv - argv array
+       *
+       * @return {object} - response from the server
+       */
       [key]: (...argv: $ReadOnlyArray<mixed>) =>
         sendToServer(
           port,

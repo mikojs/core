@@ -5,11 +5,11 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/worker",
   "repository": "https://github.com/mikojs/core/tree/master/packages/worker",
-  "version": "1.11.1",
+  "version": "1.11.2",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "@mikojs/utils": "^1.11.1",
+    "@mikojs/utils": "^1.11.2",
     "core-js": "^3.6.5",
     "debug": "^4.1.1",
     "execa": "^4.0.3",

@@ -4,6 +4,10 @@ export default {
   filenames: {
     config: 'jest.config.js',
   },
+
+  /**
+   * @return {object} - jest config
+   */
   config: () => ({
     setupFiles: ['@mikojs/jest'],
     testPathIgnorePatterns: ['__tests__/__ignore__'],

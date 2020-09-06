@@ -4,7 +4,7 @@
  * @flow
  */
 
-import type MultistreamType from 'multistream';
+import typeof MultistreamType from 'multistream';
 
 import server from '../server';
 

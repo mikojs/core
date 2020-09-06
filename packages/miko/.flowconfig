@@ -11,7 +11,6 @@
 [options]
 module.system.node.allow_root_relative=true
 module.system.node.root_relative_dirname=./src
-esproposal.optional_chaining=enable
 
 [strict]
 

@@ -6,6 +6,10 @@ export default {
   filenames: {
     config: 'babel.config.js',
   },
+
+  /**
+   * @return {object} - babel config
+   */
   config: () => ({
     presets: ['@mikojs/base'],
     ignore: mockChoice(

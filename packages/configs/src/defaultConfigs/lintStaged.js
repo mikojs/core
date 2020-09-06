@@ -4,6 +4,10 @@ export default {
   filenames: {
     config: '.lintstagedrc.js',
   },
+
+  /**
+   * @return {object} - lint-staged config
+   */
   config: () => ({
     '*.js': ['miko prettier', 'miko lint'],
     '*.js.flow': ['miko prettier --parser flow'],

@@ -3,7 +3,7 @@
 import nodePath from 'path';
 
 import { declare } from '@babel/helper-plugin-utils';
-import type nodePathType from '@babel/traverse';
+import typeof nodePathType from '@babel/traverse';
 
 export default declare(
   (
@@ -14,6 +14,13 @@ export default declare(
 
     return {
       visitor: {
+        /**
+         * @param {nodePathType} path - babel path
+         * @param {object} options - babel options
+         * @param {object} options.file - babel file options
+         * @param {object} options.file.opts - babel opts options
+         * @param {string} options.file.opts.filename - babel filename option
+         */
         CallExpression: (
           path: nodePathType,
           {

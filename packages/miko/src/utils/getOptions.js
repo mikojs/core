@@ -89,6 +89,10 @@ export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
           }) => {
             resolve({
               type: 'command',
+
+              /**
+               * @return {commandsType} - commands array
+               */
               getCommands: () =>
                 getCommands(command, configs, rawArgs.slice(3)),
             });

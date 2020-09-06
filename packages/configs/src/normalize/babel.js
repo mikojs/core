@@ -62,6 +62,13 @@ const removeEmptyOption = (presetOrPlugin: presetOrPluginType) =>
     : presetOrPlugin;
 
 export default {
+  /**
+   * @param {string} type - use presets or plugins
+   * @param {stringPresetOrPluginType} presetsOrPlugins - prev babel presets or plugins
+   * @param {Function} newPresetsOrPluginsCallback - use to build the new babel configs
+   *
+   * @return {stringPresetOrPluginType} - new babel presets or plugins
+   */
   presetOrPlugin: <-C: {}>(
     type: 'plugin' | 'preset',
     presetsOrPlugins: ?stringPresetOrPluginType,

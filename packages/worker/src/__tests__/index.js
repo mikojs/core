@@ -75,6 +75,11 @@ describe('worker', () => {
       expect(
         await worker.func(
           new stream.Writable({
+            /**
+             * @param {Buffer} chunk - pipline chunk
+             * @param {string} encoding - encoding type
+             * @param {Function} callback - callback function
+             */
             write: (
               chunk: Buffer | string,
               encoding: string,

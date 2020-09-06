@@ -73,7 +73,7 @@ export default [
               ...result,
               settings: {
                 ...result.settings,
-                // $FlowFixMe https://github.com/facebook/flow/issues/8243
+                // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/8243
                 ...otherConfig.settings,
               },
             };
@@ -83,7 +83,7 @@ export default [
               ...result,
               rules: {
                 ...result.rules,
-                // $FlowFixMe https://github.com/facebook/flow/issues/8243
+                // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/8243
                 ...otherConfig.rules,
               },
             };

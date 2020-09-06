@@ -8,6 +8,7 @@ import cache, { type initialConfigsType } from './utils/cache';
 
 import typeof * as workerType from './worker';
 
+// $FlowFixMe FIXME: Owing to utils/cache use pipline
 export type configsType = initialConfigsType;
 
 /**

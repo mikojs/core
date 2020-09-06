@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { ESLint, type LintResult as LintResultType } from 'eslint';
+import { ESLint, typeof LintResult as LintResultType } from 'eslint';
 import { hyphenate } from 'fbjs';
 
 import { d3DirTree } from '@mikojs/utils';

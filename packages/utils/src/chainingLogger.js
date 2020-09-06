@@ -3,6 +3,11 @@
 import chalk from 'chalk';
 
 const chainingLogger = {
+  /**
+   * @param {string} message - logger message
+   *
+   * @return {chainingLogger} - chaing logger object
+   */
   log: (message: string): typeof chainingLogger => {
     const { log } = console;
 
@@ -10,6 +15,12 @@ const chainingLogger = {
 
     return chainingLogger;
   },
+
+  /**
+   * @param {string} message - logger message
+   *
+   * @return {chainingLogger} - chaing logger object
+   */
   succeed: (message: string): typeof chainingLogger => {
     const { log } = console;
 
@@ -17,6 +28,12 @@ const chainingLogger = {
 
     return chainingLogger;
   },
+
+  /**
+   * @param {string} message - logger message
+   *
+   * @return {chainingLogger} - chaing logger object
+   */
   fail: (message: string): typeof chainingLogger => {
     const { error } = console;
 
@@ -24,6 +41,12 @@ const chainingLogger = {
 
     return chainingLogger;
   },
+
+  /**
+   * @param {string} message - logger message
+   *
+   * @return {chainingLogger} - chaing logger object
+   */
   warn: (message: string): typeof chainingLogger => {
     const { warn } = console;
 
@@ -31,6 +54,12 @@ const chainingLogger = {
 
     return chainingLogger;
   },
+
+  /**
+   * @param {string} message - logger message
+   *
+   * @return {chainingLogger} - chaing logger object
+   */
   info: (message: string): typeof chainingLogger => {
     const { info } = console;
 

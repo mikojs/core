@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 1.11.2 (2020-09-06)
+
+#### :rocket: New Feature
+
+- `badges`, `configs`, `eslint-config-base`, `jest`, `miko`, `utils`, `worker`
+  - [#643](https://github.com/mikojs/core/pull/643) (@mikojs/core) Upgrade package ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- [#637](https://github.com/mikojs/core/pull/637) chore(deps): bump elliptic from 6.4.1 to 6.5.3 ([@dependabot[bot]](https://github.com/apps/dependabot))
+
+#### :house: Internal
+
+- [#640](https://github.com/mikojs/core/pull/640) (@mikojs/babel-plugin-import-css) Simplify code ([@HsuTing](https://github.com/HsuTing))
+- [#639](https://github.com/mikojs/core/pull/639) (@mikojs/core) Remove not used mocks ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.11.1 (2020-07-20)
 
 #### :bug: Bug Fix

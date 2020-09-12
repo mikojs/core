@@ -1,7 +1,10 @@
 // @flow
 
 import path from 'path';
-import http from 'http';
+import {
+  type IncomingMessage as IncomingMessageType,
+  type ServerResponse as ServerResponseType,
+} from 'http';
 
 import chokidar from 'chokidar';
 
@@ -43,6 +46,6 @@ export default ({
     });
   });
 
-  return (req: http.IncomingMessage, res: http.ServerResponse) =>
+  return (req: IncomingMessageType, res: ServerResponseType) =>
     middleware(req, res);
 };

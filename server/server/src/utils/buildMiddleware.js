@@ -5,12 +5,9 @@ import http from 'http';
 
 import chokidar from 'chokidar';
 
-type eventType = 'add' | 'change' | 'unlink';
+import { type middlewareType } from '../types';
 
-export type middlewareType = (
-  req: http.IncomingMessage,
-  res: http.ServerResponse,
-) => Promise<void> | void;
+type eventType = 'add' | 'change' | 'unlink';
 
 export type optionsType = {|
   folderPath: string,
@@ -46,7 +43,6 @@ export default ({
     });
   });
 
-  return async (req: http.IncomingMessage, res: http.ServerResponse) => {
-    await middleware(req, res);
-  };
+  return (req: http.IncomingMessage, res: http.ServerResponse) =>
+    middleware(req, res);
 };

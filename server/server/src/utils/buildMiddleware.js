@@ -9,7 +9,7 @@ import {
 import chokidar from 'chokidar';
 import outputFileSync from 'output-file-sync';
 
-import { requreMoudle } from '@mikojs/utils';
+import { requireModule } from '@mikojs/utils';
 
 import { type middlewareType } from '../types';
 
@@ -53,5 +53,5 @@ export default (
   });
 
   return (req: IncomingMessageType, res: ServerResponseType) =>
-    requreMoudle<middlewareType>(req, res);
+    requireModule<middlewareType>(cacheFilePath)(req, res);
 };

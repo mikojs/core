@@ -7,6 +7,9 @@ import {
 } from 'http';
 
 import chokidar from 'chokidar';
+import outputFileSync from 'output-file-sync';
+
+import { requreMoudle } from '@mikojs/utils';
 
 import { type middlewareType } from '../types';
 
@@ -20,32 +23,35 @@ export type optionsType = {|
       filePath: string,
       pathname: string,
     |},
-  ) => middlewareType,
+  ) => string,
   ignored?: RegExp,
 |};
 
 /**
+ * @param {string} cacheFilePath - cache file path
  * @param {optionsType} options - build middleware options
  *
  * @return {middlewareType} - dev middleware
  */
-export default ({
-  folderPath,
-  build,
-  ...options
-}: optionsType): middlewareType => {
+export default (
+  cacheFilePath: string,
+  { folderPath, build, ...options }: optionsType,
+): middlewareType => {
   const watcher = chokidar.watch(folderPath, options);
-  let middleware: middlewareType;
 
   ['add', 'change', 'unlink'].forEach((event: eventType) => {
     watcher.on(event, (filePath: string) => {
-      middleware = build(event, {
-        filePath,
-        pathname: path.relative(folderPath, filePath),
-      });
+      outputFileSync(
+        cacheFilePath,
+        build(event, {
+          filePath,
+          pathname: path.relative(folderPath, filePath),
+        }),
+      );
+      delete require.cache[filePath];
     });
   });
 
   return (req: IncomingMessageType, res: ServerResponseType) =>
-    middleware(req, res);
+    requreMoudle<middlewareType>(req, res);
 };

@@ -1,10 +1,10 @@
 {
-  "name": "@mikojs/babel-watchman",
+  "name": "@mikojs/babel",
   "description": "Run `babel` with `watchman`.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://mikojs.github.io/core/babel-watchman",
-  "repository": "https://github.com/mikojs/core/tree/master/packages/babel-watchman",
+  "homepage": "https://mikojs.github.io/core/babel",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/babel",
   "version": "1.11.2",
   "main": "./lib/index.js",
   "dependencies": {

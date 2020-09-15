@@ -10,7 +10,9 @@
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "@mikojs/utils": "^1.11.2",
-    "core-js": "^3.6.5"
+    "core-js": "^3.6.5",
+    "fb-watchman": "^2.0.1",
+    "ora": "^5.0.0"
   },
   "devDependencies": {
     "flow-bin": "^0.133.0",

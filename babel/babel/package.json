@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel",
-  "repository": "https://github.com/mikojs/core/tree/master/packages/babel",
+  "repository": "https://github.com/mikojs/core/tree/master/babel/babel",
   "version": "1.11.2",
   "main": "./lib/index.js",
   "bin": {

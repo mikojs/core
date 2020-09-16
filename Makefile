@@ -19,9 +19,9 @@ define babel-build
 		--include-dependencies \
 		--scope @mikojs/miko \
 		--scope @mikojs/configs \
-		--scope @mikojs/babel-* \
+		--scope @mikojs/babel* \
 		$(1)
 	ln -snf $(ROOT)/packages/miko/lib/bin/index.js ./node_modules/.bin/miko
-	ln -snf $(ROOT)/packages/babel-miko/lib/bin/index.js ./node_modules/.bin/babel-miko
 	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
+	ln -snf $(ROOT)/babel/babel/lib/bin/index.js ./node_modules/.bin/babel-miko
 endef

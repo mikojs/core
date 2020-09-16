@@ -14,52 +14,16 @@ import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 const logger = createLogger('@mikojs/miko', ora({ discardStdin: false }));
 const client = new watchman.Client();
 const opts = parseArgv(process.argv);
-const fn = opts.cliOptions.outDir ? dirCommand : fileCommand;
-const hash = crypto.createHash('md5').update('@mikojs/babel').digest('hex');
-
-/**
- * @param {any} watch - watch-project response
- * @param {string} relativePath - relative path
- */
-const subscribe = (watch: mixed, relativePath: ?string) => {
-  client.command(
-    [
-      'subscribe',
-      watch,
-      hash,
-      {
-        ...(!relativePath
-          ? {}
-          : {
-              relative_root: relativePath,
-            }),
-        expression: ['allof', ['match', '*.js']],
-        fields: ['name', 'size', 'mtime_ms', 'exists', 'type'],
-      },
-    ],
-    (err: Error) => {
-      if (err) {
-        logger.fail(err.message);
-        return;
-      }
-    },
-  );
-
-  client.on('subscription', ({ subscription }: {| subscription: string |}) => {
-    if (subscription !== hash) return;
-
-    /*
-    files.forEach(file => {
-      console.log(file);
-    });
-    */
-  });
-};
 
 /** */
 const watching = () => {
+  const fileOrDir = opts.cliOptions.outFile || opts.cliOptions.outDir;
+  const hash = crypto.createHash('md5').update('@mikojs/babel').digest('hex');
+
+  if (!fileOrDir) return;
+
   client.command(
-    ['watch-project', opts.cliOptions.outFile || opts.cliOptions.outDir],
+    ['watch-project', fileOrDir],
     (
       err: Error,
       {
@@ -75,7 +39,44 @@ const watching = () => {
 
       if (warning) logger.warn(warning).start('Watching files');
 
-      subscribe(watch, relativePath);
+      client.command(
+        [
+          'subscribe',
+          watch,
+          hash,
+          {
+            ...(!relativePath
+              ? {}
+              : {
+                  relative_root: relativePath,
+                }),
+            expression: [
+              'allof',
+              ['match', opts.cliOptions.extensions || '*.js'],
+            ],
+            fields: ['name', 'exists', 'type'],
+          },
+        ],
+        (subErr: Error) => {
+          if (subErr) {
+            logger.fail(subErr.message);
+            return;
+          }
+        },
+      );
+
+      client.on(
+        'subscription',
+        ({ subscription }: {| subscription: string |}) => {
+          if (subscription !== hash) return;
+
+          /*
+        files.forEach(file => {
+          console.log(file);
+        });
+        */
+        },
+      );
     },
   );
 };
@@ -102,6 +103,8 @@ client.capabilityCheck(
     }
 
     try {
+      const fn = opts.cliOptions.outDir ? dirCommand : fileCommand;
+
       await fn({
         ...opts,
         cliOptions: {
@@ -115,5 +118,6 @@ client.capabilityCheck(
     }
 
     if (!opts.cliOptions.watch) watching();
+    else logger.succeed('Done');
   },
 );

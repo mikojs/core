@@ -8,6 +8,8 @@
   "version": "1.11.2",
   "main": "./lib/index.js",
   "dependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
     "@babel/runtime": "^7.11.2",
     "@mikojs/utils": "^1.11.2",
     "core-js": "^3.6.5",

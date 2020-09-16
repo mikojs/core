@@ -11,7 +11,7 @@ import fileCommand from '@babel/cli/lib/babel/file';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
-const logger = createLogger('@mikojs/miko', ora({ discardStdin: false }));
+const logger = createLogger('@mikojs/babel', ora({ discardStdin: false }));
 const client = new watchman.Client();
 const opts = parseArgv(process.argv);
 

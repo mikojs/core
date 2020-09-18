@@ -1,0 +1,22 @@
+{
+  "name": "@mikojs/server",
+  "description": "Use to build a server.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/server",
+  "repository": "https://github.com/mikojs/core/tree/master/server/server",
+  "version": "1.11.2",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.11.2",
+    "core-js": "^3.6.5"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.133.0",
+    "flow-typed": "^3.2.1"
+  },
+  "keywords": ["mikojs", "server"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -10,6 +10,8 @@
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "core-js": "^3.6.5",
+    "debug": "^4.1.1",
+    "fb-watchman": "^2.0.1",
     "get-port": "^5.1.1",
     "node-fetch": "^2.6.1"
   },

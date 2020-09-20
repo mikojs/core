@@ -9,7 +9,7 @@ import http, {
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
-import { type middlewareType } from './types';
+import { type middlewareType } from './index';
 
 export type fetchResultType = BodyType;
 

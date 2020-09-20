@@ -1,10 +1,9 @@
 // @flow
 
-import crypto from 'crypto';
-
-import watchman from 'fb-watchman';
 import debug from 'debug';
+import watchman from 'fb-watchman';
 import outputFileSync from 'output-file-sync';
+import cryptoRandomString from 'crypto-random-string';
 
 type fileType = {|
   name: string,
@@ -12,7 +11,7 @@ type fileType = {|
   type: 'f',
 |};
 
-type callbackType = (file: fileType) => string;
+export type callbackType = (file: fileType) => string;
 
 const debugLog = debug('server:buildMiddleware');
 
@@ -27,7 +26,7 @@ export default async (
   callback: callbackType,
 ) => {
   const client = new watchman.Client();
-  const hash = crypto.createHash('md5').update('@mikojs/server').digest('hex');
+  const hash = cryptoRandomString({ length: 10, type: 'base64' });
 
   /**
    * @param {string} type - client command type
@@ -92,7 +91,11 @@ export default async (
 
       outputFileSync(
         cacheFilePath,
-        files.reduce((result: string, file: fileType) => callback(file), ''),
+        files.reduce((result: string, file: fileType): string => {
+          delete require.cache[file.name];
+
+          return callback(file);
+        }, ''),
       );
     },
   );

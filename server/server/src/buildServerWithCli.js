@@ -11,6 +11,20 @@ import { type callbackType } from './types';
 import buildMiddleware from './index';
 
 /**
+ * @param {string} folderPath - folder path
+ * @param {number} port - server port
+ * @param {callbackType} callback - callback function to handle file
+ *
+ * @return {ServerType} - server object
+ */
+export const buildServer = async (
+  folderPath: string,
+  port: number,
+  callback: callbackType,
+) =>
+  http.createServer(await buildMiddleware(folderPath, callback)).listen(port);
+
+/**
  * @param {string} cliName - cli name
  * @param {number} port - server port
  * @param {Array} argv - process argv
@@ -36,7 +50,5 @@ export default async (
       .parse(argv),
   );
 
-  return http
-    .createServer(await buildMiddleware(folderPath, callback))
-    .listen(port);
+  return buildServer(folderPath, port, callback);
 };

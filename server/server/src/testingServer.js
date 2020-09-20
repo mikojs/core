@@ -6,7 +6,7 @@ import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
 import { type callbackType } from './types';
-import buildServerWithCli from './buildServerWithCli';
+import { buildServer } from './buildServerWithCli';
 
 export type fetchResultType = BodyType;
 
@@ -47,12 +47,7 @@ export default (): ((
     callback: callbackType,
   ): Promise<cacheType> => {
     cache.port = await getPort();
-    cache.server = await buildServerWithCli(
-      '@mikojs/testing-server',
-      cache.port,
-      ['node', 'server', folderPath],
-      callback,
-    );
+    cache.server = await buildServer(folderPath, cache.port, callback);
 
     return cache;
   };

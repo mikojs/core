@@ -1,18 +1,18 @@
 // @flow
 
-import http, { type Server as ServerType } from 'http';
+import { type Server as ServerType } from 'http';
 
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
-import { type middlewareType } from './types';
+import { type callbackType } from './types';
+import buildServerWithCli from './buildServerWithCli';
 
 export type fetchResultType = BodyType;
 
 type cacheType = {|
-  port: number,
   server?: ServerType,
-  use: (middleware: middlewareType) => Promise<void>,
+  port: number,
   close: () => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<BodyType>,
 |};
@@ -20,20 +20,12 @@ type cacheType = {|
 /**
  * @return {cacheType} - testing server object
  */
-export default (): cacheType => {
+export default (): ((
+  folderPath: string,
+  callback: callbackType,
+) => Promise<cacheType>) => {
   const cache: cacheType = {
     port: -1,
-
-    /**
-     * @param {middlewareType} middleware - middleware function
-     */
-    use: async (middleware: middlewareType) => {
-      const server = http.createServer(middleware);
-
-      cache.close();
-      cache.port = await getPort();
-      cache.server = server.listen(cache.port);
-    },
 
     /**
      * @return {ServerType} - server object
@@ -50,5 +42,18 @@ export default (): cacheType => {
       fetch(`http://localhost:${cache.port}${pathname}`, options),
   };
 
-  return cache;
+  return async (
+    folderPath: string,
+    callback: callbackType,
+  ): Promise<cacheType> => {
+    cache.port = await getPort();
+    cache.server = await buildServerWithCli(
+      '@mikojs/testing-server',
+      cache.port,
+      ['node', 'server', folderPath],
+      callback,
+    );
+
+    return cache;
+  };
 };

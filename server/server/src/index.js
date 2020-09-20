@@ -5,12 +5,14 @@ import {
   type ServerResponse as ServerResponseType,
 } from 'http';
 
+import { invariant } from 'fbjs';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
 
 import { requireModule } from '@mikojs/utils';
 
-import { type callbackType } from './utils/buildMiddleware';
+import eventType from './utils/eventType';
+import buildMiddleware, { type callbackType } from './utils/buildMiddleware';
 
 export type middlewareType = (
   req: IncomingMessageType,
@@ -29,6 +31,14 @@ export default (folderPath: string, callback: callbackType): middlewareType => {
   const hash = cryptoRandomString({ length: 10, type: 'base64' });
   const cacheFilePath = cacheDir(`${hash}.js`);
 
-  return (req: IncomingMessageType, res: ServerResponseType) =>
+  if (eventType.get() !== 'start')
+    buildMiddleware(folderPath, cacheFilePath, callback);
+
+  return (req: IncomingMessageType, res: ServerResponseType) => {
+    invariant(
+      eventType.get() === 'build',
+      'Should not use the middleware in the build mode',
+    );
     requireModule<middlewareType>(cacheFilePath)(req, res);
+  };
 };

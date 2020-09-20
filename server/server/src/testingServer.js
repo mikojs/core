@@ -5,7 +5,7 @@ import http, { type Server as ServerType } from 'http';
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
-import { type middlewareType } from './index';
+import { type middlewareType } from './types';
 
 export type fetchResultType = BodyType;
 

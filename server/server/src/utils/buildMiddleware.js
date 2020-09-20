@@ -5,13 +5,7 @@ import watchman from 'fb-watchman';
 import outputFileSync from 'output-file-sync';
 import cryptoRandomString from 'crypto-random-string';
 
-type fileType = {|
-  name: string,
-  exists: boolean,
-  type: 'f',
-|};
-
-export type callbackType = (file: fileType) => string;
+import { type fileType, type callbackType } from '../types';
 
 const debugLog = debug('server:buildMiddleware');
 

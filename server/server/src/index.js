@@ -11,13 +11,10 @@ import cryptoRandomString from 'crypto-random-string';
 
 import { requireModule } from '@mikojs/utils';
 
-import eventType from './utils/eventType';
-import buildMiddleware, { type callbackType } from './utils/buildMiddleware';
+import { type callbackType, type middlewareType } from './types';
 
-export type middlewareType = (
-  req: IncomingMessageType,
-  res: ServerResponseType,
-) => void;
+import eventType from './utils/eventType';
+import buildMiddleware from './utils/buildMiddleware';
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 

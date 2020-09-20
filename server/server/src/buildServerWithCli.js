@@ -7,8 +7,7 @@ import commander from 'commander';
 
 import { version } from '../package.json';
 
-import { type callbackType } from './utils/buildMiddleware';
-
+import { type callbackType } from './types';
 import buildMiddleware from './index';
 
 /**

@@ -6,7 +6,7 @@ import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
 import { type callbackType } from './types';
-import { buildServer } from './buildServerWithCli';
+import buildServer from './buildServer';
 
 export type fetchResultType = BodyType;
 

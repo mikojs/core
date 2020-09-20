@@ -15,15 +15,15 @@ type cacheType = {|
   port: number,
   close: () => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<BodyType>,
+  use: (folderPath: string) => Promise<void>,
 |};
 
 /**
+ * @param {callbackType} callback - callback function to handle file
+ *
  * @return {cacheType} - testing server object
  */
-export default (): ((
-  folderPath: string,
-  callback: callbackType,
-) => Promise<cacheType>) => {
+export default (callback: callbackType): cacheType => {
   const cache: cacheType = {
     port: -1,
 
@@ -40,15 +40,15 @@ export default (): ((
      */
     fetch: (pathname: string, options?: *) =>
       fetch(`http://localhost:${cache.port}${pathname}`, options),
+
+    /**
+     * @param {string} folderPath - folder path
+     */
+    use: async (folderPath: string) => {
+      cache.port = await getPort();
+      cache.server = await buildServer(folderPath, cache.port, callback);
+    },
   };
 
-  return async (
-    folderPath: string,
-    callback: callbackType,
-  ): Promise<cacheType> => {
-    cache.port = await getPort();
-    cache.server = await buildServer(folderPath, cache.port, callback);
-
-    return cache;
-  };
+  return cache;
 };

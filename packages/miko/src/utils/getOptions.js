@@ -8,7 +8,6 @@ import { invariant } from 'fbjs';
 import { version } from '../../package.json';
 
 import getCommands, { type commandsType } from './getCommands';
-
 import cache from './cache';
 
 export type optionsType = {|

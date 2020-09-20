@@ -17,7 +17,7 @@ import buildMiddleware, { type callbackType } from './utils/buildMiddleware';
 export type middlewareType = (
   req: IncomingMessageType,
   res: ServerResponseType,
-) => Promise<void> | void;
+) => void;
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 

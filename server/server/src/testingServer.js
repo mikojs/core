@@ -1,10 +1,6 @@
 // @flow
 
-import http, {
-  type IncomingMessage as IncomingMessageType,
-  type ServerResponse as ServerResponseType,
-  type Server as ServerType,
-} from 'http';
+import http, { type Server as ServerType } from 'http';
 
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
@@ -32,11 +28,7 @@ export default (): cacheType => {
      * @param {middlewareType} middleware - middleware function
      */
     use: async (middleware: middlewareType) => {
-      const server = http.createServer(
-        (req: IncomingMessageType, res: ServerResponseType) => {
-          middleware(req, res);
-        },
-      );
+      const server = http.createServer(middleware);
 
       cache.close();
       cache.port = await getPort();

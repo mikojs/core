@@ -4,6 +4,7 @@ import crypto from 'crypto';
 
 import watchman from 'fb-watchman';
 import debug from 'debug';
+import outputFileSync from 'output-file-sync';
 
 type fileType = {|
   name: string,
@@ -11,15 +12,20 @@ type fileType = {|
   type: 'f',
 |};
 
-type callbackType = (file: fileType) => void;
+type callbackType = (file: fileType) => string;
 
 const debugLog = debug('server:bulidWatcher');
 
 /**
  * @param {string} foldePath - folder path
+ * @param {string} cacheFilePath - cache file path
  * @param {callbackType} callback - callback function to handle file
  */
-export default async (foldePath: string, callback: callbackType) => {
+export default async (
+  foldePath: string,
+  cacheFilePath: string,
+  callback: callbackType,
+) => {
   const client = new watchman.Client();
   const hash = crypto.createHash('md5').update('@mikojs/server').digest('hex');
 
@@ -84,7 +90,10 @@ export default async (foldePath: string, callback: callbackType) => {
     |}) => {
       if (subscription !== hash) return;
 
-      files.forEach(callback);
+      outputFileSync(
+        cacheFilePath,
+        files.reduce((result: string, file: fileType) => callback(file), ''),
+      );
     },
   );
 };

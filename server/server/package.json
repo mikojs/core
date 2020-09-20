@@ -13,7 +13,8 @@
     "debug": "^4.1.1",
     "fb-watchman": "^2.0.1",
     "get-port": "^5.1.1",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "output-file-sync": "^2.0.1"
   },
   "devDependencies": {
     "flow-bin": "^0.133.0",

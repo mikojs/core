@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## 1.11.3 (2020-09-20)
+
+#### :boom: Breaking Change
+
+- [#649](https://github.com/mikojs/core/pull/649) (@mikojs/react-ssr) This package should be rewritten ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `configs`
+  - [#648](https://github.com/mikojs/core/pull/648) (@mikojs/configs) Add middleware comment ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- [#644](https://github.com/mikojs/core/pull/644) chore(deps): bump yargs-parser from 13.1.1 to 13.1.2 ([@dependabot[bot]](https://github.com/apps/dependabot))
+
+#### :house: Internal
+
+- `utils`
+  - [#647](https://github.com/mikojs/core/pull/647) (@mikojs/utils) Remove chokidar in @mikojs/utils ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.11.2 (2020-09-06)
 
 #### :rocket: New Feature

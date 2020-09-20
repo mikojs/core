@@ -14,7 +14,7 @@ type fileType = {|
 
 type callbackType = (file: fileType) => string;
 
-const debugLog = debug('server:bulidWatcher');
+const debugLog = debug('server:buildMiddleware');
 
 /**
  * @param {string} foldePath - folder path

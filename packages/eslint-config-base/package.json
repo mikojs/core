@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/eslint-config-base",
   "repository": "https://github.com/mikojs/core/tree/master/packages/eslint-config-base",
-  "version": "1.11.2",
+  "version": "1.11.3",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
@@ -29,7 +29,7 @@
     "eslint": ">=6.0.0"
   },
   "devDependencies": {
-    "@mikojs/utils": "^1.11.2",
+    "@mikojs/utils": "^1.11.3",
     "babel-plugin-module-resolver": "^4.0.0",
     "eslint": "^7.8.1",
     "fbjs": "^2.0.0",

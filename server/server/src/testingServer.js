@@ -45,6 +45,7 @@ export default (callback: callbackType): cacheType => {
      * @param {string} folderPath - folder path
      */
     use: async (folderPath: string) => {
+      cache.close();
       cache.port = await getPort();
       cache.server = await buildServer(folderPath, cache.port, callback);
     },

@@ -9,7 +9,6 @@ export type dataType = {|
   filePath: string,
   exists: boolean,
   pathname: string,
-  match: (pathname: string) => boolean,
 |};
 
 export type callbackType = (file: dataType) => string;

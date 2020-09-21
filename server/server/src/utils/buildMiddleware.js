@@ -6,7 +6,6 @@ import debug from 'debug';
 import watchman from 'fb-watchman';
 import outputFileSync from 'output-file-sync';
 import cryptoRandomString from 'crypto-random-string';
-import { match } from 'path-to-regexp';
 
 import { type callbackType } from '../types';
 
@@ -107,7 +106,6 @@ export default async (
             filePath,
             exists,
             pathname,
-            match: match(pathname, { decode: decodeURIComponent }),
           });
         }, ''),
       );

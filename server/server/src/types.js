@@ -5,13 +5,13 @@ import {
   type ServerResponse as ServerResponseType,
 } from 'http';
 
-export type fileType = {|
-  name: string,
+export type dataType = {|
+  filePath: string,
   exists: boolean,
-  type: 'f',
+  pathname: string,
 |};
 
-export type callbackType = (file: fileType) => string;
+export type callbackType = (file: dataType) => string;
 
 export type middlewareType = (
   req: IncomingMessageType,

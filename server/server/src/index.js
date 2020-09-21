@@ -33,7 +33,7 @@ export default (folderPath: string, callback: callbackType): middlewareType => {
 
   return (req: IncomingMessageType, res: ServerResponseType) => {
     invariant(
-      eventType.get() === 'build',
+      eventType.get() !== 'build',
       'Should not use the middleware in the build mode',
     );
     requireModule<middlewareType>(cacheFilePath)(req, res);

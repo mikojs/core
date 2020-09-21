@@ -7,7 +7,7 @@ import testingServer, { type fetchResultType } from '../testingServer';
 const server = testingServer(() => '');
 
 describe('testing server', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     server.use(path.resolve(__dirname, './__ignore__/folder'));
   });
 

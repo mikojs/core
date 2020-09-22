@@ -20,12 +20,14 @@ const debugLog = debug('server:buildMiddleware');
  * @param {string} foldePath - folder path
  * @param {string} cacheFilePath - cache file path
  * @param {callbackType} callback - callback function to handle file
+ *
+ * @return {Promise} - cancel watch event
  */
 export default async (
   foldePath: string,
   cacheFilePath: string,
   callback: callbackType,
-) => {
+): Promise<() => Promise<void>> => {
   const client = new watchman.Client();
   const hash = cryptoRandomString({ length: 10, type: 'base64' });
 
@@ -111,4 +113,8 @@ export default async (
       );
     },
   );
+
+  return async () => {
+    await promiseClient('command', ['unsubscribe', foldePath, hash]);
+  };
 };

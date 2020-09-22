@@ -13,7 +13,7 @@ export type fetchResultType = BodyType;
 type cacheType = {|
   server?: ServerType,
   port: number,
-  close: () => Promise<void>,
+  close: () => void,
   fetch: (pathname: string, options: *) => Promise<BodyType>,
   use: (middleware: middlewareType) => Promise<void>,
 |};
@@ -46,7 +46,11 @@ export default (): cacheType => {
 
       cache.port = port;
       cache.server = server;
-      cache.close = server.close;
+
+      /** */
+      cache.close = () => {
+        server.close();
+      };
     },
   };
 

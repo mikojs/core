@@ -24,18 +24,28 @@ const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
  *
  * @return {middlewareType} - server middleware
  */
-export default (folderPath: string, callback: callbackType): middlewareType => {
+export default async (
+  folderPath: string,
+  callback: callbackType,
+): Promise<middlewareType> => {
   const hash = cryptoRandomString({ length: 10, type: 'base64' });
   const cacheFilePath = cacheDir(`${hash}.js`);
 
-  if (eventType.get() !== 'start')
-    buildMiddleware(folderPath, cacheFilePath, callback);
-
-  return (req: IncomingMessageType, res: ServerResponseType) => {
+  /** @middleware middleware wrapper */
+  const middleware = (req: IncomingMessageType, res: ServerResponseType) => {
     invariant(
       eventType.get() !== 'build',
       'Should not use the middleware in the build mode',
     );
     requireModule<middlewareType>(cacheFilePath)(req, res);
   };
+
+  if (eventType.get() !== 'start')
+    middleware.cancel = await buildMiddleware(
+      folderPath,
+      cacheFilePath,
+      callback,
+    );
+
+  return middleware;
 };

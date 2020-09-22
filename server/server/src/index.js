@@ -13,19 +13,20 @@ import { requireModule } from '@mikojs/utils';
 
 import { type callbackType, type middlewareType } from './types';
 
-import eventType from './utils/eventType';
 import buildMiddleware from './utils/buildMiddleware';
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
 /**
  * @param {string} folderPath - folder path
+ * @param {string} event - event type
  * @param {callbackType} callback - callback function to handle file
  *
  * @return {middlewareType} - server middleware
  */
 export default async (
   folderPath: string,
+  event: 'dev' | 'build' | 'start',
   callback: callbackType,
 ): Promise<middlewareType> => {
   const hash = cryptoRandomString({ length: 10, type: 'base64' });
@@ -34,13 +35,13 @@ export default async (
   /** @middleware middleware wrapper */
   const middleware = (req: IncomingMessageType, res: ServerResponseType) => {
     invariant(
-      eventType.get() !== 'build',
+      event !== 'build',
       'Should not use the middleware in the build mode',
     );
     requireModule<middlewareType>(cacheFilePath)(req, res);
   };
 
-  if (eventType.get() !== 'start')
+  if (event !== 'start')
     middleware.cancel = await buildMiddleware(
       folderPath,
       cacheFilePath,

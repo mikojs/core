@@ -45,7 +45,7 @@ export default (callback: callbackType): cacheType => {
       await cache.close();
 
       const port = await getPort();
-      const middleware = await buildMiddleware(folderPath, callback);
+      const middleware = await buildMiddleware(folderPath, 'dev', callback);
       const server = http.createServer(middleware).listen(cache.port);
 
       cache.port = port;

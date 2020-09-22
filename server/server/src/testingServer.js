@@ -47,7 +47,7 @@ export default (callback: callbackType): cacheType => {
     use: async (folderPath: string) => {
       cache.close();
       cache.port = await getPort();
-      cache.server = await buildServer(folderPath, cache.port, callback);
+      cache.server = buildServer(folderPath, cache.port, callback);
     },
   };
 

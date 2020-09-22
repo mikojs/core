@@ -1,11 +1,18 @@
 // @flow
 
+import path from 'path';
+
 import debug from 'debug';
 import watchman from 'fb-watchman';
 import outputFileSync from 'output-file-sync';
 import cryptoRandomString from 'crypto-random-string';
 
-import { type fileType, type callbackType } from '../types';
+import { type callbackType } from '../types';
+
+type fileType = {|
+  name: string,
+  exists: boolean,
+|};
 
 const debugLog = debug('server:buildMiddleware');
 
@@ -68,7 +75,7 @@ export default async (
             relative_root: relativePath,
           }),
       expression: ['allof', ['match', '*.js']],
-      fields: ['name', 'exists', 'type'],
+      fields: ['name', 'exists'],
     },
   ]);
 
@@ -85,10 +92,21 @@ export default async (
 
       outputFileSync(
         cacheFilePath,
-        files.reduce((result: string, file: fileType): string => {
-          delete require.cache[file.name];
+        files.reduce((result: string, { name, exists }: fileType): string => {
+          const filePath = path.resolve(foldePath, name);
+          const pathname = name
+            .replace(/\.js$/, '')
+            .replace(/index/, '')
+            .replace(/^/, '/')
+            .replace(/\[([^[\]]*)\]/g, ':$1');
 
-          return callback(file);
+          delete require.cache[filePath];
+
+          return callback({
+            filePath,
+            exists,
+            pathname,
+          });
         }, ''),
       );
     },

@@ -12,9 +12,5 @@ import buildMiddleware from './index';
  *
  * @return {ServerType} - server object
  */
-export default async (
-  folderPath: string,
-  port: number,
-  callback: callbackType,
-) =>
-  http.createServer(await buildMiddleware(folderPath, callback)).listen(port);
+export default (folderPath: string, port: number, callback: callbackType) =>
+  http.createServer(buildMiddleware(folderPath, callback)).listen(port);

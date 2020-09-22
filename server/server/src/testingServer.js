@@ -2,6 +2,7 @@
 
 import http, { type Server as ServerType } from 'http';
 
+import { emptyFunction } from 'fbjs';
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
@@ -13,7 +14,7 @@ export type fetchResultType = BodyType;
 type cacheType = {|
   server?: ServerType,
   port: number,
-  close: () => ?ServerType,
+  close: () => Promise<void>,
   fetch: (pathname: string, options: *) => Promise<BodyType>,
   use: (folderPath: string) => Promise<void>,
 |};
@@ -26,11 +27,7 @@ type cacheType = {|
 export default (callback: callbackType): cacheType => {
   const cache: cacheType = {
     port: -1,
-
-    /**
-     * @return {ServerType} - server object
-     */
-    close: () => cache.server?.close(),
+    close: emptyFunction,
 
     /**
      * @param {string} pathname - request pathname
@@ -45,11 +42,20 @@ export default (callback: callbackType): cacheType => {
      * @param {string} folderPath - folder path
      */
     use: async (folderPath: string) => {
-      cache.close();
-      cache.port = await getPort();
-      cache.server = http
-        .createServer(buildMiddleware(folderPath, callback))
-        .listen(cache.port);
+      await cache.close();
+
+      const port = await getPort();
+      const middleware = await buildMiddleware(folderPath, callback);
+      const server = http.createServer(middleware).listen(cache.port);
+
+      cache.port = port;
+      cache.server = server;
+
+      /** */
+      cache.close = async () => {
+        server.close();
+        await middleware.cancel?.();
+      };
     },
   };
 

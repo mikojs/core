@@ -13,7 +13,9 @@ export type dataType = {|
 
 export type callbackType = (file: dataType) => string;
 
-export type middlewareType = (
+export type middlewareType = ((
   req: IncomingMessageType,
   res: ServerResponseType,
-) => void;
+) => void) & {
+  cancel?: () => Promise<void>,
+};

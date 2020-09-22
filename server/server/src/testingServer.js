@@ -1,12 +1,12 @@
 // @flow
 
-import { type Server as ServerType } from 'http';
+import http, { type Server as ServerType } from 'http';
 
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
 import { type callbackType } from './types';
-import buildServer from './buildServer';
+import buildMiddleware from './index';
 
 export type fetchResultType = BodyType;
 
@@ -47,7 +47,9 @@ export default (callback: callbackType): cacheType => {
     use: async (folderPath: string) => {
       cache.close();
       cache.port = await getPort();
-      cache.server = buildServer(folderPath, cache.port, callback);
+      cache.server = http
+        .createServer(buildMiddleware(folderPath, callback))
+        .listen(cache.port);
     },
   };
 

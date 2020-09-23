@@ -18,6 +18,27 @@ type cacheType = {|
   use: (folderPath: string) => Promise<void>,
 |};
 
+jest.mock('fb-watchman', () => ({
+  Client: class MockWatchman {
+    mockErr = jest.fn();
+    mockResp = jest.fn();
+
+    /**
+     * @param {any} optinos - function options
+     * @param {Function} callback - callback function
+     */
+    mockFunction = (
+      optinos: mixed,
+      callback: (err: Error, resp: mixed) => void,
+    ) => {
+      callback(this.mockErr(), this.mockResp());
+    };
+
+    capabilityCheck = this.mockFunction;
+    end = jest.fn();
+  },
+}));
+
 /**
  * @return {cacheType} - testing server object
  */

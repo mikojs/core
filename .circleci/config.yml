@@ -20,10 +20,6 @@ install: &install
   name: Install packages
   command: yarn install:all
 
-set-npm-key: &set-npm-key
-  name: Set npm key
-  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-
 jobs:
   basic:
     <<: *defaults
@@ -32,55 +28,26 @@ jobs:
       - restore_cache: *restore-cache
       - run: *install
       - save_cache: *save-cache
-
       - run:
           name: Flow
           command: |
             yarn miko flow-typed:install
             yarn miko flow
-
       - run:
           name: Check code style
           command: yarn miko lint
 
-  normal-test:
+  test:
     <<: *defaults
     steps:
       - checkout
       - restore_cache: *restore-cache
       - run: *install
-
       - run:
           name: Test
           command: yarn miko jest -i
       - store_artifacts:
           path: coverage
-
-  website-test:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache: *restore-cache
-      - run: *install
-
-      - run:
-          name: Test
-          command: echo "yarn miko jest -i ./packages/website --root-dir ./packages/website"
-
-  deploy-beta:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache: *restore-cache
-      - run: *install
-      - run: *set-npm-key
-
-      - run:
-          name: Publish beta version
-          command: |
-            yarn lerna publish from-git \
-              --dist-tag beta \
-              --yes
 
   deploy:
     <<: *defaults
@@ -88,8 +55,9 @@ jobs:
       - checkout
       - restore_cache: *restore-cache
       - run: *install
-      - run: *set-npm-key
-
+      - run:
+          name: Set npm key
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: Publish new version
           command: yarn lerna publish from-git --yes
@@ -103,36 +71,17 @@ workflows:
             tags:
               only: /.*/
 
-      - normal-test:
+      - test:
           requires:
             - basic
           filters:
             tags:
               only: /.*/
-
-      - website-test:
-          requires:
-            - basic
-          filters:
-            tags:
-              only: /.*/
-
-      - deploy-beta:
-          context: global-env
-          requires:
-            - normal-test
-            - website-test
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v(\.?\d+){3}-beta\.\d+$/
 
       - deploy:
           context: global-env
           requires:
-            - normal-test
-            - website-test
+            - test
           filters:
             branches:
               ignore: /.*/

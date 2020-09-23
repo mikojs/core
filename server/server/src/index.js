@@ -25,7 +25,7 @@ const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 export default async (
   event: 'dev' | 'build' | 'start',
 ): Promise<middlewareType> => {
-  const hash = cryptoRandomString({ length: 10, type: 'base64' });
+  const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
   const cacheFilePath = cacheDir(`${hash}.js`);
 
   mockChoice(event !== 'start', buildMiddleware, emptyFunction)(cacheFilePath);

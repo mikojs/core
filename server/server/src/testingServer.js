@@ -6,7 +6,6 @@ import { emptyFunction } from 'fbjs';
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
-import { type middlewareType } from './types';
 import buildMiddleware from './index';
 
 export type fetchResultType = BodyType;
@@ -16,7 +15,7 @@ type cacheType = {|
   port: number,
   close: () => void,
   fetch: (pathname: string, options: *) => Promise<BodyType>,
-  use: (middleware: middlewareType) => Promise<void>,
+  use: (folderPath: string) => Promise<void>,
 |};
 
 /**
@@ -37,12 +36,13 @@ export default (): cacheType => {
       fetch(`http://localhost:${cache.port}${pathname}`, options),
 
     /**
+     * @param {string} folderPath - folder path
      */
-    use: async () => {
+    use: async (folderPath: string) => {
       cache.close();
 
       const port = await getPort();
-      const middleware = await buildMiddleware('dev');
+      const middleware = await buildMiddleware(folderPath, 'dev');
       const server = http.createServer(middleware).listen(port);
 
       cache.port = port;

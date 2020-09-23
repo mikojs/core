@@ -50,8 +50,8 @@ export default (): cacheType => {
 
       /** */
       cache.close = async () => {
-        await middleware.unsubscribe();
         server.close();
+        await middleware.unsubscribe();
       };
     },
   };

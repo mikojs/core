@@ -34,14 +34,11 @@ export default async (
         options,
         (
           err: Error,
-          {
-            warning,
-            ...resp
-          }: {| warning?: string, watch?: mixed, relative_path?: mixed |},
+          resp: {| warning?: string, watch?: mixed, relative_path?: mixed |},
         ) => {
           const { warn } = console;
 
-          if (warning) warn(warning);
+          if (resp?.warning) warn(resp.warning);
 
           if (err) reject(err);
           else resolve(resp);

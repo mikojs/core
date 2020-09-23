@@ -17,7 +17,7 @@ describe('testing erver', () => {
     ).toBe('/');
   });
 
-  afterAll(() => {
-    server.close();
+  afterAll(async () => {
+    await server.close();
   });
 });

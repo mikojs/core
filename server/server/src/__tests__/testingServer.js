@@ -7,6 +7,8 @@ import {
 
 import testingServer, { type fetchResultType } from '../testingServer';
 
+jest.unmock('output-file-sync');
+
 const server = testingServer();
 
 describe('testing erver', () => {

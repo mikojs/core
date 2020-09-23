@@ -18,7 +18,7 @@ type fileType = {|
 export default async (
   foldePath: string,
   cacheFilePath: string,
-): Promise<() => Promise<void>> => {
+): Promise<() => void> => {
   const client = new watchman.Client();
   const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
   let isInitialized: boolean = false;
@@ -99,7 +99,7 @@ export default async (
     );
   });
 
-  return async () => {
+  return () => {
     client.end();
   };
 };

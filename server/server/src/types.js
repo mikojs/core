@@ -9,5 +9,5 @@ export type middlewareType = ((
   req: IncomingMessageType,
   res: ServerResponseType,
 ) => void) & {
-  unsubscribe: () => Promise<void>,
+  close: () => void,
 };

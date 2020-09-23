@@ -39,10 +39,10 @@ export default async (
     requireModule<middlewareType>(cacheFilePath)(req, res);
   };
 
-  middleware.unsubscribe = await mockChoice(
+  middleware.close = await mockChoice(
     event !== 'start',
     buildMiddleware,
-    emptyFunction,
+    emptyFunction.thatReturnsArgument(emptyFunction),
   )(foldePath, cacheFilePath);
 
   return middleware;

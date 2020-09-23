@@ -18,23 +18,32 @@ import buildMiddleware from './utils/buildMiddleware';
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
 /**
+ * @param {string} foldePath - folder path
  * @param {string} event - event type
  *
  * @return {middlewareType} - server middleware
  */
 export default async (
+  foldePath: string,
   event: 'dev' | 'build' | 'start',
 ): Promise<middlewareType> => {
   const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
   const cacheFilePath = cacheDir(`${hash}.js`);
 
-  mockChoice(event !== 'start', buildMiddleware, emptyFunction)(cacheFilePath);
-
-  return (req: IncomingMessageType, res: ServerResponseType) => {
+  /** @middleware middleware wrapper */
+  const middleware = (req: IncomingMessageType, res: ServerResponseType) => {
     invariant(
       event !== 'build',
       'Should not use the middleware in the build mode',
     );
     requireModule<middlewareType>(cacheFilePath)(req, res);
   };
+
+  middleware.close = await mockChoice(
+    event !== 'start',
+    buildMiddleware,
+    emptyFunction.thatReturnsArgument(emptyFunction),
+  )(foldePath, cacheFilePath);
+
+  return middleware;
 };

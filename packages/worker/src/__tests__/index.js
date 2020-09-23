@@ -95,12 +95,12 @@ describe('worker', () => {
       expect(output).toEqual(expected.split(''));
     });
 
-    test('func with error', async () => {
+    test('func with error', () => {
       func.mockImplementation(() => {
         throw new Error('error');
       });
 
-      await expect(worker.func()).rejects.toThrow('error');
+      expect(worker.func()).rejects.toThrow('error');
     });
 
     test('end', async () => {
@@ -119,13 +119,13 @@ describe('worker', () => {
       { cmd: (await getPort()).toString(), pid: 1 },
     ]);
 
-    await expect(
+    expect(
       buildWorker<workerType>(
         path.resolve(__dirname, './__ignore__/worker.js'),
         40,
       ),
     ).rejects.toThrow('Timeout');
-    await expect(
+    expect(
       buildWorker<workerType>(
         path.resolve(__dirname, './__ignore__/worker.js'),
         40,

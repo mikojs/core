@@ -3,6 +3,26 @@
 import watchman from 'fb-watchman';
 import outputFileSync from 'output-file-sync';
 
+type respType = {| warning?: string, watch?: mixed, relative_path?: mixed |};
+
+/**
+ * @param {Function} resolve - promise resolve function
+ * @param {Function} reject - promise reject function
+ *
+ * @return {Function} - handler function for watchman client
+ */
+export const handler = (
+  resolve: (resp: respType) => void,
+  reject: (err: Error) => void,
+) => (err: Error, resp: respType) => {
+  const { warn } = console;
+
+  if (resp?.warning) warn(resp.warning);
+
+  if (err) reject(err);
+  else resolve(resp);
+};
+
 /**
  * @param {string} foldePath - folder path
  * @param {string} cacheFilePath - cache file path
@@ -23,20 +43,7 @@ export default async (
    */
   const promiseClient = (type: string, options: mixed) =>
     new Promise((resolve, reject) => {
-      client[type](
-        options,
-        (
-          err: Error,
-          resp: {| warning?: string, watch?: mixed, relative_path?: mixed |},
-        ) => {
-          const { warn } = console;
-
-          if (resp?.warning) warn(resp.warning);
-
-          if (err) reject(err);
-          else resolve(resp);
-        },
-      );
+      client[type](options, handler(resolve, reject));
     });
 
   await promiseClient('capabilityCheck', {

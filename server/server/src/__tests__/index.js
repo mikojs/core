@@ -17,7 +17,7 @@ describe('server', () => {
     ).toBe('/');
   });
 
-  afterAll(async () => {
-    await server.close();
+  afterAll(() => {
+    server.close();
   });
 });

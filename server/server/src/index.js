@@ -30,17 +30,20 @@ export default async (
   const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
   const cacheFilePath = cacheDir(`${hash}.js`);
 
-  mockChoice(
-    event !== 'start',
-    buildMiddleware,
-    emptyFunction,
-  )(foldePath, cacheFilePath);
-
-  return (req: IncomingMessageType, res: ServerResponseType) => {
+  /** @middleware middleware wrapper */
+  const middleware = (req: IncomingMessageType, res: ServerResponseType) => {
     invariant(
       event !== 'build',
       'Should not use the middleware in the build mode',
     );
     requireModule<middlewareType>(cacheFilePath)(req, res);
   };
+
+  middleware.unsubscribe = await mockChoice(
+    event !== 'start',
+    buildMiddleware,
+    emptyFunction,
+  )(foldePath, cacheFilePath);
+
+  return middleware;
 };

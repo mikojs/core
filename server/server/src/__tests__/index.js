@@ -6,7 +6,7 @@ jest.unmock('output-file-sync');
 
 const server = testingServer();
 
-describe('testing erver', () => {
+describe('server', () => {
   beforeAll(async () => {
     await server.use(__dirname);
   });

@@ -7,6 +7,7 @@ import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
 import { type middlewareType } from './types';
+import buildMiddleware from './index';
 
 export type fetchResultType = BodyType;
 
@@ -36,12 +37,12 @@ export default (): cacheType => {
       fetch(`http://localhost:${cache.port}${pathname}`, options),
 
     /**
-     * @param {middlewareType} middleware - server middleware
      */
-    use: async (middleware: middlewareType) => {
+    use: async () => {
       cache.close();
 
       const port = await getPort();
+      const middleware = await buildMiddleware('dev');
       const server = http.createServer(middleware).listen(port);
 
       cache.port = port;

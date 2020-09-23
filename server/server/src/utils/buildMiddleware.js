@@ -21,6 +21,7 @@ export default async (
 ): Promise<() => Promise<void>> => {
   const client = new watchman.Client();
   const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
+  let isInitialized: boolean = false;
 
   /**
    * @param {string} type - client command type
@@ -71,27 +72,34 @@ export default async (
     },
   ]);
 
-  client.on(
-    'subscription',
-    ({
-      subscription,
-      files,
-    }: {|
-      subscription: string,
-      files: $ReadOnlyArray<fileType>,
-    |}) => {
-      if (subscription !== hash) return;
+  await new Promise(resolve => {
+    client.on(
+      'subscription',
+      ({
+        subscription,
+        files,
+      }: {|
+        subscription: string,
+        files: $ReadOnlyArray<fileType>,
+      |}) => {
+        if (subscription !== hash) return;
 
-      outputFileSync(
-        cacheFilePath,
-        `module.exports = (req, res) => {
+        outputFileSync(
+          cacheFilePath,
+          `module.exports = (req, res) => {
   res.end(req.url);
 };`,
-      );
-    },
-  );
+        );
+
+        if (isInitialized) return;
+
+        isInitialized = true;
+        resolve();
+      },
+    );
+  });
 
   return async () => {
-    await promiseClient('command', ['unsubscribe', foldePath, hash]);
+    client.end();
   };
 };

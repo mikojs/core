@@ -27,7 +27,7 @@ export const handler = (
  * @param {string} foldePath - folder path
  * @param {string} cacheFilePath - cache file path
  *
- * @return {Promise} - cancel watch event
+ * @return {Function} - close client
  */
 export default async (
   foldePath: string,
@@ -50,7 +50,6 @@ export default async (
     optional: [],
     required: ['relative_root'],
   });
-  await promiseClient('command', ['watch-project', foldePath]);
 
   outputFileSync(
     cacheFilePath,

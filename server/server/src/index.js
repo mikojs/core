@@ -42,7 +42,7 @@ export default async (
     requireModule<middlewareType>(cacheFilePath)(req, res);
   };
 
-  middleware.close = await mockChoice(
+  await mockChoice(
     event !== 'start',
     buildMiddleware,
     emptyFunction.thatReturnsArgument(emptyFunction),

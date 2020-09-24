@@ -2,7 +2,6 @@
 
 import http, { type Server as ServerType } from 'http';
 
-import { emptyFunction } from 'fbjs';
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
@@ -15,7 +14,7 @@ export type fetchResultType = BodyType;
 type cacheType = {|
   server?: ServerType,
   port: number,
-  close: () => void,
+  close: () => ?ServerType,
   watcher: JestMockFn<[string, mixed], Promise<respType>>,
   fetch: (pathname: string, options: *) => Promise<BodyType>,
   use: (folderPath: string) => Promise<void>,
@@ -27,8 +26,12 @@ type cacheType = {|
 export default (): cacheType => {
   const cache: cacheType = {
     port: -1,
-    close: emptyFunction,
     watcher: jest.fn(),
+
+    /**
+     * @return {ServerType} - server object
+     */
+    close: () => cache.server?.close(),
 
     /**
      * @param {string} pathname - request pathname
@@ -55,12 +58,6 @@ export default (): cacheType => {
 
       cache.port = port;
       cache.server = server;
-
-      /** */
-      cache.close = () => {
-        server.close();
-        middleware.close();
-      };
     },
   };
 

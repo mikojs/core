@@ -5,9 +5,7 @@ import {
   type ServerResponse as ServerResponseType,
 } from 'http';
 
-export type middlewareType = ((
+export type middlewareType = (
   req: IncomingMessageType,
   res: ServerResponseType,
-) => void) & {
-  close: () => void,
-};
+) => void;

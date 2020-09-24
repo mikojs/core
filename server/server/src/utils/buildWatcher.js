@@ -4,10 +4,7 @@ import watchman from 'fb-watchman';
 
 type respType = {| warning?: string, watch?: mixed, relative_path?: mixed |};
 
-export type promiseClientType = (
-  type: string,
-  options: mixed,
-) => Promise<respType>;
+export type watcherType = (type: string, options: mixed) => Promise<respType>;
 
 /**
  * @param {Function} resolve - promise resolve function
@@ -28,9 +25,9 @@ export const handler = (
 };
 
 /**
- * @return {promiseClientType} - promise watchman client object
+ * @return {watcherType} - watcher object
  */
-export default (): promiseClientType => {
+export default (): watcherType => {
   const client = new watchman.Client();
 
   return (type: string, options: mixed) =>

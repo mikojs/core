@@ -14,18 +14,21 @@ import { requireModule, mockChoice } from '@mikojs/utils';
 import { type middlewareType } from './types';
 
 import buildMiddleware from './utils/buildMiddleware';
+import { type watcherType } from './utils/buildWatcher';
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
 /**
  * @param {string} foldePath - folder path
  * @param {string} event - event type
+ * @param {watcherType} watcher - watcher object
  *
  * @return {middlewareType} - server middleware
  */
 export default async (
   foldePath: string,
   event: 'dev' | 'build' | 'start',
+  watcher: watcherType,
 ): Promise<middlewareType> => {
   const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
   const cacheFilePath = cacheDir(`${hash}.js`);
@@ -43,7 +46,7 @@ export default async (
     event !== 'start',
     buildMiddleware,
     emptyFunction.thatReturnsArgument(emptyFunction),
-  )(foldePath, cacheFilePath);
+  )(foldePath, watcher, cacheFilePath);
 
   return middleware;
 };

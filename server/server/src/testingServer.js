@@ -6,6 +6,8 @@ import { emptyFunction } from 'fbjs';
 import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
 
+import { type respType } from './utils/buildWatcher';
+
 import buildMiddleware from './index';
 
 export type fetchResultType = BodyType;
@@ -14,30 +16,10 @@ type cacheType = {|
   server?: ServerType,
   port: number,
   close: () => void,
+  watcher: JestMockFn<[string, mixed], Promise<respType>>,
   fetch: (pathname: string, options: *) => Promise<BodyType>,
   use: (folderPath: string) => Promise<void>,
 |};
-
-jest.mock('fb-watchman', () => ({
-  Client: class MockWatchman {
-    mockErr = jest.fn();
-    mockResp = jest.fn();
-
-    /**
-     * @param {any} optinos - function options
-     * @param {Function} callback - callback function
-     */
-    mockFunction = (
-      optinos: mixed,
-      callback: (err: Error, resp: mixed) => void,
-    ) => {
-      callback(this.mockErr(), this.mockResp());
-    };
-
-    capabilityCheck = this.mockFunction;
-    end = jest.fn();
-  },
-}));
 
 /**
  * @return {cacheType} - testing server object
@@ -46,6 +28,7 @@ export default (): cacheType => {
   const cache: cacheType = {
     port: -1,
     close: emptyFunction,
+    watcher: jest.fn(),
 
     /**
      * @param {string} pathname - request pathname
@@ -63,7 +46,11 @@ export default (): cacheType => {
       cache.close();
 
       const port = await getPort();
-      const middleware = await buildMiddleware(folderPath, 'dev');
+      const middleware = await buildMiddleware(
+        folderPath,
+        'dev',
+        cache.watcher,
+      );
       const server = http.createServer(middleware).listen(port);
 
       cache.port = port;

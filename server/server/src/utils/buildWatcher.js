@@ -2,7 +2,11 @@
 
 import watchman from 'fb-watchman';
 
-type respType = {| warning?: string, watch?: mixed, relative_path?: mixed |};
+export type respType = {|
+  warning?: string,
+  watch?: mixed,
+  relative_path?: mixed,
+|};
 
 export type watcherType = (type: string, options: mixed) => Promise<respType>;
 

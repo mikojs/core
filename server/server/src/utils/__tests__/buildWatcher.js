@@ -1,6 +1,6 @@
 // @flow
 
-import { handler } from '../buildMiddleware';
+import { handler } from '../buildWatcher';
 
 test('handler reject', () => {
   const mockLog = jest.fn();

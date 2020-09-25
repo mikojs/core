@@ -7,6 +7,7 @@ import {
 
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
+import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
@@ -17,6 +18,7 @@ export type middlewareType = (
 
 export type contextType = {|
   load: () => middlewareType,
+  build: () => void,
 |};
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
@@ -25,7 +27,9 @@ const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
  * @return {contextType} - server context
  */
 const buildContext = (): contextType => {
-  const cache = {};
+  const context: {|
+    [string]: string,
+  |} = {};
 
   return {
     /**
@@ -35,11 +39,23 @@ const buildContext = (): contextType => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 
-      cache[hash] = cacheFilePath;
+      context[hash] = cacheFilePath;
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
         requireModule<middlewareType>(cacheFilePath)(req, res);
       };
+    },
+
+    /** */
+    build: () => {
+      Object.keys(context).forEach((key: string) => {
+        outputFileSync(
+          context[key],
+          `module.exports = (req, res) => {
+  res.end(req.url);
+};`,
+        );
+      });
     },
   };
 };

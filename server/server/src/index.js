@@ -16,20 +16,22 @@ export type middlewareType = (
   res: ServerResponseType,
 ) => Promise<void> | void;
 
-export type contextType = {|
+type serverType = {|
   load: () => middlewareType,
   build: () => void,
+|};
+
+type contextType = {|
+  [string]: string,
 |};
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
 /**
- * @return {contextType} - server context
+ * @return {serverType} - server object
  */
-const buildContext = (): contextType => {
-  const context: {|
-    [string]: string,
-  |} = {};
+const buildServer = (): serverType => {
+  const context: contextType = {};
 
   return {
     /**
@@ -60,4 +62,4 @@ const buildContext = (): contextType => {
   };
 };
 
-export default buildContext();
+export default buildServer();

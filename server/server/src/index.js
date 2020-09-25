@@ -11,13 +11,13 @@ import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
-export type middlewareType = (
+export type middlewareType<R = Promise<void>> = (
   req: IncomingMessageType,
   res: ServerResponseType,
-) => Promise<void> | void;
+) => R | void;
 
 type serverType = {|
-  load: () => middlewareType,
+  load: () => middlewareType<void>,
   build: () => void,
 |};
 
@@ -37,14 +37,14 @@ const buildServer = (): serverType => {
     /**
      * @return {middlewareType} - middleware
      */
-    load: (): middlewareType => {
+    load: (): middlewareType<void> => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 
       context[hash] = cacheFilePath;
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
-        requireModule<middlewareType>(cacheFilePath)(req, res);
+        requireModule<middlewareType<>>(cacheFilePath)(req, res);
       };
     },
 

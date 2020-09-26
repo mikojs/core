@@ -55,7 +55,7 @@ const debugLog = debug('miko:cache');
 /**
  * @return {cacheType} - configs cache
  */
-const buildCache = (): cacheType => {
+export default ((): cacheType => {
   const cache = {
     cwd: process.cwd(),
     configs: {},
@@ -185,7 +185,5 @@ const buildCache = (): cacheType => {
     },
   };
 
-  return result;
-};
-
-export default buildCache().load(cosmiconfigSync('miko').search());
+  return result.load(cosmiconfigSync('miko').search());
+})();

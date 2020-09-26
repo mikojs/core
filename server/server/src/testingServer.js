@@ -13,10 +13,7 @@ type cacheType = {|
   fetch: (pathname: string, options: *) => Promise<BodyType>,
 |};
 
-/**
- * @return {cacheType} - testing server object
- */
-export default (): cacheType => {
+export default ((): cacheType => {
   const cache: cacheType = {
     port: -1,
 
@@ -36,4 +33,4 @@ export default (): cacheType => {
   };
 
   return cache;
-};
+})();

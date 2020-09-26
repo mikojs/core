@@ -41,10 +41,7 @@ type contextType = {|
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
-/**
- * @return {serverType} - server object
- */
-const buildServer = (): serverType => {
+export default ((): serverType => {
   const context: contextType = {
     initialized: false,
     initialMiddleware: emptyFunction,
@@ -80,6 +77,4 @@ const buildServer = (): serverType => {
       return middleware;
     },
   };
-};
-
-export default buildServer();
+})();

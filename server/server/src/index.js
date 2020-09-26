@@ -22,7 +22,9 @@ type serverType = {|
 |};
 
 type contextType = {|
-  [string]: string,
+  cache: {|
+    [string]: string,
+  |},
 |};
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
@@ -31,7 +33,9 @@ const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
  * @return {serverType} - server object
  */
 const buildServer = (): serverType => {
-  const context: contextType = {};
+  const context: contextType = {
+    cache: {},
+  };
 
   return {
     /**
@@ -41,7 +45,7 @@ const buildServer = (): serverType => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 
-      context[hash] = cacheFilePath;
+      context.cache[hash] = cacheFilePath;
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
         requireModule<middlewareType<>>(cacheFilePath)(req, res);
@@ -50,9 +54,9 @@ const buildServer = (): serverType => {
 
     /** */
     build: () => {
-      Object.keys(context).forEach((key: string) => {
+      Object.keys(context.cache).forEach((key: string) => {
         outputFileSync(
-          context[key],
+          context.cache[key],
           `module.exports = (req, res) => {
   res.end(req.url);
 };`,

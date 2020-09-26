@@ -1,11 +1,8 @@
 // @flow
 
-import http, { type Server as ServerType } from 'http';
+import { type Server as ServerType } from 'http';
 
-import getPort from 'get-port';
 import fetch, { type Body as BodyType } from 'node-fetch';
-
-import server from './index';
 
 export type fetchResultType = BodyType;
 
@@ -14,7 +11,6 @@ type cacheType = {|
   port: number,
   close: () => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<BodyType>,
-  use: () => Promise<void>,
 |};
 
 /**
@@ -37,14 +33,6 @@ export default (): cacheType => {
      */
     fetch: (pathname: string, options?: *) =>
       fetch(`http://localhost:${cache.port}${pathname}`, options),
-
-    /** */
-    use: async () => {
-      cache.close();
-      server.build();
-      cache.port = await getPort();
-      cache.server = http.createServer(server.load()).listen(cache.port);
-    },
   };
 
   return cache;

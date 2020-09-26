@@ -5,6 +5,7 @@ import {
   type ServerResponse as ServerResponseType,
 } from 'http';
 
+import { emptyFunction } from 'fbjs';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
 
@@ -27,6 +28,8 @@ type serverType = {|
 |};
 
 type contextType = {|
+  initialized: false,
+  initialMiddleware: middlewareType<void>,
   cache: {|
     [string]: {|
       folderPath: string,
@@ -43,6 +46,8 @@ const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
  */
 const buildServer = (): serverType => {
   const context: contextType = {
+    initialized: false,
+    initialMiddleware: emptyFunction,
     cache: {},
   };
 
@@ -56,15 +61,23 @@ const buildServer = (): serverType => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 
+      /** @middleware middleware wrapper */
+      const middleware = (
+        req: IncomingMessageType,
+        res: ServerResponseType,
+      ) => {
+        requireModule<middlewareType<>>(cacheFilePath)(req, res);
+      };
+
       context.cache[hash] = {
         folderPath,
         cacheFilePath,
         build,
       };
 
-      return (req: IncomingMessageType, res: ServerResponseType) => {
-        requireModule<middlewareType<>>(cacheFilePath)(req, res);
-      };
+      if (!context.initialized) context.initialMiddleware = middleware;
+
+      return middleware;
     },
   };
 };

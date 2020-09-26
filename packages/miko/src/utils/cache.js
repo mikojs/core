@@ -52,9 +52,6 @@ export type cacheType = {|
 
 const debugLog = debug('miko:cache');
 
-/**
- * @return {cacheType} - configs cache
- */
 export default ((): cacheType => {
   const cache = {
     cwd: process.cwd(),

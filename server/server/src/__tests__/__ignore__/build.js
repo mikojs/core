@@ -10,7 +10,7 @@ import server, { type middlewareType } from '../..';
  * @return {middlewareType} - middleware function
  */
 export default (folderPath: string) =>
-  server.load(
+  server.create(
     () => `module.exports = (req, res) => {
   res.end(req.url);
 };`,

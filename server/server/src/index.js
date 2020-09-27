@@ -21,10 +21,10 @@ type dataType = {|
   filePath: string,
 |};
 
-type buildType = (data: dataType) => string;
+export type buildType = (data: dataType) => string;
 
 type serverType = {|
-  load: (build: buildType) => (folderPath: string) => middlewareType<void>,
+  create: (build: buildType) => (folderPath: string) => middlewareType<void>,
 |};
 
 type contextType = {|
@@ -54,7 +54,9 @@ export default ((): serverType => {
      *
      * @return {Function} - build middleware
      */
-    load: (build: buildType) => (folderPath: string): middlewareType<void> => {
+    create: (build: buildType) => (
+      folderPath: string,
+    ): middlewareType<void> => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 

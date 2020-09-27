@@ -1,6 +1,7 @@
 // @flow
 
-import {
+import http, {
+  type Server as ServerType,
   type IncomingMessage as IncomingMessageType,
   type ServerResponse as ServerResponseType,
 } from 'http';
@@ -37,6 +38,7 @@ type contextType = {|
       build: buildType,
     |},
   |},
+  create: $PropertyType<serverType, 'create'>,
 |};
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
@@ -46,9 +48,7 @@ export default ((): serverType => {
     initialized: false,
     initialMiddleware: emptyFunction,
     cache: {},
-  };
 
-  return {
     /**
      * @param {buildType} build - build middleware cache function
      *
@@ -78,5 +78,27 @@ export default ((): serverType => {
 
       return middleware;
     },
+  };
+
+  return {
+    create: context.create,
+
+    /**
+     * @param {buildType} build - build middleware cache function
+     * @param {string} folderPath - folder path
+     * @param {number} port - server port
+     * @param {Function} callback - server callback function
+     *
+     * @return {ServerType} - server object
+     */
+    run: (
+      build: buildType,
+      folderPath: string,
+      port: number,
+      callback?: () => void = emptyFunction,
+    ) =>
+      http
+        .createServer(context.create(build)(folderPath))
+        .listen(port, emptyFunction),
   };
 })();

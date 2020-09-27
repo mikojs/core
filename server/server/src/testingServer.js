@@ -1,6 +1,6 @@
 // @flow
 
-import http, { type Server as ServerType } from 'http';
+import { type Server as ServerType } from 'http';
 
 import fetch, { type Body as BodyType } from 'node-fetch';
 import getPort from 'get-port';
@@ -23,7 +23,6 @@ type cacheType = {|
  * @return {cacheType} - testing server cache
  */
 export default (build: buildType): cacheType => {
-  const buildMiddleware = server.create(build);
   const cache: cacheType = {
     port: -1,
 
@@ -48,9 +47,7 @@ export default (build: buildType): cacheType => {
       cache.close();
 
       cache.port = await getPort();
-      cache.server = http
-        .createServer(buildMiddleware(folderPath))
-        .listen(cache.port);
+      cache.server = server.run(build, folderPath, cache.port);
     },
   };
 

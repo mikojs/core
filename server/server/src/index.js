@@ -26,11 +26,15 @@ export type buildType = (data: dataType) => string;
 
 type serverType = {|
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
+  run: (
+    build: buildType,
+    folderPath: string,
+    port: number,
+    callback?: () => void,
+  ) => ServerType,
 |};
 
 type contextType = {|
-  initialized: false,
-  initialMiddleware: middlewareType<void>,
   cache: {|
     [string]: {|
       folderPath: string,
@@ -45,8 +49,6 @@ const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
 export default ((): serverType => {
   const context: contextType = {
-    initialized: false,
-    initialMiddleware: emptyFunction,
     cache: {},
 
     /**
@@ -60,23 +62,15 @@ export default ((): serverType => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 
-      /** @middleware middleware wrapper */
-      const middleware = (
-        req: IncomingMessageType,
-        res: ServerResponseType,
-      ) => {
-        requireModule<middlewareType<>>(cacheFilePath)(req, res);
-      };
-
       context.cache[hash] = {
         folderPath,
         cacheFilePath,
         build,
       };
 
-      if (!context.initialized) context.initialMiddleware = middleware;
-
-      return middleware;
+      return (req: IncomingMessageType, res: ServerResponseType) => {
+        requireModule<middlewareType<>>(cacheFilePath)(req, res);
+      };
     },
   };
 

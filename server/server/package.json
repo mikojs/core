@@ -12,7 +12,6 @@
     "@mikojs/utils": "^1.11.2",
     "core-js": "^3.6.5",
     "crypto-random-string": "^3.3.0",
-    "fb-watchman": "^2.0.1",
     "fbjs": "^2.0.0",
     "find-cache-dir": "^3.3.1",
     "get-port": "^5.1.1",

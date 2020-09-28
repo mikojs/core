@@ -6,6 +6,8 @@ import testingServer, {
   type fetchResultType,
 } from './__ignore__/testingServer';
 
+jest.unmock('output-file-sync');
+
 describe('server', () => {
   beforeAll(async () => {
     await testingServer.run(path.resolve(__dirname, './__ignore__/folder/foo'));

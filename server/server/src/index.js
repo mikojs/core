@@ -9,22 +9,21 @@ import http, {
 import { emptyFunction } from 'fbjs';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
+import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
-export type middlewareType<R = Promise<void>> = (
+type middlewareType<R = Promise<void>> = (
   req: IncomingMessageType,
   res: ServerResponseType,
 ) => R | void;
 
-type dataType = {|
+export type buildType = (data: {|
   exists: boolean,
   filePath: string,
-|};
+|}) => string;
 
-export type buildType = (data: dataType) => string;
-
-type serverType = {|
+type cacheType = {|
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
   run: (
     build: buildType,
@@ -34,23 +33,10 @@ type serverType = {|
   ) => ServerType,
 |};
 
-type contextType = {|
-  cache: {|
-    [string]: {|
-      folderPath: string,
-      cacheFilePath: string,
-      build: buildType,
-    |},
-  |},
-  create: $PropertyType<serverType, 'create'>,
-|};
-
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
-export default ((): serverType => {
-  const context: contextType = {
-    cache: {},
-
+export default ((): cacheType => {
+  const cache = {
     /**
      * @param {buildType} build - build middleware cache function
      *
@@ -62,20 +48,16 @@ export default ((): serverType => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 
-      context.cache[hash] = {
-        folderPath,
+      // TODO: add watcher
+      outputFileSync(
         cacheFilePath,
-        build,
-      };
+        build({ exists: true, filePath: folderPath }),
+      );
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
         requireModule<middlewareType<>>(cacheFilePath)(req, res);
       };
     },
-  };
-
-  return {
-    create: context.create,
 
     /**
      * @param {buildType} build - build middleware cache function
@@ -92,7 +74,9 @@ export default ((): serverType => {
       callback?: () => void = emptyFunction,
     ) =>
       http
-        .createServer(context.create(build)(folderPath))
+        .createServer(cache.create(build)(folderPath))
         .listen(port, emptyFunction),
   };
+
+  return cache;
 })();

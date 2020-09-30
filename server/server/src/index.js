@@ -24,6 +24,10 @@ export type buildType = (data: {|
 |}) => string;
 
 type cacheType = {|
+  utils: {|
+    writeToCache: (filePath: string, content: string) => void,
+    getFromCache: (filePath: string) => middlewareType<>,
+  |},
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
   run: (
     build: buildType,
@@ -37,6 +41,11 @@ const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
 export default ((): cacheType => {
   const cache = {
+    utils: {
+      writeToCache: outputFileSync,
+      getFromCache: requireModule,
+    },
+
     /**
      * @param {buildType} build - build middleware cache function
      *
@@ -49,13 +58,13 @@ export default ((): cacheType => {
       const cacheFilePath = cacheDir(`${hash}.js`);
 
       // TODO: add watcher
-      outputFileSync(
+      cache.utils.writeToCache(
         cacheFilePath,
         build({ exists: true, filePath: folderPath }),
       );
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
-        requireModule<middlewareType<>>(cacheFilePath)(req, res);
+        cache.utils.getFromCache(cacheFilePath)(req, res);
       };
     },
 

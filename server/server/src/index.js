@@ -13,7 +13,7 @@ import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
-type middlewareType<R = Promise<void>> = (
+export type middlewareType<R = Promise<void>> = (
   req: IncomingMessageType,
   res: ServerResponseType,
 ) => R | void;
@@ -23,7 +23,11 @@ export type buildType = (data: {|
   filePath: string,
 |}) => string;
 
-type cacheType = {|
+type serverType = {|
+  utils: {|
+    writeToCache: (filePath: string, content: string) => void,
+    getFromCache: (filePath: string) => middlewareType<>,
+  |},
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
   run: (
     build: buildType,
@@ -35,8 +39,13 @@ type cacheType = {|
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
-export default ((): cacheType => {
-  const cache = {
+export default ((): serverType => {
+  const server = {
+    utils: {
+      writeToCache: outputFileSync,
+      getFromCache: requireModule,
+    },
+
     /**
      * @param {buildType} build - build middleware cache function
      *
@@ -49,13 +58,13 @@ export default ((): cacheType => {
       const cacheFilePath = cacheDir(`${hash}.js`);
 
       // TODO: add watcher
-      outputFileSync(
+      server.utils.writeToCache(
         cacheFilePath,
         build({ exists: true, filePath: folderPath }),
       );
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
-        requireModule<middlewareType<>>(cacheFilePath)(req, res);
+        server.utils.getFromCache(cacheFilePath)(req, res);
       };
     },
 
@@ -74,9 +83,9 @@ export default ((): cacheType => {
       callback?: () => void = emptyFunction,
     ) =>
       http
-        .createServer(cache.create(build)(folderPath))
+        .createServer(server.create(build)(folderPath))
         .listen(port, emptyFunction),
   };
 
-  return cache;
+  return server;
 })();

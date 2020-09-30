@@ -23,7 +23,7 @@ export type buildType = (data: {|
   filePath: string,
 |}) => string;
 
-type cacheType = {|
+type serverType = {|
   utils: {|
     writeToCache: (filePath: string, content: string) => void,
     getFromCache: (filePath: string) => middlewareType<>,
@@ -39,8 +39,8 @@ type cacheType = {|
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
-export default ((): cacheType => {
-  const cache = {
+export default ((): serverType => {
+  const server = {
     utils: {
       writeToCache: outputFileSync,
       getFromCache: requireModule,
@@ -58,13 +58,13 @@ export default ((): cacheType => {
       const cacheFilePath = cacheDir(`${hash}.js`);
 
       // TODO: add watcher
-      cache.utils.writeToCache(
+      server.utils.writeToCache(
         cacheFilePath,
         build({ exists: true, filePath: folderPath }),
       );
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
-        cache.utils.getFromCache(cacheFilePath)(req, res);
+        server.utils.getFromCache(cacheFilePath)(req, res);
       };
     },
 
@@ -83,9 +83,9 @@ export default ((): cacheType => {
       callback?: () => void = emptyFunction,
     ) =>
       http
-        .createServer(cache.create(build)(folderPath))
+        .createServer(server.create(build)(folderPath))
         .listen(port, emptyFunction),
   };
 
-  return cache;
+  return server;
 })();

@@ -9,7 +9,7 @@ import server, { type buildType } from './index';
 
 export type fetchResultType = BodyType;
 
-type cacheType = {|
+type testingServerType = {|
   server?: ServerType,
   port: number,
   close: () => ?ServerType,
@@ -20,16 +20,16 @@ type cacheType = {|
 /**
  * @param {buildType} build - build middleware cache function
  *
- * @return {cacheType} - testing server cache
+ * @return {testingServerType} - testing server cache
  */
-export default (build: buildType): cacheType => {
-  const cache: cacheType = {
+export default (build: buildType): testingServerType => {
+  const testingServer: testingServerType = {
     port: -1,
 
     /**
      * @return {ServerType} - server object
      */
-    close: () => cache.server?.close(),
+    close: () => testingServer.server?.close(),
 
     /**
      * @param {string} pathname - request pathname
@@ -38,18 +38,18 @@ export default (build: buildType): cacheType => {
      * @return {BodyType} - request body
      */
     fetch: (pathname: string, options?: *) =>
-      fetch(`http://localhost:${cache.port}${pathname}`, options),
+      fetch(`http://localhost:${testingServer.port}${pathname}`, options),
 
     /**
      * @param {string} folderPath - folder path
      */
     run: async (folderPath: string) => {
-      cache.close();
+      testingServer.close();
 
-      cache.port = await getPort();
-      cache.server = server.run(build, folderPath, cache.port);
+      testingServer.port = await getPort();
+      testingServer.server = server.run(build, folderPath, testingServer.port);
     },
   };
 
-  return cache;
+  return testingServer;
 };

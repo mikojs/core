@@ -5,12 +5,13 @@ import { type Server as ServerType } from 'http';
 import fetch, { type Body as BodyType } from 'node-fetch';
 import getPort from 'get-port';
 
-import server, { type buildType } from './index';
+import server, { type middlewareType, type buildType } from './index';
 
 export type fetchResultType = BodyType;
 
 type testingServerType = {|
   server?: ServerType,
+  cache: { [string]: middlewareType<> },
   port: number,
   close: () => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<BodyType>,
@@ -24,6 +25,7 @@ type testingServerType = {|
  */
 export default (build: buildType): testingServerType => {
   const testingServer: testingServerType = {
+    cache: {},
     port: -1,
 
     /**
@@ -49,6 +51,24 @@ export default (build: buildType): testingServerType => {
       testingServer.port = await getPort();
       testingServer.server = server.run(build, folderPath, testingServer.port);
     },
+  };
+
+  server.utils = {
+    /**
+     * @param {string} filePath - cache file path
+     * @param {string} content - cache content
+     */
+    writeToCache: (filePath: string, content: string) => {
+      // eslint-disable-next-line no-eval
+      testingServer.cache[filePath] = eval(content);
+    },
+
+    /**
+     * @param {string} filePath - cache file path
+     *
+     * @return {middlewareType} - middleware cache
+     */
+    getFromCache: (filePath: string) => testingServer.cache[filePath],
   };
 
   return testingServer;

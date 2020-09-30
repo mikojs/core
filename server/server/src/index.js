@@ -13,7 +13,7 @@ import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
-type middlewareType<R = Promise<void>> = (
+export type middlewareType<R = Promise<void>> = (
   req: IncomingMessageType,
   res: ServerResponseType,
 ) => R | void;

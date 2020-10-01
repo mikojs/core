@@ -26,7 +26,7 @@ type serverType = {|
   utils: {|
     writeToCache: (filePath: string, content: string) => void,
     getFromCache: (filePath: string) => middlewareType<>,
-    watcher: (filePath: string, callback: callbackType) => void,
+    watcher: (filePath: string, callback: callbackType) => Promise<() => void>,
   |},
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
   run: (

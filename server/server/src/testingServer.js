@@ -2,6 +2,7 @@
 
 import { type Server as ServerType } from 'http';
 
+import { emptyFunction } from 'fbjs';
 import fetch, { type Body as BodyType } from 'node-fetch';
 import getPort from 'get-port';
 
@@ -78,8 +79,13 @@ export default (build: buildType): testingServerType => {
     /**
      * @param {string} folderPath - folder path
      * @param {callbackType} callback - handle files function
+     *
+     * @return {Function} - close client
      */
-    watcher: (folderPath: string, callback: callbackType) => {
+    watcher: async (
+      folderPath: string,
+      callback: callbackType,
+    ): Promise<() => void> => {
       callback(
         d3DirTree(folderPath)
           .leaves()
@@ -88,6 +94,8 @@ export default (build: buildType): testingServerType => {
             filePath: data.path,
           })),
       );
+
+      return emptyFunction;
     },
   };
 

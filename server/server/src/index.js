@@ -13,20 +13,20 @@ import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
+import watcher, { type dataType, type callbackType } from './utils/watcher';
+
 export type middlewareType<R = Promise<void>> = (
   req: IncomingMessageType,
   res: ServerResponseType,
 ) => R | void;
 
-export type buildType = (data: {|
-  exists: boolean,
-  filePath: string,
-|}) => string;
+export type buildType = (data: dataType) => string;
 
 type serverType = {|
   utils: {|
     writeToCache: (filePath: string, content: string) => void,
     getFromCache: (filePath: string) => middlewareType<>,
+    watcher: (filePath: string, callback: callbackType) => void,
   |},
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
   run: (
@@ -44,6 +44,7 @@ export default ((): serverType => {
     utils: {
       writeToCache: outputFileSync,
       getFromCache: requireModule,
+      watcher,
     },
 
     /**
@@ -57,11 +58,12 @@ export default ((): serverType => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 
-      // TODO: add watcher
-      server.utils.writeToCache(
-        cacheFilePath,
-        build({ exists: true, filePath: folderPath }),
-      );
+      server.utils.watcher(folderPath, (data: $ReadOnlyArray<dataType>) => {
+        server.utils.writeToCache(
+          cacheFilePath,
+          data.reduce((result: string, d: dataType) => build(d), ''),
+        );
+      });
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
         server.utils.getFromCache(cacheFilePath)(req, res);

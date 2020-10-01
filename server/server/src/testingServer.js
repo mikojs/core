@@ -5,6 +5,11 @@ import { type Server as ServerType } from 'http';
 import fetch, { type Body as BodyType } from 'node-fetch';
 import getPort from 'get-port';
 
+import { d3DirTree } from '@mikojs/utils';
+import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
+
+import { type callbackType } from './utils/watcher';
+
 import server, { type middlewareType, type buildType } from './index';
 
 export type fetchResultType = BodyType;
@@ -69,6 +74,21 @@ export default (build: buildType): testingServerType => {
      * @return {middlewareType} - middleware cache
      */
     getFromCache: (filePath: string) => testingServer.cache[filePath],
+
+    /**
+     * @param {string} folderPath - folder path
+     * @param {callbackType} callback - handle files function
+     */
+    watcher: (folderPath: string, callback: callbackType) => {
+      callback(
+        d3DirTree(folderPath)
+          .leaves()
+          .map(({ data }: d3DirTreeNodeType) => ({
+            exists: true,
+            filePath: data.path,
+          })),
+      );
+    },
   };
 
   return testingServer;

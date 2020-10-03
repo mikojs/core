@@ -17,7 +17,7 @@ export type fetchResultType = BodyType;
 
 type testingServerType = {|
   server?: ServerType,
-  cache: { [string]: middlewareType<> },
+  cache: {| [string]: middlewareType<> |},
   port: number,
   close: () => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<BodyType>,

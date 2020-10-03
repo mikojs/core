@@ -4,12 +4,12 @@ defaults: &defaults
     - image: node:latest
   working_directory: ~/repo
 
-restore-cache: &restore-cache
+restore-npm-cache: &restore-npm-cache
   keys:
     - dependencies-{{ checksum "yarn.lock" }}-7c16afd2
     - dependencies-f54ec6eb
 
-save-cache: &save-cache
+save-npm-cache: &save-npm-cache
   paths:
     - node_modules
     - flow-typed/npm
@@ -25,12 +25,12 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache: *restore-cache
+      - restore_cache: *restore-npm-cache
       - run: *install
       - run:
           name: Install flow-typed
           command: yarn miko flow-typed:install
-      - save_cache: *save-cache
+      - save_cache: *save-npm-cache
       - run:
           name: Flow
           command: yarn miko flow
@@ -42,7 +42,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache: *restore-cache
+      - restore_cache: *restore-npm-cache
       - run: *install
       - run:
           name: Install watchman
@@ -57,7 +57,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache: *restore-cache
+      - restore_cache: *restore-npm-cache
       - run: *install
       - run:
           name: Set npm key

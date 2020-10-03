@@ -5,8 +5,9 @@ import http, {
   type IncomingMessage as IncomingMessageType,
   type ServerResponse as ServerResponseType,
 } from 'http';
+import path from 'path';
 
-import { emptyFunction } from 'fbjs';
+import { emptyFunction, invariant } from 'fbjs';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
 import outputFileSync from 'output-file-sync';
@@ -66,7 +67,16 @@ export default ((): serverType => {
       });
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
-        server.utils.getFromCache(cacheFilePath)(req, res);
+        const middleware = server.utils.getFromCache(cacheFilePath);
+
+        invariant(
+          middleware,
+          `Should build the middleware before using this middleware: ${path.relative(
+            process.cwd(),
+            folderPath,
+          )}`,
+        );
+        middleware(req, res);
       };
     },
 

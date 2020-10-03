@@ -20,7 +20,7 @@ type testingServerType = {|
   cache: {| [string]: middlewareType<> |},
   port: number,
   close: () => ?ServerType,
-  fetch: (pathname: string, options: *) => Promise<BodyType>,
+  fetch: (pathname: string, options: *) => Promise<fetchResultType>,
   run: (folderPath: string) => Promise<void>,
 |};
 

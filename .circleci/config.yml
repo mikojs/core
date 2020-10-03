@@ -18,13 +18,13 @@ save-npm-cache: &save-npm-cache
 
 restore-watchman-cache: &restore-watchman-cache
   keys:
-    - watchman-{{ checksum ".circleci/watchman.sh" }}-{{ .Environment.CACHE_KEY }}
+    - watchman-{{ .Environment.WATCHMAN_VERSION }}-{{ .Environment.CACHE_KEY }}
     - watchman-{{ .Environment.CACHE_KEY }}
 
 save-watchman-cache: &save-watchman-cache
   paths:
     - ~/watchman
-  key: watchman-{{ checksum ".circleci/watchman.sh" }}-{{ .Environment.CACHE_KEY }}
+  key: watchman-{{ .Environment.WATCHMAN_VERSION }}-{{ .Environment.CACHE_KEY }}
 
 install: &install
   name: Install packages

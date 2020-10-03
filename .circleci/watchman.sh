@@ -5,7 +5,7 @@ if [ ! -d ~/watchman ]; then
   cd ~/watchman
   ./autogen.sh
   ./configure --without-python
-  make
 fi
 
+make
 make install

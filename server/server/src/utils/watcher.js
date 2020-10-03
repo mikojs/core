@@ -59,7 +59,5 @@ export default async (
 
   callback([{ exists: true, filePath: folderPath }]);
 
-  return () => {
-    client.end();
-  };
+  return () => client.end();
 };

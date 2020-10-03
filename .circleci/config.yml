@@ -6,7 +6,7 @@ defaults: &defaults
 
 restore-cache: &restore-cache
   keys:
-    - dependencies-{{ checksum "yarn.lock" }}-f54ec6eb
+    - dependencies-{{ checksum "yarn.lock" }}-7c16afd2
     - dependencies-f54ec6eb
 
 save-cache: &save-cache
@@ -14,7 +14,7 @@ save-cache: &save-cache
     - node_modules
     - flow-typed/npm
     - ~/.flow-typed
-  key: dependencies-{{ checksum "yarn.lock" }}-f54ec6eb
+  key: dependencies-{{ checksum "yarn.lock" }}-7c16afd2
 
 install: &install
   name: Install packages
@@ -50,7 +50,7 @@ jobs:
             git clone https://github.com/facebook/watchman.git -b v4.9.0 --depth 1 ~/watchman
             cd ~/watchman
             ./autogen.sh
-            ./configure
+            ./configure --without-python
             make
             make install
       - run:

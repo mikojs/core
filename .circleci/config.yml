@@ -6,25 +6,25 @@ defaults: &defaults
 
 restore-npm-cache: &restore-npm-cache
   keys:
-    - dependencies-{{ checksum "yarn.lock" }}-7c16afd2
-    - dependencies-7c16afd2
+    - dependencies-{{ checksum "yarn.lock" }}-{{ .Environment.CACHE_KEY }}
+    - dependencies-{{ .Environment.CACHE_KEY }}
 
 save-npm-cache: &save-npm-cache
   paths:
     - node_modules
     - flow-typed/npm
     - ~/.flow-typed
-  key: dependencies-{{ checksum "yarn.lock" }}-7c16afd2
+  key: dependencies-{{ checksum "yarn.lock" }}-{{ .Environment.CACHE_KEY }}
 
 restore-watchman-cache: &restore-watchman-cache
   keys:
-    - watchman-{{ checksum ".circleci/watchman.sh" }}-7c16afd2
-    - watchman-f54ec6eb
+    - watchman-{{ checksum ".circleci/watchman.sh" }}-{{ .Environment.CACHE_KEY }}
+    - watchman-{{ .Environment.CACHE_KEY }}
 
 save-watchman-cache: &save-watchman-cache
   paths:
     - ~/watchman
-  key: watchman-{{ checksum ".circleci/watchman.sh" }}-7c16afd2
+  key: watchman-{{ checksum ".circleci/watchman.sh" }}-{{ .Environment.CACHE_KEY }}
 
 install: &install
   name: Install packages

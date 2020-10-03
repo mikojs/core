@@ -2,8 +2,14 @@
 
 import { type Server as ServerType } from 'http';
 
+import { emptyFunction } from 'fbjs';
 import fetch, { type Body as BodyType } from 'node-fetch';
 import getPort from 'get-port';
+
+import { d3DirTree } from '@mikojs/utils';
+import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
+
+import { type callbackType } from './utils/watcher';
 
 import server, { type middlewareType, type buildType } from './index';
 
@@ -11,10 +17,10 @@ export type fetchResultType = BodyType;
 
 type testingServerType = {|
   server?: ServerType,
-  cache: { [string]: middlewareType<> },
+  cache: {| [string]: middlewareType<> |},
   port: number,
   close: () => ?ServerType,
-  fetch: (pathname: string, options: *) => Promise<BodyType>,
+  fetch: (pathname: string, options: *) => Promise<fetchResultType>,
   run: (folderPath: string) => Promise<void>,
 |};
 
@@ -47,9 +53,12 @@ export default (build: buildType): testingServerType => {
      */
     run: async (folderPath: string) => {
       testingServer.close();
-
       testingServer.port = await getPort();
-      testingServer.server = server.run(build, folderPath, testingServer.port);
+      testingServer.server = await server.run(
+        build,
+        folderPath,
+        testingServer.port,
+      );
     },
   };
 
@@ -69,6 +78,28 @@ export default (build: buildType): testingServerType => {
      * @return {middlewareType} - middleware cache
      */
     getFromCache: (filePath: string) => testingServer.cache[filePath],
+
+    /**
+     * @param {string} folderPath - folder path
+     * @param {callbackType} callback - handle files function
+     *
+     * @return {Function} - close client
+     */
+    watcher: async (
+      folderPath: string,
+      callback: callbackType,
+    ): Promise<() => void> => {
+      callback(
+        d3DirTree(folderPath)
+          .leaves()
+          .map(({ data }: d3DirTreeNodeType) => ({
+            exists: true,
+            filePath: data.path,
+          })),
+      );
+
+      return emptyFunction;
+    },
   };
 
   return testingServer;

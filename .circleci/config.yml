@@ -4,17 +4,27 @@ defaults: &defaults
     - image: node:latest
   working_directory: ~/repo
 
-restore-cache: &restore-cache
+restore-npm-cache: &restore-npm-cache
   keys:
-    - dependencies-{{ checksum "yarn.lock" }}-f54ec6eb
-    - dependencies-f54ec6eb
+    - dependencies-{{ checksum "yarn.lock" }}-{{ .Environment.CACHE_KEY }}
+    - dependencies-{{ .Environment.CACHE_KEY }}
 
-save-cache: &save-cache
+save-npm-cache: &save-npm-cache
   paths:
     - node_modules
     - flow-typed/npm
     - ~/.flow-typed
-  key: dependencies-{{ checksum "yarn.lock" }}-f54ec6eb
+  key: dependencies-{{ checksum "yarn.lock" }}-{{ .Environment.CACHE_KEY }}
+
+restore-watchman-cache: &restore-watchman-cache
+  keys:
+    - watchman-{{ .Environment.WATCHMAN_VERSION }}-{{ .Environment.CACHE_KEY }}
+    - watchman-{{ .Environment.CACHE_KEY }}
+
+save-watchman-cache: &save-watchman-cache
+  paths:
+    - ~/watchman
+  key: watchman-{{ .Environment.WATCHMAN_VERSION }}-{{ .Environment.CACHE_KEY }}
 
 install: &install
   name: Install packages
@@ -25,14 +35,15 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache: *restore-cache
+      - restore_cache: *restore-npm-cache
       - run: *install
-      - save_cache: *save-cache
+      - run:
+          name: Install flow-typed
+          command: yarn miko flow-typed:install
+      - save_cache: *save-npm-cache
       - run:
           name: Flow
-          command: |
-            yarn miko flow-typed:install
-            yarn miko flow
+          command: yarn miko flow
       - run:
           name: Check code style
           command: yarn miko lint
@@ -41,8 +52,13 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache: *restore-cache
+      - restore_cache: *restore-npm-cache
       - run: *install
+      - restore_cache: *restore-watchman-cache
+      - run:
+          name: Install watchman
+          command: ./.circleci/watchman.sh
+      - save_cache: *save-watchman-cache
       - run:
           name: Test
           command: yarn miko jest -i
@@ -53,7 +69,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache: *restore-cache
+      - restore_cache: *restore-npm-cache
       - run: *install
       - run:
           name: Set npm key
@@ -67,11 +83,13 @@ workflows:
   test-and-deploy:
     jobs:
       - basic:
+          context: global-env
           filters:
             tags:
               only: /.*/
 
       - test:
+          context: global-env
           requires:
             - basic
           filters:

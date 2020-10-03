@@ -44,6 +44,15 @@ jobs:
       - restore_cache: *restore-cache
       - run: *install
       - run:
+          name: Install watchman
+          command: |
+            git clone https://github.com/facebook/watchman.git -b v4.9.0 --depth 1 ~/watchman
+            cd ~/watchman
+            ./autogen.sh
+            ./configure
+            make
+            make install
+      - run:
           name: Test
           command: yarn miko jest -i
       - store_artifacts:

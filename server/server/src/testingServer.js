@@ -55,7 +55,11 @@ export default (build: buildType): testingServerType => {
       testingServer.close();
 
       testingServer.port = await getPort();
-      testingServer.server = server.run(build, folderPath, testingServer.port);
+      testingServer.server = await server.run(
+        build,
+        folderPath,
+        testingServer.port,
+      );
     },
   };
 

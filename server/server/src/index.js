@@ -24,6 +24,7 @@ export type middlewareType<R = Promise<void>> = (
 export type buildType = (data: dataType) => string;
 
 type serverType = {|
+  cache: {| [string]: Promise<() => void> |},
   utils: {|
     writeToCache: (filePath: string, content: string) => void,
     getFromCache: (filePath: string) => middlewareType<>,
@@ -35,13 +36,15 @@ type serverType = {|
     folderPath: string,
     port: number,
     callback?: () => void,
-  ) => ServerType,
+  ) => Promise<ServerType>,
 |};
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
 export default ((): serverType => {
   const server = {
+    cache: {},
+
     utils: {
       writeToCache: outputFileSync,
       getFromCache: requireModule,
@@ -59,12 +62,15 @@ export default ((): serverType => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 
-      server.utils.watcher(folderPath, (data: $ReadOnlyArray<dataType>) => {
-        server.utils.writeToCache(
-          cacheFilePath,
-          data.reduce((result: string, d: dataType) => build(d), ''),
-        );
-      });
+      server.cache[hash] = server.utils.watcher(
+        folderPath,
+        (data: $ReadOnlyArray<dataType>) => {
+          server.utils.writeToCache(
+            cacheFilePath,
+            data.reduce((result: string, d: dataType) => build(d), ''),
+          );
+        },
+      );
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
         const middleware = server.utils.getFromCache(cacheFilePath);
@@ -88,15 +94,26 @@ export default ((): serverType => {
      *
      * @return {ServerType} - server object
      */
-    run: (
+    run: async (
       build: buildType,
       folderPath: string,
       port: number,
       callback?: () => void = emptyFunction,
-    ) =>
-      http
-        .createServer(server.create(build)(folderPath))
-        .listen(port, emptyFunction),
+    ): Promise<ServerType> => {
+      const middleware = server.create(build)(folderPath);
+      const closes = await Promise.all(
+        Object.keys(server.cache).map((key: string) => server.cache[key]),
+      );
+      const runningServer = http
+        .createServer(middleware)
+        .listen(port, emptyFunction);
+
+      runningServer.on('close', () =>
+        closes.forEach((close: () => void) => close()),
+      );
+
+      return runningServer;
+    },
   };
 
   return server;

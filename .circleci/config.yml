@@ -7,7 +7,7 @@ defaults: &defaults
 restore-npm-cache: &restore-npm-cache
   keys:
     - dependencies-{{ checksum "yarn.lock" }}-7c16afd2
-    - dependencies-f54ec6eb
+    - dependencies-7c16afd2
 
 save-npm-cache: &save-npm-cache
   paths:

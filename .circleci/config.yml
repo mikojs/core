@@ -83,11 +83,13 @@ workflows:
   test-and-deploy:
     jobs:
       - basic:
+          context: global-env
           filters:
             tags:
               only: /.*/
 
       - test:
+          context: global-env
           requires:
             - basic
           filters:

@@ -53,7 +53,6 @@ export default (build: buildType): testingServerType => {
      */
     run: async (folderPath: string) => {
       testingServer.close();
-
       testingServer.port = await getPort();
       testingServer.server = await server.run(
         build,

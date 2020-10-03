@@ -16,6 +16,16 @@ save-npm-cache: &save-npm-cache
     - ~/.flow-typed
   key: dependencies-{{ checksum "yarn.lock" }}-7c16afd2
 
+restore-watchman-cache: &restore-watchman-cache
+  keys:
+    - watchman-{{ checksum ".circleci/watchman.sh" }}-7c16afd2
+    - watchman-f54ec6eb
+
+save-watchman-cache: &save-watchman-cache
+  paths:
+    - ~/watchman
+  key: watchman-{{ checksum ".circleci/watchman.sh" }}-7c16afd2
+
 install: &install
   name: Install packages
   command: yarn install:all
@@ -44,9 +54,11 @@ jobs:
       - checkout
       - restore_cache: *restore-npm-cache
       - run: *install
+      - restore_cache: *restore-watchman-cache
       - run:
           name: Install watchman
           command: ./.circleci/watchman.sh
+      - save_cache: *save-watchman-cache
       - run:
           name: Test
           command: yarn miko jest -i

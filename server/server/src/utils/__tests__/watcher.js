@@ -1,16 +1,24 @@
 // @flow
 
-import { handler } from '../watcher';
+import { emptyFunction } from 'fbjs';
 
-test('handler reject', () => {
-  const mockLog = jest.fn();
+import watcher, { handler } from '../watcher';
 
-  global.console.warn = mockLog;
+describe('watcher', () => {
+  test('watcher close', async () => {
+    expect((await watcher(__dirname, emptyFunction))()).toBeUndefined();
+  });
 
-  expect(
-    new Promise((resolve, reject) =>
-      handler(resolve, reject)(new Error('error'), { warning: 'warning' }),
-    ),
-  ).rejects.toThrow('error');
-  expect(mockLog).toHaveBeenCalledWith('warning');
+  test('handler reject', () => {
+    const mockLog = jest.fn();
+
+    global.console.warn = mockLog;
+
+    expect(
+      new Promise((resolve, reject) =>
+        handler(resolve, reject)(new Error('error'), { warning: 'warning' }),
+      ),
+    ).rejects.toThrow('error');
+    expect(mockLog).toHaveBeenCalledWith('warning');
+  });
 });

@@ -27,12 +27,13 @@ jobs:
       - checkout
       - restore_cache: *restore-cache
       - run: *install
+      - run:
+          name: Install flow-typed
+          command: yarn miko flow-typed:install
       - save_cache: *save-cache
       - run:
           name: Flow
-          command: |
-            yarn miko flow-typed:install
-            yarn miko flow
+          command: yarn miko flow
       - run:
           name: Check code style
           command: yarn miko lint

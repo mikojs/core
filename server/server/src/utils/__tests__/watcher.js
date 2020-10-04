@@ -9,12 +9,12 @@ describe('watcher', () => {
     expect((await watcher(__dirname, emptyFunction))()).toBeUndefined();
   });
 
-  test('handler reject', () => {
+  test('handler reject', async () => {
     const mockLog = jest.fn();
 
     global.console.warn = mockLog;
 
-    expect(
+    await expect(
       new Promise((resolve, reject) =>
         handler(resolve, reject)(new Error('error'), { warning: 'warning' }),
       ),

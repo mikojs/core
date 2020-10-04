@@ -5,7 +5,7 @@ import nodePath from 'path';
 import { declare } from '@babel/helper-plugin-utils';
 import typeof nodePathType from '@babel/traverse';
 
-export default declare(
+export default (declare(
   (
     { assertVersion, types: t }: nodePathType,
     { test: pattern = /\.css$/ }: {| test: RegExp |},
@@ -60,4 +60,4 @@ export default declare(
       },
     };
   },
-);
+): $Call<typeof declare>);

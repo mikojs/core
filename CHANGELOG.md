@@ -1,5 +1,42 @@
 # CHANGELOG
 
+## 1.11.4 (2020-10-04)
+
+#### :rocket: New Feature
+
+- Other
+  - [#661](https://github.com/mikojs/core/pull/661) (@mikojs/server) Could watch files ([@HsuTing](https://github.com/HsuTing))
+  - [#659](https://github.com/mikojs/core/pull/659) (@mikojs/server) Add default server ([@HsuTing](https://github.com/HsuTing))
+  - [#653](https://github.com/mikojs/core/pull/653) (@mikojs/server) Can build middleware ([@HsuTing](https://github.com/HsuTing))
+  - [#652](https://github.com/mikojs/core/pull/652) (@mikojs/server) Add testing server ([@HsuTing](https://github.com/HsuTing))
+- `worker`
+  - [#655](https://github.com/mikojs/core/pull/655) (@mikojs/server) Add watchman ([@HsuTing](https://github.com/HsuTing))
+- `miko`
+  - [#651](https://github.com/mikojs/core/pull/651) (@mikojs/server) Add new package ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `badges`, `configs`, `eslint-config-base`, `jest`, `miko`, `utils`, `worker`
+  - [#663](https://github.com/mikojs/core/pull/663) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `worker`
+  - [#662](https://github.com/mikojs/core/pull/662) (@mikojs/worker, @mikojs/server) Fix coverage ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#660](https://github.com/mikojs/core/pull/660) (@mikojs/server) Fix update multiple times in testing ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `worker`
+  - [#662](https://github.com/mikojs/core/pull/662) (@mikojs/worker, @mikojs/server) Fix coverage ([@HsuTing](https://github.com/HsuTing))
+- `miko`
+  - [#658](https://github.com/mikojs/core/pull/658) (@mikojs/miko) Modify code style ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#657](https://github.com/mikojs/core/pull/657) (@mikojs/server) Rewrite package ([@HsuTing](https://github.com/HsuTing))
+  - [#654](https://github.com/mikojs/core/pull/654) (@mikojs/core) Remove not used jobs in circleci ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.11.3 (2020-09-20)
 
 #### :boom: Breaking Change

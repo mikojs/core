@@ -41,7 +41,7 @@ type serverType = {|
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
-export default ((): serverType => {
+export default (((): serverType => {
   const server = {
     cache: {},
 
@@ -117,4 +117,4 @@ export default ((): serverType => {
   };
 
   return server;
-})();
+})(): serverType);

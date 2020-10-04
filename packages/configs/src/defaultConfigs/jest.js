@@ -9,6 +9,8 @@ export default {
    * @return {object} - jest config
    */
   config: (): {|
+    setupFiles: $ReadOnlyArray<string>,
+    testPathIgnorePatterns: $ReadOnlyArray<string>,
     collectCoverage: boolean,
     collectCoverageFrom: $ReadOnlyArray<string>,
     coverageDirectory: string,
@@ -22,8 +24,6 @@ export default {
         statements: number,
       |},
     |},
-    setupFiles: $ReadOnlyArray<string>,
-    testPathIgnorePatterns: $ReadOnlyArray<string>,
   |} => ({
     setupFiles: ['@mikojs/jest'],
     testPathIgnorePatterns: ['__tests__/__ignore__'],

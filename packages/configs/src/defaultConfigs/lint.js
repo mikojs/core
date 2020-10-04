@@ -12,9 +12,10 @@ export default {
   config: (): {|
     extends: string,
     rules: {|
-      'jsdoc/check-tag-names': $ReadOnlyArray<
-        string | {| definedTags: $ReadOnlyArray<string> |},
-      >,
+      'jsdoc/check-tag-names': [
+        string,
+        {| definedTags: $ReadOnlyArray<string> |},
+      ],
     |},
   |} => ({
     extends: '@mikojs/base',

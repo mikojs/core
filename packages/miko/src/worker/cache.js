@@ -17,12 +17,9 @@ export type cacheType = {|
   hasWorkingPids: () => boolean,
 |};
 
-const debugLog = debug('miko:worker:buildCache');
+const debugLog = debug('miko:worker:cache');
 
-/**
- * @return {cacheType} - cache object
- */
-export default (): cacheType => {
+export default (((): cacheType => {
   const cache = {};
   const result = {
     /**
@@ -119,4 +116,4 @@ export default (): cacheType => {
   };
 
   return result;
-};
+})(): cacheType);

@@ -2,9 +2,9 @@
 
 import { type commandsType } from './getCommands';
 
-export const QUOTATION_START = /^['"]/;
-export const QUOTATION_END = /['"]$/;
-const QUOTATION_ALL = /['"]/g;
+export const QUOTATION_START: RegExp = /^['"]/;
+export const QUOTATION_END: RegExp = /['"]$/;
+export const QUOTATION_ALL: RegExp = /['"]/g;
 
 /**
  * @param {string} command - command string

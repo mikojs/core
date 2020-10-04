@@ -52,7 +52,7 @@ export type cacheType = {|
 
 const debugLog = debug('miko:cache');
 
-export default ((): cacheType => {
+export default (((): cacheType => {
   const cache = {
     cwd: process.cwd(),
     configs: {},
@@ -183,4 +183,4 @@ export default ((): cacheType => {
   };
 
   return result.load(cosmiconfigSync('miko').search());
-})();
+})(): cacheType);

@@ -9,7 +9,7 @@ export default {
    *
    * @return {object} - new lint config
    */
-  lint: ({ rules, ...config }: lintType) => ({
+  lint: ({ rules, ...config }: lintType): lintType => ({
     ...config,
     rules: normalizeLint.rules(rules, {
       /**

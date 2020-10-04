@@ -5,7 +5,7 @@ import { declare } from '@babel/helper-plugin-utils';
 import { mockChoice } from '@mikojs/utils';
 import { type optionsType as transformFLowOptions } from '@mikojs/babel-plugin-transform-flow';
 
-export default declare(
+export default (declare(
   (
     { assertVersion }: {| assertVersion: (version: number) => void |},
     options: {|
@@ -71,4 +71,4 @@ export default declare(
       ],
     };
   },
-);
+): $Call<typeof declare>);

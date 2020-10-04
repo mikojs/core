@@ -3,7 +3,9 @@
 /**
  * @return {object} - miko default config
  */
-export default () => ({
+export default (): {|
+  [string]: {| command: string, description: string |},
+|} => ({
   build: {
     command: 'babel src -d lib --verbose',
     description: 'run `babel` in the build mode',

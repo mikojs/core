@@ -41,7 +41,7 @@ const defaultConfig = {
   },
 };
 
-export default [
+export default ([
   defaultConfig,
   importConfig,
   flowtypeConfig,
@@ -98,4 +98,4 @@ export default [
       config,
     ),
   ({ extends: [] }: configType),
-);
+): configType);

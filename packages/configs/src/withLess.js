@@ -16,7 +16,7 @@ export default [
      *
      * @return {object} - new babel config
      */
-    babel: ({ plugins, ...config }: babelType) => ({
+    babel: ({ plugins, ...config }: babelType): babelType => ({
       ...config,
       plugins: normalizeBabel.presetOrPlugin('plugin', plugins, {
         /**
@@ -68,7 +68,11 @@ export default [
      *
      * @return {object} - new lint-staged config
      */
-    'lint-staged': (config: { '*.less'?: $ReadOnlyArray<string> }) => ({
+    'lint-staged': (config: {
+      '*.less'?: $ReadOnlyArray<string>,
+    }): {
+      '*.less'?: $ReadOnlyArray<string>,
+    } => ({
       ...config,
       '*.less': [...(config['*.less'] || []), 'prettier --parser less --write'],
     }),

@@ -14,7 +14,7 @@ export default {
    *
    * @return {object} - new babel config
    */
-  babel: ({ presets, plugins, ...config }: babelType) => ({
+  babel: ({ presets, plugins, ...config }: babelType): babelType => ({
     ...config,
     presets: normalizeBabel.presetOrPlugin('preset', presets, {
       /**
@@ -56,7 +56,7 @@ export default {
    *
    * @return {object} - new lint config
    */
-  lint: ({ rules, ...config }: lintType) => ({
+  lint: ({ rules, ...config }: lintType): lintType => ({
     ...config,
     rules: normalizeLint.rules(rules, {
       /**
@@ -123,7 +123,9 @@ export default {
     ...config
   }: {
     setupFiles: $ReadOnlyArray<string>,
-  }) => ({
+  }): {
+    setupFiles: $ReadOnlyArray<string>,
+  } => ({
     ...config,
     setupFiles: [...(setupFiles || []), '@mikojs/jest/lib/react'],
   }),

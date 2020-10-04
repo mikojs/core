@@ -10,7 +10,10 @@ export default {
   /**
    * @return {object} - babel config
    */
-  config: () => ({
+  config: (): {|
+    presets: $ReadOnlyArray<string>,
+    ignore: $ReadOnlyArray<string>,
+  |} => ({
     presets: ['@mikojs/base'],
     ignore: mockChoice(
       process.env.NODE_ENV === 'test',

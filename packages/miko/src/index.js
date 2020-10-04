@@ -4,6 +4,7 @@ import path from 'path';
 
 import buildWorker from '@mikojs/worker';
 
+// $FlowFixMe FIXME: Owing to utils/cache use pipline
 import cache, { type initialConfigsType } from './utils/cache';
 
 import typeof * as workerType from './worker';

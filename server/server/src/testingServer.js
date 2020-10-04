@@ -15,7 +15,7 @@ import server, { type middlewareType, type buildType } from './index';
 
 export type fetchResultType = BodyType;
 
-type testingServerType = {|
+export type testingServerType = {|
   server?: ServerType,
   cache: {| [string]: middlewareType<> |},
   port: number,

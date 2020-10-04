@@ -8,7 +8,11 @@ export default {
   /**
    * @return {object} - prettier config
    */
-  config: () => ({
+  config: (): {
+    singleQuote: boolean,
+    arrowParens: 'avoid',
+    trailingComma: 'all',
+  } => ({
     singleQuote: true,
     arrowParens: 'avoid',
     trailingComma: 'all',

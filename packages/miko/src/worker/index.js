@@ -1,9 +1,9 @@
 // @flow
 
-import buildCache from './buildCache';
+import cache from './cache';
 import checkingTimer from './checkingTimer';
 
-export const cache = buildCache();
+export { cache };
 
 /**
  * @param {number} pid - process pid

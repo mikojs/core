@@ -3,7 +3,7 @@
 import { transformSync } from '@babel/core';
 import outputFileSync from 'output-file-sync';
 
-import testings from './__ignore__/testings';
+import testings, { type testingType } from './__ignore__/testings';
 
 describe('babel-plugin-transform-flow', () => {
   beforeEach(() => {
@@ -13,11 +13,11 @@ describe('babel-plugin-transform-flow', () => {
   test.each(testings)(
     '%s',
     (
-      info: string,
-      options: {},
-      content: string,
-      expected: $ReadOnlyArray<[string, string]>,
-      logInfo: string | false,
+      info: $ElementType<testingType, 0>,
+      options: $ElementType<testingType, 1>,
+      content: $ElementType<testingType, 2>,
+      expected: $ElementType<testingType, 3>,
+      logInfo: $ElementType<testingType, 4>,
     ) => {
       const mockLog = jest.fn();
 

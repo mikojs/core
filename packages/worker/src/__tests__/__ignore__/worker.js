@@ -1,5 +1,8 @@
 // @flow
 
-export const start = jest.fn<$ReadOnlyArray<void>, void>();
-export const func = jest.fn<$ReadOnlyArray<stream$Writable>, mixed>();
-export const end = jest.fn<$ReadOnlyArray<void>, void>();
+export const start: JestMockFn<$ReadOnlyArray<void>, void> = jest.fn();
+export const func: JestMockFn<
+  $ReadOnlyArray<stream$Writable>,
+  mixed,
+> = jest.fn();
+export const end: JestMockFn<$ReadOnlyArray<void>, void> = jest.fn();

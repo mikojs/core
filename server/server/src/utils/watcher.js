@@ -10,16 +10,22 @@ export type dataType = {|
 export type callbackType = (data: $ReadOnlyArray<dataType>) => void;
 
 type respType = {| warning?: string, watch?: mixed, relative_path?: mixed |};
+type resolveType = (resp: respType) => void;
+type rejectType = (err: Error) => void;
+type handlerType = (
+  resolve: resolveType,
+  reject: rejectType,
+) => (err: Error, resp: respType) => void;
 
 /**
- * @param {Function} resolve - promise resolve function
- * @param {Function} reject - promise reject function
+ * @param {resolveType} resolve - promise resolve function
+ * @param {rejectType} reject - promise reject function
  *
  * @return {Function} - handler function for watchman client
  */
-export const handler = (
-  resolve: (resp: respType) => void,
-  reject: (err: Error) => void,
+export const handler: handlerType = (
+  resolve: resolveType,
+  reject: rejectType,
 ) => (err: Error, resp: respType) => {
   const { warn } = console;
 

@@ -16,7 +16,7 @@ export type optionsType = {|
   ignore?: RegExp,
 |};
 
-export default declare(
+export default (declare(
   (
     { assertVersion }: {| assertVersion: (version: number) => void |},
     {
@@ -84,4 +84,4 @@ export default declare(
       },
     };
   },
-);
+): $Call<typeof declare>);

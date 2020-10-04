@@ -4,6 +4,14 @@ import path from 'path';
 
 import babelPluginTransformFlow from '../../index';
 
+export type testingType = [
+  string,
+  {},
+  string,
+  [string, string] | [],
+  string | false,
+];
+
 const options = {
   filename: './src/filename.js',
   plugins: [babelPluginTransformFlow],
@@ -11,7 +19,7 @@ const options = {
   configFile: false,
 };
 
-export default [
+export default ([
   [
     'basic usage',
     options,
@@ -146,4 +154,4 @@ export type flowType = string;
       path.resolve(__dirname, './flow.js.flow'),
     )}`,
   ],
-];
+]: $ReadOnlyArray<testingType>);

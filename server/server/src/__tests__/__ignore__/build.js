@@ -3,6 +3,6 @@
 /**
  * @return {string} - middleware cache
  */
-export default () => `module.exports = (req, res) => {
+export default (): string => `module.exports = (req, res) => {
   res.end(req.url);
 };`;

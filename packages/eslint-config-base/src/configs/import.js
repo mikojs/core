@@ -8,7 +8,7 @@ export default {
   extends: ['plugin:import/errors', 'plugin:import/warnings'],
   settings: {
     'import/resolver': {
-      node: {},
+      node: ({}: {}),
       'babel-module': {
         root: ['./src'],
         cwd: 'packagejson',

@@ -6,7 +6,7 @@ import debug from 'debug';
 
 import worker from '@mikojs/worker';
 
-import { type cacheType } from './buildCache';
+import { type cacheType } from './cache';
 
 export const TIME_TO_CHECK = 100;
 export const TIME_TO_REMOVE_FILES = 5000;

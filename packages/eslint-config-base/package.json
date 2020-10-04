@@ -13,16 +13,16 @@
     "core-js": "^3.6.5",
     "eslint-config-fbjs": "^3.1.1",
     "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-prettier": "^6.12.0",
     "eslint-import-resolver-babel-module": "^5.1.2",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-flowtype": "^5.2.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jsdoc": "^30.3.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsdoc": "^30.6.3",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.20.6",
-    "eslint-plugin-react-hooks": "^4.1.0",
+    "eslint-plugin-react": "^7.21.3",
+    "eslint-plugin-react-hooks": "^4.1.2",
     "eslint-plugin-relay": "^1.8.1"
   },
   "peerDependencies": {
@@ -31,9 +31,9 @@
   "devDependencies": {
     "@mikojs/utils": "^1.11.3",
     "babel-plugin-module-resolver": "^4.0.0",
-    "eslint": "^7.8.1",
+    "eslint": "^7.10.0",
     "fbjs": "^2.0.0",
-    "flow-bin": "^0.133.0",
+    "flow-bin": "^0.135.0",
     "flow-typed": "^3.2.1",
     "react": "^16.13.1"
   },

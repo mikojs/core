@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@mikojs/miko": "^1.11.3",
-    "flow-bin": "^0.133.0",
+    "flow-bin": "^0.135.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["configs", "mikojs"],

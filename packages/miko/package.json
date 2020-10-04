@@ -16,16 +16,16 @@
     "commander": "^6.1.0",
     "core-js": "^3.6.5",
     "cosmiconfig": "^7.0.0",
-    "debug": "^4.1.1",
+    "debug": "^4.2.0",
     "execa": "^4.0.3",
     "fbjs": "^2.0.0",
     "is-running": "^2.1.0",
-    "ora": "^5.0.0",
+    "ora": "^5.1.0",
     "output-file-sync": "^2.0.1",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "flow-bin": "^0.133.0",
+    "flow-bin": "^0.135.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["miko", "mikojs"],

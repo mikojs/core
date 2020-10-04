@@ -3,7 +3,7 @@
 import { type Server as ServerType } from 'http';
 
 import { emptyFunction } from 'fbjs';
-import fetch, { type Body as BodyType } from 'node-fetch';
+import fetch, { type Response as ResponseType } from 'node-fetch';
 import getPort from 'get-port';
 
 import { d3DirTree } from '@mikojs/utils';
@@ -13,7 +13,7 @@ import { type callbackType } from './utils/watcher';
 
 import server, { type middlewareType, type buildType } from './index';
 
-export type fetchResultType = BodyType;
+export type fetchResultType = ResponseType;
 
 export type testingServerType = {|
   server?: ServerType,
@@ -43,7 +43,7 @@ export default (build: buildType): testingServerType => {
      * @param {string} pathname - request pathname
      * @param {object} options - request object
      *
-     * @return {BodyType} - request body
+     * @return {ResponseType} - request body
      */
     fetch: (pathname: string, options?: *) =>
       fetch(`http://localhost:${testingServer.port}${pathname}`, options),

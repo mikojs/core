@@ -1,4 +1,8 @@
 [ignore]
+<PROJECT_ROOT>/packages/.*
+<PROJECT_ROOT>/babel/.*
+<PROJECT_ROOT>/server/.*
+<PROJECT_ROOT>/components/.*
 
 [include]
 
@@ -17,7 +21,3 @@ module.system.node.root_relative_dirname=./src
 [declarations]
 .*/node_modules/graphql/error/GraphQLError.js.flow
 .*/node_modules/express-graphql/index.js.flow
-<PROJECT_ROOT>/packages/.*
-<PROJECT_ROOT>/babel/.*
-<PROJECT_ROOT>/server/.*
-<PROJECT_ROOT>/components/.*

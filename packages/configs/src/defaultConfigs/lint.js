@@ -9,7 +9,14 @@ export default {
   /**
    * @return {object} - lint config
    */
-  config: () => ({
+  config: (): {|
+    extends: string,
+    rules: {|
+      'jsdoc/check-tag-names': $ReadOnlyArray<
+        string | {| definedTags: $ReadOnlyArray<string> |},
+      >,
+    |},
+  |} => ({
     extends: '@mikojs/base',
     rules: {
       'jsdoc/check-tag-names': [
@@ -24,7 +31,7 @@ export default {
   /**
    * @return {Array} - lint ignore
    */
-  ignore: () => [
+  ignore: (): $ReadOnlyArray<string> => [
     // node
     'node_modules',
 

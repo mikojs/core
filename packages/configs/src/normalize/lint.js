@@ -28,7 +28,7 @@ export default {
   rules: <-C: {}>(
     rules: $PropertyType<lintType, 'rules'>,
     newRulesCallback: C,
-  ) =>
+  ): $PropertyType<lintType, 'rules'> =>
     Object.keys(newRulesCallback).reduce(
       (result: $PropertyType<lintType, 'rules'>, ruleName: $Keys<C>) => ({
         ...result,

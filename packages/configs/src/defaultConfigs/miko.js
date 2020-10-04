@@ -3,7 +3,22 @@
 /**
  * @return {object} - miko default config
  */
-export default () => ({
+export default (): {|
+  build: {| command: string, description: string |},
+  clean: {| command: string, description: string |},
+  dev: {| command: string, description: string |},
+  'flow-typed:install': {| command: string, description: string |},
+  'husky:post-checkout': {| command: string, description: string |},
+  'husky:post-merge': {| command: string, description: string |},
+  'husky:pre-commit': {| command: string, description: string |},
+  jest: {| command: string, description: string |},
+  'jest:watch': {| command: string, description: string |},
+  lint: {| command: string, description: string |},
+  'lint:watch': {| command: string, description: string |},
+  prettier: {| command: string, description: string |},
+  prod: {| command: string, description: string |},
+  release: {| command: string, description: string |},
+|} => ({
   build: {
     command: 'babel src -d lib --verbose',
     description: 'run `babel` in the build mode',

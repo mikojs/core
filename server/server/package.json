@@ -5,11 +5,11 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/server",
   "repository": "https://github.com/mikojs/core/tree/master/server/server",
-  "version": "1.11.2",
+  "version": "1.11.4",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "@mikojs/utils": "^1.11.2",
+    "@mikojs/utils": "^1.11.4",
     "core-js": "^3.6.5",
     "crypto-random-string": "^3.3.0",
     "fb-watchman": "^2.0.1",

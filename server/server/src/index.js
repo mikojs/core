@@ -21,7 +21,13 @@ export type middlewareType<R = Promise<void>> = (
   res: ServerResponseType,
 ) => R | void;
 
-export type buildType = (data: dataType) => string;
+export type buildDataType = {|
+  exists: boolean,
+  filePath: string,
+  pathname: string,
+|};
+
+export type buildType = (data: buildDataType) => string;
 
 type serverType = {|
   cache: {| [string]: Promise<() => void> |},
@@ -67,7 +73,20 @@ export default (((): serverType => {
         (data: $ReadOnlyArray<dataType>) => {
           server.utils.writeToCache(
             cacheFilePath,
-            data.reduce((result: string, d: dataType) => build(d), ''),
+            data.reduce(
+              (result: string, { exists, filePath }: dataType) =>
+                build({
+                  exists,
+                  filePath,
+                  pathname: path
+                    .relative(folderPath, filePath)
+                    .replace(/\.js$/, '')
+                    .replace(/index$/, '')
+                    .replace(/^/, '/')
+                    .replace(/\[([^[\]]*)\]/g, ':$1'),
+                }),
+              '',
+            ),
           );
         },
       );

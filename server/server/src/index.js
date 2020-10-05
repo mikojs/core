@@ -21,19 +21,26 @@ export type middlewareType<R = Promise<void>> = (
   res: ServerResponseType,
 ) => R | void;
 
-export type buildType = (data: dataType) => string;
+export type buildDataType = {|
+  exists: boolean,
+  filePath: string,
+  pathname: string,
+|};
+
+type buildType = (data: buildDataType) => string;
+
+type utilsType = {|
+  writeToCache?: (filePath: string, content: string) => void,
+  getFromCache?: (filePath: string) => middlewareType<>,
+  watcher?: (filePath: string, callback: callbackType) => Promise<() => void>,
+|};
 
 type serverType = {|
-  cache: {| [string]: Promise<() => void> |},
-  utils: {|
-    writeToCache: (filePath: string, content: string) => void,
-    getFromCache: (filePath: string) => middlewareType<>,
-    watcher: (filePath: string, callback: callbackType) => Promise<() => void>,
-  |},
+  set: (utils: utilsType) => void,
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
+  ready: () => Promise<() => void>,
   run: (
-    build: buildType,
-    folderPath: string,
+    middleware: middlewareType<void>,
     port: number,
     callback?: () => void,
   ) => Promise<ServerType>,
@@ -42,13 +49,19 @@ type serverType = {|
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
 export default (((): serverType => {
+  const cache = {
+    writeToCache: outputFileSync,
+    getFromCache: requireModule,
+    watcher,
+  };
   const server = {
-    cache: {},
-
-    utils: {
-      writeToCache: outputFileSync,
-      getFromCache: requireModule,
-      watcher,
+    /**
+     * @param {utilsType} utils - new utils object
+     */
+    set: (utils: utilsType) => {
+      Object.keys(utils).forEach((key: string) => {
+        cache[key] = utils[key];
+      });
     },
 
     /**
@@ -62,18 +75,31 @@ export default (((): serverType => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 
-      server.cache[hash] = server.utils.watcher(
+      cache[hash] = cache.watcher(
         folderPath,
         (data: $ReadOnlyArray<dataType>) => {
-          server.utils.writeToCache(
+          cache.writeToCache(
             cacheFilePath,
-            data.reduce((result: string, d: dataType) => build(d), ''),
+            data.reduce(
+              (result: string, { exists, filePath }: dataType) =>
+                build({
+                  exists,
+                  filePath,
+                  pathname: path
+                    .relative(folderPath, filePath)
+                    .replace(/\.js$/, '')
+                    .replace(/index$/, '')
+                    .replace(/^/, '/')
+                    .replace(/\[([^[\]]*)\]/g, ':$1'),
+                }),
+              '',
+            ),
           );
         },
       );
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
-        const middleware = server.utils.getFromCache(cacheFilePath);
+        const middleware = cache.getFromCache(cacheFilePath);
 
         invariant(
           middleware,
@@ -87,30 +113,39 @@ export default (((): serverType => {
     },
 
     /**
-     * @param {buildType} build - build middleware cache function
-     * @param {string} folderPath - folder path
+     * @return {Promise} - close function
+     */
+    ready: async (): Promise<() => void> => {
+      const closes = await Promise.all(
+        Object.keys(cache)
+          .filter(
+            (key: string) =>
+              !['writeToCache', 'getFromCache', 'watcher'].includes(key),
+          )
+          .map((key: string) => cache[key]),
+      );
+
+      return () => closes.forEach((close: () => void) => close());
+    },
+
+    /**
+     * @param {middlewareType} middleware - middleware function
      * @param {number} port - server port
      * @param {Function} callback - server callback function
      *
      * @return {ServerType} - server object
      */
     run: async (
-      build: buildType,
-      folderPath: string,
+      middleware: middlewareType<void>,
       port: number,
       callback?: () => void = emptyFunction,
     ): Promise<ServerType> => {
-      const middleware = server.create(build)(folderPath);
-      const closes = await Promise.all(
-        Object.keys(server.cache).map((key: string) => server.cache[key]),
-      );
+      const close = await server.ready();
       const runningServer = http
         .createServer(middleware)
-        .listen(port, emptyFunction);
+        .listen(port, callback);
 
-      runningServer.on('close', () =>
-        closes.forEach((close: () => void) => close()),
-      );
+      runningServer.on('close', close);
 
       return runningServer;
     },

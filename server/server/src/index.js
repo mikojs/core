@@ -38,6 +38,7 @@ type utilsType = {|
 type serverType = {|
   set: (utils: utilsType) => void,
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
+  ready: () => Promise<() => void>,
   run: (
     build: buildType,
     folderPath: string,
@@ -113,6 +114,17 @@ export default (((): serverType => {
     },
 
     /**
+     * @return {Promise} - close function
+     */
+    ready: async (): Promise<() => void> => {
+      const closes = await Promise.all(
+        Object.keys(cache).map((key: string) => cache[key]),
+      );
+
+      return () => closes.forEach((close: () => void) => close());
+    },
+
+    /**
      * @param {buildType} build - build middleware cache function
      * @param {string} folderPath - folder path
      * @param {number} port - server port
@@ -127,16 +139,12 @@ export default (((): serverType => {
       callback?: () => void = emptyFunction,
     ): Promise<ServerType> => {
       const middleware = server.create(build)(folderPath);
-      const closes = await Promise.all(
-        Object.keys(cache).map((key: string) => cache[key]),
-      );
+      const close = await server.ready();
       const runningServer = http
         .createServer(middleware)
-        .listen(port, emptyFunction);
+        .listen(port, callback);
 
-      runningServer.on('close', () =>
-        closes.forEach((close: () => void) => close()),
-      );
+      runningServer.on('close', close);
 
       return runningServer;
     },

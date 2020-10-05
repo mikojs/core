@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import watchman from 'fb-watchman';
 
 export type dataType = {|
@@ -9,7 +11,12 @@ export type dataType = {|
 
 export type callbackType = (data: $ReadOnlyArray<dataType>) => void;
 
-type respType = {| warning?: string, watch?: mixed, relative_path?: mixed |};
+type respType = {|
+  warning?: string,
+  watch?: mixed,
+  relative_path?: mixed,
+  files?: $ReadOnlyArray<{| exists: boolean, name: string |}>,
+|};
 type resolveType = (resp: respType) => void;
 type rejectType = (err: Error) => void;
 type handlerType = (
@@ -63,7 +70,34 @@ export default async (
     required: ['relative_root'],
   });
 
-  callback([{ exists: true, filePath: folderPath }]);
+  const { watch, relative_path: relativePath } = await promiseClient(
+    'command',
+    ['watch-project', folderPath],
+  );
+  const { files = [] } = await promiseClient('command', [
+    'query',
+    watch,
+    {
+      expression: ['allof', ['match', '*.js']],
+      fields: ['exists', 'name'],
+      relative_root: relativePath,
+    },
+  ]);
+
+  callback(
+    files.map(
+      ({
+        exists,
+        name,
+      }: $ElementType<
+        $NonMaybeType<$PropertyType<respType, 'files'>>,
+        number,
+      >) => ({
+        exists,
+        filePath: path.resolve(folderPath, name),
+      }),
+    ),
+  );
 
   return () => client.end();
 };

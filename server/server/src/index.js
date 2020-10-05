@@ -117,7 +117,12 @@ export default (((): serverType => {
      */
     ready: async (): Promise<() => void> => {
       const closes = await Promise.all(
-        Object.keys(cache).map((key: string) => cache[key]),
+        Object.keys(cache)
+          .filter(
+            (key: string) =>
+              !['writeToCache', 'getFromCache', 'watcher'].includes(key),
+          )
+          .map((key: string) => cache[key]),
       );
 
       return () => closes.forEach((close: () => void) => close());

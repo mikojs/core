@@ -15,7 +15,7 @@ type respType = {|
   warning?: string,
   watch?: mixed,
   relative_path?: mixed,
-  files?: $ReadOnlyArray<{| exists: boolean, name: string |}>,
+  files: $ReadOnlyArray<{| exists: boolean, name: string |}>,
 |};
 type resolveType = (resp: respType) => void;
 type rejectType = (err: Error) => void;
@@ -74,7 +74,7 @@ export default async (
     'command',
     ['watch-project', folderPath],
   );
-  const { files = [] } = await promiseClient('command', [
+  const { files } = await promiseClient('command', [
     'query',
     watch,
     {

@@ -16,14 +16,24 @@ import server, { type middlewareType, type buildType } from './index';
 export type fetchResultType = ResponseType;
 
 export type testingServerType = {|
-  server?: ServerType,
-  port: number,
   close: () => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<fetchResultType>,
   run: (folderPath: string) => Promise<void>,
 |};
 
-const cache: {| [string]: middlewareType<> |} = {};
+const cache: {|
+  server?: ServerType,
+  port: number,
+  close: $PropertyType<testingServerType, 'close'>,
+  [string]: middlewareType<>,
+|} = {
+  port: -1,
+
+  /**
+   * @return {ServerType} - server object
+   */
+  close: () => cache.server?.close(),
+};
 
 server.set({
   /**
@@ -70,37 +80,24 @@ server.set({
  *
  * @return {testingServerType} - testing server cache
  */
-export default (build: buildType): testingServerType => {
-  const testingServer: testingServerType = {
-    port: -1,
+export default (build: buildType): testingServerType => ({
+  close: cache.close,
 
-    /**
-     * @return {ServerType} - server object
-     */
-    close: () => testingServer.server?.close(),
+  /**
+   * @param {string} pathname - request pathname
+   * @param {object} options - request object
+   *
+   * @return {ResponseType} - request body
+   */
+  fetch: (pathname: string, options?: *) =>
+    fetch(`http://localhost:${cache.port}${pathname}`, options),
 
-    /**
-     * @param {string} pathname - request pathname
-     * @param {object} options - request object
-     *
-     * @return {ResponseType} - request body
-     */
-    fetch: (pathname: string, options?: *) =>
-      fetch(`http://localhost:${testingServer.port}${pathname}`, options),
-
-    /**
-     * @param {string} folderPath - folder path
-     */
-    run: async (folderPath: string) => {
-      testingServer.close();
-      testingServer.port = await getPort();
-      testingServer.server = await server.run(
-        build,
-        folderPath,
-        testingServer.port,
-      );
-    },
-  };
-
-  return testingServer;
-};
+  /**
+   * @param {string} folderPath - folder path
+   */
+  run: async (folderPath: string) => {
+    cache.close();
+    cache.port = await getPort();
+    cache.server = await server.run(build, folderPath, cache.port);
+  },
+});

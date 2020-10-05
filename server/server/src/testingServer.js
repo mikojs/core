@@ -17,12 +17,53 @@ export type fetchResultType = ResponseType;
 
 export type testingServerType = {|
   server?: ServerType,
-  cache: {| [string]: middlewareType<> |},
   port: number,
   close: () => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<fetchResultType>,
   run: (folderPath: string) => Promise<void>,
 |};
+
+const cache: {| [string]: middlewareType<> |} = {};
+
+server.set({
+  /**
+   * @param {string} filePath - cache file path
+   * @param {string} content - cache content
+   */
+  writeToCache: (filePath: string, content: string) => {
+    // eslint-disable-next-line no-eval
+    cache[filePath] = eval(content);
+  },
+
+  /**
+   * @param {string} filePath - cache file path
+   *
+   * @return {middlewareType} - middleware cache
+   */
+  getFromCache: (filePath: string) => cache[filePath],
+
+  /**
+   * @param {string} folderPath - folder path
+   * @param {callbackType} callback - handle files function
+   *
+   * @return {Function} - close client
+   */
+  watcher: async (
+    folderPath: string,
+    callback: callbackType,
+  ): Promise<() => void> => {
+    callback(
+      d3DirTree(folderPath)
+        .leaves()
+        .map(({ data }: d3DirTreeNodeType) => ({
+          exists: true,
+          filePath: data.path,
+        })),
+    );
+
+    return emptyFunction;
+  },
+});
 
 /**
  * @param {buildType} build - build middleware cache function
@@ -31,7 +72,6 @@ export type testingServerType = {|
  */
 export default (build: buildType): testingServerType => {
   const testingServer: testingServerType = {
-    cache: {},
     port: -1,
 
     /**
@@ -59,46 +99,6 @@ export default (build: buildType): testingServerType => {
         folderPath,
         testingServer.port,
       );
-    },
-  };
-
-  server.utils = {
-    /**
-     * @param {string} filePath - cache file path
-     * @param {string} content - cache content
-     */
-    writeToCache: (filePath: string, content: string) => {
-      // eslint-disable-next-line no-eval
-      testingServer.cache[filePath] = eval(content);
-    },
-
-    /**
-     * @param {string} filePath - cache file path
-     *
-     * @return {middlewareType} - middleware cache
-     */
-    getFromCache: (filePath: string) => testingServer.cache[filePath],
-
-    /**
-     * @param {string} folderPath - folder path
-     * @param {callbackType} callback - handle files function
-     *
-     * @return {Function} - close client
-     */
-    watcher: async (
-      folderPath: string,
-      callback: callbackType,
-    ): Promise<() => void> => {
-      callback(
-        d3DirTree(folderPath)
-          .leaves()
-          .map(({ data }: d3DirTreeNodeType) => ({
-            exists: true,
-            filePath: data.path,
-          })),
-      );
-
-      return emptyFunction;
     },
   };
 

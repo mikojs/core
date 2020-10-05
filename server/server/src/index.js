@@ -29,13 +29,20 @@ export type buildDataType = {|
 
 export type buildType = (data: buildDataType) => string;
 
+type utilsType = {|
+  writeToCache: (filePath: string, content: string) => void,
+  getFromCache: (filePath: string) => middlewareType<>,
+  watcher: (filePath: string, callback: callbackType) => Promise<() => void>,
+|};
+
+type newUtilsType = {|
+  writeToCache?: $PropertyType<utilsType, 'writeToCache'>,
+  getFromCache?: $PropertyType<utilsType, 'getFromCache'>,
+  watcher?: $PropertyType<utilsType, 'watcher'>,
+|};
+
 type serverType = {|
-  cache: {| [string]: Promise<() => void> |},
-  utils: {|
-    writeToCache: (filePath: string, content: string) => void,
-    getFromCache: (filePath: string) => middlewareType<>,
-    watcher: (filePath: string, callback: callbackType) => Promise<() => void>,
-  |},
+  set: (newUtils: newUtilsType) => void,
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
   run: (
     build: buildType,
@@ -48,13 +55,20 @@ type serverType = {|
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 
 export default (((): serverType => {
+  const cache: {| [string]: Promise<() => void> |} = {};
+  const utils = {
+    writeToCache: outputFileSync,
+    getFromCache: requireModule,
+    watcher,
+  };
   const server = {
-    cache: {},
-
-    utils: {
-      writeToCache: outputFileSync,
-      getFromCache: requireModule,
-      watcher,
+    /**
+     * @param {newUtilsType} newUtils - new utils object
+     */
+    set: (newUtils: newUtilsType) => {
+      Object.keys(newUtils).forEach((key: string) => {
+        utils[key] = newUtils[key];
+      });
     },
 
     /**
@@ -68,10 +82,10 @@ export default (((): serverType => {
       const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
       const cacheFilePath = cacheDir(`${hash}.js`);
 
-      server.cache[hash] = server.utils.watcher(
+      cache[hash] = utils.watcher(
         folderPath,
         (data: $ReadOnlyArray<dataType>) => {
-          server.utils.writeToCache(
+          utils.writeToCache(
             cacheFilePath,
             data.reduce(
               (result: string, { exists, filePath }: dataType) =>
@@ -92,7 +106,7 @@ export default (((): serverType => {
       );
 
       return (req: IncomingMessageType, res: ServerResponseType) => {
-        const middleware = server.utils.getFromCache(cacheFilePath);
+        const middleware = utils.getFromCache(cacheFilePath);
 
         invariant(
           middleware,
@@ -121,7 +135,7 @@ export default (((): serverType => {
     ): Promise<ServerType> => {
       const middleware = server.create(build)(folderPath);
       const closes = await Promise.all(
-        Object.keys(server.cache).map((key: string) => server.cache[key]),
+        Object.keys(cache).map((key: string) => cache[key]),
       );
       const runningServer = http
         .createServer(middleware)

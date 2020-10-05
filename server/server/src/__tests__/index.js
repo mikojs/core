@@ -17,7 +17,7 @@ describe.each`
   'server with mockWatcher = $mockWatcher',
   ({ mockWatcher }: {| mockWatcher: boolean |}) => {
     beforeAll(async () => {
-      if (!mockWatcher) server.utils.watcher = watcher;
+      if (!mockWatcher) server.set({ watcher });
 
       await testingServer.run(
         path.resolve(__dirname, './__ignore__/folder/foo'),

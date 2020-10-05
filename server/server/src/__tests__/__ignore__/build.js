@@ -2,7 +2,7 @@
 
 import { type buildDataType } from '../../index';
 
-const cache = {};
+const cache: {| [string]: string |} = {};
 
 /**
  * @param {buildDataType} buildData - the data of the build function

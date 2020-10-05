@@ -6,7 +6,7 @@ import d3DirTree, { type d3DirTreeNodeType } from '../d3DirTree';
 
 it('test d3DirTree', () => {
   expect(
-    d3DirTree(path.resolve(__dirname, '..'))
+    d3DirTree(path.resolve(__dirname, '../index'))
       .children.map(({ data: { name } }: d3DirTreeNodeType) => name)
       .sort(),
   ).toEqual([

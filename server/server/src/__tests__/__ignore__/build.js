@@ -9,7 +9,7 @@ const cache: {| [string]: string |} = {};
  *
  * @return {string} - middleware cache
  */
-export default ({ exists, filePath, pathname }: buildDataType): string => {
+export default ({ filePath, pathname }: buildDataType): string => {
   cache[pathname] = filePath;
 
   return `const requireModule = require('@mikojs/utils/lib/requireModule');

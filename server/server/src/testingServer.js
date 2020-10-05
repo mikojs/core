@@ -11,14 +11,14 @@ import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import { type callbackType } from './utils/watcher';
 
-import server, { type middlewareType, type buildType } from './index';
+import server, { type middlewareType } from './index';
 
 export type fetchResultType = ResponseType;
 
 export type testingServerType = {|
   close: () => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<fetchResultType>,
-  run: (folderPath: string) => Promise<void>,
+  run: (middleware: middlewareType<void>) => Promise<void>,
 |};
 
 const cache: {|
@@ -75,12 +75,7 @@ server.set({
   },
 });
 
-/**
- * @param {buildType} build - build middleware cache function
- *
- * @return {testingServerType} - testing server cache
- */
-export default (build: buildType): testingServerType => ({
+export default ({
   close: cache.close,
 
   /**
@@ -93,11 +88,11 @@ export default (build: buildType): testingServerType => ({
     fetch(`http://localhost:${cache.port}${pathname}`, options),
 
   /**
-   * @param {string} folderPath - folder path
+   * @param {middlewareType} middleware - middleware function
    */
-  run: async (folderPath: string) => {
+  run: async (middleware: middlewareType<void>) => {
     cache.close();
     cache.port = await getPort();
-    cache.server = await server.run(build, folderPath, cache.port);
+    cache.server = await server.run(middleware, cache.port);
   },
-});
+}: testingServerType);

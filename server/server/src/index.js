@@ -27,7 +27,7 @@ export type buildDataType = {|
   pathname: string,
 |};
 
-export type buildType = (data: buildDataType) => string;
+type buildType = (data: buildDataType) => string;
 
 type utilsType = {|
   writeToCache?: (filePath: string, content: string) => void,
@@ -40,8 +40,7 @@ type serverType = {|
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
   ready: () => Promise<() => void>,
   run: (
-    build: buildType,
-    folderPath: string,
+    middleware: middlewareType<void>,
     port: number,
     callback?: () => void,
   ) => Promise<ServerType>,
@@ -125,20 +124,17 @@ export default (((): serverType => {
     },
 
     /**
-     * @param {buildType} build - build middleware cache function
-     * @param {string} folderPath - folder path
+     * @param {middlewareType} middleware - middleware function
      * @param {number} port - server port
      * @param {Function} callback - server callback function
      *
      * @return {ServerType} - server object
      */
     run: async (
-      build: buildType,
-      folderPath: string,
+      middleware: middlewareType<void>,
       port: number,
       callback?: () => void = emptyFunction,
     ): Promise<ServerType> => {
-      const middleware = server.create(build)(folderPath);
       const close = await server.ready();
       const runningServer = http
         .createServer(middleware)

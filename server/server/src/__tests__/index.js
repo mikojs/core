@@ -1,11 +1,9 @@
 // @flow
 
-import path from 'path';
-
 import server from '../index';
-import testingServer, {
-  type fetchResultType,
-} from './__ignore__/testingServer';
+import testingServer, { type fetchResultType } from '../testingServer';
+
+import foo from './__ignore__/foo';
 
 import watcher from 'utils/watcher';
 
@@ -19,9 +17,7 @@ describe.each`
     beforeAll(async () => {
       if (!mockWatcher) server.set({ watcher });
 
-      await testingServer.run(
-        path.resolve(__dirname, './__ignore__/folder/foo'),
-      );
+      await testingServer.run(foo);
     });
 
     test('fetch', async () => {

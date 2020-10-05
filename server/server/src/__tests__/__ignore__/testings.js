@@ -15,10 +15,16 @@ export default () => {
     );
   });
 
-  test('fetch', async () => {
+  test.each`
+    pathname
+    ${'/'}
+    ${'/foo'}
+  `('fetch $pathname', async ({ pathname }: {| pathname: string |}) => {
     expect(
-      await testingServer.fetch('/').then((res: fetchResultType) => res.text()),
-    ).toBe('/');
+      await testingServer
+        .fetch(pathname)
+        .then((res: fetchResultType) => res.text()),
+    ).toBe(pathname);
   });
 
   afterAll(

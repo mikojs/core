@@ -16,7 +16,7 @@ import server, { type middlewareType } from './index';
 export type fetchResultType = ResponseType;
 
 export type testingServerType = {|
-  close: () => ?ServerType,
+  close: (callback?: () => void) => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<fetchResultType>,
   run: (middleware: middlewareType<void>) => Promise<void>,
 |};
@@ -30,9 +30,11 @@ const cache: {|
   port: -1,
 
   /**
+   * @param {Function} callback - server callback function
+   *
    * @return {ServerType} - server object
    */
-  close: () => cache.server?.close(),
+  close: (callback?: () => void) => cache.server?.close(callback),
 };
 
 server.set({

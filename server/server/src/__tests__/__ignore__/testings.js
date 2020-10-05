@@ -21,7 +21,10 @@ export default () => {
     ).toBe('/');
   });
 
-  afterAll(() => {
-    testingServer.close();
-  });
+  afterAll(
+    () =>
+      new Promise(resolve => {
+        testingServer.close(resolve);
+      }),
+  );
 };

@@ -42,7 +42,13 @@ const tools = {
 };
 
 export default {
-  get: tools.getFromCache,
+  /**
+   * @param {string} cacheFilePath - cache file path
+   *
+   * @return {middlewareType} - middleware from cache
+   */
+  get: (cacheFilePath: string): middlewareType<> =>
+    tools.getFromCache(cacheFilePath),
 
   /**
    * @param {string} folderPath - folder path
@@ -57,7 +63,7 @@ export default {
     cache[hash] = tools.watcher(
       folderPath,
       (data: $ReadOnlyArray<dataType>) => {
-        cache.writeToCache(
+        tools.writeToCache(
           cacheFilePath,
           data.reduce(
             (result: string, { exists, filePath }: dataType) =>

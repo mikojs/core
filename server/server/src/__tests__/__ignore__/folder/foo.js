@@ -1,3 +1,3 @@
 // @flow
 
-export { default } from '../middleware';
+export { default } from './index';

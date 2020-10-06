@@ -17,7 +17,6 @@ export type middlewareType<R = Promise<void>> = (
 ) => R | void;
 
 type serverType = {|
-  set: $PropertyType<typeof mergeDir, 'updateTools'>,
   ready: $PropertyType<typeof mergeDir, 'ready'>,
   create: (build: buildType) => (folderPath: string) => middlewareType<void>,
   run: (
@@ -28,7 +27,6 @@ type serverType = {|
 |};
 
 export default ({
-  set: mergeDir.updateTools,
   ready: mergeDir.ready,
 
   /**

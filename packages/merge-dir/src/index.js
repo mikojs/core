@@ -8,7 +8,7 @@ import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
-import watcher, { type dataType } from './utils/watcher';
+import watcher, { type dataType, type callbackType } from './utils/watcher';
 
 export type fileDataType = {|
   exists: boolean,
@@ -16,13 +16,12 @@ export type fileDataType = {|
   pathname: string,
 |};
 
+type buildType = (data: fileDataType) => string;
 type toolsType = {|
   writeToCache?: (filePath: string, content: string) => void,
   getFromCache?: <C>(filePath: string) => C,
-  watcher?: (filePath: string, build: buildType) => Promise<() => void>,
+  watcher?: (filePath: string, callback: callbackType) => Promise<() => void>,
 |};
-
-export type buildType = (data: fileDataType) => string;
 
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const cache = {};

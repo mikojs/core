@@ -19,6 +19,9 @@ export default () => {
     pathname
     ${'/'}
     ${'/foo'}
+    ${'/bar'}
+    ${'/bar/foo'}
+    ${'/bar/bar'}
   `('fetch $pathname', async ({ pathname }: {| pathname: string |}) => {
     expect(
       await testingServer

@@ -1,15 +1,15 @@
 // @flow
 
-import { type buildDataType } from '../../index';
+import { type dataType } from '../../index';
 
 const cache = {};
 
 /**
- * @param {buildDataType} buildData - the data of the build function
+ * @param {dataType} data - the data of the build function
  *
  * @return {string} - middleware cache
  */
-export default ({ filePath, pathname }: buildDataType): string => {
+export default ({ filePath, pathname }: dataType): string => {
   cache[pathname] = filePath;
 
   return `const requireModule = require('@mikojs/utils/lib/requireModule');

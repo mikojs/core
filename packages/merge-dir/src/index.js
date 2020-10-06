@@ -24,7 +24,7 @@ type toolsType = {|
 
 export type buildType = (data: fileDataType) => string;
 
-const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
+const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const cache = {};
 const tools = {
   writeToCache: outputFileSync,

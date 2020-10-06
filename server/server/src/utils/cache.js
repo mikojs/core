@@ -1,6 +1,10 @@
 // @flow
 
 import path from 'path';
+import {
+  type IncomingMessage as IncomingMessageType,
+  type ServerResponse as ServerResponseType,
+} from 'http';
 
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
@@ -8,7 +12,12 @@ import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
-import watcher, { type dataType } from './watcher';
+import watcher, { type dataType, type callbackType } from './watcher';
+
+type middlewareType<R = Promise<void>> = (
+  req: IncomingMessageType,
+  res: ServerResponseType,
+) => R | void;
 
 type buildDataType = {|
   exists: boolean,
@@ -17,6 +26,12 @@ type buildDataType = {|
 |};
 
 type buildType = (data: buildDataType) => string;
+
+type toolsType = {|
+  writeToCache?: (filePath: string, content: string) => void,
+  getFromCache?: (filePath: string) => middlewareType<>,
+  watcher?: (filePath: string, callback: callbackType) => Promise<() => void>,
+|};
 
 const cacheDir = findCacheDir({ name: '@mikojs/server', thunk: true });
 const cache = {};
@@ -63,6 +78,15 @@ export default {
     );
 
     return cacheFilePath;
+  },
+
+  /**
+   * @param {toolsType} newTools - new tools functions
+   */
+  updateTools: (newTools: toolsType) => {
+    Object.keys(newTools).forEach((key: string) => {
+      tools[key] = newTools[key];
+    });
   },
 
   /**

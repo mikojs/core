@@ -11,7 +11,9 @@ import testingServer, { type fetchResultType } from '../../testingServer';
 export default () => {
   beforeAll(async () => {
     await testingServer.run(
-      requireModule<middlewareType<void>>(path.resolve(__dirname, './foo')),
+      requireModule<middlewareType<void>>(
+        path.resolve(__dirname, './middleware'),
+      ),
     );
   });
 

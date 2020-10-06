@@ -41,6 +41,22 @@ const tools = {
   watcher,
 };
 
+/**
+ * @return {Array} - close functions
+ */
+const ready = async () => [
+  ...(await Promise.all(
+    Object.keys(cache).map((key: string): Promise<() => void> => {
+      const promise = cache[key];
+
+      delete cache[key];
+
+      return promise;
+    }),
+  )),
+  ...(Object.keys(cache).length === 0 ? [] : await ready()),
+];
+
 export default {
   /**
    * @param {string} cacheFilePath - cache file path
@@ -66,8 +82,11 @@ export default {
         tools.writeToCache(
           cacheFilePath,
           data.reduce(
-            (result: string, { exists, filePath }: dataType) =>
-              build({
+            (result: string, { exists, filePath }: dataType): string => {
+              delete require.cache[filePath];
+              requireModule(filePath);
+
+              return build({
                 exists,
                 filePath,
                 pathname: path
@@ -76,7 +95,8 @@ export default {
                   .replace(/index$/, '')
                   .replace(/^/, '/')
                   .replace(/\[([^[\]]*)\]/g, ':$1'),
-              }),
+              });
+            },
             '',
           ),
         );
@@ -99,9 +119,7 @@ export default {
    * @return {Promise} - close function
    */
   ready: async (): Promise<() => void> => {
-    const closes = await Promise.all(
-      Object.keys(cache).map((key: string) => cache[key]),
-    );
+    const closes = await ready();
 
     return () => closes.forEach((close: () => void) => close());
   },

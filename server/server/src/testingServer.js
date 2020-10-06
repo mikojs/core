@@ -2,14 +2,10 @@
 
 import { type Server as ServerType } from 'http';
 
-import { emptyFunction } from 'fbjs';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 import getPort from 'get-port';
 
-import { d3DirTree } from '@mikojs/utils';
-import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
-
-import { type callbackType } from './utils/watcher';
+import '@mikojs/merge-dir';
 
 import server, { type middlewareType } from './index';
 
@@ -25,7 +21,6 @@ const cache: {|
   server?: ServerType,
   port: number,
   close: $PropertyType<testingServerType, 'close'>,
-  [string]: middlewareType<>,
 |} = {
   port: -1,
 
@@ -36,46 +31,6 @@ const cache: {|
    */
   close: (callback?: () => void) => cache.server?.close(callback),
 };
-
-server.set({
-  /**
-   * @param {string} filePath - cache file path
-   * @param {string} content - cache content
-   */
-  writeToCache: (filePath: string, content: string) => {
-    // eslint-disable-next-line no-eval
-    cache[filePath] = eval(content);
-  },
-
-  /**
-   * @param {string} filePath - cache file path
-   *
-   * @return {middlewareType} - middleware cache
-   */
-  getFromCache: (filePath: string) => cache[filePath],
-
-  /**
-   * @param {string} folderPath - folder path
-   * @param {callbackType} callback - handle files function
-   *
-   * @return {Function} - close client
-   */
-  watcher: async (
-    folderPath: string,
-    callback: callbackType,
-  ): Promise<() => void> => {
-    callback(
-      d3DirTree(folderPath)
-        .leaves()
-        .map(({ data }: d3DirTreeNodeType) => ({
-          exists: true,
-          filePath: data.path,
-        })),
-    );
-
-    return emptyFunction;
-  },
-});
 
 export default ({
   close: cache.close,

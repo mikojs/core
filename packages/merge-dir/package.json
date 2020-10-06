@@ -9,7 +9,8 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "core-js": "^3.6.5"
+    "core-js": "^3.6.5",
+    "fb-watchman": "^2.0.1"
   },
   "devDependencies": {
     "flow-bin": "^0.135.0",

@@ -14,18 +14,18 @@ import { requireModule } from '@mikojs/utils';
 
 import watcher, { type dataType, type callbackType } from './watcher';
 
-type middlewareType<R = Promise<void>> = (
+export type middlewareType<R = Promise<void>> = (
   req: IncomingMessageType,
   res: ServerResponseType,
 ) => R | void;
 
-type buildDataType = {|
+export type buildDataType = {|
   exists: boolean,
   filePath: string,
   pathname: string,
 |};
 
-type buildType = (data: buildDataType) => string;
+export type buildType = (data: buildDataType) => string;
 
 type toolsType = {|
   writeToCache?: (filePath: string, content: string) => void,

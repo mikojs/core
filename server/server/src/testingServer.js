@@ -11,7 +11,7 @@ import server, { type middlewareType } from './index';
 
 export type fetchResultType = ResponseType;
 
-export type testingServerType = {|
+type testingServerType = {|
   close: (callback?: () => void) => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<fetchResultType>,
   run: (middleware: middlewareType<void>) => Promise<void>,

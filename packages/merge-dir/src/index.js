@@ -16,7 +16,8 @@ export type fileDataType = {|
   pathname: string,
 |};
 
-type buildType = (data: fileDataType) => string;
+export type buildType = (data: fileDataType) => string;
+
 type toolsType = {|
   writeToCache?: (filePath: string, content: string) => void,
   getFromCache?: <C>(filePath: string) => C,

@@ -11,16 +11,10 @@ import server, { type middlewareType } from './index';
 
 export type fetchResultType = ResponseType;
 
-type testingServerType = {|
-  close: (callback?: () => void) => ?ServerType,
-  fetch: (pathname: string, options: *) => Promise<fetchResultType>,
-  run: (middleware: middlewareType) => Promise<void>,
-|};
-
 const cache: {|
   server?: ServerType,
   port: number,
-  close: $PropertyType<testingServerType, 'close'>,
+  close: (callback?: () => void) => ?ServerType,
 |} = {
   port: -1,
 

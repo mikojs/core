@@ -16,6 +16,7 @@ export default () => {
     pathname
     ${'/'}
     ${'/foo'}
+    ${'/bar'}
   `('get $pathname', ({ pathname }: {| pathname: string |}) => {
     expect(func(pathname)).toBe(pathname);
   });

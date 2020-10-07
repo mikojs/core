@@ -56,8 +56,11 @@ export default {
         tools.writeToCache(
           cacheFilePath,
           data.reduce(
-            (result: string, { exists, filePath }: dataType) =>
-              build({
+            (result: string, { exists, filePath }: dataType): string => {
+              delete require.cache[filePath];
+              requireModule(filePath);
+
+              return build({
                 exists,
                 filePath,
                 pathname: path
@@ -66,7 +69,8 @@ export default {
                   .replace(/index$/, '')
                   .replace(/^/, '/')
                   .replace(/\[([^[\]]*)\]/g, ':$1'),
-              }),
+              });
+            },
             '',
           ),
         );

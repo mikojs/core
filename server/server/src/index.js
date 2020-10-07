@@ -9,40 +9,30 @@ import path from 'path';
 
 import { emptyFunction, invariant } from 'fbjs';
 
-import cache, {
-  type buildType,
-  type buildDataType,
-  type middlewareType as cacheMiddlewareType,
-} from './utils/cache';
+import mergeDir, { type buildType } from '@mikojs/merge-dir';
 
-export type middlewareType<R = Promise<void>> = cacheMiddlewareType<R>;
-export type dataType = buildDataType;
+export type middlewareType = (
+  req: IncomingMessageType,
+  res: ServerResponseType,
+) => void;
 
-type serverType = {|
-  set: $PropertyType<typeof cache, 'updateTools'>,
-  ready: $PropertyType<typeof cache, 'ready'>,
-  create: (build: buildType) => (folderPath: string) => middlewareType<void>,
-  run: (
-    middleware: middlewareType<void>,
-    port: number,
-    callback?: () => void,
-  ) => Promise<ServerType>,
-|};
+type createMiddlewareType = (folderPath: string) => middlewareType;
 
-export default ({
-  set: cache.updateTools,
-  ready: cache.ready,
+export default {
+  ready: mergeDir.ready,
 
   /**
    * @param {buildType} build - build middleware cache function
    *
    * @return {Function} - build middleware
    */
-  create: (build: buildType) => (folderPath: string): middlewareType<void> => {
-    const cacheFilePath = cache.set(folderPath, build);
+  create: (build: buildType): createMiddlewareType => (
+    folderPath: string,
+  ): middlewareType => {
+    const cacheFilePath = mergeDir.set(folderPath, build);
 
     return (req: IncomingMessageType, res: ServerResponseType) => {
-      const middleware = cache.get(cacheFilePath);
+      const middleware = mergeDir.get(cacheFilePath);
 
       invariant(
         middleware,
@@ -63,15 +53,15 @@ export default ({
    * @return {ServerType} - server object
    */
   run: async (
-    middleware: middlewareType<void>,
+    middleware: middlewareType,
     port: number,
     callback?: () => void = emptyFunction,
   ): Promise<ServerType> => {
-    const close = await cache.ready();
+    const close = await mergeDir.ready();
     const runningServer = http.createServer(middleware).listen(port, callback);
 
     runningServer.on('close', close);
 
     return runningServer;
   },
-}: serverType);
+};

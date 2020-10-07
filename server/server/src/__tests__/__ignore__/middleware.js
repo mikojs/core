@@ -1,11 +1,10 @@
 // @flow
 
-import {
-  type IncomingMessage as IncomingMessageType,
-  type ServerResponse as ServerResponseType,
-} from 'http';
+import path from 'path';
 
-/** @middleware testing middleware */
-export default (req: IncomingMessageType, res: ServerResponseType) => {
-  res.end(req.url);
-};
+import server, { type middlewareType } from '../../index';
+import build from './build';
+
+export default (server.create(build)(
+  path.resolve(__dirname, './folder'),
+): middlewareType);

@@ -1,8 +1,4 @@
 [ignore]
-<PROJECT_ROOT>/packages/.*
-<PROJECT_ROOT>/babel/.*
-<PROJECT_ROOT>/server/.*
-<PROJECT_ROOT>/components/.*
 
 [include]
 
@@ -19,3 +15,4 @@ module.system.node.root_relative_dirname=./src
 [strict]
 
 [declarations]
+.*/merge-dir/src/.*

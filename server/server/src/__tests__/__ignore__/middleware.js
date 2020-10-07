@@ -7,4 +7,4 @@ import build from './build';
 
 export default (server.create(build)(
   path.resolve(__dirname, './folder'),
-): middlewareType<void>);
+): middlewareType);

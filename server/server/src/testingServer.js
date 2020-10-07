@@ -14,7 +14,7 @@ export type fetchResultType = ResponseType;
 type testingServerType = {|
   close: (callback?: () => void) => ?ServerType,
   fetch: (pathname: string, options: *) => Promise<fetchResultType>,
-  run: (middleware: middlewareType<void>) => Promise<void>,
+  run: (middleware: middlewareType) => Promise<void>,
 |};
 
 const cache: {|
@@ -32,7 +32,7 @@ const cache: {|
   close: (callback?: () => void) => cache.server?.close(callback),
 };
 
-export default ({
+export default {
   close: cache.close,
 
   /**
@@ -41,15 +41,15 @@ export default ({
    *
    * @return {ResponseType} - request body
    */
-  fetch: (pathname: string, options?: *) =>
+  fetch: (pathname: string, options?: *): Promise<fetchResultType> =>
     fetch(`http://localhost:${cache.port}${pathname}`, options),
 
   /**
    * @param {middlewareType} middleware - middleware function
    */
-  run: async (middleware: middlewareType<void>) => {
+  run: async (middleware: middlewareType) => {
     cache.close();
     cache.port = await getPort();
     cache.server = await server.run(middleware, cache.port);
   },
-}: testingServerType);
+};

@@ -11,22 +11,14 @@ import { emptyFunction, invariant } from 'fbjs';
 
 import mergeDir, { type buildType } from '@mikojs/merge-dir';
 
-export type middlewareType<R = Promise<void>> = (
+export type middlewareType = (
   req: IncomingMessageType,
   res: ServerResponseType,
-) => R | void;
+) => void;
 
-type serverType = {|
-  ready: $PropertyType<typeof mergeDir, 'ready'>,
-  create: (build: buildType) => (folderPath: string) => middlewareType<void>,
-  run: (
-    middleware: middlewareType<void>,
-    port: number,
-    callback?: () => void,
-  ) => Promise<ServerType>,
-|};
+type createMiddlewareType = (folderPath: string) => middlewareType;
 
-export default ({
+export default {
   ready: mergeDir.ready,
 
   /**
@@ -34,7 +26,9 @@ export default ({
    *
    * @return {Function} - build middleware
    */
-  create: (build: buildType) => (folderPath: string): middlewareType<void> => {
+  create: (build: buildType): createMiddlewareType => (
+    folderPath: string,
+  ): middlewareType => {
     const cacheFilePath = mergeDir.set(folderPath, build);
 
     return (req: IncomingMessageType, res: ServerResponseType) => {
@@ -59,7 +53,7 @@ export default ({
    * @return {ServerType} - server object
    */
   run: async (
-    middleware: middlewareType<void>,
+    middleware: middlewareType,
     port: number,
     callback?: () => void = emptyFunction,
   ): Promise<ServerType> => {
@@ -70,4 +64,4 @@ export default ({
 
     return runningServer;
   },
-}: serverType);
+};

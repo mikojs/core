@@ -5,7 +5,7 @@ import { type Server as ServerType } from 'http';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 import getPort from 'get-port';
 
-import '@mikojs/merge-dir';
+import '@mikojs/merge-dir/lib/testing';
 
 import server, { type middlewareType } from './index';
 

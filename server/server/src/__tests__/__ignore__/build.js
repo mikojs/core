@@ -5,7 +5,7 @@ import { type fileDataType } from '@mikojs/merge-dir';
 const cache = {};
 
 /**
- * @param {fileDataType} data - the data of the build function
+ * @param {fileDataType} fileData - the data of the build function
  *
  * @return {string} - middleware cache
  */

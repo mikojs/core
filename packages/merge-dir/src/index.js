@@ -25,10 +25,6 @@ type toolsType = {|
 |};
 
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
-const cacheId = `cacheId${cryptoRandomString({
-  length: 10,
-  type: 'alphanumeric',
-})}`;
 const cache = {};
 const tools = {
   writeToCache: outputFileSync,
@@ -54,8 +50,9 @@ export default {
     const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
     const cacheFilePath = cacheDir(`${hash}.js`);
 
-    cache[hash] = {
-      watcher: tools.watcher(folderPath, (data: $ReadOnlyArray<dataType>) => {
+    cache[hash] = tools.watcher(
+      folderPath,
+      (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
           data.reduce(
@@ -72,15 +69,13 @@ export default {
                   .replace(/index$/, '')
                   .replace(/^/, '/')
                   .replace(/\[([^[\]]*)\]/g, ':$1'),
-              })
-                .replace(/module\.exports/, `const ${cacheId}${hash}`)
-                .replace(/$/, `module.exports = ${cacheId}${hash}`);
+              });
             },
             '',
           ),
         );
-      }),
-    };
+      },
+    );
 
     return cacheFilePath;
   },
@@ -99,7 +94,7 @@ export default {
    */
   ready: async (): Promise<() => void> => {
     const closes = await Promise.all(
-      Object.keys(cache).map((key: string) => cache[key].watcher),
+      Object.keys(cache).map((key: string) => cache[key]),
     );
 
     return () => closes.forEach((close: () => void) => close());

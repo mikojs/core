@@ -24,9 +24,11 @@ type toolsType = {|
   watcher?: (filePath: string, callback: callbackType) => Promise<() => void>,
 |};
 
-const randomOptions = { length: 5, type: 'alphanumeric' };
-const cacheId = `cacheId${cryptoRandomString(randomOptions)}`;
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
+const cacheId = `cacheId${cryptoRandomString({
+  length: 10,
+  type: 'alphanumeric',
+})}`;
 const cache = {};
 const tools = {
   writeToCache: outputFileSync,
@@ -49,21 +51,17 @@ export default {
    * @return {string} - cache file path
    */
   set: (folderPath: string, build: buildType): string => {
-    const hash = `${cacheId}${cryptoRandomString(randomOptions)}`;
+    const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
     const cacheFilePath = cacheDir(`${hash}.js`);
 
     cache[hash] = {
-      ...cache[hash],
       watcher: tools.watcher(folderPath, (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
           data.reduce(
             (result: string, { exists, filePath }: dataType): string => {
               delete require.cache[filePath];
-
-              const { name } = requireModule(filePath);
-
-              if (name.includes(cacheId)) cache[name].parentId = hash;
+              requireModule(filePath);
 
               return build({
                 exists,
@@ -75,8 +73,8 @@ export default {
                   .replace(/^/, '/')
                   .replace(/\[([^[\]]*)\]/g, ':$1'),
               })
-                .replace(/module\.exports/, `const ${hash}`)
-                .replace(/$/, `module.exports = ${hash}`);
+                .replace(/module\.exports/, `const ${cacheId}${hash}`)
+                .replace(/$/, `module.exports = ${cacheId}${hash}`);
             },
             '',
           ),

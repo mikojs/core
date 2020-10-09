@@ -32,22 +32,6 @@ const tools = {
   watcher,
 };
 
-/**
- * @return {Array} - closes array
- */
-const ready = async () => [
-  ...(await Promise.all(
-    Object.keys(cache).map(async (key: string): Promise<() => void> => {
-      const close = cache[key];
-
-      delete cache[key];
-
-      return close();
-    }),
-  )),
-  ...(Object.keys(cache).length === 0 ? [] : await ready()),
-];
-
 export default {
   /**
    * @param {string} cacheFilePath - cache file path
@@ -66,18 +50,9 @@ export default {
     const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
     const cacheFilePath = cacheDir(`${hash}.js`);
 
-    tools.writeToCache(
-      cacheFilePath,
-      `module.exports = () => {
-  throw new Error('Should run build mode');
-};`,
-    );
-
-    /**
-     * @return {Function} - close function
-     */
-    cache[hash] = () =>
-      tools.watcher(folderPath, (data: $ReadOnlyArray<dataType>) => {
+    cache[hash] = tools.watcher(
+      folderPath,
+      (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
           data.reduce(
@@ -99,7 +74,8 @@ export default {
             '',
           ),
         );
-      });
+      },
+    );
 
     return cacheFilePath;
   },
@@ -117,7 +93,9 @@ export default {
    * @return {Promise} - close function
    */
   ready: async (): Promise<() => void> => {
-    const closes = await ready();
+    const closes = await Promise.all(
+      Object.keys(cache).map((key: string) => cache[key]),
+    );
 
     return () => closes.forEach((close: () => void) => close());
   },

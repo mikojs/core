@@ -43,10 +43,11 @@ export default {
   /**
    * @param {string} folderPath - folder path
    * @param {buildType} build - build cache function
+   * @param {string} prefix - pathname prefix
    *
    * @return {string} - cache file path
    */
-  set: (folderPath: string, build: buildType): string => {
+  set: (folderPath: string, build: buildType, prefix?: string): string => {
     const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
     const cacheFilePath = cacheDir(`${hash}.js`);
 
@@ -63,12 +64,17 @@ export default {
               return build({
                 exists,
                 filePath,
-                pathname: path
-                  .relative(folderPath, filePath)
-                  .replace(/\.js$/, '')
-                  .replace(/index$/, '')
-                  .replace(/^/, '/')
-                  .replace(/\[([^[\]]*)\]/g, ':$1'),
+                pathname: [
+                  prefix,
+                  path
+                    .relative(folderPath, filePath)
+                    .replace(/\.js$/, '')
+                    .replace(/index$/, '')
+                    .replace(/\[([^[\]]*)\]/g, ':$1'),
+                ]
+                  .filter(Boolean)
+                  .join('/')
+                  .replace(/^([^/])/, '/$1'),
               });
             },
             '',

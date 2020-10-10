@@ -8,11 +8,13 @@ const cache = {};
 
 /**
  * @param {string} folderPath - folder path
+ * @param {string} prefix - pathname prefix
  *
  * @return {Function} - cache function
  */
 export default ((
   folderPath: string,
+  prefix?: string,
 ): $PropertyType<EmptyFunctionType, 'thatReturnsArgument'> => {
   const cacheFilePath = mergeDir.set(
     folderPath,
@@ -30,9 +32,11 @@ module.exports = pathname => {
     return requireModule(cache[cacheKey])(pathname);
 };`;
     },
+    prefix,
   );
 
   return <T>(filePath: T) => mergeDir.get(cacheFilePath)(filePath);
 }: (
   folderPath: string,
+  prefix?: string,
 ) => $PropertyType<EmptyFunctionType, 'thatReturnsArgument'>);

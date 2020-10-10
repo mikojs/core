@@ -69,12 +69,13 @@ export default {
                   path
                     .relative(folderPath, filePath)
                     .replace(/\.js$/, '')
-                    .replace(/index$/, '')
+                    .replace(/\/?index$/, '')
                     .replace(/\[([^[\]]*)\]/g, ':$1'),
                 ]
                   .filter(Boolean)
                   .join('/')
-                  .replace(/^([^/])/, '/$1'),
+                  .replace(/^([^/])/, '/$1')
+                  .replace(/^$/, '/'),
               });
             },
             '',

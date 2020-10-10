@@ -25,7 +25,10 @@ type toolsType = {|
 |};
 
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
-const cache = {};
+const cache = {
+  watchers: {},
+  prefixs: [],
+};
 const tools = {
   writeToCache: outputFileSync,
   getFromCache: requireModule,
@@ -51,31 +54,43 @@ export default {
     const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
     const cacheFilePath = cacheDir(`${hash}.js`);
 
-    cache[hash] = tools.watcher(
+    if (prefix) cache.prefixs.push(prefix);
+
+    cache.watchers[hash] = tools.watcher(
       folderPath,
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
           data.reduce(
             (result: string, { exists, filePath }: dataType): string => {
+              const pathname = [
+                prefix,
+                path
+                  .relative(folderPath, filePath)
+                  .replace(/\.js$/, '')
+                  .replace(/\/?index$/, '')
+                  .replace(/\[([^[\]]*)\]/g, ':$1'),
+              ]
+                .filter(Boolean)
+                .join('/')
+                .replace(/^([^/])/, '/$1')
+                .replace(/^$/, '/');
+
+              if (
+                cache.prefixs.some(
+                  (cachePrefix: string) =>
+                    cachePrefix !== prefix && pathname.startsWith(cachePrefix),
+                )
+              )
+                return result;
+
               delete require.cache[filePath];
               requireModule(filePath);
 
               return build({
                 exists,
                 filePath,
-                pathname: [
-                  prefix,
-                  path
-                    .relative(folderPath, filePath)
-                    .replace(/\.js$/, '')
-                    .replace(/\/?index$/, '')
-                    .replace(/\[([^[\]]*)\]/g, ':$1'),
-                ]
-                  .filter(Boolean)
-                  .join('/')
-                  .replace(/^([^/])/, '/$1')
-                  .replace(/^$/, '/'),
+                pathname,
               });
             },
             '',
@@ -101,7 +116,7 @@ export default {
    */
   ready: async (): Promise<() => void> => {
     const closes = await Promise.all(
-      Object.keys(cache).map((key: string) => cache[key]),
+      Object.keys(cache.watchers).map((key: string) => cache[key]),
     );
 
     return () => closes.forEach((close: () => void) => close());

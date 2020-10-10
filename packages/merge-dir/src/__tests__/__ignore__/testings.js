@@ -17,8 +17,8 @@ export default () => {
     ${'/'}
     ${'/foo'}
     ${'/bar'}
-    ${'/foo/foo'}
-    ${'/foo/bar'}
+    ${'/bar/foo'}
+    ${'/bar/bar'}
     ${'/baz'}
     ${'/baz/foo'}
     ${'/baz/bar'}

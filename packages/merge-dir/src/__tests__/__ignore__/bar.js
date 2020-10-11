@@ -6,7 +6,7 @@ import { type EmptyFunctionType } from 'fbjs/lib/emptyFunction';
 
 import build from './build';
 
-export default (build(path.resolve(__dirname, './folder/bar')): $PropertyType<
-  EmptyFunctionType,
-  'thatReturnsArgument',
->);
+export default (build(
+  path.resolve(__dirname, './folder/bar'),
+  '/bar',
+): $PropertyType<EmptyFunctionType, 'thatReturnsArgument'>);

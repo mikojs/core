@@ -8,12 +8,17 @@ const cache = {};
 
 /**
  * @param {string} folderPath - folder path
+ * @param {string} prefix - pathname prefix
  *
  * @return {Function} - cache function
  */
-export default ((folderPath: string) =>
-  mergeDir.get(
-    mergeDir.set(folderPath, ({ filePath, pathname }: fileDataType): string => {
+export default ((
+  folderPath: string,
+  prefix?: string,
+): $PropertyType<EmptyFunctionType, 'thatReturnsArgument'> => {
+  const cacheFilePath = mergeDir.set(
+    folderPath,
+    ({ filePath, pathname }: fileDataType): string => {
       cache[pathname] = filePath;
 
       return `const requireModule = require('@mikojs/utils/lib/requireModule');
@@ -26,7 +31,12 @@ module.exports = pathname => {
   if (cacheKey)
     return requireModule(cache[cacheKey])(pathname);
 };`;
-    }),
-  ): (
+    },
+    prefix,
+  );
+
+  return <T>(filePath: T) => mergeDir.get(cacheFilePath)(filePath);
+}: (
   folderPath: string,
+  prefix?: string,
 ) => $PropertyType<EmptyFunctionType, 'thatReturnsArgument'>);

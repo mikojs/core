@@ -1,7 +1,9 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
+import { invariant } from 'fbjs';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
 import outputFileSync from 'output-file-sync';
@@ -16,7 +18,7 @@ export type fileDataType = {|
   pathname: string,
 |};
 
-export type buildType = (data: fileDataType) => string;
+export type buildType = (fileData: fileDataType) => string;
 
 type toolsType = {|
   writeToCache?: (filePath: string, content: string) => void,
@@ -25,7 +27,10 @@ type toolsType = {|
 |};
 
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
-const cache = {};
+const cache = {
+  watchers: {},
+  prefixs: [],
+};
 const tools = {
   writeToCache: outputFileSync,
   getFromCache: requireModule,
@@ -43,30 +48,60 @@ export default {
   /**
    * @param {string} folderPath - folder path
    * @param {buildType} build - build cache function
+   * @param {string} prefix - pathname prefix
    *
    * @return {string} - cache file path
    */
-  set: (folderPath: string, build: buildType): string => {
+  set: (folderPath: string, build: buildType, prefix?: string): string => {
     const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
     const cacheFilePath = cacheDir(`${hash}.js`);
 
-    cache[hash] = tools.watcher(
+    if (prefix) cache.prefixs.push(prefix);
+
+    cache.watchers[hash] = tools.watcher(
       folderPath,
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
           data.reduce(
-            (result: string, { exists, filePath }: dataType) =>
-              build({
+            (result: string, { exists, filePath }: dataType): string => {
+              const relativePath = path
+                .relative(folderPath, filePath)
+                .replace(/\.js$/, '');
+
+              invariant(
+                !fs.existsSync(filePath.replace(/\.js$/, '')),
+                `You should not use \`folder: ${relativePath}\` and \`file: ${relativePath}.js\` at the same time.`,
+              );
+
+              const pathname = [
+                prefix,
+                relativePath
+                  .replace(/\/?index$/, '')
+                  .replace(/\[([^[\]]*)\]/g, ':$1'),
+              ]
+                .filter(Boolean)
+                .join('/')
+                .replace(/^([^/])/, '/$1')
+                .replace(/^$/, '/');
+
+              if (
+                cache.prefixs.some(
+                  (cachePrefix: string) =>
+                    cachePrefix !== prefix && pathname.startsWith(cachePrefix),
+                )
+              )
+                return result;
+
+              delete require.cache[filePath];
+              requireModule(filePath);
+
+              return build({
                 exists,
                 filePath,
-                pathname: path
-                  .relative(folderPath, filePath)
-                  .replace(/\.js$/, '')
-                  .replace(/index$/, '')
-                  .replace(/^/, '/')
-                  .replace(/\[([^[\]]*)\]/g, ':$1'),
-              }),
+                pathname,
+              });
+            },
             '',
           ),
         );
@@ -90,7 +125,7 @@ export default {
    */
   ready: async (): Promise<() => void> => {
     const closes = await Promise.all(
-      Object.keys(cache).map((key: string) => cache[key]),
+      Object.keys(cache.watchers).map((key: string) => cache[key]),
     );
 
     return () => closes.forEach((close: () => void) => close());

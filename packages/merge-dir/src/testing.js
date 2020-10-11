@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import { emptyFunction } from 'fbjs';
 
 import { d3DirTree } from '@mikojs/utils';
@@ -42,7 +44,7 @@ mergeDir.updateTools({
         .leaves()
         .map(({ data }: d3DirTreeNodeType) => ({
           exists: true,
-          filePath: data.path,
+          relativePath: path.relative(folderPath, data.path),
         })),
     );
 

@@ -1,12 +1,10 @@
 // @flow
 
-import path from 'path';
-
 import watchman from 'fb-watchman';
 
 export type dataType = {|
   exists: boolean,
-  filePath: string,
+  relativePath: string,
 |};
 
 export type callbackType = (data: $ReadOnlyArray<dataType>) => void;
@@ -94,7 +92,7 @@ export default async (
         number,
       >) => ({
         exists,
-        filePath: path.resolve(folderPath, name),
+        relativePath: name,
       }),
     ),
   );

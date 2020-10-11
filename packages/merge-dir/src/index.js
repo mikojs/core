@@ -64,19 +64,21 @@ export default {
         tools.writeToCache(
           cacheFilePath,
           data.reduce(
-            (result: string, { exists, filePath }: dataType): string => {
-              const relativePath = path
-                .relative(folderPath, filePath)
-                .replace(/\.js$/, '');
+            (result: string, { exists, relativePath }: dataType): string => {
+              const filePath = path.resolve(folderPath, relativePath);
 
               invariant(
                 !fs.existsSync(filePath.replace(/\.js$/, '')),
-                `You should not use \`folder: ${relativePath}\` and \`file: ${relativePath}.js\` at the same time.`,
+                `You should not use \`folder: ${relativePath.replace(
+                  /\.js$/,
+                  '',
+                )}\` and \`file: ${relativePath}\` at the same time.`,
               );
 
               const pathname = [
                 prefix,
                 relativePath
+                  .replace(/\.js$/, '')
                   .replace(/\/?index$/, '')
                   .replace(/\[([^[\]]*)\]/g, ':$1'),
               ]

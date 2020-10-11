@@ -1,5 +1,6 @@
 // @flow
 
+import debug from 'debug';
 import watchman from 'fb-watchman';
 
 export type dataType = {|
@@ -22,6 +23,8 @@ type handlerType = (
   reject: rejectType,
 ) => (err: Error, resp: respType) => void;
 
+const debugLog = debug('merge-dir:watcher');
+
 /**
  * @param {resolveType} resolve - promise resolve function
  * @param {rejectType} reject - promise reject function
@@ -33,6 +36,8 @@ export const handler: handlerType = (
   reject: rejectType,
 ) => (err: Error, resp: respType) => {
   const { warn } = console;
+
+  debugLog({ err, resp });
 
   if (resp?.warning) warn(resp.warning);
 
@@ -82,6 +87,7 @@ export default async (
     },
   ]);
 
+  debugLog(files);
   callback(
     files.map(
       ({

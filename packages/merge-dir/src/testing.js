@@ -6,6 +6,7 @@ import vm from 'vm';
 import path from 'path';
 
 import { emptyFunction } from 'fbjs';
+import debug from 'debug';
 
 import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
@@ -13,6 +14,7 @@ import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 import { type callbackType } from './utils/watcher';
 import mergeDir from './index';
 
+const debugLog = debug('merge-dir:testing');
 const cache = {};
 
 mergeDir.updateTools({
@@ -23,6 +25,7 @@ mergeDir.updateTools({
   writeToCache: (filePath: string, content: string) => {
     const context = {};
 
+    debugLog({ filePath, content });
     vm.runInThisContext(module.wrap(content))(
       context,
       require,
@@ -38,7 +41,11 @@ mergeDir.updateTools({
    *
    * @return {any} - any function from cache
    */
-  getFromCache: <C>(filePath: string): C => cache[filePath],
+  getFromCache: <C>(filePath: string): C => {
+    debugLog({ filePath });
+
+    return cache[filePath];
+  },
 
   /**
    * @param {string} folderPath - folder path
@@ -50,6 +57,7 @@ mergeDir.updateTools({
     folderPath: string,
     callback: callbackType,
   ): Promise<() => void> => {
+    debugLog({ folderPath });
     callback(
       d3DirTree(folderPath)
         .leaves()

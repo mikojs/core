@@ -1,7 +1,9 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
+import { invariant } from 'fbjs';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
 import outputFileSync from 'output-file-sync';
@@ -63,11 +65,18 @@ export default {
           cacheFilePath,
           data.reduce(
             (result: string, { exists, filePath }: dataType): string => {
+              const relativePath = path
+                .relative(folderPath, filePath)
+                .replace(/\.js$/, '');
+
+              invariant(
+                !fs.existsSync(filePath.replace(/\.js$/, '')),
+                `You should not use \`folder: ${relativePath}\` and \`file: ${relativePath}.js\` at the same time.`,
+              );
+
               const pathname = [
                 prefix,
-                path
-                  .relative(folderPath, filePath)
-                  .replace(/\.js$/, '')
+                relativePath
                   .replace(/\/?index$/, '')
                   .replace(/\[([^[\]]*)\]/g, ':$1'),
               ]

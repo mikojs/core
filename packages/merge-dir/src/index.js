@@ -26,11 +26,10 @@ type toolsType = {|
   watcher?: (filePath: string, callback: callbackType) => Promise<() => void>,
 |};
 
+const randomOptions = { length: 10, type: 'alphanumeric' };
+const cacheId = cryptoRandomString(randomOptions);
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
-const cache = {
-  watchers: {},
-  prefixs: [],
-};
+const cache = {};
 const tools = {
   writeToCache: outputFileSync,
   getFromCache: requireModule,
@@ -43,7 +42,19 @@ export default {
    *
    * @return {any} - any function from cache
    */
-  get: <C>(cacheFilePath: string): C => tools.getFromCache(cacheFilePath),
+  get: <C>(cacheFilePath: string): ((...argv: $ReadOnlyArray<mixed>) => C) => {
+    /**
+     * @param {Array} argv - function argv
+     *
+     * @return {any} - the result of the function
+     */
+    const cacheFunc = (...argv: $ReadOnlyArray<mixed>) =>
+      tools.getFromCache(cacheFilePath)(...argv);
+
+    cacheFunc.cacheId = cacheId;
+
+    return cacheFunc;
+  },
 
   /**
    * @param {string} folderPath - folder path
@@ -53,30 +64,30 @@ export default {
    * @return {string} - cache file path
    */
   set: (folderPath: string, build: buildType, prefix?: string): string => {
-    const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
+    const hash = cryptoRandomString(randomOptions);
     const cacheFilePath = cacheDir(`${hash}.js`);
 
-    if (prefix) cache.prefixs.push(prefix);
-
-    cache.watchers[hash] = tools.watcher(
+    cache[hash] = tools.watcher(
       folderPath,
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
           data.reduce(
-            (result: string, { exists, filePath }: dataType): string => {
-              const relativePath = path
-                .relative(folderPath, filePath)
-                .replace(/\.js$/, '');
+            (result: string, { exists, relativePath }: dataType): string => {
+              const filePath = path.resolve(folderPath, relativePath);
 
               invariant(
                 !fs.existsSync(filePath.replace(/\.js$/, '')),
-                `You should not use \`folder: ${relativePath}\` and \`file: ${relativePath}.js\` at the same time.`,
+                `You should not use \`folder: ${relativePath.replace(
+                  /\.js$/,
+                  '',
+                )}\` and \`file: ${relativePath}\` at the same time.`,
               );
 
               const pathname = [
                 prefix,
                 relativePath
+                  .replace(/\.js$/, '')
                   .replace(/\/?index$/, '')
                   .replace(/\[([^[\]]*)\]/g, ':$1'),
               ]
@@ -85,22 +96,15 @@ export default {
                 .replace(/^([^/])/, '/$1')
                 .replace(/^$/, '/');
 
-              if (
-                cache.prefixs.some(
-                  (cachePrefix: string) =>
-                    cachePrefix !== prefix && pathname.startsWith(cachePrefix),
-                )
-              )
-                return result;
-
               delete require.cache[filePath];
-              requireModule(filePath);
 
-              return build({
-                exists,
-                filePath,
-                pathname,
-              });
+              return requireModule(filePath).cacheId === cacheId
+                ? result
+                : build({
+                    exists,
+                    filePath,
+                    pathname,
+                  });
             },
             '',
           ),
@@ -125,7 +129,7 @@ export default {
    */
   ready: async (): Promise<() => void> => {
     const closes = await Promise.all(
-      Object.keys(cache.watchers).map((key: string) => cache[key]),
+      Object.keys(cache).map((key: string) => cache[key]),
     );
 
     return () => closes.forEach((close: () => void) => close());

@@ -1,5 +1,10 @@
 // @flow
 
+// $FlowFixMe FIXME: can not use module package
+import module from 'module';
+import vm from 'vm';
+import path from 'path';
+
 import { emptyFunction } from 'fbjs';
 
 import { d3DirTree } from '@mikojs/utils';
@@ -16,8 +21,16 @@ mergeDir.updateTools({
    * @param {string} content - cache content
    */
   writeToCache: (filePath: string, content: string) => {
-    // eslint-disable-next-line no-eval
-    cache[filePath] = eval(content);
+    const context = {};
+
+    vm.runInThisContext(module.wrap(content))(
+      context,
+      require,
+      context,
+      filePath,
+      path.dirname(filePath),
+    );
+    cache[filePath] = context.exports;
   },
 
   /**
@@ -42,7 +55,7 @@ mergeDir.updateTools({
         .leaves()
         .map(({ data }: d3DirTreeNodeType) => ({
           exists: true,
-          filePath: data.path,
+          relativePath: path.relative(folderPath, data.path),
         })),
     );
 

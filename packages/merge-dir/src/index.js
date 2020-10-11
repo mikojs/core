@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { invariant } from 'fbjs';
+import debug from 'debug';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
 import outputFileSync from 'output-file-sync';
@@ -29,12 +30,15 @@ type toolsType = {|
 const randomOptions = { length: 10, type: 'alphanumeric' };
 const cacheId = cryptoRandomString(randomOptions);
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
+const debugLog = debug('merge-dir');
 const cache = {};
 const tools = {
   writeToCache: outputFileSync,
   getFromCache: requireModule,
   watcher,
 };
+
+debugLog({ cacheId, cacheDir: cacheDir() });
 
 export default {
   /**
@@ -51,6 +55,7 @@ export default {
     const cacheFunc = (...argv: $ReadOnlyArray<mixed>) =>
       tools.getFromCache(cacheFilePath)(...argv);
 
+    debugLog({ cacheFilePath });
     cacheFunc.cacheId = cacheId;
 
     return cacheFunc;
@@ -67,6 +72,7 @@ export default {
     const hash = cryptoRandomString(randomOptions);
     const cacheFilePath = cacheDir(`${hash}.js`);
 
+    debugLog({ folderPath, prefix, hash });
     cache[hash] = tools.watcher(
       folderPath,
       (data: $ReadOnlyArray<dataType>) => {
@@ -76,6 +82,7 @@ export default {
             (result: string, { exists, relativePath }: dataType): string => {
               const filePath = path.resolve(folderPath, relativePath);
 
+              debugLog({ exists, relativePath });
               invariant(
                 !fs.existsSync(filePath.replace(/\.js$/, '')),
                 `You should not use \`folder: ${relativePath.replace(
@@ -96,6 +103,7 @@ export default {
                 .replace(/^([^/])/, '/$1')
                 .replace(/^$/, '/');
 
+              debugLog({ pathname });
               delete require.cache[filePath];
 
               return requireModule(filePath).cacheId === cacheId
@@ -119,6 +127,7 @@ export default {
    * @param {toolsType} newTools - new tools functions
    */
   updateTools: (newTools: toolsType) => {
+    debugLog(newTools);
     Object.keys(newTools).forEach((key: string) => {
       tools[key] = newTools[key];
     });
@@ -131,6 +140,8 @@ export default {
     const closes = await Promise.all(
       Object.keys(cache).map((key: string) => cache[key]),
     );
+
+    debugLog(cache);
 
     return () => closes.forEach((close: () => void) => close());
   },

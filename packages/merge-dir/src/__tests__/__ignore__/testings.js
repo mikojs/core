@@ -17,6 +17,7 @@ export default () => {
     ${'/'}
     ${'/foo'}
     ${'/bar'}
+    ${'/:id'}
     ${'/bar/foo'}
     ${'/bar/bar'}
     ${'/baz'}

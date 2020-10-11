@@ -1,5 +1,8 @@
 // @flow
 
+// $FlowFixMe FIXME: can not use module package
+import module from 'module';
+import vm from 'vm';
 import path from 'path';
 
 import { emptyFunction } from 'fbjs';
@@ -18,8 +21,16 @@ mergeDir.updateTools({
    * @param {string} content - cache content
    */
   writeToCache: (filePath: string, content: string) => {
-    // eslint-disable-next-line no-eval
-    cache[filePath] = eval(content);
+    const context = {};
+
+    vm.runInThisContext(module.wrap(content))(
+      context,
+      require,
+      context,
+      filePath,
+      path.dirname(filePath),
+    );
+    cache[filePath] = context.exports;
   },
 
   /**

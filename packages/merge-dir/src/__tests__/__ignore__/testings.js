@@ -16,8 +16,8 @@ export default () => {
     pathname
     ${'/'}
     ${'/foo'}
-    ${'/bar'}
     ${'/:id'}
+    ${'/bar'}
     ${'/bar/foo'}
     ${'/bar/bar'}
     ${'/baz'}

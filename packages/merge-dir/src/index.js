@@ -26,6 +26,8 @@ type toolsType = {|
   watcher?: (filePath: string, callback: callbackType) => Promise<() => void>,
 |};
 
+const randomOptions = { length: 10, type: 'alphanumeric' };
+const cacheId = cryptoRandomString(randomOptions);
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const cache = {};
 const tools = {
@@ -40,7 +42,19 @@ export default {
    *
    * @return {any} - any function from cache
    */
-  get: <C>(cacheFilePath: string): C => tools.getFromCache(cacheFilePath),
+  get: <C>(cacheFilePath: string): ((...argv: $ReadOnlyArray<mixed>) => C) => {
+    /**
+     * @param {Array} argv - function argv
+     *
+     * @return {any} - the result of the function
+     */
+    const cacheFunc = (...argv: $ReadOnlyArray<mixed>) =>
+      tools.getFromCache(cacheFilePath)(...argv);
+
+    cacheFunc.cacheId = cacheId;
+
+    return cacheFunc;
+  },
 
   /**
    * @param {string} folderPath - folder path
@@ -50,7 +64,7 @@ export default {
    * @return {string} - cache file path
    */
   set: (folderPath: string, build: buildType, prefix?: string): string => {
-    const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
+    const hash = cryptoRandomString(randomOptions);
     const cacheFilePath = cacheDir(`${hash}.js`);
 
     cache[hash] = tools.watcher(
@@ -83,13 +97,14 @@ export default {
                 .replace(/^$/, '/');
 
               delete require.cache[filePath];
-              requireModule(filePath);
 
-              return build({
-                exists,
-                filePath,
-                pathname,
-              });
+              return requireModule(filePath).cacheId === cacheId
+                ? result
+                : build({
+                    exists,
+                    filePath,
+                    pathname,
+                  });
             },
             '',
           ),

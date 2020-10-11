@@ -27,10 +27,7 @@ type toolsType = {|
 |};
 
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
-const cache = {
-  watchers: {},
-  prefixs: [],
-};
+const cache = {};
 const tools = {
   writeToCache: outputFileSync,
   getFromCache: requireModule,
@@ -56,9 +53,7 @@ export default {
     const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
     const cacheFilePath = cacheDir(`${hash}.js`);
 
-    if (prefix) cache.prefixs.push(prefix);
-
-    cache.watchers[hash] = tools.watcher(
+    cache[hash] = tools.watcher(
       folderPath,
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
@@ -86,14 +81,6 @@ export default {
                 .join('/')
                 .replace(/^([^/])/, '/$1')
                 .replace(/^$/, '/');
-
-              if (
-                cache.prefixs.some(
-                  (cachePrefix: string) =>
-                    cachePrefix !== prefix && pathname.startsWith(cachePrefix),
-                )
-              )
-                return result;
 
               delete require.cache[filePath];
               requireModule(filePath);
@@ -127,7 +114,7 @@ export default {
    */
   ready: async (): Promise<() => void> => {
     const closes = await Promise.all(
-      Object.keys(cache.watchers).map((key: string) => cache[key]),
+      Object.keys(cache).map((key: string) => cache[key]),
     );
 
     return () => closes.forEach((close: () => void) => close());

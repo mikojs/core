@@ -11,7 +11,11 @@ import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
-import watcher, { type dataType, type callbackType } from './utils/watcher';
+import watcher, {
+  type dataType,
+  type eventType,
+  type callbackType,
+} from './utils/watcher';
 
 export type fileDataType = {|
   exists: boolean,
@@ -22,9 +26,14 @@ export type fileDataType = {|
 export type buildType = (fileData: fileDataType) => string;
 
 type toolsType = {|
+  type?: eventType,
   writeToCache?: (filePath: string, content: string) => void,
   getFromCache?: <C>(filePath: string) => C,
-  watcher?: (filePath: string, callback: callbackType) => Promise<() => void>,
+  watcher?: (
+    filePath: string,
+    event: eventType,
+    callback: callbackType,
+  ) => Promise<() => void>,
 |};
 
 const randomOptions = { length: 10, type: 'alphanumeric' };
@@ -33,6 +42,7 @@ const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const debugLog = debug('merge-dir');
 const cache = {};
 const tools = {
+  type: 'dev',
   writeToCache: outputFileSync,
   getFromCache: requireModule,
   watcher,
@@ -75,6 +85,7 @@ export default {
     debugLog({ folderPath, prefix, hash });
     cache[hash] = tools.watcher(
       folderPath,
+      tools.type,
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,

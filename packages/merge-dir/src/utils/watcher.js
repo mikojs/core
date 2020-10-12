@@ -8,6 +8,7 @@ export type dataType = {|
   relativePath: string,
 |};
 
+export type eventType = 'dev' | 'build' | 'run';
 export type callbackType = (data: $ReadOnlyArray<dataType>) => void;
 
 type respType = {|
@@ -47,12 +48,14 @@ export const handler: handlerType = (
 
 /**
  * @param {string} folderPath - folder path
+ * @param {eventType} event - watcher event type
  * @param {callbackType} callback - handle files function
  *
  * @return {Function} - close client
  */
 export default async (
   folderPath: string,
+  event: eventType,
   callback: callbackType,
 ): Promise<() => void> => {
   const client = new watchman.Client();

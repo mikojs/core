@@ -11,7 +11,7 @@ import debug from 'debug';
 import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
-import { type callbackType } from './utils/watcher';
+import { type eventType, type callbackType } from './utils/watcher';
 import mergeDir from './index';
 
 const debugLog = debug('merge-dir:testing');
@@ -49,12 +49,14 @@ mergeDir.updateTools({
 
   /**
    * @param {string} folderPath - folder path
+   * @param {eventType} event - watcher event type
    * @param {callbackType} callback - handle files function
    *
    * @return {Function} - close client
    */
   watcher: async (
     folderPath: string,
+    event: eventType,
     callback: callbackType,
   ): Promise<() => void> => {
     debugLog({ folderPath });

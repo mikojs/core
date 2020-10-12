@@ -6,7 +6,9 @@ import watcher, { handler } from '../watcher';
 
 describe('watcher', () => {
   test('watcher close', async () => {
-    expect((await watcher(__dirname, emptyFunction))()).toBeUndefined();
+    expect(
+      (await watcher(__dirname, 'build', emptyFunction))(),
+    ).toBeUndefined();
   });
 
   test('handler reject', async () => {

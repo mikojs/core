@@ -5,6 +5,7 @@ import path from 'path';
 
 import { invariant } from 'fbjs';
 import debug from 'debug';
+import cryptoRandomString from 'crypto-random-string';
 
 import { requireModule } from '@mikojs/utils';
 
@@ -20,11 +21,17 @@ export type buildType = (fileData: fileDataType) => string;
 
 const debugLog = debug('merge-dir:buildFile');
 
+export const cacheId: string = cryptoRandomString({
+  length: 10,
+  type: 'alphanumeric',
+});
+
+debugLog({ cacheId });
+
 /**
  * @param {string} folderPath - folder path
  * @param {buildType} build - build cache function
  * @param {string} prefix - pathname prefix
- * @param {string} cacheId - cache id
  * @param {Array} data - the data from the watcher
  *
  * @return {string} - file content
@@ -33,7 +40,6 @@ export default (
   folderPath: string,
   build: buildType,
   prefix?: string,
-  cacheId: string,
   data: $ReadOnlyArray<dataType>,
 ): string =>
   data.reduce((result: string, { exists, relativePath }: dataType): string => {

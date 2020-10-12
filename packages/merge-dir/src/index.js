@@ -8,6 +8,7 @@ import outputFileSync from 'output-file-sync';
 import { requireModule } from '@mikojs/utils';
 
 import buildFile, {
+  cacheId,
   type fileDataType as buildFileFileDataType,
   type buildType,
 } from './utils/buildFile';
@@ -30,10 +31,8 @@ type toolsType = {|
   ) => Promise<() => void>,
 |};
 
-const randomOptions = { length: 10, type: 'alphanumeric' };
-const cacheId = cryptoRandomString(randomOptions);
-const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const debugLog = debug('merge-dir');
+const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const cache = {};
 const tools = {
   type: 'dev',
@@ -42,7 +41,7 @@ const tools = {
   watcher,
 };
 
-debugLog({ cacheId, cacheDir: cacheDir() });
+debugLog({ cacheDir: cacheDir() });
 
 export default {
   /**
@@ -73,7 +72,7 @@ export default {
    * @return {string} - cache file path
    */
   set: (folderPath: string, build: buildType, prefix?: string): string => {
-    const hash = cryptoRandomString(randomOptions);
+    const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
     const cacheFilePath = cacheDir(`${hash}.js`);
 
     debugLog({ folderPath, prefix, hash });
@@ -83,7 +82,7 @@ export default {
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
-          buildFile(folderPath, build, prefix, cacheId, data),
+          buildFile(folderPath, build, prefix, data),
         );
       },
     );

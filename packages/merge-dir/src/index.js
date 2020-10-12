@@ -1,9 +1,5 @@
 // @flow
 
-import fs from 'fs';
-import path from 'path';
-
-import { invariant } from 'fbjs';
 import debug from 'debug';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
@@ -11,19 +7,17 @@ import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
+import buildFile, {
+  type fileDataType as buildFileFileDataType,
+  type buildType,
+} from './utils/buildFile';
 import watcher, {
   type dataType,
   type eventType,
   type callbackType,
 } from './utils/watcher';
 
-export type fileDataType = {|
-  exists: boolean,
-  filePath: string,
-  pathname: string,
-|};
-
-export type buildType = (fileData: fileDataType) => string;
+export type fileDataType = buildFileFileDataType;
 
 type toolsType = {|
   type?: eventType,
@@ -89,44 +83,7 @@ export default {
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
-          data.reduce(
-            (result: string, { exists, relativePath }: dataType): string => {
-              const filePath = path.resolve(folderPath, relativePath);
-
-              debugLog({ exists, relativePath });
-              invariant(
-                !fs.existsSync(filePath.replace(/\.js$/, '')),
-                `You should not use \`folder: ${relativePath.replace(
-                  /\.js$/,
-                  '',
-                )}\` and \`file: ${relativePath}\` at the same time.`,
-              );
-
-              const pathname = [
-                prefix,
-                relativePath
-                  .replace(/\.js$/, '')
-                  .replace(/\/?index$/, '')
-                  .replace(/\[([^[\]]*)\]/g, ':$1'),
-              ]
-                .filter(Boolean)
-                .join('/')
-                .replace(/^([^/])/, '/$1')
-                .replace(/^$/, '/');
-
-              debugLog({ pathname });
-              delete require.cache[filePath];
-
-              return requireModule(filePath).cacheId === cacheId
-                ? result
-                : build({
-                    exists,
-                    filePath,
-                    pathname,
-                  });
-            },
-            '',
-          ),
+          buildFile(folderPath, build, prefix, cacheId, data),
         );
       },
     );

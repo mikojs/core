@@ -80,6 +80,9 @@ export default async (
     'command',
     ['watch-project', folderPath],
   );
+
+  debugLog({ watch, relativePath });
+
   const { files } = await promiseClient('command', [
     'query',
     watch,

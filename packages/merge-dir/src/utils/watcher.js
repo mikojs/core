@@ -83,31 +83,38 @@ export default async (
 
   debugLog({ watch, relativePath });
 
-  const { files } = await promiseClient('command', [
-    'query',
-    watch,
-    {
-      expression: ['allof', ['match', '*.js']],
-      fields: ['exists', 'name'],
-      relative_root: relativePath,
-    },
-  ]);
+  switch (event) {
+    case 'build':
+      const { files } = await promiseClient('command', [
+        'query',
+        watch,
+        {
+          expression: ['allof', ['match', '*.js']],
+          fields: ['exists', 'name'],
+          relative_root: relativePath,
+        },
+      ]);
 
-  debugLog(files);
-  callback(
-    files.map(
-      ({
-        exists,
-        name,
-      }: $ElementType<
-        $NonMaybeType<$PropertyType<respType, 'files'>>,
-        number,
-      >) => ({
-        exists,
-        relativePath: name,
-      }),
-    ),
-  );
+      debugLog(files);
+      callback(
+        files.map(
+          ({
+            exists,
+            name,
+          }: $ElementType<
+            $NonMaybeType<$PropertyType<respType, 'files'>>,
+            number,
+          >) => ({
+            exists,
+            relativePath: name,
+          }),
+        ),
+      );
+      break;
+
+    default:
+      break;
+  }
 
   return () => client.end();
 };

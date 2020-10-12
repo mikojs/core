@@ -2,6 +2,7 @@
 
 import debug from 'debug';
 import watchman from 'fb-watchman';
+import cryptoRandomString from 'crypto-random-string';
 
 export type dataType = {|
   exists: boolean,
@@ -15,6 +16,7 @@ type respType = {|
   warning?: string,
   watch?: mixed,
   relative_path?: mixed,
+  subscription?: string,
   files: $ReadOnlyArray<{| exists: boolean, name: string |}>,
 |};
 type resolveType = (resp: respType) => void;
@@ -44,6 +46,30 @@ export const handler: handlerType = (
 
   if (err) reject(err);
   else resolve(resp);
+};
+
+/**
+ * @param {respType} files - the files of resp
+ *
+ * @return {Array} - the output data
+ */
+const getData = (
+  files: $PropertyType<respType, 'files'>,
+): $ReadOnlyArray<dataType> => {
+  debugLog(files);
+
+  return files.map(
+    ({
+      exists,
+      name,
+    }: $ElementType<
+      $NonMaybeType<$PropertyType<respType, 'files'>>,
+      number,
+    >) => ({
+      exists,
+      relativePath: name,
+    }),
+  );
 };
 
 /**
@@ -80,36 +106,30 @@ export default async (
     'command',
     ['watch-project', folderPath],
   );
+  const sub = {
+    expression: ['allof', ['match', '*.js']],
+    fields: ['exists', 'name'],
+    relative_root: relativePath,
+  };
 
   debugLog({ watch, relativePath });
 
   switch (event) {
-    case 'build':
-      const { files } = await promiseClient('command', [
-        'query',
-        watch,
-        {
-          expression: ['allof', ['match', '*.js']],
-          fields: ['exists', 'name'],
-          relative_root: relativePath,
-        },
-      ]);
+    case 'dev':
+      const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
 
-      debugLog(files);
-      callback(
-        files.map(
-          ({
-            exists,
-            name,
-          }: $ElementType<
-            $NonMaybeType<$PropertyType<respType, 'files'>>,
-            number,
-          >) => ({
-            exists,
-            relativePath: name,
-          }),
-        ),
-      );
+      await promiseClient('command', ['subscribe', watch, hash, sub]);
+      client.on('subscription', ({ subscription, files }: respType) => {
+        if (subscription !== hash) return;
+
+        callback(getData(files));
+      });
+      break;
+
+    case 'build':
+      const { files } = await promiseClient('command', ['query', watch, sub]);
+
+      callback(getData(files));
       break;
 
     default:

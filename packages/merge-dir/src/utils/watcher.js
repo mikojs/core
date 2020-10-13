@@ -1,5 +1,6 @@
 // @flow
 
+import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 import watchman from 'fb-watchman';
 import cryptoRandomString from 'crypto-random-string';
@@ -60,6 +61,8 @@ export default async (
   event: eventType,
   callback: callbackType,
 ): Promise<() => void> => {
+  if (event === 'run') return emptyFunction;
+
   const client = new watchman.Client();
 
   /**
@@ -90,26 +93,19 @@ export default async (
 
   debugLog({ watch, relativePath });
 
-  switch (event) {
-    case 'dev':
-      const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
+  if (event === 'dev') {
+    const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
 
-      await promiseClient('command', ['subscribe', watch, hash, sub]);
-      client.on('subscription', ({ subscription, files }: respType) => {
-        if (subscription !== hash) return;
-
-        callback(files);
-      });
-      break;
-
-    case 'build':
-      const { files } = await promiseClient('command', ['query', watch, sub]);
+    await promiseClient('command', ['subscribe', watch, hash, sub]);
+    client.on('subscription', ({ subscription, files }: respType) => {
+      if (subscription !== hash) return;
 
       callback(files);
-      break;
+    });
+  } else if (event === 'build') {
+    const { files } = await promiseClient('command', ['query', watch, sub]);
 
-    default:
-      break;
+    callback(files);
   }
 
   return () => client.end();

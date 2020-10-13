@@ -6,7 +6,7 @@ import cryptoRandomString from 'crypto-random-string';
 
 export type dataType = {|
   exists: boolean,
-  relativePath: string,
+  name: string,
 |};
 
 export type eventType = 'dev' | 'build' | 'run';
@@ -17,7 +17,7 @@ type respType = {|
   watch?: mixed,
   relative_path?: mixed,
   subscription?: string,
-  files: $ReadOnlyArray<{| exists: boolean, name: string |}>,
+  files: $ReadOnlyArray<dataType>,
 |};
 type resolveType = (resp: respType) => void;
 type rejectType = (err: Error) => void;
@@ -46,30 +46,6 @@ export const handler: handlerType = (
 
   if (err) reject(err);
   else resolve(resp);
-};
-
-/**
- * @param {respType} files - the files of resp
- *
- * @return {Array} - the output data
- */
-const getData = (
-  files: $PropertyType<respType, 'files'>,
-): $ReadOnlyArray<dataType> => {
-  debugLog(files);
-
-  return files.map(
-    ({
-      exists,
-      name,
-    }: $ElementType<
-      $NonMaybeType<$PropertyType<respType, 'files'>>,
-      number,
-    >) => ({
-      exists,
-      relativePath: name,
-    }),
-  );
 };
 
 /**
@@ -122,14 +98,14 @@ export default async (
       client.on('subscription', ({ subscription, files }: respType) => {
         if (subscription !== hash) return;
 
-        callback(getData(files));
+        callback(files);
       });
       break;
 
     case 'build':
       const { files } = await promiseClient('command', ['query', watch, sub]);
 
-      callback(getData(files));
+      callback(files);
       break;
 
     default:

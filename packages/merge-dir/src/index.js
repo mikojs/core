@@ -33,9 +33,16 @@ type toolsType = {|
   ) => Promise<() => void>,
 |};
 
+type cacheType = {|
+  [string]: {
+    cacheFilePath: string,
+    watcher: Promise<() => void>,
+  },
+|};
+
 const debugLog = debug('merge-dir');
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
-const cache = {};
+const cache: cacheType = {};
 const tools = {
   type: 'dev',
   writeToCache: outputFileSync,
@@ -86,8 +93,8 @@ export default {
     );
 
     debugLog({ folderPath, prefix, relativePath, cacheFilePath });
-    cache[cacheFilePath] = {
-      relativePath,
+    cache[relativePath] = {
+      cacheFilePath,
       watcher: tools.watcher(
         folderPath,
         tools.type,
@@ -132,7 +139,7 @@ export default {
             Object.keys(cache).reduce(
               (result: {| [string]: string |}, key: string) => ({
                 ...result,
-                [cache[key].relativePath]: key,
+                [key]: cache[key].cacheFilePath,
               }),
               {},
             ),

@@ -4,12 +4,10 @@ import testing from '../../testing';
 
 import func from './foo';
 
-let close: () => void;
-
 /** */
 export default () => {
   beforeAll(async () => {
-    close = await testing.ready();
+    (await testing.ready())();
   });
 
   test.each`
@@ -25,9 +23,5 @@ export default () => {
     ${'/baz/bar'}
   `('get $pathname', ({ pathname }: {| pathname: string |}) => {
     expect(func(pathname)).toBe(pathname);
-  });
-
-  afterAll(() => {
-    close();
   });
 };

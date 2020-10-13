@@ -74,23 +74,31 @@ export default {
    * @return {string} - cache file path
    */
   set: (folderPath: string, build: buildType, prefix?: string): string => {
+    const relativePath = path.relative(cacheDir(), folderPath);
+
+    if (tools.type === 'run')
+      return tools.getFromCache(cacheDir('main.js'))[relativePath];
+
     const cacheFilePath = cacheDir(
       [cryptoRandomString({ length: 10, type: 'alphanumeric' }), 'js'].join(
         '.',
       ),
     );
 
-    debugLog({ folderPath, prefix, cacheFilePath });
-    cache[cacheFilePath] = tools.watcher(
-      folderPath,
-      tools.type,
-      (data: $ReadOnlyArray<dataType>) => {
-        tools.writeToCache(
-          cacheFilePath,
-          buildFile(folderPath, build, prefix, data),
-        );
-      },
-    );
+    debugLog({ folderPath, prefix, relativePath, cacheFilePath });
+    cache[cacheFilePath] = {
+      relativePath,
+      watcher: tools.watcher(
+        folderPath,
+        tools.type,
+        (data: $ReadOnlyArray<dataType>) => {
+          tools.writeToCache(
+            cacheFilePath,
+            buildFile(folderPath, build, prefix, data),
+          );
+        },
+      ),
+    };
 
     return cacheFilePath;
   },
@@ -110,7 +118,7 @@ export default {
    */
   ready: async (): Promise<() => void> => {
     const closes = await Promise.all(
-      Object.keys(cache).map((key: string) => cache[key]),
+      Object.keys(cache).map((key: string) => cache[key].watcher),
     );
 
     return () => {
@@ -120,9 +128,15 @@ export default {
       if (tools.type === 'build')
         tools.writeToCache(
           cacheDir('main.js'),
-          `module.exports = [${Object.keys(cache)
-            .map((key: string) => `'${path.relative(cacheDir(), key)}'`)
-            .join(',')}];`,
+          `module.exports = ${JSON.stringify(
+            Object.keys(cache).reduce(
+              (result: {| [string]: string |}, key: string) => ({
+                ...result,
+                [cache[key].relativePath]: key,
+              }),
+              {},
+            ),
+          )};`,
         );
     };
   },

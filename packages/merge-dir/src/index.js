@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import debug from 'debug';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
@@ -72,11 +74,14 @@ export default {
    * @return {string} - cache file path
    */
   set: (folderPath: string, build: buildType, prefix?: string): string => {
-    const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
-    const cacheFilePath = cacheDir(`${hash}.js`);
+    const cacheFilePath = cacheDir(
+      [cryptoRandomString({ length: 10, type: 'alphanumeric' }), 'js'].join(
+        '.',
+      ),
+    );
 
-    debugLog({ folderPath, prefix, hash });
-    cache[hash] = tools.watcher(
+    debugLog({ folderPath, prefix, cacheFilePath });
+    cache[cacheFilePath] = tools.watcher(
       folderPath,
       tools.type,
       (data: $ReadOnlyArray<dataType>) => {
@@ -108,8 +113,17 @@ export default {
       Object.keys(cache).map((key: string) => cache[key]),
     );
 
-    debugLog(cache);
+    return () => {
+      debugLog(cache);
+      closes.forEach((close: () => void) => close());
 
-    return () => closes.forEach((close: () => void) => close());
+      if (tools.type === 'build')
+        tools.writeToCache(
+          cacheDir('main.js'),
+          `module.exports = [${Object.keys(cache)
+            .map((key: string) => `'${path.relative(cacheDir(), key)}'`)
+            .join(',')}];`,
+        );
+    };
   },
 };

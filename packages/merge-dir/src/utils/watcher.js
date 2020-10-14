@@ -92,6 +92,7 @@ export default async (
   };
 
   debugLog({ watch, relativePath });
+  callback((await promiseClient('command', ['query', watch, sub])).files);
 
   if (event === 'dev') {
     const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
@@ -102,10 +103,6 @@ export default async (
 
       callback(files);
     });
-  } else if (event === 'build') {
-    const { files } = await promiseClient('command', ['query', watch, sub]);
-
-    callback(files);
   }
 
   return () => client.end();

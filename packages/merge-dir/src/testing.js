@@ -61,7 +61,7 @@ mergeDir.updateTools({
   ): Promise<() => void> => {
     debugLog({ folderPath });
     callback(
-      d3DirTree(folderPath)
+      d3DirTree(folderPath, { extensions: /\.js$/ })
         .leaves()
         .map(({ data }: d3DirTreeNodeType) => ({
           exists: true,

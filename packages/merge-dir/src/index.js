@@ -1,9 +1,7 @@
 // @flow
 
-import fs from 'fs';
 import path from 'path';
 
-import { invariant } from 'fbjs';
 import debug from 'debug';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
@@ -11,15 +9,14 @@ import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
+import buildFile, {
+  cacheId,
+  type fileDataType as buildFileFileDataType,
+  type buildType,
+} from './utils/buildFile';
 import watcher, { type dataType, type callbackType } from './utils/watcher';
 
-export type fileDataType = {|
-  exists: boolean,
-  filePath: string,
-  pathname: string,
-|};
-
-export type buildType = (fileData: fileDataType) => string;
+export type fileDataType = buildFileFileDataType;
 
 type toolsType = {|
   writeToCache?: (filePath: string, content: string) => void,
@@ -27,10 +24,8 @@ type toolsType = {|
   watcher?: (filePath: string, callback: callbackType) => Promise<() => void>,
 |};
 
-const randomOptions = { length: 10, type: 'alphanumeric' };
-const cacheId = cryptoRandomString(randomOptions);
-const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const debugLog = debug('merge-dir');
+const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const cache = {};
 const tools = {
   writeToCache: outputFileSync,
@@ -38,7 +33,7 @@ const tools = {
   watcher,
 };
 
-debugLog({ cacheId, cacheDir: cacheDir() });
+debugLog({ cacheDir: cacheDir() });
 
 export default {
   /**
@@ -69,50 +64,20 @@ export default {
    * @return {string} - cache file path
    */
   set: (folderPath: string, build: buildType, prefix?: string): string => {
-    const hash = cryptoRandomString(randomOptions);
-    const cacheFilePath = cacheDir(`${hash}.js`);
+    const relativePath = path.relative(cacheDir(), folderPath);
+    const cacheFilePath = cacheDir(
+      [cryptoRandomString({ length: 10, type: 'alphanumeric' }), 'js'].join(
+        '.',
+      ),
+    );
 
-    debugLog({ folderPath, prefix, hash });
-    cache[hash] = tools.watcher(
+    debugLog({ folderPath, prefix, relativePath, cacheFilePath });
+    cache[relativePath] = tools.watcher(
       folderPath,
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
-          data.reduce((result: string, { exists, name }: dataType): string => {
-            const filePath = path.resolve(folderPath, name);
-
-            debugLog({ exists, name });
-            invariant(
-              !fs.existsSync(filePath.replace(/\.js$/, '')),
-              `You should not use \`folder: ${name.replace(
-                /\.js$/,
-                '',
-              )}\` and \`file: ${name}\` at the same time.`,
-            );
-
-            const pathname = [
-              prefix,
-              name
-                .replace(/\.js$/, '')
-                .replace(/\/?index$/, '')
-                .replace(/\[([^[\]]*)\]/g, ':$1'),
-            ]
-              .filter(Boolean)
-              .join('/')
-              .replace(/^([^/])/, '/$1')
-              .replace(/^$/, '/');
-
-            debugLog({ pathname });
-            delete require.cache[filePath];
-
-            return requireModule(filePath).cacheId === cacheId
-              ? result
-              : build({
-                  exists,
-                  filePath,
-                  pathname,
-                });
-          }, ''),
+          buildFile(folderPath, build, prefix, data),
         );
       },
     );

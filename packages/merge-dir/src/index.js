@@ -6,19 +6,28 @@ import debug from 'debug';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
 
-import tools from './utils/tools';
-import buildFile, {
-  cacheId,
-  type fileDataType as buildFileFileDataType,
-  type buildType,
-} from './utils/buildFile';
-import { type dataType } from './utils/watcher';
+import { requireModule } from '@mikojs/utils';
 
-export type fileDataType = buildFileFileDataType;
+import tools from './utils/tools';
+import { type dataType, type closeType } from './utils/watcher';
+import getFileInfo from './utils/getFileInfo';
+
+export type fileDataType = {|
+  exists: boolean,
+  filePath: string,
+  pathname: string,
+|};
+
+type buildType = (fileData: fileDataType) => string;
+type cacheType = {| [string]: Promise<closeType> |};
 
 const debugLog = debug('merge-dir');
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
-const cache = {};
+const cacheId = cryptoRandomString({
+  length: 10,
+  type: 'alphanumeric',
+});
+const cache: cacheType = {};
 
 debugLog({ cacheDir: cacheDir() });
 
@@ -62,7 +71,20 @@ export default {
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
-          buildFile(folderPath, build, prefix, data),
+          data.reduce((result: string, { exists, name }: dataType): string => {
+            const { filePath, pathname } = getFileInfo(
+              folderPath,
+              name,
+              prefix,
+            );
+
+            debugLog({ filePath, pathname });
+            delete require.cache[filePath];
+
+            return requireModule(filePath).cacheId === cacheId
+              ? result
+              : build({ exists, filePath, pathname });
+          }, ''),
         );
       },
     );

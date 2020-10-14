@@ -88,13 +88,13 @@ export default {
   /**
    * @return {Promise} - close function
    */
-  ready: async (): Promise<() => void> => {
+  ready: async (): Promise<closeType> => {
     const closes = await Promise.all(
       Object.keys(cache).map((key: string) => cache[key]),
     );
 
     debugLog(cache);
 
-    return () => closes.forEach((close: () => void) => close());
+    return () => closes.forEach((close: closeType) => close());
   },
 };

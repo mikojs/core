@@ -12,7 +12,7 @@ import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import tools from './utils/tools';
-import { type callbackType } from './utils/watcher';
+import { type callbackType, type closeType } from './utils/watcher';
 
 import mergeDir from './index';
 
@@ -58,7 +58,7 @@ tools.set({
   watcher: async (
     folderPath: string,
     callback: callbackType,
-  ): Promise<() => void> => {
+  ): Promise<closeType> => {
     debugLog({ folderPath });
     callback(
       d3DirTree(folderPath, { extensions: /\.js$/ })

@@ -7,12 +7,11 @@ import testing from '../../testing';
 import build from './build';
 
 const folderPath = path.resolve(__dirname, './folder/foo');
+const func = build(folderPath);
 
 /** */
 export default () => {
   describe('dev mode', () => {
-    const func = build(folderPath);
-
     beforeAll(async () => {
       (await testing.ready())();
     });

@@ -15,7 +15,10 @@ const cache = {};
  *
  * @return {Function} - cache function
  */
-export default ((folderPath: string, prefix?: string) =>
+export default (
+  folderPath: string,
+  prefix?: string,
+): $PropertyType<EmptyFunctionType, 'thatReturnsArgument'> =>
   mergeDir.use(
     folderPath,
     ({ filePath, pathname }: fileDataType): string => {
@@ -39,7 +42,4 @@ module.exports = pathname => {
 };`;
     },
     prefix,
-  ): (
-  folderPath: string,
-  prefix?: string,
-) => $PropertyType<EmptyFunctionType, 'thatReturnsArgument'>);
+  );

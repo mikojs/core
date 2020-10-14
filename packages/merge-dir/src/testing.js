@@ -63,7 +63,7 @@ mergeDir.updateTools({
         .leaves()
         .map(({ data }: d3DirTreeNodeType) => ({
           exists: true,
-          relativePath: path.relative(folderPath, data.path),
+          name: path.relative(folderPath, data.path),
         })),
     );
 

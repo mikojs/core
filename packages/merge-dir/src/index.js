@@ -78,44 +78,41 @@ export default {
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,
-          data.reduce(
-            (result: string, { exists, relativePath }: dataType): string => {
-              const filePath = path.resolve(folderPath, relativePath);
+          data.reduce((result: string, { exists, name }: dataType): string => {
+            const filePath = path.resolve(folderPath, name);
 
-              debugLog({ exists, relativePath });
-              invariant(
-                !fs.existsSync(filePath.replace(/\.js$/, '')),
-                `You should not use \`folder: ${relativePath.replace(
-                  /\.js$/,
-                  '',
-                )}\` and \`file: ${relativePath}\` at the same time.`,
-              );
+            debugLog({ exists, name });
+            invariant(
+              !fs.existsSync(filePath.replace(/\.js$/, '')),
+              `You should not use \`folder: ${name.replace(
+                /\.js$/,
+                '',
+              )}\` and \`file: ${name}\` at the same time.`,
+            );
 
-              const pathname = [
-                prefix,
-                relativePath
-                  .replace(/\.js$/, '')
-                  .replace(/\/?index$/, '')
-                  .replace(/\[([^[\]]*)\]/g, ':$1'),
-              ]
-                .filter(Boolean)
-                .join('/')
-                .replace(/^([^/])/, '/$1')
-                .replace(/^$/, '/');
+            const pathname = [
+              prefix,
+              name
+                .replace(/\.js$/, '')
+                .replace(/\/?index$/, '')
+                .replace(/\[([^[\]]*)\]/g, ':$1'),
+            ]
+              .filter(Boolean)
+              .join('/')
+              .replace(/^([^/])/, '/$1')
+              .replace(/^$/, '/');
 
-              debugLog({ pathname });
-              delete require.cache[filePath];
+            debugLog({ pathname });
+            delete require.cache[filePath];
 
-              return requireModule(filePath).cacheId === cacheId
-                ? result
-                : build({
-                    exists,
-                    filePath,
-                    pathname,
-                  });
-            },
-            '',
-          ),
+            return requireModule(filePath).cacheId === cacheId
+              ? result
+              : build({
+                  exists,
+                  filePath,
+                  pathname,
+                });
+          }, ''),
         );
       },
     );

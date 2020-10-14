@@ -9,6 +9,7 @@ export type dataType = {|
 |};
 
 export type callbackType = (data: $ReadOnlyArray<dataType>) => void;
+export type closeType = () => void;
 
 type respType = {|
   warning?: string,
@@ -54,7 +55,7 @@ export const handler: handlerType = (
 export default async (
   folderPath: string,
   callback: callbackType,
-): Promise<() => void> => {
+): Promise<closeType> => {
   const client = new watchman.Client();
 
   /**

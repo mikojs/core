@@ -5,7 +5,7 @@ import watchman from 'fb-watchman';
 
 export type dataType = {|
   exists: boolean,
-  relativePath: string,
+  name: string,
 |};
 
 export type callbackType = (data: $ReadOnlyArray<dataType>) => void;
@@ -14,7 +14,7 @@ type respType = {|
   warning?: string,
   watch?: mixed,
   relative_path?: mixed,
-  files: $ReadOnlyArray<{| exists: boolean, name: string |}>,
+  files: $ReadOnlyArray<dataType>,
 |};
 type resolveType = (resp: respType) => void;
 type rejectType = (err: Error) => void;
@@ -88,20 +88,7 @@ export default async (
   ]);
 
   debugLog(files);
-  callback(
-    files.map(
-      ({
-        exists,
-        name,
-      }: $ElementType<
-        $NonMaybeType<$PropertyType<respType, 'files'>>,
-        number,
-      >) => ({
-        exists,
-        relativePath: name,
-      }),
-    ),
-  );
+  callback(files);
 
   return () => client.end();
 };

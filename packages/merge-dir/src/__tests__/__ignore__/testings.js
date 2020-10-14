@@ -1,33 +1,35 @@
 // @flow
 
+import path from 'path';
+
 import testing from '../../testing';
 
-import func from './foo';
+import build from './build';
 
-let close: () => void;
+const folderPath = path.resolve(__dirname, './folder/foo');
 
 /** */
 export default () => {
-  beforeAll(async () => {
-    close = await testing.ready();
-  });
+  describe('dev mode', () => {
+    const func = build(folderPath);
 
-  test.each`
-    pathname
-    ${'/'}
-    ${'/foo'}
-    ${'/:id'}
-    ${'/bar'}
-    ${'/bar/foo'}
-    ${'/bar/bar'}
-    ${'/baz'}
-    ${'/baz/foo'}
-    ${'/baz/bar'}
-  `('get $pathname', ({ pathname }: {| pathname: string |}) => {
-    expect(func(pathname)).toBe(pathname);
-  });
+    beforeAll(async () => {
+      (await testing.ready())();
+    });
 
-  afterAll(() => {
-    close();
+    test.each`
+      pathname
+      ${'/'}
+      ${'/foo'}
+      ${'/:id'}
+      ${'/bar'}
+      ${'/bar/foo'}
+      ${'/bar/bar'}
+      ${'/baz'}
+      ${'/baz/foo'}
+      ${'/baz/bar'}
+    `('get $pathname', ({ pathname }: {| pathname: string |}) => {
+      expect(func(pathname)).toBe(pathname);
+    });
   });
 };

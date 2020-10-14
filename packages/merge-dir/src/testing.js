@@ -11,13 +11,15 @@ import debug from 'debug';
 import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
+import tools from './utils/tools';
 import { type callbackType } from './utils/watcher';
+
 import mergeDir from './index';
 
 const debugLog = debug('merge-dir:testing');
 const cache = {};
 
-mergeDir.updateTools({
+tools.set({
   /**
    * @param {string} filePath - cache file path
    * @param {string} content - cache content

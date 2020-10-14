@@ -5,33 +5,20 @@ import path from 'path';
 import debug from 'debug';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
-import outputFileSync from 'output-file-sync';
 
-import { requireModule } from '@mikojs/utils';
-
+import tools from './utils/tools';
 import buildFile, {
   cacheId,
   type fileDataType as buildFileFileDataType,
   type buildType,
 } from './utils/buildFile';
-import watcher, { type dataType, type callbackType } from './utils/watcher';
+import { type dataType } from './utils/watcher';
 
 export type fileDataType = buildFileFileDataType;
-
-type toolsType = {|
-  writeToCache?: (filePath: string, content: string) => void,
-  getFromCache?: <C>(filePath: string) => C,
-  watcher?: (filePath: string, callback: callbackType) => Promise<() => void>,
-|};
 
 const debugLog = debug('merge-dir');
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const cache = {};
-const tools = {
-  writeToCache: outputFileSync,
-  getFromCache: requireModule,
-  watcher,
-};
 
 debugLog({ cacheDir: cacheDir() });
 
@@ -66,9 +53,7 @@ export default {
   set: (folderPath: string, build: buildType, prefix?: string): string => {
     const relativePath = path.relative(cacheDir(), folderPath);
     const cacheFilePath = cacheDir(
-      [cryptoRandomString({ length: 10, type: 'alphanumeric' }), 'js'].join(
-        '.',
-      ),
+      `${cryptoRandomString({ length: 10, type: 'alphanumeric' })}.js`,
     );
 
     debugLog({ folderPath, prefix, relativePath, cacheFilePath });
@@ -83,16 +68,6 @@ export default {
     );
 
     return cacheFilePath;
-  },
-
-  /**
-   * @param {toolsType} newTools - new tools functions
-   */
-  updateTools: (newTools: toolsType) => {
-    debugLog(newTools);
-    Object.keys(newTools).forEach((key: string) => {
-      tools[key] = newTools[key];
-    });
   },
 
   /**

@@ -33,11 +33,22 @@ debugLog({ cacheDir: cacheDir() });
 
 export default {
   /**
-   * @param {string} cacheFilePath - cache file path
+   * @param {string} folderPath - folder path
+   * @param {buildType} build - build cache function
+   * @param {string} prefix - pathname prefix
    *
    * @return {any} - any function from cache
    */
-  get: <C>(cacheFilePath: string): ((...argv: $ReadOnlyArray<mixed>) => C) => {
+  use: <C>(
+    folderPath: string,
+    build: buildType,
+    prefix?: string,
+  ): ((...argv: $ReadOnlyArray<mixed>) => C) => {
+    const relativePath = path.relative(cacheDir(), folderPath);
+    const cacheFilePath = cacheDir(
+      `${cryptoRandomString({ length: 10, type: 'alphanumeric' })}.js`,
+    );
+
     /**
      * @param {Array} argv - function argv
      *
@@ -46,26 +57,8 @@ export default {
     const cacheFunc = (...argv: $ReadOnlyArray<mixed>) =>
       tools.getFromCache(cacheFilePath)(...argv);
 
-    debugLog({ cacheFilePath });
-    cacheFunc.cacheId = cacheId;
-
-    return cacheFunc;
-  },
-
-  /**
-   * @param {string} folderPath - folder path
-   * @param {buildType} build - build cache function
-   * @param {string} prefix - pathname prefix
-   *
-   * @return {string} - cache file path
-   */
-  set: (folderPath: string, build: buildType, prefix?: string): string => {
-    const relativePath = path.relative(cacheDir(), folderPath);
-    const cacheFilePath = cacheDir(
-      `${cryptoRandomString({ length: 10, type: 'alphanumeric' })}.js`,
-    );
-
     debugLog({ folderPath, prefix, relativePath, cacheFilePath });
+    cacheFunc.cacheId = cacheId;
     cache[relativePath] = tools.watcher(
       folderPath,
       (data: $ReadOnlyArray<dataType>) => {
@@ -89,7 +82,7 @@ export default {
       },
     );
 
-    return cacheFilePath;
+    return cacheFunc;
   },
 
   /**

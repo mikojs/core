@@ -16,13 +16,12 @@ const cache = {};
  * @return {Function} - cache function
  */
 export default ((folderPath: string, prefix?: string) =>
-  mergeDir.get(
-    mergeDir.set(
-      folderPath,
-      ({ filePath, pathname }: fileDataType): string => {
-        cache[pathname] = filePath;
+  mergeDir.use(
+    folderPath,
+    ({ filePath, pathname }: fileDataType): string => {
+      cache[pathname] = filePath;
 
-        return `'use strict';
+      return `'use strict';
 
 const invariant = require('fbjs/lib/invariant');
 const requireModule = require('@mikojs/utils/lib/requireModule');
@@ -38,9 +37,8 @@ module.exports = pathname => {
   if (cacheKey)
     return requireModule(cache[cacheKey])(pathname);
 };`;
-      },
-      prefix,
-    ),
+    },
+    prefix,
   ): (
   folderPath: string,
   prefix?: string,

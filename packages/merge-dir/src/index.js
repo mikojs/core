@@ -53,6 +53,10 @@ export default {
     prefix?: string,
   ): ((...argv: $ReadOnlyArray<mixed>) => C) => {
     const relativePath = path.relative(cacheDir(), folderPath);
+
+    if (event === 'run')
+      return tools.getFromCache(cacheDir('main.js'))[relativePath];
+
     const cacheFilePath = cacheDir(
       `${cryptoRandomString({ length: 10, type: 'alphanumeric' })}.js`,
     );

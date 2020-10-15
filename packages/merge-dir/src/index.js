@@ -60,7 +60,9 @@ export default {
     const relativePath = path.relative(cacheDir(), folderPath);
 
     if (event === 'run')
-      return tools.getFromCache(cacheDir('main.js'))[relativePath];
+      return tools.getFromCache(
+        tools.getFromCache(cacheDir('main.js'))[relativePath],
+      );
 
     const cacheFilePath = cacheDir(
       `${cryptoRandomString({ length: 10, type: 'alphanumeric' })}.js`,

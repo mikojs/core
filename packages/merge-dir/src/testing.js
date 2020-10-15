@@ -12,7 +12,11 @@ import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
 import tools from './utils/tools';
-import { type callbackType, type closeType } from './utils/watcher';
+import {
+  type eventType,
+  type callbackType,
+  type closeType,
+} from './utils/watcher';
 
 import mergeDir from './index';
 
@@ -51,12 +55,14 @@ tools.set({
 
   /**
    * @param {string} folderPath - folder path
+   * @param {eventType} event - watcher event type
    * @param {callbackType} callback - handle files function
    *
    * @return {Function} - close client
    */
   watcher: async (
     folderPath: string,
+    event: eventType,
     callback: callbackType,
   ): Promise<closeType> => {
     debugLog({ folderPath });

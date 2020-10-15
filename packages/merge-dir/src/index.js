@@ -9,7 +9,7 @@ import cryptoRandomString from 'crypto-random-string';
 import { requireModule } from '@mikojs/utils';
 
 import tools from './utils/tools';
-import { type dataType, type closeType } from './utils/watcher';
+import { type eventType, type dataType, type closeType } from './utils/watcher';
 import getFileInfo from './utils/getFileInfo';
 
 export type fileDataType = {|
@@ -28,10 +28,18 @@ const cacheId = cryptoRandomString({
   type: 'alphanumeric',
 });
 const cache: cacheType = {};
+let event: eventType = 'dev';
 
 debugLog({ cacheDir: cacheDir() });
 
 export default {
+  /**
+   * @param {eventType} newEvent - new event type
+   */
+  set: (newEvent: eventType) => {
+    event = newEvent;
+  },
+
   /**
    * @param {string} folderPath - folder path
    * @param {buildType} build - build cache function
@@ -61,6 +69,7 @@ export default {
     cacheFunc.cacheId = cacheId;
     cache[relativePath] = tools.watcher(
       folderPath,
+      event,
       (data: $ReadOnlyArray<dataType>) => {
         tools.writeToCache(
           cacheFilePath,

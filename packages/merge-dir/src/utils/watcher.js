@@ -1,5 +1,6 @@
 // @flow
 
+import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 import watchman from 'fb-watchman';
 
@@ -8,6 +9,7 @@ export type dataType = {|
   name: string,
 |};
 
+export type eventType = 'dev' | 'build' | 'run';
 export type callbackType = (data: $ReadOnlyArray<dataType>) => void;
 export type closeType = () => void;
 
@@ -48,14 +50,18 @@ export const handler: handlerType = (
 
 /**
  * @param {string} folderPath - folder path
+ * @param {eventType} event - watcher event type
  * @param {callbackType} callback - handle files function
  *
  * @return {Function} - close client
  */
 export default async (
   folderPath: string,
+  event: eventType,
   callback: callbackType,
 ): Promise<closeType> => {
+  if (event === 'run') return emptyFunction;
+
   const client = new watchman.Client();
 
   /**

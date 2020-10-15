@@ -42,7 +42,9 @@ export default {
         .join(' && '),
     },
     babel: {
-      command: `${config.build.command} --root-mode upward`,
+      command: `${
+        config.build?.command || 'babel src -d lib --verbose'
+      } --root-mode upward`,
       description: 'run `babel` in the package of the monorepo',
     },
     build: {

@@ -11,13 +11,15 @@ import debug from 'debug';
 import { d3DirTree } from '@mikojs/utils';
 import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
 
-import { type callbackType } from './utils/watcher';
+import tools from './utils/tools';
+import { type callbackType, type closeType } from './utils/watcher';
+
 import mergeDir from './index';
 
 const debugLog = debug('merge-dir:testing');
 const cache = {};
 
-mergeDir.updateTools({
+tools.set({
   /**
    * @param {string} filePath - cache file path
    * @param {string} content - cache content
@@ -56,14 +58,14 @@ mergeDir.updateTools({
   watcher: async (
     folderPath: string,
     callback: callbackType,
-  ): Promise<() => void> => {
+  ): Promise<closeType> => {
     debugLog({ folderPath });
     callback(
-      d3DirTree(folderPath)
+      d3DirTree(folderPath, { extensions: /\.js$/ })
         .leaves()
         .map(({ data }: d3DirTreeNodeType) => ({
           exists: true,
-          relativePath: path.relative(folderPath, data.path),
+          name: path.relative(folderPath, data.path),
         })),
     );
 

@@ -3,6 +3,7 @@
 import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 import watchman from 'fb-watchman';
+import cryptoRandomString from 'crypto-random-string';
 
 export type dataType = {|
   exists: boolean,
@@ -17,6 +18,7 @@ type respType = {|
   warning?: string,
   watch?: mixed,
   relative_path?: mixed,
+  subscription?: string,
   files: $ReadOnlyArray<dataType>,
 |};
 type resolveType = (resp: respType) => void;
@@ -84,18 +86,23 @@ export default async (
     'command',
     ['watch-project', folderPath],
   );
-  const { files } = await promiseClient('command', [
-    'query',
-    watch,
-    {
-      expression: ['allof', ['match', '*.js']],
-      fields: ['exists', 'name'],
-      relative_root: relativePath,
-    },
-  ]);
+  const sub = {
+    expression: ['allof', ['match', '*.js']],
+    fields: ['exists', 'name'],
+    relative_root: relativePath,
+  };
 
-  debugLog(files);
-  callback(files);
+  debugLog({ watch, relativePath });
+  callback((await promiseClient('command', ['query', watch, sub])).files);
+
+  if (event === 'dev') {
+    const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
+
+    await promiseClient('command', ['subscribe', watch, hash, sub]);
+    client.on('subscription', ({ subscription, files }: respType) => {
+      if (subscription === hash) callback(files);
+    });
+  }
 
   return () => client.end();
 };

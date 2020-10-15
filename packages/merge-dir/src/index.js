@@ -19,7 +19,12 @@ export type fileDataType = {|
 |};
 
 type buildType = (fileData: fileDataType) => string;
-type cacheType = {| [string]: Promise<closeType> |};
+type cacheType = {|
+  [string]: {|
+    cacheFilePath: string,
+    watcher: Promise<closeType>,
+  |},
+|};
 
 const debugLog = debug('merge-dir');
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
@@ -71,29 +76,35 @@ export default {
 
     debugLog({ folderPath, prefix, relativePath, cacheFilePath });
     cacheFunc.cacheId = cacheId;
-    cache[relativePath] = tools.watcher(
-      folderPath,
-      event,
-      (data: $ReadOnlyArray<dataType>) => {
-        tools.writeToCache(
-          cacheFilePath,
-          data.reduce((result: string, { exists, name }: dataType): string => {
-            const { filePath, pathname } = getFileInfo(
-              folderPath,
-              name,
-              prefix,
-            );
+    cache[relativePath] = {
+      cacheFilePath,
+      watcher: tools.watcher(
+        folderPath,
+        event,
+        (data: $ReadOnlyArray<dataType>) => {
+          tools.writeToCache(
+            cacheFilePath,
+            data.reduce(
+              (result: string, { exists, name }: dataType): string => {
+                const { filePath, pathname } = getFileInfo(
+                  folderPath,
+                  name,
+                  prefix,
+                );
 
-            debugLog({ filePath, pathname });
-            delete require.cache[filePath];
+                debugLog({ filePath, pathname });
+                delete require.cache[filePath];
 
-            return requireModule(filePath).cacheId === cacheId
-              ? result
-              : build({ exists, filePath, pathname });
-          }, ''),
-        );
-      },
-    );
+                return requireModule(filePath).cacheId === cacheId
+                  ? result
+                  : build({ exists, filePath, pathname });
+              },
+              '',
+            ),
+          );
+        },
+      ),
+    };
 
     return cacheFunc;
   },
@@ -103,11 +114,26 @@ export default {
    */
   ready: async (): Promise<closeType> => {
     const closes = await Promise.all(
-      Object.keys(cache).map((key: string) => cache[key]),
+      Object.keys(cache).map((key: string) => cache[key].watcher),
     );
 
-    debugLog(cache);
+    return () => {
+      debugLog(cache);
+      closes.forEach((close: closeType) => close());
 
-    return () => closes.forEach((close: closeType) => close());
+      if (event === 'build')
+        tools.writeToCache(
+          cacheDir('main.js'),
+          `module.exports = ${JSON.stringify(
+            Object.keys(cache).reduce(
+              (result: {| [string]: string |}, key: string) => ({
+                ...result,
+                [key]: cache[key].cacheFilePath,
+              }),
+              {},
+            ),
+          )};`,
+        );
+    };
   },
 };

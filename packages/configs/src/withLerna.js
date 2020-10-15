@@ -1,7 +1,6 @@
 // @flow
 
 import gitBranch from 'git-branch';
-import { cosmiconfigSync } from 'cosmiconfig';
 
 export default {
   /**
@@ -43,13 +42,9 @@ export default {
         .join(' && '),
     },
     babel: {
-      /**
-       * @return {string} - command string
-       */
-      command: () =>
-        `${config.build.command} --config-file ${
-          cosmiconfigSync('babel').search()?.filepath || 'babel.config.js'
-        }`,
+      command: `${
+        config.build?.command || 'babel src -d lib --verbose'
+      } --root-mode upward`,
       description: 'run `babel` in the package of the monorepo',
     },
     build: {

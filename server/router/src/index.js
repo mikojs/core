@@ -3,7 +3,14 @@
 import mergeDir, { type fileDataType } from '@mikojs/merge-dir';
 import { type middlewareType } from '@mikojs/server';
 
-const cache = {};
+type cacheType = {|
+  [string]: {|
+    filePath: string,
+    pathname: string,
+  |},
+|};
+
+const cache: cacheType = {};
 
 /**
  * @param {string} folderPath - folder path
@@ -16,23 +23,47 @@ export default (folderPath: string, prefix?: string): middlewareType =>
     folderPath,
     prefix,
     ({ exists, filePath, pathname }: fileDataType): string => {
-      cache[pathname] = filePath;
+      cache[pathname] = {
+        filePath,
+        pathname,
+      };
 
       if (!exists) delete cache[pathname];
 
       return `'use strict';
 
+const { pathToRegexp, match } = require('path-to-regexp');
+const { parse } = require('query-string');
+
 const requireModule = require('@mikojs/utils/lib/requireModule');
 
-const cache = ${JSON.stringify(cache)};
+const cache = {${Object.keys(cache)
+        .map(
+          (key: string) => `{
+  filePath: '${cache[key].filePath}',
+  regExp: pathToRegexp('${cache[key].pathname}', []),
+  getUrlQuery: pathname => match('${cache[key].pathname}', { decode: decodeURIComponent })(
+    pathname,
+  ).params,
+}`,
+        )
+        .join(', ')}};
 
 module.exports = (req, res) => {
-  const cacheKey = Object.keys(cache).find(key => key === req.url);
+  const cacheKey = Object.keys(cache).find(key => cache[key].regExp.exec(req.url));
 
-  if (!cacheKey)
+  if (!cacheKey) {
     res.end();
-  else
-    requireModule(cache[cacheKey])(req, res);
+    return;
+  }
+
+  const { filePath, getUrlQuery } = cache[cacheKey];
+
+  req.query = {
+    ...parse(query || ''),
+    ...getUrlQuery(pathname),
+  };
+  requireModule(filePath)(req, res);
 };`;
     },
   );

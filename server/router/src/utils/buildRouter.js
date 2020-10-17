@@ -26,12 +26,14 @@ export default ({ exists, filePath, pathname }: fileDataType): string => {
 
   return `'use strict';
 
+const url = require('url');
+
 const { pathToRegexp, match } = require('path-to-regexp');
 const { parse } = require('query-string');
 
 const requireModule = require('@mikojs/utils/lib/requireModule');
 
-const cache = {${Object.keys(cache)
+const cache = [${Object.keys(cache)
     .map(
       (key: string) => `{
   filePath: '${cache[key].filePath}',
@@ -41,10 +43,11 @@ const cache = {${Object.keys(cache)
   ).params,
 }`,
     )
-    .join(', ')}};
+    .join(', ')}];
 
 module.exports = (req, res) => {
-  const cacheKey = Object.keys(cache).find(key => cache[key].regExp.exec(req.url));
+  const { pathname, query } = url.parse(req.url);
+  const cacheKey = Object.keys(cache).find(key => cache[key].regExp.exec(pathname));
 
   if (!cacheKey) {
     res.end();

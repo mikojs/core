@@ -6,6 +6,9 @@ import {
 } from 'http';
 
 /** @middleware get middleware */
-export default (req: IncomingMessageType, res: ServerResponseType) => {
+export default (
+  req: IncomingMessageType & {| query: {} |},
+  res: ServerResponseType,
+) => {
   res.end(`${req.url} ${JSON.stringify(req.query)}`);
 };

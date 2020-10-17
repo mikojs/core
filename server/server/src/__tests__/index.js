@@ -10,6 +10,7 @@ describe('server', () => {
     await testingServer.run(
       mergeDir.use(
         __dirname,
+        undefined,
         () => `module.exports = (req, res) => {
   res.end(req.url);
 };`,

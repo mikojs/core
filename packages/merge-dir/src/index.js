@@ -47,15 +47,15 @@ export default {
 
   /**
    * @param {string} folderPath - folder path
-   * @param {buildType} build - build cache function
    * @param {string} prefix - pathname prefix
+   * @param {buildType} build - build cache function
    *
    * @return {any} - any function from cache
    */
   use: <C>(
     folderPath: string,
+    prefix: ?string,
     build: buildType,
-    prefix?: string,
   ): ((...argv: $ReadOnlyArray<mixed>) => C) => {
     const relativePath = path.relative(cacheDir(), folderPath);
 

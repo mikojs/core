@@ -18,6 +18,12 @@ export type middlewareType = (
 export default {
   ready: mergeDir.ready,
 
+  /** */
+  build: async () => {
+    mergeDir.set('build');
+    (await mergeDir.ready())();
+  },
+
   /**
    * @param {middlewareType} middleware - middleware function
    * @param {number} port - server port

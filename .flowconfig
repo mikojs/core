@@ -18,6 +18,7 @@ module.system.node.root_relative_dirname=./src
 module.system.node.root_relative_dirname=../../packages/worker/src
 module.system.node.root_relative_dirname=../../packages/miko/src
 module.system.node.root_relative_dirname=../../packages/merge-dir/src
+module.system.node.root_relative_dirname=../../packages/server/src
 
 [strict]
 

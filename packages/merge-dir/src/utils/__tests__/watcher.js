@@ -1,14 +1,19 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
 import { emptyFunction } from 'fbjs';
 
-import watcher, { handler } from '../watcher';
+import watcher, { handler, type eventType } from '../watcher';
 
 const folder = path.resolve(__dirname, './__ignore__');
 
 describe('watcher', () => {
+  beforeAll(() => {
+    fs.mkdirSync(folder);
+  });
+
   test('handler reject', async () => {
     const mockLog = jest.fn();
 
@@ -25,7 +30,15 @@ describe('watcher', () => {
     expect(mockLog).toHaveBeenCalledWith('warning');
   });
 
-  test('run mode', async () => {
-    expect((await watcher(folder, 'run', emptyFunction))()).toBeUndefined();
+  test.each`
+    event
+    ${'dev'}
+    ${'run'}
+  `('$event mode', async ({ event }: {| event: eventType |}) => {
+    expect((await watcher(folder, event, emptyFunction))()).toBeUndefined();
+  });
+
+  afterAll(() => {
+    fs.rmdirSync(folder);
   });
 });

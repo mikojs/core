@@ -5,12 +5,20 @@ import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
 
-import watcher, { type callbackType, type closeType } from './watcher';
+import watcher, {
+  type eventType,
+  type callbackType,
+  type closeType,
+} from './watcher';
 
 type toolsType = {|
   writeToCache?: (filePath: string, content: string) => void,
   getFromCache?: <C>(filePath: string) => C,
-  watcher?: (filePath: string, callback: callbackType) => Promise<closeType>,
+  watcher?: (
+    filePath: string,
+    event: eventType,
+    callback: callbackType,
+  ) => Promise<closeType>,
 |};
 
 const debugLog = debug('merge-dir:tools');

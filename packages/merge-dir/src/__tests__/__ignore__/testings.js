@@ -2,6 +2,8 @@
 
 import path from 'path';
 
+import { emptyFunction } from 'fbjs';
+
 import testing from '../../testing';
 
 import build from './build';
@@ -30,5 +32,19 @@ export default () => {
     `('get $pathname', ({ pathname }: {| pathname: string |}) => {
       expect(func(pathname)).toBe(pathname);
     });
+  });
+
+  test('build and run mode', async () => {
+    testing.set('build');
+    testing.use(
+      folderPath,
+      () =>
+        `module.exports = require('fbjs/lib/emptyFunction').thatReturnsArgument;`,
+    );
+
+    (await testing.ready())();
+    testing.set('run');
+
+    expect(testing.use(folderPath, emptyFunction)('test')).toBe('test');
   });
 };

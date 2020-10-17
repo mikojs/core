@@ -38,6 +38,7 @@ export default () => {
     testing.set('build');
     testing.use(
       folderPath,
+      undefined,
       () =>
         `module.exports = require('fbjs/lib/emptyFunction').thatReturnsArgument;`,
     );
@@ -45,6 +46,8 @@ export default () => {
     (await testing.ready())();
     testing.set('run');
 
-    expect(testing.use(folderPath, emptyFunction)('test')).toBe('test');
+    expect(testing.use(folderPath, undefined, emptyFunction)('test')).toBe(
+      'test',
+    );
   });
 };

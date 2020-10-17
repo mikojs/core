@@ -2,6 +2,7 @@
 
 import mergeDir from '@mikojs/merge-dir';
 
+import server from '../index';
 import testingServer, { type fetchResultType } from '../testingServer';
 
 describe('server', () => {
@@ -20,6 +21,10 @@ describe('server', () => {
     expect(
       await testingServer.fetch('/').then((res: fetchResultType) => res.text()),
     ).toBe('/');
+  });
+
+  test('build', async () => {
+    expect(await server.build()).toBeUndefined();
   });
 
   afterAll(() => {

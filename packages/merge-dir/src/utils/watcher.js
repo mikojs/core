@@ -51,6 +51,19 @@ export const handler: handlerType = (
 };
 
 /**
+ * @param {string} hash - hash key
+ * @param {callbackType} callback - handle files function
+ *
+ * @return {Function} - subscription function
+ */
+export const buildSubscription = (
+  hash: string,
+  callback: callbackType,
+): ((resp: respType) => void) => ({ subscription, files }: respType) => {
+  if (subscription === hash) callback(files);
+};
+
+/**
  * @param {string} folderPath - folder path
  * @param {eventType} event - watcher event type
  * @param {callbackType} callback - handle files function
@@ -99,9 +112,7 @@ export default async (
     const hash = cryptoRandomString({ length: 10, type: 'alphanumeric' });
 
     await promiseClient('command', ['subscribe', watch, hash, sub]);
-    client.on('subscription', ({ subscription, files }: respType) => {
-      if (subscription === hash) callback(files);
-    });
+    client.on('subscription', buildSubscription(hash, callback));
   }
 
   return () => client.end();

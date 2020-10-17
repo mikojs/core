@@ -19,3 +19,6 @@ module.system.node.root_relative_dirname=./src
 [strict]
 
 [declarations]
+.*/worker/src/.*
+.*/miko/src/.*
+.*/merge-dir/src/.*

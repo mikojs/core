@@ -21,6 +21,7 @@ export default (
 ): $PropertyType<EmptyFunctionType, 'thatReturnsArgument'> =>
   mergeDir.use(
     folderPath,
+    prefix,
     ({ filePath, pathname }: fileDataType): string => {
       cache[pathname] = filePath;
 
@@ -41,5 +42,4 @@ module.exports = pathname => {
     return requireModule(cache[cacheKey])(pathname);
 };`;
     },
-    prefix,
   );

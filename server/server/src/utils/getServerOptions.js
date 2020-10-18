@@ -9,7 +9,7 @@ import { version } from '../../package.json';
 
 export type serverOptionsType = {|
   event: eventType | 'error',
-  folderPath: string,
+  filePath: string,
 |};
 
 /**
@@ -28,19 +28,19 @@ export default (argv: $ReadOnlyArray<string>): Promise<serverOptionsType> =>
   server {green build}
   server {green start}`,
       )
-      .option('-f, --folder <folderPath>', 'the path of the folder')
+      .option('-f, --file-path <filePath>', 'the path of the folder')
       .action(
         (
           event: eventType,
-          { folderPath = process.cwd() }: {| folderPath: string |},
+          { filePath = process.cwd() }: {| filePath: string |},
         ) => {
           resolve({
             event,
-            folderPath,
+            filePath,
           });
         },
       );
 
     if (argv.length !== 2) program.parse([...argv]);
-    else resolve({ event: 'error', folderPath: process.cwd() });
+    else resolve({ event: 'error', filePath: process.cwd() });
   });

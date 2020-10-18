@@ -20,11 +20,9 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
 handleUnhandledRejection();
 
 (async () => {
-  const { event, folderPath } = await getServerOptions(process.argv);
+  const { event, filePath } = await getServerOptions(process.argv);
   const middleware =
-    event === 'error'
-      ? emptyFunction
-      : requireModule<middlewareType>(folderPath);
+    event === 'error' ? emptyFunction : requireModule<middlewareType>(filePath);
 
   switch (event) {
     case 'error':

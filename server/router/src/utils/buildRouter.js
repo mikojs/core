@@ -34,6 +34,15 @@ const { parse } = require('query-string');
 const requireModule = require('@mikojs/utils/lib/requireModule');
 
 const cache = [${Object.keys(cache)
+    .sort((a: string, b: string): number => {
+      const pathnameALength = [...cache[a].pathname.matchAll(/\//g)].length;
+      const pathnameBLength = [...cache[b].pathname.matchAll(/\//g)].length;
+
+      if (pathnameALength !== pathnameBLength)
+        return pathnameALength > pathnameBLength ? -1 : 1;
+
+      return !/\/:([^[\]]*)/.test(cache[a].pathname) ? -1 : 1;
+    })
     .map(
       (key: string) => `{
   filePath: '${cache[key].filePath}',
@@ -47,14 +56,14 @@ const cache = [${Object.keys(cache)
 
 module.exports = (req, res) => {
   const { pathname, query } = url.parse(req.url);
-  const cacheKey = Object.keys(cache).find(key => cache[key].regExp.exec(pathname));
+  const router = cache.find(({ regExp }) => regExp.exec(pathname));
 
-  if (!cacheKey) {
+  if (!router) {
     res.end();
     return;
   }
 
-  const { filePath, getUrlQuery } = cache[cacheKey];
+  const { filePath, getUrlQuery } = router;
 
   req.query = {
     ...parse(query || ''),

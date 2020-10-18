@@ -1,6 +1,8 @@
 #! /usr/bin/env node
 // @flow
 
+import path from 'path';
+
 import ora from 'ora';
 import chalk from 'chalk';
 import { emptyFunction } from 'fbjs';
@@ -22,7 +24,9 @@ handleUnhandledRejection();
 (async () => {
   const { event, filePath, port } = await getServerOptions(process.argv);
   const middleware =
-    event === 'error' ? emptyFunction : requireModule<middlewareType>(filePath);
+    event === 'error'
+      ? emptyFunction
+      : requireModule<middlewareType>(path.resolve(filePath));
 
   switch (event) {
     case 'error':

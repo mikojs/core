@@ -18,7 +18,7 @@ describe('get server options', () => {
     |}) => {
       expect(await getServerOptions(['node', 'server', ...argv])).toEqual({
         event,
-        filePath: process.cwd(),
+        filePath: './middleware.js',
         port: 3000,
       });
     },

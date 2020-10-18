@@ -35,7 +35,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<serverOptionsType> =>
         (
           event: eventType,
           {
-            filePath = process.cwd(),
+            filePath = './middleware.js',
             port = 3000,
           }: {| filePath: string, port: number |},
         ) => {
@@ -48,5 +48,5 @@ export default (argv: $ReadOnlyArray<string>): Promise<serverOptionsType> =>
       );
 
     if (argv.length !== 2) program.parse([...argv]);
-    else resolve({ event: 'error', filePath: process.cwd(), port: 3000 });
+    else resolve({ event: 'error', filePath: './middleware.js', port: 3000 });
   });

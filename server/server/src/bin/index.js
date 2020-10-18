@@ -44,10 +44,10 @@ handleUnhandledRejection();
       break;
 
     default:
-      logger.start('Running the server');
+      logger.start('Preparing the server');
       server.set(event);
       server.run(middleware, port, () => {
-        logger.succeed('Stop the server');
+        logger.succeed('Running the server');
       });
       break;
   }

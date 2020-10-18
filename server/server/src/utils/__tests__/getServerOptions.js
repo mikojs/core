@@ -1,26 +1,25 @@
 // @flow
 
-import { type eventType } from '@mikojs/merge-dir/lib/utils/watcher';
-
-import getServerOptions from '../getServerOptions';
+import getServerOptions, { type serverOptionsType } from '../getServerOptions';
 
 describe('get server options', () => {
   test.each`
-    argv       | expected
+    argv       | event
     ${[]}      | ${'error'}
     ${['dev']} | ${'dev'}
   `(
     'run $argv',
     async ({
       argv,
-      expected,
+      event,
     }: {|
       argv: $ReadOnlyArray<string>,
-      expected: eventType | 'error',
+      event: $PropertyType<serverOptionsType, 'event'>,
     |}) => {
-      expect(await getServerOptions(['node', 'server', ...argv])).toBe(
-        expected,
-      );
+      expect(await getServerOptions(['node', 'server', ...argv])).toEqual({
+        folderPath: process.cwd(),
+        event,
+      });
     },
   );
 });

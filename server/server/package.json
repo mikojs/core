@@ -16,7 +16,8 @@
     "core-js": "^3.6.5",
     "fbjs": "^2.0.0",
     "get-port": "^5.1.1",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "ora": "^5.1.0"
   },
   "devDependencies": {
     "flow-bin": "^0.135.0",

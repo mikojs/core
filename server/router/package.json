@@ -1,0 +1,27 @@
+{
+  "name": "@mikojs/router",
+  "description": "Use to build the server routes.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/router",
+  "repository": "https://github.com/mikojs/core/tree/master/server/router",
+  "version": "1.11.4",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.11.2",
+    "@mikojs/merge-dir": "^1.11.4",
+    "@mikojs/server": "^1.11.4",
+    "@mikojs/utils": "^1.11.4",
+    "core-js": "^3.6.5",
+    "path-to-regexp": "^6.1.0",
+    "query-string": "^6.12.1"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.135.0",
+    "flow-typed": "^3.2.1"
+  },
+  "keywords": ["mikojs", "router", "server"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

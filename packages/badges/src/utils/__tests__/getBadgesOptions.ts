@@ -1,16 +1,16 @@
 // @flow
 
-import getOptions from '../getOptions';
+import getBadgesOptions from '../getBadgesOptions';
 
 const defaultArgv = ['node', 'badges'];
 
-describe('get options', () => {
+describe('get badges options', () => {
   test.each`
     argv
     ${['readmePath']}
     ${['readmePath1', 'readmePath2']}
   `('run with $argv', async ({ argv }: {| argv: $ReadOnlyArray<string> |}) => {
-    expect(await getOptions([...defaultArgv, ...argv])).toEqual(argv);
+    expect(await getBadgesOptions([...defaultArgv, ...argv])).toEqual(argv);
   });
 
   test('not give readme path', async () => {
@@ -18,7 +18,7 @@ describe('get options', () => {
 
     global.console.error = mockLog;
 
-    expect(await getOptions(defaultArgv)).toEqual([]);
+    expect(await getBadgesOptions(defaultArgv)).toEqual([]);
     expect(mockLog).toHaveBeenCalled();
   });
 });

@@ -8,13 +8,13 @@ import { createLogger } from '@mikojs/utils';
 
 import { version } from '../../package.json';
 
-const debugLog = debug('badges:getOptions');
+const debugLog = debug('badges:getBadgesOptions');
 const logger = createLogger('@mikojs/badges');
 
 /**
  * @param {Array} argv - command line
  *
- * @return {Array<string>} - options
+ * @return {Array<string>} - badges options
  */
 export default (
   argv: $ReadOnlyArray<string>,

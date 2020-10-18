@@ -10,7 +10,7 @@ import { version } from '../../package.json';
 import getCommands, { type commandsType } from './getCommands';
 import cache from './cache';
 
-export type optionsType = {|
+export type mikoOptionsType = {|
   type: 'error' | 'start' | 'kill' | 'command',
   configNames?: $ReadOnlyArray<string>,
   keep?: boolean,
@@ -18,14 +18,14 @@ export type optionsType = {|
   errorMessage?: string,
 |};
 
-const debugLog = debug('miko:getOptions');
+const debugLog = debug('miko:getMikoOptions');
 
 /**
  * @param {Array} argv - command line
  *
- * @return {optionsType} - options
+ * @return {mikoOptionsType} - miko options
  */
-export default (argv: $ReadOnlyArray<string>): Promise<optionsType> =>
+export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
   new Promise(resolve => {
     const configs = cache.get('miko').config?.({}) || {};
     const program = new commander.Command('miko')

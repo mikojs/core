@@ -4,7 +4,7 @@ import path from 'path';
 
 import chalk from 'chalk';
 
-import getOptions, { type optionsType } from '../getOptions';
+import getMikoOptions, { type mikoOptionsType } from '../getMikoOptions';
 import cache from '../cache';
 
 const command =
@@ -16,7 +16,7 @@ const expectedCommand = [
   ['echo', '"test"'],
 ];
 
-describe('get options', () => {
+describe('get miko options', () => {
   beforeAll(() => {
     cache.load({
       filepath: path.resolve('.mikorc.js'),
@@ -78,19 +78,19 @@ describe('get options', () => {
       expected,
     }: {|
       argv: $ReadOnlyArray<string>,
-      expected: optionsType,
+      expected: mikoOptionsType,
     |}) => {
       const mockLog = jest.fn();
 
       global.console.error = mockLog;
 
-      const { getCommands, ...options } = await getOptions([
+      const { getCommands, ...mikoOptions } = await getMikoOptions([
         'node',
         'miko',
         ...argv,
       ]);
 
-      expect({ ...options, command: getCommands?.() }).toEqual(expected);
+      expect({ ...mikoOptions, command: getCommands?.() }).toEqual(expected);
       (!expected ? expect(mockLog) : expect(mockLog).not).toHaveBeenCalled();
     },
   );
@@ -108,7 +108,7 @@ describe('get options', () => {
       ],
     });
 
-    expect(await getOptions(['node', 'miko', 'cmdString'])).toEqual({
+    expect(await getMikoOptions(['node', 'miko', 'cmdString'])).toEqual({
       type: 'error',
       errorMessage: chalk`Can not find {red cmdString} in the config`,
     });

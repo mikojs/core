@@ -20,7 +20,7 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
 handleUnhandledRejection();
 
 (async () => {
-  const { event, filePath } = await getServerOptions(process.argv);
+  const { event, filePath, port } = await getServerOptions(process.argv);
   const middleware =
     event === 'error' ? emptyFunction : requireModule<middlewareType>(filePath);
 
@@ -42,7 +42,7 @@ handleUnhandledRejection();
     default:
       logger.start('Running the server');
       server.set(event);
-      server.run(middleware, 3000, () => {
+      server.run(middleware, port, () => {
         logger.succeed('Stop the server');
       });
       break;

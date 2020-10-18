@@ -17,8 +17,9 @@ describe('get server options', () => {
       event: $PropertyType<serverOptionsType, 'event'>,
     |}) => {
       expect(await getServerOptions(['node', 'server', ...argv])).toEqual({
-        filePath: process.cwd(),
         event,
+        filePath: process.cwd(),
+        port: 3000,
       });
     },
   );

@@ -10,6 +10,7 @@ import { version } from '../../package.json';
 export type serverOptionsType = {|
   event: eventType | 'error',
   filePath: string,
+  port: number,
 |};
 
 /**
@@ -29,18 +30,23 @@ export default (argv: $ReadOnlyArray<string>): Promise<serverOptionsType> =>
   server {green start}`,
       )
       .option('-f, --file-path <filePath>', 'the path of the folder')
+      .option('-p, --port <port>', 'the port of the folder')
       .action(
         (
           event: eventType,
-          { filePath = process.cwd() }: {| filePath: string |},
+          {
+            filePath = process.cwd(),
+            port = 3000,
+          }: {| filePath: string, port: number |},
         ) => {
           resolve({
             event,
             filePath,
+            port,
           });
         },
       );
 
     if (argv.length !== 2) program.parse([...argv]);
-    else resolve({ event: 'error', filePath: process.cwd() });
+    else resolve({ event: 'error', filePath: process.cwd(), port: 3000 });
   });

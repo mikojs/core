@@ -16,6 +16,7 @@ export type middlewareType = (
 ) => void;
 
 export default {
+  set: mergeDir.set,
   ready: mergeDir.ready,
 
   /** */

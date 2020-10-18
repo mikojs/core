@@ -10,7 +10,7 @@ import router from '../index';
 
 describe('router', () => {
   beforeAll(async () => {
-    testingServer.run(router(path.resolve(__dirname, './__ignore__')));
+    await testingServer.run(router(path.resolve(__dirname, './__ignore__')));
   });
 
   test.each`

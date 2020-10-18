@@ -99,7 +99,11 @@ export default {
 
                 return requireModule(filePath).cacheId === cacheId
                   ? result
-                  : build({ exists, filePath, pathname });
+                  : build({
+                      exists,
+                      filePath: path.relative(cacheFilePath, filePath),
+                      pathname,
+                    });
               },
               '',
             ),

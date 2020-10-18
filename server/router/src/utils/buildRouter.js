@@ -27,6 +27,7 @@ export default ({ exists, filePath, pathname }: fileDataType): string => {
   return `'use strict';
 
 const url = require('url');
+const path = require('path');
 
 const { pathToRegexp, match } = require('path-to-regexp');
 const { parse } = require('query-string');
@@ -45,7 +46,7 @@ const cache = [${Object.keys(cache)
     })
     .map(
       (key: string) => `{
-  filePath: '${cache[key].filePath}',
+  filePath: path.resolve(__filename, '${cache[key].filePath}'),
   regExp: pathToRegexp('${cache[key].pathname}', []),
   getUrlQuery: pathname => match('${cache[key].pathname}', { decode: decodeURIComponent })(
     pathname,

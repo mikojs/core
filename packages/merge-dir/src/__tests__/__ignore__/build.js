@@ -3,10 +3,12 @@
 import path from 'path';
 
 import { type EmptyFunctionType } from 'fbjs/lib/emptyFunction';
+import findCacheDir from 'find-cache-dir';
 
 import mergeDir, { type fileDataType } from '../../index';
 
 const barPath = path.resolve(__dirname, './folder/bar/index.js');
+const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const cache = {};
 
 /**
@@ -23,7 +25,7 @@ export default (
     folderPath,
     prefix,
     ({ filePath, pathname }: fileDataType): string => {
-      cache[pathname] = filePath;
+      cache[pathname] = path.resolve(cacheDir('main.js'), filePath);
 
       return `'use strict';
 

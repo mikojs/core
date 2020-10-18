@@ -5,12 +5,12 @@ import { handleUnhandledRejection } from '@mikojs/utils';
 
 import server from '../index';
 
-import getOptions from 'utils/getOptions';
+import getServerOptions from 'utils/getServerOptions';
 
 handleUnhandledRejection();
 
 (async () => {
-  const type = await getOptions(process.argv);
+  const type = await getServerOptions(process.argv);
 
   if (type === 'error') process.exit(1);
   else server.set(type);

@@ -3,10 +3,15 @@
 
 import ora from 'ora';
 import chalk from 'chalk';
+import { emptyFunction } from 'fbjs';
 
-import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
+import {
+  handleUnhandledRejection,
+  createLogger,
+  requireModule,
+} from '@mikojs/utils';
 
-import server from '../index';
+import server, { type middlewareType } from '../index';
 
 import getServerOptions from 'utils/getServerOptions';
 
@@ -15,7 +20,11 @@ const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
 handleUnhandledRejection();
 
 (async () => {
-  const { event } = await getServerOptions(process.argv);
+  const { event, folderPath } = await getServerOptions(process.argv);
+  const middleware =
+    event === 'error'
+      ? emptyFunction
+      : requireModule<middlewareType>(folderPath);
 
   switch (event) {
     case 'error':
@@ -25,8 +34,19 @@ handleUnhandledRejection();
       process.exit(1);
       break;
 
+    case 'build':
+      logger.start('Building the server');
+      server.set('build');
+      (await server.ready())();
+      logger.succeed(chalk`Use {green server start} to run the server`);
+      break;
+
     default:
+      logger.start('Running the server');
       server.set(event);
+      server.run(middleware, 3000, () => {
+        logger.succeed('Stop the server');
+      });
       break;
   }
 })();

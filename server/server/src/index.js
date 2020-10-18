@@ -19,12 +19,6 @@ export default {
   set: mergeDir.set,
   ready: mergeDir.ready,
 
-  /** */
-  build: async () => {
-    mergeDir.set('build');
-    (await mergeDir.ready())();
-  },
-
   /**
    * @param {middlewareType} middleware - middleware function
    * @param {number} port - server port

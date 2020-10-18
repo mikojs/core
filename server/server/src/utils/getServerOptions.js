@@ -28,8 +28,5 @@ export default (argv: $ReadOnlyArray<string>): Promise<eventType | 'error'> =>
       });
 
     if (argv.length !== 2) program.parse([...argv]);
-    else {
-      program.outputHelp();
-      resolve('error');
-    }
+    else resolve('error');
   });

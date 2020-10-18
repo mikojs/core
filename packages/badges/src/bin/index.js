@@ -10,7 +10,7 @@ import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 
-import getOptions from 'utils/getOptions';
+import getBadgesOptions from 'utils/getBadgesOptions';
 import addBadges from 'utils/addBadges';
 
 handleUnhandledRejection();
@@ -18,12 +18,12 @@ handleUnhandledRejection();
 const logger = createLogger('@mikojs/badges');
 
 (async () => {
-  const options = await getOptions(process.argv);
+  const badgesOptions = await getBadgesOptions(process.argv);
 
-  if (options.length === 0) process.exit(1);
+  if (badgesOptions.length === 0) process.exit(1);
 
   await Promise.all(
-    options.map(async (cwd: string) => {
+    badgesOptions.map(async (cwd: string) => {
       const { path: pkgPath, packageJson: pkg } = await readPkgUp({
         cwd: path.resolve(cwd),
       });

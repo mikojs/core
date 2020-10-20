@@ -13,6 +13,7 @@ import tools from './utils/tools';
 import { type eventType, type dataType, type closeType } from './utils/watcher';
 import getFileInfo from './utils/getFileInfo';
 
+export type mergeEventType = eventType;
 export type fileDataType = {|
   exists: boolean,
   filePath: string,

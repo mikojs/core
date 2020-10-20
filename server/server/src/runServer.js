@@ -6,9 +6,8 @@ import ora from 'ora';
 import chalk from 'chalk';
 
 import { createLogger } from '@mikojs/utils';
-import { type eventType } from '@mikojs/merge-dir/lib/utils/watcher';
 
-import server, { type middlewareType } from './index';
+import server, { type eventType, type middlewareType } from './index';
 
 const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
 

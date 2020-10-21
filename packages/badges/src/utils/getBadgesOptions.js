@@ -30,6 +30,5 @@ export default (
         debugLog(readmePaths);
         resolve(readmePaths);
       })
-      .exitOverride()
       .parse([...argv]);
   });

@@ -12,7 +12,7 @@ import server, { type middlewareType } from './index';
 
 /**
  * @param {string} name - command name
- * @param {number} version - command version
+ * @param {string} version - command version
  * @param {Function} buildMiddleware - build the middleware for the server
  * @param {Array} argv - command line
  *
@@ -20,7 +20,7 @@ import server, { type middlewareType } from './index';
  */
 export default (
   name: string,
-  version: number,
+  version: string,
   buildMiddleware: (folderPath: string) => middlewareType,
   argv: $ReadOnlyArray<string>,
 ): Promise<?ServerType> =>
@@ -62,5 +62,5 @@ export default (
         );
     });
 
-    program.exitOverride().parse([...argv]);
+    program.parse([...argv]);
   });

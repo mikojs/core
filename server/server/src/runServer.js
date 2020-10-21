@@ -4,37 +4,63 @@ import { type Server as ServerType } from 'http';
 
 import ora from 'ora';
 import chalk from 'chalk';
+import commander from 'commander';
 
 import { createLogger } from '@mikojs/utils';
 
-import server, { type eventType, type middlewareType } from './index';
-
-const logger = createLogger('@mikojs/server', ora({ discardStdin: false }));
+import server, { type middlewareType } from './index';
 
 /**
- * @param {eventType} event - the event of the server
- * @param {number} port - the port of the server
- * @param {middlewareType} middleware - run the middleware in the server
+ * @param {string} name - command name
+ * @param {number} version - command version
+ * @param {Function} buildMiddleware - build the middleware for the server
+ * @param {Array} argv - command line
  *
  * @return {ServerType} - server or null
  */
-export default async (
-  event: eventType,
-  port: number,
-  middleware: middlewareType,
-): Promise<?ServerType> => {
-  if (event === 'build') {
-    logger.start('Building the server');
-    server.set('build');
-    (await server.ready())();
-    logger.succeed(chalk`Use {green server start} to run the server`);
-    return null;
-  }
+export default (
+  name: string,
+  version: number,
+  buildMiddleware: (folderPath: string) => middlewareType,
+  argv: $ReadOnlyArray<string>,
+): Promise<?ServerType> =>
+  new Promise(resolve => {
+    const logger = createLogger(
+      `@mikojs/${name}`,
+      ora({ discardStdin: false }),
+    );
+    const program = new commander.Command(name).version(
+      version,
+      '-v, --version',
+    );
 
-  logger.start('Preparing the server');
-  server.set(event);
+    ['dev', 'build', 'start'].forEach((command: 'dev' | 'build' | 'start') => {
+      program
+        .command(`${command} <folder-path>`)
+        .option('-p, --port <port>', 'the port of the folder')
+        .action(
+          async (folderPath: string, { port = 3000 }: {| port: number |}) => {
+            const event = command === 'start' ? 'run' : command;
+            const middleware = buildMiddleware(folderPath);
 
-  return server.run(middleware, port, () => {
-    logger.succeed('Running the server');
+            if (event === 'build') {
+              logger.start('Building the server');
+              server.set('build');
+              (await server.ready())();
+              logger.succeed(chalk`Use {green server start} to run the server`);
+              resolve(null);
+            } else {
+              logger.start('Preparing the server');
+              server.set(event);
+              resolve(
+                server.run(middleware, port, () => {
+                  logger.succeed('Running the server');
+                }),
+              );
+            }
+          },
+        );
+    });
+
+    program.exitOverride().parse([...argv]);
   });
-};

@@ -16,7 +16,7 @@ const debugLog = debug('badges:getBadgesOptions');
 export default (
   argv: $ReadOnlyArray<string>,
 ): Promise<$ReadOnlyArray<string>> =>
-  new Promise((resolve, reject) => {
+  new Promise(resolve => {
     new commander.Command('badges')
       .version(version, '-v, --version')
       .arguments('<readme-paths...>')

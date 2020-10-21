@@ -99,10 +99,5 @@ export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
         );
     });
 
-    debugLog(argv);
-
-    if (argv.length === 3 && argv.slice(-1)[0] === '--keep')
-      resolve({ type: 'start', configNames: [], keep: true });
-    else if (argv.length !== 2) program.parse([...argv]);
-    else resolve({ type: 'start', configNames: [], keep: false });
+    program.exitOverride().parse([...argv]);
   });

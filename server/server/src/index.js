@@ -8,8 +8,9 @@ import http, {
 
 import { emptyFunction } from 'fbjs';
 
-import mergeDir from '@mikojs/merge-dir';
+import mergeDir, { type mergeEventType } from '@mikojs/merge-dir';
 
+export type eventType = mergeEventType;
 export type middlewareType = (
   req: IncomingMessageType,
   res: ServerResponseType,

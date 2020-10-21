@@ -14,7 +14,7 @@ const importError = (packageName: string) => {
  * @param {Function} requireFunc - require package function
  */
 importError.test = (packageName: string, requireFunc: () => mixed) => {
-  test(`can not import ${packageName}`, () => {
+  test(`could not import ${packageName}`, () => {
     expect(() => {
       requireFunc();
     }).toThrow(

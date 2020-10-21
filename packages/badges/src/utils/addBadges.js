@@ -160,7 +160,7 @@ export default async (readme: string, ctx: ctxType): Promise<?string> => {
   const repo = await getRepo();
 
   if (!repo) {
-    logger.fail('Can not find git remote');
+    logger.fail('Could not find git remote');
     return null;
   } else
     return readme.replace(

@@ -26,7 +26,7 @@ const logger = createLogger('@mikojs/badges');
 
       if (!pkgPath) {
         logger
-          .fail('Can not find the root path')
+          .fail('Could not find the root path')
           .fail(chalk`Create a {green package.json} first`);
         process.exit(1);
       }
@@ -36,7 +36,7 @@ const logger = createLogger('@mikojs/badges');
 
       if (!fs.existsSync(readmePath)) {
         logger
-          .fail(chalk`Can not find the {green README.md} in the root folder`)
+          .fail(chalk`Could not find the {green README.md} in the root folder`)
           .fail(chalk`Create a {green README.md} first`);
         process.exit(1);
       }

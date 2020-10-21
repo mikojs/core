@@ -12,7 +12,7 @@ import { type eventType } from '../index';
 import parseArgv, { handleErrorMessage } from '../parseArgv';
 
 describe('parse argv', () => {
-  test('can not find a build error', () => {
+  test('could not find a build error', () => {
     expect(
       handleErrorMessage('server', new Error('Cannot find module main.js')),
     ).toMatch(/Could not find a valid build./);

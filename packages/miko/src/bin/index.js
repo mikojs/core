@@ -11,7 +11,7 @@ import execa from 'execa';
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import buildWorker from '@mikojs/worker';
 
-import getMikoOptions, { type mikoOptionsType } from 'utils/getMikoOptions';
+import getMikoOptions from 'utils/getMikoOptions';
 import generateFiles from 'utils/generateFiles';
 import { type commandsType } from 'utils/getCommands';
 import getExecaArguments from 'utils/getExecaArguments';
@@ -30,13 +30,7 @@ handleUnhandledRejection();
     keep = false,
     getCommands,
     errorMessage,
-  } = await getMikoOptions(process.argv).catch(
-    (err: Error): mikoOptionsType => {
-      process.exit(1);
-
-      return { type: 'error' };
-    },
-  );
+  } = await getMikoOptions(process.argv);
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );

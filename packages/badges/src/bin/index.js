@@ -19,13 +19,7 @@ const logger = createLogger('@mikojs/badges');
 
 (async () => {
   await Promise.all(
-    (
-      await getBadgesOptions(process.argv).catch((err: Error): [] => {
-        process.exit(1);
-
-        return [];
-      })
-    ).map(async (cwd: string) => {
+    (await getBadgesOptions(process.argv)).map(async (cwd: string) => {
       const { path: pkgPath, packageJson: pkg } = await readPkgUp({
         cwd: path.resolve(cwd),
       });

@@ -99,5 +99,5 @@ export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
         );
     });
 
-    program.exitOverride().parse([...argv]);
+    program.parse([...argv]);
   });

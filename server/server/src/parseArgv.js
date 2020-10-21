@@ -48,7 +48,9 @@ export default (
             if (command === 'build') {
               logger.start('Building the server');
               (await server.ready())();
-              logger.succeed(chalk`Use {green server start} to run the server`);
+              logger.succeed(
+                chalk`Use {green ${name} start} to run the server`,
+              );
               resolve(null);
             } else {
               logger.start('Preparing the server');

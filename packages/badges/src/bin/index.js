@@ -18,12 +18,14 @@ handleUnhandledRejection();
 const logger = createLogger('@mikojs/badges');
 
 (async () => {
-  const badgesOptions = await getBadgesOptions(process.argv);
-
-  if (badgesOptions.length === 0) process.exit(1);
-
   await Promise.all(
-    badgesOptions.map(async (cwd: string) => {
+    (
+      await getBadgesOptions(process.argv).catch((err: Error): [] => {
+        process.exit(1);
+
+        return [];
+      })
+    ).map(async (cwd: string) => {
       const { path: pkgPath, packageJson: pkg } = await readPkgUp({
         cwd: path.resolve(cwd),
       });
@@ -55,7 +57,7 @@ const logger = createLogger('@mikojs/badges');
       outputFileSync(readmePath, content);
 
       logger.succeed(
-        `"${path.relative(process.cwd(), path.resolve(cwd))}" done`,
+        chalk`{gray ${path.relative(process.cwd(), path.resolve(cwd))}}`,
       );
     }),
   );

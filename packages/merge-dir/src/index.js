@@ -1,5 +1,6 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
 import debug from 'debug';
@@ -84,6 +85,7 @@ export default {
         folderPath,
         event,
         (data: $ReadOnlyArray<dataType>) => {
+          delete require.cache[cacheFilePath];
           tools.writeToCache(
             cacheFilePath,
             data.reduce(
@@ -94,10 +96,11 @@ export default {
                   prefix,
                 );
 
-                debugLog({ filePath, pathname });
+                debugLog({ exists, filePath, pathname });
                 delete require.cache[filePath];
 
-                return requireModule(filePath).cacheId === cacheId
+                return fs.existsSync(filePath) &&
+                  requireModule(filePath).cacheId === cacheId
                   ? result
                   : build({
                       exists,

@@ -30,7 +30,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
     const configs = cache.get('miko').config?.({}) || {};
     const program = new commander.Command('miko')
       .version(version, '-v, --version')
-      .arguments('[configNames...]')
+      .arguments('[config-names...]')
       .description(
         chalk`Example:
   miko

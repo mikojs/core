@@ -1,5 +1,52 @@
 # CHANGELOG
 
+## 1.12.0 (2020-10-21)
+
+#### :rocket: New Feature
+
+- Other
+  - [#684](https://github.com/mikojs/core/pull/684) (@mikojs/server) Remove cli, add parseArgv function ([@HsuTing](https://github.com/HsuTing))
+  - [#683](https://github.com/mikojs/core/pull/683) (@mikojs/server) Add cli ([@HsuTing](https://github.com/HsuTing))
+  - [#679](https://github.com/mikojs/core/pull/679) (@mikojs/server) Add new server ([@HsuTing](https://github.com/HsuTing))
+  - [#666](https://github.com/mikojs/core/pull/666) (@mikojs/server) Add cache ([@HsuTing](https://github.com/HsuTing))
+  - [#665](https://github.com/mikojs/core/pull/665) (@mikojs/server) Add more testing ([@HsuTing](https://github.com/HsuTing))
+  - [#664](https://github.com/mikojs/core/pull/664) (@mikojs/server) Add build function ([@HsuTing](https://github.com/HsuTing))
+- `merge-dir`
+  - [#685](https://github.com/mikojs/core/pull/685) (@mikojs/server, @mikojs/router) Fix detail ([@HsuTing](https://github.com/HsuTing))
+  - [#681](https://github.com/mikojs/core/pull/681) (@mikojs/router) Add new package ([@HsuTing](https://github.com/HsuTing))
+  - [#678](https://github.com/mikojs/core/pull/678) (@mikojs/merge-dir) Add mode ([@HsuTing](https://github.com/HsuTing))
+  - [#672](https://github.com/mikojs/core/pull/672) (@mikojs/merge-dir) Add debug ([@HsuTing](https://github.com/HsuTing))
+  - [#671](https://github.com/mikojs/core/pull/671) (@mikojs/merge-dir) Use relative path ([@HsuTing](https://github.com/HsuTing))
+  - [#669](https://github.com/mikojs/core/pull/669) (@mikojs/server) Use @mikojs/merge-dir ([@HsuTing](https://github.com/HsuTing))
+  - [#668](https://github.com/mikojs/core/pull/668) (@mikojs/merge-dir) Add new package ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#677](https://github.com/mikojs/core/pull/677) (@mikojs/configs) Use --root-mode to find babel.config.js ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `badges`, `merge-dir`, `miko`, `utils`, `worker`
+  - [#688](https://github.com/mikojs/core/pull/688) (@mikojs/server) Fix server event and log ([@HsuTing](https://github.com/HsuTing))
+- `merge-dir`
+  - [#670](https://github.com/mikojs/core/pull/670) (@mikojs/merge-dir) Can find children merge-dir ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `badges`, `miko`
+  - [#687](https://github.com/mikojs/core/pull/687) (@mikojs/miko, @mikojs/badges) Remove program catch ([@HsuTing](https://github.com/HsuTing))
+  - [#686](https://github.com/mikojs/core/pull/686) (@mikojs/badges, @mikojs/miko) Modify options code style ([@HsuTing](https://github.com/HsuTing))
+  - [#682](https://github.com/mikojs/core/pull/682) (@mikojs/core) Rename getOptions to other filenames ([@HsuTing](https://github.com/HsuTing))
+- `merge-dir`
+  - [#685](https://github.com/mikojs/core/pull/685) (@mikojs/server, @mikojs/router) Fix detail ([@HsuTing](https://github.com/HsuTing))
+  - [#676](https://github.com/mikojs/core/pull/676) (@mikojs/merge-dir) Merge functions ([@HsuTing](https://github.com/HsuTing))
+  - [#675](https://github.com/mikojs/core/pull/675) (@mikojs/merge-dir) Add tools ([@HsuTing](https://github.com/HsuTing))
+  - [#674](https://github.com/mikojs/core/pull/674) (@mikojs/merge-dir) Add buildFile ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `merge-dir`, `miko`
+  - [#680](https://github.com/mikojs/core/pull/680) (@mikojs/core) Modify detail ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.11.4 (2020-10-04)
 
 #### :rocket: New Feature

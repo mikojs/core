@@ -8,7 +8,7 @@
 
 [website]: https://mikojs.github.io/core/babel-plugin-import-css
 
-Use to make the css files can be imported into `node` and `browser` with `babel-plugin-css-modules-transform`.
+Use to make the css files could be imported into `node` and `browser` with `babel-plugin-css-modules-transform`.
 
 ## Example
 

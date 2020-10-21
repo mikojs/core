@@ -8,13 +8,13 @@ import getPort from 'get-port';
 import endServer from '../endServer';
 
 describe('end server', () => {
-  test('can not find main process', async () => {
+  test('could not find main process', async () => {
     findProcess.mockReturnValue([]);
 
     expect(await endServer(__filename)).toBeUndefined();
   });
 
-  test('can find main process', async () => {
+  test('could find main process', async () => {
     const mockCallback = jest.fn();
     const port = await getPort();
     const server = net

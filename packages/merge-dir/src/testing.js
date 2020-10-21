@@ -1,6 +1,6 @@
 // @flow
 
-// $FlowFixMe FIXME: can not use module package
+// $FlowFixMe FIXME: could not use module package
 import module from 'module';
 import vm from 'vm';
 import path from 'path';

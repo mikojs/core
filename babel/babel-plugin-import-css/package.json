@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/babel-plugin-import-css",
-  "description": "Use to make the css files can be imported into `node` and `browser`.",
+  "description": "Use to make the css files could be imported into `node` and `browser`.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-plugin-import-css",

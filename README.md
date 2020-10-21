@@ -50,7 +50,7 @@ Here are the other packages for creating a new project.
 
 ## Development
 
-This project use `lerna` to manage packages. You can use:
+This project use `lerna` to manage packages. You could use:
 
 - `install:all`: Install the all pacakges.
 - `prod`: Build the production packages.

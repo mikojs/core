@@ -86,7 +86,7 @@ const sendToServer = <+R>(
           debugLog({ port, clientData });
 
           if (!cache)
-            // $FlowFixMe R should can be void
+            // $FlowFixMe R should could be void
             resolve(cache);
           else if (type !== 'error') resolve(JSON.parse(cache));
           else {

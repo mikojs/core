@@ -110,7 +110,7 @@ describe('get miko options', () => {
 
     expect(await getMikoOptions(['node', 'miko', 'cmdString'])).toEqual({
       type: 'error',
-      errorMessage: chalk`Can not find {red cmdString} in the config`,
+      errorMessage: chalk`Could not find {red cmdString} in the config`,
     });
   });
 });

@@ -54,7 +54,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
           )
             resolve({
               type: 'error',
-              errorMessage: chalk`Can not find {red ${configNames.join(
+              errorMessage: chalk`Could not find {red ${configNames.join(
                 ', ',
               )}} in the config`,
             });
@@ -74,7 +74,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
 
       invariant(
         !program.commands.some(({ _name }: { _name: string }) => _name === key),
-        `Can not set the existing command: ${key}`,
+        `Could not set the existing command: ${key}`,
       );
       program
         .command(key)

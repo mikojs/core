@@ -1,5 +1,6 @@
 // @flow
 
+import path from 'path';
 import { type Server as ServerType } from 'http';
 
 import ora from 'ora';
@@ -41,7 +42,7 @@ export default (
         .action(
           async (folderPath: string, { port = 3000 }: {| port: number |}) => {
             const event = command === 'start' ? 'run' : command;
-            const middleware = buildMiddleware(folderPath);
+            const middleware = buildMiddleware(path.resolve(folderPath));
 
             if (event === 'build') {
               logger.start('Building the server');

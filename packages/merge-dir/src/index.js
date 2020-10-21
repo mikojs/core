@@ -1,5 +1,6 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 
 import debug from 'debug';
@@ -12,6 +13,7 @@ import tools from './utils/tools';
 import { type eventType, type dataType, type closeType } from './utils/watcher';
 import getFileInfo from './utils/getFileInfo';
 
+export type mergeEventType = eventType;
 export type fileDataType = {|
   exists: boolean,
   filePath: string,
@@ -84,6 +86,7 @@ export default {
         folderPath,
         event,
         (data: $ReadOnlyArray<dataType>) => {
+          delete require.cache[cacheFilePath];
           tools.writeToCache(
             cacheFilePath,
             data.reduce(
@@ -94,10 +97,11 @@ export default {
                   prefix,
                 );
 
-                debugLog({ filePath, pathname });
+                debugLog({ exists, filePath, pathname });
                 delete require.cache[filePath];
 
-                return requireModule(filePath).cacheId === cacheId
+                return fs.existsSync(filePath) &&
+                  requireModule(filePath).cacheId === cacheId
                   ? result
                   : build({
                       exists,

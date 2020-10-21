@@ -3,8 +3,7 @@
 import commander from 'commander';
 import chalk from 'chalk';
 
-import { type eventType } from '@mikojs/merge-dir/lib/utils/watcher';
-
+import { type eventType } from '../index';
 import { version } from '../../package.json';
 
 export type serverOptionsType = {|

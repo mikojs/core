@@ -8,8 +8,9 @@ import http, {
 
 import { emptyFunction } from 'fbjs';
 
-import mergeDir from '@mikojs/merge-dir';
+import mergeDir, { type mergeEventType } from '@mikojs/merge-dir';
 
+export type eventType = mergeEventType;
 export type middlewareType = (
   req: IncomingMessageType,
   res: ServerResponseType,
@@ -30,12 +31,9 @@ export default {
     middleware: middlewareType,
     port: number,
     callback?: () => void = emptyFunction,
-  ): Promise<ServerType> => {
-    const close = await mergeDir.ready();
-    const runningServer = http.createServer(middleware).listen(port, callback);
-
-    runningServer.on('close', close);
-
-    return runningServer;
-  },
+  ): Promise<ServerType> =>
+    http
+      .createServer(middleware)
+      .listen(port, callback)
+      .on('close', await mergeDir.ready()),
 };

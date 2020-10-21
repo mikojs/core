@@ -41,18 +41,17 @@ export default (
         .option('-p, --port <port>', 'the port of the folder')
         .action(
           async (folderPath: string, { port = 3000 }: {| port: number |}) => {
-            const event = command === 'start' ? 'run' : command;
+            server.set(command === 'start' ? 'run' : command);
+
             const middleware = buildMiddleware(path.resolve(folderPath));
 
-            if (event === 'build') {
+            if (command === 'build') {
               logger.start('Building the server');
-              server.set('build');
               (await server.ready())();
               logger.succeed(chalk`Use {green server start} to run the server`);
               resolve(null);
             } else {
               logger.start('Preparing the server');
-              server.set(event);
               resolve(
                 server.run(middleware, port, () => {
                   logger.succeed('Running the server');

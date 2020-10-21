@@ -2,15 +2,11 @@
 
 import path from 'path';
 
-import testingServer, {
-  type fetchResultType,
-} from '@mikojs/server/lib/testingServer';
-
-import router from '../index';
+import testingServer, { type fetchResultType } from '../testingServer';
 
 describe('router', () => {
   beforeAll(async () => {
-    await testingServer.run(router(path.resolve(__dirname, './__ignore__')));
+    await testingServer.run(path.resolve(__dirname, './__ignore__'));
   });
 
   test.each`

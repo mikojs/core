@@ -9,9 +9,15 @@ import { emptyFunction } from 'fbjs';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
 import { type eventType } from '../index';
-import parseArgv from '../parseArgv';
+import parseArgv, { handleErrorMessage } from '../parseArgv';
 
 describe('parse argv', () => {
+  test('can not find a build error', () => {
+    expect(
+      handleErrorMessage('server', new Error('Cannot find module main.js')),
+    ).toMatch(/Could not find a valid build./);
+  });
+
   test.each`
     event
     ${'build'}
@@ -20,14 +26,14 @@ describe('parse argv', () => {
     'run commands with event = $event',
     async ({ event }: {| event: eventType |}) => {
       const server = await parseArgv(
-        'name',
+        'server',
         '1.0.0',
         emptyFunction.thatReturns(
           (req: IncomingMessageType, res: ServerResponseType) => {
             res.end('test');
           },
         ),
-        ['node', 'name', event, __dirname],
+        ['node', 'server', event, __dirname],
       );
 
       if (event === 'build') expect(server).toBeNull();
@@ -43,4 +49,17 @@ describe('parse argv', () => {
       if (server) server.close();
     },
   );
+
+  test('parse argv error', async () => {
+    await expect(
+      parseArgv(
+        'server',
+        '1.0.0',
+        () => {
+          throw new Error('error');
+        },
+        ['node', 'server', 'start', __dirname],
+      ),
+    ).rejects.toThrow('error');
+  });
 });

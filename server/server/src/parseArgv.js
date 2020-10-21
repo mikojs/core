@@ -33,7 +33,7 @@ export const handleErrorMessage = (name: string, err: Error): string =>
 export default (
   name: string,
   version: string,
-  buildMiddleware: (folderPath: string) => middlewareType,
+  buildMiddleware: (folderPath: string, prefix?: string) => middlewareType,
   argv: $ReadOnlyArray<string>,
 ): Promise<?ServerType> =>
   new Promise((resolve, reject) => {
@@ -50,12 +50,19 @@ export default (
       program
         .command(`${command} <folder-path>`)
         .option('-p, --port <port>', 'the port of the folder')
+        .option('--prefix <prefix>', 'the prefix of the server')
         .action(
-          async (folderPath: string, { port = 3000 }: {| port: number |}) => {
+          async (
+            folderPath: string,
+            { port = 3000, prefix }: {| port: number, prefix?: string |},
+          ) => {
             server.set(command === 'start' ? 'run' : command);
 
             try {
-              const middleware = buildMiddleware(path.resolve(folderPath));
+              const middleware = buildMiddleware(
+                path.resolve(folderPath),
+                prefix,
+              );
 
               if (command === 'build') {
                 logger.start('Building the server');

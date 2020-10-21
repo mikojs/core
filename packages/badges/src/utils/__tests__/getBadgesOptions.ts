@@ -18,7 +18,7 @@ describe('get badges options', () => {
 
     global.console.error = mockLog;
 
-    expect(await getBadgesOptions(defaultArgv)).toEqual([]);
+    await expect(getBadgesOptions(defaultArgv)).rejects.toThrow(`error: missing required argument 'readme-paths'`);
     expect(mockLog).toHaveBeenCalled();
   });
 });

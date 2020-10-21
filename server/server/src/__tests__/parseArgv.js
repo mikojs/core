@@ -9,17 +9,17 @@ import { emptyFunction } from 'fbjs';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
 import { type eventType } from '../index';
-import runServer from '../runServer';
+import parseArgv from '../parseArgv';
 
-describe('run server', () => {
+describe('parse argv', () => {
   test.each`
     event
     ${'build'}
     ${'start'}
   `(
-    'run server with event = $event',
+    'run commands with event = $event',
     async ({ event }: {| event: eventType |}) => {
-      const server = await runServer(
+      const server = await parseArgv(
         'name',
         '1.0.0',
         emptyFunction.thatReturns(

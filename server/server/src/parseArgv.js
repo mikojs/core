@@ -8,8 +8,35 @@ import chalk from 'chalk';
 import commander from 'commander';
 
 import { createLogger } from '@mikojs/utils';
+import tools, {
+  type fileDataType,
+  type toolsType,
+} from '@mikojs/merge-dir/lib/utils/tools';
 
 import server, { type middlewareType } from './index';
+
+/**
+ * @param {string} name - command name
+ * @param {createLogger} logger - command logger
+ *
+ * @return {toolsType} - tools.log
+ */
+export const buildLog = (
+  name: string,
+  logger: $Call<typeof createLogger, string>,
+): $NonMaybeType<$PropertyType<toolsType, 'log'>> => (
+  fileData: fileDataType | 'done',
+) => {
+  if (fileData === 'done') logger.succeed('The server is updated');
+  else
+    logger
+      .info(
+        fileData.exists
+          ? chalk`File {green (${fileData.filePath})} is changed`
+          : chalk`File {red (${fileData.filePath})} is removed`,
+      )
+      .start('The server is updating');
+};
 
 /**
  * @param {string} name - command name
@@ -74,8 +101,11 @@ export default (
               } else {
                 logger.start('Preparing the server');
                 resolve(
-                  server.run(middleware, port, () => {
-                    logger.succeed('Running the server');
+                  await server.run(middleware, port, () => {
+                    logger.succeed(
+                      chalk`Running the server on {underline http://localhost:${port}}`,
+                    );
+                    tools.set({ log: buildLog(name, logger) });
                   }),
                 );
               }

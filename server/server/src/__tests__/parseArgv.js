@@ -8,10 +8,32 @@ import http, {
 import { emptyFunction } from 'fbjs';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
+import { createLogger } from '@mikojs/utils';
+
 import { type eventType } from '../index';
-import parseArgv, { handleErrorMessage } from '../parseArgv';
+import parseArgv, { buildLog, handleErrorMessage } from '../parseArgv';
 
 describe('parse argv', () => {
+  test.each`
+    data
+    ${'done'}
+    ${true}
+    ${false}
+  `('run with data = $data', ({ data }: {| data: 'done' | boolean |}) => {
+    const mockLog = jest.fn();
+
+    global.console = {
+      log: mockLog,
+      info: mockLog,
+    };
+    buildLog(
+      'server',
+      createLogger('server'),
+    )(data === 'done' ? data : { exists: data, filePath: './', pathname: '/' });
+
+    expect(mockLog).toHaveBeenCalled();
+  });
+
   test('could not find a build error', () => {
     expect(
       handleErrorMessage('server', new Error('Cannot find module main.js')),

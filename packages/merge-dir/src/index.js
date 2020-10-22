@@ -9,16 +9,12 @@ import cryptoRandomString from 'crypto-random-string';
 
 import { requireModule } from '@mikojs/utils';
 
-import tools from './utils/tools';
+import tools, { type fileDataType as toolsFileDataType } from './utils/tools';
 import { type eventType, type dataType, type closeType } from './utils/watcher';
 import getFileInfo from './utils/getFileInfo';
 
 export type mergeEventType = eventType;
-export type fileDataType = {|
-  exists: boolean,
-  filePath: string,
-  pathname: string,
-|};
+export type fileDataType = toolsFileDataType;
 
 type buildType = (fileData: fileDataType) => string;
 type cacheType = {|
@@ -96,22 +92,28 @@ export default {
                   name,
                   prefix,
                 );
+                const fileData = {
+                  exists,
+                  filePath: path.relative(cacheFilePath, filePath),
+                  pathname,
+                };
 
-                debugLog({ exists, filePath, pathname });
+                debugLog(fileData);
+                tools.log({
+                  ...fileData,
+                  filePath: path.relative(process.cwd(), filePath),
+                });
                 delete require.cache[filePath];
 
                 return fs.existsSync(filePath) &&
                   requireModule(filePath).cacheId === cacheId
                   ? result
-                  : build({
-                      exists,
-                      filePath: path.relative(cacheFilePath, filePath),
-                      pathname,
-                    });
+                  : build(fileData);
               },
               '',
             ),
           );
+          tools.log('done');
         },
       ),
     };

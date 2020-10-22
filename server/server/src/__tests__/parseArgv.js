@@ -27,7 +27,7 @@ describe('parse argv', () => {
       info: mockLog,
     };
     buildLog(
-      'name',
+      'server',
       createLogger('server'),
     )(data === 'done' ? data : { exists: data, filePath: './', pathname: '/' });
 

@@ -17,17 +17,6 @@ import server, { type middlewareType } from './index';
 
 /**
  * @param {string} name - command name
- * @param {Error} err - err message
- *
- * @return {string} - new error message
- */
-export const handleErrorMessage = (name: string, err: Error): string =>
-  /^Cannot find module.*main.js/.test(err.message)
-    ? chalk`Could not find a valid build. Try using {green ${name} build} before running the server`
-    : err.message.replace(/\nRequire stack:(.|\n)*/, '');
-
-/**
- * @param {string} name - command name
  * @param {createLogger} logger - command logger
  *
  * @return {toolsType} - tools.log
@@ -48,6 +37,17 @@ export const buildLog = (
       }. The server is updating`,
     );
 };
+
+/**
+ * @param {string} name - command name
+ * @param {Error} err - err message
+ *
+ * @return {string} - new error message
+ */
+export const handleErrorMessage = (name: string, err: Error): string =>
+  /^Cannot find module.*main.js/.test(err.message)
+    ? chalk`Could not find a valid build. Try using {green ${name} build} before running the server`
+    : err.message.replace(/\nRequire stack:(.|\n)*/, '');
 
 /**
  * @param {string} name - command name

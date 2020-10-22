@@ -101,7 +101,7 @@ export default (
               } else {
                 logger.start('Preparing the server');
                 resolve(
-                  server.run(middleware, port, () => {
+                  await server.run(middleware, port, () => {
                     logger.succeed(
                       chalk`Running the server on {underline http://localhost:${port}}`,
                     );

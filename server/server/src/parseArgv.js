@@ -8,6 +8,10 @@ import chalk from 'chalk';
 import commander from 'commander';
 
 import { createLogger } from '@mikojs/utils';
+import tools, {
+  type fileDataType,
+  type toolsType,
+} from '@mikojs/merge-dir/lib/utils/tools';
 
 import server, { type middlewareType } from './index';
 
@@ -21,6 +25,19 @@ export const handleErrorMessage = (name: string, err: Error): string =>
   /^Cannot find module.*main.js/.test(err.message)
     ? chalk`Could not find a valid build. Try using {green ${name} build} before running the server`
     : err.message.replace(/\nRequire stack:(.|\n)*/, '');
+
+/**
+ * @param {string} name - command name
+ * @param {createLogger} logger - command logger
+ *
+ * @return {toolsType} - tools.log
+ */
+export const buildLog = (
+  name: string,
+  logger: $Call<typeof createLogger, string>,
+): $NonMaybeType<$PropertyType<toolsType, 'log'>> => (
+  fileData: fileDataType | 'done',
+) => {};
 
 /**
  * @param {string} name - command name
@@ -76,6 +93,7 @@ export default (
                 resolve(
                   server.run(middleware, port, () => {
                     logger.succeed('Running the server');
+                    tools.set({ log: buildLog(name, logger) });
                   }),
                 );
               }

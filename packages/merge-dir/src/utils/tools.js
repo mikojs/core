@@ -18,7 +18,7 @@ export type fileDataType = {|
   pathname: string,
 |};
 
-type toolsType = {|
+export type toolsType = {|
   writeToCache?: (filePath: string, content: string) => void,
   getFromCache?: <C>(filePath: string) => C,
   watcher?: (

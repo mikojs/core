@@ -37,7 +37,17 @@ export const buildLog = (
   logger: $Call<typeof createLogger, string>,
 ): $NonMaybeType<$PropertyType<toolsType, 'log'>> => (
   fileData: fileDataType | 'done',
-) => {};
+) => {
+  if (fileData === 'done') logger.succeed('The server is updated');
+  else
+    logger.start(
+      `${
+        fileData.exists
+          ? chalk`{green ${fileData.pathname}} is changed`
+          : chalk`{red ${fileData.pathname}} is removed`
+      }. The server is updating`,
+    );
+};
 
 /**
  * @param {string} name - command name

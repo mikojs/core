@@ -29,13 +29,13 @@ export const buildLog = (
 ) => {
   if (fileData === 'done') logger.succeed('The server is updated');
   else
-    logger.start(
-      `${
+    logger
+      .info(
         fileData.exists
-          ? chalk`{green ${fileData.pathname}} is changed`
-          : chalk`{red ${fileData.pathname}} is removed`
-      }. The server is updating`,
-    );
+          ? chalk`{green ${fileData.filePath}} is changed`
+          : chalk`{red ${fileData.filePath}} is removed`,
+      )
+      .start('The server is updating');
 };
 
 /**
@@ -102,7 +102,9 @@ export default (
                 logger.start('Preparing the server');
                 resolve(
                   server.run(middleware, port, () => {
-                    logger.succeed('Running the server');
+                    logger.succeed(
+                      `Running the server on http://localhost:${port}`,
+                    );
                     tools.set({ log: buildLog(name, logger) });
                   }),
                 );

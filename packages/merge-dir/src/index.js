@@ -99,7 +99,10 @@ export default {
                 };
 
                 debugLog(fileData);
-                tools.log(fileData);
+                tools.log({
+                  ...fileData,
+                  filePath: path.relative(process.cwd(), filePath),
+                });
                 delete require.cache[filePath];
 
                 return fs.existsSync(filePath) &&

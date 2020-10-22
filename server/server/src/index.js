@@ -31,9 +31,12 @@ export default {
     middleware: middlewareType,
     port: number,
     callback?: () => void = emptyFunction,
-  ): Promise<ServerType> =>
-    http
+  ): Promise<ServerType> => {
+    const close = await mergeDir.ready();
+
+    return http
       .createServer(middleware)
       .listen(port, callback)
-      .on('close', await mergeDir.ready()),
+      .on('close', close);
+  },
 };

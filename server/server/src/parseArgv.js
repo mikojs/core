@@ -32,8 +32,8 @@ export const buildLog = (
     logger
       .info(
         fileData.exists
-          ? chalk`{green ${fileData.filePath}} is changed`
-          : chalk`{red ${fileData.filePath}} is removed`,
+          ? chalk`File {green (${fileData.filePath})} is changed`
+          : chalk`File {red (${fileData.filePath})} is removed`,
       )
       .start('The server is updating');
 };
@@ -103,7 +103,7 @@ export default (
                 resolve(
                   server.run(middleware, port, () => {
                     logger.succeed(
-                      `Running the server on http://localhost:${port}`,
+                      chalk`Running the server on {underline http://localhost:${port}}`,
                     );
                     tools.set({ log: buildLog(name, logger) });
                   }),

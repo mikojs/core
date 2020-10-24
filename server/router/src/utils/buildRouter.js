@@ -32,8 +32,9 @@ export default (
   res: ServerResponseType,
 ) => {
   const { pathname, query } = url.parse(req.url);
-  const router = cache.find(({ regExp }: $ElementType<cacheType, number>) =>
-    regExp.exec(pathname || ''),
+  const router = cache.find(
+    ({ regExp }: $ElementType<cacheType, number>) =>
+      pathname && regExp.exec(pathname),
   );
 
   if (!router) {

@@ -1,22 +1,28 @@
 // @flow
 
-import { type fileDataType } from '@mikojs/merge-dir';
+import { type QueryParameters as QueryParametersType } from 'query-string';
 
-type cacheType = {|
+import { type fileType } from '@mikojs/server';
+
+export type cacheType = $ReadOnlyArray<{|
+  filePath: string,
+  regExp: RegExp,
+  getUrlQuery: (pathname: string | null) => QueryParametersType,
+|}>;
+
+const cache: {|
   [string]: {|
     filePath: string,
     pathname: string,
   |},
-|};
-
-const cache: cacheType = {};
+|} = {};
 
 /**
- * @param {fileDataType} fileData - file data
+ * @param {fileType} fileData - file data
  *
  * @return {string} - router cache function
  */
-export default ({ exists, filePath, pathname }: fileDataType): string => {
+export default ({ exists, filePath, pathname }: fileType): string => {
   cache[pathname] = {
     filePath,
     pathname,
@@ -26,15 +32,15 @@ export default ({ exists, filePath, pathname }: fileDataType): string => {
 
   return `'use strict';
 
-const url = require('url');
 const path = require('path');
 
 const { pathToRegexp, match } = require('path-to-regexp');
-const { parse } = require('query-string');
 
 const requireModule = require('@mikojs/utils/lib/requireModule');
 
-const cache = [${Object.keys(cache)
+module.exports = requireModule('@mikojs/router/lib/utils/buildMiddleware')([${Object.keys(
+    cache,
+  )
     .sort((a: string, b: string): number => {
       const pathnameALength = [...cache[a].pathname.matchAll(/\//g)].length;
       const pathnameBLength = [...cache[b].pathname.matchAll(/\//g)].length;
@@ -53,23 +59,5 @@ const cache = [${Object.keys(cache)
   ).params,
 }`,
     )
-    .join(', ')}];
-
-module.exports = (req, res) => {
-  const { pathname, query } = url.parse(req.url);
-  const router = cache.find(({ regExp }) => regExp.exec(pathname));
-
-  if (!router) {
-    res.end();
-    return;
-  }
-
-  const { filePath, getUrlQuery } = router;
-
-  req.query = {
-    ...parse(query || ''),
-    ...getUrlQuery(pathname),
-  };
-  requireModule(filePath)(req, res);
-};`;
+    .join(', ')}])`;
 };

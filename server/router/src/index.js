@@ -2,7 +2,7 @@
 
 import server, { type middlewareType } from '@mikojs/server';
 
-import buildRouterCache from './utils/buildRouterCache';
+import buildRouter from './utils/buildRouter';
 
 /**
  * @param {string} folderPath - folder path
@@ -11,4 +11,4 @@ import buildRouterCache from './utils/buildRouterCache';
  * @return {middlewareType} - router middleware
  */
 export default (folderPath: string, prefix?: string): middlewareType<> =>
-  server.use(folderPath, prefix, buildRouterCache);
+  server.use(folderPath, prefix, buildRouter);

@@ -1,53 +1,63 @@
 // @flow
 
-import url from 'url';
-import {
-  type IncomingMessage as IncomingMessageType,
-  type ServerResponse as ServerResponseType,
-} from 'http';
+import { type QueryParameters as QueryParametersType } from 'query-string';
 
-import {
-  parse,
-  type QueryParameters as QueryParametersType,
-} from 'query-string';
+import { type fileType } from '@mikojs/server';
 
-import { requireModule } from '@mikojs/utils';
-import { type middlewareType } from '@mikojs/server';
+export type cacheType = $ReadOnlyArray<{|
+  filePath: string,
+  regExp: RegExp,
+  getUrlQuery: (pathname: string | null) => QueryParametersType,
+|}>;
 
-import { type cacheType } from './buildRouterCache';
-
-type reqType = IncomingMessageType & {|
-  query: QueryParametersType,
-|};
+const cache: {|
+  [string]: {|
+    filePath: string,
+    pathname: string,
+  |},
+|} = {};
 
 /**
- * @param {cacheType} cache - router cache
+ * @param {fileType} fileData - file data
  *
- * @return {middlewareType} - router middleware
+ * @return {string} - router cache function
  */
-export default (
-  cache: cacheType,
-): middlewareType<reqType, ServerResponseType> => (
-  req: reqType,
-  res: ServerResponseType,
-) => {
-  const { pathname, query } = url.parse(req.url);
-  const router = cache.find(
-    ({ regExp }: $ElementType<cacheType, number>) =>
-      pathname && regExp.exec(pathname),
-  );
-
-  if (!router) {
-    res.statusCode = 404;
-    res.end();
-    return;
-  }
-
-  const { filePath, getUrlQuery } = router;
-
-  req.query = {
-    ...parse(query || ''),
-    ...getUrlQuery(pathname),
+export default ({ exists, filePath, pathname }: fileType): string => {
+  cache[pathname] = {
+    filePath,
+    pathname,
   };
-  requireModule(filePath)(req, res);
+
+  if (!exists) delete cache[pathname];
+
+  return `'use strict';
+
+const path = require('path');
+
+const { pathToRegexp, match } = require('path-to-regexp');
+
+const requireModule = require('@mikojs/utils/lib/requireModule');
+
+module.exports = requireModule('@mikojs/router/lib/utils/buildMiddleware')([${Object.keys(
+    cache,
+  )
+    .sort((a: string, b: string): number => {
+      const pathnameALength = [...cache[a].pathname.matchAll(/\//g)].length;
+      const pathnameBLength = [...cache[b].pathname.matchAll(/\//g)].length;
+
+      if (pathnameALength !== pathnameBLength)
+        return pathnameALength > pathnameBLength ? -1 : 1;
+
+      return !/\/:([^[\]]*)/.test(cache[a].pathname) ? -1 : 1;
+    })
+    .map(
+      (key: string) => `{
+  filePath: path.resolve(__filename, '${cache[key].filePath}'),
+  regExp: pathToRegexp('${cache[key].pathname}', []),
+  getUrlQuery: pathname => match('${cache[key].pathname}', { decode: decodeURIComponent })(
+    pathname,
+  ).params,
+}`,
+    )
+    .join(', ')}])`;
 };

@@ -4,8 +4,8 @@ import path from 'path';
 
 import testingServer, { type fetchResultType } from '../testingServer';
 
-jest.mock('@mikojs/router/lib/utils/buildRouter', () =>
-  jest.requireActual('@mikojs/router/src/utils/buildRouter'),
+jest.mock('@mikojs/router/lib/utils/buildMiddleware', () =>
+  jest.requireActual('@mikojs/router/src/utils/buildMiddleware'),
 );
 
 describe('router', () => {

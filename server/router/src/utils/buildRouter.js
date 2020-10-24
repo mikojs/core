@@ -1,65 +1,44 @@
 // @flow
 
-import { type fileDataType } from '@mikojs/merge-dir';
+import url from 'url';
+import {
+  type IncomingMessage as IncomingMessageType,
+  type ServerResponse as ServerResponseType,
+} from 'http';
 
-type cacheType = {|
-  [string]: {|
-    filePath: string,
-    pathname: string,
-  |},
+import {
+  parse,
+  type QueryParameters as QueryParametersType,
+} from 'query-string';
+
+import { requireModule } from '@mikojs/utils';
+import { type middlewareType } from '@mikojs/server';
+
+import { type cacheType } from './buildRouterCache';
+
+type reqType = IncomingMessageType & {|
+  query: QueryParametersType,
 |};
 
-const cache: cacheType = {};
-
 /**
- * @param {fileDataType} fileData - file data
+ * @param {cacheType} cache - router cache
  *
- * @return {string} - router cache function
+ * @return {middlewareType} - router middleware
  */
-export default ({ exists, filePath, pathname }: fileDataType): string => {
-  cache[pathname] = {
-    filePath,
-    pathname,
-  };
-
-  if (!exists) delete cache[pathname];
-
-  return `'use strict';
-
-const url = require('url');
-const path = require('path');
-
-const { pathToRegexp, match } = require('path-to-regexp');
-const { parse } = require('query-string');
-
-const requireModule = require('@mikojs/utils/lib/requireModule');
-
-const cache = [${Object.keys(cache)
-    .sort((a: string, b: string): number => {
-      const pathnameALength = [...cache[a].pathname.matchAll(/\//g)].length;
-      const pathnameBLength = [...cache[b].pathname.matchAll(/\//g)].length;
-
-      if (pathnameALength !== pathnameBLength)
-        return pathnameALength > pathnameBLength ? -1 : 1;
-
-      return !/\/:([^[\]]*)/.test(cache[a].pathname) ? -1 : 1;
-    })
-    .map(
-      (key: string) => `{
-  filePath: path.resolve(__filename, '${cache[key].filePath}'),
-  regExp: pathToRegexp('${cache[key].pathname}', []),
-  getUrlQuery: pathname => match('${cache[key].pathname}', { decode: decodeURIComponent })(
-    pathname,
-  ).params,
-}`,
-    )
-    .join(', ')}];
-
-module.exports = (req, res) => {
+export default (
+  cache: cacheType,
+): middlewareType<reqType, ServerResponseType> => (
+  req: reqType,
+  res: ServerResponseType,
+) => {
   const { pathname, query } = url.parse(req.url);
-  const router = cache.find(({ regExp }) => regExp.exec(pathname));
+  const router = cache.find(
+    ({ regExp }: $ElementType<cacheType, number>) =>
+      pathname && regExp.exec(pathname),
+  );
 
   if (!router) {
+    res.statusCode = 404;
     res.end();
     return;
   }
@@ -71,5 +50,4 @@ module.exports = (req, res) => {
     ...getUrlQuery(pathname),
   };
   requireModule(filePath)(req, res);
-};`;
 };

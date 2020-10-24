@@ -4,6 +4,10 @@ import path from 'path';
 
 import testingServer, { type fetchResultType } from '../testingServer';
 
+jest.mock('@mikojs/router/lib/utils/buildRouter', () =>
+  jest.requireActual('@mikojs/router/src/utils/buildRouter'),
+);
+
 describe('router', () => {
   beforeAll(async () => {
     await testingServer.run(path.resolve(__dirname, './__ignore__'));
@@ -23,6 +27,14 @@ describe('router', () => {
       ).toBe(expected);
     },
   );
+
+  test('not found', async () => {
+    expect(
+      await testingServer
+        .fetch('/a/notFound')
+        .then((res: fetchResultType) => res.status),
+    ).toBe(404);
+  });
 
   afterAll(() => {
     testingServer.close();

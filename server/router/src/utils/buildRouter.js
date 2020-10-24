@@ -2,7 +2,7 @@
 
 import { type QueryParameters as QueryParametersType } from 'query-string';
 
-import { type fileType } from '@mikojs/server';
+import { type fileDataType } from '@mikojs/server';
 
 export type cacheType = $ReadOnlyArray<{|
   filePath: string,
@@ -18,11 +18,11 @@ const cache: {|
 |} = {};
 
 /**
- * @param {fileType} fileData - file data
+ * @param {fileDataType} fileData - file data
  *
  * @return {string} - router cache function
  */
-export default ({ exists, filePath, pathname }: fileType): string => {
+export default ({ exists, filePath, pathname }: fileDataType): string => {
   cache[pathname] = {
     filePath,
     pathname,

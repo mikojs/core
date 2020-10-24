@@ -1,7 +1,6 @@
 // @flow
 
-import mergeDir from '@mikojs/merge-dir';
-import { type middlewareType } from '@mikojs/server';
+import server, { type middlewareType } from '@mikojs/server';
 
 import buildRouter from './utils/buildRouter';
 
@@ -12,4 +11,4 @@ import buildRouter from './utils/buildRouter';
  * @return {middlewareType} - router middleware
  */
 export default (folderPath: string, prefix?: string): middlewareType =>
-  mergeDir.use(folderPath, prefix, buildRouter);
+  server.use(folderPath, prefix, buildRouter);

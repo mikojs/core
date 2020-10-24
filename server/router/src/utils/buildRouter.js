@@ -1,6 +1,6 @@
 // @flow
 
-import { type fileDataType } from '@mikojs/merge-dir';
+import { type fileType } from '@mikojs/server';
 
 type cacheType = {|
   [string]: {|
@@ -12,11 +12,11 @@ type cacheType = {|
 const cache: cacheType = {};
 
 /**
- * @param {fileDataType} fileData - file data
+ * @param {fileType} fileData - file data
  *
  * @return {string} - router cache function
  */
-export default ({ exists, filePath, pathname }: fileDataType): string => {
+export default ({ exists, filePath, pathname }: fileType): string => {
   cache[pathname] = {
     filePath,
     pathname,

@@ -8,8 +8,12 @@ import http, {
 
 import { emptyFunction } from 'fbjs';
 
-import mergeDir, { type mergeEventType } from '@mikojs/merge-dir';
+import mergeDir, {
+  type fileDataType,
+  type mergeEventType,
+} from '@mikojs/merge-dir';
 
+export type fileType = fileDataType;
 export type eventType = mergeEventType;
 export type middlewareType = (
   req: IncomingMessageType,
@@ -17,8 +21,7 @@ export type middlewareType = (
 ) => void;
 
 export default {
-  set: mergeDir.set,
-  ready: mergeDir.ready,
+  ...mergeDir,
 
   /**
    * @param {middlewareType} middleware - middleware function

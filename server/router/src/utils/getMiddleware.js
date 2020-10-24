@@ -14,7 +14,7 @@ import {
 import { requireModule } from '@mikojs/utils';
 import { type middlewareType } from '@mikojs/server';
 
-import { type cacheType } from './buildRouterCache';
+import { type cacheType } from './buildRouter';
 
 type reqType = IncomingMessageType & {|
   query: QueryParametersType,

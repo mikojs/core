@@ -2,15 +2,15 @@
 
 import { type fileType } from '@mikojs/server';
 
-import buildRouter from '../buildRouter';
+import buildRouterCache from '../buildRouterCache';
 
 import testings from './__ignore__/testings';
 
-describe('build router', () => {
+describe('build router cache', () => {
   test.each(testings)(
     '%s',
     (info: string, fileData: fileType, expected: string) => {
-      expect(buildRouter(fileData)).toMatch(expected);
+      expect(buildRouterCache(fileData)).toMatch(expected);
     },
   );
 });

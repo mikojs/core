@@ -28,6 +28,14 @@ describe('router', () => {
     },
   );
 
+  test('not found', async () => {
+    expect(
+      await testingServer
+        .fetch('/a/notFound')
+        .then((res: fetchResultType) => res.status),
+    ).toBe(404);
+  });
+
   afterAll(() => {
     testingServer.close();
   });

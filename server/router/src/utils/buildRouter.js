@@ -37,6 +37,7 @@ export default (
   );
 
   if (!router) {
+    res.statusCode = 404;
     res.end();
     return;
   }

@@ -9,11 +9,11 @@ import http, {
 import { emptyFunction } from 'fbjs';
 
 import mergeDir, {
-  type fileDataType,
+  type fileDataType as mergeDirFileDataType,
   type mergeEventType,
 } from '@mikojs/merge-dir';
 
-export type fileType = fileDataType;
+export type fileDataType = mergeDirFileDataType;
 export type eventType = mergeEventType;
 export type middlewareType<Req = {}, Res = {}> = (
   req: IncomingMessageType & Req,

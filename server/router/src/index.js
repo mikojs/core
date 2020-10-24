@@ -10,5 +10,5 @@ import buildRouterCache from './utils/buildRouterCache';
  *
  * @return {middlewareType} - router middleware
  */
-export default (folderPath: string, prefix?: string): middlewareType =>
+export default (folderPath: string, prefix?: string): middlewareType<> =>
   server.use(folderPath, prefix, buildRouterCache);

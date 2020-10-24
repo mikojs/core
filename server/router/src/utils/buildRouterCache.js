@@ -1,15 +1,21 @@
 // @flow
 
+import { type QueryParameters as QueryParametersType } from 'query-string';
+
 import { type fileType } from '@mikojs/server';
 
-type cacheType = {|
+export type cacheType = $ReadOnlyArray<{|
+  filePath: string,
+  regExp: RegExp,
+  getUrlQuery: (pathname: string | null) => QueryParametersType,
+|}>;
+
+const cache: {|
   [string]: {|
     filePath: string,
     pathname: string,
   |},
-|};
-
-const cache: cacheType = {};
+|} = {};
 
 /**
  * @param {fileType} fileData - file data

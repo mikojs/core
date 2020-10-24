@@ -38,7 +38,7 @@ const { pathToRegexp, match } = require('path-to-regexp');
 
 const requireModule = require('@mikojs/utils/lib/requireModule');
 
-module.exports = requireModule('@mikojs/router/lib/utils/buildRouter')([${Object.keys(
+module.exports = requireModule('@mikojs/router/lib/utils/getMiddleware')([${Object.keys(
     cache,
   )
     .sort((a: string, b: string): number => {

@@ -60,7 +60,7 @@ export const handleErrorMessage = (name: string, err: Error): string =>
 export default (
   name: string,
   version: string,
-  buildMiddleware: (folderPath: string, prefix?: string) => middlewareType,
+  buildMiddleware: (folderPath: string, prefix?: string) => middlewareType<>,
   argv: $ReadOnlyArray<string>,
 ): Promise<?ServerType> =>
   new Promise((resolve, reject) => {

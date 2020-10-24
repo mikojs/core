@@ -15,9 +15,9 @@ import mergeDir, {
 
 export type fileType = fileDataType;
 export type eventType = mergeEventType;
-export type middlewareType = (
-  req: IncomingMessageType,
-  res: ServerResponseType,
+export type middlewareType<Req = {}, Res = {}> = (
+  req: IncomingMessageType & Req,
+  res: ServerResponseType & Res,
 ) => void;
 
 export default {
@@ -31,7 +31,7 @@ export default {
    * @return {ServerType} - server object
    */
   run: async (
-    middleware: middlewareType,
+    middleware: middlewareType<>,
     port: number,
     callback?: () => void = emptyFunction,
   ): Promise<ServerType> => {

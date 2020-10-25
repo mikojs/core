@@ -9,9 +9,6 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "@mikojs/merge-dir": "^1.12.0",
-    "@mikojs/server": "^1.12.0",
-    "@mikojs/utils": "^1.12.0",
     "core-js": "^3.6.5"
   },
   "devDependencies": {

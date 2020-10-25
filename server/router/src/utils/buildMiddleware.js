@@ -11,7 +11,6 @@ import {
   type QueryParameters as QueryParametersType,
 } from 'query-string';
 
-import { requireModule } from '@mikojs/utils';
 import { type middlewareType } from '@mikojs/server';
 
 import { type cacheType } from './buildRouter';
@@ -43,11 +42,11 @@ export default (
     return;
   }
 
-  const { filePath, getUrlQuery } = router;
+  const { middleware, getUrlQuery } = router;
 
   req.query = {
     ...parse(query || ''),
     ...getUrlQuery(pathname),
   };
-  requireModule(filePath)(req, res);
+  middleware(req, res);
 };

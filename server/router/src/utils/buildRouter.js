@@ -2,10 +2,10 @@
 
 import { type QueryParameters as QueryParametersType } from 'query-string';
 
-import { type fileDataType } from '@mikojs/server';
+import { type fileDataType, type middlewareType } from '@mikojs/server';
 
 export type cacheType = $ReadOnlyArray<{|
-  filePath: string,
+  middleware: middlewareType<>,
   regExp: RegExp,
   getUrlQuery: (pathname: string | null) => QueryParametersType,
 |}>;
@@ -52,7 +52,7 @@ module.exports = requireModule('@mikojs/router/lib/utils/buildMiddleware')([${Ob
     })
     .map(
       (key: string) => `{
-  filePath: path.resolve(__filename, '${cache[key].filePath}'),
+  middleware: requireModule(path.resolve(__filename, '${cache[key].filePath}')),
   regExp: pathToRegexp('${cache[key].pathname}', []),
   getUrlQuery: pathname => match('${cache[key].pathname}', { decode: decodeURIComponent })(
     pathname,

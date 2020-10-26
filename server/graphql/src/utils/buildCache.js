@@ -22,9 +22,7 @@ const path = require('path');
 
 const requireModule = require('@mikojs/utils/lib/requireModule');
 
-module.exports = require('@mikojs/graphql/lib/utils/buildMiddleware')([${Object.keys(
-    cache,
-  )
+module.exports = callback => callback([${Object.keys(cache)
     .map((key: string) => `requireModule('${cache[key]}')`)
     .join(', ')}]);`;
 };

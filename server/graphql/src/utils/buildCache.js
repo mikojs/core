@@ -24,5 +24,27 @@ const requireModule = require('@mikojs/utils/lib/requireModule');
 
 module.exports = callback => callback([${Object.keys(cache)
     .map((key: string) => `requireModule('${cache[key]}')`)
-    .join(', ')}]);`;
+    .join(', ')}].reduce((result, { typeDefs, resolvers }) => ({
+  ...result,
+  typeDefs: [
+    ...result.typeDefs,
+    ...(typeDefs instanceof Array ? typeDefs : [typeDefs]),
+  ],
+  resolvers: Object.keys(resolvers).reduce(
+    (prevResolvers, key) => ({
+      ...prevResolvers,
+      [key]: {
+        ...prevResolvers[key],
+        ...resolvers[key],
+      },
+    }),
+    result.resolvers,
+  ),
+}), {
+  resolverValidationOptions: {
+    requireResolversForResolveType: false,
+  },
+  typeDefs: [],
+  resolvers: {},
+}));`;
 };

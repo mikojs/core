@@ -24,12 +24,15 @@ export default ({ exists, filePath, pathname }: fileDataType): string => {
 
 const path = require('path');
 
-const { makeExecutableSchema } = require('graphql-tools');
+const { makeExecutableSchema } = require('@graphql-tools/schema');
 
 const requireModule = require('@mikojs/utils/lib/requireModule');
 
 module.exports = callback => callback(makeExecutableSchema([${Object.keys(cache)
-    .map((key: string) => `requireModule('${cache[key]}')`)
+    .map(
+      (key: string) =>
+        `requireModule(path.resolve(__filename, '${cache[key]}'))`,
+    )
     .join(', ')}].reduce((result, { typeDefs, resolvers }) => ({
   ...result,
   typeDefs: [

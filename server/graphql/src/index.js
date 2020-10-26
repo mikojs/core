@@ -6,6 +6,7 @@ import {
 } from 'http';
 
 import { graphqlHTTP } from 'express-graphql';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import server, { type middlewareType } from '@mikojs/server';
 
@@ -25,5 +26,5 @@ export default (folderPath: string, prefix?: string): middlewareType<> =>
     prefix,
     buildCache,
   )((cache: cacheType): middlewareType<IncomingMessageType, resType> =>
-    graphqlHTTP({ schema: cache }),
+    graphqlHTTP({ schema: makeExecutableSchema(cache) }),
   );

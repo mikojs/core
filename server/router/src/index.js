@@ -14,7 +14,7 @@ import {
 import { requireModule } from '@mikojs/utils';
 import server, { type middlewareType } from '@mikojs/server';
 
-import buildRouter, { type cacheType } from './utils/buildRouter';
+import buildCache, { type cacheType } from './utils/buildCache';
 
 type reqType = IncomingMessageType & {|
   query: QueryParametersType,
@@ -30,24 +30,24 @@ export default (folderPath: string, prefix?: string): middlewareType<> =>
   server.mergeDir(
     folderPath,
     prefix,
-    buildRouter,
+    buildCache,
   )((cache: cacheType): middlewareType<
     reqType,
     ServerResponseType,
   > => (req: reqType, res: ServerResponseType) => {
     const { pathname, query } = url.parse(req.url);
-    const router = cache.find(
+    const route = cache.find(
       ({ regExp }: $ElementType<cacheType, number>) =>
         pathname && regExp.exec(pathname),
     );
 
-    if (!router) {
+    if (!route) {
       res.statusCode = 404;
       res.end();
       return;
     }
 
-    const { filePath, getUrlQuery } = router;
+    const { filePath, getUrlQuery } = route;
 
     req.query = {
       ...parse(query || ''),

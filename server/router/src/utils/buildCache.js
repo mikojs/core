@@ -18,7 +18,7 @@ const cache: {|
 |} = {};
 
 /**
- * @param {fileType} fileData - file data
+ * @param {fileType} file - file
  *
  * @return {string} - router cache function
  */

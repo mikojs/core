@@ -31,8 +31,7 @@ module.exports = callback => callback([${Object.keys(cache)
       (key: string) =>
         `requireModule(path.resolve(__filename, '${cache[key]}'))`,
     )
-    .join(', ')}].reduce((result, { typeDefs, resolvers }) => ({
-  ...result,
+    .join(', ')}].reduce((result, { typeDefs, ...resolvers }) => ({
   typeDefs: [
     ...result.typeDefs,
     ...(typeDefs instanceof Array ? typeDefs : [typeDefs]),
@@ -48,9 +47,6 @@ module.exports = callback => callback([${Object.keys(cache)
     result.resolvers,
   ),
 }), {
-  resolverValidationOptions: {
-    requireResolversForResolveType: false,
-  },
   typeDefs: [],
   resolvers: {},
 }));`;

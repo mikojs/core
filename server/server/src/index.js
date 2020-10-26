@@ -21,7 +21,9 @@ export type middlewareType<Req = {}, Res = {}> = (
 ) => void;
 
 export default {
-  ...mergeDir,
+  set: mergeDir.set,
+  ready: mergeDir.ready,
+  mergeDir: mergeDir.use,
 
   /**
    * @param {middlewareType} middleware - middleware function

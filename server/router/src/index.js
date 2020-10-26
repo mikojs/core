@@ -11,4 +11,4 @@ import buildRouter from './utils/buildRouter';
  * @return {middlewareType} - router middleware
  */
 export default (folderPath: string, prefix?: string): middlewareType<> =>
-  server.use(folderPath, prefix, buildRouter);
+  server.mergeDir(folderPath, prefix, buildRouter);

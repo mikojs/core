@@ -18,7 +18,7 @@ export type eventType = mergeEventType;
 export type middlewareType<Req = {}, Res = {}> = (
   req: IncomingMessageType & Req,
   res: ServerResponseType & Res,
-) => void;
+) => void | Promise<void>;
 
 export default {
   set: mergeDir.set,
@@ -40,7 +40,9 @@ export default {
     const close = await mergeDir.ready();
 
     return http
-      .createServer(middleware)
+      .createServer((req: IncomingMessageType, res: ServerResponseType) => {
+        middleware(req, res);
+      })
       .listen(port, callback)
       .on('close', close);
   },

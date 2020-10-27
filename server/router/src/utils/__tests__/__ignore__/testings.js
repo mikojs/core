@@ -6,10 +6,10 @@
  * @return {string} - cache data
  */
 const getCacheData = (filePath: string) => `{
-  filePath: path.resolve(__filename, '${filePath.replace(
+  middleware: requireModule(path.resolve(__filename, '${filePath.replace(
     /:([\w]+)/,
     '[$1]',
-  )}.js'),
+  )}.js')),
   regExp: pathToRegexp('/${filePath}', []),
   getUrlQuery: pathname => match('/${filePath}', { decode: decodeURIComponent })(
     pathname,

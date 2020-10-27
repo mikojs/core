@@ -19,19 +19,17 @@ type resType = ServerResponseType & {| json?: (data: mixed) => void |};
 
 /**
  * @param {string} folderPath - folder path
- * @param {string} prefix - pathname prefix
  * @param {OptionsDataType} options - graphql middleware options
  *
  * @return {middlewareType} - router middleware
  */
 export default (
   folderPath: string,
-  prefix?: string,
   options?: $Diff<OptionsDataType, {| schema: mixed |}>,
 ): middlewareType<> =>
   server.mergeDir(
     folderPath,
-    prefix,
+    undefined,
     buildCache,
   )((cache: cacheType): middlewareType<IncomingMessageType, resType> =>
     graphqlHTTP({ ...options, schema: makeExecutableSchema(cache) }),

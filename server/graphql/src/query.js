@@ -25,7 +25,7 @@ export default {
    *
    * @return {queryType} - query function
    */
-  query: (folderPath: string): queryType =>
+  build: (folderPath: string): queryType =>
     server.mergeDir(
       folderPath,
       undefined,

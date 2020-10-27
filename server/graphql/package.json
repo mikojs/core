@@ -1,0 +1,26 @@
+{
+  "name": "@mikojs/graphql",
+  "description": "Use to build a graphql server.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/graphql",
+  "repository": "https://github.com/mikojs/core/tree/master/server/graphql",
+  "version": "1.12.0",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.11.2",
+    "@graphql-tools/schema": "^7.0.0",
+    "@mikojs/server": "^1.12.0",
+    "core-js": "^3.6.5",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.3.0"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.135.0",
+    "flow-typed": "^3.2.1"
+  },
+  "keywords": ["graphql", "mikojs", "server"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -11,7 +11,6 @@ import {
   type QueryParameters as QueryParametersType,
 } from 'query-string';
 
-import { requireModule } from '@mikojs/utils';
 import server, { type middlewareType } from '@mikojs/server';
 
 import buildCache, { type cacheType } from './utils/buildCache';
@@ -47,11 +46,11 @@ export default (folderPath: string, prefix?: string): middlewareType<> =>
       return;
     }
 
-    const { filePath, getUrlQuery } = route;
+    const { middleware, getUrlQuery } = route;
 
     req.query = {
       ...parse(query || ''),
       ...getUrlQuery(pathname),
     };
-    requireModule(filePath)(req, res);
+    middleware(req, res);
   });

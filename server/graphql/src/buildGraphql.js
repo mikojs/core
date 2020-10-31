@@ -11,10 +11,8 @@ import server from '@mikojs/server';
 
 import buildCache, { type cacheType } from './utils/buildCache';
 
-export type optionsType = $Diff<GraphQLArgsType, { schema: mixed }>;
-export type graphqlType = (
-  options: optionsType,
-) => Promise<ExecutionResultType>;
+type optionsType = $Diff<GraphQLArgsType, { schema: mixed }>;
+type graphqlType = (options: optionsType) => Promise<ExecutionResultType>;
 
 /**
  * @param {string} folderPath - folder path

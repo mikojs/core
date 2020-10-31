@@ -4,17 +4,6 @@ import path from 'path';
 
 import testingServer, { type fetchResultType } from '../testingServer';
 
-const query = `
-  {
-    version
-  }
-`;
-const expected = {
-  data: {
-    version: '1.0.0',
-  },
-};
-
 describe('router', () => {
   beforeAll(async () => {
     await testingServer.run(path.resolve(__dirname, './__ignore__'));
@@ -29,19 +18,19 @@ describe('router', () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            query,
+            query: `
+              {
+                version
+              }
+            `,
           }),
         })
         .then((res: fetchResultType) => res.json()),
-    ).toEqual(expected);
-  });
-
-  test('graphql', async () => {
-    expect(
-      await testingServer.graphql({
-        source: query,
-      }),
-    ).toEqual(expected);
+    ).toEqual({
+      data: {
+        version: '1.0.0',
+      },
+    });
   });
 
   afterAll(() => {

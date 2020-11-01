@@ -41,7 +41,7 @@ export default {
   /**
    * @param {middlewareType} middleware - middleware function
    */
-  run: async (middleware: middlewareType<>) => {
+  run: async <Req = {}, Res = {}>(middleware: middlewareType<Req, Res>) => {
     cache.close();
     cache.port = await getPort();
     cache.server = await server.run(middleware, cache.port);

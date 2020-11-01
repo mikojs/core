@@ -57,10 +57,13 @@ export const handleErrorMessage = (name: string, err: Error): string =>
  *
  * @return {ServerType} - server or null
  */
-export default (
+export default <Req = {}, Res = {}>(
   name: string,
   version: string,
-  buildMiddleware: (folderPath: string, prefix?: string) => middlewareType<>,
+  buildMiddleware: (
+    folderPath: string,
+    prefix?: string,
+  ) => middlewareType<Req, Res>,
   argv: $ReadOnlyArray<string>,
 ): Promise<?ServerType> =>
   new Promise((resolve, reject) => {

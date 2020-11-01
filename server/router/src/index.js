@@ -15,7 +15,7 @@ import server, { type middlewareType } from '@mikojs/server';
 
 import buildCache, { type cacheType } from './utils/buildCache';
 
-type reqType = IncomingMessageType & {|
+type reqType = {|
   query: QueryParametersType,
 |};
 
@@ -25,32 +25,34 @@ type reqType = IncomingMessageType & {|
  *
  * @return {middlewareType} - router middleware
  */
-export default (folderPath: string, prefix?: string): middlewareType<> =>
+export default (folderPath: string, prefix?: string): middlewareType<reqType> =>
   server.mergeDir(
     folderPath,
     prefix,
     buildCache,
-  )((cache: cacheType): middlewareType<
-    reqType,
-    ServerResponseType,
-  > => (req: reqType, res: ServerResponseType) => {
-    const { pathname, query } = url.parse(req.url);
-    const route = cache.find(
-      ({ regExp }: $ElementType<cacheType, number>) =>
-        pathname && regExp.exec(pathname),
-    );
+  )(
+    (cache: cacheType) => (
+      req: IncomingMessageType & reqType,
+      res: ServerResponseType,
+    ) => {
+      const { pathname, query } = url.parse(req.url);
+      const route = cache.find(
+        ({ regExp }: $ElementType<cacheType, number>) =>
+          pathname && regExp.exec(pathname),
+      );
 
-    if (!route) {
-      res.statusCode = 404;
-      res.end();
-      return;
-    }
+      if (!route) {
+        res.statusCode = 404;
+        res.end();
+        return;
+      }
 
-    const { middleware, getUrlQuery } = route;
+      const { middleware, getUrlQuery } = route;
 
-    req.query = {
-      ...parse(query || ''),
-      ...getUrlQuery(pathname),
-    };
-    middleware(req, res);
-  });
+      req.query = {
+        ...parse(query || ''),
+        ...getUrlQuery(pathname),
+      };
+      middleware(req, res);
+    },
+  );

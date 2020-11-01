@@ -33,7 +33,7 @@ export default {
    * @return {ServerType} - server object
    */
   run: async (
-    middleware: middlewareType<>,
+    middleware: middlewareType<*, *>,
     port: number,
     callback?: () => void = emptyFunction,
   ): Promise<ServerType> => {

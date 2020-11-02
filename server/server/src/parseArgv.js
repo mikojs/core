@@ -61,7 +61,7 @@ export default <Req = {}, Res = {}>(
   name: string,
   version: string,
   buildMiddleware: (
-    folderPath: string,
+    sourcePath: string,
     prefix?: string,
   ) => middlewareType<Req, Res>,
   argv: $ReadOnlyArray<string>,
@@ -78,19 +78,19 @@ export default <Req = {}, Res = {}>(
 
     ['dev', 'build', 'start'].forEach((command: 'dev' | 'build' | 'start') => {
       program
-        .command(`${command} <folder-path>`)
-        .option('-p, --port <port>', 'the port of the folder')
+        .command(`${command} <source-path>`)
+        .option('-p, --port <port>', 'the port of the server')
         .option('--prefix <prefix>', 'the prefix of the server')
         .action(
           async (
-            folderPath: string,
+            sourcePath: string,
             { port = 3000, prefix }: {| port: number, prefix?: string |},
           ) => {
             server.set(command === 'start' ? 'run' : command);
 
             try {
               const middleware = buildMiddleware(
-                path.resolve(folderPath),
+                path.resolve(sourcePath),
                 prefix,
               );
 

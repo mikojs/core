@@ -1,5 +1,6 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 import { type Server as ServerType } from 'http';
 
@@ -89,10 +90,14 @@ export default <Req = {}, Res = {}>(
             server.set(command === 'start' ? 'run' : command);
 
             try {
-              const middleware = buildMiddleware(
-                path.resolve(sourcePath),
-                prefix,
-              );
+              const resolvedPath = path.resolve(sourcePath);
+
+              if (fs.lstatSync(resolvedPath).isFile()) {
+                resolve(null);
+                return;
+              }
+
+              const middleware = buildMiddleware(resolvedPath, prefix);
 
               if (command === 'build') {
                 logger.start('Building the server');

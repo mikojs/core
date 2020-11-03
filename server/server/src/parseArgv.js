@@ -8,7 +8,7 @@ import ora from 'ora';
 import chalk from 'chalk';
 import commander from 'commander';
 
-import { createLogger } from '@mikojs/utils';
+import { createLogger, requireModule } from '@mikojs/utils';
 import tools, {
   type fileDataType,
   type toolsType,
@@ -91,13 +91,9 @@ export default <Req = {}, Res = {}>(
 
             try {
               const resolvedPath = path.resolve(sourcePath);
-
-              if (fs.lstatSync(resolvedPath).isFile()) {
-                resolve(null);
-                return;
-              }
-
-              const middleware = buildMiddleware(resolvedPath, prefix);
+              const middleware = fs.lstatSync(resolvedPath).isFile()
+                ? requireModule<middlewareType<Req, Res>>(resolvedPath)
+                : buildMiddleware(resolvedPath, prefix);
 
               if (command === 'build') {
                 logger.start('Building the server');

@@ -1,9 +1,6 @@
 // @flow
 
-import http, {
-  type ServerResponse as ServerResponseType,
-  type IncomingMessage as IncomingMessageType,
-} from 'http';
+import http from 'http';
 
 import { emptyFunction } from 'fbjs';
 import fetch, { type Response as ResponseType } from 'node-fetch';
@@ -12,6 +9,8 @@ import { createLogger } from '@mikojs/utils';
 
 import { type eventType } from '../index';
 import parseArgv, { buildLog, handleErrorMessage } from '../parseArgv';
+
+import middleware from './__ignore__/middleware';
 
 describe('parse argv', () => {
   test.each`
@@ -50,11 +49,7 @@ describe('parse argv', () => {
       const server = await parseArgv(
         'server',
         '1.0.0',
-        emptyFunction.thatReturns(
-          (req: IncomingMessageType, res: ServerResponseType) => {
-            res.end('test');
-          },
-        ),
+        emptyFunction.thatReturns(middleware),
         ['node', 'server', event, __dirname],
       );
 

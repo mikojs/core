@@ -1,11 +1,10 @@
 // @flow
 
-import { type middlewareType } from '@mikojs/server';
 import testingServer, {
   type fetchResultType as testingServerFetchResultType,
 } from '@mikojs/server/lib/testingServer';
 
-import graphql from './index';
+import graphql, { type graphqlType } from './index';
 
 export type fetchResultType = testingServerFetchResultType;
 
@@ -15,7 +14,7 @@ export default {
   /**
    * @param {string} folderPathOrMiddleware - folder path or middleware
    */
-  run: async (folderPathOrMiddleware: string | middlewareType<>) => {
+  run: async (folderPathOrMiddleware: string | graphqlType) => {
     await testingServer.run(
       typeof folderPathOrMiddleware === 'string'
         ? graphql(folderPathOrMiddleware)

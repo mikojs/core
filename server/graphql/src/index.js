@@ -1,11 +1,6 @@
 // @flow
 
 import {
-  type IncomingMessage as IncomingMessageType,
-  type ServerResponse as ServerResponseType,
-} from 'http';
-
-import {
   graphqlHTTP,
   type OptionsData as OptionsDataType,
 } from 'express-graphql';
@@ -15,24 +10,26 @@ import server, { type middlewareType } from '@mikojs/server';
 
 import buildCache, { type cacheType } from './utils/buildCache';
 
-type resType = ServerResponseType & {| json?: (data: mixed) => void |};
+type resType = {| json?: (data: mixed) => void |};
+
+export type graphqlType = middlewareType<{}, resType>;
 
 /**
  * @param {string} folderPath - folder path
  * @param {string} prefix - pathname prefix
  * @param {OptionsDataType} options - graphql middleware options
  *
- * @return {middlewareType} - router middleware
+ * @return {graphqlType} - graphqlmiddleware
  */
 export default (
   folderPath: string,
   prefix?: string,
   options?: $Diff<OptionsDataType, {| schema: mixed |}>,
-): middlewareType<> =>
+): graphqlType =>
   server.mergeDir(
     folderPath,
     prefix,
     buildCache,
-  )((cache: cacheType): middlewareType<IncomingMessageType, resType> =>
+  )((cache: cacheType): middlewareType<{}, resType> =>
     graphqlHTTP({ ...options, schema: makeExecutableSchema(cache) }),
   );

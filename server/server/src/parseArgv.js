@@ -1,13 +1,15 @@
 // @flow
 
+import fs from 'fs';
 import path from 'path';
 import { type Server as ServerType } from 'http';
 
 import ora from 'ora';
 import chalk from 'chalk';
 import commander from 'commander';
+import { emptyFunction } from 'fbjs';
 
-import { createLogger } from '@mikojs/utils';
+import { createLogger, requireModule } from '@mikojs/utils';
 import tools, {
   type fileDataType,
   type toolsType,
@@ -54,6 +56,7 @@ export const handleErrorMessage = (name: string, err: Error): string =>
  * @param {string} version - command version
  * @param {Function} buildMiddleware - build the middleware for the server
  * @param {Array} argv - command line
+ * @param {Function} addCommands - support to add commands
  *
  * @return {ServerType} - server or null
  */
@@ -61,10 +64,11 @@ export default <Req = {}, Res = {}>(
   name: string,
   version: string,
   buildMiddleware: (
-    folderPath: string,
+    sourcePath: string,
     prefix?: string,
   ) => middlewareType<Req, Res>,
   argv: $ReadOnlyArray<string>,
+  addCommands?: (program: typeof commander) => void = emptyFunction,
 ): Promise<?ServerType> =>
   new Promise((resolve, reject) => {
     const logger = createLogger(
@@ -78,21 +82,21 @@ export default <Req = {}, Res = {}>(
 
     ['dev', 'build', 'start'].forEach((command: 'dev' | 'build' | 'start') => {
       program
-        .command(`${command} <folder-path>`)
-        .option('-p, --port <port>', 'the port of the folder')
+        .command(`${command} <source-path>`)
+        .option('-p, --port <port>', 'the port of the server')
         .option('--prefix <prefix>', 'the prefix of the server')
         .action(
           async (
-            folderPath: string,
+            sourcePath: string,
             { port = 3000, prefix }: {| port: number, prefix?: string |},
           ) => {
             server.set(command === 'start' ? 'run' : command);
 
             try {
-              const middleware = buildMiddleware(
-                path.resolve(folderPath),
-                prefix,
-              );
+              const resolvedPath = path.resolve(sourcePath);
+              const middleware = fs.lstatSync(resolvedPath).isFile()
+                ? requireModule<middlewareType<Req, Res>>(resolvedPath)
+                : buildMiddleware(resolvedPath, prefix);
 
               if (command === 'build') {
                 logger.start('Building the server');
@@ -120,5 +124,6 @@ export default <Req = {}, Res = {}>(
         );
     });
 
+    addCommands(program);
     program.parse([...argv]);
   });

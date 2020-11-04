@@ -1,9 +1,7 @@
 // @flow
 
-import http, {
-  type ServerResponse as ServerResponseType,
-  type IncomingMessage as IncomingMessageType,
-} from 'http';
+import http from 'http';
+import path from 'path';
 
 import { emptyFunction } from 'fbjs';
 import fetch, { type Response as ResponseType } from 'node-fetch';
@@ -12,6 +10,8 @@ import { createLogger } from '@mikojs/utils';
 
 import { type eventType } from '../index';
 import parseArgv, { buildLog, handleErrorMessage } from '../parseArgv';
+
+import middleware from './__ignore__/middleware';
 
 describe('parse argv', () => {
   test.each`
@@ -40,35 +40,42 @@ describe('parse argv', () => {
     ).toMatch(/Could not find a valid build./);
   });
 
-  test.each`
-    event
-    ${'build'}
-    ${'start'}
+  describe.each`
+    sourcePath
+    ${__dirname}
+    ${path.resolve(__dirname, './__ignore__/middleware.js')}
   `(
-    'run commands with event = $event',
-    async ({ event }: {| event: eventType |}) => {
-      const server = await parseArgv(
-        'server',
-        '1.0.0',
-        emptyFunction.thatReturns(
-          (req: IncomingMessageType, res: ServerResponseType) => {
-            res.end('test');
-          },
-        ),
-        ['node', 'server', event, __dirname],
+    'run command with source-path = $sourcePath',
+    ({ sourcePath }: {| sourcePath: string |}) => {
+      test.each`
+        event
+        ${'build'}
+        ${'start'}
+      `(
+        'run commands with event = $event',
+        async ({ event }: {| event: eventType |}) => {
+          const server = await parseArgv(
+            'server',
+            '1.0.0',
+            sourcePath === __dirname
+              ? emptyFunction.thatReturns(middleware)
+              : emptyFunction,
+            ['node', 'server', event, sourcePath],
+          );
+
+          if (event === 'build') expect(server).toBeNull();
+          else {
+            expect(server).toBeInstanceOf(http.Server);
+            expect(
+              await fetch('http://localhost:3000').then((res: ResponseType) =>
+                res.text(),
+              ),
+            ).toBe('test');
+          }
+
+          if (server) server.close();
+        },
       );
-
-      if (event === 'build') expect(server).toBeNull();
-      else {
-        expect(server).toBeInstanceOf(http.Server);
-        expect(
-          await fetch('http://localhost:3000').then((res: ResponseType) =>
-            res.text(),
-          ),
-        ).toBe('test');
-      }
-
-      if (server) server.close();
     },
   );
 

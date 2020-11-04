@@ -59,7 +59,7 @@ describe('parse argv', () => {
             '1.0.0',
             sourcePath === __dirname
               ? emptyFunction.thatReturns(middleware)
-              : __dirname,
+              : emptyFunction,
             ['node', 'server', event, sourcePath],
           );
 

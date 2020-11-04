@@ -7,6 +7,7 @@ import { type Server as ServerType } from 'http';
 import ora from 'ora';
 import chalk from 'chalk';
 import commander from 'commander';
+import { emptyFunction } from 'fbjs';
 
 import { createLogger, requireModule } from '@mikojs/utils';
 import tools, {
@@ -55,6 +56,7 @@ export const handleErrorMessage = (name: string, err: Error): string =>
  * @param {string} version - command version
  * @param {Function} buildMiddleware - build the middleware for the server
  * @param {Array} argv - command line
+ * @param {Function} addCommands - support to add commands
  *
  * @return {ServerType} - server or null
  */
@@ -66,6 +68,7 @@ export default <Req = {}, Res = {}>(
     prefix?: string,
   ) => middlewareType<Req, Res>,
   argv: $ReadOnlyArray<string>,
+  addCommands?: (program: typeof commander) => void = emptyFunction,
 ): Promise<?ServerType> =>
   new Promise((resolve, reject) => {
     const logger = createLogger(
@@ -121,5 +124,6 @@ export default <Req = {}, Res = {}>(
         );
     });
 
+    addCommands(program);
     program.parse([...argv]);
   });

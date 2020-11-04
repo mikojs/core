@@ -19,13 +19,15 @@ type reqType = {|
   query: QueryParametersType,
 |};
 
+export type routerType = middlewareType<reqType>;
+
 /**
  * @param {string} folderPath - folder path
  * @param {string} prefix - pathname prefix
  *
- * @return {middlewareType} - router middleware
+ * @return {routerType} - router middleware
  */
-export default (folderPath: string, prefix?: string): middlewareType<reqType> =>
+export default (folderPath: string, prefix?: string): routerType =>
   server.mergeDir(
     folderPath,
     prefix,

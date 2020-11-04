@@ -8,7 +8,7 @@ import graphql from './__ignore__/graphql';
 
 describe.each`
   folderPathOrMiddleware
-  ${path.resolve(__dirname, './__ignore__')}
+  ${path.resolve(__dirname, './__ignore__/schemas')}
   ${graphql}
 `(
   'graphql with folderPathOrMiddleware = $folderPathOrMiddleware',

@@ -2,8 +2,7 @@
 
 import path from 'path';
 
-import { type middlewareType } from '@mikojs/server';
-
+import { type routerType } from '../index';
 import testingServer, { type fetchResultType } from '../testingServer';
 import router from './__ignore__/router';
 
@@ -16,7 +15,7 @@ describe.each`
   ({
     folderPathOrMiddleware,
   }: {|
-    folderPathOrMiddleware: string | middlewareType<>,
+    folderPathOrMiddleware: string | routerType,
   |}) => {
     beforeAll(async () => {
       await testingServer.run(folderPathOrMiddleware);

@@ -30,6 +30,6 @@ export default (
     folderPath,
     prefix,
     buildCache,
-  )((cache: cacheType): middlewareType<{}, resType> =>
+  )((cache: cacheType): graphqlType =>
     graphqlHTTP({ ...options, schema: makeExecutableSchema(cache) }),
   );

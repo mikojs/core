@@ -38,8 +38,8 @@ export default (
 
   if (
     !pathname ||
-    !prefix ||
-    !new RegExp(`^${prefix.replace(/^([^/])/, '/$1')}`).test(pathname)
+    (prefix &&
+      !new RegExp(`^${prefix.replace(/^([^/])/, '/$1')}`).test(pathname))
   ) {
     res.statusCode = 404;
     res.end();

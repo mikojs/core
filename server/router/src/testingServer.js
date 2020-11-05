@@ -13,11 +13,12 @@ export default {
 
   /**
    * @param {string} folderPathOrMiddleware - folder path or middleware
+   * @param {string} prefix - pathname prefix
    */
-  run: async (folderPathOrMiddleware: string | routerType) => {
+  run: async (folderPathOrMiddleware: string | routerType, prefix?: string) => {
     await testingServer.run(
       typeof folderPathOrMiddleware === 'string'
-        ? router(folderPathOrMiddleware)
+        ? router(folderPathOrMiddleware, prefix)
         : folderPathOrMiddleware,
     );
   },

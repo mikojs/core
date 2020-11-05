@@ -84,15 +84,18 @@ export default <Req = {}, Res = {}>(
         .command(`${command} <source-path>`)
         .description(
           {
-            dev: chalk`start a ${name} server in the {green dev} mode`,
-            build: chalk`build a {green prod} server`,
-            start: chalk`start a ${name} server in the {green prod} mode`,
+            dev: chalk`start a {green ${name}} server in the {cyan dev} mode`,
+            start: chalk`start a {green ${name}} server in the {cyan prod} mode`,
+            build: chalk`build a {cyan prod} {green ${name}} server`,
           }[command],
         )
-        .option('-p, --port <port>', chalk`the port of {green ${name}} server`)
+        .option(
+          '-p, --port <port>',
+          chalk`the port of the {green ${name}} server`,
+        )
         .option(
           '--prefix <prefix>',
-          chalk`the prefix of {green ${name}} server`,
+          chalk`the prefix of the {green ${name}} server`,
         )
         .action(
           async (

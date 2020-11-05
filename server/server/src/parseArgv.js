@@ -75,16 +75,25 @@ export default <Req = {}, Res = {}>(
       `@mikojs/${name}`,
       ora({ discardStdin: false }),
     );
-    const program = new commander.Command(name).version(
-      version,
-      '-v, --version',
-    );
+    const program = new commander.Command(name)
+      .version(version, '-v, --version')
+      .description(chalk`control a {green ${name}} server`);
 
-    ['dev', 'build', 'start'].forEach((command: 'dev' | 'build' | 'start') => {
+    ['dev', 'start', 'build'].forEach((command: 'dev' | 'start' | 'build') => {
       program
         .command(`${command} <source-path>`)
-        .option('-p, --port <port>', 'the port of the server')
-        .option('--prefix <prefix>', 'the prefix of the server')
+        .description(
+          {
+            dev: chalk`start a ${name} server in the {green dev} mode`,
+            build: chalk`build a {green prod} server`,
+            start: chalk`start a ${name} server in the {green prod} mode`,
+          }[command],
+        )
+        .option('-p, --port <port>', chalk`the port of {green ${name}} server`)
+        .option(
+          '--prefix <prefix>',
+          chalk`the prefix of {green ${name}} server`,
+        )
         .action(
           async (
             sourcePath: string,

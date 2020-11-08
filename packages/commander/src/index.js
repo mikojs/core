@@ -15,12 +15,13 @@ type configType = {|
   |},
 |};
 
-type optionType = configType & {|
+export type optionType = {|
+  ...configType,
   name: string,
   version: string,
 |};
 
-type callbackType<O> = (option: O) => void;
+type callbackType<O> = (...options: O) => void;
 
 /**
  * @param {commander} prevProgram - prev program object
@@ -62,6 +63,6 @@ export default <O>({
   new Promise(resolve => {
     const program = new commander.Command(name).version(version);
 
-    addConfig(program, config, resolve);
+    addConfig(program, config, (...options: O) => resolve(options));
     program.parse(argv);
   });

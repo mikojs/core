@@ -21,17 +21,17 @@ export type optionType = {|
   version: string,
 |};
 
-type callbackType<O> = (...options: O) => void;
+type callbackType<Data: $ReadOnlyArray<mixed>> = (data: Data) => void;
 
 /**
  * @param {commander} prevProgram - prev program object
  * @param {configType} config - program config
  * @param {callbackType} callback - callback function
  */
-const addConfig = <O>(
+const addConfig = <Data: $ReadOnlyArray<mixed>>(
   prevProgram: typeof commander,
   { description, options = [], commands = {} }: configType,
-  callback: callbackType<O>,
+  callback: callbackType<Data>,
 ) => {
   const program = options
     .reduce(
@@ -41,10 +41,12 @@ const addConfig = <O>(
       ) => result.option(flags, desc),
       prevProgram.description(description),
     )
-    .action(callback);
+    .action((...data: Data) => callback(data));
 
   Object.keys(commands).forEach((key: string) => {
-    addConfig(program.command(key), commands[key], callback);
+    addConfig(program.command(key), commands[key], (data: Data) =>
+      callback([key, ...data]),
+    );
   });
 };
 
@@ -53,16 +55,16 @@ const addConfig = <O>(
  *
  * @return {Promise} - parse result
  */
-export default <O>({
+export default <Data: $ReadOnlyArray<mixed>>({
   name,
   version,
   ...config
-}: optionType): ((argv: $ReadOnlyArray<string>) => Promise<O>) => (
+}: optionType): ((argv: $ReadOnlyArray<string>) => Promise<Data>) => (
   argv: $ReadOnlyArray<string>,
 ) =>
   new Promise(resolve => {
     const program = new commander.Command(name).version(version);
 
-    addConfig(program, config, (...options: O) => resolve(options));
+    addConfig(program, config, resolve);
     program.parse(argv);
   });

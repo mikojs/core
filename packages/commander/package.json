@@ -1,0 +1,23 @@
+{
+  "name": "@mikojs/commander",
+  "description": "Use object to parse commands with commander.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/commander",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/commander",
+  "version": "1.12.1",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.11.2",
+    "commander": "^6.1.0",
+    "core-js": "^3.6.5"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.135.0",
+    "flow-typed": "^3.2.1"
+  },
+  "keywords": ["commander", "mikojs"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

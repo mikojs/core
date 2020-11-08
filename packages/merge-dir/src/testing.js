@@ -8,8 +8,7 @@ import path from 'path';
 import { emptyFunction } from 'fbjs';
 import debug from 'debug';
 
-import { d3DirTree } from '@mikojs/utils';
-import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
+import dirTree, { type dirTreeNodeType } from '@mikojs/dir-tree';
 
 import tools from './utils/tools';
 import {
@@ -67,9 +66,9 @@ tools.set({
   ): Promise<closeType> => {
     debugLog({ folderPath });
     callback(
-      d3DirTree(folderPath, { extensions: /\.js$/ })
+      dirTree(folderPath, { extensions: /\.js$/ })
         .leaves()
-        .map(({ data }: d3DirTreeNodeType) => ({
+        .map(({ data }: dirTreeNodeType) => ({
           exists: true,
           name: path.relative(folderPath, data.path),
         })),

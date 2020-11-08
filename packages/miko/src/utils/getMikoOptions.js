@@ -32,12 +32,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
       .version(version, '-v, --version')
       .arguments('[config-names...]')
       .description(
-        chalk`Example:
-  miko
-  miko {gray --keep}
-  miko {green babel}
-  miko {green babel} {gray --keep}
-  miko {cyan kill}`,
+        chalk`{cyan manage configs} and {cyan run commands} with the {green miko} worker`,
       )
       .option('--keep', 'use to keep server working, not auto close')
       .action(
@@ -64,7 +59,7 @@ export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
 
     program
       .command('kill')
-      .description('kill the all events')
+      .description(chalk`kill the all events of the {green miko} worker`)
       .action(() => {
         resolve({ type: 'kill' });
       });

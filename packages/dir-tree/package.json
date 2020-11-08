@@ -1,23 +1,23 @@
 {
-  "name": "@mikojs/utils",
-  "description": "Util tools for mikojs.",
+  "name": "@mikojs/dir-tree",
+  "description": "Get the directory tree with d3-hierarchy.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://mikojs.github.io/core/utils",
-  "repository": "https://github.com/mikojs/core/tree/master/packages/utils",
+  "homepage": "https://mikojs.github.io/core/dir-tree",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/dir-tree",
   "version": "1.12.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "chalk": "^4.1.0",
     "core-js": "^3.6.5",
-    "fbjs": "^2.0.0"
+    "d3-hierarchy": "^2.0.0",
+    "directory-tree": "^2.2.4"
   },
   "devDependencies": {
     "flow-bin": "^0.135.0",
     "flow-typed": "^3.2.1"
   },
-  "keywords": ["mikojs", "utils"],
+  "keywords": ["directory tree", "mikojs"],
   "publishConfig": {
     "access": "public"
   }

@@ -20,12 +20,7 @@ export default (
     new commander.Command('badges')
       .version(version, '-v, --version')
       .arguments('<readme-paths...>')
-      .usage(chalk`{green <readme-paths...>}`)
-      .description(
-        chalk`Example:
-  badges {green readme-path},
-  badges {green readme-path1 readme-path2}`,
-      )
+      .description(chalk`add the badges to {green README.md}`)
       .action((readmePaths: $ReadOnlyArray<string>) => {
         debugLog(readmePaths);
         resolve(readmePaths);

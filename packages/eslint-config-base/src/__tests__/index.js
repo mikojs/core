@@ -6,8 +6,7 @@ import path from 'path';
 import { ESLint, typeof LintResult as LintResultType } from 'eslint';
 import { hyphenate } from 'fbjs';
 
-import { d3DirTree } from '@mikojs/utils';
-import { type d3DirTreeNodeType } from '@mikojs/utils/lib/d3DirTree';
+import dirTree, { type dirTreeNodeType } from '@mikojs/dir-tree';
 
 import configs from '../index';
 
@@ -26,11 +25,11 @@ jest.mock('@mikojs/worker', () =>
 const root = path.resolve(__dirname, './__ignore__');
 const expectErrorRegExp = /^[ ]*(\/\/|\*|\/\*\*) \$expectError /;
 const expectedCache = {};
-const testings = d3DirTree(root, {
+const testings = dirTree(root, {
   extensions: /\.js$/,
 })
   .leaves()
-  .map(({ data: { path: filePath, name } }: d3DirTreeNodeType) => [
+  .map(({ data: { path: filePath, name } }: dirTreeNodeType) => [
     hyphenate(name.replace(/.js/, '')),
     filePath,
     fs

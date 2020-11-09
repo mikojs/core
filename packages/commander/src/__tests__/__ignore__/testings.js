@@ -20,16 +20,8 @@ export default ([
   ],
   [
     {
-      name: 'commander <args>',
-      version: '1.0.0',
-      description: 'description',
-    },
-    ['args'],
-    ['args', {}],
-  ],
-  [
-    {
       name: 'commander',
+      args: '<args>',
       version: '1.0.0',
       description: 'description',
       options: [
@@ -39,8 +31,8 @@ export default ([
         },
       ],
     },
-    ['-o', 'option'],
-    [{ o: 'option' }],
+    ['args', '-o', 'option'],
+    ['args', { o: 'option' }],
   ],
   [
     {
@@ -54,7 +46,7 @@ export default ([
       },
     },
     ['command'],
-    ['command'],
+    ['command', {}],
   ],
   [
     {
@@ -63,6 +55,7 @@ export default ([
       description: 'description',
       commands: {
         command: {
+          args: '<args>',
           description: 'description',
           options: [
             {
@@ -73,7 +66,7 @@ export default ([
         },
       },
     },
-    ['command', '-o', 'option'],
-    ['command', { o: 'option' }],
+    ['command', 'args', '-o', 'option'],
+    ['command', 'args', { o: 'option' }],
   ],
 ]: $ReadOnlyArray<testingType>);

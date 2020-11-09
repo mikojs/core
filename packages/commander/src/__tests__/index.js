@@ -13,8 +13,8 @@ describe('commander', () => {
     ) => {
       const result = await commander(configs)(['node', 'commander', ...argv]);
 
-      expect(result[0]).toMatchObject(expected[0]);
-      expect(result.slice(1)).toEqual(expected.slice(1));
+      expect(result.slice(-1)[0]).toMatchObject(expected.slice(-1)[0]);
+      expect(result.slice(0, -1)).toEqual(expected.slice(0, -1));
     },
   );
 });

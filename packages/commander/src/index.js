@@ -66,7 +66,10 @@ export default <Data: $ReadOnlyArray<mixed>>({
   argv: $ReadOnlyArray<string>,
 ) =>
   new Promise(resolve => {
-    const program = new commander.Command(name).version(version);
+    const program = new commander.Command(name).version(
+      version,
+      '-v --version',
+    );
 
     addConfig(program, config, resolve);
     program.parse(argv);

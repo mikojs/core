@@ -2,6 +2,12 @@
 
 import { type optionType } from '../../index';
 
+export type testingType = [
+  optionType,
+  $ReadOnlyArray<string>,
+  $ReadOnlyArray<mixed>,
+];
+
 export default ([
   [
     {
@@ -10,6 +16,6 @@ export default ([
       description: 'description',
     },
     [],
-    [],
+    ['_command'],
   ],
-]: $ReadOnlyArray<[optionType, $ReadOnlyArray<string>, $ReadOnlyArray<mixed>]>);
+]: $ReadOnlyArray<testingType>);

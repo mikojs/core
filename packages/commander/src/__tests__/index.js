@@ -1,19 +1,20 @@
 // @flow
 
-import commander, { type optionType } from '../index';
-import testings from './__ignore__/testings';
+import commander from '../index';
+import testings, { type testingType } from './__ignore__/testings';
 
 describe('commander', () => {
   test.each(testings)(
     'configs = %j, argv = %j',
     async (
-      configs: optionType,
-      argv: $ReadOnlyArray<string>,
-      expected: mixed,
+      configs: $ElementType<testingType, 0>,
+      argv: $ElementType<testingType, 1>,
+      expected: $ElementType<testingType, 2>,
     ) => {
-      expect(
-        (await commander(configs)(['node', 'commander', ...argv])).slice(0, -1),
-      ).toEqual(expected);
+      const result = await commander(configs)(['node', 'commander', ...argv]);
+
+      expect(result[0]).toMatchObject(expected[0]);
+      expect(result.slice(1)).toEqual(expected.slice(1));
     },
   );
 });

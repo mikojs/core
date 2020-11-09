@@ -9,6 +9,7 @@ type commandOptionType = {|
 
 type configType = {|
   description: string,
+  args?: string,
   options?: $ReadOnlyArray<commandOptionType>,
   commands?: {|
     [string]: configType,
@@ -30,7 +31,7 @@ type callbackType<Data: $ReadOnlyArray<mixed>> = (data: Data) => void;
  */
 const addConfig = <Data: $ReadOnlyArray<mixed>>(
   prevProgram: typeof commander,
-  { description, options = [], commands = {} }: configType,
+  { description, args, options = [], commands = {} }: configType,
   callback: callbackType<Data>,
 ) => {
   const program = options
@@ -39,7 +40,9 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
         result: typeof commander,
         { flags, description: desc }: commandOptionType,
       ) => result.option(flags, desc),
-      prevProgram.description(description),
+      !args
+        ? prevProgram.description(description)
+        : prevProgram.description(description).arguments(args),
     )
     .action((...data: Data) => callback(data));
 

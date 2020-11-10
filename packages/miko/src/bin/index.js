@@ -26,7 +26,6 @@ handleUnhandledRejection();
 (async () => {
   const {
     type,
-    configNames = [],
     keep = false,
     getCommands,
     errorMessage,
@@ -35,7 +34,7 @@ handleUnhandledRejection();
     path.resolve(__dirname, '../worker/index.js'),
   );
 
-  debugLog({ type, configNames, keep, getCommands });
+  debugLog({ type, keep, getCommands });
   logger.start('Running');
 
   switch (type) {
@@ -51,7 +50,7 @@ handleUnhandledRejection();
       break;
 
     case 'command':
-      await worker.addTracking(process.pid, generateFiles([]));
+      await worker.addTracking(process.pid, generateFiles());
 
       const commands = getCommands?.() || [[]];
 
@@ -94,7 +93,7 @@ handleUnhandledRejection();
         }, 500);
       }
 
-      await worker.addTracking(process.pid, generateFiles(configNames));
+      await worker.addTracking(process.pid, generateFiles());
 
       if (!keep) logger.succeed('Done.');
 

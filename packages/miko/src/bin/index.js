@@ -24,12 +24,9 @@ const debugLog = debug('miko:bin');
 handleUnhandledRejection();
 
 (async () => {
-  const {
-    type,
-    keep = false,
-    getCommands,
-    errorMessage,
-  } = await getMikoOptions(process.argv);
+  const { type, keep = false, getCommands } = await getMikoOptions(
+    process.argv,
+  );
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
@@ -38,12 +35,6 @@ handleUnhandledRejection();
   logger.start('Running');
 
   switch (type) {
-    case 'error':
-      if (errorMessage) logger.fail(errorMessage);
-
-      process.exit(1);
-      break;
-
     case 'kill':
       await worker.killAllEvents();
       logger.succeed('Done.');

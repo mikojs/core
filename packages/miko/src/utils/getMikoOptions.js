@@ -2,7 +2,6 @@
 
 import commander from 'commander';
 import chalk from 'chalk';
-import debug from 'debug';
 import { invariant } from 'fbjs';
 
 import { version } from '../../package.json';
@@ -11,14 +10,10 @@ import getCommands, { type commandsType } from './getCommands';
 import cache from './cache';
 
 export type mikoOptionsType = {|
-  type: 'error' | 'start' | 'kill' | 'command',
-  configNames?: $ReadOnlyArray<string>,
+  type: 'start' | 'kill' | 'command',
   keep?: boolean,
   getCommands?: () => commandsType,
-  errorMessage?: string,
 |};
-
-const debugLog = debug('miko:getMikoOptions');
 
 /**
  * @param {Array} argv - command line
@@ -30,32 +25,13 @@ export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
     const configs = cache.get('miko').config?.({}) || {};
     const program = new commander.Command('miko')
       .version(version, '-v, --version')
-      .arguments('[config-names...]')
       .description(
         chalk`{cyan manage configs} and {cyan run commands} with the {green miko} worker`,
       )
       .option('--keep', 'use to keep server working, not auto close')
-      .action(
-        (
-          configNames: $ReadOnlyArray<string>,
-          { keep = false }: {| keep: boolean |},
-        ) => {
-          debugLog(configNames);
-
-          if (
-            configNames.some(
-              (configName: string) => !cache.keys().includes(configName),
-            )
-          )
-            resolve({
-              type: 'error',
-              errorMessage: chalk`Could not find {red ${configNames.join(
-                ', ',
-              )}} in the config`,
-            });
-          else resolve({ type: 'start', configNames, keep });
-        },
-      );
+      .action(({ keep = false }: {| keep: boolean |}) => {
+        resolve({ type: 'start', keep });
+      });
 
     program
       .command('kill')

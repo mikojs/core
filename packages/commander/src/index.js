@@ -10,6 +10,8 @@ type commandOptionType = {|
 type configType = {|
   description: string,
   args?: string,
+  allowUnknownOption?: boolean,
+  exitOverride?: boolean,
   options?: $ReadOnlyArray<commandOptionType>,
   commands?: {|
     [string]: configType,
@@ -24,6 +26,13 @@ export type optionType = {|
 
 type callbackType<Data: $ReadOnlyArray<mixed>> = (data: Data) => void;
 
+const defaultOptions = ['args', 'allowUnknownOption', 'exitOverride'].map(
+  (key: string) => ({
+    flags: key,
+    description: key,
+  }),
+);
+
 /**
  * @param {commander} prevProgram - prev program object
  * @param {configType} config - program config
@@ -31,18 +40,40 @@ type callbackType<Data: $ReadOnlyArray<mixed>> = (data: Data) => void;
  */
 const addConfig = <Data: $ReadOnlyArray<mixed>>(
   prevProgram: typeof commander,
-  { description, args, options = [], commands = {} }: configType,
+  {
+    description,
+    args,
+    allowUnknownOption,
+    exitOverride,
+    options = [],
+    commands = {},
+  }: configType,
   callback: callbackType<Data>,
 ) => {
-  const program = options
+  const program = [...defaultOptions, ...(options || [])]
     .reduce(
       (
         result: typeof commander,
         { flags, description: desc }: commandOptionType,
-      ) => result.option(flags, desc),
-      !args
-        ? prevProgram.description(description)
-        : prevProgram.description(description).arguments(args),
+      ) =>
+        ({
+          /**
+           * @return {commander} - new program
+           */
+          args: () => (!args ? result : result.arguments(args)),
+
+          /**
+           * @return {commander} - new program
+           */
+          allowUnknownOption: () =>
+            !allowUnknownOption ? result : result.allowUnknownOption(),
+
+          /**
+           * @return {commander} - new program
+           */
+          exitOverride: () => (!exitOverride ? result : result.exitOverride()),
+        }[flags]?.() || result.option(flags, desc)),
+      prevProgram.description(description),
     )
     .action((...data: Data) => callback(data));
 

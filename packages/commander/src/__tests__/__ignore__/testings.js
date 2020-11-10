@@ -24,6 +24,8 @@ export default ([
       args: '<args>',
       version: '1.0.0',
       description: 'description',
+      allowUnknownOption: true,
+      exitOverride: true,
       options: [
         {
           flags: '-o <option>',
@@ -57,6 +59,8 @@ export default ([
         command: {
           args: '<args>',
           description: 'description',
+          allowUnknownOption: true,
+          exitOverride: true,
           options: [
             {
               flags: '-o <option>',

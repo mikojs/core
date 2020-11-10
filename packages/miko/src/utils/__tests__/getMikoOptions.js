@@ -2,8 +2,6 @@
 
 import path from 'path';
 
-import chalk from 'chalk';
-
 import getMikoOptions, { type mikoOptionsType } from '../getMikoOptions';
 import cache from '../cache';
 
@@ -76,10 +74,6 @@ describe('get miko options', () => {
       argv: $ReadOnlyArray<string>,
       expected: mikoOptionsType,
     |}) => {
-      const mockLog = jest.fn();
-
-      global.console.error = mockLog;
-
       const { getCommands, ...mikoOptions } = await getMikoOptions([
         'node',
         'miko',
@@ -87,26 +81,6 @@ describe('get miko options', () => {
       ]);
 
       expect({ ...mikoOptions, command: getCommands?.() }).toEqual(expected);
-      (!expected ? expect(mockLog) : expect(mockLog).not).toHaveBeenCalled();
     },
   );
-
-  test('empty miko config', async () => {
-    cache.load({
-      filepath: path.resolve('.mikorc.js'),
-      config: [
-        {
-          /**
-           * @return {null} - empty miko config
-           */
-          miko: () => null,
-        },
-      ],
-    });
-
-    expect(await getMikoOptions(['node', 'miko', 'cmdString'])).toEqual({
-      type: 'error',
-      errorMessage: chalk`Could not find {red cmdString} in the config`,
-    });
-  });
 });

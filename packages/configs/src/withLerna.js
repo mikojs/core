@@ -2,6 +2,8 @@
 
 import gitBranch from 'git-branch';
 
+import flowTypedCache from './utils/flowTypedCache';
+
 export default {
   /**
    * @param {object} config - prev miko config
@@ -30,6 +32,14 @@ export default {
         return `${flow} && lerna exec '${flow}' --stream --concurrency 1`;
       },
       description: 'run `flow` with the lerna command',
+    },
+    'flow-typed:save-cache': {
+      command: flowTypedCache.save,
+      description: 'save flow-typed in the cache folder',
+    },
+    'flow-typed:restore-cache': {
+      command: flowTypedCache.restore,
+      description: 'restore flow-typed from the cache folder',
     },
     'flow-typed:install': {
       ...config['flow-typed:install'],

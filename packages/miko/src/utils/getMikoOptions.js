@@ -2,7 +2,7 @@
 
 import commander from 'commander';
 import chalk from 'chalk';
-import { invariant } from 'fbjs';
+import { invariant, emptyFunction } from 'fbjs';
 
 import { version } from '../../package.json';
 
@@ -28,15 +28,12 @@ export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
       .description(
         chalk`{cyan manage configs} and {cyan run commands} with the {green miko} worker`,
       )
+      .arguments('<commands...>')
       .allowUnknownOption()
-      .action((_: mixed, commands: $ReadOnlyArray<string>) => {
+      .action((commands: $ReadOnlyArray<string>) => {
         resolve({
           type: 'command',
-
-          /**
-           * @return {commandsType} - commands array
-           */
-          getCommands: () => [commands],
+          getCommands: emptyFunction.thatReturns([commands]),
         });
       });
 

@@ -59,8 +59,8 @@ describe('get miko options', () => {
     ${['generate']}            | ${{ type: 'generate', keep: false }}
     ${['generate', '--keep']}  | ${{ type: 'generate', keep: true }}
     ${['kill']}                | ${{ type: 'kill' }}
-    ${['customCommand']}       | ${{ type: 'command', command: ['customCommand'] }}
-    ${['customCommand', '-a']} | ${{ type: 'command', command: ['customCommand', '-a'] }}
+    ${['customCommand']}       | ${{ type: 'command', command: [['customCommand']] }}
+    ${['customCommand', '-a']} | ${{ type: 'command', command: [['customCommand', '-a']] }}
     ${['cmdString']}           | ${{ type: 'command', command: expectedCommand }}
     ${['cmdFunc']}             | ${{ type: 'command', command: expectedCommand }}
     ${['cmdFunc', '-a']}       | ${{ type: 'command', command: [...expectedCommand.slice(0, -1), [...expectedCommand.slice(-1)[0], '-a']] }}

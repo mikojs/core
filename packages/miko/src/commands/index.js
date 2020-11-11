@@ -68,8 +68,14 @@ const transform = (
  *
  * @return {commandType} - command object
  */
-export default (key: string, args: $ReadOnlyArray<string>): commandType => {
-  const commands = getCommands(cache.get('miko').config?.({}) || {}, key, args);
+export default (
+  key: string | commandsType,
+  args: $ReadOnlyArray<string>,
+): commandType => {
+  const commands =
+    key instanceof Array
+      ? key
+      : getCommands(cache.get('miko').config?.({}) || {}, key, args);
 
   return {
     info: commands

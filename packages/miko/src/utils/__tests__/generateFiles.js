@@ -45,42 +45,34 @@ describe('generate files', () => {
     outputFileSync.mockClear();
   });
 
-  test.each`
-    configNames  | expected
-    ${[]}        | ${['babel.config.js', 'jest.config.js', '.eslintrc.js', '.eslintignore', '.prettierrc.js', '.lintstagedrc.js', 'hasIgnore.js']}
-    ${['babel']} | ${['babel.config.js']}
-  `(
-    'generate files with configNames = $configNames',
-    ({
-      configNames,
-      expected,
-    }: {|
-      configNames: $ReadOnlyArray<string>,
-      expected: $ReadOnlyArray<string>,
-    |}) => {
-      const mockLog = jest.fn();
+  test('generate files', () => {
+    const mockLog = jest.fn();
 
-      global.console.warn = mockLog;
+    global.console.warn = mockLog;
 
-      const result = [...generateFiles(configNames)].sort();
+    const result = [...generateFiles()].sort();
 
-      expect(result).toEqual(
-        [...expected]
-          .sort()
-          .map((filePath: string) => path.resolve(process.cwd(), filePath)),
-      );
-      expect(
-        outputFileSync.mock.calls
-          .map(([outputFilePath]: [string]) => outputFilePath)
-          .sort(),
-      ).toEqual(result);
-
-      if (expected.includes('hasIgnore.js')) {
-        expect(mockLog).toHaveBeenCalledTimes(1);
-        expect(mockLog).toHaveBeenCalledWith(
-          chalk`{yellow ⚠ }{yellow {bold @mikojs/miko}} {red hasIgnore.js} should be added in {bold {gray .gitignore}}`,
-        );
-      }
-    },
-  );
+    expect(result).toEqual(
+      [
+        'babel.config.js',
+        'jest.config.js',
+        '.eslintrc.js',
+        '.eslintignore',
+        '.prettierrc.js',
+        '.lintstagedrc.js',
+        'hasIgnore.js',
+      ]
+        .sort()
+        .map((filePath: string) => path.resolve(process.cwd(), filePath)),
+    );
+    expect(
+      outputFileSync.mock.calls
+        .map(([outputFilePath]: [string]) => outputFilePath)
+        .sort(),
+    ).toEqual(result);
+    expect(mockLog).toHaveBeenCalledTimes(1);
+    expect(mockLog).toHaveBeenCalledWith(
+      chalk`{yellow ⚠ }{yellow {bold @mikojs/miko}} {red hasIgnore.js} should be added in {bold {gray .gitignore}}`,
+    );
+  });
 });

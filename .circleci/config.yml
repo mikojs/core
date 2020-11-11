@@ -44,7 +44,7 @@ jobs:
           name: Install flow-typed
           command: yarn miko flow-typed:install
       - run:
-          name: Restore flow-typed cache
+          name: Save flow-typed cache
           command: yarn miko flow-typed:save-cache
       - save_cache: *save-npm-cache
       - run:

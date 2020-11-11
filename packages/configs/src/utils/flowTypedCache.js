@@ -31,6 +31,8 @@ const mkdirSync = (folderPath: string) => {
  * @return {string} - command string
  */
 const copy = (sourceFolder: string, targetFolder: string): string => {
+  if (!fs.existsSync(sourceFolder)) return '';
+
   mkdirSync(targetFolder);
 
   return `rm -rf ${targetFolder} && cp -r ${sourceFolder} ${targetFolder}`;
@@ -50,6 +52,7 @@ export default {
           path.resolve(cacheFolder, name),
         ),
       )
+      .filter(Boolean)
       .join(' && ');
   },
 
@@ -66,5 +69,6 @@ export default {
               path.resolve(manifestLocation, '../flow-typed/npm'),
             ),
           )
+          .filter(Boolean)
           .join(' && '),
 };

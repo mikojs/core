@@ -10,7 +10,9 @@ type packageType = {|
   manifestLocation: string,
 |};
 
-const cacheFolder = path.resolve('./node_modules/.cache/flow-typed');
+export const cacheFolder: string = path.resolve(
+  './node_modules/.cache/flow-typed',
+);
 
 /**
  * @param {string} folderPath - folder path

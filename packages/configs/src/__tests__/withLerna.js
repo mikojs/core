@@ -5,7 +5,7 @@ import withLerna from '../withLerna';
 describe('with lerna', () => {
   test.each`
     cliName               | ci         | expected
-    ${'flow'}             | ${'true'}  | ${"flow --quiet && flow stop && lerna exec 'flow --quiet && flow stop' --stream --concurrency 1"}
+    ${'flow'}             | ${'true'}  | ${"flow stop && flow --quiet && flow stop && lerna exec 'flow stop && flow --quiet && flow stop' --stream --concurrency 1"}
     ${'flow'}             | ${'false'} | ${"flow --quiet && lerna exec 'flow --quiet' --stream --concurrency 1"}
     ${'dev'}              | ${'true'}  | ${'lerna exec "miko babel -w" --parallel --stream --since master'}
     ${'husky:pre-commit'} | ${'true'}  | ${'miko build --since master && miko flow --since master && lint-staged'}

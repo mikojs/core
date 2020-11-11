@@ -25,9 +25,14 @@ export default {
        * @return {string} - command string
        */
       command: (): string => {
-        const flow = `flow --quiet${
-          process.env.CI === 'true' ? ' && flow stop' : ''
-        }`;
+        const isCI = process.env.CI === 'true';
+        const flow = [
+          isCI ? 'flow stop' : '',
+          'flow --quiet',
+          isCI ? 'flow stop' : '',
+        ]
+          .filter(Boolean)
+          .join(' && ');
 
         return `${flow} && lerna exec '${flow}' --stream --concurrency 1`;
       },

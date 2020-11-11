@@ -9,17 +9,27 @@ import chalk from 'chalk';
 import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
+import commander from '@mikojs/commander';
 
-import getBadgesOptions from 'utils/getBadgesOptions';
+import { version } from '../../package.json';
+
 import addBadges from 'utils/addBadges';
 
 handleUnhandledRejection();
 
 const logger = createLogger('@mikojs/badges');
+const parseArgv = commander({
+  name: 'badges',
+  version,
+  description: chalk`add the badges to {green README.md}`,
+  args: '<readme-paths...>',
+});
 
 (async () => {
+  const [readmePaths] = await parseArgv(process.argv);
+
   await Promise.all(
-    (await getBadgesOptions(process.argv)).map(async (cwd: string) => {
+    readmePaths.map(async (cwd: string) => {
       const { path: pkgPath, packageJson: pkg } = await readPkgUp({
         cwd: path.resolve(cwd),
       });

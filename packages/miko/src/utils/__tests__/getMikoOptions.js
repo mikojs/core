@@ -55,16 +55,16 @@ describe('get miko options', () => {
   });
 
   test.each`
-    argv                 | expected
-    ${[]}                | ${{ type: 'start', keep: false }}
-    ${['--keep']}        | ${{ type: 'start', keep: true }}
-    ${['kill']}          | ${{ type: 'kill' }}
-    ${['cmdString']}     | ${{ type: 'command', command: expectedCommand }}
-    ${['cmdFunc']}       | ${{ type: 'command', command: expectedCommand }}
-    ${['cmdFunc', '-a']} | ${{ type: 'command', command: [...expectedCommand.slice(0, -1), [...expectedCommand.slice(-1)[0], '-a']] }}
-    ${['mergeCmd']}      | ${{ type: 'command', command: [...expectedCommand.slice(0, -1), [...expectedCommand.slice(-1)[0], '-a']] }}
-    ${['mergeEnv']}      | ${{ type: 'command', command: [['NODE_ENV=production', ...expectedCommand[0]], ...expectedCommand.slice(1)] }}
-    ${['mergeLerna']}    | ${{ type: 'command', command: [['lerna', 'exec', `"echo 'test' && echo 'test test' && ${command} && ${command} -a"`, '--stream']] }}
+    argv                      | expected
+    ${['generate']}           | ${{ type: 'generate', keep: false }}
+    ${['generate', '--keep']} | ${{ type: 'generate', keep: true }}
+    ${['kill']}               | ${{ type: 'kill' }}
+    ${['cmdString']}          | ${{ type: 'command', command: expectedCommand }}
+    ${['cmdFunc']}            | ${{ type: 'command', command: expectedCommand }}
+    ${['cmdFunc', '-a']}      | ${{ type: 'command', command: [...expectedCommand.slice(0, -1), [...expectedCommand.slice(-1)[0], '-a']] }}
+    ${['mergeCmd']}           | ${{ type: 'command', command: [...expectedCommand.slice(0, -1), [...expectedCommand.slice(-1)[0], '-a']] }}
+    ${['mergeEnv']}           | ${{ type: 'command', command: [['NODE_ENV=production', ...expectedCommand[0]], ...expectedCommand.slice(1)] }}
+    ${['mergeLerna']}         | ${{ type: 'command', command: [['lerna', 'exec', `"echo 'test' && echo 'test test' && ${command} && ${command} -a"`, '--stream']] }}
   `(
     'run $argv',
     async ({

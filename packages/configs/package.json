@@ -9,6 +9,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
+    "@lerna/project": "^3.21.0",
     "@mikojs/utils": "^1.12.1",
     "core-js": "^3.6.5",
     "git-branch": "^2.0.1"

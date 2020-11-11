@@ -28,8 +28,16 @@ export default (argv: $ReadOnlyArray<string>): Promise<mikoOptionsType> =>
       .description(
         chalk`{cyan manage configs} and {cyan run commands} with the {green miko} worker`,
       )
-      .action(({ keep = false }: {| keep: boolean |}) => {
-        resolve({ type: 'generate', keep });
+      .allowUnknownOption()
+      .action((_: mixed, commands: $ReadOnlyArray<string>) => {
+        resolve({
+          type: 'command',
+
+          /**
+           * @return {commandsType} - commands array
+           */
+          getCommands: () => [commands],
+        });
       });
 
     program

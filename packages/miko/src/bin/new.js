@@ -14,6 +14,7 @@ import parseArgv from 'utils/parseArgv';
 import generateFiles from 'utils/generateFiles';
 
 import typeof * as workerType from 'worker';
+import commands from 'commands';
 
 const logger = createLogger('@mikojs/miko', ora({ discardStdin: false }));
 const debugLog = debug('miko:bin');
@@ -21,12 +22,12 @@ const debugLog = debug('miko:bin');
 handleUnhandledRejection();
 
 (async () => {
-  const [type, { keep = false }] = await parseArgv(process.argv);
+  const [type, { keep = false }, rawArgs = []] = await parseArgv(process.argv);
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );
 
-  debugLog({ type });
+  debugLog({ type, keep, rawArgs });
   logger.start('Running');
 
   switch (type) {
@@ -56,6 +57,21 @@ handleUnhandledRejection();
       break;
 
     default:
+      const { info, run } = commands(
+        typeof type === 'string' ? type : [type],
+        rawArgs,
+      );
+
+      await worker.addTracking(process.pid, generateFiles());
+      debugLog(info);
+      logger.info(chalk`{gray Run command: ${info}}`);
+
+      try {
+        await run();
+      } catch (e) {
+        debugLog(e);
+        process.exit(1);
+      }
       break;
   }
 })();

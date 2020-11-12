@@ -34,7 +34,9 @@ const option = {
  *
  * @return {Promise} - parse result
  */
-export default <Data: $ReadOnlyArray<mixed>>(argv: $ReadOnlyArray<string>): Promise<Data> => {
+export default <Data: $ReadOnlyArray<mixed>>(
+  argv: $ReadOnlyArray<string>,
+): Promise<Data> => {
   const existCommands = Object.keys(option.commands);
   const configs = cache.get('miko').config?.({}) || {};
 

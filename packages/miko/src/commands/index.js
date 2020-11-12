@@ -6,7 +6,7 @@ import debug from 'debug';
 import { type commandsType, QUOTATION_START, QUOTATION_END } from './normalize';
 import getCommands from './getCommands';
 
-import cache from 'utils/cache';
+import { type mikoConfigsType } from 'utils/parseArgv';
 
 type commandType = {|
   info: string,
@@ -66,19 +66,18 @@ const transform = (
 };
 
 /**
+ * @param {mikoConfigsType} configs - miko configs
  * @param {string} key - command key
  * @param {Array} args - other arguments
  *
  * @return {commandType} - command object
  */
 export default (
+  configs: mikoConfigsType,
   key: string | commandsType,
   args: $ReadOnlyArray<string>,
 ): commandType => {
-  const commands =
-    key instanceof Array
-      ? key
-      : getCommands(cache.get('miko').config?.({}) || {}, key, args);
+  const commands = key instanceof Array ? key : getCommands(configs, key, args);
 
   debugLog(commands);
 

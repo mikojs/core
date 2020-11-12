@@ -63,6 +63,7 @@ handleUnhandledRejection();
 
     default:
       const { info, run } = commands(
+        configs,
         typeof type === 'string' ? type : [type],
         rawArgs,
       );

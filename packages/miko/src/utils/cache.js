@@ -36,12 +36,6 @@ type configObjType = {|
   filepath: string,
 |};
 
-export type mikoConfigsType = {|
-  [string]: {|
-    command: string | (() => string),
-  |},
-|};
-
 export type cacheType = {|
   keys: () => $ReadOnlyArray<string>,
   resolve: (filePath: string) => string,

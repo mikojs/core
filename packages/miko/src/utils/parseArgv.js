@@ -9,6 +9,7 @@ import { version } from '../../package.json';
 export type mikoConfigsType = {|
   [string]: {|
     command: string | (() => string),
+    description: string,
   |},
 |};
 

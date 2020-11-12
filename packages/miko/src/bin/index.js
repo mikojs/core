@@ -63,7 +63,6 @@ handleUnhandledRejection();
       );
 
       await worker.addTracking(process.pid, generateFiles());
-      debugLog(info);
       logger.info(chalk`{gray Run command: ${info}}`);
 
       try {

@@ -1,6 +1,7 @@
 // @flow
 
 import execa from 'execa';
+import debug from 'debug';
 
 import { type commandsType, QUOTATION_START, QUOTATION_END } from './normalize';
 import getCommands from './getCommands';
@@ -17,6 +18,8 @@ type execaOptionsType = [
   $ElementType<commandsType, number>,
   { stdio: 'inherit', env: { [string]: string } },
 ];
+
+const debugLog = debug('miko:commands');
 
 /**
  * @param {Array} commands - commands array
@@ -76,6 +79,8 @@ export default (
     key instanceof Array
       ? key
       : getCommands(cache.get('miko').config?.({}) || {}, key, args);
+
+  debugLog(commands);
 
   return {
     info: commands

@@ -24,6 +24,10 @@ export type optionType = {|
   version: string,
 |};
 
+export type parseArgvType<Data: $ReadOnlyArray<mixed>> = (
+  argv: $ReadOnlyArray<string>,
+) => Promise<Data>;
+
 type callbackType<Data: $ReadOnlyArray<mixed>> = (data: Data) => void;
 
 const defaultOptions = ['args', 'allowUnknownOption', 'exitOverride'].map(
@@ -93,9 +97,7 @@ export default <Data: $ReadOnlyArray<mixed>>({
   name,
   version,
   ...config
-}: optionType): ((argv: $ReadOnlyArray<string>) => Promise<Data>) => (
-  argv: $ReadOnlyArray<string>,
-) =>
+}: optionType): parseArgvType<Data> => (argv: $ReadOnlyArray<string>) =>
   new Promise(resolve => {
     const program = new commander.Command(name).version(
       version,

@@ -10,10 +10,10 @@
   "bin": "./lib/bin/index.js",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
+    "@mikojs/commander": "^1.12.1",
     "@mikojs/utils": "^1.12.1",
     "@mikojs/worker": "^1.12.1",
     "chalk": "^4.1.0",
-    "commander": "^6.1.0",
     "core-js": "^3.6.5",
     "cosmiconfig": "^7.0.0",
     "debug": "^4.2.0",

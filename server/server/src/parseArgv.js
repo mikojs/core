@@ -7,7 +7,7 @@ import { type Server as ServerType } from 'http';
 import ora from 'ora';
 import chalk from 'chalk';
 
-import commander from '@mikojs/commander';
+import commander, { type optionsType } from '@mikojs/commander';
 import { createLogger, requireModule } from '@mikojs/utils';
 import tools, {
   type fileDataType,
@@ -15,6 +15,8 @@ import tools, {
 } from '@mikojs/merge-dir/lib/utils/tools';
 
 import server, { type middlewareType } from './index';
+
+export type defaultOptionsType = $Diff<optionsType, {| version: mixed |}>;
 
 /**
  * @param {string} name - command name
@@ -52,7 +54,7 @@ export const handleErrorMessage = (name: string, err: Error): string =>
 
 /**
  * @param {string} name - command name
- * @param {string} version - command version
+ * @param {Function} buildOptions - build the command options for the server
  * @param {Function} buildMiddleware - build the middleware for the server
  * @param {Array} argv - command line
  *
@@ -60,7 +62,7 @@ export const handleErrorMessage = (name: string, err: Error): string =>
  */
 export default async <Req = {}, Res = {}>(
   name: string,
-  version: string,
+  buildOptions: (defaultOptions: defaultOptionsType) => optionsType,
   buildMiddleware: (
     sourcePath: string,
     prefix?: string,
@@ -86,25 +88,26 @@ export default async <Req = {}, Res = {}>(
     command,
     sourcePath,
     { port = 3000, prefix }: {| port: number, prefix?: string |},
-  ] = await commander({
-    name,
-    version,
-    description: chalk`control a {green ${name}} server`,
-    commands: {
-      dev: {
-        ...defaultCommand,
-        description: chalk`start a {green ${name}} server in the {cyan dev} mode`,
+  ] = await commander(
+    buildOptions({
+      name,
+      description: chalk`control a {green ${name}} server`,
+      commands: {
+        dev: {
+          ...defaultCommand,
+          description: chalk`start a {green ${name}} server in the {cyan dev} mode`,
+        },
+        start: {
+          ...defaultCommand,
+          description: chalk`start a {green ${name}} server in the {cyan prod} mode`,
+        },
+        build: {
+          ...defaultCommand,
+          description: chalk`build a {cyan prod} {green ${name}} server`,
+        },
       },
-      start: {
-        ...defaultCommand,
-        description: chalk`start a {green ${name}} server in the {cyan prod} mode`,
-      },
-      build: {
-        ...defaultCommand,
-        description: chalk`build a {cyan prod} {green ${name}} server`,
-      },
-    },
-  })(argv);
+    }),
+  )(argv);
 
   server.set(command === 'start' ? 'run' : command);
 
@@ -118,6 +121,7 @@ export default async <Req = {}, Res = {}>(
       logger.start('Building the server');
       (await server.ready())();
       logger.succeed(chalk`Use {green ${name} start} to run the server`);
+
       return null;
     }
 

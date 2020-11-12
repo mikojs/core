@@ -2,24 +2,24 @@
 
 import commander from 'commander';
 
-type commandOptionType = {|
+type commandOptionsType = {|
   flags: string,
   description: string,
 |};
 
-type configType = {|
+type configsType = {|
   description: string,
   args?: string,
   allowUnknownOption?: boolean,
   exitOverride?: boolean,
-  options?: $ReadOnlyArray<commandOptionType>,
+  options?: $ReadOnlyArray<commandOptionsType>,
   commands?: {|
-    [string]: configType,
+    [string]: configsType,
   |},
 |};
 
-export type optionType = {|
-  ...configType,
+export type optionsType = {|
+  ...configsType,
   name: string,
   version: string,
 |};
@@ -35,7 +35,7 @@ const defaultOptions = ['args', 'allowUnknownOption', 'exitOverride'].map(
 
 /**
  * @param {commander} prevProgram - prev program object
- * @param {configType} config - program config
+ * @param {configsType} config - program config
  * @param {callbackType} callback - callback function
  */
 const addConfig = <Data: $ReadOnlyArray<mixed>>(
@@ -47,14 +47,14 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
     exitOverride,
     options = [],
     commands = {},
-  }: configType,
+  }: configsType,
   callback: callbackType<Data>,
 ) => {
   const program = [...defaultOptions, ...options]
     .reduce(
       (
         result: typeof commander,
-        { flags, description: desc }: commandOptionType,
+        { flags, description: desc }: commandOptionsType,
       ) =>
         ({
           /**
@@ -85,7 +85,7 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
 };
 
 /**
- * @param {configType} config - commander config
+ * @param {configsType} config - commander config
  *
  * @return {Promise} - parse result
  */
@@ -93,7 +93,7 @@ export default <Data: $ReadOnlyArray<mixed>>({
   name,
   version,
   ...config
-}: optionType): ((argv: $ReadOnlyArray<string>) => Promise<Data>) => (
+}: optionsType): ((argv: $ReadOnlyArray<string>) => Promise<Data>) => (
   argv: $ReadOnlyArray<string>,
 ) =>
   new Promise(resolve => {

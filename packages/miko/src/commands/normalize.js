@@ -1,6 +1,6 @@
 // @flow
 
-import { type commandsType } from './getCommands';
+export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
 
 export const QUOTATION_START: RegExp = /^['"]/;
 export const QUOTATION_END: RegExp = /['"]$/;

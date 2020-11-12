@@ -50,7 +50,7 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
   }: configType,
   callback: callbackType<Data>,
 ) => {
-  const program = [...defaultOptions, ...(options || [])]
+  const program = [...defaultOptions, ...options]
     .reduce(
       (
         result: typeof commander,

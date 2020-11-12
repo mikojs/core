@@ -1,25 +1,30 @@
 // @flow
 
-import getCommandsArray, {
+import normalize, {
+  type commandsType,
   QUOTATION_START,
   QUOTATION_END,
-} from './getCommandsArray';
+} from './normalize';
 
-export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
+import { type mikoConfigsType } from 'utils/parseArgv';
 
 /**
- * @param {string} command - command string or command function
- * @param {object} configs - miko configs
- * @param {Array} otherArgs - other arguments
+ * @param {mikoConfigsType} configs - miko configs
+ * @param {string} key - command key
+ * @param {Array} args - other arguments
  *
  * @return {commandsType} - commands array
  */
 const getCommands = (
-  command: string | (() => string),
-  configs: {},
-  otherArgs: $ReadOnlyArray<string>,
+  configs: mikoConfigsType,
+  key: string,
+  args: $ReadOnlyArray<string>,
 ): commandsType =>
-  getCommandsArray(typeof command === 'string' ? command : command()).reduce(
+  normalize(
+    typeof configs[key].command === 'string'
+      ? configs[key].command
+      : configs[key].command(),
+  ).reduce(
     (
       result: commandsType,
       commands: $ElementType<commandsType, number>,
@@ -28,15 +33,15 @@ const getCommands = (
     ): commandsType => {
       const currentCommands = (commandsArray.length - 1 !== index
         ? commands
-        : [...commands, ...otherArgs]
+        : [...commands, ...args]
       ).map((currentCommand: string) =>
         QUOTATION_START.test(currentCommand) &&
         QUOTATION_END.test(currentCommand) &&
         /miko/.test(currentCommand)
           ? currentCommand.replace(
               /miko (\w+)/g,
-              (match: string, key: string) =>
-                getCommands(configs[key].command, configs, [])
+              (match: string, commandKey: string) =>
+                getCommands(configs, commandKey, [])
                   .map((eachCommands: $ReadOnlyArray<string>) =>
                     eachCommands.join(' '),
                   )
@@ -52,11 +57,7 @@ const getCommands = (
 
       if (mikoCommandIndex !== -1) {
         const mikoCommand = [
-          ...getCommands(
-            configs[currentCommands[mikoCommandIndex]].command,
-            configs,
-            [],
-          ),
+          ...getCommands(configs, currentCommands[mikoCommandIndex], []),
         ];
 
         mikoCommand[0] = [

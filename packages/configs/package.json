@@ -5,16 +5,17 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/configs",
   "repository": "https://github.com/mikojs/core/tree/master/packages/configs",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "@mikojs/utils": "^1.12.0",
+    "@lerna/project": "^3.21.0",
+    "@mikojs/utils": "^1.12.1",
     "core-js": "^3.6.5",
     "git-branch": "^2.0.1"
   },
   "devDependencies": {
-    "@mikojs/miko": "^1.12.0",
+    "@mikojs/miko": "^1.12.1",
     "flow-bin": "^0.135.0",
     "flow-typed": "^3.2.1"
   },

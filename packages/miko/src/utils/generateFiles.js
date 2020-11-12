@@ -15,13 +15,9 @@ const logger = createLogger('@mikojs/miko');
 const debugLog = debug('miko:generateFiles');
 
 /**
- * @param {Array} configNames - config names
- *
  * @return {Array} - generating files
  */
-export default (
-  configNames: $ReadOnlyArray<string>,
-): $ReadOnlyArray<string> => {
+export default (): $ReadOnlyArray<string> => {
   const gitignore = [cache.resolve, path.resolve]
     .reduce((result: string, getPath: (filePath: string) => string): string => {
       const filePath = getPath('./.gitignore');
@@ -34,13 +30,10 @@ export default (
 
   return cache
     .keys()
-    .filter((key: string) =>
-      key === 'miko'
-        ? false
-        : configNames.length === 0 || configNames.includes(key),
-    )
     .reduce(
       (result: $ReadOnlyArray<string>, key: string): $ReadOnlyArray<string> => {
+        if (key === 'miko') return result;
+
         const { configFile, ignoreFile } = cache.get(key);
 
         debugLog({ key, configFile, ignoreFile });

@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## 1.12.1 (2020-11-08)
+
+#### :rocket: New Feature
+
+- `badges`, `dir-tree`, `eslint-config-base`, `merge-dir`, `miko`, `utils`
+  - [#697](https://github.com/mikojs/core/pull/697) (@mikojs/dir-tree) Add new package ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#696](https://github.com/mikojs/core/pull/696) (@mikojs/server) Support middleware ([@HsuTing](https://github.com/HsuTing))
+  - [#692](https://github.com/mikojs/core/pull/692) (@mikojs/graphql) Add new package ([@HsuTing](https://github.com/HsuTing))
+  - [#690](https://github.com/mikojs/core/pull/690) (@mikojs/router) Modify code style ([@HsuTing](https://github.com/HsuTing))
+- `merge-dir`
+  - [#689](https://github.com/mikojs/core/pull/689) (@mikojs/server) Add more info ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- [#695](https://github.com/mikojs/core/pull/695) (@mikojs/server) Modify middleware type ([@HsuTing](https://github.com/HsuTing))
+- [#693](https://github.com/mikojs/core/pull/693) (@mikojs/server) Rename function name ([@HsuTing](https://github.com/HsuTing))
+- [#691](https://github.com/mikojs/core/pull/691) (@mikojs/router) Rename file name ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.12.0 (2020-10-21)
 
 #### :rocket: New Feature

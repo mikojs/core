@@ -1,9 +1,9 @@
 // @flow
 
-import { type optionType } from '../../index';
+import { type optionsType } from '../../index';
 
 export type testingType = [
-  optionType,
+  optionsType,
   $ReadOnlyArray<string>,
   $ReadOnlyArray<mixed>,
 ];

@@ -9,7 +9,11 @@ import fetch, { type Response as ResponseType } from 'node-fetch';
 import { createLogger } from '@mikojs/utils';
 
 import { type eventType } from '../index';
-import parseArgv, { buildLog, handleErrorMessage } from '../parseArgv';
+import parseArgv, {
+  type defaultOptionsType,
+  buildLog,
+  handleErrorMessage,
+} from '../parseArgv';
 
 import middleware from './__ignore__/middleware';
 
@@ -56,7 +60,10 @@ describe('parse argv', () => {
         async ({ event }: {| event: eventType |}) => {
           const server = await parseArgv(
             'server',
-            '1.0.0',
+            (defaultOptions: defaultOptionsType) => ({
+              ...defaultOptions,
+              version: '1.0.0',
+            }),
             sourcePath === __dirname
               ? emptyFunction.thatReturns(middleware)
               : emptyFunction,
@@ -83,7 +90,10 @@ describe('parse argv', () => {
     await expect(
       parseArgv(
         'server',
-        '1.0.0',
+        (defaultOptions: defaultOptionsType) => ({
+          ...defaultOptions,
+          version: '1.0.0',
+        }),
         () => {
           throw new Error('error');
         },

@@ -18,7 +18,7 @@ import server, { type middlewareType } from './index';
 
 export type defaultOptionsType = $Diff<optionsType, {| version: mixed |}>;
 export type buildOptionsType = (
-  options: $Diff<optionsType, {| version: mixed |}>,
+  defaultOptions: defaultOptionsType,
 ) => optionsType;
 
 /**

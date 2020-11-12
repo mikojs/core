@@ -10,6 +10,7 @@ import chalk from 'chalk';
 import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
 import buildWorker from '@mikojs/worker';
 
+import cache from 'utils/cache';
 import parseArgv from 'utils/parseArgv';
 import generateFiles from 'utils/generateFiles';
 
@@ -22,7 +23,11 @@ const debugLog = debug('miko:bin');
 handleUnhandledRejection();
 
 (async () => {
-  const [type, { keep = false }, rawArgs = []] = await parseArgv(process.argv);
+  const configs = cache.get('miko').config?.({}) || {};
+  const [type, { keep = false }, rawArgs = []] = await parseArgv(
+    configs,
+    process.argv,
+  );
   const worker = await buildWorker<workerType>(
     path.resolve(__dirname, '../worker/index.js'),
   );

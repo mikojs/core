@@ -5,7 +5,12 @@ import chalk from 'chalk';
 import commander from '@mikojs/commander';
 
 import { version } from '../../package.json';
-import cache from './cache';
+
+export type mikoConfigsType = {|
+  [string]: {|
+    command: string | (() => string),
+  |},
+|};
 
 const option = {
   name: 'miko',
@@ -30,15 +35,16 @@ const option = {
 };
 
 /**
+ * @param {mikoConfigsType} configs - miko configs
  * @param {Array} argv - command argv
  *
  * @return {Promise} - parse result
  */
 export default <Data: $ReadOnlyArray<mixed>>(
+  configs: {},
   argv: $ReadOnlyArray<string>,
 ): Promise<Data> => {
   const existCommands = Object.keys(option.commands);
-  const configs = cache.get('miko').config?.({}) || {};
 
   Object.keys(configs)
     .filter((key: string) => !existCommands.includes(key))

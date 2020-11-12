@@ -2,7 +2,7 @@
 
 import chalk from 'chalk';
 
-import commander, { type parseArgvType } from '@mikojs/commander';
+import commander from '@mikojs/commander';
 
 import { version } from '../../package.json';
 import cache from './cache';
@@ -30,9 +30,11 @@ const option = {
 };
 
 /**
+ * @param {Array} argv - command argv
+ *
  * @return {Promise} - parse result
  */
-export default <Data: $ReadOnlyArray<mixed>>(): parseArgvType<Data> => {
+export default <Data: $ReadOnlyArray<mixed>>(argv: $ReadOnlyArray<string>): Promise<Data> => {
   const existCommands = Object.keys(option.commands);
   const configs = cache.get('miko').config?.({}) || {};
 
@@ -45,5 +47,5 @@ export default <Data: $ReadOnlyArray<mixed>>(): parseArgvType<Data> => {
       };
     });
 
-  return commander(option);
+  return commander(option)(argv);
 };

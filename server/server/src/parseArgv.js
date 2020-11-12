@@ -17,9 +17,6 @@ import tools, {
 import server, { type middlewareType } from './index';
 
 export type defaultOptionsType = $Diff<optionsType, {| version: mixed |}>;
-export type buildOptionsType = (
-  defaultOptions: defaultOptionsType,
-) => optionsType;
 
 /**
  * @param {string} name - command name
@@ -57,7 +54,7 @@ export const handleErrorMessage = (name: string, err: Error): string =>
 
 /**
  * @param {string} name - command name
- * @param {buildOptionsType} buildOptions - build command options
+ * @param {Function} buildOptions - build the command options for the server
  * @param {Function} buildMiddleware - build the middleware for the server
  * @param {Array} argv - command line
  *
@@ -65,7 +62,7 @@ export const handleErrorMessage = (name: string, err: Error): string =>
  */
 export default async <Req = {}, Res = {}>(
   name: string,
-  buildOptions: buildOptionsType,
+  buildOptions: (defaultOptions: defaultOptionsType) => optionsType,
   buildMiddleware: (
     sourcePath: string,
     prefix?: string,

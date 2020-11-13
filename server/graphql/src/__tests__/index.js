@@ -19,13 +19,20 @@ describe.each`
     folderPathOrMiddleware: string | graphqlType,
   |}) => {
     beforeAll(async () => {
-      await testingServer.run(folderPathOrMiddleware);
+      await testingServer.run(folderPathOrMiddleware, 'prefix');
     });
 
-    test('fetch', async () => {
+    test.each`
+      url
+      ${'/'}
+      ${'/prefix'}
+    `('fetch $url', async ({ url }: {| url: string |}) => {
+      const notFound =
+        url === '/' && typeof folderPathOrMiddleware === 'string';
+
       expect(
         await testingServer
-          .fetch('/', {
+          .fetch(url, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -38,12 +45,16 @@ describe.each`
             `,
             }),
           })
-          .then((res: fetchResultType) => res.json()),
-      ).toEqual({
-        data: {
-          version: '1.0.0',
-        },
-      });
+          .then((res: fetchResultType) => (notFound ? res.status : res.json())),
+      ).toEqual(
+        notFound
+          ? 404
+          : {
+              data: {
+                version: '1.0.0',
+              },
+            },
+      );
     });
 
     afterAll(() => {

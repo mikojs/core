@@ -13,6 +13,7 @@ type configsType = {|
   allowUnknownOption?: boolean,
   exitOverride?: boolean,
   options?: $ReadOnlyArray<commandOptionsType>,
+  requiredOptions?: $ReadOnlyArray<commandOptionsType>,
   commands?: {|
     [string]: configsType,
   |},
@@ -46,15 +47,17 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
     allowUnknownOption,
     exitOverride,
     options = [],
+    requiredOptions = [],
     commands = {},
   }: configsType,
   callback: callbackType<Data>,
 ) => {
-  const program = [...defaultOptions, ...options]
+  const program = [...defaultOptions, ...requiredOptions, ...options]
     .reduce(
       (
         result: typeof commander,
         { flags, description: desc }: commandOptionsType,
+        index: number,
       ) =>
         ({
           /**
@@ -72,7 +75,10 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
            * @return {commander} - new program
            */
           exitOverride: () => (!exitOverride ? result : result.exitOverride()),
-        }[flags]?.() || result.option(flags, desc)),
+        }[flags]?.() ||
+        (index >= defaultOptions.length + requiredOptions.length
+          ? result.option(flags, desc)
+          : result.requiredOption(flags, desc))),
       prevProgram.description(description),
     )
     .action((...data: Data) => callback(data));

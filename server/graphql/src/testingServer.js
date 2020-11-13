@@ -13,11 +13,15 @@ export default {
 
   /**
    * @param {string} folderPathOrMiddleware - folder path or middleware
+   * @param {string} prefix - pathname prefix
    */
-  run: async (folderPathOrMiddleware: string | graphqlType) => {
+  run: async (
+    folderPathOrMiddleware: string | graphqlType,
+    prefix?: string,
+  ) => {
     await testingServer.run(
       typeof folderPathOrMiddleware === 'string'
-        ? graphql(folderPathOrMiddleware)
+        ? graphql(folderPathOrMiddleware, prefix)
         : folderPathOrMiddleware,
     );
   },

@@ -1,17 +1,21 @@
 // @flow
 
+import url from 'url';
+import {
+  type IncomingMessage as IncomingMessageType,
+  type ServerResponse as ServerResponseType,
+} from 'http';
+
 import {
   graphqlHTTP,
   type OptionsData as OptionsDataType,
 } from 'express-graphql';
-import { makeExecutableSchema } from '@graphql-tools/schema';
 
-import server, { type middlewareType } from '@mikojs/server';
+import { type middlewareType } from '@mikojs/server';
 
-import buildCache, { type cacheType } from './utils/buildCache';
+import schema from './schema';
 
-type resType = {| json?: (data: mixed) => void |};
-
+export type resType = {| json?: (data: mixed) => void |};
 export type graphqlType = middlewareType<{}, resType>;
 
 /**
@@ -25,11 +29,21 @@ export default (
   folderPath: string,
   prefix?: string,
   options?: $Diff<OptionsDataType, {| schema: mixed |}>,
-): graphqlType =>
-  server.mergeDir(
-    folderPath,
-    prefix,
-    buildCache,
-  )((cache: cacheType): graphqlType =>
-    graphqlHTTP({ ...options, schema: makeExecutableSchema(cache) }),
-  );
+): graphqlType => (
+  req: IncomingMessageType,
+  res: ServerResponseType & resType,
+) => {
+  const { pathname } = url.parse(req.url);
+
+  if (
+    !pathname ||
+    (prefix &&
+      !new RegExp(`^${prefix.replace(/^([^/])/, '/$1')}`).test(pathname))
+  ) {
+    res.statusCode = 404;
+    res.end();
+    return;
+  }
+
+  graphqlHTTP({ ...options, schema: schema(folderPath) })(req, res);
+};

@@ -32,9 +32,15 @@ export default ([
           description: 'option',
         },
       ],
+      requiredOptions: [
+        {
+          flags: '-ro <option>',
+          description: 'required option',
+        },
+      ],
     },
-    ['args', '-o', 'option'],
-    ['args', { o: 'option' }],
+    ['args', '-o', 'option', '-ro', 'option'],
+    ['args', { o: 'option', Ro: 'option' }],
   ],
   [
     {
@@ -67,10 +73,16 @@ export default ([
               description: 'option',
             },
           ],
+          requiredOptions: [
+            {
+              flags: '-ro <option>',
+              description: 'required option',
+            },
+          ],
         },
       },
     },
-    ['command', 'args', '-o', 'option'],
-    ['command', 'args', { o: 'option' }],
+    ['command', 'args', '-o', 'option', '-ro', 'option'],
+    ['command', 'args', { o: 'option', Ro: 'option' }],
   ],
 ]: $ReadOnlyArray<testingType>);

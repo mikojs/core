@@ -6,44 +6,12 @@ import path from 'path';
 import { emptyFunction } from 'fbjs';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
-import { createLogger } from '@mikojs/utils';
+import { type eventType } from '../../index';
+import middleware from '../../__tests__/__ignore__/middleware';
 
-import { type eventType } from '../index';
-import parseArgv, {
-  type defaultOptionsType,
-  buildLog,
-  handleErrorMessage,
-} from '../parseArgv';
-
-import middleware from './__ignore__/middleware';
+import parseArgv, { type defaultOptionsType } from '../index';
 
 describe('parse argv', () => {
-  test.each`
-    data
-    ${'done'}
-    ${true}
-    ${false}
-  `('run with data = $data', ({ data }: {| data: 'done' | boolean |}) => {
-    const mockLog = jest.fn();
-
-    global.console = {
-      log: mockLog,
-      info: mockLog,
-    };
-    buildLog(
-      'server',
-      createLogger('server'),
-    )(data === 'done' ? data : { exists: data, filePath: './', pathname: '/' });
-
-    expect(mockLog).toHaveBeenCalled();
-  });
-
-  test('could not find a build error', () => {
-    expect(
-      handleErrorMessage('server', new Error('Cannot find module main.js')),
-    ).toMatch(/Could not find a valid build./);
-  });
-
   describe.each`
     sourcePath
     ${__dirname}

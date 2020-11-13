@@ -1,5 +1,7 @@
 // @flow
 
+import http from 'http';
+
 import { relayCompiler } from 'relay-compiler';
 import { type Config } from 'relay-compiler/bin/RelayCompilerMain.js.flow';
 
@@ -28,7 +30,9 @@ import { version } from '../../package.json';
       process.argv,
     );
 
-    if (result instanceof Array) relayCompiler(result[1]);
+    if (!result || result instanceof http.Server) return;
+
+    relayCompiler(result[1]);
   } catch (e) {
     process.exit(1);
   }

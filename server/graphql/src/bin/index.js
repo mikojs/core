@@ -1,6 +1,7 @@
 // @flow
 
-import http from 'http';
+import { relayCompiler } from 'relay-compiler';
+import { type Config } from 'relay-compiler/bin/RelayCompilerMain.js.flow';
 
 import parseArgv, {
   type defaultOptionsType,
@@ -11,7 +12,7 @@ import { version } from '../../package.json';
 
 (async () => {
   try {
-    const result = await parseArgv<{}, resType, []>(
+    const result = await parseArgv<{}, resType, ['relay-compiler', Config]>(
       'graphql',
       (defaultOptions: defaultOptionsType) => ({
         ...defaultOptions,
@@ -27,7 +28,7 @@ import { version } from '../../package.json';
       process.argv,
     );
 
-    if (result instanceof http.Server) return;
+    if (result instanceof Array) relayCompiler(result[1]);
   } catch (e) {
     process.exit(1);
   }

@@ -29,7 +29,7 @@ export type defaultOptionsType = getDefaultOptionsDefaultOptionsType;
  *
  * @return {ServerType} - server or null
  */
-export default async <Req = {}, Res = {}>(
+export default async <Req = {}, Res = {}, Data = []>(
   name: string,
   buildOptions: (defaultOptions: defaultOptionsType) => optionsType,
   buildMiddleware: (
@@ -37,7 +37,7 @@ export default async <Req = {}, Res = {}>(
     prefix?: string,
   ) => middlewareType<Req, Res>,
   argv: $ReadOnlyArray<string>,
-): Promise<?ServerType> => {
+): Promise<?ServerType | Data> => {
   const logger = createLogger(`@mikojs/${name}`, ora({ discardStdin: false }));
   const defaultOptions = getDefaultOptions(name);
   const result = await commander(buildOptions(defaultOptions))(argv);

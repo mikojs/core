@@ -55,24 +55,23 @@ describe('parse argv', () => {
   );
 
   test('custom commnad', async () => {
-    expect(
-      (
-        await parseArgv(
-          'server',
-          (defaultOptions: defaultOptionsType) => ({
-            ...defaultOptions,
-            version: '1.0.0',
-            commands: {
-              command: {
-                description: 'description',
-              },
-            },
-          }),
-          emptyFunction,
-          ['node', 'server', 'command'],
-        )
-      ).slice(0, -1),
-    ).toEqual(['command']);
+    const result = await parseArgv<{}, {}, []>(
+      'server',
+      (defaultOptions: defaultOptionsType) => ({
+        ...defaultOptions,
+        version: '1.0.0',
+        commands: {
+          command: {
+            description: 'description',
+          },
+        },
+      }),
+      emptyFunction,
+      ['node', 'server', 'command'],
+    );
+
+    if (!result || result instanceof http.Server) expect(result).toBeTruthy();
+    else expect(result.slice(0, -1)).toEqual(['command']);
   });
 
   test('parse argv error', async () => {

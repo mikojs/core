@@ -15,7 +15,7 @@ describe('parse argv', () => {
   describe.each`
     sourcePath
     ${__dirname}
-    ${path.resolve(__dirname, './__ignore__/middleware.js')}
+    ${path.resolve(__dirname, '../../__tests__/__ignore__/middleware.js')}
   `(
     'run command with source-path = $sourcePath',
     ({ sourcePath }: {| sourcePath: string |}) => {

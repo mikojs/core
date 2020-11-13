@@ -15,8 +15,7 @@ import { type middlewareType } from '@mikojs/server';
 
 import schema from './schema';
 
-type resType = {| json?: (data: mixed) => void |};
-
+export type resType = {| json?: (data: mixed) => void |};
 export type graphqlType = middlewareType<{}, resType>;
 
 /**

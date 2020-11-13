@@ -1,20 +1,34 @@
 // @flow
 
+import http from 'http';
+
 import parseArgv, {
   type defaultOptionsType,
 } from '@mikojs/server/lib/parseArgv';
 
-import graphql from '../index';
+import graphql, { type resType } from '../index';
 import { version } from '../../package.json';
 
-parseArgv(
-  'graphql',
-  (defaultOptions: defaultOptionsType) => ({
-    ...defaultOptions,
-    version,
-  }),
-  graphql,
-  process.argv,
-).catch(() => {
-  process.exit(1);
-});
+(async () => {
+  try {
+    const result = await parseArgv<{}, resType, []>(
+      'graphql',
+      (defaultOptions: defaultOptionsType) => ({
+        ...defaultOptions,
+        version,
+        commands: {
+          ...defaultOptions.commands,
+          'relay-compiler': {
+            description: 'create Relay generated files',
+          },
+        },
+      }),
+      graphql,
+      process.argv,
+    );
+
+    if (result instanceof http.Server) return;
+  } catch (e) {
+    process.exit(1);
+  }
+})();

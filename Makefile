@@ -12,6 +12,7 @@ else
 endif
 
 define babel-build
+	yarn lerna run pre:build --stream
 	yarn lerna exec \
 		"USE_DEFAULT_BABEL=true babel src -d lib --config-file ../../.mikorc.js --verbose" \
 		--parallel \

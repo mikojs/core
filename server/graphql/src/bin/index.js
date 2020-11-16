@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 // @flow
 
 import http from 'http';

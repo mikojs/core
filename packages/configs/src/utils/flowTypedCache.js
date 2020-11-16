@@ -5,10 +5,7 @@ import path from 'path';
 
 import { getPackagesSync } from '@lerna/project';
 
-type packageType = {|
-  name: string,
-  manifestLocation: string,
-|};
+import { type packageType } from './types';
 
 export const cacheFolder: string = path.resolve(
   './node_modules/.cache/flow-typed',

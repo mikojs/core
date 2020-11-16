@@ -3,6 +3,7 @@
 import gitBranch from 'git-branch';
 
 import flowTypedCache from './utils/flowTypedCache';
+import findCustomFlowConfigs from './utils/findCustomFlowConfigs';
 
 export default {
   /**
@@ -117,7 +118,7 @@ export default {
     },
     clean: {
       ...config.clean,
-      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' --parallel && lerna clean && ${
+      command: `lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna exec 'rm -rf .flowconfig' --parallel ${findCustomFlowConfigs()} && lerna clean && ${
         config.clean?.command || 'rm -rf'
       } ./.changelog`,
     },

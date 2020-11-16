@@ -12,6 +12,7 @@ import parseArgv, {
 
 import graphql, { type resType } from '../index';
 import { version } from '../../package.json';
+import relayCompilerCommand from './relayCompiler';
 
 (async () => {
   try {
@@ -22,9 +23,7 @@ import { version } from '../../package.json';
         version,
         commands: {
           ...defaultOptions.commands,
-          'relay-compiler': {
-            description: 'create Relay generated files',
-          },
+          'relay-compiler': relayCompilerCommand,
         },
       }),
       graphql,

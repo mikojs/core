@@ -10,11 +10,7 @@ const miko = ({ clean, ...config }) => ({
     ...clean,
     command: clean.command.replace(
       / \.flowconfig'/,
-      `' && lerna exec 'rm -rf .flowconfig' --ignore ${[
-        '@mikojs/miko',
-        '@mikojs/configs',
-        '@mikojs/eslint-config-base',
-      ].join(' --ignore ')}`,
+      `' && lerna exec 'rm -rf .flowconfig' --ignore @mikojs/eslint-config-base`,
     ),
   },
 });

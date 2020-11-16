@@ -1,21 +1,25 @@
 // @flow
 
+import { type mikoConfigsType } from '@mikojs/miko';
+
 /**
- * @return {object} - miko default config
+ * @return {mikoConfigsType} - miko default config
  */
-export default (): {|
-  [string]: {| command: string, description: string |},
-|} => ({
+export default (): mikoConfigsType => ({
+  babel: {
+    command: 'babel src -d lib --verbose --root-mode upward',
+    description: 'default babel command',
+  },
   build: {
-    command: 'babel src -d lib --verbose',
+    command: 'miko babel',
     description: 'run `babel` in the build mode',
   },
   dev: {
-    command: 'miko build -w',
+    command: 'miko babel -w',
     description: 'run `babel` in the dev mode',
   },
   prod: {
-    command: 'NODE_ENV=production miko build',
+    command: 'NODE_ENV=production miko babel',
     description: 'run `babel` in the production mode',
   },
   prettier: {

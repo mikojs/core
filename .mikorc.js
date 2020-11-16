@@ -4,21 +4,6 @@
 /* eslint-disable flowtype/require-parameter-type */
 /* eslint-disable jsdoc/require-jsdoc */
 
-const miko = ({ clean, ...config }) => ({
-  ...config,
-  clean: {
-    ...clean,
-    command: clean.command.replace(
-      / \.flowconfig'/,
-      `' && lerna exec 'rm -rf .flowconfig' --ignore ${[
-        '@mikojs/miko',
-        '@mikojs/configs',
-        '@mikojs/eslint-config-base',
-      ].join(' --ignore ')}`,
-    ),
-  },
-});
-
 const babel = ({ presets, plugins, ...config }) => {
   if (!process.env.USE_DEFAULT_BABEL) {
     const basePreset = presets.find(preset => preset[0] === '@mikojs/base');
@@ -143,9 +128,6 @@ module.exports = (() => {
     require('@mikojs/configs/lib/withLerna'),
     /* eslint-enable import/no-extraneous-dependencies */
     {
-      // miko
-      miko,
-
       // babel
       babel,
 

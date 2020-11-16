@@ -2,7 +2,11 @@
 
 import gitBranch from 'git-branch';
 
+import { type mikoConfigsType } from '@mikojs/miko';
+
 import flowTypedCache from './utils/flowTypedCache';
+import findCustomFlowConfigs from './utils/findCustomFlowConfigs';
+import extendCommand from './utils/extendCommand';
 
 export default {
   /**
@@ -10,15 +14,7 @@ export default {
    *
    * @return {object} - new miko config
    */
-  miko: <
-    C: {
-      [string]: {| command: string | (() => string), description: string |},
-      clean: { command: string, description: string },
-      build: { command: string, description: string },
-    },
-  >(
-    config: C,
-  ): C => ({
+  miko: (config: mikoConfigsType): mikoConfigsType => ({
     ...config,
     flow: {
       /**
@@ -50,17 +46,11 @@ export default {
       ...config['flow-typed:install'],
       command: [
         config['flow-typed:install']?.command,
-        'flow-mono create-symlinks ./helpers/.flowconfig',
+        'flow-mono create-symlinks .flowconfig',
         'flow-mono install-types ----ignoreDeps=peer',
       ]
         .filter(Boolean)
         .join(' && '),
-    },
-    babel: {
-      command: `${
-        config.build?.command || 'babel src -d lib --verbose'
-      } --root-mode upward`,
-      description: 'run `babel` in the package of the monorepo',
     },
     build: {
       ...config.build,
@@ -117,9 +107,17 @@ export default {
     },
     clean: {
       ...config.clean,
-      command: `lerna exec 'rm -rf lib flow-typed/npm .flowconfig' --parallel && lerna clean && ${
-        config.clean?.command || 'rm -rf'
-      } ./.changelog`,
+
+      /**
+       * @return {string} - command string
+       */
+      command: () =>
+        [
+          `lerna exec 'rm -rf lib flow-typed/npm' --parallel`,
+          `lerna exec 'rm -rf .flowconfig' --parallel ${findCustomFlowConfigs()}`,
+          'lerna clean',
+          `${extendCommand(config.clean?.command, 'rm -rf')} ./.changelog`,
+        ].join(' && '),
     },
   }),
 };

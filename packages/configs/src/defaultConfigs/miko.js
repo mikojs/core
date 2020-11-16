@@ -1,11 +1,11 @@
 // @flow
 
+import { type mikoConfigsType } from '@mikojs/miko';
+
 /**
- * @return {object} - miko default config
+ * @return {mikoConfigsType} - miko default config
  */
-export default (): {|
-  [string]: {| command: string, description: string |},
-|} => ({
+export default (): mikoConfigsType => ({
   build: {
     command: 'babel src -d lib --verbose',
     description: 'run `babel` in the build mode',

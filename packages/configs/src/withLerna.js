@@ -2,8 +2,11 @@
 
 import gitBranch from 'git-branch';
 
+import { type mikoConfigsType } from '@mikojs/miko';
+
 import flowTypedCache from './utils/flowTypedCache';
 import findCustomFlowConfigs from './utils/findCustomFlowConfigs';
+import extendCommand from './utils/extendCommand';
 
 export default {
   /**
@@ -11,15 +14,7 @@ export default {
    *
    * @return {object} - new miko config
    */
-  miko: <
-    C: {
-      [string]: {| command: string | (() => string), description: string |},
-      clean: { command: string | (() => string), description: string },
-      build: { command: string, description: string },
-    },
-  >(
-    config: C,
-  ): C => ({
+  miko: (config: mikoConfigsType): mikoConfigsType => ({
     ...config,
     flow: {
       /**
@@ -58,9 +53,14 @@ export default {
         .join(' && '),
     },
     babel: {
-      command: `${
-        config.build?.command || 'babel src -d lib --verbose'
-      } --root-mode upward`,
+      /**
+       * @return {string} - command string
+       */
+      command: () =>
+        `${extendCommand(
+          config.build?.command,
+          'babel src -d lib --verbose',
+        )} --root-mode upward`,
       description: 'run `babel` in the package of the monorepo',
     },
     build: {
@@ -122,15 +122,13 @@ export default {
       /**
        * @return {string} - command string
        */
-      command: (): string => {
-        const command = config.clean?.command;
-        const cleanCommand =
-          typeof command === 'function' ? command?.() : command;
-
-        return `lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna exec 'rm -rf .flowconfig' --parallel ${findCustomFlowConfigs()} && lerna clean && ${
-          cleanCommand || 'rm -rf'
-        } ./.changelog`;
-      },
+      command: () =>
+        [
+          `lerna exec 'rm -rf lib flow-typed/npm' --parallel`,
+          `lerna exec 'rm -rf .flowconfig' --parallel ${findCustomFlowConfigs()}`,
+          'lerna clean',
+          `${extendCommand(config.clean?.command, 'rm -rf')} ./.changelog`,
+        ].join(' && '),
     },
   }),
 };

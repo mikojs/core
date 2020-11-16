@@ -6,11 +6,13 @@ import buildWorker from '@mikojs/worker';
 
 // $FlowFixMe FIXME: Owing to utils/cache use pipline
 import cache, { type initialConfigsType } from './utils/cache';
+import { type mikoConfigsType as parseArgvMikoConfigsType } from './utils/parseArgv';
 
 import typeof * as workerType from './worker';
 
 // $FlowFixMe FIXME: Owing to utils/cache use pipline
 export type configsType = initialConfigsType;
+export type mikoConfigsType = parseArgvMikoConfigsType;
 
 /**
  * @param {string} configName - config name

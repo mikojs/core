@@ -25,6 +25,7 @@ describe('with lerna', () => {
     ${'flow-typed:restore-cache'} | ${'true'}  | ${`rm -rf ${sourceFolder} && cp -r ${targetFolder} ${sourceFolder}`}
     ${'dev'}                      | ${'true'}  | ${'lerna exec "miko babel -w" --parallel --stream --since master'}
     ${'husky:pre-commit'}         | ${'true'}  | ${'miko build --since master && miko flow --since master && lint-staged'}
+    ${'clean'}                    | ${'true'}  | ${`lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna exec 'rm -rf .flowconfig' --parallel --ignore @mikojs/core && lerna clean && rm -rf ./.changelog`}
   `(
     'run miko with cliName = $cliName',
     ({

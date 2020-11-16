@@ -12,11 +12,12 @@ import { type packageType } from './types';
  */
 export default (): string =>
   getPackagesSync()
-    .filter(
-      ({ manifestLocation }: packageType) =>
-        !fs
-          .lstatSync(path.resolve(manifestLocation, '../.flowconfig'))
-          .isSymbolicLink(),
-    )
+    .filter(({ manifestLocation }: packageType): boolean => {
+      const filePath = path.resolve(manifestLocation, '../.flowconfig');
+
+      return (
+        fs.existsSync(filePath) && !fs.lstatSync(filePath).isSymbolicLink()
+      );
+    })
     .map(({ name }: packageType) => `--ignore ${name}`)
     .join(' ');

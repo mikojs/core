@@ -14,7 +14,7 @@ export default {
   miko: <
     C: {
       [string]: {| command: string | (() => string), description: string |},
-      clean: { command: string, description: string },
+      clean: { command: string | (() => string), description: string },
       build: { command: string, description: string },
     },
   >(
@@ -118,9 +118,19 @@ export default {
     },
     clean: {
       ...config.clean,
-      command: `lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna exec 'rm -rf .flowconfig' --parallel ${findCustomFlowConfigs()} && lerna clean && ${
-        config.clean?.command || 'rm -rf'
-      } ./.changelog`,
+
+      /**
+       * @return {string} - command string
+       */
+      command: (): string => {
+        const command = config.clean?.command;
+        const cleanCommand =
+          typeof command === 'function' ? command?.() : command;
+
+        return `lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna exec 'rm -rf .flowconfig' --parallel ${findCustomFlowConfigs()} && lerna clean && ${
+          cleanCommand || 'rm -rf'
+        } ./.changelog`;
+      },
     },
   }),
 };

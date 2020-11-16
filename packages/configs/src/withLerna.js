@@ -52,17 +52,6 @@ export default {
         .filter(Boolean)
         .join(' && '),
     },
-    babel: {
-      /**
-       * @return {string} - command string
-       */
-      command: () =>
-        `${extendCommand(
-          config.build?.command,
-          'babel src -d lib --verbose',
-        )} --root-mode upward`,
-      description: 'run `babel` in the package of the monorepo',
-    },
     build: {
       ...config.build,
       command: 'lerna exec "miko babel" --parallel --stream',

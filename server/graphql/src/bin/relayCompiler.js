@@ -2,6 +2,7 @@
 
 export default {
   description: 'create Relay generated files',
+  args: '<source-path>',
   options: [
     {
       flags: '--include <include...>',

@@ -3,20 +3,27 @@
 
 import http from 'http';
 
+import { printSchema } from 'graphql';
 import { relayCompiler } from 'relay-compiler';
-import { type Config } from 'relay-compiler/bin/RelayCompilerMain.js.flow';
+import { type Config as ConfigType } from 'relay-compiler/bin/RelayCompilerMain.js.flow';
 
 import parseArgv, {
   type defaultOptionsType,
 } from '@mikojs/server/lib/parseArgv';
 
 import graphql, { type resType } from '../index';
+import buildSchema from '../schema';
+
 import { version } from '../../package.json';
 import relayCompilerCommand from './relayCompiler';
 
 (async () => {
   try {
-    const result = await parseArgv<{}, resType, ['relay-compiler', Config]>(
+    const result = await parseArgv<
+      {},
+      resType,
+      ['relay-compiler', string, ConfigType],
+    >(
       'graphql',
       (defaultOptions: defaultOptionsType) => ({
         ...defaultOptions,
@@ -32,7 +39,12 @@ import relayCompilerCommand from './relayCompiler';
 
     if (!result || result instanceof http.Server) return;
 
-    relayCompiler(result[1]);
+    const [, sourcePath, config] = result;
+
+    relayCompiler({
+      ...config,
+      schema: printSchema(buildSchema(sourcePath)),
+    });
   } catch (e) {
     process.exit(1);
   }

@@ -12,9 +12,10 @@ import parseArgv, {
 } from '@mikojs/server/lib/parseArgv';
 
 import graphql, { type resType } from '../index';
-import buildSchema from '../schema';
+import buildSchema, { type schemaType } from '../buildSchema';
 
 import { version } from '../../package.json';
+
 import relayCompilerCommand from './relayCompiler';
 
 (async () => {
@@ -41,9 +42,11 @@ import relayCompilerCommand from './relayCompiler';
 
     const [, sourcePath, config] = result;
 
-    relayCompiler({
-      ...config,
-      schema: printSchema(buildSchema(sourcePath)),
+    buildSchema(sourcePath, (schema: schemaType) => {
+      relayCompiler({
+        ...config,
+        schema: printSchema(schema),
+      });
     });
   } catch (e) {
     process.exit(1);

@@ -13,7 +13,7 @@ import {
 
 import { type middlewareType } from '@mikojs/server';
 
-import schema from './schema';
+import buildSchema, { type schemaType } from './buildSchema';
 
 export type resType = {| json?: (data: mixed) => void |};
 export type graphqlType = middlewareType<{}, resType>;
@@ -29,21 +29,25 @@ export default (
   folderPath: string,
   prefix?: string,
   options?: $Diff<OptionsDataType, {| schema: mixed |}>,
-): graphqlType => (
-  req: IncomingMessageType,
-  res: ServerResponseType & resType,
-) => {
-  const { pathname } = url.parse(req.url);
+): graphqlType =>
+  buildSchema<graphqlType>(
+    folderPath,
+    (schema: schemaType) => (
+      req: IncomingMessageType,
+      res: ServerResponseType & resType,
+    ) => {
+      const { pathname } = url.parse(req.url);
 
-  if (
-    !pathname ||
-    (prefix &&
-      !new RegExp(`^${prefix.replace(/^([^/])/, '/$1')}`).test(pathname))
-  ) {
-    res.statusCode = 404;
-    res.end();
-    return;
-  }
+      if (
+        !pathname ||
+        (prefix &&
+          !new RegExp(`^${prefix.replace(/^([^/])/, '/$1')}`).test(pathname))
+      ) {
+        res.statusCode = 404;
+        res.end();
+        return;
+      }
 
-  graphqlHTTP({ ...options, schema: schema(folderPath) })(req, res);
-};
+      graphqlHTTP({ ...options, schema })(req, res);
+    },
+  );

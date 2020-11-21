@@ -1,10 +1,10 @@
 // @flow
 
-import { typeof makeExecutableSchemaOptionsType } from '@graphql-tools/schema';
+import { type GraphQLSchema as GraphQLSchemaType } from 'graphql';
 
 import { type fileDataType } from '@mikojs/server';
 
-export type cacheType = makeExecutableSchemaOptionsType;
+export type cacheType = GraphQLSchemaType;
 
 const cache: {|
   [string]: string,
@@ -24,9 +24,11 @@ export default ({ exists, filePath, pathname }: fileDataType): string => {
 
 const path = require('path');
 
+const { makeExecutableSchema } = require('@graphql-tools/schema');
+
 const requireModule = require('@mikojs/utils/lib/requireModule');
 
-module.exports = callback => callback([${Object.keys(cache)
+const schema = makeExecutableSchema([${Object.keys(cache)
     .map(
       (key: string) =>
         `requireModule(path.resolve(__filename, '${cache[key]}'))`,
@@ -49,5 +51,7 @@ module.exports = callback => callback([${Object.keys(cache)
 }), {
   typeDefs: [],
   resolvers: {},
-}));`;
+}));
+
+module.exports = () => schema;`;
 };

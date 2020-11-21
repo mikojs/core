@@ -27,34 +27,28 @@ export type routerType = middlewareType<reqType>;
  *
  * @return {routerType} - router middleware
  */
-export default (folderPath: string, prefix?: string): routerType =>
-  server.mergeDir(
-    folderPath,
-    prefix,
-    buildCache,
-  )(
-    (cache: cacheType) => (
-      req: IncomingMessageType & reqType,
-      res: ServerResponseType,
-    ) => {
-      const { pathname, query } = url.parse(req.url);
-      const route = cache.find(
-        ({ regExp }: $ElementType<cacheType, number>) =>
-          pathname && regExp.exec(pathname),
-      );
+export default (folderPath: string, prefix?: string): routerType => {
+  const getCache = server.mergeDir(folderPath, prefix, buildCache);
 
-      if (!route) {
-        res.statusCode = 404;
-        res.end();
-        return;
-      }
+  return (req: IncomingMessageType & reqType, res: ServerResponseType) => {
+    const { pathname, query } = url.parse(req.url);
+    const route = getCache().find(
+      ({ regExp }: $ElementType<cacheType, number>) =>
+        pathname && regExp.exec(pathname),
+    );
 
-      const { middleware, getUrlQuery } = route;
+    if (!route) {
+      res.statusCode = 404;
+      res.end();
+      return;
+    }
 
-      req.query = {
-        ...parse(query || ''),
-        ...getUrlQuery(pathname),
-      };
-      middleware(req, res);
-    },
-  );
+    const { middleware, getUrlQuery } = route;
+
+    req.query = {
+      ...parse(query || ''),
+      ...getUrlQuery(pathname),
+    };
+    middleware(req, res);
+  };
+};

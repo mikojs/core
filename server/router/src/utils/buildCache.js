@@ -38,7 +38,7 @@ const { pathToRegexp, match } = require('path-to-regexp');
 
 const requireModule = require('@mikojs/utils/lib/requireModule');
 
-module.exports = callback => callback([${Object.keys(cache)
+module.exports = () => [${Object.keys(cache)
     .sort((a: string, b: string): number => {
       const pathnameALength = [...cache[a].pathname.matchAll(/\//g)].length;
       const pathnameBLength = [...cache[b].pathname.matchAll(/\//g)].length;
@@ -57,5 +57,5 @@ module.exports = callback => callback([${Object.keys(cache)
   ).params,
 }`,
     )
-    .join(', ')}]);`;
+    .join(', ')}];`;
 };

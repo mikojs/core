@@ -24,7 +24,7 @@ export default [
       filePath: 'a.js',
       pathname: '/a',
     },
-    `([${getCacheData('a')}])`,
+    `() => [${getCacheData('a')}]`,
   ],
   [
     'add a/a.js',
@@ -33,7 +33,7 @@ export default [
       filePath: 'a/a.js',
       pathname: '/a/a',
     },
-    `([${getCacheData('a/a')}, ${getCacheData('a')}])`,
+    `() => [${getCacheData('a/a')}, ${getCacheData('a')}]`,
   ],
   [
     'add [:id].js',
@@ -42,7 +42,9 @@ export default [
       filePath: '[id].js',
       pathname: '/:id',
     },
-    `([${getCacheData('a/a')}, ${getCacheData('a')}, ${getCacheData(':id')}])`,
+    `() => [${getCacheData('a/a')}, ${getCacheData('a')}, ${getCacheData(
+      ':id',
+    )}]`,
   ],
   [
     'remove [:id].js',
@@ -51,6 +53,6 @@ export default [
       filePath: '[id].js',
       pathname: '/:id',
     },
-    `([${getCacheData('a/a')}, ${getCacheData('a')}])`,
+    `() => [${getCacheData('a/a')}, ${getCacheData('a')}]`,
   ],
 ];

@@ -53,6 +53,7 @@ export default async <Req = {}, Res = {}, Data = []>(
     );
     throw new Error('empty command');
   }
+
   if (!Object.keys(defaultOptions.commands).includes(command)) return result;
 
   server.set(command === 'start' ? 'run' : command);

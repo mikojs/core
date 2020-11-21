@@ -15,6 +15,7 @@ import parseArgv, {
 import graphql, { type resType, buildCache } from '../index';
 
 import { version } from '../../package.json';
+
 import relayCompilerCommand from './relayCompiler';
 
 (async () => {

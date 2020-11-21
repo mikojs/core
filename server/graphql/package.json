@@ -11,6 +11,7 @@
     "@babel/runtime": "^7.11.2",
     "@graphql-tools/schema": "^7.0.0",
     "@mikojs/server": "^1.12.1",
+    "@mikojs/utils": "^1.12.1",
     "core-js": "^3.6.5",
     "express-graphql": "^0.11.0",
     "graphql": "^15.3.0",

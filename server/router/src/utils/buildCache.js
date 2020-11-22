@@ -6,6 +6,7 @@ import { type fileDataType, type middlewareType } from '@mikojs/server';
 
 export type cacheType = $ReadOnlyArray<{|
   middleware: middlewareType<>,
+  method?: string,
   regExp: RegExp,
   getUrlQuery: (pathname: string | null) => QueryParametersType,
 |}>;
@@ -51,6 +52,7 @@ module.exports = () => [${Object.keys(cache)
     .map(
       (key: string) => `{
   middleware: requireModule(path.resolve(__filename, '${cache[key].filePath}')),
+  method: require(path.resolve(__filename, '${cache[key].filePath}')).method,
   regExp: pathToRegexp('${cache[key].pathname}', []),
   getUrlQuery: pathname => match('${cache[key].pathname}', { decode: decodeURIComponent })(
     pathname,

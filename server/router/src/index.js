@@ -43,7 +43,13 @@ export default (folderPath: string, prefix?: string): routerType => {
       return;
     }
 
-    const { middleware, getUrlQuery } = route;
+    const { middleware, method, getUrlQuery } = route;
+
+    if (method && method !== req.method) {
+      res.statusCode = 404;
+      res.end();
+      return;
+    }
 
     req.query = {
       ...parse(query || ''),

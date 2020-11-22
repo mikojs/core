@@ -2,10 +2,13 @@
 // @flow
 
 import http from 'http';
+import path from 'path';
 
 import { printSchema } from 'graphql';
 import { relayCompiler } from 'relay-compiler';
 import { type Config as ConfigType } from 'relay-compiler/bin/RelayCompilerMain.js.flow';
+import findCacheDir from 'find-cache-dir';
+import outputFileSync from 'output-file-sync';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 import server from '@mikojs/server';
@@ -45,12 +48,19 @@ handleUnhandledRejection();
   if (!result || result instanceof http.Server) return;
 
   const [, sourcePath, config] = result;
-  const getCache = server.mergeDir(sourcePath, undefined, buildCache);
+  const cacheDir = findCacheDir({ name: '@mikojs/graphql', thunk: true });
+  const cacheFilePath = cacheDir('relay-compiler.schema');
+  const getCache = server.mergeDir(
+    path.resolve(sourcePath),
+    undefined,
+    buildCache,
+  );
   const close = await server.ready();
 
+  outputFileSync(cacheFilePath, printSchema(getCache()));
   relayCompiler({
     ...config,
-    schema: printSchema(getCache()),
+    schema: cacheFilePath,
   });
   close();
 })();

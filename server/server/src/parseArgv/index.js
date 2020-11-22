@@ -47,6 +47,13 @@ export default async <Req = {}, Res = {}, Data = []>(
     { port = 3000, prefix }: {| port: number, prefix?: string |} = {},
   ] = result;
 
+  if (result.length === 1) {
+    logger.fail(
+      chalk`Should give a command, use {green -h} to get the more information.`,
+    );
+    throw new Error('empty command');
+  }
+
   if (!Object.keys(defaultOptions.commands).includes(command)) return result;
 
   server.set(command === 'start' ? 'run' : command);

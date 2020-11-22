@@ -45,7 +45,7 @@ export default (folderPath: string, prefix?: string): routerType => {
 
     const { middleware, method, getUrlQuery } = route;
 
-    if (method && method !== req.method) {
+    if (method && method !== req.method.toLowerCase()) {
       res.statusCode = 404;
       res.end();
       return;

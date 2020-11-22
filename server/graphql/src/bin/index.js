@@ -16,13 +16,15 @@ import parseArgv, {
   type defaultOptionsType,
 } from '@mikojs/server/lib/parseArgv';
 
-import graphql, { type resType, buildCache } from '../index';
+import graphql, { type resType } from '../index';
 
 import { version } from '../../package.json';
 
 import relayCompilerCommand, {
   defaultRelayCompilerOptions,
 } from './relayCompiler';
+
+import buildCache, { type cacheType } from 'utils/buildCache';
 
 handleUnhandledRejection();
 
@@ -53,7 +55,7 @@ handleUnhandledRejection();
   const cacheFilePath = findCacheDir({ name: '@mikojs/graphql', thunk: true })(
     'relay-compiler.schema',
   );
-  const getCache = server.mergeDir(
+  const getCache = server.mergeDir<[], cacheType>(
     path.resolve(sourcePath),
     undefined,
     buildCache,

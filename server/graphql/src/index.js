@@ -13,12 +13,10 @@ import {
 
 import server, { type middlewareType } from '@mikojs/server';
 
-import buildCache from './utils/buildCache';
+import buildCache, { type cacheType } from './utils/buildCache';
 
 export type resType = {| json?: (data: mixed) => void |};
 export type graphqlType = middlewareType<{}, resType>;
-
-export { buildCache };
 
 /**
  * @param {string} folderPath - folder path
@@ -32,7 +30,11 @@ export default (
   prefix?: string,
   options?: $Diff<OptionsDataType, {| schema: mixed |}>,
 ): graphqlType => {
-  const getCache = server.mergeDir(folderPath, undefined, buildCache);
+  const getCache = server.mergeDir<[], cacheType>(
+    folderPath,
+    undefined,
+    buildCache,
+  );
 
   return (req: IncomingMessageType, res: ServerResponseType & resType) => {
     const { pathname } = url.parse(req.url);

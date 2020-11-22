@@ -74,19 +74,32 @@ describe('parse argv', () => {
     else expect(result.slice(0, -1)).toEqual(['command']);
   });
 
-  test('parse argv error', async () => {
-    await expect(
-      parseArgv(
-        'server',
-        (defaultOptions: defaultOptionsType) => ({
-          ...defaultOptions,
-          version: '1.0.0',
-        }),
-        () => {
-          throw new Error('error');
-        },
-        ['node', 'server', 'start', __dirname],
-      ),
-    ).rejects.toThrow('error');
-  });
+  test.each`
+    command                 | expected
+    ${[]}                   | ${'empty command'}
+    ${['start', __dirname]} | ${'error'}
+  `(
+    'Run $command',
+    async ({
+      command,
+      expected,
+    }: {|
+      command: $ReadOnlyArray<string>,
+      expected: string,
+    |}) => {
+      await expect(
+        parseArgv(
+          'server',
+          (defaultOptions: defaultOptionsType) => ({
+            ...defaultOptions,
+            version: '1.0.0',
+          }),
+          () => {
+            throw new Error('error');
+          },
+          ['node', 'server', ...command],
+        ),
+      ).rejects.toThrow(expected);
+    },
+  );
 });

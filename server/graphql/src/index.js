@@ -18,8 +18,6 @@ import buildCache, { type cacheType } from './utils/buildCache';
 export type resType = {| json?: (data: mixed) => void |};
 export type graphqlType = middlewareType<{}, resType>;
 
-export { buildCache };
-
 /**
  * @param {string} folderPath - folder path
  * @param {string} prefix - pathname prefix

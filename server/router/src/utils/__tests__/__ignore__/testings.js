@@ -10,6 +10,10 @@ const getCacheData = (filePath: string) => `{
     /:([\w]+)/,
     '[$1]',
   )}.js')),
+  method: require(path.resolve(__filename, '${filePath.replace(
+    /:([\w]+)/,
+    '[$1]',
+  )}.js')).method,
   regExp: pathToRegexp('/${filePath}', []),
   getUrlQuery: pathname => match('/${filePath}', { decode: decodeURIComponent })(
     pathname,

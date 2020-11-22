@@ -37,6 +37,23 @@ describe.each`
       },
     );
 
+    test.each`
+      method    | expected
+      ${'get'}  | ${200}
+      ${'post'} | ${404}
+    `(
+      'fetch url with method = $method',
+      async ({ method, expected }: {| method: string, expected: number |}) => {
+        expect(
+          await testingServer
+            .fetch('/method', {
+              method,
+            })
+            .then((res: fetchResultType) => res.status),
+        ).toBe(expected);
+      },
+    );
+
     test('not found', async () => {
       expect(
         await testingServer

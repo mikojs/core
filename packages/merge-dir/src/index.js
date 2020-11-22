@@ -50,11 +50,11 @@ export default {
    *
    * @return {any} - any function from cache
    */
-  use: <C>(
+  use: <A: $ReadOnlyArray<mixed>, C>(
     folderPath: string,
     prefix: ?string,
     build: buildType,
-  ): ((...argv: $ReadOnlyArray<mixed>) => C) => {
+  ): ((...argv: A) => C) => {
     const relativePath = path.relative(cacheDir(), folderPath);
 
     if (event === 'run')
@@ -71,7 +71,7 @@ export default {
      *
      * @return {any} - the result of the function
      */
-    const cacheFunc = (...argv: $ReadOnlyArray<mixed>) =>
+    const cacheFunc = (...argv: A) =>
       tools.getFromCache(cacheFilePath)(...argv);
 
     debugLog({ folderPath, prefix, relativePath, cacheFilePath });

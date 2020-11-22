@@ -31,9 +31,9 @@ const requireModule = require('@mikojs/utils/lib/requireModule');
 const schema = makeExecutableSchema([${Object.keys(cache)
     .map(
       (key: string) =>
-        `requireModule(path.resolve(__filename, '${cache[key]}'))`,
+        `requireModule(path.resolve(__filename, '${cache[key]}')) || {}`,
     )
-    .join(', ')}].reduce((result, { typeDefs, ...resolvers }) => ({
+    .join(', ')}].reduce((result, { typeDefs = [], ...resolvers }) => ({
   typeDefs: [
     ...result.typeDefs,
     ...(typeDefs instanceof Array ? typeDefs : [typeDefs]),

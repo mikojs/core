@@ -28,7 +28,11 @@ export type routerType = middlewareType<reqType>;
  * @return {routerType} - router middleware
  */
 export default (folderPath: string, prefix?: string): routerType => {
-  const getCache = server.mergeDir(folderPath, prefix, buildCache);
+  const getCache = server.mergeDir<[], cacheType>(
+    folderPath,
+    prefix,
+    buildCache,
+  );
 
   return (req: IncomingMessageType & reqType, res: ServerResponseType) => {
     const { pathname, query } = url.parse(req.url);
@@ -45,7 +49,7 @@ export default (folderPath: string, prefix?: string): routerType => {
 
     const { middleware, method, getUrlQuery } = route;
 
-    if (method && method !== req.method.toLowerCase()) {
+    if (!middleware || (method && method !== req.method.toLowerCase())) {
       res.statusCode = 404;
       res.end();
       return;

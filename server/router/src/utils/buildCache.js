@@ -5,7 +5,7 @@ import { type QueryParameters as QueryParametersType } from 'query-string';
 import { type fileDataType, type middlewareType } from '@mikojs/server';
 
 export type cacheType = $ReadOnlyArray<{|
-  middleware: middlewareType<>,
+  middleware?: middlewareType<>,
   method?: string,
   regExp: RegExp,
   getUrlQuery: (pathname: string | null) => QueryParametersType,

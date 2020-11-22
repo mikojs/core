@@ -1,5 +1,19 @@
 // @flow
 
+export const defaultRelayCompilerOptions = {
+  include: ['**'],
+  exclude: ['**/node_modules/**', '**/__mocks__/**', '**/__generated__/**'],
+  verbose: false,
+  quiet: false,
+  watchman: true,
+  watch: false,
+  validate: false,
+  repersist: false,
+  noFutureProofEnums: false,
+  language: 'javascript',
+  eagerESModules: false,
+};
+
 export default {
   description: 'create Relay generated files',
   args: '<source-path>',

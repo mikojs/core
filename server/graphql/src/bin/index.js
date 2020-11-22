@@ -20,7 +20,9 @@ import graphql, { type resType, buildCache } from '../index';
 
 import { version } from '../../package.json';
 
-import relayCompilerCommand from './relayCompiler';
+import relayCompilerCommand, {
+  defaultRelayCompilerOptions,
+} from './relayCompiler';
 
 handleUnhandledRejection();
 
@@ -48,14 +50,19 @@ handleUnhandledRejection();
   if (!result || result instanceof http.Server) return;
 
   const [, sourcePath, config] = result;
-  const cacheDir = findCacheDir({ name: '@mikojs/graphql', thunk: true });
-  const cacheFilePath = cacheDir('relay-compiler.schema');
+  const cacheFilePath = findCacheDir({ name: '@mikojs/graphql', thunk: true })(
+    'relay-compiler.schema',
+  );
   const getCache = server.mergeDir(
     path.resolve(sourcePath),
     undefined,
     buildCache,
   );
   const close = await server.ready();
+
+  Object.keys(defaultRelayCompilerOptions).forEach((key: string) => {
+    config[key] = config[key] || defaultRelayCompilerOptions[key];
+  });
 
   outputFileSync(cacheFilePath, printSchema(getCache()));
   relayCompiler({

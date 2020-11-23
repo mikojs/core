@@ -18,7 +18,7 @@ import addBadges from 'utils/addBadges';
 handleUnhandledRejection();
 
 const logger = createLogger('@mikojs/badges');
-const parseArgv = commander({
+const parseArgv = commander<[$ReadOnlyArray<string>]>({
   name: 'badges',
   version,
   description: chalk`add the badges to {green README.md}`,

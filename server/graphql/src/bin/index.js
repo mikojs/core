@@ -29,11 +29,7 @@ import buildCache, { type cacheType } from 'utils/buildCache';
 handleUnhandledRejection();
 
 (async () => {
-  const result = await parseArgv<
-    {},
-    resType,
-    ['relay-compiler', string, ConfigType],
-  >(
+  const result = await parseArgv<{}, resType, ConfigType>(
     'graphql',
     (defaultOptions: defaultOptionsType) => ({
       ...defaultOptions,
@@ -51,7 +47,9 @@ handleUnhandledRejection();
 
   if (!result || result instanceof http.Server) return;
 
-  const [, sourcePath, config] = result;
+  // FIXME: flow could not use `delete config.port`, `delete config.prefix`
+  // eslint-disable-next-line no-unused-vars
+  const [, sourcePath, { port, prefix, ...config }] = result;
   const cacheFilePath = findCacheDir({ name: '@mikojs/graphql', thunk: true })(
     'relay-compiler.schema',
   );

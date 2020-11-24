@@ -7,8 +7,9 @@ import { type Server as ServerType } from 'http';
 import ora from 'ora';
 import chalk from 'chalk';
 
-import commander, { type optionsType } from '@mikojs/commander';
 import { createLogger, requireModule } from '@mikojs/utils';
+import commander, { type optionsType } from '@mikojs/commander';
+import { type mergeEventType } from '@mikojs/merge-dir';
 import tools from '@mikojs/merge-dir/lib/utils/tools';
 
 import server, { type middlewareType } from '../index';
@@ -21,6 +22,12 @@ import handleErrorMessage from './handleErrorMessage';
 
 export type defaultOptionsType = getDefaultOptionsDefaultOptionsType;
 
+type resultType<O> = [
+  mergeEventType | string,
+  string,
+  O & {| port?: number, prefix?: string |},
+];
+
 /**
  * @param {string} name - command name
  * @param {Function} buildOptions - build the command options for the server
@@ -29,7 +36,7 @@ export type defaultOptionsType = getDefaultOptionsDefaultOptionsType;
  *
  * @return {ServerType} - server or null
  */
-export default async <Req = {}, Res = {}, Data = []>(
+export default async <Req = {}, Res = {}, O = {}>(
   name: string,
   buildOptions: (defaultOptions: defaultOptionsType) => optionsType,
   buildMiddleware: (
@@ -37,15 +44,13 @@ export default async <Req = {}, Res = {}, Data = []>(
     prefix?: string,
   ) => middlewareType<Req, Res>,
   argv: $ReadOnlyArray<string>,
-): Promise<?ServerType | Data> => {
+): Promise<?ServerType | resultType<O>> => {
   const logger = createLogger(`@mikojs/${name}`, ora({ discardStdin: false }));
   const defaultOptions = getDefaultOptions(name);
-  const result = await commander(buildOptions(defaultOptions))(argv);
-  const [
-    command,
-    sourcePath,
-    { port = 3000, prefix }: {| port: number, prefix?: string |} = {},
-  ] = result;
+  const result = await commander<resultType<O>>(buildOptions(defaultOptions))(
+    argv,
+  );
+  const [command, sourcePath, { port = 3000, prefix }] = result;
 
   if (result.length === 1) {
     logger.fail(
@@ -54,7 +59,8 @@ export default async <Req = {}, Res = {}, Data = []>(
     throw new Error('empty command');
   }
 
-  if (!Object.keys(defaultOptions.commands).includes(command)) return result;
+  if (command !== 'dev' || command !== 'start' || command !== 'build')
+    return result;
 
   server.set(command === 'start' ? 'run' : command);
 

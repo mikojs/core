@@ -42,6 +42,7 @@ export default async <Req = {}, Res = {}, O = {}>(
   buildMiddleware: (
     sourcePath: string,
     prefix?: string,
+    options?: O,
   ) => middlewareType<Req, Res>,
   argv: $ReadOnlyArray<string>,
 ): Promise<?ServerType | resultType<O>> => {
@@ -50,7 +51,7 @@ export default async <Req = {}, Res = {}, O = {}>(
   const result = await commander<resultType<O>>(buildOptions(defaultOptions))(
     argv,
   );
-  const [command, sourcePath, { port = 3000, prefix }] = result;
+  const [command, sourcePath, { port = 3000, prefix, ...options }] = result;
 
   if (result.length === 1) {
     logger.fail(
@@ -68,7 +69,7 @@ export default async <Req = {}, Res = {}, O = {}>(
     const resolvedPath = path.resolve(sourcePath);
     const middleware = fs.lstatSync(resolvedPath).isFile()
       ? requireModule<middlewareType<Req, Res>>(resolvedPath)
-      : buildMiddleware(resolvedPath, prefix);
+      : buildMiddleware(resolvedPath, prefix, options);
 
     if (command === 'build') {
       logger.start('Building the server');

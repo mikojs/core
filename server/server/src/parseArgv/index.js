@@ -59,7 +59,7 @@ export default async <Req = {}, Res = {}, O = {}>(
     throw new Error('empty command');
   }
 
-  if (command !== 'dev' || command !== 'start' || command !== 'build')
+  if (command !== 'dev' && command !== 'start' && command !== 'build')
     return result;
 
   server.set(command === 'start' ? 'run' : command);

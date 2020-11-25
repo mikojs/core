@@ -2,28 +2,44 @@
 
 import { type defaultOptionsType } from '@mikojs/server/lib/parseArgv';
 
-type commandType = $ElementType<
-  $PropertyType<defaultOptionsType, 'commands'>,
-  string,
->;
+const newOptions = [
+  {
+    flags: '--pretty',
+    description:
+      'a boolean to configure whether the output should be pretty-printed',
+  },
+  {
+    flags: '--graphiql',
+    description: 'a boolean to optionally enable GraphiQL mode',
+  },
+];
 
 /**
- * @param {commandType} command - prev command
+ * @param {defaultOptionsType} defaultOptions - default server options
  *
- * @return {commandType} - new command
+ * @return {defaultOptionsType} - new server options
  */
-export default (command: commandType): commandType => ({
-  ...command,
-  options: [
-    ...(command.options || []),
-    {
-      flags: '--pretty',
-      description:
-        'a boolean to configure whether the output should be pretty-printed',
+export default (defaultOptions: defaultOptionsType): defaultOptionsType => ({
+  ...defaultOptions,
+  commands: {
+    ...defaultOptions.commands,
+    dev: {
+      ...defaultOptions.commands.dev,
+      options: [...(defaultOptions.commands.dev.options || []), ...newOptions],
     },
-    {
-      flags: '--graphiql',
-      description: 'a boolean to optionally enable GraphiQL mode',
+    start: {
+      ...defaultOptions.commands.start,
+      options: [
+        ...(defaultOptions.commands.start.options || []),
+        ...newOptions,
+      ],
     },
-  ],
+    build: {
+      ...defaultOptions.commands.build,
+      options: [
+        ...(defaultOptions.commands.build.options || []),
+        ...newOptions,
+      ],
+    },
+  },
 });

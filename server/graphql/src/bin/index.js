@@ -39,7 +39,8 @@ handleUnhandledRejection();
         'relay-compiler': relayCompilerCommand,
       },
     }),
-    graphql,
+    // TODO
+    (folderPath: string, prefix?: string) => graphql(folderPath, prefix),
     process.argv,
   ).catch(() => {
     process.exit(1);

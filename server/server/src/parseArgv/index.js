@@ -21,8 +21,7 @@ import getDefaultOptions, {
 import handleErrorMessage from './handleErrorMessage';
 
 export type defaultOptionsType = getDefaultOptionsDefaultOptionsType;
-
-type resultType<O> = [
+export type resultType<O> = [
   mergeEventType | string,
   string,
   O & {| port?: number, prefix?: string |},

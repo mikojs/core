@@ -11,12 +11,12 @@ type defaultCommandType = $ElementType<
 
 export type defaultOptionsType = {|
   ...$Diff<optionsType, {| version: mixed |}>,
-  commands: {
+  commands: {|
     ...$NonMaybeType<$PropertyType<optionsType, 'commands'>>,
     dev: defaultCommandType,
     start: defaultCommandType,
     build: defaultCommandType,
-  },
+  |},
 |};
 
 /**

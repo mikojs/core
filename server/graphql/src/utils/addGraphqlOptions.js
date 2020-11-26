@@ -1,5 +1,6 @@
 // @flow
 
+import { type optionsType } from '@mikojs/commander';
 import { type defaultOptionsType } from '@mikojs/server/lib/parseArgv';
 
 type commandOptionsType = {|
@@ -22,9 +23,9 @@ const newOptions = [
 /**
  * @param {commandOptionsType} commandOptions - default command options
  *
- * @return {commandOptionsType} - new command options
+ * @return {optionsType} - new command options
  */
-export default (commandOptions: commandOptionsType): commandOptionsType => ({
+export default (commandOptions: commandOptionsType): optionsType => ({
   ...commandOptions,
   commands: {
     ...commandOptions.commands,

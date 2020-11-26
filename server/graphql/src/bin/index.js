@@ -24,6 +24,7 @@ import relayCompilerCommand, {
   defaultRelayCompilerOptions,
 } from './relayCompiler';
 
+import addGraphqlOptions from 'utils/addGraphqlOptions';
 import buildCache, { type cacheType } from 'utils/buildCache';
 
 handleUnhandledRejection();
@@ -31,14 +32,15 @@ handleUnhandledRejection();
 (async () => {
   const result = await parseArgv<{}, resType, ConfigType>(
     'graphql',
-    (defaultOptions: defaultOptionsType) => ({
-      ...defaultOptions,
-      version,
-      commands: {
-        ...defaultOptions.commands,
-        'relay-compiler': relayCompilerCommand,
-      },
-    }),
+    (defaultOptions: defaultOptionsType) =>
+      addGraphqlOptions({
+        ...defaultOptions,
+        version,
+        commands: {
+          ...defaultOptions.commands,
+          'relay-compiler': relayCompilerCommand,
+        },
+      }),
     // TODO
     (folderPath: string, prefix?: string) => graphql(folderPath, prefix),
     process.argv,

@@ -20,6 +20,7 @@
     "relay-compiler": "^10.0.1"
   },
   "devDependencies": {
+    "@mikojs/commander": "^1.12.1",
     "flow-bin": "^0.135.0",
     "flow-typed": "^3.2.1"
   },

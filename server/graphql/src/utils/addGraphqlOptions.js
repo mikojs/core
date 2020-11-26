@@ -2,6 +2,11 @@
 
 import { type defaultOptionsType } from '@mikojs/server/lib/parseArgv';
 
+type commandOptionsType = {|
+  ...defaultOptionsType,
+  version: string,
+|};
+
 const newOptions = [
   {
     flags: '--pretty',
@@ -15,29 +20,29 @@ const newOptions = [
 ];
 
 /**
- * @param {defaultOptionsType} defaultOptions - default server options
+ * @param {commandOptionsType} commandOptions - default command options
  *
- * @return {defaultOptionsType} - new server options
+ * @return {commandOptionsType} - new command options
  */
-export default (defaultOptions: defaultOptionsType): defaultOptionsType => ({
-  ...defaultOptions,
+export default (commandOptions: commandOptionsType): commandOptionsType => ({
+  ...commandOptions,
   commands: {
-    ...defaultOptions.commands,
+    ...commandOptions.commands,
     dev: {
-      ...defaultOptions.commands.dev,
-      options: [...(defaultOptions.commands.dev.options || []), ...newOptions],
+      ...commandOptions.commands.dev,
+      options: [...(commandOptions.commands.dev.options || []), ...newOptions],
     },
     start: {
-      ...defaultOptions.commands.start,
+      ...commandOptions.commands.start,
       options: [
-        ...(defaultOptions.commands.start.options || []),
+        ...(commandOptions.commands.start.options || []),
         ...newOptions,
       ],
     },
     build: {
-      ...defaultOptions.commands.build,
+      ...commandOptions.commands.build,
       options: [
-        ...(defaultOptions.commands.build.options || []),
+        ...(commandOptions.commands.build.options || []),
         ...newOptions,
       ],
     },

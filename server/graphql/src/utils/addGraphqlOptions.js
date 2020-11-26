@@ -10,7 +10,7 @@ type commandOptionsType = {|
   version: string,
 |};
 
-const newOptions = [
+export const newOptions = [
   {
     flags: '--pretty',
     description:

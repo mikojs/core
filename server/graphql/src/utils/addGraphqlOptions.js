@@ -3,6 +3,8 @@
 import { type optionsType } from '@mikojs/commander';
 import { type defaultOptionsType } from '@mikojs/server/lib/parseArgv';
 
+import { type optionsType as graphqlOptionsType } from '../index';
+
 type commandOptionsType = {|
   ...defaultOptionsType,
   version: string,
@@ -18,6 +20,11 @@ const newOptions = [
     flags: '--graphiql',
     description: 'a boolean to optionally enable GraphiQL mode',
   },
+];
+
+export const graphqlOptionKeys: $ReadOnlyArray<$Keys<graphqlOptionsType>> = [
+  'pretty',
+  'graphiql',
 ];
 
 /**

@@ -51,7 +51,6 @@ export default async <Req = {}, Res = {}, O = {}>(
   const result = await commander<parsedResultType<O>>(
     buildOptions(defaultOptions),
   )(argv);
-  const [command, sourcePath, { port = 3000, prefix, ...options }] = result;
 
   if (result.length === 1) {
     logger.fail(
@@ -60,16 +59,19 @@ export default async <Req = {}, Res = {}, O = {}>(
     throw new Error('empty command');
   }
 
+  const [command, sourcePath, options] = result;
+
   if (command !== 'dev' && command !== 'start' && command !== 'build')
     return result;
 
   server.set(command === 'start' ? 'run' : command);
 
   try {
+    const { port = 3000, prefix, ...customOptions } = options;
     const resolvedPath = path.resolve(sourcePath);
     const middleware = fs.lstatSync(resolvedPath).isFile()
       ? requireModule<middlewareType<Req, Res>>(resolvedPath)
-      : buildMiddleware(resolvedPath, prefix, options);
+      : buildMiddleware(resolvedPath, prefix, customOptions);
 
     if (command === 'build') {
       logger.start('Building the server');

@@ -4,7 +4,10 @@ import { type Config as ConfigType } from 'relay-compiler/bin/RelayCompilerMain.
 
 import { type optionsType as graphqlOptionsType } from '../index';
 
-export type optionsType = ConfigType & graphqlOptionsType;
+export type optionsType = {|
+  ...ConfigType,
+  ...graphqlOptionsType,
+|};
 
 /**
  * @param {optionsType} options - command options
@@ -17,13 +20,10 @@ export default <O: {}>(
   keys: $ReadOnlyArray<$Keys<O>>,
 ): O =>
   keys.reduce(
-    (result: O, key: $Keys<O>) =>
-      !options?.[key]
-        ? result
-        : {
-            ...result,
-            [key]: options[key],
-          },
+    (result: O, key: $Keys<O>) => ({
+      ...result,
+      [key]: options?.[key],
+    }),
     // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/5332
     ({}: O),
   );

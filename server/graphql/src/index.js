@@ -17,7 +17,6 @@ import buildCache, { type cacheType } from './utils/buildCache';
 
 export type resType = {| json?: (data: mixed) => void |};
 export type graphqlType = middlewareType<{}, resType>;
-export type optionsType = $Diff<OptionsDataType, {| schema: mixed |}>;
 
 /**
  * @param {string} folderPath - folder path
@@ -29,7 +28,7 @@ export type optionsType = $Diff<OptionsDataType, {| schema: mixed |}>;
 export default (
   folderPath: string,
   prefix?: string,
-  options?: optionsType,
+  options?: $Diff<OptionsDataType, {| schema: mixed |}>,
 ): graphqlType => {
   const getCache = server.mergeDir<[], cacheType>(
     folderPath,

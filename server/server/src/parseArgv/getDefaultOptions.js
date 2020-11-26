@@ -4,9 +4,19 @@ import chalk from 'chalk';
 
 import { type optionsType } from '@mikojs/commander';
 
+type defaultCommandType = $ElementType<
+  $NonMaybeType<$PropertyType<optionsType, 'commands'>>,
+  string,
+>;
+
 export type defaultOptionsType = {|
   ...$Diff<optionsType, {| version: mixed |}>,
-  commands: $NonMaybeType<$PropertyType<optionsType, 'commands'>>,
+  commands: {|
+    ...$NonMaybeType<$PropertyType<optionsType, 'commands'>>,
+    dev: defaultCommandType,
+    start: defaultCommandType,
+    build: defaultCommandType,
+  |},
 |};
 
 /**

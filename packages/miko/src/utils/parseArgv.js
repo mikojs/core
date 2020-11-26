@@ -13,6 +13,12 @@ export type mikoConfigsType = {|
   |},
 |};
 
+type parsedResultType = [
+  'generate' | 'kill' | string,
+  {| keep?: boolean |},
+  $ReadOnlyArray<string> | void,
+];
+
 const option = {
   name: 'miko',
   version,
@@ -41,10 +47,10 @@ const option = {
  *
  * @return {Promise} - parse result
  */
-export default <Data: $ReadOnlyArray<mixed>>(
+export default (
   configs: {},
   argv: $ReadOnlyArray<string>,
-): Promise<Data> => {
+): Promise<parsedResultType> => {
   const existCommands = Object.keys(option.commands);
 
   Object.keys(configs)
@@ -56,5 +62,5 @@ export default <Data: $ReadOnlyArray<mixed>>(
       };
     });
 
-  return commander(option)(argv);
+  return commander<parsedResultType>(option)(argv);
 };

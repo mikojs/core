@@ -1,5 +1,7 @@
 // @flow
 
+import { type Config as ConfigType } from 'relay-compiler/bin/RelayCompilerMain.js.flow';
+
 export const defaultRelayCompilerOptions = {
   include: ['**'],
   exclude: ['**/node_modules/**', '**/__mocks__/**', '**/__generated__/**'],
@@ -13,6 +15,16 @@ export const defaultRelayCompilerOptions = {
   language: 'javascript',
   eagerESModules: false,
 };
+
+export const relayCompilerOptionKeys: $ReadOnlyArray<$Keys<ConfigType>> = [
+  ...Object.keys(defaultRelayCompilerOptions),
+  'src',
+  'extensions',
+  'persistOutput',
+  'persistFunction',
+  'artifactDirectory',
+  'customScalars',
+];
 
 export default {
   description: 'create Relay generated files',

@@ -38,15 +38,15 @@ describe('parse argv', () => {
             ['node', 'server', event, sourcePath],
           );
 
+          if (server instanceof Array) throw new Error('Should be a server');
+
           if (event === 'build') expect(server).toBeNull();
-          else {
-            expect(server).toBeInstanceOf(http.Server);
+          else
             expect(
               await fetch('http://localhost:3000').then((res: ResponseType) =>
                 res.text(),
               ),
             ).toBe('test');
-          }
 
           if (server) server.close();
         },
@@ -55,7 +55,7 @@ describe('parse argv', () => {
   );
 
   test('custom commnad', async () => {
-    const result = await parseArgv<{}, {}, []>(
+    const result = await parseArgv(
       'server',
       (defaultOptions: defaultOptionsType) => ({
         ...defaultOptions,

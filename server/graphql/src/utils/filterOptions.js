@@ -13,14 +13,17 @@ export type optionsType = ConfigType & graphqlOptionsType;
  * @return {object} - filtered options
  */
 export default <O: {}>(
-  options: optionsType,
+  options: ?optionsType,
   keys: $ReadOnlyArray<$Keys<O>>,
 ): O =>
   keys.reduce(
-    (result: O, key: $Keys<O>) => ({
-      ...result,
-      [key]: options[key],
-    }),
+    (result: O, key: $Keys<O>) =>
+      !options?.[key]
+        ? result
+        : {
+            ...result,
+            [key]: options[key],
+          },
     // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/5332
     ({}: O),
   );

@@ -16,21 +16,26 @@ import parseArgv, {
   type defaultOptionsType,
 } from '@mikojs/server/lib/parseArgv';
 
-import graphql, { type resType } from '../index';
+import graphql, {
+  type resType,
+  type optionsType as graphqlOptionsType,
+} from '../index';
 
 import { version } from '../../package.json';
 
 import relayCompilerCommand, {
   defaultRelayCompilerOptions,
+  relayCompilerOptionKeys,
 } from './relayCompiler';
 
-import addGraphqlOptions from 'utils/addGraphqlOptions';
+import addGraphqlOptions, { graphqlOptionKeys } from 'utils/addGraphqlOptions';
+import filterOptions, { type optionsType } from 'utils/filterOptions';
 import buildCache, { type cacheType } from 'utils/buildCache';
 
 handleUnhandledRejection();
 
 (async () => {
-  const result = await parseArgv<{}, resType, ConfigType>(
+  const result = await parseArgv<{}, resType, optionsType>(
     'graphql',
     (defaultOptions: defaultOptionsType) =>
       addGraphqlOptions({
@@ -41,8 +46,12 @@ handleUnhandledRejection();
           'relay-compiler': relayCompilerCommand,
         },
       }),
-    // TODO
-    (folderPath: string, prefix?: string) => graphql(folderPath, prefix),
+    (folderPath: string, prefix?: string, options?: optionsType) =>
+      graphql(
+        folderPath,
+        prefix,
+        filterOptions<graphqlOptionsType>(options, graphqlOptionKeys),
+      ),
     process.argv,
   ).catch(() => {
     process.exit(1);
@@ -50,9 +59,7 @@ handleUnhandledRejection();
 
   if (!result || result instanceof http.Server) return;
 
-  // FIXME: flow could not use `delete config.port`, `delete config.prefix`
-  // eslint-disable-next-line no-unused-vars
-  const [, sourcePath, { port, prefix, ...config }] = result;
+  const [, sourcePath, options] = result;
   const cacheFilePath = findCacheDir({ name: '@mikojs/graphql', thunk: true })(
     'relay-compiler.schema',
   );
@@ -64,12 +71,12 @@ handleUnhandledRejection();
   const close = await server.ready();
 
   Object.keys(defaultRelayCompilerOptions).forEach((key: string) => {
-    config[key] = config[key] || defaultRelayCompilerOptions[key];
+    options[key] = options[key] || defaultRelayCompilerOptions[key];
   });
 
   outputFileSync(cacheFilePath, printSchema(getCache()));
   relayCompiler({
-    ...config,
+    ...filterOptions<ConfigType>(options, relayCompilerOptionKeys),
     schema: cacheFilePath,
   });
   close();

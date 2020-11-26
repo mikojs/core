@@ -21,7 +21,8 @@ import getDefaultOptions, {
 import handleErrorMessage from './handleErrorMessage';
 
 export type defaultOptionsType = getDefaultOptionsDefaultOptionsType;
-export type resultType<O> = [
+
+type parsedResultType<O> = [
   mergeEventType | string,
   string,
   O & {| port?: number, prefix?: string |},
@@ -44,12 +45,12 @@ export default async <Req = {}, Res = {}, O = {}>(
     options?: O,
   ) => middlewareType<Req, Res>,
   argv: $ReadOnlyArray<string>,
-): Promise<?ServerType | resultType<O>> => {
+): Promise<?ServerType | parsedResultType<O>> => {
   const logger = createLogger(`@mikojs/${name}`, ora({ discardStdin: false }));
   const defaultOptions = getDefaultOptions(name);
-  const result = await commander<resultType<O>>(buildOptions(defaultOptions))(
-    argv,
-  );
+  const result = await commander<parsedResultType<O>>(
+    buildOptions(defaultOptions),
+  )(argv);
   const [command, sourcePath, { port = 3000, prefix, ...options }] = result;
 
   if (result.length === 1) {

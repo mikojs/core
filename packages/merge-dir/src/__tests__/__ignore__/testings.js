@@ -36,7 +36,7 @@ export default () => {
 
   test('build and run mode', async () => {
     testing.set('build');
-    testing.use(
+    testing.use<[], string>(
       folderPath,
       undefined,
       () =>
@@ -46,8 +46,12 @@ export default () => {
     (await testing.ready())();
     testing.set('run');
 
-    expect(testing.use(folderPath, undefined, emptyFunction)('test')).toBe(
-      'test',
-    );
+    expect(
+      testing.use<[string], string>(
+        folderPath,
+        undefined,
+        emptyFunction,
+      )('test'),
+    ).toBe('test');
   });
 };

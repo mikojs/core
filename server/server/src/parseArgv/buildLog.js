@@ -9,18 +9,18 @@ import {
 } from '@mikojs/merge-dir/lib/utils/tools';
 
 /**
+ * @param {string} type - log type
  * @param {string} name - command name
  * @param {createLogger} logger - command logger
  *
  * @return {toolsType} - tools.log
  */
 export default (
+  type: 'update' | 'done',
   name: string,
   logger: $Call<typeof createLogger, string>,
-): $NonMaybeType<$PropertyType<toolsType, 'log'>> => (
-  fileData: fileDataType | 'done',
-) => {
-  if (fileData === 'done') logger.succeed('The server is updated');
+): ((fileData: fileDataType) => void) => (fileData: fileDataType) => {
+  if (type === 'done') logger.succeed('The server is updated');
   else
     logger
       .info(

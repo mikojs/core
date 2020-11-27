@@ -23,7 +23,7 @@ export type middlewareType<Req = {}, Res = {}> = (
 export default {
   set: mergeDir.set,
   ready: mergeDir.ready,
-  mergeDir: mergeDir.use,
+  mergeDir,
 
   /**
    * @param {middlewareType} middleware - middleware function

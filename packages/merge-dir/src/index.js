@@ -125,7 +125,7 @@ class MergeDir extends EventEmitter {
               '',
             ),
           );
-          this.emit('dnoe');
+          this.emit('done');
         },
       ),
     };

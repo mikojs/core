@@ -28,7 +28,7 @@ export type routerType = middlewareType<reqType>;
  * @return {routerType} - router middleware
  */
 export default (folderPath: string, prefix?: string): routerType => {
-  const getCache = server.mergeDir<[], cacheType>(
+  const getCache = server.mergeDir.use<[], cacheType>(
     folderPath,
     prefix,
     buildCache,

@@ -59,7 +59,13 @@ handleUnhandledRejection();
 
   if (!result || result instanceof http.Server) return;
 
-  const [, sourcePath, options] = result;
+  const [command, sourcePath, options] = result;
+
+  if (command !== 'relay-compiler') {
+    process.exit(1);
+    return;
+  }
+
   const cacheFilePath = findCacheDir({ name: '@mikojs/graphql', thunk: true })(
     'relay-compiler.schema',
   );

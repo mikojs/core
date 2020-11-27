@@ -63,7 +63,7 @@ handleUnhandledRejection();
   const cacheFilePath = findCacheDir({ name: '@mikojs/graphql', thunk: true })(
     'relay-compiler.schema',
   );
-  const getCache = server.mergeDir<[], cacheType>(
+  const getCache = server.mergeDir.use<[], cacheType>(
     path.resolve(sourcePath),
     undefined,
     buildCache,

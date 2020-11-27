@@ -31,7 +31,7 @@ export default (
   prefix?: string,
   options?: optionsType,
 ): graphqlType => {
-  const getCache = server.mergeDir<[], cacheType>(
+  const getCache = server.mergeDir.use<[], cacheType>(
     folderPath,
     undefined,
     buildCache,

@@ -73,24 +73,30 @@ handleUnhandledRejection();
   );
   const close = await server.ready();
 
-  outputFileSync(cacheFilePath, printSchema(getCache()));
-  execa(
-    path.resolve(__dirname, './runRelayCompiler.js'),
-    [
-      JSON.stringify(
-        relayCompilerOptionKeys.reduce(
-          (relayCompilerOptions: ConfigType, key: string) => ({
-            ...relayCompilerOptions,
-            [key]: options[key],
-          }),
-          // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/5332
-          ({
-            schema: cacheFilePath,
-          }: ConfigType),
+  /** */
+  const run = () => {
+    outputFileSync(cacheFilePath, printSchema(getCache()));
+    execa(
+      path.resolve(__dirname, './runRelayCompiler.js'),
+      [
+        JSON.stringify(
+          relayCompilerOptionKeys.reduce(
+            (relayCompilerOptions: ConfigType, key: string) => ({
+              ...relayCompilerOptions,
+              [key]: options[key],
+            }),
+            // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/5332
+            ({
+              schema: cacheFilePath,
+            }: ConfigType),
+          ),
         ),
-      ),
-    ],
-    { stdio: 'inherit' },
-  );
-  close();
+      ],
+      { stdio: 'inherit' },
+    );
+  };
+
+  server.mergeDir.addListener('done', run);
+
+  if (!options.watch) close();
 })();

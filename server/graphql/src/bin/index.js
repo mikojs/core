@@ -75,6 +75,7 @@ handleUnhandledRejection();
 
   /** */
   const run = () => {
+    // TODO: should add logger after logger is rewritton
     outputFileSync(cacheFilePath, printSchema(getCache()));
     execa(
       path.resolve(__dirname, './runRelayCompiler.js'),

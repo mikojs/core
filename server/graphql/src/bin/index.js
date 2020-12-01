@@ -96,7 +96,8 @@ handleUnhandledRejection();
     );
   };
 
-  server.mergeDir.addListener('done', run);
+  run();
 
   if (!options.watch) close();
+  else server.mergeDir.addListener('done', run);
 })();

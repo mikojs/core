@@ -13,6 +13,7 @@
     "@mikojs/server": "^1.12.1",
     "@mikojs/utils": "^1.12.1",
     "core-js": "^3.6.5",
+    "execa": "^4.0.3",
     "express-graphql": "^0.11.0",
     "find-cache-dir": "^3.3.1",
     "graphql": "^15.3.0",

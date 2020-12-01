@@ -5,10 +5,10 @@ import http from 'http';
 import path from 'path';
 
 import { printSchema } from 'graphql';
-import { relayCompiler } from 'relay-compiler';
 import { type Config as ConfigType } from 'relay-compiler/bin/RelayCompilerMain.js.flow';
 import findCacheDir from 'find-cache-dir';
 import outputFileSync from 'output-file-sync';
+import execa from 'execa';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 import server from '@mikojs/server';
@@ -23,10 +23,7 @@ import graphql, {
 
 import { version } from '../../package.json';
 
-import relayCompilerCommand, {
-  defaultRelayCompilerOptions,
-  relayCompilerOptionKeys,
-} from './relayCompiler';
+import relayCompilerCommand, { relayCompilerOptionKeys } from './relayCompiler';
 
 import addGraphqlOptions, { graphqlOptionKeys } from 'utils/addGraphqlOptions';
 import filterOptions, { type optionsType } from 'utils/filterOptions';
@@ -76,14 +73,24 @@ handleUnhandledRejection();
   );
   const close = await server.ready();
 
-  Object.keys(defaultRelayCompilerOptions).forEach((key: string) => {
-    options[key] = options[key] || defaultRelayCompilerOptions[key];
-  });
-
   outputFileSync(cacheFilePath, printSchema(getCache()));
-  relayCompiler({
-    ...filterOptions<ConfigType>(options, relayCompilerOptionKeys),
-    schema: cacheFilePath,
-  });
+  execa(
+    path.resolve(__dirname, './runRelayCompiler.js'),
+    [
+      JSON.stringify(
+        relayCompilerOptionKeys.reduce(
+          (relayCompilerOptions: ConfigType, key: string) => ({
+            ...relayCompilerOptions,
+            [key]: options[key],
+          }),
+          // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/5332
+          ({
+            schema: cacheFilePath,
+          }: ConfigType),
+        ),
+      ),
+    ],
+    { stdio: 'inherit' },
+  );
   close();
 })();

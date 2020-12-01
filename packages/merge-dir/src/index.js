@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import EventEmitter from 'events';
 
 import debug from 'debug';
 import findCacheDir from 'find-cache-dir';
@@ -24,6 +25,16 @@ type cacheType = {|
   |},
 |};
 
+interface mergeDirType extends EventEmitter {
+  set: (event: eventType) => void;
+  use: <A: $ReadOnlyArray<mixed>, C>(
+    folderPath: string,
+    prefix: ?string,
+    build: buildType,
+  ) => (...argv: A) => C;
+  ready: () => Promise<closeType>;
+}
+
 const debugLog = debug('merge-dir');
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const cacheId = cryptoRandomString({
@@ -35,13 +46,14 @@ let event: eventType = 'dev';
 
 debugLog({ cacheDir: cacheDir() });
 
-export default {
+/** */
+class MergeDir extends EventEmitter {
   /**
    * @param {eventType} newEvent - new event type
    */
-  set: (newEvent: eventType) => {
+  set = (newEvent: eventType) => {
     event = newEvent;
-  },
+  };
 
   /**
    * @param {string} folderPath - folder path
@@ -50,7 +62,7 @@ export default {
    *
    * @return {any} - any function from cache
    */
-  use: <A: $ReadOnlyArray<mixed>, C>(
+  use = <A: $ReadOnlyArray<mixed>, C>(
     folderPath: string,
     prefix: ?string,
     build: buildType,
@@ -99,7 +111,7 @@ export default {
                 };
 
                 debugLog(fileData);
-                tools.log({
+                this.emit('update', {
                   ...fileData,
                   filePath: path.relative(process.cwd(), filePath),
                 });
@@ -113,18 +125,18 @@ export default {
               '',
             ),
           );
-          tools.log('done');
+          this.emit('done');
         },
       ),
     };
 
     return cacheFunc;
-  },
+  };
 
   /**
    * @return {Promise} - close function
    */
-  ready: async (): Promise<closeType> => {
+  ready = async (): Promise<closeType> => {
     const closes = await Promise.all(
       Object.keys(cache).map((key: string) => cache[key].watcher),
     );
@@ -147,5 +159,7 @@ export default {
           )};`,
         );
     };
-  },
-};
+  };
+}
+
+export default (new MergeDir(): mergeDirType);

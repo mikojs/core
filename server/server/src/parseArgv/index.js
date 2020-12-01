@@ -10,7 +10,6 @@ import chalk from 'chalk';
 import { createLogger, requireModule } from '@mikojs/utils';
 import commander, { type optionsType } from '@mikojs/commander';
 import { type mergeEventType } from '@mikojs/merge-dir';
-import tools from '@mikojs/merge-dir/lib/utils/tools';
 
 import server, { type middlewareType } from '../index';
 
@@ -87,7 +86,8 @@ export default async <Req = {}, Res = {}, O = {}>(
       logger.succeed(
         chalk`Running the server on {underline http://localhost:${port}}`,
       );
-      tools.set({ log: buildLog(name, logger) });
+      server.mergeDir.addListener('update', buildLog('update', name, logger));
+      server.mergeDir.addListener('done', buildLog('done', name, logger));
     });
   } catch (e) {
     logger.fail(handleErrorMessage(name, e));

@@ -18,9 +18,10 @@ describe('build log', () => {
       info: mockLog,
     };
     buildLog(
+      data === 'done' ? data : 'update',
       'server',
       createLogger('server'),
-    )(data === 'done' ? data : { exists: data, filePath: './', pathname: '/' });
+    )({ exists: Boolean(data), filePath: './', pathname: '/' });
 
     expect(mockLog).toHaveBeenCalled();
   });

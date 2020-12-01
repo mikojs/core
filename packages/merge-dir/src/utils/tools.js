@@ -2,7 +2,6 @@
 
 import debug from 'debug';
 import outputFileSync from 'output-file-sync';
-import { emptyFunction } from 'fbjs';
 
 import { requireModule } from '@mikojs/utils';
 
@@ -26,7 +25,6 @@ export type toolsType = {|
     event: eventType,
     callback: callbackType,
   ) => Promise<closeType>,
-  log?: (fileData: fileDataType | 'done') => void,
 |};
 
 const debugLog = debug('merge-dir:tools');
@@ -34,7 +32,6 @@ const tools = {
   writeToCache: outputFileSync,
   getFromCache: requireModule,
   watcher,
-  log: emptyFunction,
 
   /**
    * @param {toolsType} newTools - new tools functions

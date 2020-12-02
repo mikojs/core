@@ -1,5 +1,51 @@
 # CHANGELOG
 
+## 1.13.0 (2020-12-02)
+
+#### :boom: Breaking Change
+
+- `commander`, `miko`
+  - [#702](https://github.com/mikojs/core/pull/702) (@mikojs/miko) Modify commands ([@HsuTing](https://github.com/HsuTing))
+- `miko`
+  - [#699](https://github.com/mikojs/core/pull/699) (@mikojs/miko) Remove config names ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `merge-dir`
+  - [#712](https://github.com/mikojs/core/pull/712) (@mikojs/graphql) Could auto add re-run relay-compiler ([@HsuTing](https://github.com/HsuTing))
+  - [#709](https://github.com/mikojs/core/pull/709) (@mikojs/router, @mikojs/graphql) Add file path checking ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `commander`, `miko`
+  - [#711](https://github.com/mikojs/core/pull/711) (@mikojs/graphql) Add more options ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#708](https://github.com/mikojs/core/pull/708) (@mikojs/router) Add method ([@HsuTing](https://github.com/HsuTing))
+  - [#705](https://github.com/mikojs/core/pull/705) (@mikojs/graphql) Add relay-compiler options ([@HsuTing](https://github.com/HsuTing))
+- `commander`
+  - [#694](https://github.com/mikojs/core/pull/694) (@mikojs/graphql) Add query and relay-compiler ([@HsuTing](https://github.com/HsuTing))
+  - [#703](https://github.com/mikojs/core/pull/703) (@mikojs/server) Modify parseArgv options ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#701](https://github.com/mikojs/core/pull/701) (@mikojs/configs) Can save flow-typed cache ([@HsuTing](https://github.com/HsuTing))
+- `miko`
+  - [#700](https://github.com/mikojs/core/pull/700) (@mikojs/miko) Support custom command ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- Other
+  - [#710](https://github.com/mikojs/core/pull/710) chore(deps): bump highlight.js from 9.14.2 to 9.18.5 ([@dependabot[bot]](https://github.com/apps/dependabot))
+  - [#707](https://github.com/mikojs/core/pull/707) (@mikojs/graphql, @mikojs/router) Fix cache ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `miko`
+  - [#706](https://github.com/mikojs/core/pull/706) (@mikojs/configs) Fix detail ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `commander`, `configs`
+  - [#698](https://github.com/mikojs/core/pull/698) (@mikojs/commander) Add new package ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `configs`
+  - [#704](https://github.com/mikojs/core/pull/704) (@mikojs/core) Add helpers ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.12.1 (2020-11-08)
 
 #### :rocket: New Feature

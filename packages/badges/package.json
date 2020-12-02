@@ -9,19 +9,19 @@
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.11.2",
+    "@babel/runtime": "^7.12.5",
     "@mikojs/commander": "^1.13.0",
     "@mikojs/utils": "^1.12.1",
     "chalk": "^4.1.0",
-    "core-js": "^3.6.5",
-    "debug": "^4.2.0",
-    "execa": "^4.0.3",
-    "fbjs": "^2.0.0",
+    "core-js": "^3.8.0",
+    "debug": "^4.3.1",
+    "execa": "^4.1.0",
+    "fbjs": "^3.0.0",
     "output-file-sync": "^2.0.1",
     "read-pkg-up": "^7.0.1"
   },
   "devDependencies": {
-    "flow-bin": "^0.135.0",
+    "flow-bin": "^0.138.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["badges", "mikojs"],

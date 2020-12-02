@@ -8,21 +8,21 @@
   "version": "1.12.1",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.11.2",
+    "@babel/runtime": "^7.12.5",
     "babel-eslint": "^10.1.0",
-    "core-js": "^3.6.5",
+    "core-js": "^3.8.0",
     "eslint-config-fbjs": "^3.1.1",
     "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^6.12.0",
-    "eslint-import-resolver-babel-module": "^5.1.2",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-import-resolver-babel-module": "^5.2.0",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^30.6.3",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-jsdoc": "^30.7.8",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.21.3",
-    "eslint-plugin-react-hooks": "^4.1.2",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-relay": "^1.8.1"
   },
   "peerDependencies": {
@@ -31,11 +31,11 @@
   "devDependencies": {
     "@mikojs/dir-tree": "^1.12.1",
     "babel-plugin-module-resolver": "^4.0.0",
-    "eslint": "^7.10.0",
-    "fbjs": "^2.0.0",
-    "flow-bin": "^0.135.0",
+    "eslint": "^7.14.0",
+    "fbjs": "^3.0.0",
+    "flow-bin": "^0.138.0",
     "flow-typed": "^3.2.1",
-    "react": "^16.13.1"
+    "react": "^17.0.1"
   },
   "keywords": ["eslint", "mikojs"],
   "publishConfig": {

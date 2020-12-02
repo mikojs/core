@@ -5,11 +5,11 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/router",
   "repository": "https://github.com/mikojs/core/tree/master/server/router",
-  "version": "1.12.1",
+  "version": "1.13.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "@mikojs/server": "^1.12.1",
+    "@mikojs/server": "^1.13.0",
     "@mikojs/utils": "^1.12.1",
     "core-js": "^3.6.5",
     "path-to-regexp": "^6.1.0",

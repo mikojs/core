@@ -6,23 +6,64 @@ import {
   type ServerResponse as ServerResponseType,
 } from 'http';
 
+import { graphqlHTTP } from 'express-graphql';
 import {
-  graphqlHTTP,
-  type OptionsData as OptionsDataType,
-} from 'express-graphql';
+  type ASTVisitor,
+  type DocumentNode,
+  type ValidationRule,
+  type ValidationContext,
+  type ExecutionArgs,
+  type ExecutionResult,
+  type GraphQLSchema,
+  type GraphQLFieldResolver,
+  type GraphQLTypeResolver,
+  type GraphQLFormattedError,
+  type Source,
+  type GraphQLError,
+} from 'graphql';
 
 import server, { type middlewareType } from '@mikojs/server';
 
 import buildCache, { type cacheType } from './utils/buildCache';
 
+type maybePromiseType<T> = Promise<T> | T;
+
 export type resType = {| json?: (data: mixed) => void |};
 export type graphqlType = middlewareType<{}, resType>;
-export type optionsType = $Diff<OptionsDataType, {| schema: mixed |}>;
+// FIXME: should use express-graphql type
+export type optionsType = {|
+  context?: mixed,
+  rootValue?: mixed,
+  pretty?: boolean,
+  validationRules?: $ReadOnlyArray<(ctx: ValidationContext) => ASTVisitor>,
+  customValidateFn?: (
+    schema: GraphQLSchema,
+    documentAST: DocumentNode,
+    rules: $ReadOnlyArray<ValidationRule>,
+  ) => $ReadOnlyArray<GraphQLError>,
+  customExecuteFn?: (args: ExecutionArgs) => maybePromiseType<ExecutionResult>,
+  customFormatErrorFn?: (error: GraphQLError) => GraphQLFormattedError,
+  customParseFn?: (source: Source) => DocumentNode,
+  formatError?: (error: GraphQLError) => GraphQLFormattedError,
+  extensions?: (
+    info: RequestInfo,
+  ) => maybePromiseType<?{|
+    [string]: mixed,
+  |}>,
+  graphiql?:
+    | boolean
+    | {|
+        defaultQuery?: string,
+        headerEditorEnabled?: boolean,
+      |},
+  fieldResolver?: GraphQLFieldResolver<mixed, mixed>,
+  typeResolver?: GraphQLTypeResolver<mixed, mixed>,
+|};
 
 /**
  * @param {string} folderPath - folder path
  * @param {string} prefix - pathname prefix
- * @param {OptionsDataType} options - graphql middleware options
+ * @param {optionsType} options - graphql middleware options
  *
  * @return {graphqlType} - graphqlmiddleware
  */

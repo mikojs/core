@@ -8,16 +8,16 @@
   "version": "1.12.1",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.11.2",
+    "@babel/runtime": "^7.12.5",
     "@mikojs/utils": "^1.12.1",
-    "core-js": "^3.6.5",
-    "debug": "^4.2.0",
-    "execa": "^4.0.3",
-    "find-process": "^1.4.3",
+    "core-js": "^3.8.0",
+    "debug": "^4.3.1",
+    "execa": "^4.1.0",
+    "find-process": "^1.4.4",
     "get-port": "^5.1.1"
   },
   "devDependencies": {
-    "flow-bin": "^0.135.0",
+    "flow-bin": "^0.138.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["mikojs", "worker"],

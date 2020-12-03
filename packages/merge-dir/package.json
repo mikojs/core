@@ -8,19 +8,19 @@
   "version": "1.13.0",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.11.2",
+    "@babel/runtime": "^7.12.5",
     "@mikojs/dir-tree": "^1.12.1",
     "@mikojs/utils": "^1.12.1",
-    "core-js": "^3.6.5",
+    "core-js": "^3.8.0",
     "crypto-random-string": "^3.3.0",
-    "debug": "^4.2.0",
+    "debug": "^4.3.1",
     "fb-watchman": "^2.0.1",
-    "fbjs": "^2.0.0",
+    "fbjs": "^3.0.0",
     "find-cache-dir": "^3.3.1",
     "output-file-sync": "^2.0.1"
   },
   "devDependencies": {
-    "flow-bin": "^0.135.0",
+    "flow-bin": "^0.138.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["merge dir", "mikojs"],

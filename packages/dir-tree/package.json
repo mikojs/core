@@ -8,13 +8,13 @@
   "version": "1.12.1",
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.11.2",
-    "core-js": "^3.6.5",
+    "@babel/runtime": "^7.12.5",
+    "core-js": "^3.8.0",
     "d3-hierarchy": "^2.0.0",
-    "directory-tree": "^2.2.4"
+    "directory-tree": "^2.2.5"
   },
   "devDependencies": {
-    "flow-bin": "^0.135.0",
+    "flow-bin": "^0.138.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["directory tree", "mikojs"],

@@ -2,14 +2,20 @@
 
 import EventEmitter from 'events';
 
+import React, { type Node as NodeType } from 'react';
+import { Text, render } from 'ink';
+
 export type eventType = 'success' | 'fail';
 
 type logType = (mesage: string) => void;
 type logsType = {|
   [eventType]: logType,
+  dom: NodeType,
+  render: typeof render,
 |};
 
 const events = new EventEmitter();
+let cache: NodeType;
 
 /**
  * @param {string} name - logger name
@@ -29,4 +35,6 @@ const emit = (name: string, event: eventType) => (message: string) => {
 export default (name: string): logsType => ({
   success: emit(name, 'success'),
   fail: emit(name, 'fail'),
+  dom: cache || <Text>Hello world</Text>,
+  render,
 });

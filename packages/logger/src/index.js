@@ -5,10 +5,9 @@ import EventEmitter from 'events';
 import React, { type Node as NodeType } from 'react';
 import { render } from 'ink';
 
-import Logger from 'components';
+import Logger, { type stateType } from 'components';
 
-export type eventType = 'success' | 'fail';
-
+type eventType = $Keys<$ElementType<stateType, string>>;
 type logType = (mesage: string) => void;
 type logsType = {|
   [eventType]: logType,

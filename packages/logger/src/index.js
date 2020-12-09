@@ -37,5 +37,6 @@ export default (name: string): logsType => ({
   success: emit(name, 'success'),
   fail: emit(name, 'fail'),
   dom: cache || <Logger events={events} />,
+  // FIXME should only render once
   render,
 });

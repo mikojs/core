@@ -8,24 +8,24 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { Text } from 'ink';
 
-type eventType = 'success' | 'fail';
+import Table, {
+  type eventType,
+  type propsType as tablePropsType,
+} from './Table';
+
 type propsType = {|
   events: EventEmitter,
 |};
 
-export type stateType = {|
-  [string]: {|
-    [eventType]: $ReadOnlyArray<string>,
-  |},
-|};
+export type stateType = $PropertyType<tablePropsType, 'logs'>;
 
 /** @react logger controller */
 const Logger = ({ events }: propsType): NodeType => {
-  const [, setLogs] = useState<stateType>({});
+  const [logs, setLogs] = useState<stateType>({});
 
   useEffect(() => {
+    // FIXME: should keep watch
     events.addListener(
       'update',
       ({
@@ -60,7 +60,7 @@ const Logger = ({ events }: propsType): NodeType => {
     );
   }, [events]);
 
-  return <Text>Hello world</Text>;
+  return <Table logs={logs} />;
 };
 
 export default (React.memo<propsType>(

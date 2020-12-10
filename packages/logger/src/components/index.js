@@ -42,7 +42,7 @@ const Logger = ({ events }: propsType): NodeType => {
         setLogs((prevLogs: stateType): stateType => {
           const newLogs = {
             ...prevLogs,
-            [name]: {},
+            [name]: prevLogs[name] || {},
           };
 
           switch (event) {

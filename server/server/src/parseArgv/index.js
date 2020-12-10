@@ -86,8 +86,8 @@ export default async <Req = {}, Res = {}, O = {}>(
       logger.succeed(
         chalk`Running the server on {underline http://localhost:${port}}`,
       );
-      server.mergeDir.addListener('update', buildLog('update', name, logger));
-      server.mergeDir.addListener('done', buildLog('done', name, logger));
+      server.mergeDir.on('update', buildLog('update', name, logger));
+      server.mergeDir.on('done', buildLog('done', name, logger));
     });
   } catch (e) {
     logger.fail(handleErrorMessage(name, e));

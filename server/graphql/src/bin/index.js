@@ -100,5 +100,5 @@ handleUnhandledRejection();
   run();
 
   if (!options.watch) close();
-  else server.mergeDir.addListener('done', run);
+  else server.mergeDir.on('done', run);
 })();

@@ -26,7 +26,7 @@ const Logger = ({ events }: propsType): NodeType => {
 
   useEffect(() => {
     // FIXME: should keep watch
-    events.addListener(
+    events.on(
       'update',
       ({
         name,

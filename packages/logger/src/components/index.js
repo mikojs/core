@@ -8,6 +8,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { emptyFunction } from 'fbjs';
 
 import Table, {
   type eventType,
@@ -25,7 +26,8 @@ const Logger = ({ events }: propsType): NodeType => {
   const [logs, setLogs] = useState<stateType>({});
 
   useEffect(() => {
-    // FIXME: should keep watch
+    const interval = setInterval(emptyFunction, 1000);
+
     events.on(
       'update',
       ({
@@ -38,23 +40,32 @@ const Logger = ({ events }: propsType): NodeType => {
         message: string,
       |}) => {
         setLogs((prevLogs: stateType): stateType => {
+          const newLogs = {
+            ...prevLogs,
+            [name]: {},
+          };
+
           switch (event) {
             case 'success':
-              prevLogs[name].success = [
-                ...(prevLogs[name].success || []),
+              newLogs[name].success = [
+                ...(newLogs[name].success || []),
                 message,
               ];
               break;
 
             case 'fail':
-              prevLogs[name].fail = [...(prevLogs[name].fail || []), message];
+              newLogs[name].fail = [...(newLogs[name].fail || []), message];
+              break;
+
+            case 'end':
+              clearInterval(interval);
               break;
 
             default:
               break;
           }
 
-          return prevLogs;
+          return newLogs;
         });
       },
     );

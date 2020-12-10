@@ -1,7 +1,6 @@
 // @flow
 
 import EventEmitter from 'events';
-import stream from 'stream';
 
 import React, { type Node as NodeType } from 'react';
 import { render } from 'ink';
@@ -10,39 +9,34 @@ import Logger, { type stateType } from 'components';
 
 type eventType = $Keys<$ElementType<stateType, string>>;
 type logType = (mesage: string) => void;
-type loggerType = {|
+type logsType = {|
   [eventType]: logType,
   dom: NodeType,
   render: typeof render,
 |};
 
-const inputStream = new stream.Writable();
-const outputStream = new stream.Readable();
+const events = new EventEmitter();
 let cache: NodeType;
-
-outputStream.pipe(inputStream);
-outputStream.setEncoding('utf8');
 
 /**
  * @param {string} name - logger name
- * @param {eventType} event - event name
+ * @param {eventType} event - event
  *
- * @return {logType} - log function
+ * @return {logType} - logger function
  */
-const build = (name: string, event: eventType) => (message: string) => {
-  inputStream.write(JSON.stringify({ name, event, message }));
+const emit = (name: string, event: eventType) => (message: string) => {
+  events.emit('update', { name, event, message });
 };
 
 /**
  * @param {string} name - logger name
  *
- * @return {loggerType} - logger object
+ * @return {logsType} - logger functions
  */
-export default (name: string): loggerType => ({
-  success: build(name, 'success'),
-  fail: build(name, 'fail'),
-  // FIXME should use stream
-  dom: cache || <Logger events={new EventEmitter()} />,
+export default (name: string): logsType => ({
+  success: emit(name, 'success'),
+  fail: emit(name, 'fail'),
+  dom: cache || <Logger events={events} />,
   // FIXME should only render once
   render,
 });

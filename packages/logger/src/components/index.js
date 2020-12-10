@@ -69,6 +69,7 @@ const Logger = ({ events }: propsType): NodeType => {
         });
       },
     );
+    events.emit('end');
   }, [events]);
 
   return <Table logs={logs} />;

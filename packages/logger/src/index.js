@@ -2,7 +2,7 @@
 
 import EventEmitter from 'events';
 
-import React, { type Node as NodeType } from 'react';
+import React from 'react';
 import { render } from 'ink';
 
 import Logger, { type stateType } from 'components';
@@ -11,12 +11,11 @@ type eventType = $Keys<$ElementType<stateType, string>>;
 type logType = (mesage: string) => void;
 type logsType = {|
   [eventType]: logType,
-  dom: NodeType,
-  render: typeof render,
+  init: () => Promise<void>,
 |};
 
 const events = new EventEmitter();
-let cache: NodeType;
+let isInit: boolean;
 
 /**
  * @param {string} name - logger name
@@ -36,7 +35,17 @@ const emit = (name: string, event: eventType) => (message: string) => {
 export default (name: string): logsType => ({
   success: emit(name, 'success'),
   fail: emit(name, 'fail'),
-  dom: cache || <Logger events={events} />,
-  // FIXME should only render once
-  render,
+
+  /**
+   * @return {Promise} - init
+   */
+  init: () =>
+    new Promise(resolve => {
+      events.on('end', resolve);
+
+      if (!isInit) render(<Logger events={events} />);
+      else events.emit('end');
+
+      isInit = true;
+    }),
 });

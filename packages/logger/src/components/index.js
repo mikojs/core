@@ -1,16 +1,13 @@
 // @flow
 
 import React, { type AbstractComponent as AbstractComponentType } from 'react';
-import { Text } from 'ink';
 import Divider from 'ink-divider';
 
-export type eventType = 'success' | 'fail';
+import Message, { type propsType as messagePropsType } from './Message';
+
 export type propsType = {|
   logs: {|
-    [string]: $ReadOnlyArray<{|
-      event: eventType,
-      message: string,
-    |}>,
+    [string]: $ReadOnlyArray<messagePropsType>,
   |},
 |};
 
@@ -20,7 +17,9 @@ const Logger = ({ logs }: propsType) =>
     <React.Fragment key={name}>
       <Divider title={name} width={100} />
 
-      <Text>{JSON.stringify(logs[name])}</Text>
+      {logs[name].map((messageProps: messagePropsType, index: number) => (
+        <Message {...messageProps} key={index} />
+      ))}
     </React.Fragment>
   ));
 

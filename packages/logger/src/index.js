@@ -3,10 +3,16 @@
 import React from 'react';
 import { render } from 'ink';
 
-import Logger, { type eventType, type propsType } from './components';
+import Logger, { type propsType } from './components';
+
+type logsType = $PropertyType<propsType, 'logs'>;
+type eventType = $PropertyType<
+  $ElementType<$PropertyType<logsType, 'string'>, number>,
+  'event',
+>;
 
 export const cache: {|
-  logs: $PropertyType<propsType, 'logs'>,
+  logs: logsType,
   render: typeof render,
   add: (name: string, event: eventType, message: string) => void,
   instance?: $Call<typeof render>,

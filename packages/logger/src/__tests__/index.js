@@ -7,7 +7,8 @@ import createLogger, { cache } from '../index';
 describe('logger', () => {
   beforeAll(() => {
     cache.render = render;
-    cache.update(() => ({}));
+    cache.add('init', 'success', 'init');
+    cache.logs = {};
   });
 
   test('could log message', () => {

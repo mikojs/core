@@ -6,14 +6,18 @@ import { Text } from 'ink';
 export type eventType = 'success' | 'fail';
 export type propsType = {|
   logs: {|
-    [string]: {|
-      [eventType]: $ReadOnlyArray<string>,
-    |},
+    [string]: $ReadOnlyArray<{|
+      event: eventType,
+      message: string,
+    |}>,
   |},
 |};
 
 /** @react logger */
-const Logger = ({ logs }: propsType) => <Text>{JSON.stringify(logs)}</Text>;
+const Logger = ({ logs }: propsType) =>
+  Object.keys(logs).map((name: string) => (
+    <Text key={name}>{JSON.stringify(logs[name])}</Text>
+  ));
 
 export default (React.memo<propsType>(
   Logger,

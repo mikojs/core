@@ -5,23 +5,25 @@ import { render } from 'ink';
 
 import Logger, { type eventType, type propsType } from './components';
 
-type logsType = $PropertyType<propsType, 'logs'>;
-type callbackType = (prevLogs: logsType) => logsType;
-
 export const cache: {|
-  logs: logsType,
+  logs: $PropertyType<propsType, 'logs'>,
   render: typeof render,
-  update: (callback: callbackType) => void,
+  add: (name: string, event: eventType, message: string) => void,
   instance?: $Call<typeof render>,
 |} = {
   logs: {},
   render,
 
   /**
-   * @param {callbackType} callback - update logs callback
+   * @param {string} name - logger name
+   * @param {eventType} event - log event
+   * @param {string} message - log message
    */
-  update: (callback: callbackType) => {
-    cache.logs = callback(cache.logs);
+  add: (name: string, event: eventType, message: string) => {
+    cache.logs = {
+      ...cache.logs,
+      [name]: [...(cache.logs[name] || []), { event, message }],
+    };
 
     if (cache.instance) cache.instance.rerender(<Logger logs={cache.logs} />);
     else cache.instance = cache.render(<Logger logs={cache.logs} />);
@@ -42,25 +44,13 @@ export default (
    * @param {string} message - log success message
    */
   success: (message: string) => {
-    cache.update((prevLogs: logsType) => ({
-      ...prevLogs,
-      [name]: {
-        ...prevLogs[name],
-        success: [...(prevLogs[name]?.success || []), message],
-      },
-    }));
+    cache.add(name, 'success', message);
   },
 
   /**
    * @param {string} message - log fail message
    */
   fail: (message: string) => {
-    cache.update((prevLogs: logsType) => ({
-      ...prevLogs,
-      [name]: {
-        ...prevLogs[name],
-        fail: [...(prevLogs[name]?.fail || []), message],
-      },
-    }));
+    cache.add(name, 'fail', message);
   },
 });

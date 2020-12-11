@@ -8,12 +8,14 @@ import Logger, { type eventType, type propsType } from './components';
 type logsType = $PropertyType<propsType, 'logs'>;
 type callbackType = (prevLogs: logsType) => logsType;
 
-const cache: {|
+export const cache: {|
   logs: logsType,
+  render: typeof render,
   update: (callback: callbackType) => void,
-  rerender?: $PropertyType<$Call<typeof render>, 'rerender'>,
+  instance?: $Call<typeof render>,
 |} = {
   logs: {},
+  render,
 
   /**
    * @param {callbackType} callback - update logs callback
@@ -21,8 +23,8 @@ const cache: {|
   update: (callback: callbackType) => {
     cache.logs = callback(cache.logs);
 
-    if (cache.rerender) cache.rerender(<Logger logs={cache.logs} />);
-    else cache.rerender = render(<Logger logs={cache.logs} />).rerender;
+    if (cache.instance) cache.instance.rerender(<Logger logs={cache.logs} />);
+    else cache.instance = cache.render(<Logger logs={cache.logs} />);
   },
 };
 

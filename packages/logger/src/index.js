@@ -54,9 +54,9 @@ export default (
   },
 
   /**
-   * @param {string} message - log fail message
+   * @param {string} message - log error message
    */
-  fail: (message: string) => {
-    cache.add(name, 'fail', message);
+  error: (message: string) => {
+    cache.add(name, 'error', message);
   },
 });

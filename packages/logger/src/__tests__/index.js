@@ -15,7 +15,7 @@ describe('logger', () => {
     const logger = createLogger('logger');
 
     logger.success('success');
-    logger.fail('fail');
+    logger.error('error');
 
     expect(cache.instance?.lastFrame()).toBe('');
   });

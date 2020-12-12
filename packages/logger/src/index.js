@@ -7,7 +7,7 @@ import Logger, { type propsType } from './components';
 
 type logsType = $PropertyType<propsType, 'logs'>;
 type eventType = $PropertyType<
-  $ElementType<$PropertyType<logsType, 'string'>, number>,
+  $ElementType<$ElementType<logsType, string>, number>,
   'event',
 >;
 

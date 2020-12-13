@@ -59,4 +59,25 @@ export default (
   error: (message: string) => {
     cache.add(name, 'error', message);
   },
+
+  /**
+   * @param {string} message - log info message
+   */
+  info: (message: string) => {
+    cache.add(name, 'info', message);
+  },
+
+  /**
+   * @param {string} message - log warn message
+   */
+  warn: (message: string) => {
+    cache.add(name, 'warn', message);
+  },
+
+  /**
+   * @param {string} message - log message
+   */
+  log: (message: string) => {
+    cache.add(name, 'log', message);
+  },
 });

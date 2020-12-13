@@ -7,7 +7,7 @@ import React, {
 import { Box, Text } from 'ink';
 
 export type propsType = {|
-  event: 'success' | 'error',
+  event: 'success' | 'error' | 'info' | 'warn' | 'log',
   message: string,
 |};
 
@@ -17,7 +17,7 @@ const Message = ({ event, message }: propsType): NodeType => {
     case 'success':
       return (
         <Box>
-          <Text color="green">✔ </Text>
+          <Text color="green">&#10003; </Text>
 
           <Text>{message}</Text>
         </Box>
@@ -26,14 +26,32 @@ const Message = ({ event, message }: propsType): NodeType => {
     case 'error':
       return (
         <Box>
-          <Text color="red">✖ </Text>
+          <Text color="red">&#10008; </Text>
+
+          <Text>{message}</Text>
+        </Box>
+      );
+
+    case 'info':
+      return (
+        <Box>
+          <Text color="blue">&#8560; </Text>
+
+          <Text>{message}</Text>
+        </Box>
+      );
+
+    case 'warn':
+      return (
+        <Box>
+          <Text color="yellow">&#9888; </Text>
 
           <Text>{message}</Text>
         </Box>
       );
 
     default:
-      return <Text> {message}</Text>;
+      return <Text>  {message}</Text>;
   }
 };
 

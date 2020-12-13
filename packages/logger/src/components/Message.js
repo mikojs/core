@@ -44,14 +44,14 @@ const Message = ({ event, message }: propsType): NodeType => {
     case 'warn':
       return (
         <Box>
-          <Text color="yellow">&#9888; </Text>
+          <Text color="yellow">&#8560; </Text>
 
           <Text>{message}</Text>
         </Box>
       );
 
     default:
-      return <Text>  {message}</Text>;
+      return <Text> {message}</Text>;
   }
 };
 

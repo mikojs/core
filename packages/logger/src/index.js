@@ -28,7 +28,10 @@ export const cache: {|
   add: (name: string, event: eventType, message: string) => {
     cache.logs = {
       ...cache.logs,
-      [name]: [...(cache.logs[name] || []), { event, message }],
+      [name]: {
+        loading: false,
+        messages: [...(cache.logs[name]?.messages || []), { event, message }],
+      },
     };
 
     if (cache.instance) cache.instance.rerender(<Logger logs={cache.logs} />);

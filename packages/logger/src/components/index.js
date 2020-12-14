@@ -7,7 +7,10 @@ import Message, { type propsType as messagePropsType } from './Message';
 
 export type propsType = {|
   logs: {|
-    [string]: $ReadOnlyArray<messagePropsType>,
+    [string]: {|
+      loading: boolean,
+      messages: $ReadOnlyArray<messagePropsType>,
+    |},
   |},
 |};
 
@@ -17,9 +20,11 @@ const Logger = ({ logs }: propsType) =>
     <React.Fragment key={name}>
       <Divider title={name} width={100} />
 
-      {logs[name].map((messageProps: messagePropsType, index: number) => (
-        <Message {...messageProps} key={index} />
-      ))}
+      {logs[name].messages.map(
+        (messageProps: messagePropsType, index: number) => (
+          <Message {...messageProps} key={index} />
+        ),
+      )}
     </React.Fragment>
   ));
 

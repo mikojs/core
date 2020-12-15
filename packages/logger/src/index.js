@@ -10,6 +10,9 @@ type eventType = $PropertyType<
   $ElementType<$ElementType<logsType, string>, number>,
   'event',
 >;
+type loggerType = {|
+  [eventType]: (message: string) => void,
+|};
 
 export const cache: {|
   logs: logsType,
@@ -48,50 +51,17 @@ export const cache: {|
  *
  * @return {object} - logger
  */
-export default (
-  name: string,
-): ({|
-  [eventType]: (message: string) => void,
-|}) => ({
-  /**
-   * @param {string} message - log start message
-   */
-  start: (message: string) => {
-    cache.add(name, 'start', message);
-  },
+export default (name: string): loggerType =>
+  ['start', 'success', 'error', 'info', 'warn', 'log'].reduce(
+    (result: loggerType, event: eventType) => ({
+      ...result,
 
-  /**
-   * @param {string} message - log success message
-   */
-  success: (message: string) => {
-    cache.add(name, 'success', message);
-  },
-
-  /**
-   * @param {string} message - log error message
-   */
-  error: (message: string) => {
-    cache.add(name, 'error', message);
-  },
-
-  /**
-   * @param {string} message - log info message
-   */
-  info: (message: string) => {
-    cache.add(name, 'info', message);
-  },
-
-  /**
-   * @param {string} message - log warn message
-   */
-  warn: (message: string) => {
-    cache.add(name, 'warn', message);
-  },
-
-  /**
-   * @param {string} message - log message
-   */
-  log: (message: string) => {
-    cache.add(name, 'log', message);
-  },
-});
+      /**
+       * @param {string} message - log message
+       */
+      [event]: (message: string) => {
+        cache.add(name, event, message);
+      },
+    }),
+    {},
+  );

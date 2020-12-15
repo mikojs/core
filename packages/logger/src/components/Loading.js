@@ -13,18 +13,7 @@ type propsType = {|
 |};
 
 const fps = 1000 / 24;
-const symbols = [
-  '&#10251;',
-  '&#10265;',
-  '&#10297;',
-  '&#10296;',
-  '&#10300;',
-  '&#10292;',
-  '&#10278;',
-  '&#10279;',
-  '&#10247;',
-  '&#10255;',
-];
+const symbols = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 
 /** @react loading message */
 const Loading = ({ message }: propsType): NodeType => {

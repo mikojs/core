@@ -26,11 +26,15 @@ export const cache: {|
    * @param {string} message - log message
    */
   add: (name: string, event: eventType, message: string) => {
+    const loading = event !== 'start' ? cache.logs[name]?.loading : message;
+    const messages = cache.logs[name]?.messages || [];
+
     cache.logs = {
       ...cache.logs,
       [name]: {
-        loading: false,
-        messages: [...(cache.logs[name]?.messages || []), { event, message }],
+        loading: ['success', 'error'].includes(event) ? false : loading,
+        messages:
+          event === 'start' ? messages : [...messages, { event, message }],
       },
     };
 
@@ -49,6 +53,13 @@ export default (
 ): ({|
   [eventType]: (message: string) => void,
 |}) => ({
+  /**
+   * @param {string} message - log start message
+   */
+  start: (message: string) => {
+    cache.add(name, 'start', message);
+  },
+
   /**
    * @param {string} message - log success message
    */

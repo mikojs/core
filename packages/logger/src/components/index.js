@@ -4,11 +4,12 @@ import React, { type AbstractComponent as AbstractComponentType } from 'react';
 import Divider from 'ink-divider';
 
 import Message, { type propsType as messagePropsType } from './Message';
+import Loading from './Loading';
 
 export type propsType = {|
   logs: {|
     [string]: {|
-      loading: boolean,
+      loading: false | string,
       messages: $ReadOnlyArray<messagePropsType>,
     |},
   |},
@@ -25,6 +26,8 @@ const Logger = ({ logs }: propsType) =>
           <Message {...messageProps} key={index} />
         ),
       )}
+
+      {!logs[name].loading ? null : <Loading message={logs[name].loading} />}
     </React.Fragment>
   ));
 

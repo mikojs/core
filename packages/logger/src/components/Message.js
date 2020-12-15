@@ -7,7 +7,7 @@ import React, {
 import { Box, Text } from 'ink';
 
 export type propsType = {|
-  event: 'success' | 'error' | 'info' | 'warn' | 'log',
+  event: 'start' | 'success' | 'error' | 'info' | 'warn' | 'log',
   message: string,
 |};
 
@@ -51,7 +51,7 @@ const Message = ({ event, message }: propsType): NodeType => {
       );
 
     default:
-      return <Text>  {message}</Text>;
+      return <Text> {message}</Text>;
   }
 };
 

@@ -49,7 +49,7 @@ export const cache: {|
 /**
  * @param {string} name - logger name
  *
- * @return {object} - logger
+ * @return {loggerType} - logger
  */
 export default (name: string): loggerType =>
   ['start', 'success', 'error', 'info', 'warn', 'log'].reduce(

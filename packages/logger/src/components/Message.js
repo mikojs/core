@@ -51,7 +51,7 @@ const Message = ({ event, message }: propsType): NodeType => {
       );
 
     default:
-      return <Text> {message}</Text>;
+      return <Text>{`  ${message}`}</Text>;
   }
 };
 

@@ -17,13 +17,13 @@ export type propsType = {|
 
 /** @react logger */
 const Logger = ({ logs }: propsType) =>
-  Object.keys(logs).map((name: string) => (
+  Object.keys(logs).map((name: string, index: number) => (
     <React.Fragment key={name}>
-      <Divider title={name} width={100} />
+      {index === 0 ? null : <Divider title={name} width={100} />}
 
       {logs[name].messages.map(
-        (messageProps: messagePropsType, index: number) => (
-          <Message {...messageProps} key={index} />
+        (messageProps: messagePropsType, messageIndex: number) => (
+          <Message {...messageProps} key={messageIndex} />
         ),
       )}
 

@@ -11,7 +11,7 @@
     "@babel/runtime": "^7.12.5",
     "core-js": "^3.8.0",
     "ink": "^3.0.8",
-    "ink-divider": "^3.0.0"
+    "ink-spinner": "^4.0.1"
   },
   "peerDependencies": {
     "react": ">=17.0.0"

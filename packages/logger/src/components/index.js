@@ -6,32 +6,34 @@ import Spinner from 'ink-spinner';
 
 import Message, { type propsType as messagePropsType } from './Message';
 
-export type propsType = {|
-  logs: {|
-    [string]: {|
-      loading: false | string,
-      messages: $ReadOnlyArray<messagePropsType>,
-    |},
+export type messageType = {|
+  ...messagePropsType,
+  id: string,
+|};
+
+type propsType = {|
+  loading: {|
+    [string]: string,
   |},
+  messages: $ReadOnlyArray<messageType>,
 |};
 
 /** @react logger */
-const Logger = ({ logs }: propsType) =>
-  Object.keys(logs).map((name: string) => (
-    <React.Fragment key={name}>
-      {logs[name].messages.map((props: messagePropsType, index: number) => (
-        <Message {...props} key={index} />
-      ))}
+const Logger = ({ loading, messages }: propsType) => (
+  <>
+    {messages.map(({ id, ...props }: messageType) => (
+      <Message {...props} key={id} />
+    ))}
 
-      {!logs[name].loading ? null : (
-        <Text>
-          <Spinner type="dots" />
+    {Object.keys(loading).map((name: string) => (
+      <Text key={name}>
+        <Spinner type="dots" />
 
-          {` ${logs[name].loading}`}
-        </Text>
-      )}
-    </React.Fragment>
-  ));
+        {` ${loading[name]}`}
+      </Text>
+    ))}
+  </>
+);
 
 export default (React.memo<propsType>(
   Logger,

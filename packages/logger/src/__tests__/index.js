@@ -8,7 +8,7 @@ describe('logger', () => {
   beforeAll(() => {
     cache.render = render;
     cache.add('init', 'success', 'init');
-    cache.logs = {};
+    cache.messages = [];
   });
 
   test('could log message', () => {

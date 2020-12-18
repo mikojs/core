@@ -4,6 +4,7 @@ import React, { type AbstractComponent as AbstractComponentType } from 'react';
 import { Box, Text } from 'ink';
 
 export type propsType = {|
+  name: string,
   event: 'start' | 'success' | 'error' | 'info' | 'warn' | 'log',
   message: string,
 |};
@@ -18,9 +19,11 @@ const symbols = {
 };
 
 /** @react show message */
-const Message = ({ event, message }: propsType) => (
+const Message = ({ name, event, message }: propsType) => (
   <Box>
     {symbols[event]}
+
+    <Text>{name} </Text>
 
     <Text>{message}</Text>
   </Box>

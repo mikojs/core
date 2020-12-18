@@ -11,7 +11,7 @@ export type messageType = {|
   id: string,
 |};
 
-type propsType = {|
+export type propsType = {|
   loading: {|
     [string]: string,
   |},
@@ -29,7 +29,7 @@ const Logger = ({ loading, messages }: propsType) => (
       <Text key={name}>
         <Spinner type="dots" />
 
-        {` ${loading[name]}`}
+        {` ${name} ${loading[name]}`}
       </Text>
     ))}
   </>

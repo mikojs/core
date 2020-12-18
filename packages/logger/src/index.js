@@ -3,7 +3,7 @@
 import React from 'react';
 import { render } from 'ink';
 
-import Logger, { type messageType } from './components';
+import Logger, { type messageType, type propsType } from './components';
 
 type eventType = $PropertyType<$ElementType<messageType, number>, 'event'>;
 type loggerType = {|
@@ -11,11 +11,12 @@ type loggerType = {|
 |};
 
 export const cache: {|
-  messages: $ReadOnlyArray<messageType>,
+  ...propsType,
   render: typeof render,
   add: (name: string, event: eventType, message: string) => void,
   instance?: $Call<typeof render>,
 |} = {
+  loading: {},
   messages: [],
   render,
 
@@ -25,33 +26,33 @@ export const cache: {|
    * @param {string} message - log message
    */
   add: (name: string, event: eventType, message: string) => {
-    cache.messages = [
-      ...cache.messages,
-      {
-        id: new Date().toString(),
-        name,
-        event,
-        message,
-      },
-    ];
-    /* TODO
-    cache.logs = {
-      ...cache.logs,
-      [name]: {
-        loading: ['success', 'error'].includes(event) ? false : loading,
-        messages:
-          event === 'start' ? messages : [...messages, { event, message }],
-      },
-    };
-    */
+    if (event === 'start')
+      cache.loading = {
+        ...cache.loading,
+        [name]: message,
+      };
+    else {
+      if (['success', 'error'].includes(event) && cache.loading[name])
+        delete cache.loading[name];
+
+      cache.messages = [
+        ...cache.messages,
+        {
+          id: cache.messages.length.toString(),
+          name,
+          event,
+          message,
+        },
+      ];
+    }
 
     if (cache.instance)
       cache.instance.rerender(
-        <Logger loading={{}} messages={cache.messages} />,
+        <Logger loading={cache.loading} messages={cache.messages} />,
       );
     else
       cache.instance = cache.render(
-        <Logger loading={{}} messages={cache.messages} />,
+        <Logger loading={cache.loading} messages={cache.messages} />,
       );
   },
 };

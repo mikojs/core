@@ -5,7 +5,7 @@ import { render } from 'ink';
 
 import Logger, { type messageType, type propsType } from './components';
 
-type eventType = $PropertyType<$ElementType<messageType, number>, 'event'>;
+type eventType = $PropertyType<messageType, 'event'>;
 type loggerType = {|
   [eventType]: (message: string) => void,
 |};
@@ -13,7 +13,7 @@ type loggerType = {|
 export const cache: {|
   ...propsType,
   render: typeof render,
-  add: (name: string, event: eventType, message: string) => void,
+  build: (name: string, event: eventType) => (message: string) => void,
   instance?: $Call<typeof render>,
 |} = {
   loading: {},
@@ -23,9 +23,10 @@ export const cache: {|
   /**
    * @param {string} name - logger name
    * @param {eventType} event - log event
-   * @param {string} message - log message
+   *
+   * @return {loggerType} - log function
    */
-  add: (name: string, event: eventType, message: string) => {
+  build: (name: string, event: eventType) => (message: string) => {
     if (event === 'start')
       cache.loading = {
         ...cache.loading,
@@ -62,17 +63,11 @@ export const cache: {|
  *
  * @return {loggerType} - logger
  */
-export default (name: string): loggerType =>
-  ['start', 'success', 'error', 'info', 'warn', 'log'].reduce(
-    (result: loggerType, event: eventType) => ({
-      ...result,
-
-      /**
-       * @param {string} message - log message
-       */
-      [event]: (message: string) => {
-        cache.add(name, event, message);
-      },
-    }),
-    {},
-  );
+export default (name: string): loggerType => ({
+  start: cache.build(name, 'start'),
+  success: cache.build(name, 'success'),
+  error: cache.build(name, 'error'),
+  info: cache.build(name, 'info'),
+  warn: cache.build(name, 'warn'),
+  log: cache.build(name, 'log'),
+});

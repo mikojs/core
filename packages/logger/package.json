@@ -1,0 +1,30 @@
+{
+  "name": "@mikojs/logger",
+  "description": "Use to log the information.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/logger",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/logger",
+  "version": "1.13.0",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.12.5",
+    "core-js": "^3.8.0",
+    "ink": "^3.0.8",
+    "ink-spinner": "^4.0.1"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0"
+  },
+  "devDependencies": {
+    "chalk": "^4.1.0",
+    "flow-bin": "^0.138.0",
+    "flow-typed": "^3.2.1",
+    "ink-testing-library": "^2.1.0",
+    "react": "^17.0.1"
+  },
+  "keywords": ["logger", "mikojs"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -9,10 +9,7 @@ import { type mikoConfigsType } from '@mikojs/miko';
  * @return {string} - new command
  */
 export default (
-  prevCommand: ?$PropertyType<
-    $PropertyType<mikoConfigsType, 'string'>,
-    'command',
-  >,
+  prevCommand: ?$PropertyType<$ElementType<mikoConfigsType, string>, 'command'>,
   defaultCommand: string,
 ): string => {
   const command =

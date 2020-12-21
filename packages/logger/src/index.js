@@ -8,6 +8,7 @@ import Logger, { type messageType, type propsType } from './components';
 type eventType = $PropertyType<messageType, 'event'>;
 type loggerType = {|
   [eventType]: (message: string) => void,
+  debug: (message: string) => void,
 |};
 
 export const cache: {|
@@ -63,11 +64,23 @@ export const cache: {|
  *
  * @return {loggerType} - logger
  */
-export default (name: string): loggerType => ({
-  start: cache.build(name, 'start'),
-  success: cache.build(name, 'success'),
-  error: cache.build(name, 'error'),
-  info: cache.build(name, 'info'),
-  warn: cache.build(name, 'warn'),
-  log: cache.build(name, 'log'),
-});
+export default (name: string): loggerType => {
+  const logName = name.replace(/:.*$/, '');
+
+  return {
+    start: cache.build(logName, 'start'),
+    success: cache.build(logName, 'success'),
+    error: cache.build(logName, 'error'),
+    info: cache.build(logName, 'info'),
+    warn: cache.build(logName, 'warn'),
+    log: cache.build(logName, 'log'),
+
+    /**
+     * @param {string} message - log message
+     */
+    debug: (message: string) => {
+      if (new RegExp(process.env.DEBUG || '').test(name))
+        cache.build(name, 'log')(message);
+    },
+  };
+};

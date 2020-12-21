@@ -9,7 +9,7 @@ describe('logger', () => {
   beforeEach(() => {
     cache.render = render;
     cache.messages = [];
-    process.env.DEBUG = undefined;
+    delete process.env.DEBUG;
   });
 
   test.each`
@@ -21,7 +21,9 @@ describe('logger', () => {
     ({ debug }: {| debug?: string |}) => {
       const logger = createLogger('logger:debug');
 
-      process.env.DEBUG = debug;
+      if (debug) process.env.DEBUG = debug;
+      else delete process.env.DEBUG;
+
       logger.start('start');
       logger.info('info');
       logger.warn('warn');

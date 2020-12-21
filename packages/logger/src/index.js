@@ -79,7 +79,7 @@ export default (name: string): loggerType => {
      * @param {string} message - log message
      */
     debug: (message: string) => {
-      if (new RegExp(process.env.DEBUG || '').test(name))
+      if (process.env.DEBUG && new RegExp(process.env.DEBUG).test(name))
         cache.build(name, 'log')(message);
     },
   };

@@ -10,6 +10,7 @@
   "dependencies": {
     "@babel/runtime": "^7.12.5",
     "@mikojs/commander": "^1.13.0",
+    "@mikojs/logger": "^1.13.0",
     "@mikojs/merge-dir": "^1.13.0",
     "@mikojs/utils": "^1.12.1",
     "chalk": "^4.1.0",

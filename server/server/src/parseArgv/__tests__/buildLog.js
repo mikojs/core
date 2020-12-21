@@ -1,6 +1,6 @@
 // @flow
 
-import { createLogger } from '@mikojs/utils';
+import createLogger from '@mikojs/logger';
 
 import buildLog from '../buildLog';
 

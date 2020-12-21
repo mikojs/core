@@ -7,7 +7,7 @@ import chalk from 'chalk';
 import debug from 'debug';
 import outputFileSync from 'output-file-sync';
 
-import { createLogger } from '@mikojs/utils';
+import createLogger from '@mikojs/logger';
 
 import cache from './cache';
 

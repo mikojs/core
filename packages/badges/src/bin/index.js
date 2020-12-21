@@ -8,8 +8,9 @@ import readPkgUp from 'read-pkg-up';
 import chalk from 'chalk';
 import outputFileSync from 'output-file-sync';
 
-import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
+import { handleUnhandledRejection } from '@mikojs/utils';
 import commander from '@mikojs/commander';
+import createLogger from '@mikojs/logger';
 
 import { version } from '../../package.json';
 
@@ -35,9 +36,8 @@ const parseArgv = commander<[$ReadOnlyArray<string>]>({
       });
 
       if (!pkgPath) {
-        logger
-          .fail('Could not find the root path')
-          .fail(chalk`Create a {green package.json} first`);
+        logger.error('Could not find the root path');
+        logger.error(chalk`Create a {green package.json} first`);
         process.exit(1);
       }
 
@@ -45,9 +45,10 @@ const parseArgv = commander<[$ReadOnlyArray<string>]>({
       const readmePath = path.resolve(rootPath, 'README.md');
 
       if (!fs.existsSync(readmePath)) {
-        logger
-          .fail(chalk`Could not find the {green README.md} in the root folder`)
-          .fail(chalk`Create a {green README.md} first`);
+        logger.error(
+          chalk`Could not find the {green README.md} in the root folder`,
+        );
+        logger.error(chalk`Create a {green README.md} first`);
         process.exit(1);
       }
 
@@ -60,7 +61,7 @@ const parseArgv = commander<[$ReadOnlyArray<string>]>({
 
       outputFileSync(readmePath, content);
 
-      logger.succeed(
+      logger.success(
         chalk`{gray ${path.relative(process.cwd(), path.resolve(cwd))}}`,
       );
     }),

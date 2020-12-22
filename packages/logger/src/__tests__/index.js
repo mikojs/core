@@ -3,7 +3,9 @@
 import { render } from 'ink-testing-library';
 import chalk from 'chalk';
 
-import createLogger, { cache } from '../index';
+import createLogger from '../index';
+
+import cache from 'utils/cache';
 
 describe('logger', () => {
   beforeEach(() => {

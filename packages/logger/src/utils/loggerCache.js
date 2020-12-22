@@ -13,7 +13,7 @@ export type buildType = {|
   buildLog: (event: eventType) => (message: string) => void,
 |};
 
-type cacheType = {|
+type loggerCacheType = {|
   ...propsType,
   render: typeof render,
   run: () => void,
@@ -21,20 +21,26 @@ type cacheType = {|
   instance?: $Call<typeof render>,
 |};
 
-const cache: cacheType = {
+const loggerCache: loggerCacheType = {
   loading: {},
   messages: [],
   render,
 
   /** */
   run: () => {
-    if (cache.instance)
-      cache.instance.rerender(
-        <Logger loading={cache.loading} messages={cache.messages} />,
+    if (loggerCache.instance)
+      loggerCache.instance.rerender(
+        <Logger
+          loading={loggerCache.loading}
+          messages={loggerCache.messages}
+        />,
       );
     else
-      cache.instance = cache.render(
-        <Logger loading={cache.loading} messages={cache.messages} />,
+      loggerCache.instance = loggerCache.render(
+        <Logger
+          loading={loggerCache.loading}
+          messages={loggerCache.messages}
+        />,
       );
   },
 
@@ -48,20 +54,20 @@ const cache: cacheType = {
      * @param {string} message - log message
      */
     start: (message: string) => {
-      cache.loading = {
-        ...cache.loading,
+      loggerCache.loading = {
+        ...loggerCache.loading,
         [name]: message,
       };
-      cache.run();
+      loggerCache.run();
     },
 
     /** */
     stop: () => {
-      if (!cache.loading[name]) return;
+      if (!loggerCache.loading[name]) return;
 
-      delete cache.loading[name];
-      cache.loading = { ...cache.loading };
-      cache.run();
+      delete loggerCache.loading[name];
+      loggerCache.loading = { ...loggerCache.loading };
+      loggerCache.run();
     },
 
     /**
@@ -76,18 +82,18 @@ const cache: cacheType = {
       )
         return;
 
-      cache.messages = [
-        ...cache.messages,
+      loggerCache.messages = [
+        ...loggerCache.messages,
         {
-          id: cache.messages.length.toString(),
+          id: loggerCache.messages.length.toString(),
           name,
           event: event === 'debug' ? 'log' : event,
           message,
         },
       ];
-      cache.run();
+      loggerCache.run();
     },
   }),
 };
 
-export default cache;
+export default loggerCache;

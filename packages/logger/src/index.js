@@ -1,6 +1,9 @@
 // @flow
 
-import cache, { type eventType, type buildType } from './utils/cache';
+import loggerCache, {
+  type eventType,
+  type buildType,
+} from './utils/loggerCache';
 
 type loggerType = {|
   ...$Diff<buildType, {| buildLog: mixed |}>,
@@ -13,7 +16,7 @@ type loggerType = {|
  * @return {loggerType} - logger
  */
 export default (name: string): loggerType => {
-  const { start, stop, buildLog } = cache.build(name.replace(/:.*$/, ''));
+  const { start, stop, buildLog } = loggerCache.build(name.replace(/:.*$/, ''));
 
   return {
     start,

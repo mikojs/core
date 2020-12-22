@@ -5,12 +5,12 @@ import chalk from 'chalk';
 
 import createLogger from '../index';
 
-import cache from 'utils/cache';
+import loggerCache from 'utils/loggerCache';
 
 describe('logger', () => {
   beforeEach(() => {
-    cache.render = render;
-    cache.messages = [];
+    loggerCache.render = render;
+    loggerCache.messages = [];
     delete process.env.DEBUG;
   });
 
@@ -34,7 +34,7 @@ describe('logger', () => {
       logger.success('success');
       logger.error('error');
 
-      expect(cache.instance?.lastFrame()).toBe(chalk`{blue ⅰ }logger info
+      expect(loggerCache.instance?.lastFrame()).toBe(chalk`{blue ⅰ }logger info
 {yellow ⅰ }logger warn${
         !debug
           ? ''

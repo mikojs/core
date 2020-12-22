@@ -6,12 +6,18 @@ import path from 'path';
 import { emptyFunction } from 'fbjs';
 import fetch, { type Response as ResponseType } from 'node-fetch';
 
+import testingLogger from '@mikojs/logger/lib/testingLogger';
+
 import { type eventType } from '../../index';
 import middleware from '../../__tests__/__ignore__/middleware';
 
 import parseArgv, { type defaultOptionsType } from '../index';
 
 describe('parse argv', () => {
+  beforeEach(() => {
+    testingLogger.reset();
+  });
+
   describe.each`
     sourcePath
     ${__dirname}

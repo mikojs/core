@@ -7,9 +7,9 @@ import chalk from 'chalk';
 import debug from 'debug';
 import outputFileSync from 'output-file-sync';
 
-import { createLogger } from '@mikojs/utils';
+import createLogger from '@mikojs/logger';
 
-import cache from './cache';
+import configsCache from './configsCache';
 
 const logger = createLogger('@mikojs/miko');
 const debugLog = debug('miko:generateFiles');
@@ -18,7 +18,7 @@ const debugLog = debug('miko:generateFiles');
  * @return {Array} - generating files
  */
 export default (): $ReadOnlyArray<string> => {
-  const gitignore = [cache.resolve, path.resolve]
+  const gitignore = [configsCache.resolve, path.resolve]
     .reduce((result: string, getPath: (filePath: string) => string): string => {
       const filePath = getPath('./.gitignore');
 
@@ -28,13 +28,13 @@ export default (): $ReadOnlyArray<string> => {
     }, '')
     .replace(/^#.*$/gm, '');
 
-  return cache
+  return configsCache
     .keys()
     .reduce(
       (result: $ReadOnlyArray<string>, key: string): $ReadOnlyArray<string> => {
         if (key === 'miko') return result;
 
-        const { configFile, ignoreFile } = cache.get(key);
+        const { configFile, ignoreFile } = configsCache.get(key);
 
         debugLog({ key, configFile, ignoreFile });
 

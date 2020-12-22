@@ -36,7 +36,7 @@ type configObjType = {|
   filepath: string,
 |};
 
-export type cacheType = {|
+export type configsCacheType = {|
   keys: () => $ReadOnlyArray<string>,
   resolve: (filePath: string) => string,
   get: (
@@ -46,14 +46,16 @@ export type cacheType = {|
     configFile: ?[string, string],
     ignoreFile: ?[string, string],
   |},
-  load: (configObj: ?configObjType) => cacheType,
-  addConfig: (configsArray: $ReadOnlyArray<initialConfigsType>) => cacheType,
+  load: (configObj: ?configObjType) => configsCacheType,
+  addConfig: (
+    configsArray: $ReadOnlyArray<initialConfigsType>,
+  ) => configsCacheType,
 |};
 
-const debugLog = debug('miko:cache');
+const debugLog = debug('miko:configsCache');
 
-export default (((): cacheType => {
-  const cache = {
+export default (((): configsCacheType => {
+  const configsCache = {
     cwd: process.cwd(),
     configs: {},
   };
@@ -61,14 +63,14 @@ export default (((): cacheType => {
     /**
      * @return {Array} - configs array
      */
-    keys: () => Object.keys(cache.configs),
+    keys: () => Object.keys(configsCache.configs),
 
     /**
      * @param {string} filePath - config file path
      *
      * @return {string} - absolute config file path
      */
-    resolve: (filePath: string) => path.resolve(cache.cwd, filePath),
+    resolve: (filePath: string) => path.resolve(configsCache.cwd, filePath),
 
     /**
      * @param {string} configName - config name
@@ -77,10 +79,10 @@ export default (((): cacheType => {
      */
     get: (
       configName: string,
-    ): $Call<$PropertyType<cacheType, 'get'>, string> => {
-      if (!cache.configs[configName]) return {};
+    ): $Call<$PropertyType<configsCacheType, 'get'>, string> => {
+      if (!configsCache.configs[configName]) return {};
 
-      const { filenames, config, ignore } = cache.configs[configName];
+      const { filenames, config, ignore } = configsCache.configs[configName];
       const configFilename = filenames?.config;
       const ignoreFilename = filenames?.ignore;
 
@@ -104,20 +106,20 @@ export default (((): cacheType => {
     /**
      * @param {configObjType} configObj - config object
      *
-     * @return {cacheType} - cache object
+     * @return {configsCacheType} - configsCache object
      */
-    load: (configObj: ?configObjType): cacheType => {
+    load: (configObj: ?configObjType): configsCacheType => {
       if (!configObj) return result;
 
       const { config, filepath } = configObj;
 
-      cache.cwd = path.dirname(filepath);
+      configsCache.cwd = path.dirname(filepath);
       debugLog({ config, filepath });
-      debugLog(cache);
+      debugLog(configsCache);
 
       return (config instanceof Array ? config : [config]).reduce(
         (
-          newResult: cacheType,
+          newResult: configsCacheType,
           oneOrArrayConfigs:
             | initialConfigsType
             | $ReadOnlyArray<initialConfigsType>,
@@ -134,20 +136,20 @@ export default (((): cacheType => {
     /**
      * @param {initialConfigsType} configsArray - configs array
      *
-     * @return {cacheType} - cache object
+     * @return {configsCacheType} - configsCache object
      */
     addConfig: (
       configsArray: $ReadOnlyArray<initialConfigsType>,
-    ): cacheType => {
+    ): configsCacheType => {
       configsArray.forEach((configs: initialConfigsType) => {
         Object.keys(configs).forEach((key: string) => {
-          const prevConfig = cache.configs[key] || {};
+          const prevConfig = configsCache.configs[key] || {};
           const newConfig: $ElementType<configsType, string> =
             typeof configs[key] !== 'function'
               ? configs[key]
               : { config: configs[key] };
 
-          cache.configs[key] = {
+          configsCache.configs[key] = {
             filenames: {
               ...prevConfig.filenames,
               ...newConfig.filenames,
@@ -176,11 +178,11 @@ export default (((): cacheType => {
         });
       });
       debugLog(configsArray);
-      debugLog(cache);
+      debugLog(configsCache);
 
       return result;
     },
   };
 
   return result.load(cosmiconfigSync('miko').search());
-})(): cacheType);
+})(): configsCacheType);

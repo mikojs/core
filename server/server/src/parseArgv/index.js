@@ -4,11 +4,11 @@ import fs from 'fs';
 import path from 'path';
 import { type Server as ServerType } from 'http';
 
-import ora from 'ora';
 import chalk from 'chalk';
 
-import { createLogger, requireModule } from '@mikojs/utils';
+import { requireModule } from '@mikojs/utils';
 import commander, { type optionsType } from '@mikojs/commander';
+import createLogger from '@mikojs/logger';
 import { type mergeEventType } from '@mikojs/merge-dir';
 
 import server, { type middlewareType } from '../index';
@@ -45,14 +45,14 @@ export default async <Req = {}, Res = {}, O = {}>(
   ) => middlewareType<Req, Res>,
   argv: $ReadOnlyArray<string>,
 ): Promise<?ServerType | parsedResultType<O>> => {
-  const logger = createLogger(`@mikojs/${name}`, ora({ discardStdin: false }));
+  const logger = createLogger(`@mikojs/${name}`);
   const defaultOptions = getDefaultOptions(name);
   const result = await commander<parsedResultType<O>>(
     buildOptions(defaultOptions),
   )(argv);
 
   if (result.length === 1) {
-    logger.fail(
+    logger.error(
       chalk`Should give a command, use {green -h} to get the more information.`,
     );
     throw new Error('empty command');
@@ -75,7 +75,7 @@ export default async <Req = {}, Res = {}, O = {}>(
     if (command === 'build') {
       logger.start('Building the server');
       (await server.ready())();
-      logger.succeed(chalk`Use {green ${name} start} to run the server`);
+      logger.success(chalk`Use {green ${name} start} to run the server`);
 
       return null;
     }
@@ -83,14 +83,14 @@ export default async <Req = {}, Res = {}, O = {}>(
     logger.start('Preparing the server');
 
     return await server.run(middleware, port, () => {
-      logger.succeed(
+      logger.success(
         chalk`Running the server on {underline http://localhost:${port}}`,
       );
       server.mergeDir.on('update', buildLog('update', name, logger));
       server.mergeDir.on('done', buildLog('done', name, logger));
     });
   } catch (e) {
-    logger.fail(handleErrorMessage(name, e));
+    logger.error(handleErrorMessage(name, e));
     throw e;
   }
 };

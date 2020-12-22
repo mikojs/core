@@ -5,7 +5,7 @@ import { Box, Text } from 'ink';
 
 export type propsType = {|
   name: string,
-  event: 'start' | 'success' | 'error' | 'info' | 'warn' | 'log',
+  event: 'success' | 'error' | 'info' | 'warn' | 'log',
   message: string,
 |};
 
@@ -15,7 +15,6 @@ const symbols = {
   info: <Text color="blue">&#8560; </Text>,
   warn: <Text color="yellow">&#8560; </Text>,
   log: <Text>{'  '}</Text>,
-  start: <Text />,
 };
 
 /** @react show message */

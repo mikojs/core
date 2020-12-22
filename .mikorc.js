@@ -86,6 +86,7 @@ module.exports = (() => {
           },
         ],
         '@babel/flow',
+        '@babel/react',
       ],
       plugins: [
         '@babel/proposal-optional-chaining',

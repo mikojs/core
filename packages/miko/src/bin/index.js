@@ -3,27 +3,27 @@
 
 import path from 'path';
 
-import ora from 'ora';
 import debug from 'debug';
 import chalk from 'chalk';
 
-import { handleUnhandledRejection, createLogger } from '@mikojs/utils';
+import { handleUnhandledRejection } from '@mikojs/utils';
 import buildWorker from '@mikojs/worker';
+import createLogger from '@mikojs/logger';
 
-import cache from 'utils/cache';
+import configsCache from 'utils/configsCache';
 import parseArgv from 'utils/parseArgv';
 import generateFiles from 'utils/generateFiles';
 
 import typeof * as workerType from 'worker';
 import commands from 'commands';
 
-const logger = createLogger('@mikojs/miko', ora({ discardStdin: false }));
+const logger = createLogger('@mikojs/miko');
 const debugLog = debug('miko:bin');
 
 handleUnhandledRejection();
 
 (async () => {
-  const configs = cache.get('miko').config?.({}) || {};
+  const configs = configsCache.get('miko').config?.({}) || {};
   const [type, { keep = false }, rawArgs = []] = await parseArgv(
     configs,
     process.argv,
@@ -38,13 +38,13 @@ handleUnhandledRejection();
   switch (type) {
     case 'kill':
       await worker.killAllEvents();
-      logger.succeed('Done.');
+      logger.success('Done.');
       break;
 
     case 'generate':
       await worker.addTracking(process.pid, generateFiles());
 
-      if (!keep) logger.succeed('Done.');
+      if (!keep) logger.success('Done.');
       else {
         let count: number = 0;
 
@@ -70,6 +70,7 @@ handleUnhandledRejection();
 
       await worker.addTracking(process.pid, generateFiles());
       logger.info(chalk`{gray Run command: ${info}}`);
+      logger.stop();
 
       try {
         await run();

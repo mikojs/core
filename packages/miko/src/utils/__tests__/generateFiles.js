@@ -5,10 +5,12 @@ import path from 'path';
 import outputFileSync from 'output-file-sync';
 import chalk from 'chalk';
 
-import generateFiles from '../generateFiles';
-import cache from '../cache';
+import testingLogger from '@mikojs/logger/lib/testingLogger';
 
-cache.load({
+import generateFiles from '../generateFiles';
+import configsCache from '../configsCache';
+
+configsCache.load({
   filepath: path.resolve('.mikorc.js'),
   config: [
     {
@@ -42,14 +44,11 @@ cache.load({
 
 describe('generate files', () => {
   beforeEach(() => {
+    testingLogger.reset();
     outputFileSync.mockClear();
   });
 
   test('generate files', () => {
-    const mockLog = jest.fn();
-
-    global.console.warn = mockLog;
-
     const result = [...generateFiles()].sort();
 
     expect(result).toEqual(
@@ -70,9 +69,8 @@ describe('generate files', () => {
         .map(([outputFilePath]: [string]) => outputFilePath)
         .sort(),
     ).toEqual(result);
-    expect(mockLog).toHaveBeenCalledTimes(1);
-    expect(mockLog).toHaveBeenCalledWith(
-      chalk`{yellow ⚠ }{yellow {bold @mikojs/miko}} {red hasIgnore.js} should be added in {bold {gray .gitignore}}`,
+    expect(testingLogger.getInstance()?.lastFrame()).toMatch(
+      chalk`{red hasIgnore.js} should be added in {bold {gray .gitignore}}`,
     );
   });
 });

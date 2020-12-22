@@ -7,7 +7,7 @@ import execa from 'execa';
 import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
-import { createLogger } from '@mikojs/utils';
+import createLogger from '@mikojs/logger';
 
 type ctxType = {|
   rootPath: string,
@@ -160,7 +160,7 @@ export default async (readme: string, ctx: ctxType): Promise<?string> => {
   const repo = await getRepo();
 
   if (!repo) {
-    logger.fail('Could not find git remote');
+    logger.error('Could not find git remote');
     return null;
   } else
     return readme.replace(

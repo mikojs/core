@@ -5,7 +5,7 @@ import path from 'path';
 import outputFileSync from 'output-file-sync';
 import chalk from 'chalk';
 
-import testing from '@mikojs/logger/lib/testing';
+import testingLogger from '@mikojs/logger/lib/testingLogger';
 
 import generateFiles from '../generateFiles';
 import configsCache from '../configsCache';
@@ -44,7 +44,7 @@ configsCache.load({
 
 describe('generate files', () => {
   beforeEach(() => {
-    testing.reset();
+    testingLogger.reset();
     outputFileSync.mockClear();
   });
 
@@ -69,7 +69,7 @@ describe('generate files', () => {
         .map(([outputFilePath]: [string]) => outputFilePath)
         .sort(),
     ).toEqual(result);
-    expect(testing.getInstance()?.lastFrame()).toMatch(
+    expect(testingLogger.getInstance()?.lastFrame()).toMatch(
       chalk`{red hasIgnore.js} should be added in {bold {gray .gitignore}}`,
     );
   });

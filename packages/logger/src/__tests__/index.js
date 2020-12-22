@@ -3,11 +3,11 @@
 import chalk from 'chalk';
 
 import createLogger from '../index';
-import testing from '../testing';
+import testingLogger from '../testingLogger';
 
 describe('logger', () => {
   beforeEach(() => {
-    testing.reset();
+    testingLogger.reset();
     delete process.env.DEBUG;
   });
 
@@ -31,7 +31,8 @@ describe('logger', () => {
       logger.success('success');
       logger.error('error');
 
-      expect(testing.getInstance()?.lastFrame()).toBe(chalk`{blue ⅰ }logger info
+      expect(testingLogger.getInstance()?.lastFrame())
+        .toBe(chalk`{blue ⅰ }logger info
 {yellow ⅰ }logger warn${
         !debug
           ? ''

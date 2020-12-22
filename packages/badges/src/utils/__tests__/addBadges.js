@@ -3,7 +3,7 @@
 import fs from 'fs';
 import execa from 'execa';
 
-import testing from '@mikojs/logger/lib/testing';
+import testingLogger from '@mikojs/logger/lib/testingLogger';
 
 import addBadges from '../addBadges';
 
@@ -30,14 +30,14 @@ const ALL_BADGES = [
 
 describe('add badges', () => {
   beforeEach(() => {
-    testing.reset();
+    testingLogger.reset();
   });
 
   test('could not find git remote', async () => {
     execa.mockRejectedValue(new Error('could not find git remote'));
 
     expect(await addBadges('readme', ctx)).toBeNull();
-    expect(testing.getInstance()?.lastFrame()).toMatch(
+    expect(testingLogger.getInstance()?.lastFrame()).toMatch(
       /Could not find git remote/,
     );
   });

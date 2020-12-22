@@ -1,13 +1,13 @@
 // @flow
 
 import createLogger from '@mikojs/logger';
-import testing from '@mikojs/logger/lib/testing';
+import testingLogger from '@mikojs/logger/lib/testingLogger';
 
 import buildLog from '../buildLog';
 
 describe('build log', () => {
   beforeEach(() => {
-    testing.reset();
+    testingLogger.reset();
   });
 
   test.each`
@@ -22,6 +22,6 @@ describe('build log', () => {
       createLogger('server'),
     )({ exists: Boolean(data), filePath: './', pathname: '/' });
 
-    expect(testing.getInstance()?.lastFrame()).not.toBe('');
+    expect(testingLogger.getInstance()?.lastFrame()).not.toBe('');
   });
 });

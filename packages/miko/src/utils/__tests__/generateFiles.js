@@ -6,9 +6,9 @@ import outputFileSync from 'output-file-sync';
 import chalk from 'chalk';
 
 import generateFiles from '../generateFiles';
-import cache from '../cache';
+import configsCache from '../configsCache';
 
-cache.load({
+configsCache.load({
   filepath: path.resolve('.mikorc.js'),
   config: [
     {

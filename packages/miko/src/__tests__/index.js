@@ -2,7 +2,7 @@
 
 import miko from '../index';
 
-import cache from 'utils/cache';
+import configsCache from 'utils/configsCache';
 
 const config = {
   testConfig: {
@@ -19,7 +19,7 @@ const config = {
 jest.mock('@mikojs/worker', () =>
   jest.fn().mockResolvedValue(jest.requireActual('../worker')),
 );
-cache
+configsCache
   .load()
   .load({
     filepath: __filename,

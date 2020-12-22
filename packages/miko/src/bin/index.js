@@ -10,7 +10,7 @@ import { handleUnhandledRejection } from '@mikojs/utils';
 import buildWorker from '@mikojs/worker';
 import createLogger from '@mikojs/logger';
 
-import cache from 'utils/cache';
+import configsCache from 'utils/configsCache';
 import parseArgv from 'utils/parseArgv';
 import generateFiles from 'utils/generateFiles';
 
@@ -23,7 +23,7 @@ const debugLog = debug('miko:bin');
 handleUnhandledRejection();
 
 (async () => {
-  const configs = cache.get('miko').config?.({}) || {};
+  const configs = configsCache.get('miko').config?.({}) || {};
   const [type, { keep = false }, rawArgs = []] = await parseArgv(
     configs,
     process.argv,

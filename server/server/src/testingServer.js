@@ -6,6 +6,7 @@ import fetch, { type Response as ResponseType } from 'node-fetch';
 import getPort from 'get-port';
 
 import '@mikojs/merge-dir/lib/testing';
+import testingLogger from '@mikojs/logger/lib/testingLogger';
 
 import server, { type middlewareType } from './index';
 
@@ -42,6 +43,7 @@ export default {
    * @param {middlewareType} middleware - middleware function
    */
   run: async <Req = {}, Res = {}>(middleware: middlewareType<Req, Res>) => {
+    testingLogger.reset();
     cache.close();
     cache.port = await getPort();
     cache.server = await server.run(middleware, cache.port);

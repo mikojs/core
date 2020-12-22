@@ -1,18 +1,13 @@
 // @flow
 
-import { render } from 'ink-testing-library';
 import chalk from 'chalk';
 
 import createLogger from '../index';
-
-import loggerCache from 'utils/loggerCache';
+import testing from '../testing';
 
 describe('logger', () => {
   beforeEach(() => {
-    loggerCache.init({
-      render,
-      messages: [],
-    });
+    testing.reset();
     delete process.env.DEBUG;
   });
 
@@ -36,8 +31,7 @@ describe('logger', () => {
       logger.success('success');
       logger.error('error');
 
-      expect(loggerCache.getInstance()?.lastFrame())
-        .toBe(chalk`{blue ⅰ }logger info
+      expect(testing.getInstance()?.lastFrame()).toBe(chalk`{blue ⅰ }logger info
 {yellow ⅰ }logger warn${
         !debug
           ? ''

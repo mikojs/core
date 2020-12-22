@@ -17,83 +17,105 @@ type loggerCacheType = {|
   ...propsType,
   render: typeof render,
   run: () => void,
-  build: (name: string) => buildType,
   instance?: $Call<typeof render>,
 |};
 
-const loggerCache: loggerCacheType = {
-  loading: {},
-  messages: [],
-  render,
+type resultType = {|
+  init: (initialCache: $Shape<loggerCacheType>) => void,
+  getInstance: () => $PropertyType<loggerCacheType, 'instance'>,
+  build: (name: string) => buildType,
+|};
 
-  /** */
-  run: () => {
-    if (loggerCache.instance)
-      loggerCache.instance.rerender(
-        <Logger
-          loading={loggerCache.loading}
-          messages={loggerCache.messages}
-        />,
-      );
-    else
-      loggerCache.instance = loggerCache.render(
-        <Logger
-          loading={loggerCache.loading}
-          messages={loggerCache.messages}
-        />,
-      );
-  },
-
-  /**
-   * @param {string} name - logger name
-   *
-   * @return {buildType} - logger functions
-   */
-  build: (name: string) => ({
-    /**
-     * @param {string} message - log message
-     */
-    start: (message: string) => {
-      loggerCache.loading = {
-        ...loggerCache.loading,
-        [name]: message,
-      };
-      loggerCache.run();
-    },
+export default (((): resultType => {
+  const loggerCache: loggerCacheType = {
+    loading: {},
+    messages: [],
+    render,
 
     /** */
-    stop: () => {
-      if (!loggerCache.loading[name]) return;
+    run: () => {
+      if (loggerCache.instance)
+        loggerCache.instance.rerender(
+          <Logger
+            loading={loggerCache.loading}
+            messages={loggerCache.messages}
+          />,
+        );
+      else
+        loggerCache.instance = loggerCache.render(
+          <Logger
+            loading={loggerCache.loading}
+            messages={loggerCache.messages}
+          />,
+        );
+    },
+  };
 
-      delete loggerCache.loading[name];
-      loggerCache.loading = { ...loggerCache.loading };
-      loggerCache.run();
+  return {
+    /**
+     * @param {loggerCacheType} initialCache - initial cache
+     */
+    init: (initialCache: $Shape<loggerCacheType>) => {
+      Object.keys(initialCache).forEach((key: string) => {
+        loggerCache[key] = initialCache[key];
+      });
     },
 
     /**
-     * @param {eventType} event - log event
-     *
-     * @return {Function} - log function
+     * @return {any} - ink instance
      */
-    buildLog: (event: eventType) => (message: string) => {
-      if (
-        event === 'debug' &&
-        !(process.env.DEBUG && new RegExp(process.env.DEBUG).test(name))
-      )
-        return;
+    getInstance: (): $PropertyType<loggerCacheType, 'instance'> =>
+      loggerCache.instance,
 
-      loggerCache.messages = [
-        ...loggerCache.messages,
-        {
-          id: loggerCache.messages.length.toString(),
-          name,
-          event: event === 'debug' ? 'log' : event,
-          message,
-        },
-      ];
-      loggerCache.run();
-    },
-  }),
-};
+    /**
+     * @param {string} name - logger name
+     *
+     * @return {buildType} - logger functions
+     */
+    build: (name: string) => ({
+      /**
+       * @param {string} message - log message
+       */
+      start: (message: string) => {
+        loggerCache.loading = {
+          ...loggerCache.loading,
+          [name]: message,
+        };
+        loggerCache.run();
+      },
 
-export default loggerCache;
+      /** */
+      stop: () => {
+        if (!loggerCache.loading[name]) return;
+
+        delete loggerCache.loading[name];
+        loggerCache.loading = { ...loggerCache.loading };
+        loggerCache.run();
+      },
+
+      /**
+       * @param {eventType} event - log event
+       *
+       * @return {Function} - log function
+       */
+      buildLog: (event: eventType) => (message: string) => {
+        if (
+          event === 'debug' &&
+          !(process.env.DEBUG && new RegExp(process.env.DEBUG).test(name))
+        )
+          return;
+
+        loggerCache.messages = [
+          ...loggerCache.messages,
+          {
+            id: loggerCache.messages.length.toString(),
+            name,
+            event: event === 'debug' ? 'log' : event,
+            message,
+          },
+        ];
+        loggerCache.run();
+      },
+    }),
+  };
+})(): resultType);

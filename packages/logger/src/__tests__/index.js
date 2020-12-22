@@ -9,8 +9,10 @@ import loggerCache from 'utils/loggerCache';
 
 describe('logger', () => {
   beforeEach(() => {
-    loggerCache.render = render;
-    loggerCache.messages = [];
+    loggerCache.init({
+      render,
+      messages: [],
+    });
     delete process.env.DEBUG;
   });
 
@@ -34,7 +36,8 @@ describe('logger', () => {
       logger.success('success');
       logger.error('error');
 
-      expect(loggerCache.instance?.lastFrame()).toBe(chalk`{blue ⅰ }logger info
+      expect(loggerCache.getInstance()?.lastFrame())
+        .toBe(chalk`{blue ⅰ }logger info
 {yellow ⅰ }logger warn${
         !debug
           ? ''

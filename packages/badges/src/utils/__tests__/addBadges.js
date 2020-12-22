@@ -3,6 +3,8 @@
 import fs from 'fs';
 import execa from 'execa';
 
+import testing from '@mikojs/logger/lib/testing';
+
 import addBadges from '../addBadges';
 
 jest.mock('fs');
@@ -27,14 +29,17 @@ const ALL_BADGES = [
 ];
 
 describe('add badges', () => {
-  test('could not find git remote', async () => {
-    const mockLog = jest.fn();
+  beforeEach(() => {
+    testing.reset();
+  });
 
-    global.console.error = mockLog;
+  test('could not find git remote', async () => {
     execa.mockRejectedValue(new Error('could not find git remote'));
 
     expect(await addBadges('readme', ctx)).toBeNull();
-    expect(mockLog).toHaveBeenCalled();
+    expect(testing.getInstance()?.lastFrame()).toMatch(
+      /Could not find git remote/,
+    );
   });
 
   test.each`

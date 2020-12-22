@@ -41,6 +41,6 @@ export default (name: string): loggerType => {
     info: buildLog('info'),
     warn: buildLog('warn'),
     log: buildLog('log'),
-    debug: buildLog('debug'),
+    debug: buildLog('debug', name),
   };
 };

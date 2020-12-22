@@ -10,7 +10,7 @@ export type eventType = 'debug' | $PropertyType<messageType, 'event'>;
 export type buildType = {|
   start: (message: string) => void,
   stop: () => void,
-  buildLog: (event: eventType) => (message: string) => void,
+  buildLog: (event: eventType, name?: string) => (message: string) => void,
 |};
 
 type loggerCacheType = {|
@@ -95,13 +95,16 @@ export default (((): resultType => {
 
       /**
        * @param {eventType} event - log event
+       * @param {string} logName - log name
        *
        * @return {Function} - log function
        */
-      buildLog: (event: eventType) => (message: string) => {
+      buildLog: (event: eventType, logName?: string = name) => (
+        message: string,
+      ) => {
         if (
           event === 'debug' &&
-          !(process.env.DEBUG && new RegExp(process.env.DEBUG).test(name))
+          !(process.env.DEBUG && new RegExp(process.env.DEBUG).test(logName))
         )
           return;
 
@@ -109,7 +112,7 @@ export default (((): resultType => {
           ...loggerCache.messages,
           {
             id: loggerCache.messages.length.toString(),
-            name,
+            name: logName,
             event: event === 'debug' ? 'log' : event,
             message,
           },

@@ -5,6 +5,8 @@ import path from 'path';
 
 import { emptyFunction } from 'fbjs';
 
+import testingLogger from '@mikojs/logger/lib/testingLogger';
+
 import watcher, {
   handler,
   buildSubscription,
@@ -14,15 +16,15 @@ import watcher, {
 const folder = path.resolve(__dirname, './__ignore__');
 
 describe('watcher', () => {
+  beforeEach(() => {
+    testingLogger.reset();
+  });
+
   beforeAll(() => {
     fs.mkdirSync(folder);
   });
 
   test('handler reject', async () => {
-    const mockLog = jest.fn();
-
-    global.console.warn = mockLog;
-
     await expect(
       new Promise((resolve, reject) =>
         handler(resolve, reject)(new Error('error'), {
@@ -31,7 +33,7 @@ describe('watcher', () => {
         }),
       ),
     ).rejects.toThrow('error');
-    expect(mockLog).toHaveBeenCalledWith('warning');
+    expect(testingLogger.getInstance()?.lastFrame()).toMatch('warning');
   });
 
   test('build subscription', () => {

@@ -4,6 +4,7 @@ import loggerCache, {
   type eventType,
   type buildType,
 } from './utils/loggerCache';
+import { type messageType } from './utils/handleMessage';
 
 type loggerType = {|
   ...$Diff<buildType, {| buildLog: mixed |}>,
@@ -23,17 +24,17 @@ export default (name: string): loggerType => {
     stop,
 
     /**
-     * @param {string} message - log message
+     * @param {messageType} message - log message
      */
-    success: (message: string) => {
+    success: (message: messageType) => {
       stop();
       buildLog('success')(message);
     },
 
     /**
-     * @param {string} message - log message
+     * @param {messageType} message - log message
      */
-    error: (message: string) => {
+    error: (message: messageType) => {
       stop();
       buildLog('error')(message);
     },

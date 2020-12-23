@@ -4,11 +4,11 @@ import fs from 'fs';
 import path from 'path';
 import EventEmitter from 'events';
 
-import debug from 'debug';
 import findCacheDir from 'find-cache-dir';
 import cryptoRandomString from 'crypto-random-string';
 
 import { requireModule } from '@mikojs/utils';
+import createLogger from '@mikojs/logger';
 
 import tools, { type fileDataType as toolsFileDataType } from './utils/tools';
 import { type eventType, type dataType, type closeType } from './utils/watcher';
@@ -35,7 +35,7 @@ interface mergeDirType extends EventEmitter {
   ready: () => Promise<closeType>;
 }
 
-const debugLog = debug('merge-dir');
+const logger = createLogger('@mikojs/merge-dir');
 const cacheDir = findCacheDir({ name: '@mikojs/merge-dir', thunk: true });
 const cacheId = cryptoRandomString({
   length: 10,
@@ -44,7 +44,7 @@ const cacheId = cryptoRandomString({
 const cache: cacheType = {};
 let event: eventType = 'dev';
 
-debugLog({ cacheDir: cacheDir() });
+logger.debug({ cacheDir: cacheDir() });
 
 /** */
 class MergeDir extends EventEmitter {
@@ -86,7 +86,7 @@ class MergeDir extends EventEmitter {
     const cacheFunc = (...argv: A) =>
       tools.getFromCache(cacheFilePath)(...argv);
 
-    debugLog({ folderPath, prefix, relativePath, cacheFilePath });
+    logger.debug({ folderPath, prefix, relativePath, cacheFilePath });
     cacheFunc.cacheId = cacheId;
     cache[relativePath] = {
       cacheFilePath,
@@ -110,7 +110,7 @@ class MergeDir extends EventEmitter {
                   pathname,
                 };
 
-                debugLog(fileData);
+                logger.debug(fileData);
                 this.emit('update', {
                   ...fileData,
                   filePath: path.relative(process.cwd(), filePath),
@@ -142,7 +142,7 @@ class MergeDir extends EventEmitter {
     );
 
     return () => {
-      debugLog(cache);
+      logger.debug(cache);
       closes.forEach((close: closeType) => close());
 
       if (event === 'build')

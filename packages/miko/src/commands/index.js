@@ -1,7 +1,8 @@
 // @flow
 
 import execa from 'execa';
-import debug from 'debug';
+
+import createLogger from '@mikojs/logger';
 
 import { type commandsType, QUOTATION_START, QUOTATION_END } from './normalize';
 import getCommands from './getCommands';
@@ -19,7 +20,7 @@ type execaOptionsType = [
   { stdio: 'inherit', env: { [string]: string } },
 ];
 
-const debugLog = debug('miko:commands');
+const logger = createLogger('@mikojs/miko:commands');
 
 /**
  * @param {Array} commands - commands array
@@ -79,7 +80,7 @@ export default (
 ): commandType => {
   const commands = key instanceof Array ? key : getCommands(configs, key, args);
 
-  debugLog(commands);
+  logger.debug(commands);
 
   return {
     info: commands

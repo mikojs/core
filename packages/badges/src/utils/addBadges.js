@@ -4,7 +4,6 @@ import fs from 'fs';
 import path from 'path';
 
 import execa from 'execa';
-import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
 import createLogger from '@mikojs/logger';
@@ -29,8 +28,7 @@ type repoType = {|
   projectName: string,
 |};
 
-const debugLog = debug('badges:addBadges');
-const logger = createLogger('@mikojs/badges');
+const logger = createLogger('@mikojs/badges:addBadges');
 const START_COMMENT = '<!-- badges.start -->';
 const END_COMMENT = '<!-- badges.end -->';
 
@@ -44,7 +42,7 @@ const getRepo = async (): Promise<?repoType> => {
       .replace(/origin\t.*@.*:(.*).git \(fetch\)(.|\n)*/, '$1')
       .split('/');
 
-    debugLog({
+    logger.debug({
       username,
       projectName,
     });
@@ -54,7 +52,7 @@ const getRepo = async (): Promise<?repoType> => {
       projectName,
     };
   } catch (e) {
-    debugLog(e);
+    logger.debug(e);
     return null;
   }
 };

@@ -1,9 +1,9 @@
 // @flow
 
-import debug from 'debug';
 import outputFileSync from 'output-file-sync';
 
 import { requireModule } from '@mikojs/utils';
+import createLogger from '@mikojs/logger';
 
 import watcher, {
   type eventType,
@@ -27,7 +27,7 @@ export type toolsType = {|
   ) => Promise<closeType>,
 |};
 
-const debugLog = debug('merge-dir:tools');
+const logger = createLogger('@mikojs/merge-dir:tools');
 const tools = {
   writeToCache: outputFileSync,
   getFromCache: requireModule,
@@ -37,7 +37,7 @@ const tools = {
    * @param {toolsType} newTools - new tools functions
    */
   set: (newTools: toolsType) => {
-    debugLog(newTools);
+    logger.debug(newTools);
     Object.keys(newTools).forEach((key: string) => {
       tools[key] = newTools[key];
     });

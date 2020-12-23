@@ -2,9 +2,8 @@
 
 import path from 'path';
 
-import debug from 'debug';
-
 import worker from '@mikojs/worker';
+import createLogger from '@mikojs/logger';
 
 import { type cacheType } from './cache';
 
@@ -12,7 +11,7 @@ export const TIME_TO_CHECK = 100;
 export const TIME_TO_REMOVE_FILES = 5000;
 export const TIME_TO_CLOSE_SERVER = 5000;
 
-const debugLog = debug('miko:worker:checkingTimer');
+const logger = createLogger('@mikojs/miko:worker:checkingTimer');
 let timer: TimeoutID;
 
 /**
@@ -28,7 +27,7 @@ const checking = (cache: cacheType, checkedTimes: number) => {
   const [filePath] = cache.getFilePaths();
 
   if (checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK && filePath) {
-    debugLog(`delete file: ${filePath}`);
+    logger.debug(`delete file: ${filePath}`);
     cache.delete(filePath).then(() => {
       timer = setTimeout(
         checking,
@@ -41,7 +40,7 @@ const checking = (cache: cacheType, checkedTimes: number) => {
   }
 
   if (checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK) {
-    debugLog('close server');
+    logger.debug('close server');
     clearTimeout(timer);
     worker.end(path.resolve(__dirname, './index.js'));
     return;
@@ -53,7 +52,7 @@ const checking = (cache: cacheType, checkedTimes: number) => {
 /**
  */
 checking.clear = () => {
-  debugLog('clear');
+  logger.debug('clear');
   clearTimeout(timer);
 };
 

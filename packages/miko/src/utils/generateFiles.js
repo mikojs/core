@@ -4,15 +4,13 @@ import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
-import debug from 'debug';
 import outputFileSync from 'output-file-sync';
 
 import createLogger from '@mikojs/logger';
 
 import configsCache from './configsCache';
 
-const logger = createLogger('@mikojs/miko');
-const debugLog = debug('miko:generateFiles');
+const logger = createLogger('@mikojs/miko:generateFiles');
 
 /**
  * @return {Array} - generating files
@@ -36,7 +34,7 @@ export default (): $ReadOnlyArray<string> => {
 
         const { configFile, ignoreFile } = configsCache.get(key);
 
-        debugLog({ key, configFile, ignoreFile });
+        logger.debug({ key, configFile, ignoreFile });
 
         return [configFile, ignoreFile]
           .filter(Boolean)
@@ -52,7 +50,7 @@ export default (): $ReadOnlyArray<string> => {
                   chalk`{red ${filename}} should be added in {bold {gray .gitignore}}`,
                 );
 
-              debugLog(argu);
+              logger.debug(argu);
               outputFileSync(...argu);
 
               return [...subResult, argu[0]];

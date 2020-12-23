@@ -10,7 +10,8 @@ import path from 'path';
 
 import { emptyFunction } from 'fbjs';
 import { cosmiconfigSync } from 'cosmiconfig';
-import debug from 'debug';
+
+import createLogger from '@mikojs/logger';
 
 type configsType = {
   [string]: {|
@@ -52,7 +53,7 @@ export type configsCacheType = {|
   ) => configsCacheType,
 |};
 
-const debugLog = debug('miko:configsCache');
+const logger = createLogger('@mikojs/miko:configsCache');
 
 export default (((): configsCacheType => {
   const cache = {
@@ -114,8 +115,8 @@ export default (((): configsCacheType => {
       const { config, filepath } = configObj;
 
       cache.cwd = path.dirname(filepath);
-      debugLog({ config, filepath });
-      debugLog(cache);
+      logger.debug({ config, filepath });
+      logger.debug(cache);
 
       return (config instanceof Array ? config : [config]).reduce(
         (
@@ -177,8 +178,8 @@ export default (((): configsCacheType => {
           };
         });
       });
-      debugLog(configsArray);
-      debugLog(cache);
+      logger.debug(configsArray);
+      logger.debug(cache);
 
       return result;
     },

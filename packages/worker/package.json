@@ -9,9 +9,9 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "@mikojs/logger": "^1.12.1",
     "@mikojs/utils": "^1.12.1",
     "core-js": "^3.8.0",
-    "debug": "^4.3.1",
     "execa": "^4.1.0",
     "find-process": "^1.4.4",
     "get-port": "^5.1.1"

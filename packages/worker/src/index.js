@@ -4,15 +4,16 @@ import path from 'path';
 
 import execa from 'execa';
 import getPort from 'get-port';
-import debug from 'debug';
 import findProcess from 'find-process';
+
+import createLogger from '@mikojs/logger';
 
 import sendToServer from './utils/sendToServer';
 import endServer from './utils/endServer';
 
 type addEndType<R> = { ...R, end: () => Promise<void> };
 
-const debugLog = debug('worker');
+const logger = createLogger('@mikojs/worker');
 let cachePid: number;
 
 /**
@@ -33,8 +34,8 @@ const buildWorker = async <+R>(
 
   if (mainProcess?.pid !== cachePid) {
     cachePid = mainProcess.pid;
-    debugLog(mainProcess);
-    debugLog(process.pid);
+    logger.debug(mainProcess);
+    logger.debug(process.pid);
   }
 
   if (!mainProcess)

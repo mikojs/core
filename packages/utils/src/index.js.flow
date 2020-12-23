@@ -1,8 +1,6 @@
 // @flow
 
 // Use for babel-plugins-transform-imports
-export { default as chainingLogger } from './chainingLogger';
-export { default as createLogger } from './createLogger';
 export { default as handleUnhandledRejection } from './handleUnhandledRejection';
 export { default as importError } from './importError';
 export { default as mockChoice } from './mockChoice';

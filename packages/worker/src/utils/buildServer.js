@@ -3,9 +3,9 @@
 import net from 'net';
 import stream from 'stream';
 
-import debug from 'debug';
+import createLogger from '@mikojs/logger';
 
-const debugLog = debug('worker:buildServer');
+const logger = createLogger('@mikojs/worker:buildServer');
 
 /**
  * @param {number} port - the port of the server
@@ -21,14 +21,14 @@ export default (port: number): net$Server => {
       socket.setEncoding('utf8').on('data', async (data: string) => {
         const { type, filePath, argv, hasStdout } = JSON.parse(data);
 
-        debugLog(data);
+        logger.debug(data);
 
         try {
           if (type === 'end') {
             timer = setTimeout(() => {
               if (Object.keys(cache).length !== 0) return;
 
-              debugLog('Close server');
+              logger.debug('Close server');
               clearTimeout(timer);
               server.close();
             }, 5000);
@@ -44,7 +44,7 @@ export default (port: number): net$Server => {
             cache[filePath] = require(filePath);
 
           clearTimeout(timer);
-          debugLog(cache);
+          logger.debug(cache);
 
           if (type === 'start') {
             socket.write('start;');
@@ -68,11 +68,11 @@ export default (port: number): net$Server => {
             await cache[filePath][type](...argv),
           );
 
-          debugLog(serverData);
+          logger.debug(serverData);
           socket.write('normal;');
           socket.end(serverData);
         } catch (e) {
-          debugLog(e);
+          logger.debug(e);
           socket.write('error;');
           socket.end(
             JSON.stringify({
@@ -84,7 +84,7 @@ export default (port: number): net$Server => {
       });
     })
     .listen(port, () => {
-      debugLog(`(${process.pid}) Open server at ${port}`);
+      logger.debug(`(${process.pid}) Open server at ${port}`);
     });
 
   return server;

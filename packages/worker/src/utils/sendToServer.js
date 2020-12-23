@@ -3,7 +3,7 @@
 import net from 'net';
 import stream from 'stream';
 
-import debug from 'debug';
+import createLogger from '@mikojs/logger';
 
 type clientDataType = {|
   type: string,
@@ -11,7 +11,7 @@ type clientDataType = {|
   argv: $ReadOnlyArray<mixed>,
 |};
 
-const debugLog = debug('worker:sendToServer');
+const logger = createLogger('@mikojs/worker:sendToServer');
 const TIMEOUT = 5000;
 const RETRY_TIME = 20;
 
@@ -75,7 +75,7 @@ const sendToServer = <+R>(
           },
         })
         .on('error', (err: Error) => {
-          debugLog(err);
+          logger.debug(err);
           setTimeout(() => {
             sendToServer(port, clientData, timeout, retryTimes + 1)
               .then(resolve)
@@ -83,7 +83,7 @@ const sendToServer = <+R>(
           }, RETRY_TIME);
         })
         .on('end', () => {
-          debugLog({ port, clientData });
+          logger.debug({ port, clientData });
 
           if (!cache)
             // $FlowFixMe R should could be void

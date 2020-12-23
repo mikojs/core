@@ -100,15 +100,17 @@ export default ({
       )
         return;
 
-      cache.messages = [
-        ...cache.messages,
-        {
-          id: cache.messages.length.toString(),
-          name: logName,
-          event: event === 'debug' ? 'log' : event,
-          message,
-        },
-      ];
+      message.split(/\n/).forEach((str: string) => {
+        cache.messages = [
+          ...cache.messages,
+          {
+            id: cache.messages.length.toString(),
+            name: logName,
+            event: event === 'debug' ? 'log' : event,
+            message: str,
+          },
+        ];
+      });
       cache.run();
     },
   }),

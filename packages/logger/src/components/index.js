@@ -6,7 +6,7 @@ import Spinner from 'ink-spinner';
 
 import Message, { type propsType as messagePropsType } from './Message';
 
-export type messageType = {|
+type messageType = {|
   ...messagePropsType,
   id: string,
 |};

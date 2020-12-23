@@ -3,14 +3,21 @@
 import React from 'react';
 import { render } from 'ink';
 
-import Logger, { type messageType, type propsType } from 'components';
+import handleMessage, { type messageType } from './handleMessage';
 
-export type eventType = 'debug' | $PropertyType<messageType, 'event'>;
+import Logger, { type propsType } from 'components';
+
+export type eventType =
+  | 'debug'
+  | $PropertyType<
+      $ElementType<$PropertyType<propsType, 'messages'>, number>,
+      'event',
+    >;
 
 export type buildType = {|
-  start: (message: string) => void,
+  start: (message: messageType) => void,
   stop: () => void,
-  buildLog: (event: eventType, name?: string) => (message: string) => void,
+  buildLog: (event: eventType, name?: string) => (message: messageType) => void,
 |};
 
 type cacheType = {|
@@ -68,10 +75,10 @@ export default ({
     /**
      * @param {string} message - log message
      */
-    start: (message: string) => {
+    start: (message: messageType) => {
       cache.loading = {
         ...cache.loading,
-        [name]: message,
+        [name]: handleMessage(message),
       };
       cache.run();
     },
@@ -92,7 +99,7 @@ export default ({
      * @return {Function} - log function
      */
     buildLog: (event: eventType, logName?: string = name) => (
-      message: string,
+      message: messageType,
     ) => {
       if (
         event === 'debug' &&
@@ -100,17 +107,19 @@ export default ({
       )
         return;
 
-      message.split(/\n/).forEach((str: string) => {
-        cache.messages = [
-          ...cache.messages,
-          {
-            id: cache.messages.length.toString(),
-            name: logName,
-            event: event === 'debug' ? 'log' : event,
-            message: str,
-          },
-        ];
-      });
+      handleMessage(message)
+        .split(/\n/)
+        .forEach((str: string) => {
+          cache.messages = [
+            ...cache.messages,
+            {
+              id: cache.messages.length.toString(),
+              name: logName,
+              event: event === 'debug' ? 'log' : event,
+              message: str,
+            },
+          ];
+        });
       cache.run();
     },
   }),

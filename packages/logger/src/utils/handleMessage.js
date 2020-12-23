@@ -1,6 +1,6 @@
 // @flow
 
-export type messageType = string | {};
+export type messageType = string | {} | $ReadOnlyArray<messageType>;
 
 /**
  * @param {messageType} message - log message

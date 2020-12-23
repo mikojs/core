@@ -3,7 +3,6 @@
 
 import path from 'path';
 
-import debug from 'debug';
 import chalk from 'chalk';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
@@ -17,8 +16,7 @@ import generateFiles from 'utils/generateFiles';
 import typeof * as workerType from 'worker';
 import commands from 'commands';
 
-const logger = createLogger('@mikojs/miko');
-const debugLog = debug('miko:bin');
+const logger = createLogger('@mikojs/miko:bin');
 
 handleUnhandledRejection();
 
@@ -32,7 +30,7 @@ handleUnhandledRejection();
     path.resolve(__dirname, '../worker/index.js'),
   );
 
-  debugLog({ type, keep, rawArgs });
+  logger.debug({ type, keep, rawArgs });
   logger.start('Running');
 
   switch (type) {
@@ -75,7 +73,7 @@ handleUnhandledRejection();
       try {
         await run();
       } catch (e) {
-        debugLog(e);
+        logger.debug(e);
         process.exit(1);
       }
       break;

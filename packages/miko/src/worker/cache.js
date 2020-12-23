@@ -4,10 +4,10 @@ import fs from 'fs';
 
 import rimraf from 'rimraf';
 import isRunning from 'is-running';
-import debug from 'debug';
 import { emptyFunction } from 'fbjs';
 
 import { mockChoice } from '@mikojs/utils';
+import createLogger from '@mikojs/logger';
 
 export type cacheType = {|
   getFilePaths: () => $ReadOnlyArray<string>,
@@ -17,7 +17,7 @@ export type cacheType = {|
   hasWorkingPids: () => boolean,
 |};
 
-const debugLog = debug('miko:worker:cache');
+const logger = createLogger('@mikojs/miko:worker:cache');
 
 export default (((): cacheType => {
   const cache = {};
@@ -37,8 +37,8 @@ export default (((): cacheType => {
       if (!cache[filePath]) cache[filePath] = [];
 
       cache[filePath].push(pid);
-      debugLog({ pid, filePath });
-      debugLog(cache);
+      logger.debug({ pid, filePath });
+      logger.debug(cache);
 
       return result;
     },
@@ -53,14 +53,14 @@ export default (((): cacheType => {
         if (fs.existsSync(filePath))
           rimraf(filePath, () => {
             delete cache[filePath];
-            debugLog(`Remove existing file: ${filePath}`);
-            debugLog(cache);
+            logger.debug(`Remove existing file: ${filePath}`);
+            logger.debug(cache);
             resolve(result);
           });
         else {
           delete cache[filePath];
-          debugLog(`File does not exist: ${filePath}`);
-          debugLog(cache);
+          logger.debug(`File does not exist: ${filePath}`);
+          logger.debug(cache);
           resolve(result);
         }
       }),
@@ -71,7 +71,7 @@ export default (((): cacheType => {
     kill: async (): Promise<cacheType> => {
       await Promise.all(
         Object.keys(cache).map((filePath: string): Promise<cacheType> => {
-          debugLog({
+          logger.debug({
             filePath,
             pids: cache[filePath],
           });
@@ -99,7 +99,7 @@ export default (((): cacheType => {
           const newPids = cache[cacheFilePath].filter(isRunning);
 
           if (newPids.length !== cache[cacheFilePath].length)
-            debugLog(
+            logger.debug(
               `Cache: ${JSON.stringify(
                 { ...cache, [cacheFilePath]: newPids },
                 null,

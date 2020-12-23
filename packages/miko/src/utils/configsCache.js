@@ -55,7 +55,7 @@ export type configsCacheType = {|
 const debugLog = debug('miko:configsCache');
 
 export default (((): configsCacheType => {
-  const configsCache = {
+  const cache = {
     cwd: process.cwd(),
     configs: {},
   };
@@ -63,14 +63,14 @@ export default (((): configsCacheType => {
     /**
      * @return {Array} - configs array
      */
-    keys: () => Object.keys(configsCache.configs),
+    keys: () => Object.keys(cache.configs),
 
     /**
      * @param {string} filePath - config file path
      *
      * @return {string} - absolute config file path
      */
-    resolve: (filePath: string) => path.resolve(configsCache.cwd, filePath),
+    resolve: (filePath: string) => path.resolve(cache.cwd, filePath),
 
     /**
      * @param {string} configName - config name
@@ -80,9 +80,9 @@ export default (((): configsCacheType => {
     get: (
       configName: string,
     ): $Call<$PropertyType<configsCacheType, 'get'>, string> => {
-      if (!configsCache.configs[configName]) return {};
+      if (!cache.configs[configName]) return {};
 
-      const { filenames, config, ignore } = configsCache.configs[configName];
+      const { filenames, config, ignore } = cache.configs[configName];
       const configFilename = filenames?.config;
       const ignoreFilename = filenames?.ignore;
 
@@ -113,9 +113,9 @@ export default (((): configsCacheType => {
 
       const { config, filepath } = configObj;
 
-      configsCache.cwd = path.dirname(filepath);
+      cache.cwd = path.dirname(filepath);
       debugLog({ config, filepath });
-      debugLog(configsCache);
+      debugLog(cache);
 
       return (config instanceof Array ? config : [config]).reduce(
         (
@@ -143,13 +143,13 @@ export default (((): configsCacheType => {
     ): configsCacheType => {
       configsArray.forEach((configs: initialConfigsType) => {
         Object.keys(configs).forEach((key: string) => {
-          const prevConfig = configsCache.configs[key] || {};
+          const prevConfig = cache.configs[key] || {};
           const newConfig: $ElementType<configsType, string> =
             typeof configs[key] !== 'function'
               ? configs[key]
               : { config: configs[key] };
 
-          configsCache.configs[key] = {
+          cache.configs[key] = {
             filenames: {
               ...prevConfig.filenames,
               ...newConfig.filenames,
@@ -178,7 +178,7 @@ export default (((): configsCacheType => {
         });
       });
       debugLog(configsArray);
-      debugLog(configsCache);
+      debugLog(cache);
 
       return result;
     },

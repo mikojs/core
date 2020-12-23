@@ -6,9 +6,9 @@ import vm from 'vm';
 import path from 'path';
 
 import { emptyFunction } from 'fbjs';
-import debug from 'debug';
 
 import dirTree, { type dirTreeNodeType } from '@mikojs/dir-tree';
+import createLogger from '@mikojs/logger';
 
 import tools from './utils/tools';
 import {
@@ -19,7 +19,7 @@ import {
 
 import mergeDir from './index';
 
-const debugLog = debug('merge-dir:testing');
+const logger = createLogger('@mikojs/merge-dir:testing');
 const cache = {};
 
 tools.set({
@@ -30,7 +30,7 @@ tools.set({
   writeToCache: (filePath: string, content: string) => {
     const context = {};
 
-    debugLog({ filePath, content });
+    logger.debug({ filePath, content });
     vm.runInThisContext(module.wrap(content))(
       context,
       require,
@@ -47,7 +47,7 @@ tools.set({
    * @return {any} - any function from cache
    */
   getFromCache: <C>(filePath: string): C => {
-    debugLog({ filePath });
+    logger.debug({ filePath });
 
     return cache[filePath];
   },
@@ -64,7 +64,7 @@ tools.set({
     event: eventType,
     callback: callbackType,
   ): Promise<closeType> => {
-    debugLog({ folderPath });
+    logger.debug({ folderPath });
     callback(
       dirTree(folderPath, { extensions: /\.js$/ })
         .leaves()

@@ -1,9 +1,10 @@
 // @flow
 
 import { emptyFunction } from 'fbjs';
-import debug from 'debug';
 import watchman from 'fb-watchman';
 import cryptoRandomString from 'crypto-random-string';
+
+import createLogger from '@mikojs/logger';
 
 export type dataType = {|
   exists: boolean,
@@ -28,7 +29,7 @@ type handlerType = (
   reject: rejectType,
 ) => (err: Error, resp: respType) => void;
 
-const debugLog = debug('merge-dir:watcher');
+const logger = createLogger('@mikojs/merge-dir:watcher');
 
 /**
  * @param {resolveType} resolve - promise resolve function
@@ -42,7 +43,7 @@ export const handler: handlerType = (
 ) => (err: Error, resp: respType) => {
   const { warn } = console;
 
-  debugLog({ err, resp });
+  logger.debug({ err, resp });
 
   if (resp?.warning) warn(resp.warning);
 
@@ -105,7 +106,7 @@ export default async (
     relative_root: relativePath,
   };
 
-  debugLog({ watch, relativePath });
+  logger.debug({ watch, relativePath });
   callback((await promiseClient('command', ['query', watch, sub])).files);
 
   if (event === 'dev') {

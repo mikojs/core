@@ -41,11 +41,9 @@ export const handler: handlerType = (
   resolve: resolveType,
   reject: rejectType,
 ) => (err: Error, resp: respType) => {
-  const { warn } = console;
-
   logger.debug({ err, resp });
 
-  if (resp?.warning) warn(resp.warning);
+  if (resp?.warning) logger.warn(resp.warning);
 
   if (err) reject(err);
   else resolve(resp);

@@ -20,11 +20,10 @@ const symbols = {
 /** @react show message */
 const Message = ({ name, event, message }: propsType) => (
   <Box>
-    {symbols[event]}
-
-    <Text>{name} </Text>
-
-    <Text>{message}</Text>
+    <Text>
+      {symbols[event]}
+      {name} {message}
+    </Text>
   </Box>
 );
 

@@ -26,6 +26,7 @@ describe('logger', () => {
       logger.warn('warn');
       logger.debug('debug');
       logger.log('log');
+      logger.log(1);
       logger.success('success');
       logger.error('error');
 
@@ -34,6 +35,7 @@ describe('logger', () => {
       expect(message).toMatch(/.*logger .*info/);
       expect(message).toMatch(/.*logger .*warn/);
       expect(message).toMatch(/.*logger .*log/);
+      expect(message).toMatch(/.*logger .*1/);
       expect(message).toMatch(/.*logger .*success/);
       expect(message).toMatch(/.*logger .*error/);
 

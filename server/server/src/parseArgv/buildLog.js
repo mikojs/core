@@ -21,14 +21,14 @@ export default (
   logger: $Call<createLoggerType, string>,
 ): ((fileData: fileDataType) => void) => (fileData: fileDataType) => {
   if (type === 'done') {
-    logger.success('The server is updated');
+    logger.success('Server is updated.');
     return;
   }
 
   logger.info(
     fileData.exists
-      ? chalk`File {green (${fileData.filePath})} is changed`
-      : chalk`File {red (${fileData.filePath})} is removed`,
+      ? chalk`File {green (${fileData.filePath})} is changed.`
+      : chalk`File {red (${fileData.filePath})} is removed.`,
   );
-  logger.start('The server is updating');
+  logger.start('Server is updating.');
 };

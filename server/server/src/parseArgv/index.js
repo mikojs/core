@@ -73,18 +73,18 @@ export default async <Req = {}, Res = {}, O = {}>(
       : buildMiddleware(resolvedPath, prefix, customOptions);
 
     if (command === 'build') {
-      logger.start('Building the server');
+      logger.start('Server is building.');
       (await server.ready())();
-      logger.success(chalk`Use {green ${name} start} to run the server`);
+      logger.success(chalk`Use {green ${name} start} to run the server.`);
 
       return null;
     }
 
-    logger.start('Preparing the server');
+    logger.start('Server is preparing.');
 
     return await server.run(middleware, port, () => {
       logger.success(
-        chalk`Running the server on {underline http://localhost:${port}}`,
+        chalk`Server is running on {underline http://localhost:${port}}.`,
       );
       server.mergeDir.on('update', buildLog('update', name, logger));
       server.mergeDir.on('done', buildLog('done', name, logger));

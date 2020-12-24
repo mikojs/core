@@ -1,7 +1,5 @@
 // @flow
 
-import chalk from 'chalk';
-
 import createLogger from '../index';
 import testingLogger from '../testingLogger';
 
@@ -28,20 +26,20 @@ describe('logger', () => {
       logger.warn('warn');
       logger.debug('debug');
       logger.log('log');
+      logger.log(1);
       logger.success('success');
       logger.error('error');
 
-      expect(testingLogger.getInstance()?.lastFrame())
-        .toBe(chalk`{blue ⅰ }logger info
-{yellow ⅰ }logger warn${
-        !debug
-          ? ''
-          : `
-  logger:debug debug`
-      }
-  logger log
-{green ✓ }logger success
-{red ✘ }logger error`);
+      const message = testingLogger.getInstance()?.lastFrame();
+
+      expect(message).toMatch(/.*logger .*info/);
+      expect(message).toMatch(/.*logger .*warn/);
+      expect(message).toMatch(/.*logger .*log/);
+      expect(message).toMatch(/.*logger .*1/);
+      expect(message).toMatch(/.*logger .*success/);
+      expect(message).toMatch(/.*logger .*error/);
+
+      if (debug) expect(message).toMatch(/.*logger:debug .*debug/);
     },
   );
 });

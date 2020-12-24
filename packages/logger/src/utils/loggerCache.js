@@ -59,13 +59,11 @@ const cache: cacheType = {
    * @return {string} - color string
    */
   getColor: (name: string): string => {
-    const color =
+    cache.names[name] =
       cache.names[name] ||
       `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 
-    cache.names[name] = color;
-
-    return color;
+    return cache.names[name];
   },
 };
 

@@ -5,6 +5,7 @@ import { Box, Text } from 'ink';
 
 export type propsType = {|
   name: string,
+  color: string,
   event: 'success' | 'error' | 'info' | 'warn' | 'log',
   message: string,
 |};
@@ -18,11 +19,14 @@ const symbols = {
 };
 
 /** @react show message */
-const Message = ({ name, event, message }: propsType) => (
+const Message = ({ name, color, event, message }: propsType) => (
   <Box>
     <Text>
       {symbols[event]}
-      {name} {message}
+
+      <Text color={color}>{name} </Text>
+
+      {message}
     </Text>
   </Box>
 );

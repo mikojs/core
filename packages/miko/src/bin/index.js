@@ -48,7 +48,7 @@ handleUnhandledRejection();
         logger.info(chalk`Use {green ctrl + c} to stop.`);
         setInterval(() => {
           logger.start(
-            `Running${[].constructor
+            `Server is running${[].constructor
               .apply({}, new Array(count))
               .fill('.')
               .join('')}`,
@@ -66,7 +66,7 @@ handleUnhandledRejection();
       );
 
       await worker.addTracking(process.pid, generateFiles());
-      logger.info(chalk`Run command: {gray ${info}}`);
+      logger.info(chalk`Run command: {gray ${info}}.`);
 
       try {
         await run();

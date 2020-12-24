@@ -52,12 +52,12 @@ export default (((): cacheType => {
         if (fs.existsSync(filePath))
           rimraf(filePath, () => {
             delete cache[filePath];
-            logger.debug(`Remove existing file: ${filePath}`, cache);
+            logger.debug(`Remove existing file: ${filePath}.`, cache);
             resolve(result);
           });
         else {
           delete cache[filePath];
-          logger.debug(`File does not exist: ${filePath}`, cache);
+          logger.debug(`File does not exist: ${filePath}.`, cache);
           resolve(result);
         }
       }),
@@ -101,7 +101,7 @@ export default (((): cacheType => {
                 { ...cache, [cacheFilePath]: newPids },
                 null,
                 2,
-              )}`,
+              )}.`,
             );
 
           cache[cacheFilePath] = newPids;

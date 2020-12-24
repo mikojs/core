@@ -47,7 +47,7 @@ export default (): $ReadOnlyArray<string> => {
 
               if (!new RegExp(filename).test(gitignore))
                 logger.warn(
-                  chalk`{red ${filename}} should be added in {bold {gray .gitignore}}`,
+                  chalk`{red ${filename}} should be added in {bold {gray .gitignore}}.`,
                 );
 
               logger.debug(argu);

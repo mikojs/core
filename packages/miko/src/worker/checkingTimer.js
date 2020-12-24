@@ -27,7 +27,7 @@ const checking = (cache: cacheType, checkedTimes: number) => {
   const [filePath] = cache.getFilePaths();
 
   if (checkedTimes >= TIME_TO_REMOVE_FILES / TIME_TO_CHECK && filePath) {
-    logger.debug(`delete file: ${filePath}`);
+    logger.debug(`Delete file: ${filePath}.`);
     cache.delete(filePath).then(() => {
       timer = setTimeout(
         checking,
@@ -40,7 +40,7 @@ const checking = (cache: cacheType, checkedTimes: number) => {
   }
 
   if (checkedTimes >= TIME_TO_CLOSE_SERVER / TIME_TO_CHECK) {
-    logger.debug('close server');
+    logger.debug('Close server.');
     clearTimeout(timer);
     worker.end(path.resolve(__dirname, './index.js'));
     return;
@@ -52,7 +52,7 @@ const checking = (cache: cacheType, checkedTimes: number) => {
 /**
  */
 checking.clear = () => {
-  logger.debug('clear');
+  logger.debug('Clear timer.');
   clearTimeout(timer);
 };
 

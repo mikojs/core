@@ -22,8 +22,10 @@ export type buildType = {|
 
 type cacheType = {|
   ...propsType,
+  names: {| [string]: string |},
   render: typeof render,
   run: () => void,
+  getColor: (name: string) => string,
   instance?: $Call<typeof render>,
 |};
 
@@ -35,6 +37,7 @@ type loggerCacheType = {|
 
 const cache: cacheType = {
   loading: {},
+  names: {},
   messages: [],
   render,
 
@@ -48,6 +51,21 @@ const cache: cacheType = {
       cache.instance = cache.render(
         <Logger loading={cache.loading} messages={cache.messages} />,
       );
+  },
+
+  /**
+   * @param {string} name - log name
+   *
+   * @return {string} - color string
+   */
+  getColor: (name: string): string => {
+    const color =
+      cache.names[name] ||
+      `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+
+    cache.names[name] = color;
+
+    return color;
   },
 };
 
@@ -115,6 +133,7 @@ export default ({
             {
               id: cache.messages.length.toString(),
               name: logName,
+              color: cache.getColor(logName),
               event: event === 'debug' ? 'log' : event,
               message: str,
             },

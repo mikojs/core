@@ -63,7 +63,10 @@ const parseArgv = commander<[$ReadOnlyArray<string>]>({
 
       outputFileSync(readmePath, content);
       logger.success(
-        chalk`{gray ${path.relative(process.cwd(), path.resolve(cwd))}}.`,
+        chalk`Add badges to {gray ${path.relative(
+          process.cwd(),
+          path.resolve(cwd),
+        )}}.`,
       );
     }),
   );

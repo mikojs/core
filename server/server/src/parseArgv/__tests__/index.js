@@ -44,7 +44,8 @@ describe('parse argv', () => {
             ['node', 'server', event, sourcePath],
           );
 
-          if (server instanceof Array) throw new Error('Should be a server');
+          if (server instanceof Array)
+            throw new Error('Could not find the server.');
 
           if (event === 'build') expect(server).toBeNull();
           else
@@ -82,8 +83,8 @@ describe('parse argv', () => {
 
   test.each`
     command                 | expected
-    ${[]}                   | ${'empty command'}
-    ${['start', __dirname]} | ${'error'}
+    ${[]}                   | ${'Commands could not be empty.'}
+    ${['start', __dirname]} | ${'Run server fail.'}
   `(
     'Run $command',
     async ({
@@ -101,7 +102,7 @@ describe('parse argv', () => {
             version: '1.0.0',
           }),
           () => {
-            throw new Error('error');
+            throw new Error('Run server fail.');
           },
           ['node', 'server', ...command],
         ),

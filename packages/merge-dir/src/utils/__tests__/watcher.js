@@ -27,12 +27,12 @@ describe('watcher', () => {
   test('handler reject', async () => {
     await expect(
       new Promise((resolve, reject) =>
-        handler(resolve, reject)(new Error('error'), {
+        handler(resolve, reject)(new Error('Run watcher fail.'), {
           warning: 'warning',
           files: [],
         }),
       ),
-    ).rejects.toThrow('error');
+    ).rejects.toThrow('Run watcher fail.');
     expect(testingLogger.getInstance()?.lastFrame()).toMatch('warning');
   });
 

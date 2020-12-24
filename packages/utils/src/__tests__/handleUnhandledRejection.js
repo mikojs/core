@@ -17,7 +17,9 @@ describe('handle unhandleRejection', () => {
     const [[, callback]] = mockAddEventListener.mock.calls;
 
     expect(callback).not.toBeUndefined();
-    expect(() => callback(new Error('error'))).toThrow('error');
+    expect(() => callback(new Error('Run command fail.'))).toThrow(
+      'Run command fail.',
+    );
   });
 
   test.each`

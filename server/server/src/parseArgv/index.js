@@ -55,7 +55,7 @@ export default async <Req = {}, Res = {}, O = {}>(
     logger.error(
       chalk`Should give a command, use {green -h} to get the more information.`,
     );
-    throw new Error('empty command');
+    throw new Error('Commands could not be empty.');
   }
 
   const [command, sourcePath, options] = result;

@@ -36,7 +36,7 @@ module.exports = pathname => {
   const cacheKey = Object.keys(cache).find(key => key === pathname);
 
   if (cache['/bar'] !== '${barPath}')
-    throw new Error('Sub merge-dir error');
+    throw new Error('Could not use sub merge-dir.');
 
   if (cacheKey)
     return requireModule(cache[cacheKey])(pathname);

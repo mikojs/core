@@ -17,7 +17,10 @@ export type eventType =
 export type buildType = {|
   start: (message: messageType) => void,
   stop: () => void,
-  buildLog: (event: eventType, name?: string) => (message: messageType) => void,
+  buildLog: (
+    event: eventType,
+    name?: string,
+  ) => (...messages: $ReadOnlyArray<messageType>) => void,
 |};
 
 type cacheType = {|
@@ -115,7 +118,7 @@ export default ({
      * @return {Function} - log function
      */
     buildLog: (event: eventType, logName?: string = name) => (
-      message: messageType,
+      ...messages: $ReadOnlyArray<messageType>
     ) => {
       if (
         event === 'debug' &&
@@ -123,20 +126,22 @@ export default ({
       )
         return;
 
-      handleMessage(message)
-        .split(/\n/)
-        .forEach((str: string) => {
-          cache.messages = [
-            ...cache.messages,
-            {
-              id: cache.messages.length.toString(),
-              name: logName,
-              color: cache.getColor(logName),
-              event: event === 'debug' ? 'log' : event,
-              message: str,
-            },
-          ];
-        });
+      messages.forEach((message: messageType) => {
+        handleMessage(message)
+          .split(/\n/)
+          .forEach((str: string) => {
+            cache.messages = [
+              ...cache.messages,
+              {
+                id: cache.messages.length.toString(),
+                name: logName,
+                color: cache.getColor(logName),
+                event: event === 'debug' ? 'log' : event,
+                message: str,
+              },
+            ];
+          });
+      });
       cache.run();
     },
   }),

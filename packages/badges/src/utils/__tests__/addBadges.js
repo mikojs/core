@@ -38,7 +38,7 @@ describe('add badges', () => {
 
     expect(await addBadges('readme', ctx)).toBeNull();
     expect(testingLogger.getInstance()?.lastFrame()).toMatch(
-      /Could not find git remote/,
+      /Could not find .*git remote.*/,
     );
   });
 

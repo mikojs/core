@@ -17,7 +17,6 @@
     "react": ">=17.0.0"
   },
   "devDependencies": {
-    "chalk": "^4.1.0",
     "flow-bin": "^0.138.0",
     "flow-typed": "^3.2.1",
     "ink-testing-library": "^2.1.0",

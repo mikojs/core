@@ -14,14 +14,14 @@
     "@mikojs/logger": "^1.13.0",
     "@mikojs/utils": "^1.12.1",
     "chalk": "^4.1.0",
-    "core-js": "^3.8.0",
-    "execa": "^4.1.0",
+    "core-js": "^3.8.1",
+    "execa": "^5.0.0",
     "fbjs": "^3.0.0",
     "output-file-sync": "^2.0.1",
     "read-pkg-up": "^7.0.1"
   },
   "devDependencies": {
-    "flow-bin": "^0.138.0",
+    "flow-bin": "^0.141.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["badges", "mikojs"],

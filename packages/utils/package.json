@@ -9,11 +9,11 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.12.5",
-    "core-js": "^3.8.0",
+    "core-js": "^3.8.1",
     "fbjs": "^3.0.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.138.0",
+    "flow-bin": "^0.141.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["mikojs", "utils"],

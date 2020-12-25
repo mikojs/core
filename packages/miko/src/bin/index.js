@@ -43,18 +43,8 @@ handleUnhandledRejection();
 
       if (!keep) logger.success('Successfully generated the files.');
       else {
-        let count: number = 0;
-
         logger.info(chalk`Use {green ctrl + c} to stop.`);
-        setInterval(() => {
-          logger.start(
-            `Server is running${[].constructor
-              .apply({}, new Array(count))
-              .fill('.')
-              .join('')}`,
-          );
-          count = count + 1 > 3 ? 0 : count + 1;
-        }, 500);
+        logger.start('Server is running.');
       }
       break;
 

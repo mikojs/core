@@ -47,8 +47,5 @@
       "post-merge": "make babel-base-all && miko husky:post-merge",
       "post-checkout": "make babel-base-changed BRANCH=master && miko husky:post-checkout"
     }
-  },
-  "resolutions": {
-    "semver": "7.3.2"
   }
 }

@@ -97,10 +97,10 @@ describe('worker', () => {
 
     test('func with error', async () => {
       func.mockImplementation(() => {
-        throw new Error('error');
+        throw new Error('Run function fail.');
       });
 
-      await expect(worker.func()).rejects.toThrow('error');
+      await expect(worker.func()).rejects.toThrow('Run function fail.');
     });
 
     test('end', async () => {

@@ -36,8 +36,10 @@ const parseArgv = commander<[$ReadOnlyArray<string>]>({
       });
 
       if (!pkgPath) {
-        logger.error('Could not find the root path');
-        logger.error(chalk`Create a {green package.json} first`);
+        logger.error(
+          'Could not find the root path.',
+          chalk`Create a {green package.json} first.`,
+        );
         process.exit(1);
       }
 
@@ -46,9 +48,9 @@ const parseArgv = commander<[$ReadOnlyArray<string>]>({
 
       if (!fs.existsSync(readmePath)) {
         logger.error(
-          chalk`Could not find the {green README.md} in the root folder`,
+          chalk`Could not find the {green README.md} in the root folder.`,
+          chalk`Create a {green README.md} first.`,
         );
-        logger.error(chalk`Create a {green README.md} first`);
         process.exit(1);
       }
 
@@ -60,9 +62,11 @@ const parseArgv = commander<[$ReadOnlyArray<string>]>({
       if (!content) process.exit(1);
 
       outputFileSync(readmePath, content);
-
       logger.success(
-        chalk`{gray ${path.relative(process.cwd(), path.resolve(cwd))}}`,
+        chalk`Add badges to {gray ${path.relative(
+          process.cwd(),
+          path.resolve(cwd),
+        )}}.`,
       );
     }),
   );

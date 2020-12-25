@@ -115,8 +115,7 @@ export default (((): configsCacheType => {
       const { config, filepath } = configObj;
 
       cache.cwd = path.dirname(filepath);
-      logger.debug({ config, filepath });
-      logger.debug(cache);
+      logger.debug({ config, filepath }, cache);
 
       return (config instanceof Array ? config : [config]).reduce(
         (
@@ -178,8 +177,7 @@ export default (((): configsCacheType => {
           };
         });
       });
-      logger.debug(configsArray);
-      logger.debug(cache);
+      logger.debug(configsArray, cache);
 
       return result;
     },

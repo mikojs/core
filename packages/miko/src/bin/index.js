@@ -31,31 +31,20 @@ handleUnhandledRejection();
   );
 
   logger.debug({ type, keep, rawArgs });
-  logger.start('Running');
 
   switch (type) {
     case 'kill':
       await worker.killAllEvents();
-      logger.success('Done.');
+      logger.success('Successfully killed the server.');
       break;
 
     case 'generate':
       await worker.addTracking(process.pid, generateFiles());
 
-      if (!keep) logger.success('Done.');
+      if (!keep) logger.success('Successfully generated the files.');
       else {
-        let count: number = 0;
-
-        logger.info(chalk`{gray Use ctrl + c to stop.}`);
-        setInterval(() => {
-          logger.start(
-            `Running${[].constructor
-              .apply({}, new Array(count))
-              .fill('.')
-              .join('')}`,
-          );
-          count = count + 1 > 3 ? 0 : count + 1;
-        }, 500);
+        logger.info(chalk`Use {green ctrl + c} to stop.`);
+        logger.start('Server is running.');
       }
       break;
 
@@ -67,8 +56,7 @@ handleUnhandledRejection();
       );
 
       await worker.addTracking(process.pid, generateFiles());
-      logger.info(chalk`{gray Run command: ${info}}`);
-      logger.stop();
+      logger.info(chalk`Run command: {gray ${info}}.`);
 
       try {
         await run();

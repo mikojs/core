@@ -34,8 +34,7 @@ const buildWorker = async <+R>(
 
   if (mainProcess?.pid !== cachePid) {
     cachePid = mainProcess.pid;
-    logger.debug(mainProcess);
-    logger.debug(process.pid);
+    logger.debug(mainProcess, process.pid);
   }
 
   if (!mainProcess)

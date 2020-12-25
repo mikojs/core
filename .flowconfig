@@ -2,7 +2,6 @@
 <PROJECT_ROOT>/packages/.*
 <PROJECT_ROOT>/babel/.*
 <PROJECT_ROOT>/server/.*
-<PROJECT_ROOT>/components/.*
 
 [include]
 

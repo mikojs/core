@@ -2,7 +2,7 @@
   "private": true,
   "name": "@mikojs/core",
   "license": "MIT",
-  "workspaces": ["packages/*", "babel/*", "server/*", "components/*"],
+  "workspaces": ["packages/*", "babel/*", "server/*"],
   "scripts": {
     "build": "make babel-base-all && miko build",
     "dev": "make babel-base-changed && miko dev",

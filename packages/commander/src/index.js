@@ -85,6 +85,7 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
 
   Object.keys(commands).forEach((key: string) => {
     addConfig<Data>(program.command(key), commands[key], (data: Data) =>
+      // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/8458
       callback([key, ...data]),
     );
   });

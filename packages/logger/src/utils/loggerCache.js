@@ -122,7 +122,10 @@ export default ({
     ) => {
       if (
         event === 'debug' &&
-        !(process.env.DEBUG && new RegExp(process.env.DEBUG).test(logName))
+        !(
+          process.env.DEBUG &&
+          new RegExp(process.env.DEBUG.replace(/\*/g, '.*')).test(logName)
+        )
       )
         return;
 

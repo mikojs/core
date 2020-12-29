@@ -84,7 +84,9 @@ export default (
 
   return {
     info: commands
-      .map((command: $ElementType<commandsType, number>) => command.join(' '))
+      .map((command: $ElementType<commandsType, number>) =>
+        command.join(' ').replace(/\n/, ''),
+      )
       .join(' && '),
 
     /**

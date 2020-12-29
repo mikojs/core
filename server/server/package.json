@@ -14,13 +14,13 @@
     "@mikojs/merge-dir": "^1.13.0",
     "@mikojs/utils": "^1.12.1",
     "chalk": "^4.1.0",
-    "core-js": "^3.8.0",
+    "core-js": "^3.8.1",
     "fbjs": "^3.0.0",
     "get-port": "^5.1.1",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
-    "flow-bin": "^0.138.0",
+    "flow-bin": "^0.141.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["mikojs", "server"],

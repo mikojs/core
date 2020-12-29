@@ -11,12 +11,12 @@
     "@babel/runtime": "^7.12.5",
     "@lerna/project": "^3.21.0",
     "@mikojs/utils": "^1.12.1",
-    "core-js": "^3.8.0",
+    "core-js": "^3.8.1",
     "git-branch": "^2.0.1"
   },
   "devDependencies": {
     "@mikojs/miko": "^1.13.0",
-    "flow-bin": "^0.138.0",
+    "flow-bin": "^0.141.0",
     "flow-typed": "^3.2.1"
   },
   "keywords": ["configs", "mikojs"],

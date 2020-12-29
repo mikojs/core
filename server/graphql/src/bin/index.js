@@ -32,7 +32,7 @@ import buildCache, { type cacheType } from 'utils/buildCache';
 handleUnhandledRejection();
 
 (async () => {
-  const result = await parseArgv<{}, resType, optionsType>(
+  const result = await parseArgv<optionsType, {}, resType>(
     'graphql',
     (defaultOptions: defaultOptionsType) =>
       addGraphqlOptions({

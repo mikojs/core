@@ -35,7 +35,7 @@ type parsedResultType<O> = [
  *
  * @return {ServerType} - server or null
  */
-export default async <Req = {}, Res = {}, O = {}>(
+export default async <O: {}, Req = {}, Res = {}>(
   name: string,
   buildOptions: (defaultOptions: defaultOptionsType) => optionsType,
   buildMiddleware: (

@@ -84,7 +84,8 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
     .action((...data: Data) => callback(data));
 
   Object.keys(commands).forEach((key: string) => {
-    addConfig(program.command(key), commands[key], (data: Data) =>
+    addConfig<Data>(program.command(key), commands[key], (data: Data) =>
+      // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/8458
       callback([key, ...data]),
     );
   });
@@ -108,6 +109,6 @@ export default <Data: $ReadOnlyArray<mixed>>({
       '-v --version',
     );
 
-    addConfig(program, config, resolve);
+    addConfig<Data>(program, config, resolve);
     program.parse(argv);
   });

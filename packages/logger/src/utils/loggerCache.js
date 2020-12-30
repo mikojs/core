@@ -97,7 +97,10 @@ export default ({
     start: (message: messageType) => {
       cache.loading = {
         ...cache.loading,
-        [name]: handleMessage(message),
+        [name]: {
+          color: cache.getColor(name),
+          message: handleMessage(message),
+        },
       };
       cache.run();
     },

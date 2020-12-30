@@ -2,4 +2,4 @@
 
 import { importError } from '@mikojs/utils';
 
-importError('@mikojs/lerna-changelog');
+importError('@mikojs/lerna-generate-changelog');

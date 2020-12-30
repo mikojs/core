@@ -1,10 +1,10 @@
 {
-  "name": "@mikojs/lerna-changelog",
+  "name": "@mikojs/lerna-generate-changelog",
   "description": "Generate changelog with `lerna-changelog`.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://mikojs.github.io/core/lerna-changelog",
-  "repository": "https://github.com/mikojs/core/tree/master/packages/lerna-changelog",
+  "homepage": "https://mikojs.github.io/core/lerna-generate-changelog",
+  "repository": "https://github.com/mikojs/core/tree/master/packages/lerna-generate-changelog",
   "version": "1.13.0",
   "main": "./lib/index.js",
   "dependencies": {
@@ -16,7 +16,7 @@
     "flow-bin": "^0.141.0",
     "flow-typed": "^3.2.1"
   },
-  "keywords": ["lerna-changelog", "mikojs"],
+  "keywords": ["cli", "lerna-changelog", "mikojs"],
   "publishConfig": {
     "access": "public"
   }

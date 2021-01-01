@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-plugin-import-css",
   "repository": "https://github.com/mikojs/core/tree/main/babel/babel-plugin-import-css",
-  "version": "1.12.0",
+  "version": "1.14.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.10.4",

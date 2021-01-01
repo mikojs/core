@@ -1,5 +1,52 @@
 # CHANGELOG
 
+## 1.14.0 (2021-01-01)
+
+#### :boom: Breaking Change
+
+- `badges`, `logger`, `merge-dir`, `miko`, `worker`
+  - [#720](https://github.com/mikojs/core/pull/720) (@mikojs/core) Remove debug ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `badges`, `commander`, `configs`, `lerna-version`, `miko`
+  - [#727](https://github.com/mikojs/core/pull/727) (@mikojs/configs) Use new @mikojs/lerna-version and modify command descriptions ([@HsuTing](https://github.com/HsuTing))
+- `lerna-version`
+  - [#726](https://github.com/mikojs/core/pull/726) (@mikojs/lerna-version) Add new package ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `commander`, `configs`, `dir-tree`, `eslint-config-base`, `jest`, `logger`, `merge-dir`, `miko`, `utils`, `worker`
+  - [#725](https://github.com/mikojs/core/pull/725) (@mikojs/core) Fix log detail ([@HsuTing](https://github.com/HsuTing))
+  - [#724](https://github.com/mikojs/core/pull/724) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+- `logger`
+  - [#722](https://github.com/mikojs/core/pull/722) (@mikojs/logger) Add random name color ([@HsuTing](https://github.com/HsuTing))
+  - [#716](https://github.com/mikojs/core/pull/716) (@mikojs/logger) Add debug logger ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `logger`, `miko`
+  - [#718](https://github.com/mikojs/core/pull/718) (@mikojs/core) Use new @mikojs/logger ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `logger`
+  - [#715](https://github.com/mikojs/core/pull/715) (@mikojs/logger) Add new package ([@HsuTing](https://github.com/HsuTing))
+- `badges`, `commander`, `configs`, `dir-tree`, `eslint-config-base`, `jest`, `merge-dir`, `miko`, `utils`, `worker`
+  - [#713](https://github.com/mikojs/core/pull/713) (@mikojs/core) Upgrade packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `lerna-version`
+  - [#728](https://github.com/mikojs/core/pull/728) (@mikojs/lerna-version) Fix CHANGELOG.md error ([@HsuTing](https://github.com/HsuTing))
+- `logger`
+  - [#721](https://github.com/mikojs/core/pull/721) (@mikojs/logger) Fix log message spaces ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#717](https://github.com/mikojs/core/pull/717) chore(deps): bump node-notifier from 8.0.0 to 8.0.1 ([@dependabot[bot]](https://github.com/apps/dependabot))
+  - [#714](https://github.com/mikojs/core/pull/714) chore(deps): bump ini from 1.3.5 to 1.3.7 ([@dependabot[bot]](https://github.com/apps/dependabot))
+
+#### :house: Internal
+
+- `badges`, `logger`, `merge-dir`, `miko`, `utils`, `worker`
+  - [#723](https://github.com/mikojs/core/pull/723) (@mikojs/core) Modify logger message ([@HsuTing](https://github.com/HsuTing))
+- `miko`, `utils`
+  - [#719](https://github.com/mikojs/core/pull/719) (@mikojs/core) Remove not used packages and files ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.13.0 (2020-12-02)
 
 #### :boom: Breaking Change

@@ -32,15 +32,15 @@ export default {
 
         return `${flow} && lerna exec '${flow}' --stream --concurrency 1`;
       },
-      description: 'run `flow` with the lerna command',
+      description: 'Run `flow` with the lerna command.',
     },
     'flow-typed:save-cache': {
       command: flowTypedCache.save,
-      description: 'save flow-typed in the cache folder',
+      description: 'Save `flow-typed` in the cache folder.',
     },
     'flow-typed:restore-cache': {
       command: flowTypedCache.restore,
-      description: 'restore flow-typed from the cache folder',
+      description: 'Restore `flow-typed` from the cache folder.',
     },
     'flow-typed:install': {
       ...config['flow-typed:install'],
@@ -95,15 +95,7 @@ export default {
     },
     release: {
       ...config.release,
-      command: [
-        'lerna-changelog',
-        'echo "\nContinue with any keyword or exit with "ctrl + c"..."',
-        'read -p ""',
-        'vim CHANGELOG.md',
-        'git add CHANGELOG.md',
-        'git commit -m "chore(root): add CHANGELOG.md"',
-        'lerna version',
-      ].join(' && '),
+      command: 'lerna-version',
     },
     clean: {
       ...config.clean,

@@ -14,11 +14,11 @@ export const newOptions = [
   {
     flags: '--pretty',
     description:
-      'a boolean to configure whether the output should be pretty-printed',
+      'Set a boolean to configure whether the output should be pretty-printed.',
   },
   {
     flags: '--graphiql',
-    description: 'a boolean to optionally enable GraphiQL mode',
+    description: 'Set a boolean to optionally enable GraphiQL mode.',
   },
 ];
 

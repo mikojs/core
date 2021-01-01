@@ -27,33 +27,36 @@ export const relayCompilerOptionKeys: $ReadOnlyArray<$Keys<ConfigType>> = [
 ];
 
 export default {
-  description: 'create Relay generated files',
+  description: 'Create the relay generated files.',
   args: '<source-path>',
   options: [
     {
       flags: '--include <include...>',
-      description: 'Directories to include under src',
+      description: 'The directories are included under src.',
     },
     {
       flags: '--exclude <exclude...>',
-      description: 'Directories to ignore under src',
+      description: 'The directories are ignored under src.',
     },
     {
       flags: '--extensions <extensions...>',
       description:
-        'File extensions to compile (defaults to extensions provided by the language plugin)',
+        'File extensions are used to compile (defaults to extensions provided by the language plugin).',
     },
-    { flags: '--verbose', description: 'More verbose logging' },
-    { flags: '--quiet', description: 'No output to stdout' },
-    { flags: '--watchman', description: 'Use watchman when not in watch mode' },
+    { flags: '--verbose', description: 'Show more verbose logging or not.' },
+    { flags: '--quiet', description: 'Show output to stdout or not.' },
+    {
+      flags: '--watchman',
+      description: 'Use watchman when not in watch mode.',
+    },
     {
       flags: '--watch',
-      description: 'If specified, watches files and regenerates on changes',
+      description: 'If specified, watches files and regenerates on changes.',
     },
     {
       flags: '--validate',
       description:
-        'Looks for pending changes and exits with non-zero code instead of writing to disk',
+        'Looks for pending changes and exits with non-zero code instead of writing to disk.',
     },
     {
       flags: '--persistFunction <persistFunction>',
@@ -78,7 +81,7 @@ export default {
     {
       flags: '--language <language>',
       description:
-        'The name of the language plugin used for input files and artifacts',
+        'The name of the language plugin used for input files and artifacts.',
     },
     {
       flags: '--artifactDirectory <artifactDirectory>',
@@ -91,6 +94,9 @@ export default {
     },
   ],
   requiredOptions: [
-    { flags: '--src <src>', description: 'Root directory of application code' },
+    {
+      flags: '--src <src>',
+      description: 'Set the root directory of application code.',
+    },
   ],
 };

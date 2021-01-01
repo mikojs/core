@@ -19,7 +19,7 @@ handleUnhandledRejection();
 const parseArgv = commander<[string]>({
   name: 'lerna-version',
   version,
-  description: chalk`generate {green CHANGELOG.md} with {green lerna version}`,
+  description: chalk`Generate {green CHANGELOG.md} with {green lerna version}.`,
   args: '<version>',
 });
 

@@ -8,59 +8,59 @@ import { type mikoConfigsType } from '@mikojs/miko';
 export default (): mikoConfigsType => ({
   babel: {
     command: 'babel src -d lib --verbose --root-mode upward',
-    description: 'default babel command',
+    description: 'Run babel with the default folder.',
   },
   build: {
     command: 'miko babel',
-    description: 'run `babel` in the build mode',
+    description: 'Run `babel` in the build mode.',
   },
   dev: {
     command: 'miko babel -w',
-    description: 'run `babel` in the dev mode',
+    description: 'Run `babel` in the development mode.',
   },
   prod: {
     command: 'NODE_ENV=production miko babel',
-    description: 'run `babel` in the production mode',
+    description: 'Run `babel` in the production mode.',
   },
   prettier: {
     command: 'prettier --write',
-    description: 'run `prettier` with `--write` option',
+    description: 'Run `prettier` with `--write` option.',
   },
   lint: {
     command: 'esw --cache --color',
-    description: 'run `eslint` with generating the cache',
+    description: 'Run `eslint` with generating the cache.',
   },
   'lint:watch': {
     command: 'miko lint -w --quiet --rule "prettier/prettier: off"',
-    description: 'run `eslint` in the watch mode',
+    description: 'Run `eslint` in the watch mode.',
   },
   jest: {
     command: 'jest --silent',
-    description: 'run `jest` in the silent mode',
+    description: 'Run `jest` in the silent mode.',
   },
   'jest:watch': {
     command: 'jest --coverage=false --watchAll',
-    description: 'run `jest` without generating the coverage',
+    description: 'Run `jest` without generating the coverage.',
   },
   'flow-typed:install': {
     command: 'flow-typed install --verbose',
-    description: 'flow-typed install',
+    description: 'Install flow-typed files.',
   },
   'husky:pre-commit': {
     command: 'miko build && flow && miko lint-staged',
-    description: 'checking the code style before running `git commit`',
+    description: 'Check the code style before running `git commit`.',
   },
   'husky:post-merge': {
     command: 'miko build',
-    description: 'rebuild the package after running `git merge`',
+    description: 'Rebuild the package after running `git merge`.',
   },
   'husky:post-checkout': {
     command: 'miko build',
-    description: 'rebuild the package after running `git checkout`',
+    description: 'Rebuild the package after running `git checkout`.',
   },
   release: {
     command: 'standard-version',
-    description: 'set the tag and release a new version',
+    description: 'Set the tag and release a new version.',
   },
   clean: {
     command: [
@@ -72,6 +72,6 @@ export default (): mikoConfigsType => ({
       './*.log',
       './node_modules',
     ].join(' '),
-    description: 'clean the built files',
+    description: 'Clean the built files.',
   },
 });

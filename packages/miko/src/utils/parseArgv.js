@@ -22,21 +22,22 @@ type parsedResultType = [
 const option = {
   name: 'miko',
   version,
-  description: chalk`{cyan manage configs} and {cyan run commands} with the {green miko} worker`,
+  description: chalk`{cyan Manage configs} and {cyan run commands} with the {green miko} worker.`,
   args: '<commands...>',
   allowUnknownOption: true,
   commands: {
     generate: {
-      description: 'generate configs',
+      description: 'Generate the configs.',
       options: [
         {
           flags: '-k, --keep',
-          description: 'use to keep server working, not auto close',
+          description:
+            'Keep server working, and make it would not be auto closed.',
         },
       ],
     },
     kill: {
-      description: chalk`kill the all events of the {green miko} worker`,
+      description: chalk`Kill the all events of the {green miko} worker.`,
     },
   },
 };

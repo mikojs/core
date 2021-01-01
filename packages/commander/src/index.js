@@ -79,7 +79,9 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
         (index >= defaultOptions.length + requiredOptions.length
           ? result.option(flags, desc)
           : result.requiredOption(flags, desc))),
-      prevProgram.description(description),
+      prevProgram
+        .description(description)
+        .helpOption('-h, --help', 'Display help for command.'),
     )
     .action((...data: Data) => callback(data));
 
@@ -107,6 +109,7 @@ export default <Data: $ReadOnlyArray<mixed>>({
     const program = new commander.Command(name).version(
       version,
       '-v --version',
+      'Output the version number.',
     );
 
     addConfig<Data>(program, config, resolve);

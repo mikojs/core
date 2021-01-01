@@ -95,15 +95,7 @@ export default {
     },
     release: {
       ...config.release,
-      command: [
-        'lerna-changelog',
-        'echo "\nContinue with any keyword or exit with "ctrl + c"..."',
-        'read -p ""',
-        'vim CHANGELOG.md',
-        'git add CHANGELOG.md',
-        'git commit -m "chore(root): add CHANGELOG.md"',
-        'lerna version',
-      ].join(' && '),
+      command: 'lerna-version',
     },
     clean: {
       ...config.clean,

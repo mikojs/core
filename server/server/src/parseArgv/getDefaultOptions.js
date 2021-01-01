@@ -30,30 +30,30 @@ export default (name: string): defaultOptionsType => {
     options: [
       {
         flags: '-p, --port <port>',
-        description: chalk`the port of the {green ${name}} server`,
+        description: chalk`Set the port of the {green ${name}} server.`,
       },
       {
         flags: '--prefix <prefix>',
-        description: chalk`the prefix of the {green ${name}} server`,
+        description: chalk`Set the prefix of the {green ${name}} server.`,
       },
     ],
   };
 
   return {
     name,
-    description: chalk`control a {green ${name}} server`,
+    description: chalk`Use to control the {green ${name}} server.`,
     commands: {
       dev: {
         ...defaultCommand,
-        description: chalk`start a {green ${name}} server in the {cyan dev} mode`,
+        description: chalk`Start the {green ${name}} server in the {cyan development} mode.`,
       },
       start: {
         ...defaultCommand,
-        description: chalk`start a {green ${name}} server in the {cyan prod} mode`,
+        description: chalk`Start the {green ${name}} server in the {cyan production} mode.`,
       },
       build: {
         ...defaultCommand,
-        description: chalk`build a {cyan prod} {green ${name}} server`,
+        description: chalk`Build the {cyan production} {green ${name}} server.`,
       },
     },
   };

@@ -7,7 +7,7 @@ import path from 'path';
 import chalk from 'chalk';
 import Changelog from 'lerna-changelog/lib/changelog';
 import { load as loadConfig } from 'lerna-changelog/lib/configuration';
-// TODO import execa from 'execa';
+import execa from 'execa';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 import commander from '@mikojs/commander';
@@ -43,4 +43,15 @@ const parseArgv = commander<[string]>({
 ${changelog}`,
     ),
   );
+
+  await [
+    ['git', 'add', changelogFilePath],
+    ['git', 'commit', '-m', 'chore(root): add CHANGELOG.md'],
+    ['lerna', 'version', nextVersion],
+  ].reduce(async (result: Promise<void>, commands: $ReadOnlyArray<string>) => {
+    await result;
+    await execa(commands[0], commands.slice(1), {
+      stdio: 'inherit',
+    });
+  }, Promise.resolve());
 })();

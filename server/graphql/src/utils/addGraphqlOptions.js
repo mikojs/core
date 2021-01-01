@@ -18,7 +18,7 @@ export const newOptions = [
   },
   {
     flags: '--graphiql',
-    description: 'set a boolean to optionally enable GraphiQL mode.',
+    description: 'Set a boolean to optionally enable GraphiQL mode.',
   },
 ];
 

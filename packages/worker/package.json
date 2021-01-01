@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/worker",
-  "repository": "https://github.com/mikojs/core/tree/master/packages/worker",
+  "repository": "https://github.com/mikojs/core/tree/main/packages/worker",
   "version": "1.12.1",
   "main": "./lib/index.js",
   "dependencies": {

@@ -22,7 +22,7 @@ const logger = createLogger('@mikojs/badges');
 const parseArgv = commander<[$ReadOnlyArray<string>]>({
   name: 'badges',
   version,
-  description: chalk`add the badges to {green README.md}`,
+  description: chalk`Add the badges to {green README.md}.`,
   args: '<readme-paths...>',
 });
 

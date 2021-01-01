@@ -37,9 +37,8 @@ const parseArgv = commander<[string]>({
   fs.writeFileSync(
     changelogFilePath,
     fs.readFileSync(changelogFilePath, 'utf-8').replace(
-      /# CHANGELOG/,
+      /(# CHANGELOG)/,
       `$1
-
 ${changelog}`,
     ),
   );

@@ -1,6 +1,6 @@
 # [Core][homepage] · <!-- badges.start -->[![circleci][circleci-image]][circleci-link] ![github-size][github-size-image] ![engine-node][engine-node-image] ![engine-npm][engine-npm-image] ![engine-yarn][engine-yarn-image] [![license][license-image]][license-link] [![lerna][lerna-image]][lerna-link] [![git-search-todo][git-search-todo-image]][git-search-todo-link]
 
-[circleci-image]: https://img.shields.io/circleci/project/github/mikojs/core/master.svg
+[circleci-image]: https://img.shields.io/circleci/project/github/mikojs/core/main.svg
 [circleci-link]: https://circleci.com/gh/mikojs/core
 [github-size-image]: https://img.shields.io/github/repo-size/mikojs/core.svg
 [engine-node-image]: https://img.shields.io/badge/node-%3E=%2010.2.1-green.svg

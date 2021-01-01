@@ -41,7 +41,7 @@ export default async (
       {
         filePath: './.circleci/config.yml',
         badgeName: 'circleci',
-        image: `https://img.shields.io/circleci/project/github/${username}/${projectName}/master.svg`,
+        image: `https://img.shields.io/circleci/project/github/${username}/${projectName}/main.svg`,
         link: `https://circleci.com/gh/${username}/${projectName}`,
       },
       {

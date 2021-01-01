@@ -45,7 +45,7 @@
     "hooks": {
       "pre-commit": "make babel-base-changed && miko husky:pre-commit",
       "post-merge": "make babel-base-all && miko husky:post-merge",
-      "post-checkout": "make babel-base-changed BRANCH=master && miko husky:post-checkout"
+      "post-checkout": "make babel-base-changed BRANCH=main && miko husky:post-checkout"
     }
   },
   "resolutions": {

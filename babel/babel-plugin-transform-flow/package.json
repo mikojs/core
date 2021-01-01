@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-plugin-transform-flow",
-  "repository": "https://github.com/mikojs/core/tree/master/babel/babel-plugin-transform-flow",
+  "repository": "https://github.com/mikojs/core/tree/main/babel/babel-plugin-transform-flow",
   "version": "1.11.4",
   "main": "./lib/index.js",
   "dependencies": {

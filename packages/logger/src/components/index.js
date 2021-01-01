@@ -13,7 +13,10 @@ type messageType = {|
 
 export type propsType = {|
   loading: {|
-    [string]: string,
+    [string]: {|
+      color: string,
+      message: string,
+    |},
   |},
   messages: $ReadOnlyArray<messageType>,
 |};
@@ -29,7 +32,9 @@ const Logger = ({ loading, messages }: propsType) => (
       <Text key={name}>
         <Spinner type="dots" />
 
-        {` ${name} ${loading[name]}`}
+        <Text color={loading[name].color}> {name} </Text>
+
+        {loading[name].message}
       </Text>
     ))}
   </>

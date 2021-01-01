@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/router",
-  "repository": "https://github.com/mikojs/core/tree/master/server/router",
+  "repository": "https://github.com/mikojs/core/tree/main/server/router",
   "version": "1.13.0",
   "main": "./lib/index.js",
   "dependencies": {

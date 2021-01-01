@@ -63,7 +63,7 @@ export default {
        * @return {string} - command string
        */
       command: (): string => {
-        const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'master';
+        const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'main';
 
         return `lerna exec "miko babel -w" --parallel --stream --since ${branch}`;
       },
@@ -80,7 +80,7 @@ export default {
        * @return {string} - command string
        */
       command: (): string => {
-        const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'master';
+        const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'main';
 
         return `miko build --since ${branch} && miko flow --since ${branch} && lint-staged`;
       },
@@ -91,7 +91,7 @@ export default {
     },
     'husky:post-checkout': {
       ...config['husky:post-checkout'],
-      command: 'miko build --since master',
+      command: 'miko build --since main',
     },
     release: {
       ...config.release,

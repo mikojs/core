@@ -97,7 +97,10 @@ export default ({
     start: (message: messageType) => {
       cache.loading = {
         ...cache.loading,
-        [name]: handleMessage(message),
+        [name]: {
+          color: cache.getColor(name),
+          message: handleMessage(message),
+        },
       };
       cache.run();
     },
@@ -122,7 +125,10 @@ export default ({
     ) => {
       if (
         event === 'debug' &&
-        !(process.env.DEBUG && new RegExp(process.env.DEBUG).test(logName))
+        !(
+          process.env.DEBUG &&
+          new RegExp(process.env.DEBUG.replace(/\*/g, '.*')).test(logName)
+        )
       )
         return;
 

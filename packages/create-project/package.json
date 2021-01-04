@@ -1,0 +1,22 @@
+{
+  "name": "@mikojs/create-project",
+  "description": "Create a new project.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/create-project",
+  "repository": "https://github.com/mikojs/core/tree/main/packages/create-project",
+  "version": "1.14.0",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.12.5",
+    "core-js": "^3.8.1"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.141.0",
+    "flow-typed": "^3.2.1"
+  },
+  "keywords": ["create project", "mikojs"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

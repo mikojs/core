@@ -8,7 +8,7 @@
 
 [website]: https://mikojs.github.io/core/create-project
 
-Create a new project.
+Create a new project by using one of the examples.
 
 ## Install
 

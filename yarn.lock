@@ -2540,7 +2540,7 @@
     "@lerna/validation-error" "3.13.0"
     p-map "^2.1.0"
 
-"@lerna/symlink-binary@3.17.0":
+"@lerna/symlink-binary@3.17.0", "@lerna/symlink-binary@^3.17.0":
   version "3.17.0"
   resolved "https://registry.yarnpkg.com/@lerna/symlink-binary/-/symlink-binary-3.17.0.tgz#8f8031b309863814883d3f009877f82e38aef45a"
   integrity sha512-RLpy9UY6+3nT5J+5jkM5MZyMmjNHxZIZvXLV+Q3MXrf7Eaa1hNqyynyj4RO95fxbS+EZc4XVSk25DGFQbcRNSQ==

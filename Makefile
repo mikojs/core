@@ -20,8 +20,7 @@ define babel-build
 		--scope @mikojs/miko \
 		--scope @mikojs/configs \
 		--scope @mikojs/babel-* \
+		--scope @mikojs/lerna-link-bin \
 		$(1)
-	ln -snf $(ROOT)/packages/miko/lib/bin/index.js ./node_modules/.bin/miko
-	ln -snf $(ROOT)/packages/badges/lib/bin/index.js ./node_modules/.bin/badges
-	ln -snf $(ROOT)/packages/lerna-version/lib/bin/index.js ./node_modules/.bin/lerna-version
+	yarn lerna-link-bin
 endef

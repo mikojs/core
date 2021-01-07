@@ -61,17 +61,9 @@ const lint = {
   ],
 };
 
-const jest = ({ collectCoverageFrom, testPathIgnorePatterns, ...config }) => ({
+const jest = ({ collectCoverageFrom, ...config }) => ({
   ...config,
-  collectCoverageFrom: [
-    ...collectCoverageFrom,
-    '!**/packages/jest/**',
-    '!**/packages/website/**',
-  ],
-  testPathIgnorePatterns: [
-    ...testPathIgnorePatterns,
-    '<rootDir>/packages/website/',
-  ],
+  collectCoverageFrom: [...collectCoverageFrom, '!**/packages/jest/**'],
 });
 
 module.exports = (() => {

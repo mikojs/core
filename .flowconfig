@@ -1,5 +1,6 @@
 [ignore]
 <PROJECT_ROOT>/packages/.*
+<PROJECT_ROOT>/lerna/.*
 <PROJECT_ROOT>/babel/.*
 <PROJECT_ROOT>/server/.*
 

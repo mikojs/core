@@ -7,7 +7,7 @@ type commandOptionsType = {|
   description: string,
 |};
 
-type configsType = {|
+export type defaultOptionsType = {|
   description: string,
   args?: string,
   allowUnknownOption?: boolean,
@@ -15,12 +15,12 @@ type configsType = {|
   options?: $ReadOnlyArray<commandOptionsType>,
   requiredOptions?: $ReadOnlyArray<commandOptionsType>,
   commands?: {|
-    [string]: configsType,
+    [string]: defaultOptionsType,
   |},
 |};
 
 export type optionsType = {|
-  ...configsType,
+  ...defaultOptionsType,
   name: string,
   version: string,
 |};
@@ -36,7 +36,7 @@ const defaultOptions = ['args', 'allowUnknownOption', 'exitOverride'].map(
 
 /**
  * @param {commander} prevProgram - prev program object
- * @param {configsType} config - program config
+ * @param {defaultOptionsType} config - program config
  * @param {callbackType} callback - callback function
  */
 const addConfig = <Data: $ReadOnlyArray<mixed>>(
@@ -49,7 +49,7 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
     options = [],
     requiredOptions = [],
     commands = {},
-  }: configsType,
+  }: defaultOptionsType,
   callback: callbackType<Data>,
 ) => {
   const program = [...defaultOptions, ...requiredOptions, ...options]
@@ -94,7 +94,7 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
 };
 
 /**
- * @param {configsType} config - commander config
+ * @param {defaultOptionsType} config - commander config
  *
  * @return {Promise} - parse result
  */

@@ -22,5 +22,8 @@ define babel-build
 		--scope @mikojs/babel-* \
 		--scope @mikojs/lerna-link-bin \
 		$(1)
-	yarn lerna-link-bin
+	yarn lerna exec \
+		"node ./lib/bin/index.js" \
+		--stream \
+		--scope @mikojs/lerna-link-bin
 endef

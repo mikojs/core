@@ -30,6 +30,7 @@
   ],
   "packages": [
     "packages/*",
+    "lerna/*",
     "babel/*",
     "server/*"
   ],

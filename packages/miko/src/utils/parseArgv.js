@@ -2,7 +2,7 @@
 
 import chalk from 'chalk';
 
-import commander from '@mikojs/commander';
+import commander, { type optionsType } from '@mikojs/commander';
 
 import { version } from '../../package.json';
 
@@ -10,6 +10,7 @@ export type mikoConfigsType = {|
   [string]: {|
     command: string | (() => string),
     description: string,
+    commands?: mikoConfigsType,
   |},
 |};
 
@@ -19,7 +20,7 @@ type parsedResultType = [
   $ReadOnlyArray<string> | void,
 ];
 
-const option = {
+const defaultOptions = {
   name: 'miko',
   version,
   description: chalk`{cyan Manage configs} and {cyan run commands} with the {green miko} worker.`,
@@ -43,25 +44,41 @@ const option = {
 };
 
 /**
+ * @param {optionsType} options - prev commander options
+ * @param {mikoConfigsType} configs - current miko configs
+ *
+ * @return {optionsType} - new commander options
+ */
+const addCustomCommands = (
+  options: optionsType,
+  configs: mikoConfigsType,
+): optionsType => {
+  const commands = options.commands || {};
+  const existCommands = Object.keys(commands);
+
+  Object.keys(configs).forEach((key: string) => {
+    if (existCommands.includes(key)) return;
+
+    commands[key] = {
+      description: chalk`{gray (custom)} ${configs[key].description}`,
+      allowUnknownOption: true,
+    };
+  });
+
+  return {
+    ...options,
+    commands,
+  };
+};
+
+/**
  * @param {mikoConfigsType} configs - miko configs
  * @param {Array} argv - command argv
  *
- * @return {Promise} - parse result
+ * @return {parsedResultType} - parsed result
  */
 export default (
-  configs: {},
+  configs: mikoConfigsType,
   argv: $ReadOnlyArray<string>,
-): Promise<parsedResultType> => {
-  const existCommands = Object.keys(option.commands);
-
-  Object.keys(configs)
-    .filter((key: string) => !existCommands.includes(key))
-    .forEach((key: string) => {
-      option.commands[key] = {
-        description: chalk`{gray (custom)} ${configs[key].description}`,
-        allowUnknownOption: true,
-      };
-    });
-
-  return commander<parsedResultType>(option)(argv);
-};
+): Promise<parsedResultType> =>
+  commander<parsedResultType>(addCustomCommands(defaultOptions, configs))(argv);

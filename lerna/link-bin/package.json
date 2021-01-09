@@ -19,7 +19,7 @@
     "flow-bin": "^0.141.0",
     "flow-typed": "^3.2.1"
   },
-  "keywords": ["changelog", "lerna link bin", "mikojs"],
+  "keywords": ["lerna", "link bin", "mikojs"],
   "publishConfig": {
     "access": "public"
   }

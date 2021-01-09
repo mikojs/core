@@ -13,7 +13,7 @@ const cacheDir = findCacheDir({ name: '@mikojs/flow-typed', thunk: true });
 /**
  * @param {boolean} restore - restore cache or not
  */
-export default async (restore: boolean) => {
+export default async (restore?: boolean) => {
   if (restore && !fs.existsSync(cacheDir())) return;
 
   await Promise.all(

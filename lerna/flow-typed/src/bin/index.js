@@ -3,9 +3,14 @@
 
 import chalk from 'chalk';
 
+import { handleUnhandledRejection } from '@mikojs/utils';
 import commander from '@mikojs/commander';
 
 import { version } from '../../package.json';
+
+import store from 'utils/store';
+
+handleUnhandledRejection();
 
 const parseArgv = commander<
   [
@@ -34,7 +39,11 @@ const parseArgv = commander<
 
   switch (type) {
     case 'store':
+      await store();
+      break;
+
     case 'restore':
+      await store(true);
       break;
 
     default:

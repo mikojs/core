@@ -4,9 +4,12 @@
 import { getPackagesSync } from '@lerna/project';
 import symlinkBinary from '@lerna/symlink-binary';
 
+import { handleUnhandledRejection } from '@mikojs/utils';
 import commander from '@mikojs/commander';
 
 import { version } from '../../package.json';
+
+handleUnhandledRejection();
 
 const parseArgv = commander<[]>({
   name: 'lerna-link-bin',

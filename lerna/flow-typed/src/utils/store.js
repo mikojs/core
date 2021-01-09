@@ -36,12 +36,14 @@ export default async (restore?: boolean) => {
 
         if (!fs.existsSync(sourceFolder)) return;
 
-        await new Promise((resolve, reject) =>
-          rimraf(targetFolder, (err?: mixed) => {
-            if (err) reject(err);
-            else resolve();
-          }),
-        );
+        if (fs.existsSync(targetFolder))
+          await new Promise((resolve, reject) =>
+            rimraf(targetFolder, (err?: mixed) => {
+              if (err) reject(err);
+              else resolve();
+            }),
+          );
+
         copyDir.sync(sourceFolder, targetFolder);
       },
     ),

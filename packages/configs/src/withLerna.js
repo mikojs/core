@@ -47,7 +47,7 @@ export default {
       command: [
         config['flow-typed:install']?.command,
         'flow-mono create-symlinks .flowconfig',
-        'flow-mono install-types ----ignoreDeps=peer',
+        'flow-mono install-types --ignoreDeps=peer',
       ]
         .filter(Boolean)
         .join(' && '),

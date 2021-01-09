@@ -4,9 +4,10 @@ import fs from 'fs';
 import path from 'path';
 
 import { getPackagesSync } from '@lerna/project';
-import rimraf from 'rimraf';
-import copyDir from 'copy-dir';
 import findCacheDir from 'find-cache-dir';
+import rimraf from 'rimraf';
+import mkdirp from 'mkdirp';
+import copyDir from 'copy-dir';
 
 const cacheDir = findCacheDir({ name: '@mikojs/flow-typed', thunk: true });
 
@@ -44,6 +45,7 @@ export default async (restore?: boolean) => {
             }),
           );
 
+        mkdirp.sync(targetFolder);
         copyDir.sync(sourceFolder, targetFolder);
       },
     ),

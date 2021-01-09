@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/lerna-flow-typed",
-  "description": "Handle flow-typed in the monorepo.",
+  "description": "Handle the all flow-typed folders in the monorepo.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/lerna-flow-typed",
@@ -13,6 +13,7 @@
     "@lerna/project": "^3.21.0",
     "@mikojs/commander": "^1.14.0",
     "@mikojs/utils": "^1.14.0",
+    "chalk": "^4.1.0",
     "copy-dir": "^1.3.0",
     "core-js": "^3.8.1",
     "find-cache-dir": "^3.3.1",

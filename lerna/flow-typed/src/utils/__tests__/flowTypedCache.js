@@ -59,4 +59,13 @@ describe('flowTypedCache', () => {
       expect(copyDir.sync).toHaveBeenCalledWith(packageFodler, cacheFolder);
     }
   });
+
+  test('could not restore cache when not found', async () => {
+    fs.existsSync.mockReturnValue(false);
+
+    expect(await flowTypedCache(true));
+    expect(rimraf).not.toHaveBeenCalled();
+    expect(mkdirp.sync).not.toHaveBeenCalled();
+    expect(copyDir.sync).not.toHaveBeenCalled();
+  });
 });

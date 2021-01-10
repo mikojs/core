@@ -44,13 +44,19 @@ export default {
     },
     'flow-typed:install': {
       ...config['flow-typed:install'],
-      command: [
-        config['flow-typed:install']?.command,
-        'flow-mono create-symlinks .flowconfig',
-        'flow-mono install-types --ignoreDeps=peer',
-      ]
-        .filter(Boolean)
-        .join(' && '),
+
+      /**
+       * @return {string} - command string
+       */
+      command: () =>
+        [
+          extendCommand(
+            config['flow-typed:install']?.command,
+            'flow-typed install --verbose',
+          ),
+          'flow-mono create-symlinks .flowconfig',
+          'flow-mono install-types --ignoreDeps=peer',
+        ].join(' && '),
     },
     build: {
       ...config.build,

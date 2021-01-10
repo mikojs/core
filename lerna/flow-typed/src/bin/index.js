@@ -22,8 +22,7 @@ const parseArgv = commander<
         help: () => void,
       |},
     ]
-  | ['link', ?string, {}]
-  | ['remove', {}]
+  | ['link', 'remove' | ?string, {}]
   | ['cache', {| restore?: boolean |}],
 >({
   name: 'lerna-flow-typed',
@@ -33,9 +32,11 @@ const parseArgv = commander<
     link: {
       description: chalk`Link {green .flowconfig} in the each package.`,
       args: '[flowconfig]',
-    },
-    remove: {
-      description: chalk`Remove linked {green .flowconfig} in the each pacakge`,
+      commands: {
+        remove: {
+          description: chalk`Remove linked {green .flowconfig} in the each pacakge`,
+        },
+      },
     },
     cache: {
       description: chalk`Store the all {green flow-typed} folders to the cache directory.`,
@@ -52,27 +53,16 @@ const parseArgv = commander<
 (async () => {
   const result = await parseArgv(process.argv);
 
-  if (result.length === 1) {
-    result[0].help();
+  if (result.length === 3) {
+    if (result[1] === 'remove') await remove();
+    else await link(path.resolve(result[1] || '.flowconfig'));
     return;
   }
 
-  switch (result[0]) {
-    case 'cache':
-      if (result[1] instanceof Object)
-        await flowTypedCache(Boolean(result[1].restore));
-      break;
-
-    case 'link':
-      if (!result[1] || typeof result[1] === 'string')
-        await link(path.resolve(result[1] || '.flowconfig'));
-      break;
-
-    case 'remove':
-      await remove();
-      break;
-
-    default:
-      break;
+  if (result.length === 2) {
+    await flowTypedCache(Boolean(result[1].restore));
+    return;
   }
+
+  result[0].help();
 })();

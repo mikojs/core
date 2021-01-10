@@ -12,6 +12,7 @@
     "@babel/runtime": "^7.12.5",
     "@lerna/project": "^3.21.0",
     "@lerna/symlink-binary": "^3.17.0",
+    "@mikojs/commander": "^1.14.0",
     "@mikojs/utils": "^1.14.0",
     "core-js": "^3.8.1"
   },
@@ -19,7 +20,7 @@
     "flow-bin": "^0.141.0",
     "flow-typed": "^3.2.1"
   },
-  "keywords": ["changelog", "lerna link bin", "mikojs"],
+  "keywords": ["lerna", "link bin", "mikojs"],
   "publishConfig": {
     "access": "public"
   }

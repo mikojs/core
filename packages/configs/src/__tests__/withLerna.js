@@ -23,6 +23,7 @@ describe('with lerna', () => {
     ${'flow-typed:restore-cache'} | ${'true'}  | ${'echo "no cache"'}
     ${'flow-typed:save-cache'}    | ${'true'}  | ${`rm -rf ${targetFolder} && cp -r ${sourceFolder} ${targetFolder}`}
     ${'flow-typed:restore-cache'} | ${'true'}  | ${`rm -rf ${sourceFolder} && cp -r ${targetFolder} ${sourceFolder}`}
+    ${'flow-typed:install'}       | ${'true'}  | ${'flow-typed install --verbose && flow-mono create-symlinks .flowconfig && flow-mono install-types --ignoreDeps=peer'}
     ${'dev'}                      | ${'true'}  | ${'lerna exec "miko babel -w" --parallel --stream --since main'}
     ${'husky:pre-commit'}         | ${'true'}  | ${'miko build --since main && miko flow --since main && lint-staged'}
     ${'clean'}                    | ${'true'}  | ${`lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna exec 'rm -rf .flowconfig' --parallel --ignore @mikojs/core && lerna clean && rm -rf ./.changelog`}

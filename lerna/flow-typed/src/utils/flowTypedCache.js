@@ -10,7 +10,10 @@ import copyDir from 'copy-dir';
 
 import rimrafSync from './rimrafSync';
 
-const cacheDir = findCacheDir({ name: '@mikojs/flow-typed', thunk: true });
+export const cacheDir: $Call<typeof findCacheDir, string> = findCacheDir({
+  name: '@mikojs/flow-typed',
+  thunk: true,
+});
 
 /**
  * @param {boolean} restore - restore flow-typed in the cache directory or not

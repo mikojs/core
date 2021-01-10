@@ -10,6 +10,7 @@ jest.mock('fs');
 test('link', async () => {
   const flowconfig = path.resolve('.flowconfig');
 
+  // $FlowFixMe jest mock
   fs.existsSync.mockImplementation((filePath: string) =>
     /__mocks__/.test(filePath),
   );

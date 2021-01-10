@@ -4,7 +4,8 @@ import fs from 'fs';
 import path from 'path';
 
 import { getPackagesSync } from '@lerna/project';
-import rimraf from 'rimraf';
+
+import rimrafSync from './rimrafSync';
 
 /** */
 export default async () => {
@@ -19,12 +20,7 @@ export default async () => {
         )
           return;
 
-        await new Promise((resolve, reject) => {
-          rimraf(flowconfig, (err?: mixed) => {
-            if (err) reject(err);
-            else resolve();
-          });
-        });
+        await rimrafSync(flowconfig);
       },
     ),
   );

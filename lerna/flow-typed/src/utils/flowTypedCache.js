@@ -5,9 +5,10 @@ import path from 'path';
 
 import { getPackagesSync } from '@lerna/project';
 import findCacheDir from 'find-cache-dir';
-import rimraf from 'rimraf';
 import mkdirp from 'mkdirp';
 import copyDir from 'copy-dir';
+
+import rimrafSync from './rimrafSync';
 
 const cacheDir = findCacheDir({ name: '@mikojs/flow-typed', thunk: true });
 
@@ -37,13 +38,7 @@ export default async (restore: boolean) => {
 
         if (!fs.existsSync(sourceFolder)) return;
 
-        if (fs.existsSync(targetFolder))
-          await new Promise((resolve, reject) =>
-            rimraf(targetFolder, (err?: mixed) => {
-              if (err) reject(err);
-              else resolve();
-            }),
-          );
+        if (fs.existsSync(targetFolder)) await rimrafSync(targetFolder);
 
         mkdirp.sync(targetFolder);
         copyDir.sync(sourceFolder, targetFolder);

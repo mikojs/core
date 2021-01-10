@@ -12,20 +12,19 @@ import { version } from '../../package.json';
 
 import link from 'utils/link';
 import remove from 'utils/remove';
-import store from 'utils/store';
+import flowTypedCache from 'utils/flowTypedCache';
 
 handleUnhandledRejection();
 
 const parseArgv = commander<
   | [
-      | {
-          help: () => void,
-        }
-      | 'store'
-      | 'restore'
-      | 'remove',
+      {|
+        help: () => void,
+      |},
     ]
-  | ['link', ?string],
+  | ['link', ?string, {}]
+  | ['remove', {}]
+  | ['cache', {| restore?: boolean |}],
 >({
   name: 'lerna-flow-typed',
   version,
@@ -38,11 +37,14 @@ const parseArgv = commander<
     remove: {
       description: chalk`Remove linked {green .flowconfig} in the each pacakge`,
     },
-    store: {
+    cache: {
       description: chalk`Store the all {green flow-typed} folders to the cache directory.`,
-    },
-    restore: {
-      description: chalk`Restore the all {green flow-typed} folders from the cache directory.`,
+      options: [
+        {
+          flags: '--restore',
+          description: chalk`Restore the all {green flow-typed} folders from the cache directory.`,
+        },
+      ],
     },
   },
 });
@@ -50,27 +52,27 @@ const parseArgv = commander<
 (async () => {
   const result = await parseArgv(process.argv);
 
-  switch (result[0]) {
-    case 'link':
-      if (result.length === 1) return;
+  if (result.length === 1) {
+    result[0].help();
+    return;
+  }
 
-      await link(path.resolve(result[1] || '.flowconfig'));
+  switch (result[0]) {
+    case 'cache':
+      if (result[1] instanceof Object)
+        await flowTypedCache(Boolean(result[1].restore));
+      break;
+
+    case 'link':
+      if (!result[1] || typeof result[1] === 'string')
+        await link(path.resolve(result[1] || '.flowconfig'));
       break;
 
     case 'remove':
       await remove();
       break;
 
-    case 'store':
-      await store();
-      break;
-
-    case 'restore':
-      await store(true);
-      break;
-
     default:
-      result[0].help();
       break;
   }
 })();

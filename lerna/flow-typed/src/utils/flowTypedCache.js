@@ -12,9 +12,9 @@ import copyDir from 'copy-dir';
 const cacheDir = findCacheDir({ name: '@mikojs/flow-typed', thunk: true });
 
 /**
- * @param {boolean} restore - restore cache or not
+ * @param {boolean} restore - restore flow-typed in the cache directory or not
  */
-export default async (restore?: boolean) => {
+export default async (restore: boolean) => {
   if (restore && !fs.existsSync(cacheDir())) return;
 
   await Promise.all(

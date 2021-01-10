@@ -61,6 +61,7 @@ describe('flowTypedCache', () => {
   });
 
   test('could not restore cache when not found', async () => {
+    // $FlowFixMe jest mock
     fs.existsSync.mockReturnValue(false);
 
     expect(await flowTypedCache(true));

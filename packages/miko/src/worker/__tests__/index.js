@@ -50,9 +50,6 @@ describe('worker', () => {
         if (!filePaths) {
           isRunning.mockReturnValue(false);
           jest.advanceTimersByTime(TIME_TO_CHECK + TIME_TO_REMOVE_FILES);
-          rimraf.mock.calls.forEach(([, callback]: [string, () => void]) => {
-            callback();
-          });
 
           if (info === 'remove existing file path')
             expect(rimraf).toHaveBeenCalledTimes(1);

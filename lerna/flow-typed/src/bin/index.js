@@ -9,6 +9,7 @@ import commander from '@mikojs/commander';
 import { version } from '../../package.json';
 
 import store from 'utils/store';
+import remove from 'utils/remove';
 
 handleUnhandledRejection();
 
@@ -18,7 +19,8 @@ const parseArgv = commander<
         help: () => void,
       }
     | 'store'
-    | 'restore',
+    | 'restore'
+    | 'remove',
   ],
 >({
   name: 'lerna-flow-typed',
@@ -30,6 +32,9 @@ const parseArgv = commander<
     },
     restore: {
       description: chalk`Restore the all {green flow-typed} folders from the cache directory.`,
+    },
+    remove: {
+      description: chalk`Remove linked {green .flowconfig} in the each pacakge`,
     },
   },
 });
@@ -44,6 +49,10 @@ const parseArgv = commander<
 
     case 'restore':
       await store(true);
+      break;
+
+    case 'remove':
+      await remove();
       break;
 
     default:

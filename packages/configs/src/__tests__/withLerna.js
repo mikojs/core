@@ -7,7 +7,7 @@ describe('with lerna', () => {
     cliName                 | ci         | expected
     ${'flow'}               | ${'true'}  | ${"flow stop && flow --quiet && flow stop && lerna exec 'flow stop && flow --quiet && flow stop' --stream --concurrency 1"}
     ${'flow'}               | ${'false'} | ${"flow --quiet && lerna exec 'flow --quiet' --stream --concurrency 1"}
-    ${'flow-typed:install'} | ${'true'}  | ${'flow-typed install --verbose && flow-mono create-symlinks .flowconfig && flow-mono install-types --ignoreDeps=peer'}
+    ${'flow-typed:install'} | ${'true'}  | ${'flow-typed install --verbose && lerna-flow-typed link && lerna exec "flow-typed install --ignoreDeps=peer" --stream'}
     ${'dev'}                | ${'true'}  | ${'lerna exec "miko babel -w" --parallel --stream --since main'}
     ${'husky:pre-commit'}   | ${'true'}  | ${'miko build --since main && miko flow --since main && lint-staged'}
     ${'clean'}              | ${'true'}  | ${`lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna-flow-typed link remove && lerna clean && rm -rf ./.changelog`}

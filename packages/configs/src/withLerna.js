@@ -52,8 +52,8 @@ export default {
             config['flow-typed:install']?.command,
             'flow-typed install --verbose',
           ),
-          'flow-mono create-symlinks .flowconfig',
-          'flow-mono install-types --ignoreDeps=peer',
+          'lerna-flow-typed link',
+          'lerna exec "flow-typed install --ignoreDeps=peer" --stream',
         ].join(' && '),
     },
     build: {

@@ -9,6 +9,7 @@ import mkdirp from 'mkdirp';
 import copyDir from 'copy-dir';
 
 import rimrafSync from './rimrafSync';
+import { type packageType } from './types';
 
 export const cacheDir: $Call<typeof findCacheDir, string> = findCacheDir({
   name: '@mikojs/flow-typed',
@@ -22,30 +23,22 @@ export default async (restore: boolean) => {
   if (restore && !fs.existsSync(cacheDir())) return;
 
   await Promise.all(
-    getPackagesSync().map(
-      async ({
-        name,
-        manifestLocation,
-      }: {|
-        name: string,
-        manifestLocation: string,
-      |}) => {
-        const folders = [
-          path.resolve(manifestLocation, '../flow-typed/npm'),
-          cacheDir(name),
-        ];
+    getPackagesSync().map(async ({ name, manifestLocation }: packageType) => {
+      const folders = [
+        path.resolve(manifestLocation, '../flow-typed/npm'),
+        cacheDir(name),
+      ];
 
-        if (restore) folders.reverse();
+      if (restore) folders.reverse();
 
-        const [sourceFolder, targetFolder] = folders;
+      const [sourceFolder, targetFolder] = folders;
 
-        if (!fs.existsSync(sourceFolder)) return;
+      if (!fs.existsSync(sourceFolder)) return;
 
-        if (fs.existsSync(targetFolder)) await rimrafSync(targetFolder);
+      if (fs.existsSync(targetFolder)) await rimrafSync(targetFolder);
 
-        mkdirp.sync(targetFolder);
-        copyDir.sync(sourceFolder, targetFolder);
-      },
-    ),
+      mkdirp.sync(targetFolder);
+      copyDir.sync(sourceFolder, targetFolder);
+    }),
   );
 };

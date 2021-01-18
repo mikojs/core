@@ -6,8 +6,6 @@ import path from 'path';
 import { getPackagesSync } from '@lerna/project';
 import mkdirp from 'mkdirp';
 
-import { requireModule } from '@mikojs/utils';
-
 import { type packageType } from './types';
 
 /**
@@ -38,36 +36,40 @@ export default async (flowconfig: string) => {
   const packages = getPackagesSync();
 
   await Promise.all(
-    packages.map(async ({ manifestLocation }: packageType) => {
-      const { dependencies, devDependencies, peerDependencies } = requireModule(
+    packages.map(
+      async ({
         manifestLocation,
-      );
-      const shouldLinkPackages = [
         dependencies,
         devDependencies,
         peerDependencies,
-      ].reduce(
-        (result: $ReadOnlyArray<string>, data: ?{| [string]: string |}) => [
-          ...result,
-          ...packages.filter(({ name }: packageType) =>
-            Object.keys(data || {}).some((pkgName: string) => pkgName === name),
-          ),
-        ],
-        [],
-      );
+      }: packageType) => {
+        const shouldLinkPackages = [
+          dependencies,
+          devDependencies,
+          peerDependencies,
+        ].reduce(
+          (result: $ReadOnlyArray<string>, data: ?{| [string]: string |}) => [
+            ...result,
+            ...packages.filter(({ name }: packageType) =>
+              Object.keys(data || {}).includes(name),
+            ),
+          ],
+          [],
+        );
 
-      link(flowconfig, path.resolve(manifestLocation, '../.flowconfig'));
-      shouldLinkPackages.forEach(
-        ({
-          name,
-          manifestLocation: shouldLinkPackageManifestLocation,
-        }: packageType) => {
-          link(
-            path.dirname(shouldLinkPackageManifestLocation),
-            path.resolve(manifestLocation, '../node_modules', name),
-          );
-        },
-      );
-    }),
+        link(flowconfig, path.resolve(manifestLocation, '../.flowconfig'));
+        shouldLinkPackages.forEach(
+          ({
+            name,
+            manifestLocation: shouldLinkPackageManifestLocation,
+          }: packageType) => {
+            link(
+              path.dirname(shouldLinkPackageManifestLocation),
+              path.resolve(manifestLocation, '../node_modules', name),
+            );
+          },
+        );
+      },
+    ),
   );
 };

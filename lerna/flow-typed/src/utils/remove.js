@@ -11,8 +11,8 @@ import { type packageType } from './types';
 /** */
 export default async () => {
   await Promise.all(
-    getPackagesSync().map(async ({ manifestLocation }: packageType) => {
-      const flowconfig = path.resolve(manifestLocation, '../.flowconfig');
+    getPackagesSync().map(async ({ location }: packageType) => {
+      const flowconfig = path.resolve(location, './.flowconfig');
 
       if (
         !fs.existsSync(flowconfig) ||

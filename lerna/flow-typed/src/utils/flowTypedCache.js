@@ -23,9 +23,9 @@ export default async (restore: boolean) => {
   if (restore && !fs.existsSync(cacheDir())) return;
 
   await Promise.all(
-    getPackagesSync().map(async ({ name, manifestLocation }: packageType) => {
+    getPackagesSync().map(async ({ name, location }: packageType) => {
       const folders = [
-        path.resolve(manifestLocation, '../flow-typed/npm'),
+        path.resolve(location, './flow-typed/npm'),
         cacheDir(name),
       ];
 

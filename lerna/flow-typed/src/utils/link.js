@@ -38,14 +38,13 @@ export default async (flowconfig: string) => {
   await Promise.all(
     packages.map(
       async ({
+        location,
         rootPath,
-        manifestLocation,
         dependencies,
         devDependencies,
         peerDependencies,
       }: packageType) => {
-        link(flowconfig, path.resolve(manifestLocation, '../.flowconfig'));
-
+        link(flowconfig, path.resolve(location, './.flowconfig'));
         [dependencies, devDependencies, peerDependencies].forEach(
           (data: ?{| [string]: string |}) => {
             Object.keys(data || {}).forEach((key: string) => {
@@ -54,10 +53,8 @@ export default async (flowconfig: string) => {
               );
 
               link(
-                pkg
-                  ? path.dirname(pkg.manifestLocation)
-                  : path.resolve(rootPath, './node_modules', key),
-                path.resolve(manifestLocation, '../node_modules', key),
+                pkg?.location || path.resolve(rootPath, './node_modules', key),
+                path.resolve(location, '../node_modules', key),
               );
             });
           },

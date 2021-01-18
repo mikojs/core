@@ -1,6 +1,7 @@
 // @flow
 
 export type packageType = {|
+  rootPath: string,
   name: string,
   manifestLocation: string,
   dependencies: {|

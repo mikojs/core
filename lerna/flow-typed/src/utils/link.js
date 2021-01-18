@@ -38,35 +38,28 @@ export default async (flowconfig: string) => {
   await Promise.all(
     packages.map(
       async ({
+        rootPath,
         manifestLocation,
         dependencies,
         devDependencies,
         peerDependencies,
       }: packageType) => {
-        const shouldLinkPackages = [
-          dependencies,
-          devDependencies,
-          peerDependencies,
-        ].reduce(
-          (result: $ReadOnlyArray<string>, data: ?{| [string]: string |}) => [
-            ...result,
-            ...packages.filter(({ name }: packageType) =>
-              Object.keys(data || {}).includes(name),
-            ),
-          ],
-          [],
-        );
-
         link(flowconfig, path.resolve(manifestLocation, '../.flowconfig'));
-        shouldLinkPackages.forEach(
-          ({
-            name,
-            manifestLocation: shouldLinkPackageManifestLocation,
-          }: packageType) => {
-            link(
-              path.dirname(shouldLinkPackageManifestLocation),
-              path.resolve(manifestLocation, '../node_modules', name),
-            );
+
+        [dependencies, devDependencies, peerDependencies].forEach(
+          (data: ?{| [string]: string |}) => {
+            Object.keys(data || {}).forEach((key: string) => {
+              const pkg = packages.find(
+                ({ name }: packageType) => name === key,
+              );
+
+              link(
+                pkg
+                  ? path.dirname(pkg.manifestLocation)
+                  : path.resolve(rootPath, './node_modules', key),
+                path.resolve(manifestLocation, '../node_modules', key),
+              );
+            });
           },
         );
       },

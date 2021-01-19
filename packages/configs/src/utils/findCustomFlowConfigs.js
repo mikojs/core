@@ -12,8 +12,8 @@ import { type packageType } from './types';
  */
 export default (): string =>
   getPackagesSync()
-    .filter(({ manifestLocation }: packageType): boolean => {
-      const filePath = path.resolve(manifestLocation, '../.flowconfig');
+    .filter(({ location }: packageType): boolean => {
+      const filePath = path.resolve(location, './.flowconfig');
 
       return (
         fs.existsSync(filePath) && !fs.lstatSync(filePath).isSymbolicLink()

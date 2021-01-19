@@ -31,8 +31,14 @@ describe('link', () => {
     await link(remove);
 
     if (remove) {
-      expect(rimraf).toHaveBeenCalledTimes(1);
-      expect(rimraf.mock.calls[0][0]).toBe(path.resolve('./.flowconfig'));
+      expect(rimraf).toHaveBeenCalledTimes(3);
+      [
+        './.flowconfig',
+        './node_modules/lerna',
+        './node_modules/@mikojs/test',
+      ].forEach((filePath: string, index: number) => {
+        expect(rimraf.mock.calls[index][0]).toBe(path.resolve(filePath));
+      });
     } else {
       expect(fs.symlinkSync).toHaveBeenCalledTimes(1);
       expect(fs.symlinkSync).toHaveBeenCalledWith(

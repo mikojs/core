@@ -29,10 +29,8 @@ const link = (source: string, target: string) => {
   fs.symlinkSync(source, target);
 };
 
-/**
- * @param {string} flowconfig - the root .flowconfig
- */
-export default async (flowconfig: string) => {
+/** */
+export default async () => {
   const packages = getPackagesSync();
 
   await Promise.all(
@@ -44,7 +42,10 @@ export default async (flowconfig: string) => {
         devDependencies,
         peerDependencies,
       }: packageType) => {
-        link(flowconfig, path.resolve(location, './.flowconfig'));
+        link(
+          path.resolve(rootPath, './.flowconfig'),
+          path.resolve(location, './.flowconfig'),
+        );
         [dependencies, devDependencies, peerDependencies].forEach(
           (data: ?{| [string]: string |}) => {
             Object.keys(data || {}).forEach((key: string) => {
@@ -54,7 +55,7 @@ export default async (flowconfig: string) => {
 
               link(
                 pkg?.location || path.resolve(rootPath, './node_modules', key),
-                path.resolve(location, '../node_modules', key),
+                path.resolve(location, './node_modules', key),
               );
             });
           },

@@ -1,8 +1,6 @@
 #! /usr/bin/env node
 // @flow
 
-import path from 'path';
-
 import chalk from 'chalk';
 
 import { handleUnhandledRejection } from '@mikojs/utils';
@@ -22,8 +20,8 @@ const parseArgv = commander<
         help: () => void,
       |},
     ]
-  | ['link', 'remove' | ?string, {}]
-  | ['cache', {| restore?: boolean |}],
+  | ['link', 'remove', {}]
+  | ['cache' | 'link', {| restore?: boolean |}],
 >({
   name: 'lerna-flow-typed',
   version,
@@ -31,7 +29,6 @@ const parseArgv = commander<
   commands: {
     link: {
       description: chalk`Link {green .flowconfig} in the each package.`,
-      args: '[flowconfig]',
       commands: {
         remove: {
           description: chalk`Remove linked {green .flowconfig} in the each pacakge`,
@@ -54,13 +51,13 @@ const parseArgv = commander<
   const result = await parseArgv(process.argv);
 
   if (result.length === 3) {
-    if (result[1] === 'remove') await remove();
-    else await link(path.resolve(result[1] || '.flowconfig'));
+    await remove();
     return;
   }
 
   if (result.length === 2) {
-    await flowTypedCache(Boolean(result[1].restore));
+    if (result[0] === 'link') await link();
+    else await flowTypedCache(Boolean(result[1].restore));
     return;
   }
 

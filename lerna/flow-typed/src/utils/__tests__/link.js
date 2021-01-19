@@ -11,6 +11,7 @@ jest.mock('fs');
 
 describe('link', () => {
   beforeEach(() => {
+    // $FlowFixMe jest mock
     fs.symlinkSync.mockClear();
     rimraf.mockClear();
   });

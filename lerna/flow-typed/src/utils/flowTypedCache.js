@@ -8,8 +8,8 @@ import findCacheDir from 'find-cache-dir';
 import mkdirp from 'mkdirp';
 import copyDir from 'copy-dir';
 
-import rimrafSync from './rimrafSync';
 import { type packageType } from './types';
+import rimrafSync from './rimrafSync';
 
 export const cacheDir: $Call<typeof findCacheDir, string> = findCacheDir({
   name: '@mikojs/flow-typed',

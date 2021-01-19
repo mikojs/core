@@ -4,8 +4,6 @@ import gitBranch from 'git-branch';
 
 import { type mikoConfigsType } from '@mikojs/miko';
 
-import flowTypedCache from './utils/flowTypedCache';
-import findCustomFlowConfigs from './utils/findCustomFlowConfigs';
 import extendCommand from './utils/extendCommand';
 
 export default {
@@ -35,11 +33,11 @@ export default {
       description: 'Run `flow` with the lerna command.',
     },
     'flow-typed:save-cache': {
-      command: flowTypedCache.save,
+      command: 'lerna-flow-typed cache',
       description: 'Save `flow-typed` in the cache folder.',
     },
     'flow-typed:restore-cache': {
-      command: flowTypedCache.restore,
+      command: 'lerna-flow-typed cache --restore',
       description: 'Restore `flow-typed` from the cache folder.',
     },
     'flow-typed:install': {
@@ -54,8 +52,8 @@ export default {
             config['flow-typed:install']?.command,
             'flow-typed install --verbose',
           ),
-          'flow-mono create-symlinks .flowconfig',
-          'flow-mono install-types --ignoreDeps=peer',
+          'lerna-flow-typed link',
+          'lerna exec "flow-typed install --ignoreDeps=peer" --stream',
         ].join(' && '),
     },
     build: {
@@ -111,8 +109,8 @@ export default {
        */
       command: () =>
         [
+          'lerna-flow-typed link --remove',
           `lerna exec 'rm -rf lib flow-typed/npm' --parallel`,
-          `lerna exec 'rm -rf .flowconfig' --parallel ${findCustomFlowConfigs()}`,
           'lerna clean',
           `${extendCommand(config.clean?.command, 'rm -rf')} ./.changelog`,
         ].join(' && '),

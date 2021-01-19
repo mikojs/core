@@ -30,8 +30,8 @@ describe('flowTypedCache', () => {
     fs.existsSync.mockImplementation(
       (filePath: string) => !/__mocks__/.test(filePath),
     );
+    await flowTypedCache(restore);
 
-    expect(await flowTypedCache(restore)).toBeUndefined();
     expect(rimraf).toHaveBeenCalledTimes(1);
     expect(rimraf.mock.calls[0][0]).toBe(restore ? packageFodler : cacheFolder);
 

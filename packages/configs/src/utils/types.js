@@ -2,5 +2,5 @@
 
 export type packageType = {|
   name: string,
-  manifestLocation: string,
+  location: string,
 |};

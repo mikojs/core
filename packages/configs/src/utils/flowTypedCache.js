@@ -43,9 +43,9 @@ export default {
     mkdirSync(cacheFolder);
 
     return getPackagesSync()
-      .map(({ name, manifestLocation }: packageType) =>
+      .map(({ name, location }: packageType) =>
         copy(
-          path.resolve(manifestLocation, '../flow-typed/npm'),
+          path.resolve(location, './flow-typed/npm'),
           path.resolve(cacheFolder, name),
         ),
       )
@@ -60,10 +60,10 @@ export default {
     !fs.existsSync(cacheFolder)
       ? 'echo "no cache"'
       : getPackagesSync()
-          .map(({ name, manifestLocation }: packageType) =>
+          .map(({ name, location }: packageType) =>
             copy(
               path.resolve(cacheFolder, name),
-              path.resolve(manifestLocation, '../flow-typed/npm'),
+              path.resolve(location, './flow-typed/npm'),
             ),
           )
           .filter(Boolean)

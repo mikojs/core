@@ -15,7 +15,7 @@ test('link', async () => {
     /__mocks__/.test(filePath),
   );
 
-  expect(await link()).toBeUndefined();
+  expect(await link(false)).toBeUndefined();
   expect(fs.symlinkSync).toHaveBeenCalledTimes(1);
   expect(fs.symlinkSync).toHaveBeenCalledWith(flowconfig, flowconfig);
 });

@@ -9,7 +9,6 @@ import commander from '@mikojs/commander';
 import { version } from '../../package.json';
 
 import link from 'utils/link';
-import remove from 'utils/remove';
 import flowTypedCache from 'utils/flowTypedCache';
 
 handleUnhandledRejection();
@@ -20,8 +19,7 @@ const parseArgv = commander<
         help: () => void,
       |},
     ]
-  | ['link', 'remove', {}]
-  | ['cache' | 'link', {| restore?: boolean |}],
+  | ['cache' | 'link', {| restore?: boolean, remove?: boolean |}],
 >({
   name: 'lerna-flow-typed',
   version,
@@ -29,11 +27,12 @@ const parseArgv = commander<
   commands: {
     link: {
       description: chalk`Link {green .flowconfig} in the each package.`,
-      commands: {
-        remove: {
+      options: [
+        {
+          flags: '--remove',
           description: chalk`Remove linked {green .flowconfig} in the each pacakge`,
         },
-      },
+      ],
     },
     cache: {
       description: chalk`Store the all {green flow-typed} folders to the cache directory.`,
@@ -50,13 +49,8 @@ const parseArgv = commander<
 (async () => {
   const result = await parseArgv(process.argv);
 
-  if (result.length === 3) {
-    await remove();
-    return;
-  }
-
   if (result.length === 2) {
-    if (result[0] === 'link') await link();
+    if (result[0] === 'link') await link(Boolean(result[1].remove));
     else await flowTypedCache(Boolean(result[1].restore));
     return;
   }

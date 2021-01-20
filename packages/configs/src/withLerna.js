@@ -1,11 +1,12 @@
 // @flow
 
+import path from 'path';
+
 import gitBranch from 'git-branch';
 
+import { requireModule } from '@mikojs/utils';
 import { type mikoConfigsType } from '@mikojs/miko';
 
-import flowTypedCache from './utils/flowTypedCache';
-import findCustomFlowConfigs from './utils/findCustomFlowConfigs';
 import extendCommand from './utils/extendCommand';
 
 export default {
@@ -35,22 +36,32 @@ export default {
       description: 'Run `flow` with the lerna command.',
     },
     'flow-typed:save-cache': {
-      command: flowTypedCache.save,
+      command: 'lerna-flow-typed cache',
       description: 'Save `flow-typed` in the cache folder.',
     },
     'flow-typed:restore-cache': {
-      command: flowTypedCache.restore,
+      command: 'lerna-flow-typed cache --restore',
       description: 'Restore `flow-typed` from the cache folder.',
     },
     'flow-typed:install': {
       ...config['flow-typed:install'],
-      command: [
-        config['flow-typed:install']?.command,
-        'flow-mono create-symlinks .flowconfig',
-        'flow-mono install-types ----ignoreDeps=peer',
-      ]
-        .filter(Boolean)
-        .join(' && '),
+
+      /**
+       * @return {string} - command string
+       */
+      command: () =>
+        [
+          extendCommand(
+            config['flow-typed:install']?.command,
+            'flow-typed install --verbose',
+          ),
+          'lerna-flow-typed link',
+          `lerna exec "flow-typed install --ignoreDeps=peer --flowVersion=${
+            requireModule(
+              path.resolve(require.resolve('flow-bin'), '../package.json'),
+            ).version
+          }" --stream`,
+        ].join(' && '),
     },
     build: {
       ...config.build,
@@ -105,8 +116,8 @@ export default {
        */
       command: () =>
         [
+          'lerna-flow-typed link --remove',
           `lerna exec 'rm -rf lib flow-typed/npm' --parallel`,
-          `lerna exec 'rm -rf .flowconfig' --parallel ${findCustomFlowConfigs()}`,
           'lerna clean',
           `${extendCommand(config.clean?.command, 'rm -rf')} ./.changelog`,
         ].join(' && '),

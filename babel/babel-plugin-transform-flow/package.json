@@ -5,7 +5,7 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-plugin-transform-flow",
   "repository": "https://github.com/mikojs/core/tree/main/babel/babel-plugin-transform-flow",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/core": "^7.12.10",
@@ -16,10 +16,6 @@
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0"
-  },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
   },
   "keywords": ["babel plugin", "mikojs", "transform flow files"],
   "publishConfig": {

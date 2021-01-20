@@ -5,20 +5,16 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/router",
   "repository": "https://github.com/mikojs/core/tree/main/server/router",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "main": "./lib/index.js",
   "bin": "./lib/bin/index.js",
   "dependencies": {
     "@babel/runtime": "^7.12.5",
-    "@mikojs/server": "^1.14.0",
-    "@mikojs/utils": "^1.14.0",
+    "@mikojs/server": "^1.15.0",
+    "@mikojs/utils": "^1.15.0",
     "core-js": "^3.8.1",
     "path-to-regexp": "^6.1.0",
     "query-string": "^6.13.7"
-  },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
   },
   "keywords": ["mikojs", "router", "server"],
   "publishConfig": {

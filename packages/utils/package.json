@@ -5,16 +5,12 @@
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/utils",
   "repository": "https://github.com/mikojs/core/tree/main/packages/utils",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.12.5",
     "core-js": "^3.8.1",
     "fbjs": "^3.0.0"
-  },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
   },
   "keywords": ["mikojs", "utils"],
   "publishConfig": {

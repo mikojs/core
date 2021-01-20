@@ -1,18 +1,29 @@
 // @flow
 
-import path from 'path';
+const rootPath = process.cwd();
 
 export const getPackagesSync: JestMockFn<
   $ReadOnlyArray<void>,
-  $ReadOnlyArray<{| name: string, manifestLocation: string |}>,
+  $ReadOnlyArray<{|
+    [string]: string,
+    dependencies?: {|
+      [string]: string,
+    |},
+  |}>,
 > = jest.fn().mockReturnValue([
   {
     name: '@mikojs/core',
-    manifestLocation: path.resolve('package.json'),
+    rootPath,
+    location: rootPath,
+    dependencies: {
+      lerna: '^1.0.0',
+      '@mikojs/test': '^1.0.0',
+    },
   },
   {
     name: '@mikojs/test',
-    manifestLocation: path.resolve(__dirname, 'package.json'),
+    rootPath,
+    location: __dirname,
   },
 ]);
 

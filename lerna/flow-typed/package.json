@@ -20,10 +20,6 @@
     "mkdirp": "^1.0.4",
     "rimraf": "^3.0.2"
   },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
-  },
   "keywords": ["flow-typed", "lerna", "mikojs"],
   "publishConfig": {
     "access": "public"

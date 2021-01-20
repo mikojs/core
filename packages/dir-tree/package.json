@@ -13,10 +13,6 @@
     "d3-hierarchy": "^2.0.0",
     "directory-tree": "^2.2.5"
   },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
-  },
   "keywords": ["directory tree", "mikojs"],
   "publishConfig": {
     "access": "public"

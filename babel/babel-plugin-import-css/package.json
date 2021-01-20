@@ -17,9 +17,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
-    "@babel/traverse": "^7.12.12",
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
+    "@babel/traverse": "^7.12.12"
   },
   "keywords": [
     "babel plugin",

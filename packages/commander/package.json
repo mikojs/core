@@ -12,10 +12,6 @@
     "commander": "^6.2.1",
     "core-js": "^3.8.1"
   },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
-  },
   "keywords": ["commander", "mikojs"],
   "publishConfig": {
     "access": "public"

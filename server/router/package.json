@@ -16,10 +16,6 @@
     "path-to-regexp": "^6.1.0",
     "query-string": "^6.13.7"
   },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
-  },
   "keywords": ["mikojs", "router", "server"],
   "publishConfig": {
     "access": "public"

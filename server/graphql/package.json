@@ -22,9 +22,7 @@
     "relay-compiler": "^10.1.2"
   },
   "devDependencies": {
-    "@mikojs/commander": "^1.14.0",
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
+    "@mikojs/commander": "^1.14.0"
   },
   "keywords": ["graphql", "mikojs", "server"],
   "publishConfig": {

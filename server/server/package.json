@@ -19,10 +19,6 @@
     "get-port": "^5.1.1",
     "node-fetch": "^2.6.1"
   },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
-  },
   "keywords": ["mikojs", "server"],
   "publishConfig": {
     "access": "public"

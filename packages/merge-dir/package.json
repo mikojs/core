@@ -19,10 +19,6 @@
     "find-cache-dir": "^3.3.1",
     "output-file-sync": "^2.0.1"
   },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
-  },
   "keywords": ["merge dir", "mikojs"],
   "publishConfig": {
     "access": "public"

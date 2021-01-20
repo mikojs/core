@@ -1,7 +1,10 @@
 // @flow
 
+import path from 'path';
+
 import gitBranch from 'git-branch';
 
+import { requireModule } from '@mikojs/utils';
 import { type mikoConfigsType } from '@mikojs/miko';
 
 import extendCommand from './utils/extendCommand';
@@ -53,7 +56,11 @@ export default {
             'flow-typed install --verbose',
           ),
           'lerna-flow-typed link',
-          'lerna exec "flow-typed install --ignoreDeps=peer" --stream',
+          `lerna exec "flow-typed install --ignoreDeps=peer --flowVersion=${
+            requireModule(
+              path.resolve(require.resolve('flow-bin'), '../package.json'),
+            ).version
+          }" --stream`,
         ].join(' && '),
     },
     build: {

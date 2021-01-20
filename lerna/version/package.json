@@ -17,10 +17,6 @@
     "execa": "^5.0.0",
     "lerna-changelog": "^1.0.1"
   },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
-  },
   "keywords": ["changelog", "lerna", "mikojs", "version"],
   "publishConfig": {
     "access": "public"

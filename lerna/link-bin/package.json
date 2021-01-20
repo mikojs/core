@@ -16,10 +16,6 @@
     "@mikojs/utils": "^1.14.0",
     "core-js": "^3.8.1"
   },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
-  },
   "keywords": ["lerna", "link bin", "mikojs"],
   "publishConfig": {
     "access": "public"

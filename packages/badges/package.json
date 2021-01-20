@@ -20,10 +20,6 @@
     "output-file-sync": "^2.0.1",
     "read-pkg-up": "^7.0.1"
   },
-  "devDependencies": {
-    "flow-bin": "^0.141.0",
-    "flow-typed": "^3.2.1"
-  },
   "keywords": ["badges", "mikojs"],
   "publishConfig": {
     "access": "public"

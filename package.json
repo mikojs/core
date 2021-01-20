@@ -22,7 +22,6 @@
     "eslint": "^7.16.0",
     "eslint-watch": "^7.0.0",
     "flow-bin": "^0.141.0",
-    "flow-mono-cli": "^1.5.3",
     "flow-typed": "^3.2.1",
     "graphql": "^15.4.0",
     "husky": "^4.3.6",

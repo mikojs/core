@@ -1,5 +1,37 @@
 # CHANGELOG
 
+## 1.15.0 (2021-01-20)
+
+#### :boom: Breaking Change
+
+- `badges`, `commander`, `configs`, `dir-tree`, `eslint-config-base`, `jest`, `logger`, `merge-dir`, `miko`, `utils`, `worker`
+  - [#735](https://github.com/mikojs/core/pull/735) (@mikojs/configs) Remove flow-mono-cli, flow-typed, flow-bin ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `configs`, `miko`
+  - [#732](https://github.com/mikojs/core/pull/732) (@mikojs/lerna-flow-typed) Add new package ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#730](https://github.com/mikojs/core/pull/730) (@mikojs/lerna-link-bin) Add new package ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `configs`
+  - [#734](https://github.com/mikojs/core/pull/734) (@mikojs/lerna-flow-typed) Fix command error ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- Other
+  - [#736](https://github.com/mikojs/core/pull/736) (@mikojs/lerna-flow-typed) Remove not used packages ([@HsuTing](https://github.com/HsuTing))
+- `configs`
+  - [#733](https://github.com/mikojs/core/pull/733) (@mikojs/configs) Use lerna commands ([@HsuTing](https://github.com/HsuTing))
+- `commander`
+  - [#731](https://github.com/mikojs/core/pull/731) (@mikojs/commander) Modify type name ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.14.0 (2021-01-01)
 
 #### :boom: Breaking Change

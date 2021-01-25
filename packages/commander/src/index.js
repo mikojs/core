@@ -7,7 +7,7 @@ type commandOptionsType = {|
   description: string,
 |};
 
-type defaultOptionsType = {|
+export type defaultOptionsType = {|
   description: string,
   args?: string,
   allowUnknownOption?: boolean,

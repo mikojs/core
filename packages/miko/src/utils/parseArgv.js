@@ -10,6 +10,7 @@ export type mikoConfigsType = {|
   [string]: {|
     command: string | (() => string),
     description: string,
+    commands?: mikoConfigsType,
   |},
 |};
 
@@ -19,9 +20,7 @@ type parsedResultType = [
   $ReadOnlyArray<string> | void,
 ];
 
-const option = {
-  name: 'miko',
-  version,
+const defaultOptions = {
   description: chalk`{cyan Manage configs} and {cyan run commands} with the {green miko} worker.`,
   args: '<commands...>',
   allowUnknownOption: true,
@@ -46,22 +45,26 @@ const option = {
  * @param {mikoConfigsType} configs - miko configs
  * @param {Array} argv - command argv
  *
- * @return {Promise} - parse result
+ * @return {parsedResultType} - parsed result
  */
 export default (
-  configs: {},
+  configs: mikoConfigsType,
   argv: $ReadOnlyArray<string>,
 ): Promise<parsedResultType> => {
-  const existCommands = Object.keys(option.commands);
+  const existCommands = Object.keys(defaultOptions.commands);
 
   Object.keys(configs)
     .filter((key: string) => !existCommands.includes(key))
     .forEach((key: string) => {
-      option.commands[key] = {
+      defaultOptions.commands[key] = {
         description: chalk`{gray (custom)} ${configs[key].description}`,
         allowUnknownOption: true,
       };
     });
 
-  return commander<parsedResultType>(option)(argv);
+  return commander<parsedResultType>({
+    ...defaultOptions,
+    name: 'miko',
+    version,
+  })(argv);
 };

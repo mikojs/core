@@ -6,7 +6,7 @@ import buildWorker from '@mikojs/worker';
 
 // $FlowFixMe FIXME: Owing to utils/configsCache use pipline
 import configsCache, { type initialConfigsType } from './utils/configsCache';
-import { type mikoConfigsType as parseArgvMikoConfigsType } from './utils/parseArgv';
+import { type mikoConfigsType as parseArgvMikoConfigsType } from './utils/addCustomCommands';
 
 import typeof * as workerType from './worker';
 

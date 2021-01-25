@@ -6,7 +6,7 @@ import normalize, {
   QUOTATION_END,
 } from './normalize';
 
-import { type mikoConfigsType } from 'utils/parseArgv';
+import { type mikoConfigsType } from 'utils/addCustomCommands';
 
 /**
  * @param {mikoConfigsType} configs - miko configs

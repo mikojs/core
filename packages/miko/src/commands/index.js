@@ -7,7 +7,7 @@ import createLogger from '@mikojs/logger';
 import { type commandsType, QUOTATION_START, QUOTATION_END } from './normalize';
 import getCommands from './getCommands';
 
-import { type mikoConfigsType } from 'utils/parseArgv';
+import { type mikoConfigsType } from 'utils/addCustomCommands';
 
 type commandType = {|
   info: string,

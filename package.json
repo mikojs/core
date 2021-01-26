@@ -6,7 +6,7 @@
   "scripts": {
     "build": "make babel-base-all && miko build",
     "dev": "make babel-base-changed && miko dev",
-    "preinstall": "patch-package --reverse",
+    "preinstall": "patch-package --reverse || echo \"no patch packages\"",
     "postinstall": "patch-package",
     "install:all": "yarn install && lerna bootstrap && yarn build",
     "prod": "NODE_ENV=production make babel-base-all && miko prod"

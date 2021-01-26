@@ -1,29 +1,51 @@
+diff --git a/node_modules/flow-typed/dist/lib/codeSign.js b/node_modules/flow-typed/dist/lib/codeSign.js
+index 9745ac9..0b3be57 100644
+--- a/node_modules/flow-typed/dist/lib/codeSign.js
++++ b/node_modules/flow-typed/dist/lib/codeSign.js
+@@ -34,13 +34,7 @@ function signCode(code, version) {
+ }
+ 
+ function signCodeStream(version) {
+-  let code = '';
+-  return (0, _through.default)(function write(data) {
+-    code += data;
+-  }, function end() {
+-    this.emit('data', signCode(code, version));
+-    this.emit('close');
+-  });
++  return (code) => signCode(code, version);
+ }
+ 
+ const HASH_COMMENT_RE = /\/\/ flow-typed signature: (.*)$/;
 diff --git a/node_modules/flow-typed/dist/lib/fileUtils.js b/node_modules/flow-typed/dist/lib/fileUtils.js
-index 8d96df8..5dd1ff9 100644
+index 8d96df8..a21e8a7 100644
 --- a/node_modules/flow-typed/dist/lib/fileUtils.js
 +++ b/node_modules/flow-typed/dist/lib/fileUtils.js
-@@ -32,20 +32,26 @@ function copyDir(srcPath, destPath) {
+@@ -32,20 +32,24 @@ function copyDir(srcPath, destPath) {
  
  function copyFile(srcPath, destPath, preProcessor) {
    return new Promise((res, rej) => {
 -    const reader = _node.fs.createReadStream(srcPath);
-+    if (preProcessor) {
-+      const reader = _node.fs.createReadStream(srcPath);
- 
+-
 -    reader.on('error', rej);
-+      reader.on('error', rej);
- 
+-
 -    const writer = _node.fs.createWriteStream(destPath);
-+      const writer = _node.fs.createWriteStream(destPath);
- 
+-
 -    writer.on('error', rej);
 -    writer.on('close', res);
-+      writer.on('error', rej);
-+      writer.on('close', res);
- 
--    if (preProcessor) {
-       reader.pipe(preProcessor);
-       preProcessor.pipe(writer);
+-
+     if (preProcessor) {
+-      reader.pipe(preProcessor);
+-      preProcessor.pipe(writer);
++      const content = _node.fs.readFileSync(srcPath, 'utf-8');
++
++      _node.fs.writeFile(destPath, preProcessor(content), err => {
++        if (err) {
++          rej(err);
++        } else {
++          res();
++        }
++      });
      } else {
 -      reader.pipe(writer);
 +      _node.fs.copyFile(srcPath, destPath, err => {

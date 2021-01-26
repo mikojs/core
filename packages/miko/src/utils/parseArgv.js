@@ -5,13 +5,7 @@ import chalk from 'chalk';
 import commander from '@mikojs/commander';
 
 import { version } from '../../package.json';
-
-export type mikoConfigsType = {|
-  [string]: {|
-    command: string | (() => string),
-    description: string,
-  |},
-|};
+import addCustomCommands, { type mikoConfigsType } from './addCustomCommands';
 
 type parsedResultType = [
   'generate' | 'kill' | string,
@@ -19,9 +13,7 @@ type parsedResultType = [
   $ReadOnlyArray<string> | void,
 ];
 
-const option = {
-  name: 'miko',
-  version,
+const defaultOptions = {
   description: chalk`{cyan Manage configs} and {cyan run commands} with the {green miko} worker.`,
   args: '<commands...>',
   allowUnknownOption: true,
@@ -46,22 +38,14 @@ const option = {
  * @param {mikoConfigsType} configs - miko configs
  * @param {Array} argv - command argv
  *
- * @return {Promise} - parse result
+ * @return {parsedResultType} - parsed result
  */
 export default (
-  configs: {},
+  configs: mikoConfigsType,
   argv: $ReadOnlyArray<string>,
-): Promise<parsedResultType> => {
-  const existCommands = Object.keys(option.commands);
-
-  Object.keys(configs)
-    .filter((key: string) => !existCommands.includes(key))
-    .forEach((key: string) => {
-      option.commands[key] = {
-        description: chalk`{gray (custom)} ${configs[key].description}`,
-        allowUnknownOption: true,
-      };
-    });
-
-  return commander<parsedResultType>(option)(argv);
-};
+): Promise<parsedResultType> =>
+  commander<parsedResultType>({
+    ...addCustomCommands(defaultOptions, configs),
+    name: 'miko',
+    version,
+  })(argv);

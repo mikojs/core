@@ -1,0 +1,12 @@
+diff --git a/node_modules/flow-typed/dist/lib/node.js b/node_modules/flow-typed/dist/lib/node.js
+index 139b84b..2c49120 100644
+--- a/node_modules/flow-typed/dist/lib/node.js
++++ b/node_modules/flow-typed/dist/lib/node.js
+@@ -102,6 +102,7 @@ const fs = {
+   open: _fsExtra.default.open,
+   readdir: _fsExtra.default.readdir,
+   readFile: _fsExtra.default.readFile,
++  readFileSync: _fsExtra.default.readFileSync,
+   rename: _fsExtra.default.rename,
+   rmdir: _fsExtra.default.rmdir,
+   stat: _fsExtra.default.stat,

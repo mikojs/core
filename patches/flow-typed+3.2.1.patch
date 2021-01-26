@@ -1,8 +1,54 @@
+diff --git a/node_modules/flow-typed/dist/lib/fileUtils.js b/node_modules/flow-typed/dist/lib/fileUtils.js
+index 8d96df8..5dd1ff9 100644
+--- a/node_modules/flow-typed/dist/lib/fileUtils.js
++++ b/node_modules/flow-typed/dist/lib/fileUtils.js
+@@ -32,20 +32,26 @@ function copyDir(srcPath, destPath) {
+ 
+ function copyFile(srcPath, destPath, preProcessor) {
+   return new Promise((res, rej) => {
+-    const reader = _node.fs.createReadStream(srcPath);
++    if (preProcessor) {
++      const reader = _node.fs.createReadStream(srcPath);
+ 
+-    reader.on('error', rej);
++      reader.on('error', rej);
+ 
+-    const writer = _node.fs.createWriteStream(destPath);
++      const writer = _node.fs.createWriteStream(destPath);
+ 
+-    writer.on('error', rej);
+-    writer.on('close', res);
++      writer.on('error', rej);
++      writer.on('close', res);
+ 
+-    if (preProcessor) {
+       reader.pipe(preProcessor);
+       preProcessor.pipe(writer);
+     } else {
+-      reader.pipe(writer);
++      _node.fs.copyFile(srcPath, destPath, err => {
++        if (err) {
++          rej(err);
++        } else {
++          res();
++        }
++      });
+     }
+   });
+ }
 diff --git a/node_modules/flow-typed/dist/lib/node.js b/node_modules/flow-typed/dist/lib/node.js
-index 139b84b..2c49120 100644
+index 139b84b..69dcb7a 100644
 --- a/node_modules/flow-typed/dist/lib/node.js
 +++ b/node_modules/flow-typed/dist/lib/node.js
-@@ -102,6 +102,7 @@ const fs = {
+@@ -95,6 +95,7 @@ const fs = {
+   appendFile: _fsExtra.default.appendFile,
+   close: _fsExtra.default.close,
+   copy: _fsExtra.default.copy,
++  copyFile: _fsExtra.default.copyFile,
+   createReadStream: _fsExtra.default.createReadStream,
+   createWriteStream: _fsExtra.default.createWriteStream,
+   exists: _fsExtra.default.exists,
+@@ -102,6 +103,7 @@ const fs = {
    open: _fsExtra.default.open,
    readdir: _fsExtra.default.readdir,
    readFile: _fsExtra.default.readFile,

@@ -1,10 +1,10 @@
 // @flow
 
-import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
 import outputFileSync from 'output-file-sync';
+import dotgitignore from 'dotgitignore';
 
 import createLogger from '@mikojs/logger';
 
@@ -16,15 +16,7 @@ const logger = createLogger('@mikojs/miko:generateFiles');
  * @return {Array} - generating files
  */
 export default (): $ReadOnlyArray<string> => {
-  const gitignore = [configsCache.resolve, path.resolve]
-    .reduce((result: string, getPath: (filePath: string) => string): string => {
-      const filePath = getPath('./.gitignore');
-
-      return !result && fs.existsSync(filePath)
-        ? fs.readFileSync(filePath, 'utf-8')
-        : result;
-    }, '')
-    .replace(/^#.*$/gm, '');
+  const gitignore = dotgitignore();
 
   return configsCache
     .keys()
@@ -45,7 +37,7 @@ export default (): $ReadOnlyArray<string> => {
             ): $ReadOnlyArray<string> => {
               const filename = path.basename(argu[0]);
 
-              if (!new RegExp(filename).test(gitignore))
+              if (!gitignore.ignore(filename))
                 logger.warn(
                   chalk`{red ${filename}} should be added in {bold {gray .gitignore}}.`,
                 );

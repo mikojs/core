@@ -7,7 +7,7 @@ import gitBranch from 'git-branch';
 import { requireModule } from '@mikojs/utils';
 import { type mikoConfigsType } from '@mikojs/miko';
 
-import extendCommand from './utils/extendCommand';
+import extendCommand from './normalize/extendCommand';
 
 export default {
   /**

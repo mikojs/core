@@ -17,6 +17,7 @@
     "chalk": "^4.1.0",
     "core-js": "^3.8.1",
     "cosmiconfig": "^7.0.0",
+    "dotgitignore": "^2.1.0",
     "execa": "^5.0.0",
     "fbjs": "^3.0.0",
     "is-running": "^2.1.0",

@@ -84,7 +84,7 @@ export default async <O: {}, Req = {}, Res = {}>(
 
     return await server.run(middleware, port, () => {
       logger.success(
-        chalk`Server is running on {underline http://localhost:${port}}.`,
+        chalk`Server is running on {underline http://localhost:${port.toString()}}.`,
       );
       server.mergeDir.on('update', buildLog('update', name, logger));
       server.mergeDir.on('done', buildLog('done', name, logger));

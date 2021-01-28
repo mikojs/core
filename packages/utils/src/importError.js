@@ -1,25 +1,31 @@
 // @flow
 
+import requireModule from './requireModule';
+
+/**
+ * @param {string} packageName - package name
+ *
+ * @return {string} - error message
+ */
+const getErrorMessage = (packageName: string) =>
+  `Do not import module with \`${packageName}\`. Use \`${packageName}/lib/<module>\`.`;
+
 /**
  * @param {string} packageName - package name
  */
 const importError = (packageName: string) => {
-  throw new Error(
-    `Do not import module with \`${packageName}\`. Use \`${packageName}/lib/<module>\`.`,
-  );
+  throw new Error(getErrorMessage(packageName));
 };
 
 /**
  * @param {string} packageName - package name
- * @param {Function} requireFunc - require package function
+ * @param {string} filePath - file path
  */
-importError.test = (packageName: string, requireFunc: () => mixed) => {
+importError.test = (packageName: string, filePath: string) => {
   test(`could not import ${packageName}`, () => {
     expect(() => {
-      requireFunc();
-    }).toThrow(
-      `Do not import module with \`${packageName}\`. Use \`${packageName}/lib/<module>\`.`,
-    );
+      requireModule(filePath);
+    }).toThrow(getErrorMessage(packageName));
   });
 };
 

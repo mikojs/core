@@ -12,10 +12,9 @@ describe('handle unhandleRejection', () => {
     ExecutionEnvironment.canUseEventListeners = true;
     handleUnhandledRejection();
 
-    expect(mockAddEventListener).toHaveBeenCalled();
-
     const [[, callback]] = mockAddEventListener.mock.calls;
 
+    expect(mockAddEventListener).toHaveBeenCalled();
     expect(callback).not.toBeUndefined();
     expect(() => callback(new Error('Run command fail.'))).toThrow(
       'Run command fail.',
@@ -30,6 +29,7 @@ describe('handle unhandleRejection', () => {
     'env with isBrowser = $isBrowser',
     ({ isBrowser }: {| isBrowser: boolean |}) => {
       ExecutionEnvironment.canUseEventListeners = isBrowser;
+
       expect(handleUnhandledRejection()).toBeUndefined();
     },
   );

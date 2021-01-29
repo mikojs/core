@@ -10,16 +10,6 @@ import { type packageType } from './types';
 import rimrafSync from './rimrafSync';
 
 /**
- * @param {string} folderPath - folder path
- */
-const mkdir = (folderPath: string) => {
-  if (fs.existsSync(folderPath)) return;
-
-  mkdir(path.dirname(folderPath));
-  mkdirp.sync(folderPath);
-};
-
-/**
  * @param {string} source - source path
  * @param {string} target - target path
  * @param {boolean} remove - remove linked files or not
@@ -34,7 +24,7 @@ const link = async (source: string, target: string, remove: boolean) => {
 
   if (fs.existsSync(target)) return;
 
-  mkdir(path.dirname(target));
+  mkdirp.sync(path.dirname(target));
   fs.symlinkSync(source, target);
 };
 

@@ -4,7 +4,7 @@ import path from 'path';
 
 import dirTree, { type dirTreeNodeType } from '../index';
 
-it('dir tree', () => {
+test('dir tree', () => {
   expect(
     dirTree(path.resolve(__dirname, '..'))
       .children.map(({ data: { name } }: dirTreeNodeType) => name)

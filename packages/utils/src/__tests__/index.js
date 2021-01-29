@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import importError from '../importError';
 
-importError.test('@mikojs/utils', () => require('../index'));
+importError.test('@mikojs/utils', path.resolve(__dirname, '../index'));

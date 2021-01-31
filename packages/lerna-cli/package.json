@@ -10,6 +10,7 @@
   "bin": "./lib/bin/index.js",
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "@lerna/project": "^3.21.0",
     "@mikojs/commander": "^1.15.0",
     "@mikojs/utils": "^1.15.0",
     "core-js": "^3.8.1",

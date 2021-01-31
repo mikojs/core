@@ -61,7 +61,7 @@ describe('commands', () => {
     |}) => {
       const { info, run } = await commands(configs, key, args);
 
-      expect(await run()).not.toBeUndefined();
+      expect(await run()).toBeUndefined();
       expect(info).toEqual(
         expected
           .map((str: $ReadOnlyArray<string>) => str.join(' '))

@@ -1,7 +1,7 @@
 // @flow
 
-export default ({
-  sync: jest.fn().mockReturnValue(null),
-}: {|
-  sync: JestMockFn<$ReadOnlyArray<void>, null>,
-|});
+// $FlowFixMe FIXME: jest type error
+export default (jest.createMockFromModule('git-branch'): JestMockFn<
+  $ReadOnlyArray<void>,
+  void,
+>);

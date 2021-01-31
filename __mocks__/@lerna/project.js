@@ -1,12 +1,14 @@
 // @flow
 
+import path from 'path';
+
 const rootPath = process.cwd();
 
 export const getPackagesSync: JestMockFn<
   $ReadOnlyArray<void>,
   $ReadOnlyArray<{|
     [string]: string,
-    dependencies?: {|
+    dependencies: {|
       [string]: string,
     |},
   |}>,
@@ -23,7 +25,8 @@ export const getPackagesSync: JestMockFn<
   {
     name: '@mikojs/test',
     rootPath,
-    location: __dirname,
+    location: path.resolve('./test'),
+    dependencies: {},
   },
 ]);
 

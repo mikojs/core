@@ -4,8 +4,14 @@ type resultType = Promise<{| stdout: string |}> & {|
   cancel: JestMockFn<$ReadOnlyArray<void>, void>,
 |};
 
-// $FlowFixMe FIXME could not extend Promise
-export default (jest.fn().mockImplementation((): resultType => ({
+const execa = jest.requireActual('execa');
+const execaMock = jest.fn().mockReturnValue({
   ...Promise.resolve({ stdout: '' }),
   cancel: jest.fn(),
-})): JestMockFn<$ReadOnlyArray<void>, resultType>);
+});
+
+Object.keys(execa).forEach((key: string) => {
+  execaMock[key] = execa[key];
+});
+
+export default (execaMock: JestMockFn<$ReadOnlyArray<void>, resultType>);

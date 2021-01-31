@@ -14,6 +14,8 @@
     "@mikojs/commander": "^1.15.0",
     "@mikojs/utils": "^1.15.0",
     "core-js": "^3.8.1",
+    "execa": "^5.0.0",
+    "lerna-changelog": "^1.0.1",
     "mkdirp": "^1.0.4",
     "rimraf": "^3.0.2"
   },

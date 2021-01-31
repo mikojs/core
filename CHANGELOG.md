@@ -1,5 +1,105 @@
 # CHANGELOG
 
+## 1.15.0 (2021-01-31)
+
+#### :boom: Breaking Change
+* [#744](https://github.com/mikojs/core/pull/744) (@mikojs/lerna-flow-typed) Remove cache command ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+* [#740](https://github.com/mikojs/core/pull/740) (@mikojs/miko) Add dotgitignore ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+* [#741](https://github.com/mikojs/core/pull/741) (@mikojs/core) fix lock ([@HsuTing](https://github.com/HsuTing))
+* [#739](https://github.com/mikojs/core/pull/739) (@mikojs/core) fix flow-typed create empty file ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+* [#743](https://github.com/mikojs/core/pull/743) (@mikojs/core) Modify code style ([@HsuTing](https://github.com/HsuTing))
+* [#742](https://github.com/mikojs/core/pull/742) (@mikojs/configs) Move extendCommand to normalize ([@HsuTing](https://github.com/HsuTing))
+* [#738](https://github.com/mikojs/core/pull/738) (@mikojs/miko) Prepare sub command ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.15.0 (2021-01-31)
+
+#### :boom: Breaking Change
+* [#744](https://github.com/mikojs/core/pull/744) (@mikojs/lerna-flow-typed) Remove cache command ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+* [#740](https://github.com/mikojs/core/pull/740) (@mikojs/miko) Add dotgitignore ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+* [#741](https://github.com/mikojs/core/pull/741) (@mikojs/core) fix lock ([@HsuTing](https://github.com/HsuTing))
+* [#739](https://github.com/mikojs/core/pull/739) (@mikojs/core) fix flow-typed create empty file ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+* [#743](https://github.com/mikojs/core/pull/743) (@mikojs/core) Modify code style ([@HsuTing](https://github.com/HsuTing))
+* [#742](https://github.com/mikojs/core/pull/742) (@mikojs/configs) Move extendCommand to normalize ([@HsuTing](https://github.com/HsuTing))
+* [#738](https://github.com/mikojs/core/pull/738) (@mikojs/miko) Prepare sub command ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.15.0 (2021-01-31)
+
+#### :boom: Breaking Change
+* [#744](https://github.com/mikojs/core/pull/744) (@mikojs/lerna-flow-typed) Remove cache command ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+* [#740](https://github.com/mikojs/core/pull/740) (@mikojs/miko) Add dotgitignore ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+* [#741](https://github.com/mikojs/core/pull/741) (@mikojs/core) fix lock ([@HsuTing](https://github.com/HsuTing))
+* [#739](https://github.com/mikojs/core/pull/739) (@mikojs/core) fix flow-typed create empty file ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+* [#743](https://github.com/mikojs/core/pull/743) (@mikojs/core) Modify code style ([@HsuTing](https://github.com/HsuTing))
+* [#742](https://github.com/mikojs/core/pull/742) (@mikojs/configs) Move extendCommand to normalize ([@HsuTing](https://github.com/HsuTing))
+* [#738](https://github.com/mikojs/core/pull/738) (@mikojs/miko) Prepare sub command ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.15.0 (2021-01-31)
+
+#### :boom: Breaking Change
+* [#744](https://github.com/mikojs/core/pull/744) (@mikojs/lerna-flow-typed) Remove cache command ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+* [#740](https://github.com/mikojs/core/pull/740) (@mikojs/miko) Add dotgitignore ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+* [#741](https://github.com/mikojs/core/pull/741) (@mikojs/core) fix lock ([@HsuTing](https://github.com/HsuTing))
+* [#739](https://github.com/mikojs/core/pull/739) (@mikojs/core) fix flow-typed create empty file ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+* [#743](https://github.com/mikojs/core/pull/743) (@mikojs/core) Modify code style ([@HsuTing](https://github.com/HsuTing))
+* [#742](https://github.com/mikojs/core/pull/742) (@mikojs/configs) Move extendCommand to normalize ([@HsuTing](https://github.com/HsuTing))
+* [#738](https://github.com/mikojs/core/pull/738) (@mikojs/miko) Prepare sub command ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
+## 1.15.0 (2021-01-31)
+
+#### :boom: Breaking Change
+* [#744](https://github.com/mikojs/core/pull/744) (@mikojs/lerna-flow-typed) Remove cache command ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+* [#740](https://github.com/mikojs/core/pull/740) (@mikojs/miko) Add dotgitignore ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+* [#741](https://github.com/mikojs/core/pull/741) (@mikojs/core) fix lock ([@HsuTing](https://github.com/HsuTing))
+* [#739](https://github.com/mikojs/core/pull/739) (@mikojs/core) fix flow-typed create empty file ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+* [#743](https://github.com/mikojs/core/pull/743) (@mikojs/core) Modify code style ([@HsuTing](https://github.com/HsuTing))
+* [#742](https://github.com/mikojs/core/pull/742) (@mikojs/configs) Move extendCommand to normalize ([@HsuTing](https://github.com/HsuTing))
+* [#738](https://github.com/mikojs/core/pull/738) (@mikojs/miko) Prepare sub command ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.15.0 (2021-01-20)
 
 #### :boom: Breaking Change

@@ -1,0 +1,21 @@
+{
+  "name": "@mikojs/lerna-cli",
+  "description": "Additional lerna commands for the monorepo.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/lerna-cli",
+  "repository": "https://github.com/mikojs/core/tree/main/packages/lerna-cli",
+  "version": "1.15.0",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.12.5",
+    "@mikojs/utils": "^1.15.0",
+    "core-js": "^3.8.1",
+    "mkdirp": "^1.0.4",
+    "rimraf": "^3.0.2"
+  },
+  "keywords": ["lerna", "mikojs"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

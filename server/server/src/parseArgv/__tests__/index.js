@@ -102,7 +102,7 @@ describe('parse argv', () => {
             version: '1.0.0',
           }),
           () => {
-            throw new Error('Run server fail.');
+            throw new Error(expected);
           },
           ['node', 'server', ...command],
         ),

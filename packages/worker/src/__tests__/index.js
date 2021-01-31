@@ -96,11 +96,13 @@ describe('worker', () => {
     });
 
     test('func with error', async () => {
+      const errorMessage = 'Run function fail.';
+
       func.mockImplementation(() => {
-        throw new Error('Run function fail.');
+        throw new Error(errorMessage);
       });
 
-      await expect(worker.func()).rejects.toThrow('Run function fail.');
+      await expect(worker.func()).rejects.toThrow(errorMessage);
     });
 
     test('end', async () => {

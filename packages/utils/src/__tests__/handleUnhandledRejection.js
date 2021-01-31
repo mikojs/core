@@ -7,6 +7,7 @@ import handleUnhandledRejection from '../handleUnhandledRejection';
 describe('handle unhandleRejection', () => {
   test('default error callback', () => {
     const mockAddEventListener = jest.fn();
+    const errorMessage = 'Run command fail.';
 
     window.addEventListener = mockAddEventListener;
     ExecutionEnvironment.canUseEventListeners = true;
@@ -16,9 +17,7 @@ describe('handle unhandleRejection', () => {
 
     expect(mockAddEventListener).toHaveBeenCalled();
     expect(callback).not.toBeUndefined();
-    expect(() => callback(new Error('Run command fail.'))).toThrow(
-      'Run command fail.',
-    );
+    expect(() => callback(new Error(errorMessage))).toThrow(errorMessage);
   });
 
   test.each`

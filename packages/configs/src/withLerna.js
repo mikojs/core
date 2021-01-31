@@ -35,14 +35,6 @@ export default {
       },
       description: 'Run `flow` with the lerna command.',
     },
-    'flow-typed:save-cache': {
-      command: 'lerna-flow-typed cache',
-      description: 'Save `flow-typed` in the cache folder.',
-    },
-    'flow-typed:restore-cache': {
-      command: 'lerna-flow-typed cache --restore',
-      description: 'Restore `flow-typed` from the cache folder.',
-    },
     'flow-typed:install': {
       ...config['flow-typed:install'],
 

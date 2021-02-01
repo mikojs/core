@@ -52,7 +52,6 @@ Here are the other packages for creating a new project.
 
 This project use `lerna` to manage packages. You could use:
 
-- `install:all`: Install the all pacakges.
 - `prod`: Build the production packages.
 - `release`: Release the packages.
 - `test`: Run the testing.

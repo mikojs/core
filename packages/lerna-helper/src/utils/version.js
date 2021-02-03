@@ -15,6 +15,9 @@ export default async (nextVersion: string) => {
   ]);
   const changelogFilePath = path.resolve('CHANGELOG.md');
 
+  if (!stdout.replace('\n', ''))
+    throw new Error('Could not find anything to release');
+
   fs.writeFileSync(
     changelogFilePath,
     fs

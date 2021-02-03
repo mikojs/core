@@ -9,9 +9,12 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "@lerna/project": "^3.21.0",
     "@mikojs/utils": "^1.15.1",
     "core-js": "^3.8.1",
-    "execa": "^5.0.0"
+    "execa": "^5.0.0",
+    "mkdirp": "^1.0.4",
+    "rimraf": "^3.0.2"
   },
   "keywords": ["helper", "lerna", "mikojs"],
   "publishConfig": {

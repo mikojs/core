@@ -8,6 +8,9 @@ export const getPackagesSync: JestMockFn<
   $ReadOnlyArray<void>,
   $ReadOnlyArray<{|
     [string]: string,
+    bin: {|
+      [string]: string,
+    |},
     dependencies?: {|
       [string]: string,
     |},
@@ -17,6 +20,9 @@ export const getPackagesSync: JestMockFn<
     name: '@mikojs/core',
     rootPath,
     location: rootPath,
+    bin: {
+      core: './lib/bin/index.js',
+    },
     dependencies: {
       lerna: '^1.0.0',
       '@mikojs/test': '^1.0.0',
@@ -26,6 +32,9 @@ export const getPackagesSync: JestMockFn<
     name: '@mikojs/test',
     rootPath,
     location: path.resolve('./test'),
+    bin: {
+      test: './lib/bin/index.js',
+    },
   },
 ]);
 

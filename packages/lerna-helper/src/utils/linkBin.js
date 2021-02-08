@@ -22,8 +22,8 @@ export default (remove: boolean): Promise<void> =>
         ...result,
         ...Object.keys(bin).map((key: string) =>
           symlinkSync(
-            path.resolve(rootPath, './node_modules/.bin', key),
             path.resolve(location, bin[key]),
+            path.resolve(rootPath, './node_modules/.bin', key),
             remove,
           ),
         ),

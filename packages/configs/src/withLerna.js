@@ -47,7 +47,7 @@ export default {
             config['flow-typed:install']?.command,
             'flow-typed install --verbose',
           ),
-          'lerna-flow-typed link',
+          'lerna-helper link-flow',
           `lerna exec "flow-typed install --ignoreDeps=peer --flowVersion=${
             requireModule(
               path.resolve(require.resolve('flow-bin'), '../package.json'),
@@ -98,7 +98,7 @@ export default {
     },
     release: {
       ...config.release,
-      command: 'lerna-version',
+      command: 'lerna-helper release',
     },
     clean: {
       ...config.clean,
@@ -108,7 +108,8 @@ export default {
        */
       command: () =>
         [
-          'lerna-flow-typed link --remove',
+          'lerna-helper link-flow --remove',
+          'lerna-helper link-bin --remove',
           `lerna exec 'rm -rf lib flow-typed/npm' --parallel`,
           'lerna clean',
           `${extendCommand(config.clean?.command, 'rm -rf')} ./.changelog`,

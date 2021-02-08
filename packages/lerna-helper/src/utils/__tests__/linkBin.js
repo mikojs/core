@@ -23,12 +23,14 @@ describe('link bin', () => {
 
     if (remove) {
       expect(rimraf).toHaveBeenCalledTimes(1);
-      expect(rimraf.mock.calls[0][0]).toBe(path.resolve('./lib/bin/index.js'));
+      expect(rimraf.mock.calls[0][0]).toBe(
+        path.resolve('./node_modules/.bin/core'),
+      );
     } else {
       expect(fs.symlinkSync).toHaveBeenCalledTimes(1);
       expect(fs.symlinkSync).toHaveBeenCalledWith(
-        path.resolve('./node_modules/.bin/test'),
         path.resolve('./test/lib/bin/index.js'),
+        path.resolve('./node_modules/.bin/test'),
       );
     }
   });

@@ -7,10 +7,10 @@ describe('with lerna', () => {
     cliName                 | ci         | expected
     ${'flow'}               | ${'true'}  | ${"flow stop && flow --quiet && flow stop && lerna exec 'flow stop && flow --quiet && flow stop' --stream --concurrency 1"}
     ${'flow'}               | ${'false'} | ${"flow --quiet && lerna exec 'flow --quiet' --stream --concurrency 1"}
-    ${'flow-typed:install'} | ${'true'}  | ${'flow-typed install --verbose && lerna-flow-typed link && lerna exec "flow-typed install --ignoreDeps=peer --flowVersion=0.141.0" --stream'}
+    ${'flow-typed:install'} | ${'true'}  | ${'flow-typed install --verbose && lerna-helper link-flow && lerna exec "flow-typed install --ignoreDeps=peer --flowVersion=0.141.0" --stream'}
     ${'dev'}                | ${'true'}  | ${'lerna exec "miko babel -w" --parallel --stream --since main'}
     ${'husky:pre-commit'}   | ${'true'}  | ${'miko build --since main && miko flow --since main && lint-staged'}
-    ${'clean'}              | ${'true'}  | ${`lerna-flow-typed link --remove && lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna clean && rm -rf ./.changelog`}
+    ${'clean'}              | ${'true'}  | ${`lerna-helper link-flow --remove && lerna-helper link-bin --remove && lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna clean && rm -rf ./.changelog`}
   `(
     'run miko with cliName = $cliName',
     ({

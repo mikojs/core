@@ -22,7 +22,8 @@
     "relay-compiler": "^10.1.2"
   },
   "devDependencies": {
-    "@mikojs/commander": "^1.15.1"
+    "@mikojs/commander": "^1.15.1",
+    "node-fetch": "^2.6.1"
   },
   "keywords": ["graphql", "mikojs", "server"],
   "publishConfig": {

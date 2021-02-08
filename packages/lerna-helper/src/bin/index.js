@@ -8,6 +8,10 @@ import commander from '@mikojs/commander';
 
 import { version } from '../../package.json';
 
+import linkBin from 'utils/linkBin';
+import linkFlow from 'utils/linkFlow';
+import release from 'utils/release';
+
 handleUnhandledRejection();
 
 const parseArgv = commander<
@@ -18,7 +22,7 @@ const parseArgv = commander<
     ]
   | ['link-bin', {| remove?: boolean |}]
   | ['link-flow', {| remove?: boolean |}]
-  | ['version', string],
+  | ['release', string, {||}],
 >({
   name: 'lerna-helper',
   version,
@@ -42,7 +46,7 @@ const parseArgv = commander<
         },
       ],
     },
-    version: {
+    release: {
       description: chalk`Generate {green CHANGELOG.md} with {green lerna version}.`,
       args: '<version>',
     },
@@ -50,5 +54,18 @@ const parseArgv = commander<
 });
 
 (async () => {
-  await parseArgv(process.argv);
+  const result = await parseArgv(process.argv);
+
+  if (result.length === 3) {
+    await release(result[1]);
+    return;
+  }
+
+  if (result.length === 2) {
+    if (result[0] === 'link-flow') await linkFlow(Boolean(result[1].remove));
+    else await linkBin(Boolean(result[1].remove));
+    return;
+  }
+
+  result[0].help();
 })();

@@ -10,7 +10,7 @@ describe('with lerna', () => {
     ${'flow-typed:install'} | ${'true'}  | ${'flow-typed install --verbose && lerna-helper link-flow && lerna exec "flow-typed install --ignoreDeps=peer --flowVersion=0.141.0" --stream'}
     ${'dev'}                | ${'true'}  | ${'lerna exec "miko babel -w" --parallel --stream --since main'}
     ${'husky:pre-commit'}   | ${'true'}  | ${'miko build --since main && miko flow --since main && lint-staged'}
-    ${'clean'}              | ${'true'}  | ${`lerna-helper link-flow --remove && lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna clean && rm -rf ./.changelog`}
+    ${'clean'}              | ${'true'}  | ${`lerna-helper link-flow --remove && lerna-helper link-bin --remove && lerna exec 'rm -rf lib flow-typed/npm' --parallel && lerna clean && rm -rf ./.changelog`}
   `(
     'run miko with cliName = $cliName',
     ({

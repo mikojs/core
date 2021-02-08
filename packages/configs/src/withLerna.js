@@ -109,6 +109,7 @@ export default {
       command: () =>
         [
           'lerna-helper link-flow --remove',
+          'lerna-helper link-bin --remove',
           `lerna exec 'rm -rf lib flow-typed/npm' --parallel`,
           'lerna clean',
           `${extendCommand(config.clean?.command, 'rm -rf')} ./.changelog`,

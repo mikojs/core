@@ -19,7 +19,7 @@
       "PR: Internal :house:": ":house: Internal"
     }
   },
-  "lerna": "3.4.0",
+  "lerna": "3.22.1",
   "npmClient": "yarn",
   "npmClientArgs": [
     "--no-lockfile"
@@ -30,7 +30,6 @@
   ],
   "packages": [
     "packages/*",
-    "lerna/*",
     "babel/*",
     "server/*"
   ],

@@ -5,11 +5,11 @@ import path from 'path';
 
 import execa from 'execa';
 
-import version from '../version';
+import release from '../release';
 
 jest.mock('fs');
 
-describe('version', () => {
+describe('release', () => {
   beforeEach(() => {
     // $FlowFixMe jest mock
     fs.writeFileSync.mockClear();
@@ -29,10 +29,10 @@ describe('version', () => {
       execa.mockResolvedValue({ stdout: changelog });
 
       if (!changelog)
-        await expect(version('1.0.0')).rejects.toThrow(
+        await expect(release('1.0.0')).rejects.toThrow(
           'Could not find anything to release',
         );
-      else await version('1.0.0');
+      else await release('1.0.0');
 
       (!changelog
         ? expect(fs.writeFileSync).not

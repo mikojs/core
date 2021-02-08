@@ -23,7 +23,7 @@ define babel-build
 		--scope @mikojs/lerna-helper \
 		$(1)
 	yarn lerna exec \
-		"node ./lib/bin/index.js" \
+		"node ./lib/bin/index.js link-bin" \
 		--stream \
-		--scope @mikojs/lerna-helper link-bin
+		--scope @mikojs/lerna-helper
 endef

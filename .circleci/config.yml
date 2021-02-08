@@ -28,7 +28,7 @@ save-watchman-cache: &save-watchman-cache
 
 install: &install
   name: Install packages
-  command: yarn install && yarn build
+  command: yarn && yarn build
 
 jobs:
   basic:

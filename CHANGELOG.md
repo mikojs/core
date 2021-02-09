@@ -1,5 +1,34 @@
 # CHANGELOG
 
+## 1.16.0 (2021-02-09)
+
+#### :boom: Breaking Change
+
+- [#750](https://github.com/mikojs/core/pull/750) (@mikojs/core) Remove lerna workspace ([@HsuTing](https://github.com/HsuTing))
+
+#### :rocket: New Feature
+
+- `configs`, `lerna-helper`
+  - [#749](https://github.com/mikojs/core/pull/749) (@mikojs/configs) Use @mikojs/lerna-helper ([@HsuTing](https://github.com/HsuTing))
+- `lerna-helper`
+  - [#748](https://github.com/mikojs/core/pull/748) (@mikojs/lerna-helper) Add new package ([@HsuTing](https://github.com/HsuTing))
+
+#### :bug: Bug Fix
+
+- `lerna-helper`
+  - [#751](https://github.com/mikojs/core/pull/751) (@mikojs/lerna-helper) Fix package error ([@HsuTing](https://github.com/HsuTing))
+- Other
+  - [#747](https://github.com/mikojs/core/pull/747) (@mikojs/core) Remove lerna bootstrap ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `merge-dir`, `miko`, `utils`, `worker`
+  - [#746](https://github.com/mikojs/core/pull/746) (@mikojs/core) Modify testing ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.15.1 (2021-01-31)
 
 #### :boom: Breaking Change

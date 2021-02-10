@@ -22,7 +22,7 @@ jest.mock('@mikojs/worker', () =>
   }),
 );
 
-const root = path.resolve(__dirname, './__ignore__');
+const root = path.resolve(__dirname, './__ignore__/files');
 const expectErrorRegExp = /^[ ]*(\/\/|\*|\/\*\*) \$expectError /;
 const expectedCache = {};
 const testings = dirTree(root, {

@@ -5,7 +5,7 @@ import path from 'path';
 
 import { emptyFunction } from 'fbjs';
 
-import getRepo from './getRepo';
+import getRepoInfo from './getRepoInfo';
 import buildBadges, { type badgeType } from './buildBadges';
 
 type ctxType = {|
@@ -31,18 +31,14 @@ export default async (
   readme: string,
   { rootPath, pkg: { name, homepage, engines = {} } }: ctxType,
 ): Promise<?string> => {
-  const repo = await getRepo();
-
-  if (!repo) return null;
-
-  const { username, projectName } = repo;
+  const repoInfo = await getRepoInfo();
   const badges = buildBadges(
     [
       {
         filePath: './.circleci/config.yml',
         badgeName: 'circleci',
-        image: `https://img.shields.io/circleci/project/github/${username}/${projectName}/main.svg`,
-        link: `https://circleci.com/gh/${username}/${projectName}`,
+        image: `https://img.shields.io/circleci/project/github/${repoInfo}/main.svg`,
+        link: `https://circleci.com/gh/${repoInfo}`,
       },
       {
         filePath: './.npmignore',
@@ -58,7 +54,7 @@ export default async (
       {
         filePath: './.npmignore',
         badgeName: 'github-size',
-        image: `https://img.shields.io/github/repo-size/${username}/${projectName}.svg`,
+        image: `https://img.shields.io/github/repo-size/${repoInfo}.svg`,
 
         /**
          * @param {boolean} result - use function or not
@@ -78,7 +74,7 @@ export default async (
       {
         filePath: './LICENSE',
         badgeName: 'license',
-        image: `https://img.shields.io/github/license/${username}/${projectName}.svg`,
+        image: `https://img.shields.io/github/license/${repoInfo}.svg`,
         link: `./LICENSE`,
       },
       {
@@ -91,8 +87,8 @@ export default async (
       {
         filePath: './.git',
         badgeName: 'git-search-todo',
-        image: `https://img.shields.io/github/search/${username}/${projectName}/todo+-language:markdown?label=todo`,
-        link: `https://github.com/${username}/${projectName}/search?q=todo+-language:markdown&unscoped_q=todo+-language:markdown`,
+        image: `https://img.shields.io/github/search/${repoInfo}/todo+-language:markdown?label=todo`,
+        link: `https://github.com/${repoInfo}/search?q=todo+-language:markdown&unscoped_q=todo+-language:markdown`,
       },
     ].filter(
       ({

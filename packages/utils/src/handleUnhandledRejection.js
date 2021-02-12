@@ -10,10 +10,13 @@ const defaultErrorCallback = (error: mixed) => {
 };
 
 /**
+ * @param {boolean} isBrowser - is browser or not
  * @param {Function} callback - use to handle UnhandledRejection
  */
-export default (callback?: (error: mixed) => void = defaultErrorCallback) => {
-  if (ExecutionEnvironment.canUseEventListeners)
-    window.addEventListener('unhandledRejection', callback);
+export default (
+  isBrowser?: boolean = ExecutionEnvironment.canUseEventListeners,
+  callback?: (error: mixed) => void = defaultErrorCallback,
+) => {
+  if (isBrowser) window.addEventListener('unhandledRejection', callback);
   else process.on('unhandledRejection', callback);
 };

@@ -2,4 +2,4 @@
 
 import { handleUnhandledRejection } from '@mikojs/utils';
 
-handleUnhandledRejection();
+handleUnhandledRejection(false);

@@ -9,7 +9,7 @@ export default (declare(
   (
     { assertVersion, types: t }: nodePathType,
     { test: pattern = /\.css$/ }: {| test: RegExp |},
-  ): {} => {
+  ): $Call<typeof declare> => {
     assertVersion(7);
 
     return {

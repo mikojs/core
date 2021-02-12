@@ -27,7 +27,7 @@ export default (declare(
       verbose = true,
       ignore,
     }: optionsType,
-  ): {} => {
+  ): $Call<typeof declare> => {
     assertVersion(7);
 
     return {

@@ -11,7 +11,7 @@ export default (declare(
     options: {|
       '@mikojs/transform-flow'?: transformFLowOptions,
     |},
-  ): {} => {
+  ): $Call<typeof declare> => {
     assertVersion(7);
 
     return {

@@ -60,7 +60,7 @@ export default ([
   },
   ...['node', 'npm', 'yarn'].map((engine: string) => ({
     name: `engine-${engine}`,
-    image: `https://img.shields.io/badge/${engine}-{{ ${engine} }}-green.svg`,
+    image: `https://img.shields.io/badge/${engine}-{{ engines.${engine} }}-green.svg`,
 
     /**
      * @param {ctxType} ctx - context value

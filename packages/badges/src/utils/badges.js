@@ -1,61 +1,87 @@
 // @flow
 
-import { emptyFunction } from 'fbjs';
+import fs from 'fs';
+import path from 'path';
+
+export type ctxType = {|
+  rootPath: string,
+  engines: {|
+    [string]: string,
+  |},
+|};
 
 export type badgeType = {|
-  filePath: string,
   name: string,
   image: string,
   link?: string,
-  // TODO
-  filterFunc?: (result: boolean) => boolean,
+  skip: (ctx: ctxType) => boolean,
 |};
+
+/**
+ * @param {string} filePath - file path
+ *
+ * @return {Function} - skip function
+ */
+const fileNotExist = (filePath: string) => ({ rootPath }: ctxType) =>
+  !fs.existsSync(path.resolve(rootPath, filePath));
 
 export default ([
   {
-    filePath: './.circleci/config.yml',
     name: 'circleci',
     image: `https://img.shields.io/circleci/project/github/{{ repoInfo }}/main.svg`,
     link: `https://circleci.com/gh/{{ repoInfo }}`,
+    skip: fileNotExist('./.circleci/config.yml'),
   },
   {
-    filePath: './.npmignore',
     name: 'npm',
     image: `https://img.shields.io/npm/v/{{ name }}.svg`,
     link: `https://www.npmjs.com/package/{{ name }}`,
+    skip: fileNotExist('./.npmignore'),
   },
   {
-    filePath: './.npmignore',
     name: 'npm-size',
     image: `https://img.shields.io/bundlephobia/minzip/{{ name }}.svg`,
+    skip: fileNotExist('./.npmignore'),
   },
   {
-    filePath: './.git',
     name: 'github-size',
     image: `https://img.shields.io/github/repo-size/{{ repoInfo }}.svg`,
+
+    /**
+     * @param {ctxType} ctx - context value
+     *
+     * @return {boolean} - should skip badge or not
+     */
+    skip: ({ rootPath }: ctxType) =>
+      fs.existsSync(path.resolve(rootPath, './.npmignore')),
   },
   ...['node', 'npm', 'yarn'].map((engine: string) => ({
-    filePath: './package.json',
     name: `engine-${engine}`,
     image: `https://img.shields.io/badge/${engine}-{{ ${engine} }}-green.svg`,
-    filterFunc: emptyFunction.thatReturnsTrue,
+
+    /**
+     * @param {ctxType} ctx - context value
+     *
+     * @return {boolean} - should skip badge or not
+     */
+    skip: ({ engines }: ctxType) => !engines[engine],
   })),
   {
-    filePath: './LICENSE',
     name: 'license',
     image: `https://img.shields.io/github/license/{{ repoInfo }}.svg`,
     link: `./LICENSE`,
+    skip: fileNotExist('./LICENSE'),
   },
   {
-    filePath: './node_modules/.bin/lerna',
     name: 'lerna',
     image: 'https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg',
     link: 'https://lernajs.io',
+    skip: fileNotExist('./node_modules/.bin/lerna'),
   },
   {
-    filePath: './.git',
     name: 'git-search-todo',
     image: `https://img.shields.io/github/search/{{ repoInfo }}/todo+-language:markdown?label=todo`,
     link: `https://github.com/{{ repoInfo }}/search?q=todo+-language:markdown&unscoped_q=todo+-language:markdown`,
+    skip: fileNotExist('./.git'),
   },
 ]: $ReadOnlyArray<badgeType>);

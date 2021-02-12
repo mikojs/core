@@ -1,19 +1,15 @@
 // @flow
 
-import fs from 'fs';
-import path from 'path';
-
-import { ESLint, typeof LintResult as LintResultType } from 'eslint';
-import { hyphenate } from 'fbjs';
-
-import dirTree, { type dirTreeNodeType } from '@mikojs/dir-tree';
+import { ESLint } from 'eslint';
 
 import configs from '../index';
 
-type messageType = $ElementType<
-  $PropertyType<LintResultType, 'messages'>,
-  number,
->;
+import testings, {
+  type messageType,
+  type testingType,
+} from './__ignore__/testings';
+
+const ruleIds = [];
 
 // use to mock worker in @mikojs/miko/src/index.js
 jest.mock('@mikojs/worker', () =>
@@ -22,51 +18,21 @@ jest.mock('@mikojs/worker', () =>
   }),
 );
 
-const root = path.resolve(__dirname, './__ignore__');
-const expectErrorRegExp = /^[ ]*(\/\/|\*|\/\*\*) \$expectError /;
-const expectedCache = {};
-const testings = dirTree(root, {
-  extensions: /\.js$/,
-})
-  .leaves()
-  .map(({ data: { path: filePath, name } }: dirTreeNodeType) => [
-    hyphenate(name.replace(/.js/, '')),
-    filePath,
-    fs
-      .readFileSync(filePath, 'utf-8')
-      .split(/\n/g)
-      .map((text: string, index: number) => [index + 1, text])
-      .filter(([line, text]: [number, string]) => expectErrorRegExp.test(text))
-      .reduce(
-        (
-          result: $ReadOnlyArray<[number, string]>,
-          [line, text]: [number, string],
-        ) => [
-          ...result,
-          ...text
-            .replace(expectErrorRegExp, '')
-            .split(/, /)
-            .map((key: string) => [
-              /flowtype\/require-valid-file-annotation/.test(text)
-                ? 1
-                : line + 1,
-              key,
-            ]),
-        ],
-        [],
-      ),
-  ]);
-
-describe('eslint', () => {
-  beforeAll(async () => {
-    (
-      await new ESLint({
-        cwd: root,
+describe('eslint config base', () => {
+  test.each(testings)(
+    '%s',
+    async (
+      name: $ElementType<testingType, 0>,
+      filePath: $ElementType<testingType, 1>,
+      code: $ElementType<testingType, 2>,
+      rules: $ElementType<testingType, 3>,
+    ) => {
+      const [{ messages }] = await new ESLint({
         baseConfig: configs,
         useEslintrc: false,
-      }).lintFiles([root])
-    ).forEach(({ filePath, messages }: LintResultType) => {
-      expectedCache[filePath] = messages
+        ignore: false,
+      }).lintText(code, { filePath });
+      const expected = messages
         .filter(
           ({ ruleId }: messageType) =>
             ![
@@ -80,78 +46,36 @@ describe('eslint', () => {
             ? a.ruleId.localeCompare(b.ruleId)
             : a.line - b.line,
         );
-    });
-  });
 
-  test('check amount of the testing files', () => {
-    expect(testings.length).toBe(Object.keys(expectedCache).length);
-  });
+      expected.forEach((message: messageType, index: number) => {
+        expect(message).toEqual(expect.objectContaining(rules[index]));
 
-  test('check amount of rules', () => {
-    const expected = Object.keys(expectedCache)
-      .reduce(
-        (result: $ReadOnlyArray<string>, filePath: string) =>
-          expectedCache[filePath].reduce(
-            (subResult: $ReadOnlyArray<string>, { ruleId }: messageType) =>
-              subResult.includes(ruleId) ? subResult : [...subResult, ruleId],
-            result,
-          ),
-        [],
-      )
-      .sort();
-    const rules = Object.keys(configs?.rules || {})
-      .filter((ruleName: string): boolean => {
-        if (configs?.rules?.[ruleName] === 'warn') return false;
-
-        switch (ruleName) {
-          case 'arrow-parens':
-            return !expected.includes('flowtype/require-parameter-type');
-          case 'require-jsdoc':
-            return !expected.includes('jsdoc/require-jsdoc');
-          case 'flowtype/no-flow-fix-me-comments':
-          case 'flowtype/generic-spacing':
-          case 'no-warning-comments':
-          case 'no-invalid-this':
-          case 'babel/no-invalid-this':
-          case 'valid-jsdoc':
-            return false;
-          default:
-            return true;
-        }
-      })
-      .sort();
-
-    expect(rules).toEqual(expected);
-  });
-
-  describe.each(testings)(
-    '%s',
-    (
-      name: string,
-      filePath: string,
-      rules: $ReadOnlyArray<[number, string]>,
-    ) => {
-      let cacheIndex: number = 0;
-
-      test.each(rules)(
-        'line: %d, ruleId: %s',
-        (line: number, ruleId: string) => {
-          expect(expectedCache[filePath][cacheIndex]).toEqual(
-            expect.objectContaining({
-              line,
-              ruleId,
-            }),
-          );
-        },
-      );
-
-      test('check rules amount', () => {
-        expect(rules.length).toBe(expectedCache[filePath].length);
+        if (!ruleIds.includes(message.ruleId)) ruleIds.push(message.ruleId);
       });
-
-      afterEach(() => {
-        cacheIndex += 1;
-      });
+      expect(expected.length).toBe(rules.length);
     },
   );
+
+  test('check rules have been checked', () => {
+    expect(ruleIds.sort()).toEqual(
+      Object.keys(configs?.rules || {})
+        .filter((ruleName: string): boolean =>
+          configs?.rules?.[ruleName] === 'warn'
+            ? false
+            : {
+                'arrow-parens': !ruleIds.includes(
+                  'flowtype/require-parameter-type',
+                ),
+                'require-jsdoc': !ruleIds.includes('jsdoc/require-jsdoc'),
+                'flowtype/no-flow-fix-me-comments': false,
+                'flowtype/generic-spacing': false,
+                'no-warning-comments': false,
+                'no-invalid-this': false,
+                'babel/no-invalid-this': false,
+                'valid-jsdoc': false,
+              }[ruleName] ?? true,
+        )
+        .sort(),
+    );
+  });
 });

@@ -6,7 +6,14 @@ import babelPluginTransformFlow from '../../index';
 
 export type testingType = [
   string,
-  {},
+  {|
+    filename: string,
+    plugins:
+      | [typeof babelPluginTransformFlow]
+      | $ReadOnlyArray<[string, {| proposal: string |}]>,
+    babelrc: boolean,
+    configFile: boolean,
+  |},
   string,
   [string, string] | [],
   string | false,

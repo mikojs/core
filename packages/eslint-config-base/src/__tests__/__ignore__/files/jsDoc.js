@@ -2,6 +2,7 @@
 
 /**
  * @param {number} argu - example argu
+ *
  * @return {10} - example return
  */
 const correctFunction = (argu: string) => 10;
@@ -9,6 +10,7 @@ const correctFunction = (argu: string) => 10;
 /** $expectError jsdoc/newline-after-description
  * $expectError jsdoc/no-undefined-types
  * @param {UndefinedTypes} argu - example argu
+ *
  * @return {10} - example return
  */
 const undefinedTypes = (argu: string) => 10;
@@ -17,6 +19,7 @@ const undefinedTypes = (argu: string) => 10;
 /** $expectError jsdoc/newline-after-description
  * $expectError jsdoc/check-tag-names
  * @Param {string} argu - example argu
+ *
  * @return {10} - example return
  */
 const noParams = (argu: string) => 10;
@@ -43,6 +46,7 @@ const checkParamNames = (argu: string) => {};
 /** $expectError jsdoc/newline-after-description
  * $expectError jsdoc/check-types
  * @param {Number} argu - example argu
+ *
  * @return {10} - example return
  */
 const checkTypes = (argu: string) => 10;
@@ -51,12 +55,14 @@ const checkTypes = (argu: string) => 10;
 /** $expectError jsdoc/newline-after-description
  * $expectError jsdoc/check-param-names, jsdoc/require-param-description, jsdoc/require-param-name, jsdoc/require-param-type
  * @param
+ *
  * @return {10} - example return
  */
 const requireParam = (argu: string) => 10;
 
 /**
  * @param {number} argu - example argu
+ *
  * $expectError jsdoc/require-returns-description, jsdoc/require-returns-type
  * @return
  */

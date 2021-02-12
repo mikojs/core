@@ -1,5 +1,5 @@
 [ignore]
-<PROJECT_ROOT>/src/__tests__/__ignore__
+<PROJECT_ROOT>/src/__tests__/__ignore__/files
 
 [include]
 

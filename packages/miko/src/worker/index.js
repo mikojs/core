@@ -22,8 +22,7 @@ export const addTracking = (
   checkingTimer(cache, 0);
 };
 
-/**
- */
+/** */
 export const killAllEvents = async () => {
   await cache.kill();
 };

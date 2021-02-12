@@ -7,7 +7,14 @@ import dirTree, { type dirTreeNodeType } from '@mikojs/dir-tree';
 
 import { hyphenate } from 'fbjs';
 
-export type testingType = [string, string, $ReadOnlyArray<[number, string]>];
+export type testingType = [
+  string,
+  string,
+  $ReadOnlyArray<{
+    ruleId: string,
+    line: number,
+  }>,
+];
 
 const expectErrorRegExp = /^[ ]*(\/\/|\*|\/\*\*) \$expectError /;
 
@@ -30,7 +37,10 @@ export default (dirTree(path.resolve(__dirname, './files'), {
                 ...text
                   .replace(expectErrorRegExp, '')
                   .split(/, /)
-                  .map((key: string) => [index === 0 ? 1 : index + 2, key]),
+                  .map((ruleId: string) => ({
+                    ruleId,
+                    line: index === 0 ? 1 : index + 2,
+                  })),
               ],
         [],
       ),

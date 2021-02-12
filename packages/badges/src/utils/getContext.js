@@ -39,9 +39,10 @@ const getRepoInfo = async (
 const getPkg = async (
   cwd: string,
 ): Promise<$Diff<ctxType, {| repoInfo: mixed |}>> => {
-  const { path: pkgPath, packageJson: pkg } = await readPkgUp({
-    cwd,
-  });
+  const { path: pkgPath, packageJson: pkg } =
+    (await readPkgUp({
+      cwd,
+    })) || {};
 
   if (!pkgPath) throw new Error('Could not find the root path.');
 

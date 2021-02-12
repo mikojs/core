@@ -4,9 +4,10 @@ import { ESLint } from 'eslint';
 
 import configs from '../index';
 
-import testings, { type testingType } from './__ignore__/testings';
-
-type messageType = {| ruleId: string |};
+import testings, {
+  type messageType,
+  type testingType,
+} from './__ignore__/testings';
 
 const ruleIds = [];
 

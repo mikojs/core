@@ -8,6 +8,8 @@ import testings, { type testingType } from './__ignore__/testings';
 
 type messageType = {| ruleId: string |};
 
+const ruleIds = [];
+
 // use to mock worker in @mikojs/miko/src/index.js
 jest.mock('@mikojs/worker', () =>
   jest.fn().mockResolvedValue({
@@ -29,8 +31,7 @@ describe('eslint config base', () => {
         useEslintrc: false,
         ignore: false,
       }).lintText(code, { filePath });
-
-      messages
+      const expected = messages
         .filter(
           ({ ruleId }: messageType) =>
             ![
@@ -43,10 +44,37 @@ describe('eslint config base', () => {
           a.line === b.line
             ? a.ruleId.localeCompare(b.ruleId)
             : a.line - b.line,
-        )
-        .forEach((message: messageType, index: number) => {
-          expect(message).toEqual(expect.objectContaining(rules[index]));
-        });
+        );
+
+      expected.forEach((message: messageType, index: number) => {
+        expect(message).toEqual(expect.objectContaining(rules[index]));
+
+        if (!ruleIds.includes(message.ruleId)) ruleIds.push(message.ruleId);
+      });
+      expect(expected.length).toBe(rules.length);
     },
   );
+
+  test('check rules have been checked', () => {
+    expect(ruleIds.sort()).toEqual(
+      Object.keys(configs?.rules || {})
+        .filter((ruleName: string): boolean =>
+          configs?.rules?.[ruleName] === 'warn'
+            ? false
+            : {
+                'arrow-parens': !ruleIds.includes(
+                  'flowtype/require-parameter-type',
+                ),
+                'require-jsdoc': !ruleIds.includes('jsdoc/require-jsdoc'),
+                'flowtype/no-flow-fix-me-comments': false,
+                'flowtype/generic-spacing': false,
+                'no-warning-comments': false,
+                'no-invalid-this': false,
+                'babel/no-invalid-this': false,
+                'valid-jsdoc': false,
+              }[ruleName] ?? true,
+        )
+        .sort(),
+    );
+  });
 });

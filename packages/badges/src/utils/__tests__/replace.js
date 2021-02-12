@@ -2,8 +2,6 @@
 
 import fs from 'fs';
 
-import execa from 'execa';
-
 import replace from '../replace';
 
 import testings, { type testingType } from './__ignore__/testings';
@@ -36,9 +34,6 @@ describe('replace', () => {
       fsExist: $ElementType<testingType, 1>,
       expected: $ElementType<testingType, 2>,
     ) => {
-      execa.mockResolvedValue({
-        stdout: 'origin\tgit@github.com:mikojs/core.git (fetch)',
-      });
       // $FlowFixMe jest mock
       fs.existsSync.mockReturnValue(fsExist);
 

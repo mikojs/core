@@ -16,7 +16,15 @@ type configType = {
     browser: true,
   |},
   settings?: {
-    [string]: {},
+    [string]: {|
+      'babel-module'?: {|
+        root: $ReadOnlyArray<string>,
+        cwd: 'packagejson',
+      |},
+      tagNamePreference?: {|
+        returns: 'return',
+      |},
+    |},
   },
   rules?: {
     [string]:

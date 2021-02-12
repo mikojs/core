@@ -2,13 +2,15 @@
 
 /**
  * @param {string} argu - any
- * @return {'value'} - value
+ *
+ * @return {string} - value
  */
 export const correct = (argu: string) => 'value';
 
 /**
  * @param {string} argu - any
- * @return {'test'} - value
+ *
+ * @return {string} - value
  */
 const correctNotDirectReturn = (argu: string): string => {
   const a = 'test';
@@ -18,7 +20,8 @@ const correctNotDirectReturn = (argu: string): string => {
 
 /**
  * @param {string} argu - any
- * @return {'value'} - value
+ *
+ * @return {string} - value
  */
 // $expectError arrow-body-style
 const shouldDirectReturn = (argu: string): string => {

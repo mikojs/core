@@ -2,21 +2,27 @@
 
 import badges, { type ctxType, type badgeType } from './badges';
 
+const START_COMMENT = '<!-- badges.start -->';
+const END_COMMENT = '<!-- badges.end -->';
+
 /**
+ * @param {string} readme - readme string
  * @param {ctxType} ctx - context value
  *
  * @return {string} - badges string
  */
-export default (ctx: ctxType): string => {
+export default (readme: string, ctx: ctxType): string => {
   const usedBadges = badges.filter(({ skip }: badgeType) => !skip(ctx));
 
-  return `${usedBadges
-    .map(({ name, link }: badgeType) =>
-      !link
-        ? `![${name}][${name}-image]`
-        : `[![${name}][${name}-image]][${name}-link]`,
-    )
-    .join(' ')}
+  return readme.replace(
+    new RegExp(`${START_COMMENT}(.|\n)*${END_COMMENT}`, 'g'),
+    `${START_COMMENT}${usedBadges
+      .map(({ name, link }: badgeType) =>
+        !link
+          ? `![${name}][${name}-image]`
+          : `[![${name}][${name}-image]][${name}-link]`,
+      )
+      .join(' ')}
 
 ${usedBadges
   .map(
@@ -25,5 +31,6 @@ ${usedBadges
   )
   .join('\n')}
 
-`;
+${END_COMMENT}`,
+  );
 };

@@ -4,8 +4,11 @@ import fs from 'fs';
 import path from 'path';
 
 export type ctxType = {|
+  repoInfo: string,
   rootPath: string,
-  engines: {|
+  name: string,
+  homepage: string,
+  engines?: {|
     [string]: string,
   |},
 |};
@@ -64,7 +67,7 @@ export default ([
      *
      * @return {boolean} - should skip badge or not
      */
-    skip: ({ engines }: ctxType) => !engines[engine],
+    skip: ({ engines }: ctxType) => !engines?.[engine],
   })),
   {
     name: 'license',

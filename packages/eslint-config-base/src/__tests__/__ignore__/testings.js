@@ -10,6 +10,7 @@ import { hyphenate } from 'fbjs';
 export type testingType = [
   string,
   string,
+  string,
   $ReadOnlyArray<{
     ruleId: string,
     line: number,
@@ -27,6 +28,7 @@ export default (dirTree(path.resolve(__dirname, './files'), {
 
     return [
       hyphenate(name.replace(/.js/, '')),
+      filePath,
       code,
       code.split(/\n/g).reduce(
         (result: $ElementType<testingType, 2>, text: string, index: number) =>

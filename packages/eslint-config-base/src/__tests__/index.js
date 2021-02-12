@@ -8,18 +8,27 @@ import testings, { type testingType } from './__ignore__/testings';
 
 type messageType = {| ruleId: string |};
 
+// use to mock worker in @mikojs/miko/src/index.js
+jest.mock('@mikojs/worker', () =>
+  jest.fn().mockResolvedValue({
+    addTracking: jest.fn(),
+  }),
+);
+
 describe('eslint config base', () => {
   test.each(testings)(
     '%s',
     async (
       name: $ElementType<testingType, 0>,
-      code: $ElementType<testingType, 1>,
-      rules: $ElementType<testingType, 2>,
+      filePath: $ElementType<testingType, 1>,
+      code: $ElementType<testingType, 2>,
+      rules: $ElementType<testingType, 3>,
     ) => {
       const [{ messages }] = await new ESLint({
         baseConfig: configs,
         useEslintrc: false,
-      }).lintText(code);
+        ignore: false,
+      }).lintText(code, { filePath });
 
       messages
         .filter(
@@ -29,6 +38,11 @@ describe('eslint config base', () => {
               'no-warning-comments',
               'prettier/prettier',
             ].includes(ruleId),
+        )
+        .sort((a: messageType, b: messageType) =>
+          a.line === b.line
+            ? a.ruleId.localeCompare(b.ruleId)
+            : a.line - b.line,
         )
         .forEach((message: messageType, index: number) => {
           expect(message).toEqual(expect.objectContaining(rules[index]));

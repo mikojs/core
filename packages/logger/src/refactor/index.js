@@ -53,5 +53,5 @@ export default (name: string): loggerType => ({
   info: buildLog(name, 'info'),
   warn: buildLog(name, 'warn'),
   log: buildLog(name, 'log'),
-  // debug
+  debug: buildLog(name, 'debug'),
 });

@@ -12,7 +12,8 @@ type colorsType = {|
 type messageType = string | number | {} | $ReadOnlyArray<messageType>;
 
 export type getMessagesArguType = {|
-  ...$Diff<messagePropsType, {| color: mixed, message: mixed |}>,
+  name: $PropertyType<messagePropsType, 'name'>,
+  event: $PropertyType<messagePropsType, 'event'> | 'debug',
   messages: $ReadOnlyArray<messageType>,
 |};
 
@@ -36,16 +37,20 @@ export default (): getMessagesType => {
           Math.random() * 16777215,
         ).toString(16)}`;
 
-      return messages.map((message: messageType) => ({
-        key: uuid(),
-        name,
-        event,
-        color: colorsRef.current[name],
-        message:
-          typeof message === 'string'
-            ? message
-            : JSON.stringify(message, null, 2),
-      }));
+      return event === 'debug' &&
+        process.env.DEBUG &&
+        !new RegExp(process.env.DEBUG.replace(/\*/g, '.*')).test(name)
+        ? []
+        : messages.map((message: messageType) => ({
+            key: uuid(),
+            name: event === 'debug' ? name : name.replace(/:.*$/, ''),
+            event: event === 'debug' ? 'log' : event,
+            color: colorsRef.current[name],
+            message:
+              typeof message === 'string'
+                ? message
+                : JSON.stringify(message, null, 2),
+          }));
     },
     [],
   );

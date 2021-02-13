@@ -2,15 +2,21 @@
 
 import React, { type AbstractComponent as AbstractComponentType } from 'react';
 import { Box, Text } from 'ink';
+import Spinner from 'ink-spinner';
 
 export type propsType = {|
   name: string,
   color: string,
-  event: 'success' | 'error' | 'info' | 'warn' | 'log',
+  event: 'loading' | 'success' | 'error' | 'info' | 'warn' | 'log',
   message: string,
 |};
 
 const symbols = {
+  loading: (
+    <>
+      <Spinner type="dots" />{' '}
+    </>
+  ),
   success: <Text color="green">&#10003; </Text>,
   error: <Text color="red">&#10008; </Text>,
   info: <Text color="blue">&#8560; </Text>,

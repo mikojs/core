@@ -1,6 +1,7 @@
 // @flow
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { v4 as uuid } from 'uuid';
 
 import { type propsType as messagePropsType } from '../Message';
 
@@ -13,7 +14,7 @@ export type messagesType = {|
 
 export type messagesStateType = $ReadOnlyArray<{|
   ...messagePropsType,
-  key: number,
+  key: string,
 |}>;
 
 /**
@@ -28,22 +29,49 @@ export default ({
 }: messagesType): messagesStateType => {
   const colors = useColors(name);
   const [messages, setMessages] = useState<messagesStateType>([]);
+  const [loadingMessages, setLoadingMessages] = useState<messagesStateType>([]);
 
   useEffect(() => {
-    setMessages([
-      ...messages,
-      ...originalMessages.map((message: messagePropsType, index: number) => ({
-        key: messages.length + index,
-        name,
-        event,
-        color: colors[name],
-        message:
-          typeof message === 'string'
-            ? message
-            : JSON.stringify(message, null, 2),
-      })),
-    ]);
+    switch (event) {
+      case 'start':
+        setLoadingMessages([
+          ...loadingMessages.filter(
+            (loadingMessage: $ElementType<messagesStateType, number>) =>
+              loadingMessage.name === name,
+          ),
+          ...originalMessages.map((message: messagePropsType) => ({
+            key: uuid(),
+            name,
+            event,
+            color: colors[name],
+            message:
+              typeof message === 'string'
+                ? message
+                : JSON.stringify(message, null, 2),
+          })),
+        ]);
+        break;
+
+      default:
+        setMessages([
+          ...messages,
+          ...originalMessages.map((message: messagePropsType) => ({
+            key: uuid(),
+            name,
+            event,
+            color: colors[name],
+            message:
+              typeof message === 'string'
+                ? message
+                : JSON.stringify(message, null, 2),
+          })),
+        ]);
+        break;
+    }
   }, [name, event, originalMessages]);
 
-  return messages;
+  return useMemo(() => [...messages, ...loadingMessages], [
+    messages,
+    loadingMessages,
+  ]);
 };

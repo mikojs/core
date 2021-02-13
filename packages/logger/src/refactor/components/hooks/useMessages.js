@@ -7,7 +7,10 @@ import useGetMessages, {
   type getMessagesReturnType,
 } from './useGetMessages';
 
-export type messagesArguType = getMessagesArguType;
+export type messagesArguType = {|
+  ...getMessagesArguType,
+  event: $PropertyType<getMessagesArguType, 'event'> | 'stop',
+|};
 export type messagesReturnType = getMessagesReturnType;
 
 /**
@@ -15,7 +18,11 @@ export type messagesReturnType = getMessagesReturnType;
  *
  * @return {messagesReturnType} - messages cache
  */
-export default (argu: messagesArguType): messagesReturnType => {
+export default ({
+  name,
+  event,
+  ...argu
+}: messagesArguType): messagesReturnType => {
   const getMessages = useGetMessages();
   const [messages, setMessages] = useState<messagesReturnType>([]);
   const [loadingMessages, setLoadingMessages] = useState<messagesReturnType>(
@@ -23,18 +30,40 @@ export default (argu: messagesArguType): messagesReturnType => {
   );
 
   useEffect(() => {
-    const { name, event } = argu;
-
-    if (event === 'start')
-      setLoadingMessages([
-        ...loadingMessages.filter(
+    const filteredLoadingMessages = ![
+      'start',
+      'stop',
+      'success',
+      'error',
+    ].includes(event)
+      ? []
+      : loadingMessages.filter(
           (message: $ElementType<messagesReturnType, number>) =>
             name === message.name,
-        ),
-        ...getMessages(argu),
-      ]);
-    else setMessages([...messages, ...getMessages(argu)]);
-  }, [argu]);
+        );
+    const newMessages =
+      event === 'stop' ? [] : getMessages({ ...argu, name, event });
+
+    switch (event) {
+      case 'start':
+        setLoadingMessages([...filteredLoadingMessages, ...newMessages]);
+        break;
+
+      case 'stop':
+        setLoadingMessages(filteredLoadingMessages);
+        break;
+
+      case 'success':
+      case 'error':
+        setLoadingMessages(filteredLoadingMessages);
+        setMessages([...messages, ...newMessages]);
+        break;
+
+      default:
+        setMessages([...messages, ...newMessages]);
+        break;
+    }
+  }, [name, event, argu]);
 
   return useMemo(() => [...messages, ...loadingMessages], [
     messages,

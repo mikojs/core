@@ -47,7 +47,7 @@ const buildLog = (name: string, event: eventType) => (
  */
 export default (name: string): loggerType => ({
   start: buildLog(name, 'start'),
-  // stop
+  stop: buildLog(name, 'stop'),
   success: buildLog(name, 'success'),
   error: buildLog(name, 'error'),
   info: buildLog(name, 'info'),

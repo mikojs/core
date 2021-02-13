@@ -11,12 +11,12 @@ type colorsType = {|
 
 type messageType = string | number | {} | $ReadOnlyArray<messageType>;
 
-type getMessagesArguType = {|
+export type getMessagesArguType = {|
   ...$Diff<messagePropsType, {| color: mixed, message: mixed |}>,
   messages: $ReadOnlyArray<messageType>,
 |};
 
-type getMessagesReturnType = $ReadOnlyArray<{|
+export type getMessagesReturnType = $ReadOnlyArray<{|
   ...messagePropsType,
   key: string,
 |}>;

@@ -11,7 +11,7 @@ import useMessages, {
   type messagesReturnType,
 } from './hooks/useMessages';
 
-type propsType = messagesArguType;
+export type propsType = messagesArguType;
 
 /** @react logger */
 const Logger = (props: propsType): NodeType => {

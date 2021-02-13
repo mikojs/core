@@ -6,12 +6,12 @@ import { type propsType as messagePropsType } from '../Message';
 
 import useColors from './useColors';
 
-type messagesType = {|
+export type messagesType = {|
   ...$Diff<messagePropsType, {| color: mixed, message: mixed |}>,
   messages: $ReadOnlyArray<messagePropsType>,
 |};
 
-type messagesStateType = $ReadOnlyArray<{|
+export type messagesStateType = $ReadOnlyArray<{|
   ...messagePropsType,
   key: number,
 |}>;

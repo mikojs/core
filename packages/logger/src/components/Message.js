@@ -6,13 +6,13 @@ import Spinner from 'ink-spinner';
 
 export type propsType = {|
   name: string,
-  event: 'loading' | 'success' | 'error' | 'info' | 'warn' | 'log',
+  event: 'start' | 'success' | 'error' | 'info' | 'warn' | 'log',
   color: string,
   message: string,
 |};
 
 const symbols = {
-  loading: <Spinner type="dots" />,
+  start: <Spinner type="dots" />,
   success: <Text color="green">&#10003;</Text>,
   error: <Text color="red">&#10008;</Text>,
   info: <Text color="blue">&#8560;</Text>,

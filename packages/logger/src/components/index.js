@@ -27,7 +27,7 @@ const Logger = ({ loading, messages }: propsType) =>
       ...loading[name],
       id: name,
       name,
-      event: 'loading',
+      event: 'start',
     })),
   ].map(({ id, ...props }: messageType) => <Message {...props} key={id} />);
 

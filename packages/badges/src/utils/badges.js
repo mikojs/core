@@ -31,24 +31,25 @@ const fileNotExist = (filePath: string) => ({ rootPath }: ctxType) =>
 export default ([
   {
     name: 'circleci',
-    image: `https://img.shields.io/circleci/project/github/{{ repoInfo }}/main.svg`,
-    link: `https://circleci.com/gh/{{ repoInfo }}`,
+    image:
+      'https://img.shields.io/circleci/project/github/{{ repoInfo }}/main.svg',
+    link: 'https://circleci.com/gh/{{ repoInfo }}',
     skip: fileNotExist('./.circleci/config.yml'),
   },
   {
     name: 'npm',
-    image: `https://img.shields.io/npm/v/{{ name }}.svg`,
-    link: `https://www.npmjs.com/package/{{ name }}`,
+    image: 'https://img.shields.io/npm/v/{{ name }}.svg',
+    link: 'https://www.npmjs.com/package/{{ name }}',
     skip: fileNotExist('./.npmignore'),
   },
   {
     name: 'npm-size',
-    image: `https://img.shields.io/bundlephobia/minzip/{{ name }}.svg`,
+    image: 'https://img.shields.io/bundlephobia/minzip/{{ name }}.svg',
     skip: fileNotExist('./.npmignore'),
   },
   {
     name: 'github-size',
-    image: `https://img.shields.io/github/repo-size/{{ repoInfo }}.svg`,
+    image: 'https://img.shields.io/github/repo-size/{{ repoInfo }}.svg',
 
     /**
      * @param {ctxType} ctx - context value
@@ -71,8 +72,8 @@ export default ([
   })),
   {
     name: 'license',
-    image: `https://img.shields.io/github/license/{{ repoInfo }}.svg`,
-    link: `./LICENSE`,
+    image: 'https://img.shields.io/github/license/{{ repoInfo }}.svg',
+    link: './LICENSE',
     skip: fileNotExist('./LICENSE'),
   },
   {
@@ -83,8 +84,10 @@ export default ([
   },
   {
     name: 'git-search-todo',
-    image: `https://img.shields.io/github/search/{{ repoInfo }}/todo+-language:markdown?label=todo`,
-    link: `https://github.com/{{ repoInfo }}/search?q=todo+-language:markdown&unscoped_q=todo+-language:markdown`,
+    image:
+      'https://img.shields.io/github/search/{{ repoInfo }}/todo+-language:markdown?label=todo',
+    link:
+      'https://github.com/{{ repoInfo }}/search?q=todo+-language:markdown&unscoped_q=todo+-language:markdown',
     skip: fileNotExist('./.git'),
   },
 ]: $ReadOnlyArray<badgeType>);

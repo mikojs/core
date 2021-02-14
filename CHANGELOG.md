@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 1.17.0 (2021-02-14)
+
+#### :boom: Breaking Change
+
+- `configs`, `logger`, `miko`
+  - [#755](https://github.com/mikojs/core/pull/755) (@mikojs/logger) Simplify logger code ([@HsuTing](https://github.com/HsuTing))
+- `configs`, `merge-dir`
+  - [#756](https://github.com/mikojs/core/pull/756) (@mikojs/core) Remove not used packages ([@HsuTing](https://github.com/HsuTing))
+
+#### :house: Internal
+
+- `badges`
+  - [#754](https://github.com/mikojs/core/pull/754) (@mikojs/badges) Modify code style ([@HsuTing](https://github.com/HsuTing))
+  - [#753](https://github.com/mikojs/core/pull/753) (@mikojs/badges) Modify code style ([@HsuTing](https://github.com/HsuTing))
+- `eslint-config-base`, `jest`, `miko`, `utils`
+  - [#752](https://github.com/mikojs/core/pull/752) (@mikojs/eslint-config-base) Modify code style ([@HsuTing](https://github.com/HsuTing))
+
+#### Committers: 1
+
+- Ting-Hsiang Hsu ([@HsuTing](https://github.com/HsuTing))
+
 ## 1.16.0 (2021-02-09)
 
 #### :boom: Breaking Change

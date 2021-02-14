@@ -24,6 +24,8 @@ export type getMessagesReturnType = $ReadOnlyArray<{|
 
 type getMessagesType = (argu: getMessagesArguType) => getMessagesReturnType;
 
+const COLORS = ['cyan', 'magenta', 'blue', 'yellow', 'green', 'red'];
+
 /**
  * @return {getMessagesType} - get messages function
  */
@@ -33,9 +35,8 @@ export default (): getMessagesType => {
   return useCallback(
     ({ name, event, messages }: getMessagesArguType): getMessagesReturnType => {
       if (!colorsRef.current[name])
-        colorsRef.current[name] = `#${Math.floor(
-          Math.random() * 16777215,
-        ).toString(16)}`;
+        colorsRef.current[name] =
+          COLORS[Object.keys(colorsRef.current).length % COLORS.length];
 
       return event === 'debug' &&
         process.env.DEBUG &&

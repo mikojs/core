@@ -30,8 +30,7 @@
   ],
   "packages": [
     "packages/*",
-    "babel/*",
-    "server/*"
+    "babel/*"
   ],
   "useWorkspaces": true
 }

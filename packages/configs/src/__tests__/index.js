@@ -5,7 +5,6 @@ import withReact from '../withReact';
 import withRelay from '../withRelay';
 import withCss from '../withCss';
 import withLess from '../withLess';
-import withServer from '../withServer';
 import withLerna from '../withLerna';
 
 const configs = {
@@ -14,7 +13,6 @@ const configs = {
   withRelay,
   withCss,
   withLess,
-  withServer,
   withLerna,
 };
 

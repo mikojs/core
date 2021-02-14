@@ -37,6 +37,7 @@ const buildLog = (name: string, event: eventType) => (
   else
     cache.instance = cache.render(
       <Logger name={name} event={event} messages={messages} />,
+      { patchConsole: false },
     );
 };
 

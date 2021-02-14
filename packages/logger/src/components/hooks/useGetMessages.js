@@ -39,8 +39,10 @@ export default (): getMessagesType => {
           COLORS[Object.keys(colorsRef.current).length % COLORS.length];
 
       return event === 'debug' &&
-        process.env.DEBUG &&
-        !new RegExp(process.env.DEBUG.replace(/\*/g, '.*')).test(name)
+        !(
+          process.env.DEBUG &&
+          new RegExp(process.env.DEBUG.replace(/\*/g, '.*')).test(name)
+        )
         ? []
         : messages.map((message: messageType) => ({
             key: uuid(),

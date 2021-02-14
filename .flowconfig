@@ -1,7 +1,6 @@
 [ignore]
 <PROJECT_ROOT>/packages/.*
 <PROJECT_ROOT>/babel/.*
-<PROJECT_ROOT>/server/.*
 
 [include]
 
@@ -17,8 +16,6 @@ module.system.node.root_relative_dirname=./src
 module.system.node.root_relative_dirname=../../packages/worker/src
 module.system.node.root_relative_dirname=../../packages/logger/src
 module.system.node.root_relative_dirname=../../packages/miko/src
-module.system.node.root_relative_dirname=../../packages/merge-dir/src
-module.system.node.root_relative_dirname=../../server/server/src
 
 [strict]
 

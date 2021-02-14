@@ -116,8 +116,6 @@ module.exports = (() => {
     /* eslint-disable import/no-extraneous-dependencies */
     require('@mikojs/configs'),
     require('@mikojs/configs/lib/withRelay'),
-    require('@mikojs/configs/lib/withLess'),
-    require('@mikojs/configs/lib/withServer'),
     require('@mikojs/configs/lib/withLerna'),
     /* eslint-enable import/no-extraneous-dependencies */
     {

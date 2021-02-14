@@ -15,7 +15,7 @@ describe('logger', () => {
     ${'logger:*'}
   `(
     'could log message with process.env.DEBUG = $debug',
-    ({ debug }: {| debug?: string |}) => {
+    async ({ debug }: {| debug?: string |}) => {
       const logger = createLogger('logger:debug');
 
       if (debug) process.env.DEBUG = debug;
@@ -28,9 +28,10 @@ describe('logger', () => {
       logger.log('log');
       logger.log(1);
       logger.success('success');
+      logger.stop();
       logger.error('error');
 
-      const message = testingLogger.getInstance()?.lastFrame();
+      const message = (await testingLogger.getInstance())?.lastFrame();
 
       expect(message).toMatch(/.*logger .*info/);
       expect(message).toMatch(/.*logger .*warn/);

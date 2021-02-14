@@ -1,44 +1,28 @@
 // @flow
 
-import React, { type AbstractComponent as AbstractComponentType } from 'react';
-import { Text } from 'ink';
-import Spinner from 'ink-spinner';
+import React, {
+  type AbstractComponent as AbstractComponentType,
+  type Node as NodeType,
+} from 'react';
 
-import Message, { type propsType as messagePropsType } from './Message';
+import Message from './Message';
+import useMessages, {
+  type messagesArguType,
+  type messagesReturnType,
+} from './hooks/useMessages';
 
-type messageType = {|
-  ...messagePropsType,
-  id: string,
-|};
-
-export type propsType = {|
-  loading: {|
-    [string]: {|
-      color: string,
-      message: string,
-    |},
-  |},
-  messages: $ReadOnlyArray<messageType>,
-|};
+export type propsType = messagesArguType;
 
 /** @react logger */
-const Logger = ({ loading, messages }: propsType) => (
-  <>
-    {messages.map(({ id, ...props }: messageType) => (
-      <Message {...props} key={id} />
-    ))}
+const Logger = (props: propsType): NodeType => {
+  const messages = useMessages(props);
 
-    {Object.keys(loading).map((name: string) => (
-      <Text key={name}>
-        <Spinner type="dots" />
-
-        <Text color={loading[name].color}> {name} </Text>
-
-        {loading[name].message}
-      </Text>
-    ))}
-  </>
-);
+  return messages.map(
+    ({ key, ...message }: $ElementType<messagesReturnType, number>) => (
+      <Message key={key} {...message} />
+    ),
+  );
+};
 
 export default (React.memo<propsType>(
   Logger,

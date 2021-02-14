@@ -2,19 +2,27 @@
 
 import { render } from 'ink-testing-library';
 
-import loggerCache from './utils/loggerCache';
+import { cache } from './index';
+
+type instanceType = $PropertyType<typeof cache, 'instance'>;
+
+cache.render = render;
 
 export default ({
-  getInstance: loggerCache.getInstance,
+  /**
+   * @return {instanceType} - ink instance
+   */
+  getInstance: async (): Promise<instanceType> => {
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    return cache.instance;
+  },
 
   /** */
   reset: () => {
-    loggerCache.init({
-      render,
-      messages: [],
-    });
+    cache.instance = null;
   },
 }: {|
-  getInstance: $PropertyType<typeof loggerCache, 'getInstance'>,
+  getInstance: () => instanceType,
   reset: () => void,
 |});

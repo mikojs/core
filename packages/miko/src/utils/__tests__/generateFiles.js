@@ -48,7 +48,7 @@ describe('generate files', () => {
     outputFileSync.mockClear();
   });
 
-  test('generate files', () => {
+  test('generate files', async () => {
     const result = [...generateFiles()].sort();
 
     expect(result).toEqual(
@@ -69,7 +69,7 @@ describe('generate files', () => {
         .map(([outputFilePath]: [string]) => outputFilePath)
         .sort(),
     ).toEqual(result);
-    expect(testingLogger.getInstance()?.lastFrame()).toMatch(
+    expect((await testingLogger.getInstance())?.lastFrame()).toMatch(
       chalk`{red hasIgnore.js} should be added in {bold {gray .gitignore}}`,
     );
   });

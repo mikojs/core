@@ -15,7 +15,7 @@ describe('logger', () => {
     ${'logger:*'}
   `(
     'could log message with process.env.DEBUG = $debug',
-    ({ debug }: {| debug?: string |}) => {
+    async ({ debug }: {| debug?: string |}) => {
       const logger = createLogger('logger:debug');
 
       if (debug) process.env.DEBUG = debug;
@@ -29,6 +29,7 @@ describe('logger', () => {
       logger.log(1);
       logger.success('success');
       logger.error('error');
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       const message = testingLogger.getInstance()?.lastFrame();
 

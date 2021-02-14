@@ -29,9 +29,8 @@ describe('logger', () => {
       logger.log(1);
       logger.success('success');
       logger.error('error');
-      await new Promise(resolve => setTimeout(resolve, 0));
 
-      const message = testingLogger.getInstance()?.lastFrame();
+      const message = (await testingLogger.getInstance())?.lastFrame();
 
       expect(message).toMatch(/.*logger .*info/);
       expect(message).toMatch(/.*logger .*warn/);

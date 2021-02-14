@@ -1,9 +1,11 @@
 // @flow
 
-import createLogger, { cache } from '../index';
+import testingLogger from '../testingLogger';
+import createLogger from '../index';
 
 describe('logger', () => {
   beforeEach(() => {
+    testingLogger.reset();
     delete process.env.DEBUG;
   });
 
@@ -27,8 +29,9 @@ describe('logger', () => {
       logger.log(1);
       logger.success('success');
       logger.error('error');
+      logger.log('FIXME');
 
-      const message = cache.instance?.lastFrame();
+      const message = testingLogger.getInstance()?.lastFrame();
 
       expect(message).toMatch(/.*logger .*info/);
       expect(message).toMatch(/.*logger .*warn/);

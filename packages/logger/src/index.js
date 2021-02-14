@@ -1,47 +1,57 @@
 // @flow
 
-import loggerCache, {
-  type eventType,
-  type buildType,
-} from './utils/loggerCache';
-import { type messageType } from './utils/handleMessage';
+import React from 'react';
+import { render } from 'ink';
+
+import Logger, { type propsType } from './components';
+
+type eventType = $PropertyType<propsType, 'event'>;
+type messagesType = $PropertyType<propsType, 'messages'>;
 
 type loggerType = {|
-  ...$Diff<buildType, {| buildLog: mixed |}>,
-  [eventType]: $Call<$PropertyType<buildType, 'buildLog'>, eventType>,
+  [eventType]: (...messages: messagesType) => void,
 |};
+
+type cacheType = {
+  render: typeof render,
+  instance?: $Call<typeof render>,
+};
+
+export const cache: cacheType = {
+  render,
+};
+
+/**
+ * @param {string} name - logger name
+ * @param {eventType} event - logger event
+ *
+ * @return {Function} - logger function
+ */
+const buildLog = (name: string, event: eventType) => (
+  ...messages: messagesType
+) => {
+  if (cache.instance)
+    cache.instance.rerender(
+      <Logger name={name} event={event} messages={messages} />,
+    );
+  else
+    cache.instance = cache.render(
+      <Logger name={name} event={event} messages={messages} />,
+    );
+};
 
 /**
  * @param {string} name - logger name
  *
- * @return {loggerType} - logger
+ * @return {loggerType} - logger functions
  */
-export default (name: string): loggerType => {
-  const { start, stop, buildLog } = loggerCache.build(name.replace(/:.*$/, ''));
-
-  return {
-    start,
-    stop,
-
-    /**
-     * @param {messageType} message - log message
-     */
-    success: (message: messageType) => {
-      stop();
-      buildLog('success')(message);
-    },
-
-    /**
-     * @param {messageType} message - log message
-     */
-    error: (message: messageType) => {
-      stop();
-      buildLog('error')(message);
-    },
-
-    info: buildLog('info'),
-    warn: buildLog('warn'),
-    log: buildLog('log'),
-    debug: buildLog('debug', name),
-  };
-};
+export default (name: string): loggerType => ({
+  start: buildLog(name, 'start'),
+  stop: buildLog(name, 'stop'),
+  success: buildLog(name, 'success'),
+  error: buildLog(name, 'error'),
+  info: buildLog(name, 'info'),
+  warn: buildLog(name, 'warn'),
+  log: buildLog(name, 'log'),
+  debug: buildLog(name, 'debug'),
+});

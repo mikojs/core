@@ -28,6 +28,7 @@ describe('logger', () => {
       logger.log('log');
       logger.log(1);
       logger.success('success');
+      logger.stop();
       logger.error('error');
 
       const message = (await testingLogger.getInstance())?.lastFrame();

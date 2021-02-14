@@ -19,7 +19,7 @@ const Logger = (props: propsType): NodeType => {
 
   return messages.map(
     ({ key, ...message }: $ElementType<messagesReturnType, number>) => (
-      <Message {...message} />
+      <Message key={key} {...message} />
     ),
   );
 };

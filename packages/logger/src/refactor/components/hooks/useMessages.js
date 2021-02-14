@@ -18,11 +18,7 @@ export type messagesReturnType = getMessagesReturnType;
  *
  * @return {messagesReturnType} - messages cache
  */
-export default ({
-  name,
-  event,
-  ...argu
-}: messagesArguType): messagesReturnType => {
+export default (argu: messagesArguType): messagesReturnType => {
   const getMessages = useGetMessages();
   const [messages, setMessages] = useState<messagesReturnType>([]);
   const [loadingMessages, setLoadingMessages] = useState<messagesReturnType>(
@@ -30,6 +26,7 @@ export default ({
   );
 
   useEffect(() => {
+    const { name, event } = argu;
     const filteredLoadingMessages = ![
       'start',
       'stop',
@@ -39,7 +36,7 @@ export default ({
       ? []
       : loadingMessages.filter(
           (message: $ElementType<messagesReturnType, number>) =>
-            name === message.name,
+            name !== message.name,
         );
     const newMessages =
       event === 'stop' ? [] : getMessages({ ...argu, name, event });
@@ -63,7 +60,7 @@ export default ({
         setMessages([...messages, ...newMessages]);
         break;
     }
-  }, [name, event, argu]);
+  }, [argu]);
 
   return useMemo(() => [...messages, ...loadingMessages], [
     messages,

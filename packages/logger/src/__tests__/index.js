@@ -1,7 +1,7 @@
 // @flow
 
-import testingLogger from '../testingLogger';
 import createLogger from '../index';
+import testingLogger from '../testingLogger';
 
 describe('logger', () => {
   beforeEach(() => {
@@ -29,7 +29,6 @@ describe('logger', () => {
       logger.log(1);
       logger.success('success');
       logger.error('error');
-      logger.log('FIXME');
 
       const message = testingLogger.getInstance()?.lastFrame();
 

@@ -12,13 +12,13 @@
     "core-js": "^3.8.1",
     "ink": "^3.0.8",
     "ink-spinner": "^4.0.1",
+    "ink-testing-library": "^2.1.0",
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
     "react": ">=17.0.0"
   },
   "devDependencies": {
-    "ink-testing-library": "^2.1.0",
     "react": "^17.0.1"
   },
   "keywords": ["logger", "mikojs"],

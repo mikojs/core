@@ -5,6 +5,7 @@ import path from 'path';
 import chalk from 'chalk';
 import outputFileSync from 'output-file-sync';
 import dotgitignore from 'dotgitignore';
+import { invariant } from 'fbjs';
 
 import createLogger from '@mikojs/logger';
 
@@ -24,31 +25,20 @@ export default (): $ReadOnlyArray<string> => {
       (result: $ReadOnlyArray<string>, key: string): $ReadOnlyArray<string> => {
         if (key === 'miko') return result;
 
-        const { configFile, ignoreFile } = configsCache.get(key);
+        const { configFile } = configsCache.get(key);
 
-        logger.debug({ key, configFile, ignoreFile });
+        logger.debug({ key, configFile });
+        invariant(configFile, 'Could not find config.');
+        outputFileSync(...configFile);
 
-        return [configFile, ignoreFile]
-          .filter(Boolean)
-          .reduce(
-            (
-              subResult: $ReadOnlyArray<string>,
-              argu: [string, string],
-            ): $ReadOnlyArray<string> => {
-              const filename = path.basename(argu[0]);
+        const filename = path.basename(configFile[0]);
 
-              if (!gitignore.ignore(filename))
-                logger.warn(
-                  chalk`{red ${filename}} should be added in {bold {gray .gitignore}}.`,
-                );
-
-              logger.debug(argu);
-              outputFileSync(...argu);
-
-              return [...subResult, argu[0]];
-            },
-            result,
+        if (!gitignore.ignore(filename))
+          logger.warn(
+            chalk`{red ${filename}} should be added in {bold {gray .gitignore}}.`,
           );
+
+        return [...result, configFile[0]];
       },
       [],
     );

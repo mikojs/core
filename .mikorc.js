@@ -40,7 +40,7 @@ const babel = ({ presets, plugins, ...config }) => {
 };
 
 const lint = {
-  config: config => ({
+  config: ({ ignorePatterns, ...config }) => ({
     ...config,
     globals: {
       __MIKOJS_DATA__: true,
@@ -53,12 +53,12 @@ const lint = {
         },
       },
     ],
+    ignorePatterns: [
+      ...ignorePatterns,
+      // ignore for @mikojs/eslint-config-base testing
+      'packages/eslint-config-base/src/__tests__/__ignore__',
+    ],
   }),
-  ignore: ignore => [
-    ...ignore,
-    // ignore for @mikojs/eslint-config-base testing
-    'packages/eslint-config-base/src/__tests__/__ignore__',
-  ],
 };
 
 const jest = ({ collectCoverageFrom, ...config }) => ({

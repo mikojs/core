@@ -17,10 +17,8 @@ type configsType = {
   [string]: {|
     filenames?: {|
       config?: string,
-      ignore?: string,
     |},
     config?: (config: {}) => {},
-    ignore?: (ignore: $ReadOnlyArray<string>) => $ReadOnlyArray<string>,
   |},
 };
 
@@ -45,7 +43,6 @@ export type configsCacheType = {|
   ) => {|
     ...$Diff<$ElementType<configsType, string>, {| filenames: mixed |}>,
     configFile: ?[string, string],
-    ignoreFile: ?[string, string],
   |},
   load: (configObj: ?configObjType) => configsCacheType,
   addConfig: (
@@ -83,13 +80,11 @@ export default (((): configsCacheType => {
     ): $Call<$PropertyType<configsCacheType, 'get'>, string> => {
       if (!cache.configs[configName]) return {};
 
-      const { filenames, config, ignore } = cache.configs[configName];
+      const { filenames, config } = cache.configs[configName];
       const configFilename = filenames?.config;
-      const ignoreFilename = filenames?.ignore;
 
       return {
         config,
-        ignore,
         configFile:
           !configFilename || !config
             ? null
@@ -97,10 +92,6 @@ export default (((): configsCacheType => {
                 result.resolve(configFilename),
                 `/* eslint-disable */ module.exports = require('@mikojs/miko')('${configName}');`,
               ],
-        ignoreFile:
-          !ignoreFilename || !ignore
-            ? null
-            : [result.resolve(ignoreFilename), ignore([]).join('\n')],
       };
     },
 
@@ -164,16 +155,6 @@ export default (((): configsCacheType => {
               config
               |> prevConfig.config || emptyFunction.thatReturnsArgument
               |> newConfig.config || emptyFunction.thatReturnsArgument,
-
-            /**
-             * @param {Array} ignore - prev ignore array
-             *
-             * @return {Array} - new ignore array
-             */
-            ignore: (ignore: $ReadOnlyArray<string>) =>
-              ignore
-              |> prevConfig.ignore || emptyFunction.thatReturnsArgument
-              |> newConfig.ignore || emptyFunction.thatReturnsArgument,
           };
         });
       });

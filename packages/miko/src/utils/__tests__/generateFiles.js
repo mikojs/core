@@ -3,7 +3,6 @@
 import path from 'path';
 
 import outputFileSync from 'output-file-sync';
-import chalk from 'chalk';
 
 import testingLogger from '@mikojs/logger/lib/testingLogger';
 
@@ -14,7 +13,6 @@ configsCache.load({
   filepath: path.resolve('.mikorc.js'),
   config: [
     {
-      noConfigAndIgnore: {},
       babel: {
         filenames: {
           config: 'babel.config.js',
@@ -25,19 +23,6 @@ configsCache.load({
          */
         config: () => ({ key: 'value' }),
       },
-      hasIgnore: {
-        filenames: {
-          ignore: 'hasIgnore.js',
-        },
-
-        /**
-         * @return {Array} - ignore array
-         */
-        ignore: () => [],
-      },
-    },
-    {
-      hasIgnore: {},
     },
   ],
 });
@@ -56,10 +41,8 @@ describe('generate files', () => {
         'babel.config.js',
         'jest.config.js',
         '.eslintrc.js',
-        '.eslintignore',
         '.prettierrc.js',
         '.lintstagedrc.js',
-        'hasIgnore.js',
       ]
         .sort()
         .map((filePath: string) => path.resolve(process.cwd(), filePath)),
@@ -69,8 +52,5 @@ describe('generate files', () => {
         .map(([outputFilePath]: [string]) => outputFilePath)
         .sort(),
     ).toEqual(result);
-    expect((await testingLogger.getInstance())?.lastFrame()).toMatch(
-      chalk`{red hasIgnore.js} should be added in {bold {gray .gitignore}}`,
-    );
   });
 });

@@ -41,15 +41,6 @@ configsCache
     ],
   });
 
-describe('miko', () => {
-  test.each`
-    configName      | expected
-    ${'testConfig'} | ${{ key: 'value' }}
-    ${'notExist'}   | ${{}}
-  `(
-    'get config from $configName',
-    ({ configName, expected }: {| configName: string, expected: {} |}) => {
-      expect(miko(configName)).toEqual(expected);
-    },
-  );
+test('miko', () => {
+  expect(miko('testConfig')).toEqual({ key: 'value' });
 });

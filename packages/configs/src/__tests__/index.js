@@ -32,10 +32,6 @@ describe.each(
           const value = config[key];
 
           switch (key) {
-            case 'ignore':
-              expect(Object.keys(value([]))).not.toBe(0);
-              break;
-
             case 'config':
               expect(Object.keys(value({}))).not.toBe(0);
               break;

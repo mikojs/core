@@ -13,7 +13,6 @@ configsCache.load({
   filepath: path.resolve('.mikorc.js'),
   config: [
     {
-      noConfigAndIgnore: {},
       babel: {
         filenames: {
           config: 'babel.config.js',
@@ -24,9 +23,6 @@ configsCache.load({
          */
         config: () => ({ key: 'value' }),
       },
-    },
-    {
-      hasIgnore: {},
     },
   ],
 });
@@ -47,7 +43,6 @@ describe('generate files', () => {
         '.eslintrc.js',
         '.prettierrc.js',
         '.lintstagedrc.js',
-        'hasIgnore.js',
       ]
         .sort()
         .map((filePath: string) => path.resolve(process.cwd(), filePath)),

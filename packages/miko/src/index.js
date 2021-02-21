@@ -2,6 +2,8 @@
 
 import path from 'path';
 
+import { invariant } from 'fbjs';
+
 import buildWorker from '@mikojs/worker';
 
 // $FlowFixMe FIXME: Owing to utils/configsCache use pipline
@@ -20,18 +22,15 @@ export type mikoConfigsType = parseArgvMikoConfigsType;
  * @return {object} - config object
  */
 export default (configName: string): {} => {
-  const { config, configFile, ignoreFile } = configsCache.get(configName);
+  const { config, configFile } = configsCache.get(configName);
 
   (async () => {
     const worker = await buildWorker<workerType>(
       path.resolve(__dirname, './worker/index.js'),
     );
 
-    [configFile, ignoreFile]
-      .filter(Boolean)
-      .forEach(([filePath]: [string, string]) => {
-        worker.addTracking(process.pid, filePath);
-      });
+    invariant(configFile, 'Could not find config.');
+    worker.addTracking(process.pid, configFile);
   })();
 
   return config?.({}) || {};

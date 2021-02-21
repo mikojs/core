@@ -3,7 +3,6 @@
 export default {
   filenames: {
     config: '.eslintrc.js',
-    ignore: '.eslintignore',
   },
 
   /**
@@ -17,6 +16,7 @@ export default {
         {| definedTags: $ReadOnlyArray<string> |},
       ],
     |},
+    ignorePatterns: $ReadOnlyArray<string>,
   |} => ({
     extends: '@mikojs/base',
     rules: {
@@ -27,25 +27,21 @@ export default {
         },
       ],
     },
+    ignorePatterns: [
+      // node
+      'node_modules',
+
+      // babel
+      'lib',
+
+      // flow
+      '**/flow-typed/npm',
+
+      // jest
+      'coverage',
+
+      // add checking other configs
+      '!.*',
+    ],
   }),
-
-  /**
-   * @return {Array} - lint ignore
-   */
-  ignore: (): $ReadOnlyArray<string> => [
-    // node
-    'node_modules',
-
-    // babel
-    'lib',
-
-    // flow
-    '**/flow-typed/npm',
-
-    // jest
-    'coverage',
-
-    // add checking other configs
-    '!.*',
-  ],
 };

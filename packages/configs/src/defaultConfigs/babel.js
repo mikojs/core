@@ -3,9 +3,7 @@
 import { mockChoice } from '@mikojs/utils';
 
 export default {
-  filenames: {
-    config: 'babel.config.js',
-  },
+  filename: 'babel.config.js',
 
   /**
    * @return {object} - babel config

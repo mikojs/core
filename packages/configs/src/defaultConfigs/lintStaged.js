@@ -1,9 +1,7 @@
 // @flow
 
 export default {
-  filenames: {
-    config: '.lintstagedrc.js',
-  },
+  filename: '.lintstagedrc.js',
 
   /**
    * @return {object} - lint-staged config

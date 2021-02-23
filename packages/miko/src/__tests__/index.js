@@ -6,9 +6,8 @@ import configsCache from 'utils/configsCache';
 
 const config = {
   testConfig: {
-    filenames: {
-      config: 'testConfig.config.js',
-    },
+    filename: 'testConfig.config.js',
+
     /**
      * @return {object} - config object
      */

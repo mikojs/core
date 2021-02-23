@@ -36,6 +36,10 @@ describe.each(
               expect(Object.keys(value({}))).not.toBe(0);
               break;
 
+            case 'filename':
+              expect(value).not.toBeUndefined();
+              break;
+
             default:
               expect(value.config).not.toBeUndefined();
               break;

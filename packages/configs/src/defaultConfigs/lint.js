@@ -1,9 +1,7 @@
 // @flow
 
 export default {
-  filenames: {
-    config: '.eslintrc.js',
-  },
+  filename: '.eslintrc.js',
 
   /**
    * @return {object} - lint config

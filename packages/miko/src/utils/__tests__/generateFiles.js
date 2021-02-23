@@ -14,9 +14,7 @@ configsCache.load({
   config: [
     {
       babel: {
-        filenames: {
-          config: 'babel.config.js',
-        },
+        filename: 'babel.config.js',
 
         /**
          * @return {object} - config object

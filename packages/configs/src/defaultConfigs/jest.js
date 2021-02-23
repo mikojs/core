@@ -1,9 +1,7 @@
 // @flow
 
 export default {
-  filenames: {
-    config: 'jest.config.js',
-  },
+  filename: 'jest.config.js',
 
   /**
    * @return {object} - jest config

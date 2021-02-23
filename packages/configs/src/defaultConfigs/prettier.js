@@ -1,9 +1,7 @@
 // @flow
 
 export default {
-  filenames: {
-    config: '.prettierrc.js',
-  },
+  filename: '.prettierrc.js',
 
   /**
    * @return {object} - prettier config

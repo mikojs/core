@@ -15,9 +15,7 @@ import createLogger from '@mikojs/logger';
 
 type configsType = {
   [string]: {|
-    filenames?: {|
-      config?: string,
-    |},
+    filename?: string,
     config?: (config: {}) => {},
   |},
 };
@@ -41,7 +39,7 @@ export type configsCacheType = {|
   get: (
     configName: string,
   ) => {|
-    ...$Diff<$ElementType<configsType, string>, {| filenames: mixed |}>,
+    ...$Diff<$ElementType<configsType, string>, {| filename: mixed |}>,
     configFile: ?[string, string],
   |},
   load: (configObj: ?configObjType) => configsCacheType,
@@ -80,16 +78,15 @@ export default (((): configsCacheType => {
     ): $Call<$PropertyType<configsCacheType, 'get'>, string> => {
       if (!cache.configs[configName]) return {};
 
-      const { filenames, config } = cache.configs[configName];
-      const configFilename = filenames?.config;
+      const { filename, config } = cache.configs[configName];
 
       return {
         config,
         configFile:
-          !configFilename || !config
+          !filename || !config
             ? null
             : [
-                result.resolve(configFilename),
+                result.resolve(filename),
                 `/* eslint-disable */ module.exports = require('@mikojs/miko')('${configName}');`,
               ],
       };
@@ -141,10 +138,7 @@ export default (((): configsCacheType => {
               : { config: configs[key] };
 
           cache.configs[key] = {
-            filenames: {
-              ...prevConfig.filenames,
-              ...newConfig.filenames,
-            },
+            filename: prevConfig.filename || newConfig.filename,
 
             /**
              * @param {object} config - prev config

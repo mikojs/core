@@ -17,7 +17,7 @@ type configsType = {|
 
 type initialConfigsType = {|
   config:
-    | configsType
+    | $PropertyType<configsType, 'cache'>
     | $ReadOnlyArray<$PropertyType<initialConfigsType, 'config'>>,
   filepath: string,
 |};

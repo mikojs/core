@@ -8,7 +8,7 @@
 
 [website]: https://mikojs.github.io/core/badges
 
-Use to add badges to `README.md`.
+Add the badges to `README.md`.
 
 ## Install
 

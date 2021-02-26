@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/badges",
-  "description": "Use to add badges to `README.md`.",
+  "description": "Add the badges to `README.md`.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/badges",

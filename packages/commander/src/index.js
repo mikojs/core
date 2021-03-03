@@ -41,7 +41,10 @@ const defaultOptions = ['args', 'allowUnknownOption', 'exitOverride'].map(
  */
 const addConfig = <Data: $ReadOnlyArray<mixed>>(
   prevProgram: typeof commander,
-  {
+  config: defaultOptionsType,
+  callback: callbackType<Data>,
+) => {
+  const {
     description,
     args,
     allowUnknownOption,
@@ -49,9 +52,7 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
     options = [],
     requiredOptions = [],
     commands = {},
-  }: defaultOptionsType,
-  callback: callbackType<Data>,
-) => {
+  } = config;
   const program = [...defaultOptions, ...requiredOptions, ...options]
     .reduce(
       (
@@ -85,6 +86,7 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
     )
     .action((...data: Data) => callback(data));
 
+  program.miko = config;
   Object.keys(commands).forEach((key: string) => {
     addConfig<Data>(program.command(key), commands[key], (data: Data) =>
       // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/8458

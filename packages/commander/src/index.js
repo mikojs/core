@@ -7,7 +7,8 @@ type commandOptionsType = {|
   description: string,
 |};
 
-export type defaultOptionsType = {|
+export type defaultOptionsType<C = {||}> = {|
+  ...C,
   description: string,
   args?: string,
   allowUnknownOption?: boolean,
@@ -15,12 +16,12 @@ export type defaultOptionsType = {|
   options?: $ReadOnlyArray<commandOptionsType>,
   requiredOptions?: $ReadOnlyArray<commandOptionsType>,
   commands?: {|
-    [string]: defaultOptionsType,
+    [string]: defaultOptionsType<C>,
   |},
 |};
 
-export type optionsType = {|
-  ...defaultOptionsType,
+export type optionsType<C = {||}> = {|
+  ...defaultOptionsType<C>,
   name: string,
   version: string,
 |};
@@ -39,9 +40,12 @@ const defaultOptions = ['args', 'allowUnknownOption', 'exitOverride'].map(
  * @param {defaultOptionsType} config - program config
  * @param {callbackType} callback - callback function
  */
-const addConfig = <Data: $ReadOnlyArray<mixed>>(
+const addConfig = <Data: $ReadOnlyArray<mixed>, C = {||}>(
   prevProgram: typeof commander,
-  {
+  config: defaultOptionsType<C>,
+  callback: callbackType<Data>,
+) => {
+  const {
     description,
     args,
     allowUnknownOption,
@@ -49,9 +53,7 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
     options = [],
     requiredOptions = [],
     commands = {},
-  }: defaultOptionsType,
-  callback: callbackType<Data>,
-) => {
+  } = config;
   const program = [...defaultOptions, ...requiredOptions, ...options]
     .reduce(
       (
@@ -85,8 +87,9 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
     )
     .action((...data: Data) => callback(data));
 
+  program.miko = config;
   Object.keys(commands).forEach((key: string) => {
-    addConfig<Data>(program.command(key), commands[key], (data: Data) =>
+    addConfig<Data, C>(program.command(key), commands[key], (data: Data) =>
       // $FlowFixMe FIXME: https://github.com/facebook/flow/issues/8458
       callback([key, ...data]),
     );
@@ -98,11 +101,11 @@ const addConfig = <Data: $ReadOnlyArray<mixed>>(
  *
  * @return {Promise} - parse result
  */
-export default <Data: $ReadOnlyArray<mixed>>({
+export default <Data: $ReadOnlyArray<mixed>, C = {||}>({
   name,
   version,
   ...config
-}: optionsType): ((argv: $ReadOnlyArray<string>) => Promise<Data>) => (
+}: optionsType<C>): ((argv: $ReadOnlyArray<string>) => Promise<Data>) => (
   argv: $ReadOnlyArray<string>,
 ) =>
   new Promise(resolve => {
@@ -112,6 +115,6 @@ export default <Data: $ReadOnlyArray<mixed>>({
       'Output the version number.',
     );
 
-    addConfig<Data>(program, config, resolve);
+    addConfig<Data, C>(program, config, resolve);
     program.parse(argv);
   });

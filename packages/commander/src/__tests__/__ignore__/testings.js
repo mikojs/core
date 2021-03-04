@@ -3,7 +3,7 @@
 import { type optionsType } from '../../index';
 
 export type testingType = [
-  optionsType,
+  optionsType<>,
   $ReadOnlyArray<string>,
   $ReadOnlyArray<mixed>,
 ];

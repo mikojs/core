@@ -19,9 +19,9 @@ export type mikoConfigsType = {|
  * @return {defaultOptionsType} - new commander options
  */
 const addCustomCommands = (
-  options: defaultOptionsType,
+  options: defaultOptionsType<>,
   configs: mikoConfigsType,
-): defaultOptionsType => {
+): defaultOptionsType<> => {
   const commands = options.commands || {};
   const existCommands = Object.keys(commands);
 

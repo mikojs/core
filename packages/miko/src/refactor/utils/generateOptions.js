@@ -6,16 +6,18 @@ import { type optionsType, type defaultOptionsType } from '@mikojs/commander';
 
 import { version } from '../../../package.json';
 
-type commandsType = {| [string]: defaultOptionsType<> |};
+type commandsOptionsType = {| [string]: defaultOptionsType<> |};
 
 /**
- * @param {commandsType} commands - prev custom commands
+ * @param {commandsOptionsType} commands - prev custom commands
  *
- * @return {commandsType} - new custom commands
+ * @return {commandsOptionsType} - new custom commands
  */
-const addAllowUnknownOption = (commands: commandsType): commandsType =>
+const addAllowUnknownOption = (
+  commands: commandsOptionsType,
+): commandsOptionsType =>
   Object.keys(commands).reduce(
-    (result: commandsType, key: string) => ({
+    (result: commandsOptionsType, key: string) => ({
       ...result,
       [key]: {
         ...commands[key],
@@ -26,11 +28,11 @@ const addAllowUnknownOption = (commands: commandsType): commandsType =>
   );
 
 /**
- * @param {commandsType} commands - custom commands
+ * @param {commandsOptionsType} commands - custom commands
  *
  * @return {optionsType} - commander options
  */
-export default (commands: commandsType): optionsType<> => ({
+export default (commands: commandsOptionsType): optionsType<> => ({
   name: 'miko',
   version,
   description: chalk`{cyan Generate configs} in the cache folder and run the {green command} with the keyword.`,

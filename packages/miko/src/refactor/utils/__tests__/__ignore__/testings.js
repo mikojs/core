@@ -16,4 +16,8 @@ export default ([
     'command "command && command" command',
     [['command', '"command && command"', 'command']],
   ],
+  [
+    `command "command 'command && command' command" command`,
+    [['command', `"command 'command && command' command"`, 'command']],
+  ],
 ]: $ReadOnlyArray<testingType>);

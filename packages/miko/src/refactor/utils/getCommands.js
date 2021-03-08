@@ -24,7 +24,7 @@ const getCommands = (commandStr: string): commandsType => {
     : crypto.createHash('md5').update(patternStr).digest('hex');
 
   return (!patternStr ? commandStr : commandStr.replace(patternStr, hash))
-    .split('[ ]*&&[ ]*')
+    .split(/[ ]*&&[ ]*/)
     .map((str: string) =>
       str
         .split(/[ ]+/)

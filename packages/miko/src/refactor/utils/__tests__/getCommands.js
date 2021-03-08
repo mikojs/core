@@ -8,10 +8,10 @@ describe('get commands', () => {
   test.each(testings)(
     'get commands from %s',
     (
-      command: $ElementType<testingType, 0>,
+      commandStr: $ElementType<testingType, 0>,
       expected: $ElementType<testingType, 1>,
     ) => {
-      expect(getCommands(command)).toEqual(expected);
+      expect(getCommands(commandStr)).toEqual(expected);
     },
   );
 });

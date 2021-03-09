@@ -16,7 +16,8 @@ type commandsOptionsType = {|
   [string]: defaultOptionsType<customOptionsType>,
 |};
 type parsedResultType = [];
-type parseArgvType = (
+
+export type parseArgvType = (
   argv: $ReadOnlyArray<string>,
 ) => Promise<parsedResultType>;
 

@@ -5,10 +5,16 @@ import getParseArgv from '../getParseArgv';
 
 import testings, { type testingType } from './__ignore__/testings';
 
+const defaultCommondOptions = {
+  description: 'description',
+  command: 'command',
+};
 const parseArgv = getParseArgv({
   miko: {
-    description: 'description',
-    command: 'command',
+    ...defaultCommondOptions,
+    commands: {
+      miko: defaultCommondOptions,
+    },
   },
 });
 

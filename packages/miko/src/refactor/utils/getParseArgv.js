@@ -15,10 +15,10 @@ type customOptionsType = {|
 type commandsOptionsType = {|
   [string]: defaultOptionsType<customOptionsType>,
 |};
-type parsedResultType = [
-  string,
-  {| miko: $ElementType<commandsOptionsType, 'string'> |},
-];
+
+export type parsedResultType = $ReadOnlyArray<
+  string | {| miko: $ElementType<commandsOptionsType, 'string'> |},
+>;
 
 export type parseArgvType = (
   argv: $ReadOnlyArray<string>,

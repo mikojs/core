@@ -2,7 +2,7 @@
 
 import crypto from 'crypto';
 
-import { type parseArgvType } from './getParseArgv';
+import { type parseArgvType, type parsedResultType } from './getParseArgv';
 
 export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
 
@@ -56,9 +56,13 @@ const getCommands = (
             ),
           ];
 
-        const [, { miko }] = await parseArgv(['node', ...commands]);
+        const command = (await parseArgv(['node', ...commands])).reduce(
+          (subResult: string, data: $ElementType<parsedResultType, number>) =>
+            typeof data === 'string' ? subResult : data.miko.command,
+          '',
+        );
 
-        return [...prevResult, ...(await getCommands(miko.command, parseArgv))];
+        return [...prevResult, ...(await getCommands(command, parseArgv))];
       },
       Promise.resolve([]),
     );

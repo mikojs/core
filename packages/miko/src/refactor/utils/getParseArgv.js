@@ -17,7 +17,9 @@ type commandsOptionsType = {|
 |};
 
 export type parsedResultType = $ReadOnlyArray<
-  string | {| miko: $ElementType<commandsOptionsType, 'string'> |},
+  | string
+  | {| miko: $ElementType<commandsOptionsType, 'string'> |}
+  | $ReadOnlyArray<string>,
 >;
 
 export type parseArgvType = (

@@ -57,8 +57,16 @@ const getCommands = (
           ];
 
         const command = (await parseArgv(['node', ...commands])).reduce(
-          (subResult: string, data: $ElementType<parsedResultType, number>) =>
-            typeof data === 'string' ? subResult : data.miko.command,
+          (
+            subResult: string,
+            data: $ElementType<parsedResultType, number>,
+          ): string => {
+            if (typeof data === 'string') return subResult;
+
+            if (data instanceof Array) return [subResult, ...data].join(' ');
+
+            return [subResult, data.miko.command].join('');
+          },
           '',
         );
 

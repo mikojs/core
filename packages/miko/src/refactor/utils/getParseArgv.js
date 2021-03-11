@@ -15,7 +15,10 @@ type customOptionsType = {|
 type commandsOptionsType = {|
   [string]: defaultOptionsType<customOptionsType>,
 |};
-type parsedResultType = [];
+type parsedResultType = [
+  string,
+  {| miko: $ElementType<commandsOptionsType, 'string'> |},
+];
 
 export type parseArgvType = (
   argv: $ReadOnlyArray<string>,
@@ -34,6 +37,7 @@ const addAllowUnknownOption = (
       ...result,
       [key]: {
         ...commands[key],
+        exitOverride: true,
         allowUnknownOption: true,
       },
     }),
@@ -51,6 +55,7 @@ export default (commands: commandsOptionsType): parseArgvType =>
     version,
     description: chalk`{cyan Generate configs} in the cache folder and run the {green command} with the keyword.`,
     args: '<commands...>',
+    exitOverride: true,
     allowUnknownOption: true,
     command: 'generate configs',
     commands: addAllowUnknownOption(commands),

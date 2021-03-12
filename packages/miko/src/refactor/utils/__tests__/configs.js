@@ -7,17 +7,20 @@ import configs from '../configs';
 const config = {
   miko: emptyFunction.thatReturnsArgument,
 };
+const expected = 'test';
 
 test('configs', () => {
-  configs.load();
-  configs.load({
-    path: __filename,
-    config,
-  });
-  configs.load({
-    path: __filename,
-    config: [config],
-  });
-
-  expect(configs.cache.miko('test')).toBe('test');
+  expect(
+    configs
+      .load()
+      .load({
+        path: __filename,
+        config,
+      })
+      .load({
+        path: __filename,
+        config: [config],
+      })
+      .cache.miko(expected),
+  ).toBe(expected);
 });

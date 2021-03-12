@@ -2,16 +2,16 @@
 
 import { emptyFunction } from 'fbjs';
 
-import configs from '../configs';
+import getConfigs from '../getConfigs';
 
 const config = {
   miko: emptyFunction.thatReturnsArgument,
 };
 const expected = 'test';
 
-test('configs', () => {
+test('get configs', () => {
   expect(
-    configs
+    getConfigs()
       .load()
       .load({
         path: __filename,

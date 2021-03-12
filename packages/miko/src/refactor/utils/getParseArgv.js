@@ -41,6 +41,7 @@ const addAllowUnknownOption = (
         ...commands[key],
         exitOverride: true,
         allowUnknownOption: true,
+        commands: addAllowUnknownOption(commands[key].commands || {}),
       },
     }),
     {},

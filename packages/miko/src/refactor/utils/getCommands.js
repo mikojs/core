@@ -70,7 +70,13 @@ const getCommands = (
           '',
         );
 
-        return [...prevResult, ...(await getCommands(command, parseArgv))];
+        return [
+          ...prevResult,
+          ...(await getCommands(
+            !patternStr ? command : command.replace(hash, patternStr),
+            parseArgv,
+          )),
+        ];
       },
       Promise.resolve([]),
     );

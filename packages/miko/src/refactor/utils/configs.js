@@ -6,6 +6,8 @@
  */
 /* eslint-disable flowtype/no-types-missing-file-annotation, flowtype/require-valid-file-annotation */
 
+import { emptyFunction } from 'fbjs';
+
 import createLogger from '@mikojs/logger';
 
 type configsType = {|
@@ -45,7 +47,8 @@ const configs: configsType = {
       );
     else
       Object.keys(config).forEach((key: string) => {
-        const prevConfigFunc = configs.cache[key];
+        const prevConfigFunc =
+          configs.cache[key] || emptyFunction.thatReturnsArgument;
         const newConfigFunc = config[key];
 
         /**

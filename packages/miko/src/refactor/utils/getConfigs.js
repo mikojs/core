@@ -10,7 +10,7 @@ import { emptyFunction } from 'fbjs';
 
 import createLogger from '@mikojs/logger';
 
-type configsType = {|
+export type configsType = {|
   cache: {|
     [string]: (config: {}) => {},
   |},

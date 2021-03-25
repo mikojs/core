@@ -24,7 +24,7 @@ const importError = (packageName: string) => {
 importError.test = (packageName: string, filePath: string) => {
   test(`could not import ${packageName}`, () => {
     expect(() => {
-      requireModule(filePath);
+      requireModule<*>(filePath);
     }).toThrow(getErrorMessage(packageName));
   });
 };

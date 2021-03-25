@@ -9,6 +9,8 @@ import { type mikoConfigsType } from '@mikojs/miko';
 
 import extendCommand from './normalize/extendCommand';
 
+type pkgType = {| version: string |};
+
 export default {
   /**
    * @param {object} config - prev miko config
@@ -49,7 +51,7 @@ export default {
           ),
           'lerna-helper link-flow',
           `lerna exec "flow-typed install --ignoreDeps=peer --flowVersion=${
-            requireModule(
+            requireModule<pkgType>(
               path.resolve(require.resolve('flow-bin'), '../package.json'),
             ).version
           }" --stream`,

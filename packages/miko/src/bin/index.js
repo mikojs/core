@@ -13,6 +13,8 @@ import configsCache from 'utils/configsCache';
 import parseArgv from 'utils/parseArgv';
 import generateFiles from 'utils/generateFiles';
 
+import refactorGenerateFiles from 'refactor/generateFiles';
+
 import typeof * as workerType from 'worker';
 import commands from 'commands';
 
@@ -31,6 +33,7 @@ handleUnhandledRejection();
   );
 
   logger.debug({ type, keep, rawArgs });
+  refactorGenerateFiles();
 
   switch (type) {
     case 'kill':

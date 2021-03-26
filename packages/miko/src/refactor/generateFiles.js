@@ -14,26 +14,26 @@ const cacheDir = findCacheDir({ name: '@mikojs/miko', thunk: true });
  * @return {Array} - config files
  */
 export default (): $ReadOnlyArray<string> => {
-  const mainFilePath = cacheDir('main.js');
+  const rootFilePath = cacheDir('index.js');
 
   outputFileSync(
-    mainFilePath,
+    rootFilePath,
     `const { cosmiconfigSync } = require('cosmiconfig');
 
-const getConfigs = require('@mikojs/miko/lib/utils/getConfigs');
+const getConfigs = require('@mikojs/miko/lib/refactor/getConfigs');
 
 module.exports = getConfigs().load(cosmiconfigSync('miko').search()).cache;`,
   );
 
   // $FlowFixMe FIXME: Owing to utils/configsCache use pipline
-  const main = requireModule<$PropertyType<configsType, 'cache'>>(mainFilePath);
+  const root = requireModule<$PropertyType<configsType, 'cache'>>(rootFilePath);
 
-  return Object.keys(main).map((key: string): string => {
+  return Object.keys(root).map((key: string): string => {
     const configFilePath = cacheDir(`${key}.js`);
 
     outputFileSync(
       configFilePath,
-      `module.exports = require('./main')['${key}'];`,
+      `module.exports = require('./index')['${key}']({});`,
     );
 
     return configFilePath;

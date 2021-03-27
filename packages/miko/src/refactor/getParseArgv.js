@@ -7,7 +7,7 @@ import commander, {
   type defaultOptionsType,
 } from '@mikojs/commander';
 
-import { version } from '../../../package.json';
+import { version } from '../../package.json';
 
 type customOptionsType = {|
   command: string,

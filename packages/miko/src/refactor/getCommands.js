@@ -75,7 +75,8 @@ const getCommands = (
           ): string => {
             if (typeof data === 'string') return subResult;
 
-            if (data instanceof Array) return [subResult, ...data].join(' ');
+            if (data instanceof Array)
+              return [subResult, ...data].filter(Boolean).join(' ');
 
             return [subResult, data.miko.command].join('');
           },

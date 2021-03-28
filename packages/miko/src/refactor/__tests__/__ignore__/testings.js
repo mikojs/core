@@ -35,4 +35,5 @@ export default ([
       ],
     ],
   ],
+  ['miko custom', [['custom']]],
 ]: $ReadOnlyArray<testingType>);

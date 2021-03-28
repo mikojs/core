@@ -60,6 +60,6 @@ export default (commands: commandsOptionsType): parseArgvType =>
     args: '<commands...>',
     exitOverride: true,
     allowUnknownOption: true,
-    command: 'generate configs',
+    command: '',
     commands: addAllowUnknownOption(commands),
   });

@@ -10,7 +10,7 @@ import commander, {
 import { version } from '../../package.json';
 
 type customOptionsType = {|
-  command: string,
+  command: string | (() => string),
 |};
 type commandsOptionsType = {|
   [string]: defaultOptionsType<customOptionsType>,

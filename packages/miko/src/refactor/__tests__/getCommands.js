@@ -21,7 +21,10 @@ describe('get commands', () => {
           getParseArgv({
             miko: {
               description: 'description',
-              command: 'command',
+              /**
+               * @return {string} - test command
+               */
+              command: () => 'command',
               commands: {
                 miko: {
                   description: 'description',

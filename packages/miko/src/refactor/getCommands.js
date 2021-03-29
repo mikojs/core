@@ -78,7 +78,12 @@ const getCommands = (
             if (data instanceof Array)
               return [subResult, ...data].filter(Boolean).join(' ');
 
-            return [subResult, data.miko.command].join('');
+            return [
+              subResult,
+              typeof data.miko.command === 'string'
+                ? data.miko.command
+                : data.miko.command(),
+            ].join('');
           },
           '',
         );

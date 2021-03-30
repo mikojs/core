@@ -50,21 +50,43 @@ const getCommands = (
         if (!/^miko/.test(str))
           return [
             ...prevResult,
-            await Promise.all(
-              commands.map(async (subStr: string) =>
-                subStr !== hash
-                  ? subStr
-                  : patternStr.replace(
-                      patternCommand,
-                      getCommandStr(
-                        await getCommands(
-                          patternCommand,
-                          configFiles,
-                          parseArgv,
+            await commands.reduce(
+              async (
+                subResultPromise: Promise<$ElementType<commandsType, number>>,
+                subStr: string,
+              ): Promise<$ElementType<commandsType, number>> => {
+                const subResult = await subResultPromise;
+                const [lastStr] = subResult.slice(-1);
+
+                if (typeof lastStr !== 'string' && /=/.test(subStr)) {
+                  const [key, value] = subStr.split(/=/);
+
+                  return [
+                    ...subResult,
+                    {
+                      ...lastStr,
+                      [key]: value,
+                    },
+                  ];
+                }
+
+                return [
+                  ...subResult,
+                  subStr !== hash
+                    ? subStr
+                    : patternStr.replace(
+                        patternCommand,
+                        getCommandStr(
+                          await getCommands(
+                            patternCommand,
+                            configFiles,
+                            parseArgv,
+                          ),
                         ),
                       ),
-                    ),
-              ),
+                ];
+              },
+              Promise.resolve([]),
             ),
           ];
 

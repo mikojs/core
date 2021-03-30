@@ -36,4 +36,7 @@ export default ([
     ],
   ],
   ['miko custom', [['custom']]],
+  ['NODE_ENV=production miko miko', [[{ NODE_ENV: 'production' }, 'command']]],
+  ['miko miko -a=a', [['command', '-a=a']]],
+  ['miko miko "NODE_ENV=production miko miko"', [['command', 'NODE_ENV=production command']]],
 ]: $ReadOnlyArray<testingType>);

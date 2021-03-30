@@ -4,7 +4,7 @@ import crypto from 'crypto';
 
 import { type parseArgvType, type parsedResultType } from './getParseArgv';
 
-export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string>>;
+export type commandsType = $ReadOnlyArray<$ReadOnlyArray<string | {| [string]: string |}>>;
 
 type configFilesType = {| [string]: string |};
 
@@ -14,7 +14,18 @@ type configFilesType = {| [string]: string |};
  * @return {string} - command string
  */
 const getCommandStr = (commands: commandsType) =>
-  commands.map((str: $ReadOnlyArray<string>) => str.join(' ')).join(' && ');
+  commands.map((command: $ElementType<commandsType, number>) => command
+    .map(
+      (key: $ElementType<$ElementType<commandsType, number>, number>) => {
+        if (typeof key === 'string')
+          return key;
+
+        const [[commandKey, commandValue]] = Object.entries(key);
+
+        return `${commandKey}=${commandValue}`;
+      },
+    ).join(' ')
+  ).join(' && ');
 
 /**
  * @param {string} commandStr - command string
@@ -47,7 +58,7 @@ const getCommands = (
         const prevResult = await result;
         const commands = str.split(/[ ]+/);
 
-        if (!/^miko/.test(str))
+        if (!/^miko/.test(str.replace(/[^ ]+=[^ ]+[ ]/, '')))
           return [
             ...prevResult,
             await commands.reduce(

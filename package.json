@@ -4,6 +4,10 @@
   "license": "MIT",
   "workspaces": [],
   "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-flow": "^7.13.13",
     "lerna": "^4.0.0"
   },
   "engines": {

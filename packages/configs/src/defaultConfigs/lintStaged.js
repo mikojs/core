@@ -16,7 +16,7 @@ export default {
     '*.js': ['miko prettier', 'miko lint'],
     '*.js.flow': ['miko prettier --parser flow'],
     '**/!(README).md': ['miko prettier --parser markdown'],
-    '**/README.md': ['miko prettier --parser markdown'],
+    '**/README.md': ['badges', 'miko prettier --parser markdown'],
     '**/package.json': [
       'prettier-package-json --write',
       'miko prettier --parser json',

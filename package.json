@@ -4,6 +4,7 @@
   "license": "MIT",
   "workspaces": [],
   "devDependencies": {
+    "lerna": "^4.0.0"
   },
   "engines": {
     "node": ">= 10.2.1",

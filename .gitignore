@@ -5,33 +5,3 @@
 
 # node
 node_modules
-
-# babel
-babel.config.js
-lib
-
-# eslint
-.eslintrc.js
-.eslintignore
-.eslintcache
-
-# prettier
-.prettierrc.js
-
-# flow
-**/flow-typed/npm
-**/.flowconfig
-!./.flowconfig
-
-# lint-staged
-.lintstagedrc.js
-
-# jest
-jest.config.js
-coverage
-
-# relay
-__generated__
-
-# lerna-changelog
-.changelog

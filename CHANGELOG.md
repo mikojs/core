@@ -2,7 +2,7 @@
 
 ## 2.0.0-beta (2021-03-31)
 
-Rewrite project
+Rewrite project.
 
 ## 1.17.0 (2021-02-14)
 

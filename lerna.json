@@ -3,9 +3,7 @@
   "command": {
     "publish": {
       "message": "chore(release): publish %s [skip ci]",
-      "allowBranch": [
-        "main"
-      ]
+      "allowBranch": ["main"]
     }
   },
   "changelog": {
@@ -21,16 +19,8 @@
   },
   "lerna": "3.22.1",
   "npmClient": "yarn",
-  "npmClientArgs": [
-    "--no-lockfile"
-  ],
-  "ignoreChanges": [
-    "**/__tests__/**",
-    "**/*.md"
-  ],
-  "packages": [
-    "packages/*",
-    "babel/*"
-  ],
+  "npmClientArgs": ["--no-lockfile"],
+  "ignoreChanges": ["**/__tests__/**", "**/*.md"],
+  "packages": [],
   "useWorkspaces": true
 }

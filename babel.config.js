@@ -1,6 +1,3 @@
 module.exports = {
-  presets: [
-    '@babel/env',
-    '@babel/flow',
-  ],
+  presets: ['@babel/env', '@babel/flow'],
 };

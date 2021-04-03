@@ -2,7 +2,7 @@
   "private": true,
   "name": "@mikojs/core",
   "license": "MIT",
-  "workspaces": [],
+  "workspaces": ["packages/*"],
   "scripts": {
     "postinstall": "husky install"
   },

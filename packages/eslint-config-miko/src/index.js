@@ -1,12 +1,6 @@
 const config = {
-  parser: '@babel/parser',
-  extends: [
-    'fbjs/strict',
-    'google',
-    'plugin:prettier/recommended',
-    'prettier/flowtype',
-    'prettier/standard',
-  ],
+  parser: '@babel/eslint-parser',
+  extends: ['fbjs/strict', 'google', 'prettier'],
 };
 
 export default config;

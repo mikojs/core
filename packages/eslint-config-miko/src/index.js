@@ -1,6 +1,5 @@
 const config = {
-  extends: ['eslint:recommended'],
-  parser: 'babel-eslint',
+  parser: '@babel/parser',
   extends: [
     'fbjs/strict',
     'google',

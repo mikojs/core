@@ -1,0 +1,27 @@
+{
+  "name": "@mikojs/eslint-config-miko",
+  "description": "This is an eslint config for mikojs.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/eslint-config-miko",
+  "repository": "https://github.com/mikojs/core/tree/main/packages/eslint-config-miko",
+  "version": "2.0.0-beta",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/eslint-parser": "^7.13.14",
+    "eslint-config-fbjs": "^3.1.1",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-flowtype": "^5.4.0",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.23.0"
+  },
+  "keywords": ["eslint config", "mikojs"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

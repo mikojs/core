@@ -2,14 +2,20 @@
   "private": true,
   "name": "@mikojs/core",
   "license": "MIT",
-  "workspaces": [],
+  "workspaces": ["packages/*"],
   "scripts": {
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "lint": "esw --cache --color",
+    "lint:prettier": "yarn lint --quiet --rule \"prettier/prettier: off\"",
+    "lint:watch": "yarn lint:prettier -w"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.14",
     "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",
+    "babel-plugin-add-module-exports": "^1.0.4",
+    "eslint": "^7.23.0",
+    "eslint-watch": "^7.0.0",
     "husky": "^6.0.0",
     "jest": "^26.6.3",
     "lerna": "^4.0.0",

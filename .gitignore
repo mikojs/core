@@ -5,3 +5,9 @@
 
 # node
 node_modules
+
+# babel
+lib
+
+# lint
+.eslintcache

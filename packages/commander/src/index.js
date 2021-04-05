@@ -10,7 +10,7 @@ const addConfg = (prevProgram, config, callback) => {
 
   program.config = config;
   program.action((...data) => callback(data));
-  Object.keys(config.commands).forEach(key =>
+  Object.keys(config.commands || {}).forEach(key =>
     addConfg(program.command(key), config.commands[key], data =>
       callback([key, ...data]),
     ),

@@ -12,6 +12,8 @@ export default config =>
   CONFIG_KEYS.reduce((result, key) => {
     const value = config[key];
 
+    if (!value) return result;
+
     switch (key) {
       case 'options':
         return [
@@ -34,25 +36,18 @@ export default config =>
         ];
 
       default:
-        return !value
-          ? result
-          : [
-              ...result,
-              ...({
-                version: [
-                  [
-                    'version',
-                    value,
-                    '-v --version',
-                    'Output the version number.',
-                  ],
-                ],
-                description: [
-                  ['description', value],
-                  ['helpOption', '-h, --help', 'Display help for command.'],
-                ],
-                arguments: [['arguments', value]],
-              }[key] || [[key]]),
-            ];
+        return [
+          ...result,
+          ...({
+            version: [
+              ['version', value, '-v --version', 'Output the version number.'],
+            ],
+            description: [
+              ['description', value],
+              ['helpOption', '-h, --help', 'Display help for command.'],
+            ],
+            arguments: [['arguments', value]],
+          }[key] || [[key]]),
+        ];
     }
   }, []);

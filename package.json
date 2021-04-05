@@ -14,6 +14,7 @@
     "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",
     "babel-plugin-add-module-exports": "^1.0.4",
+    "core-js": "^3.10.0",
     "eslint": "^7.23.0",
     "eslint-watch": "^7.0.0",
     "husky": "^6.0.0",

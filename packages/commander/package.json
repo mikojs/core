@@ -7,6 +7,9 @@
   "repository": "https://github.com/mikojs/core/tree/main/packages/commander",
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
+  "dependencies": {
+    "commander": "^6.2.1"
+  },
   "keywords": ["commander", "mikojs"],
   "publishConfig": {
     "access": "public"

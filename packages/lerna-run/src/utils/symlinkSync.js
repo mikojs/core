@@ -17,7 +17,7 @@ export default async (source, target, remove) => {
     return;
   }
 
-  if (fs.existsSync(target)) return;
+  if (!fs.existsSync(source) || fs.existsSync(target)) return;
 
   mkdirp.sync(path.dirname(target));
   fs.symlinkSync(source, target);

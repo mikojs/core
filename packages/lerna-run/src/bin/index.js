@@ -6,6 +6,8 @@ import commander from '@mikojs/commander';
 
 import { version } from '../../package.json';
 
+import linkFlow from '../linkFlow';
+
 commander({
   name: '@mikojs/lerna-run',
   version,
@@ -19,6 +21,7 @@ commander({
           description: 'Remove linked files in each package.',
         },
       ],
+      action: program => linkFlow(Boolean(program.opts().remove)),
     },
   },
 }).parse();

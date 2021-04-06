@@ -9,13 +9,7 @@ export default async remove => {
 
   await Promise.all(
     packages.map(
-      async ({
-        rootPath,
-        location,
-        dependencies,
-        devDependencies,
-        peerDependencies,
-      }) => {
+      async ({ rootPath, location, dependencies, devDependencies }) => {
         await symlinkSync(
           path.resolve(rootPath, './.flowconfig'),
           path.resolve(location, './.flowconfig'),

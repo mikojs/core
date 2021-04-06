@@ -10,7 +10,7 @@ module.exports = {
   ],
   plugins: ['add-module-exports'],
   ignore:
-    process.env.NODE_ENV !== 'test'
+    process.env.NODE_ENV === 'test'
       ? []
       : ['**/__tests__/**', '**/__mocks__/**'],
 };

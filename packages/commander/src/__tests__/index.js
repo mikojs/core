@@ -39,15 +39,15 @@ test('commander', async () => {
         'requiredOption',
       ])
     ).reduce(
-      (result, key) =>
-        typeof key === 'string' || key instanceof Array
-          ? [...result, key]
+      (result, value) =>
+        typeof value === 'string' || value instanceof Array
+          ? [...result, value]
           : [
               ...result,
               ['o', 'Ro', 'config'].reduce(
-                (subResult, subKey) => ({
+                (subResult, key) => ({
                   ...subResult,
-                  [subKey]: key[subKey],
+                  [key]: value[key],
                 }),
                 {},
               ),

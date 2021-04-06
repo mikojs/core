@@ -4,7 +4,7 @@ import transform from './transform';
 
 const addConfg = (prevProgram, config, callback) => {
   const program = transform(config).reduce(
-    (result, [key, ...options]) => result[key](...options),
+    (result, [key, ...args]) => result[key](...args),
     prevProgram,
   );
 

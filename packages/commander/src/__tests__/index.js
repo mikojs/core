@@ -24,7 +24,7 @@ test('commander', async () => {
                 description: 'required option',
               },
             ],
-            action: (args, { o, Ro }) => resolve([args, { o, Ro }]),
+            action: (args, program) => resolve([args, program.opts()]),
           },
         },
       }).parse([

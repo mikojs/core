@@ -19,7 +19,7 @@ commander({
       options: [
         {
           flags: '--remove',
-          description: 'Remove linked files in each pacakge.',
+          description: 'Remove linked files in each package.',
         },
       ],
       action: program => linkBin(Boolean(program.opts().remove)),

@@ -8,32 +8,30 @@ export default async remove => {
   const packages = getPackagesSync();
 
   await Promise.all(
-    packages.map(
-      async ({ rootPath, location, dependencies, devDependencies }) => {
-        await symlinkSync(
-          path.resolve(rootPath, './.flowconfig'),
-          path.resolve(location, './.flowconfig'),
-          remove,
-        );
-        await Promise.all(
-          [dependencies, devDependencies].reduce(
-            (result, data) => [
-              ...result,
-              ...Object.keys(data || {}).map(async key => {
-                const pkg = packages.find(({ name }) => name === key);
-
-                await symlinkSync(
-                  pkg?.location ||
-                    path.resolve(rootPath, './node_modules', key),
-                  path.resolve(location, './node_modules', key),
-                  remove,
-                );
-              }),
-            ],
-            [],
-          ),
-        );
-      },
+    packages.reduce(
+      (result, { rootPath, location, dependencies, devDependencies }) =>
+        [dependencies, devDependencies].reduce(
+          (subResult, data) => [
+            ...subResult,
+            ...Object.keys(data || {}).map(key =>
+              symlinkSync(
+                packages.find(({ name }) => name === key)?.location ||
+                  path.resolve(rootPath, './node_modules', key),
+                path.resolve(location, './node_modules', key),
+                remove,
+              ),
+            ),
+          ],
+          [
+            ...result,
+            symlinkSync(
+              path.resolve(rootPath, './.flowconfig'),
+              path.resolve(location, './.flowconfig'),
+              remove,
+            ),
+          ],
+        ),
+      [],
     ),
   );
 };

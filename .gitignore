@@ -11,3 +11,6 @@ lib
 
 # lint
 .eslintcache
+
+# jest
+coverage

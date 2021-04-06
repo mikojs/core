@@ -7,6 +7,7 @@ export default config =>
     'exitOverride',
     'options',
     'requiredOptions',
+    'action',
   ].reduce((result, key) => {
     const value = config[key];
 
@@ -33,6 +34,7 @@ export default config =>
           ['helpOption', '-h, --help', 'Display help for command.'],
         ],
         arguments: [['arguments', value]],
+        action: [['action', value]],
       }[key] || [[key]]),
     ];
   }, []);

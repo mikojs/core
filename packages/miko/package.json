@@ -1,0 +1,13 @@
+{
+  "name": "@mikojs/miko",
+  "description": "Use a simple config to manage commands.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/miko",
+  "repository": "https://github.com/mikojs/core/tree/main/packages/miko",
+  "version": "2.0.0-beta",
+  "keywords": ["miko", "mikojs"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

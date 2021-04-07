@@ -1,5 +1,3 @@
-import { version } from '../package.json';
-
 import runCommands from './runCommands';
 
 const transform = ({ command, ...config }) => ({
@@ -15,11 +13,4 @@ const transform = ({ command, ...config }) => ({
   ),
 });
 
-export default commands =>
-  transform({
-    name: 'miko',
-    version,
-    description: 'Use a simple config to manage commands.',
-    arguments: '<commands...>',
-    commands,
-  });
+export default transform;

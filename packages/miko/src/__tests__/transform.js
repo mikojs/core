@@ -1,7 +1,7 @@
 import commander from '@mikojs/commander';
 
 import transform from '../transform';
-import runCommands from '../runCommands';
+import run from '../run';
 
 const defaultConfig = {
   description: 'description',
@@ -13,11 +13,11 @@ const defaultConfig = {
   ],
 };
 
-jest.mock('../runCommands', () => jest.fn());
+jest.mock('../run', () => jest.fn());
 
 describe('transform', () => {
   beforeEach(() => {
-    runCommands.mockClear();
+    run.mockClear();
   });
 
   test.each`
@@ -42,7 +42,7 @@ describe('transform', () => {
       }),
     ).parseAsync(['node', 'miko', ...argv]);
 
-    expect(runCommands).toHaveBeenCalledTimes(1);
-    expect(runCommands).toHaveBeenCalledWith(...expected);
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(...expected);
   });
 });

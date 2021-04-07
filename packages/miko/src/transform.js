@@ -1,9 +1,9 @@
-import runCommands from './runCommands';
+import run from './run';
 
 const transform = ({ command, ...config }) => ({
   ...config,
   allowUnknownOption: true,
-  action: () => runCommands(command),
+  action: () => run(command),
   commands: Object.keys(config.commands || {}).reduce(
     (result, key) => ({
       ...result,

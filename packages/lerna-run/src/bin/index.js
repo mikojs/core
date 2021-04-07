@@ -10,7 +10,7 @@ import linkBin from '../linkBin';
 import linkFlow from '../linkFlow';
 
 commander({
-  name: '@mikojs/lerna-run',
+  name: 'lerna-run',
   version,
   description: chalk`Here are some useful commands for {green monorepo}.`,
   commands: {

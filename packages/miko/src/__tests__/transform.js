@@ -5,18 +5,28 @@ import runCommands from '../runCommands';
 
 jest.mock('../runCommands', () => jest.fn());
 
-test('transform', async () => {
-  await commander({
-    ...transform({
-      command: {
-        description: 'description',
-        arguments: '<args>',
-        command: 'command',
-      },
-    }),
-    exitOverride: true,
-  }).parseAsync(['node', 'miko', 'command', '-a']);
+describe('transform', () => {
+  beforeEach(() => {
+    runCommands.mockClear();
+  });
 
-  expect(runCommands).toHaveBeenCalledTimes(1);
-  expect(runCommands).toHaveBeenCalledWith('command');
+  test.each`
+    argv                 | expected
+    ${['custom']}        | ${[undefined]}
+    ${['command', '-a']} | ${['command']}
+  `('argv = $argv', async ({ argv, expected }) => {
+    await commander({
+      ...transform({
+        command: {
+          description: 'description',
+          arguments: '<args>',
+          command: 'command',
+        },
+      }),
+      exitOverride: true,
+    }).parseAsync(['node', 'miko', ...argv]);
+
+    expect(runCommands).toHaveBeenCalledTimes(1);
+    expect(runCommands).toHaveBeenCalledWith(...expected);
+  });
 });

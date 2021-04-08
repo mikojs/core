@@ -1,9 +1,13 @@
 import run from './run';
 
-const transform = ({ command, ...config }) => ({
+const transform = ({ action, ...config }) => ({
   ...config,
   allowUnknownOption: true,
-  action: () => run(command),
+  action: (...args) => {
+    const [program] = args.slice(-1);
+
+    run([...(action?.(program.opts())?.split(/[ ]+/g) || []), ...program.args]);
+  },
   commands: Object.keys(config.commands || {}).reduce(
     (result, key) => ({
       ...result,

@@ -11,11 +11,12 @@ describe('transform', () => {
   });
 
   test.each`
-    argv                       | expected
-    ${['custom']}              | ${['custom']}
-    ${['custom', '-o']}        | ${['custom', '-o']}
-    ${['command', '-a']}       | ${['custom', '-a']}
-    ${['command', '-o', '-a']} | ${['custom', 'option', '-a']}
+    argv                    | expected
+    ${['custom']}           | ${['custom']}
+    ${['custom', '-o']}     | ${['custom', '-o']}
+    ${['func', '-a']}       | ${['custom', '-a']}
+    ${['func', '-o', '-a']} | ${['custom', 'option', '-a']}
+    ${['str', '-a']}        | ${['custom', '-a']}
   `('argv = $argv', async ({ argv, expected }) => {
     await commander(
       transform({
@@ -25,7 +26,7 @@ describe('transform', () => {
         arguments: '<args...>',
         exitOverride: true,
         commands: {
-          command: {
+          func: {
             description: 'description',
             arguments: '<args>',
             options: [
@@ -35,6 +36,10 @@ describe('transform', () => {
               },
             ],
             action: ({ o }) => (!o ? 'custom' : 'custom option'),
+          },
+          str: {
+            description: 'description',
+            action: 'custom',
           },
         },
       }),

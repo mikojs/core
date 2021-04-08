@@ -4,9 +4,17 @@ const transform = ({ action, ...config }) => ({
   ...config,
   allowUnknownOption: true,
   action: (...args) => {
-    const [program] = args.slice(-1);
+    const program = args.find(
+      arg => typeof arg !== 'string' && !(arg instanceof Array),
+    );
 
-    run([...(action?.(program.opts())?.split(/[ ]+/g) || []), ...program.args]);
+    run([
+      ...((typeof action === 'string'
+        ? action
+        : action?.(program.opts())
+      )?.split(/[ ]+/g) || []),
+      ...program.args,
+    ]);
   },
   commands: Object.keys(config.commands || {}).reduce(
     (result, key) => ({

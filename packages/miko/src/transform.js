@@ -1,8 +1,6 @@
 import { version } from '../package.json';
 
-import run from './run';
-
-const transform = ({ action, ...config }) => ({
+const transform = ({ action, ...config }, callback) => ({
   ...config,
   allowUnknownOption: true,
   action: (...args) => {
@@ -10,7 +8,7 @@ const transform = ({ action, ...config }) => ({
       arg => typeof arg !== 'string' && !(arg instanceof Array),
     );
 
-    run([
+    callback([
       ...((typeof action === 'string'
         ? action
         : action?.(program.opts())
@@ -21,17 +19,20 @@ const transform = ({ action, ...config }) => ({
   commands: Object.keys(config.commands || {}).reduce(
     (result, key) => ({
       ...result,
-      [key]: transform(config.commands[key]),
+      [key]: transform(config.commands[key], callback),
     }),
     {},
   ),
 });
 
-export default config =>
-  transform({
-    ...config,
-    name: 'miko',
-    version,
-    description: 'Use a simple config to manage commands.',
-    arguments: '<args...>',
-  });
+export default (config, callback) =>
+  transform(
+    {
+      ...config,
+      name: 'miko',
+      version,
+      description: 'Use a simple config to manage commands.',
+      arguments: '<args...>',
+    },
+    callback,
+  );

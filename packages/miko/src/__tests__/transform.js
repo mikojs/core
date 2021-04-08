@@ -1,15 +1,8 @@
 import commander from '@mikojs/commander';
 
 import transform from '../transform';
-import run from '../run';
-
-jest.mock('../run', () => jest.fn());
 
 describe('transform', () => {
-  beforeEach(() => {
-    run.mockClear();
-  });
-
   test.each`
     argv                    | expected
     ${['custom']}           | ${['custom']}
@@ -18,30 +11,34 @@ describe('transform', () => {
     ${['func', '-o', '-a']} | ${['custom', 'option', '-a']}
     ${['str', '-a']}        | ${['custom', '-a']}
   `('argv = $argv', async ({ argv, expected }) => {
-    await commander(
-      transform({
-        exitOverride: true,
-        commands: {
-          func: {
-            description: 'description',
-            arguments: '<args>',
-            options: [
-              {
-                flags: '-o',
-                description: 'description',
+    expect(
+      await new Promise(resolve => {
+        commander(
+          transform(
+            {
+              exitOverride: true,
+              commands: {
+                func: {
+                  description: 'description',
+                  arguments: '<args>',
+                  options: [
+                    {
+                      flags: '-o',
+                      description: 'description',
+                    },
+                  ],
+                  action: ({ o }) => (!o ? 'custom' : 'custom option'),
+                },
+                str: {
+                  description: 'description',
+                  action: 'custom',
+                },
               },
-            ],
-            action: ({ o }) => (!o ? 'custom' : 'custom option'),
-          },
-          str: {
-            description: 'description',
-            action: 'custom',
-          },
-        },
+            },
+            resolve,
+          ),
+        ).parse(['node', 'miko', ...argv]);
       }),
-    ).parseAsync(['node', 'miko', ...argv]);
-
-    expect(run).toHaveBeenCalledTimes(1);
-    expect(run).toHaveBeenCalledWith(expected);
+    ).toEqual(expected);
   });
 });

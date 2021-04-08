@@ -1,3 +1,5 @@
+import commander from '@mikojs/commander';
+
 import { version } from '../package.json';
 
 const transform = ({ action, ...config }, callback) => ({
@@ -25,14 +27,18 @@ const transform = ({ action, ...config }, callback) => ({
   ),
 });
 
-export default (config, callback) =>
-  transform(
-    {
-      ...config,
-      name: 'miko',
-      version,
-      description: 'Use a simple config to manage commands.',
-      arguments: '<args...>',
-    },
-    callback,
+export default config => argv =>
+  new Promise(resolve =>
+    commander(
+      transform(
+        {
+          ...config,
+          name: 'miko',
+          version,
+          description: 'Use a simple config to manage commands.',
+          arguments: '<args...>',
+        },
+        resolve,
+      ),
+    ).parse(argv),
   );

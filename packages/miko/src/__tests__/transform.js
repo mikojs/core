@@ -1,5 +1,3 @@
-import commander from '@mikojs/commander';
-
 import transform from '../transform';
 
 describe('transform', () => {
@@ -12,33 +10,26 @@ describe('transform', () => {
     ${['str', '-a']}        | ${['custom', '-a']}
   `('argv = $argv', async ({ argv, expected }) => {
     expect(
-      await new Promise(resolve => {
-        commander(
-          transform(
-            {
-              exitOverride: true,
-              commands: {
-                func: {
-                  description: 'description',
-                  arguments: '<args>',
-                  options: [
-                    {
-                      flags: '-o',
-                      description: 'description',
-                    },
-                  ],
-                  action: ({ o }) => (!o ? 'custom' : 'custom option'),
-                },
-                str: {
-                  description: 'description',
-                  action: 'custom',
-                },
+      await transform({
+        exitOverride: true,
+        commands: {
+          func: {
+            description: 'description',
+            arguments: '<args>',
+            options: [
+              {
+                flags: '-o',
+                description: 'description',
               },
-            },
-            resolve,
-          ),
-        ).parse(['node', 'miko', ...argv]);
-      }),
+            ],
+            action: ({ o }) => (!o ? 'custom' : 'custom option'),
+          },
+          str: {
+            description: 'description',
+            action: 'custom',
+          },
+        },
+      })(['node', 'miko', ...argv]),
     ).toEqual(expected);
   });
 });

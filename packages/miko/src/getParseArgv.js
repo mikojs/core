@@ -11,10 +11,7 @@ const transform = ({ action, ...config }, callback) => ({
     );
 
     callback([
-      ...((typeof action === 'string'
-        ? action
-        : action?.(program.opts())
-      )?.split(/[ ]+/g) || []),
+      ...((action instanceof Array ? action : action?.(program.opts())) || []),
       ...program.args,
     ]);
   },

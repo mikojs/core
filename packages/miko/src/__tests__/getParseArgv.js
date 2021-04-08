@@ -12,11 +12,11 @@ const parseArgv = getParseArgv({
           description: 'description',
         },
       ],
-      action: ({ o }) => (!o ? 'custom' : 'custom option'),
+      action: ({ o }) => (!o ? ['custom'] : ['custom', 'option']),
     },
     str: {
       description: 'description',
-      action: 'custom',
+      action: ['custom'],
     },
   },
 });

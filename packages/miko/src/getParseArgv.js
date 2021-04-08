@@ -10,10 +10,14 @@ const transform = ({ action, ...config }, callback) => ({
       arg => typeof arg !== 'string' && !(arg instanceof Array),
     );
 
-    callback([
-      ...((action instanceof Array ? action : action?.(program.opts())) || []),
-      ...program.args,
-    ]);
+    callback(
+      [
+        typeof action === 'string' ? action : action?.(program.opts()),
+        ...program.args,
+      ]
+        .filter(Boolean)
+        .join(' '),
+    );
   },
   commands: Object.keys(config.commands || {}).reduce(
     (result, key) => ({

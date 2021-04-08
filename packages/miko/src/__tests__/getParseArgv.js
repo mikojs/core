@@ -12,11 +12,11 @@ const parseArgv = getParseArgv({
           description: 'description',
         },
       ],
-      action: ({ o }) => (!o ? ['custom'] : ['custom', 'option']),
+      action: ({ o }) => (!o ? 'custom' : 'custom option'),
     },
     str: {
       description: 'description',
-      action: ['custom'],
+      action: 'custom',
     },
   },
 });
@@ -24,11 +24,11 @@ const parseArgv = getParseArgv({
 describe('get parse argv', () => {
   test.each`
     argv                    | expected
-    ${['custom']}           | ${['custom']}
-    ${['custom', '-o']}     | ${['custom', '-o']}
-    ${['func', '-a']}       | ${['custom', '-a']}
-    ${['func', '-o', '-a']} | ${['custom', 'option', '-a']}
-    ${['str', '-a']}        | ${['custom', '-a']}
+    ${['custom']}           | ${'custom'}
+    ${['custom', '-o']}     | ${'custom -o'}
+    ${['func', '-a']}       | ${'custom -a'}
+    ${['func', '-o', '-a']} | ${'custom option -a'}
+    ${['str', '-a']}        | ${'custom -a'}
   `('argv = $argv', async ({ argv, expected }) => {
     expect(await parseArgv(['node', 'miko', ...argv])).toEqual(expected);
   });

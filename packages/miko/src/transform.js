@@ -1,3 +1,5 @@
+import { version } from '../package.json';
+
 import run from './run';
 
 const transform = ({ action, ...config }) => ({
@@ -25,4 +27,11 @@ const transform = ({ action, ...config }) => ({
   ),
 });
 
-export default transform;
+export default config =>
+  transform({
+    ...config,
+    name: 'miko',
+    version,
+    description: 'Use a simple config to manage commands.',
+    arguments: '<args...>',
+  });

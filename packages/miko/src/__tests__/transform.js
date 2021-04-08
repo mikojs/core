@@ -20,10 +20,6 @@ describe('transform', () => {
   `('argv = $argv', async ({ argv, expected }) => {
     await commander(
       transform({
-        name: 'name',
-        version: '1.0.0',
-        description: 'description',
-        arguments: '<args...>',
         exitOverride: true,
         commands: {
           func: {

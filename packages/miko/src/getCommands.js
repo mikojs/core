@@ -1,5 +1,7 @@
 import stringArgv from 'string-argv';
 
+import getCommandStr from './getCommandStr';
+
 const getCommands = (commandStr, parseArgv) =>
   stringArgv(commandStr).reduce(async (subResult, key, index, allKeys) => {
     const result = await subResult;
@@ -11,7 +13,7 @@ const getCommands = (commandStr, parseArgv) =>
             key === 'miko' || !/miko/.test(key)
               ? key
               : (await getCommands(key, parseArgv))
-                  .map(command => command.join(' '))
+                  .map(getCommandStr)
                   .join(' && '),
           ]),
     ];

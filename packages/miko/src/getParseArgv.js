@@ -2,6 +2,8 @@ import commander from '@mikojs/commander';
 
 import { version } from '../package.json';
 
+import getCommandStr from './getCommandStr';
+
 const transform = ({ action, ...config }, callback) => ({
   ...config,
   allowUnknownOption: true,
@@ -11,12 +13,12 @@ const transform = ({ action, ...config }, callback) => ({
     );
 
     callback(
-      [
-        typeof action === 'string' ? action : action?.(program.opts()),
-        ...program.args,
-      ]
-        .filter(Boolean)
-        .join(' '),
+      getCommandStr(
+        [
+          typeof action === 'string' ? action : action?.(program.opts()),
+          ...program.args,
+        ].filter(Boolean),
+      ),
     );
   },
   commands: Object.keys(config.commands || {}).reduce(

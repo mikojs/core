@@ -1,21 +1,14 @@
-import commander from '@mikojs/commander';
-
 import getCommands from '../getCommands';
+import getParseArgv from '../getParseArgv';
 
-const parseArgv = argv =>
-  new Promise(resolve => {
-    commander({
-      name: 'name',
+const parseArgv = getParseArgv({
+  commands: {
+    command: {
       description: 'description',
-      exitOverride: true,
-      commands: {
-        command: {
-          description: 'description',
-          action: () => resolve('command'),
-        },
-      },
-    }).parse(argv);
-  });
+      action: 'command',
+    },
+  },
+});
 
 describe('get commands', () => {
   test.each`

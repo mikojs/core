@@ -1,8 +1,8 @@
+import stringArgv from 'string-argv';
+
 import commander from '@mikojs/commander';
 
 import { version } from '../package.json';
-
-import getCommandStr from './getCommandStr';
 
 const transform = ({ action, ...config }, callback) => ({
   ...config,
@@ -12,14 +12,12 @@ const transform = ({ action, ...config }, callback) => ({
       arg => typeof arg !== 'string' && !(arg instanceof Array),
     );
 
-    callback(
-      getCommandStr(
-        [
-          typeof action === 'string' ? action : action?.(program.opts()),
-          ...program.args,
-        ].filter(Boolean),
+    callback([
+      ...stringArgv(
+        typeof action === 'string' ? action : action?.(program.opts()) || '',
       ),
-    );
+      ...program.args,
+    ]);
   },
   commands: Object.keys(config.commands || {}).reduce(
     (result, key) => ({

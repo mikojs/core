@@ -7,14 +7,16 @@ import { version } from '../package.json';
 const transform = ({ action, ...config }, callback) => ({
   ...config,
   allowUnknownOption: true,
-  action: (...args) => {
+  action: async (...args) => {
     const program = args.find(
       arg => typeof arg !== 'string' && !(arg instanceof Array),
     );
 
     callback([
       ...stringArgv(
-        typeof action === 'string' ? action : action?.(program.opts()) || '',
+        typeof action === 'string'
+          ? action
+          : (await action?.(program.opts())) || '',
       ),
       ...program.args,
     ]);

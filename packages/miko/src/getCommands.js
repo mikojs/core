@@ -1,32 +1,48 @@
 import stringArgv from 'string-argv';
 
-import getCommandStr from './getCommandStr';
+const commandsToString = commands =>
+  commands
+    .map(command =>
+      command
+        .map(key => {
+          if (!/ /.test(key) || /^['"]/.test(key)) return key;
 
-const getCommands = (commandStr, parseArgv) =>
-  stringArgv(commandStr).reduce(async (subResult, key, index, allKeys) => {
-    const result = await subResult;
-    const newCommand = [
-      ...result.slice(-1)[0],
-      ...(key === '&&'
-        ? []
-        : [
-            key === 'miko' || !/miko/.test(key)
-              ? key
-              : (await getCommands(key, parseArgv))
-                  .map(getCommandStr)
-                  .join(' && '),
-          ]),
-    ];
+          return key.match(/['"]/)?.[0] === '"' ? `'${key}'` : `"${key}"`;
+        })
+        .join(' '),
+    )
+    .join(' && ');
+
+const getCommands = async (argv, parseArgv) =>
+  (await parseArgv(argv)).reduce(async (promiseResult, key, index, keys) => {
+    const result = await promiseResult;
+    const [command] = result.slice(-1);
+
+    if (key !== '&&')
+      command.push(
+        key === 'miko' || !/miko/.test(key)
+          ? key
+          : commandsToString(
+              await key
+                .split(/[ ]+&&[ ]+/)
+                .reduce(
+                  async (promiseSubResult, subKey) => [
+                    ...(await promiseSubResult),
+                    ...(await getCommands(
+                      ['node', ...stringArgv(subKey)],
+                      parseArgv,
+                    )),
+                  ],
+                  Promise.resolve([]),
+                ),
+            ),
+      );
 
     return [
       ...result.slice(0, -1),
-      ...(newCommand[0] !== 'miko' ||
-      (key !== '&&' && allKeys.length - 1 !== index)
-        ? [newCommand]
-        : await getCommands(
-            await parseArgv(['node', ...newCommand]),
-            parseArgv,
-          )),
+      ...(command[0] !== 'miko' || (key !== '&&' && keys.length - 1 !== index)
+        ? [command]
+        : await getCommands(await parseArgv(['node', ...command]), parseArgv)),
       ...(key === '&&' ? [[]] : []),
     ];
   }, Promise.resolve([[]]));

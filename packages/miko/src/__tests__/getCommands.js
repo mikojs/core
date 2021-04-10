@@ -2,6 +2,7 @@ import getCommands from '../getCommands';
 import getParseArgv from '../getParseArgv';
 
 const parseArgv = getParseArgv({
+  exitOverride: true,
   commands: {
     command: {
       description: 'description',
@@ -12,11 +13,10 @@ const parseArgv = getParseArgv({
 
 describe('get commands', () => {
   test.each`
-    commandStr                                       | expected
-    ${'miko command'}                                | ${[['command']]}
-    ${'miko command && miko command'}                | ${[['command'], ['command']]}
-    ${'miko command "miko command"'}                 | ${[['command', 'command']]}
-    ${'miko command "miko command && miko command"'} | ${[['command', 'command && command']]}
+    commandStr                                                     | expected
+    ${['node', 'miko', 'command']}                                 | ${[['command']]}
+    ${['node', 'miko', 'command', 'miko command']}                 | ${[['command', 'command']]}
+    ${['node', 'miko', 'command', 'miko command && miko command']} | ${[['command', 'command && command']]}
   `('$commandStr', async ({ commandStr, expected }) => {
     expect(await getCommands(commandStr, parseArgv)).toEqual(expected);
   });

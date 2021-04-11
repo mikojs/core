@@ -1,5 +1,5 @@
 module.exports = {
-  '*.js': ['yarn lint:prettier', 'prettier --write'],
+  '*.js': ['miko lint prettier', 'prettier --write'],
   '*.md': ['prettier --write --parser markdown'],
   '*.json': ['prettier --write --parser json'],
   'package.json': [

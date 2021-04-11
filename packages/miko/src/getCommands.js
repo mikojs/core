@@ -13,6 +13,9 @@ const commandsToString = commands =>
     )
     .join(' && ');
 
+const addNode = command =>
+  command[0] === 'miko' ? ['node', ...command] : ['node', 'miko', ...command];
+
 const getCommands = async (argv, parseArgv) =>
   (await parseArgv(argv)).reduce(async (promiseResult, key, index, keys) => {
     const result = await promiseResult;
@@ -42,7 +45,10 @@ const getCommands = async (argv, parseArgv) =>
       ...result.slice(0, -1),
       ...(command[0] !== 'miko' || (key !== '&&' && keys.length - 1 !== index)
         ? [command]
-        : await getCommands(await parseArgv(['node', ...command]), parseArgv)),
+        : await getCommands(
+            addNode(await parseArgv(['node', ...command])),
+            parseArgv,
+          )),
       ...(key === '&&' ? [[]] : []),
     ];
   }, Promise.resolve([[]]));

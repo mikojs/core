@@ -32,7 +32,7 @@ const getCommands = async (argv, parseArgv) =>
                   async (promiseSubResult, subKey) => [
                     ...(await promiseSubResult),
                     ...(await getCommands(
-                      ['node', ...stringArgv(subKey)],
+                      addNode(stringArgv(subKey)),
                       parseArgv,
                     )),
                   ],
@@ -46,7 +46,7 @@ const getCommands = async (argv, parseArgv) =>
       ...(command[0] !== 'miko' || (key !== '&&' && keys.length - 1 !== index)
         ? [command]
         : await getCommands(
-            addNode(await parseArgv(['node', ...command])),
+            addNode(await parseArgv(addNode(command))),
             parseArgv,
           )),
       ...(key === '&&' ? [[]] : []),

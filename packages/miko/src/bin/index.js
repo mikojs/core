@@ -8,7 +8,7 @@ import getCommands from '../getCommands';
 
 (async () => {
   const commands = await getCommands(
-    process.argv,
+    ['miko', ...process.argv.slice(2)],
     getParseArgv({
       commands: cosmiconfigSync('miko').search()?.config,
     }),

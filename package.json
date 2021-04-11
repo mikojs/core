@@ -4,10 +4,7 @@
   "license": "MIT",
   "workspaces": ["packages/*"],
   "scripts": {
-    "postinstall": "husky install",
-    "lint": "esw --cache --color",
-    "lint:prettier": "yarn lint --quiet --rule \"prettier/prettier: off\"",
-    "lint:watch": "yarn lint:prettier -w"
+    "postinstall": "husky install"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.14",

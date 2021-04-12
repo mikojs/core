@@ -17,6 +17,7 @@ describe('get commands', () => {
     ${['miko', 'command']}                                 | ${[['command']]}
     ${['miko', 'command', 'miko command']}                 | ${[['command', 'command']]}
     ${['miko', 'command', 'miko command && miko command']} | ${[['command', 'command && command']]}
+    ${['test', 'test']}                                    | ${[['test', 'test']]}
   `('$commandStr', async ({ commandStr, expected }) => {
     expect(await getCommands(commandStr, parseArgv)).toEqual(expected);
   });

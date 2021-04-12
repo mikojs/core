@@ -21,6 +21,16 @@ module.exports = {
     description: 'Run production mode',
     action: 'NODE_ENV=production && miko build',
   },
+  jest: {
+    description: 'Test the code with jest.',
+    action: 'jest --silent',
+    commands: {
+      watch: {
+        description: 'Run jest in watch mode.',
+        action: 'jest --coverage=false --watchAll',
+      },
+    },
+  },
   lint: {
     description: 'Check code style with eslint.',
     action: 'esw --cache --color',

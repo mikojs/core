@@ -31,7 +31,7 @@ module.exports = {
       },
       watch: {
         description: 'Run eslint in watch mode.',
-        action: 'miko lint prettier -w',
+        action: 'miko lint --rule "prettier/prettier: off" -w',
       },
     },
   },

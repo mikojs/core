@@ -15,7 +15,7 @@ const commandsToString = commands =>
 
 const getCommands = async (argv, parseArgv) =>
   argv[0] !== 'miko'
-    ? argv
+    ? [argv]
     : (await parseArgv(['node', ...argv])).reduce(
         async (promiseResult, key, index, keys) => {
           const result = await promiseResult;

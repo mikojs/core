@@ -4,6 +4,8 @@
   "license": "MIT",
   "workspaces": ["packages/*"],
   "scripts": {
+    "build:base": "yarn lerna exec \"babel src -d lib --delete-dir-on-start --verbose --root-mode upward\" --stream --include-dependencies $(for PACKAGE in $(yarn --silent build:base:scope); do printf \"%s \" \"--scope $PACKAGE\"; done)",
+    "build:base:scope": "echo \"@mikojs/miko\"",
     "postinstall": "husky install"
   },
   "devDependencies": {

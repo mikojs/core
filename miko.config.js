@@ -1,3 +1,5 @@
+const path = require('path');
+
 const gitBranch = require('git-branch');
 
 module.exports = {
@@ -43,6 +45,23 @@ module.exports = {
       watch: {
         description: 'Run eslint in watch mode.',
         action: 'miko lint --rule "prettier/prettier: off" -w',
+      },
+    },
+  },
+  'flow-typed': {
+    description: 'Run flow-typed',
+    commands: {
+      install: {
+        description: 'Run flow-typed install in monorepo',
+        action: () => {
+          const { version } = require(path.resolve(
+            require.resolve('flow-bin'),
+            '../package.json',
+          ));
+          const command = `flow-typed install --verbose --flowVersion=${version}`;
+
+          return `${command} && lerna exec "${command}" --stream`;
+        },
       },
     },
   },

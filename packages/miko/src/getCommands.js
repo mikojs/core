@@ -4,7 +4,7 @@ import commandsToString from './commandsToString';
 import spliceEnv from './spliceEnv';
 
 const getCommands = async (originalArgv, parseArgv) => {
-  const [env, argv] = spliceEnv(originalArgv);
+  const { env, argv } = spliceEnv(originalArgv);
 
   return argv[0] !== 'miko'
     ? [originalArgv]
@@ -33,7 +33,7 @@ const getCommands = async (originalArgv, parseArgv) => {
           return [
             ...result.slice(0, -1),
             ...((key !== '&&' && keys.length - 1 !== index) ||
-            spliceEnv(command)[1][0] !== 'miko'
+            spliceEnv(command).argv[0] !== 'miko'
               ? [command]
               : await getCommands(command, parseArgv)),
             ...(key === '&&' ? [[]] : []),

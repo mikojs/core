@@ -17,7 +17,7 @@ module.exports = {
     description: 'Run build mode',
     action: 'lerna exec "miko babel" --parallel --stream',
   },
-  pord: {
+  prod: {
     description: 'Run production mode',
     action: 'NODE_ENV=production && miko build',
   },

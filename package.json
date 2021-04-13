@@ -4,6 +4,8 @@
   "license": "MIT",
   "workspaces": ["packages/*"],
   "scripts": {
+    "build:base": "yarn lerna exec \"babel src -d lib --delete-dir-on-start --verbose --root-mode upward\" --stream --include-dependencies $(for PACKAGE in $(yarn --silent build:base:scope); do printf \"%s \" \"--scope $PACKAGE\"; done)",
+    "build:base:scope": "echo \"@mikojs/miko\"",
     "postinstall": "husky install"
   },
   "devDependencies": {
@@ -14,6 +16,8 @@
     "core-js": "^3.10.0",
     "eslint": "^7.23.0",
     "eslint-watch": "^7.0.0",
+    "flow-bin": "^0.148.0",
+    "flow-typed": "^3.3.1",
     "git-branch": "^2.0.1",
     "husky": "^6.0.0",
     "jest": "^26.6.3",

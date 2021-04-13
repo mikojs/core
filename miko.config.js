@@ -1,9 +1,15 @@
+const path = require('path');
+
 const gitBranch = require('git-branch');
+
+const runLernaCommand = command =>
+  `${command} && lerna exec "${command}" --stream --concurrency 1`;
 
 module.exports = {
   babel: {
     description: 'Build source code with babel.',
-    action: 'babel src -d lib --verbose --root-mode upward',
+    action:
+      'babel src -d lib --delete-dir-on-start --verbose --root-mode upward',
   },
   dev: {
     description: 'Run development mode',
@@ -42,6 +48,36 @@ module.exports = {
       watch: {
         description: 'Run eslint in watch mode.',
         action: 'miko lint --rule "prettier/prettier: off" -w',
+      },
+    },
+  },
+  flow: {
+    description: 'Run flow in monorepo',
+    action: () => {
+      const isCI = process.env.CI === 'true';
+
+      return runLernaCommand(
+        [isCI ? 'flow stop' : '', 'flow --quiet', isCI ? 'flow stop' : '']
+          .filter(Boolean)
+          .join(' && '),
+      );
+    },
+  },
+  'flow-typed': {
+    description: 'Run flow-typed',
+    commands: {
+      install: {
+        description: 'Run flow-typed install in monorepo',
+        action: () => {
+          const { version } = require(path.resolve(
+            require.resolve('flow-bin'),
+            '../package.json',
+          ));
+
+          return runLernaCommand(
+            `flow-typed install --verbose --flowVersion=${version}`,
+          );
+        },
       },
     },
   },

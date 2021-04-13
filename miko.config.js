@@ -3,7 +3,8 @@ const gitBranch = require('git-branch');
 module.exports = {
   babel: {
     description: 'Build source code with babel.',
-    action: 'babel src -d lib --verbose --root-mode upward',
+    action:
+      'babel src -d lib --delete-dir-on-start --verbose --root-mode upward',
   },
   dev: {
     description: 'Run development mode',

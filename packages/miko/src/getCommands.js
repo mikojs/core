@@ -1,17 +1,6 @@
 import stringArgv from 'string-argv';
 
-const commandsToString = commands =>
-  commands
-    .map(command =>
-      command
-        .map(key => {
-          if (!/ /.test(key) || /^['"]/.test(key)) return key;
-
-          return key.match(/['"]/)?.[0] === '"' ? `'${key}'` : `"${key}"`;
-        })
-        .join(' '),
-    )
-    .join(' && ');
+import commandsToString from './commandsToString';
 
 const getCommands = async (argv, parseArgv) =>
   argv[0] !== 'miko'

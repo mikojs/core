@@ -8,8 +8,8 @@ export default originalArgv => {
           }
         : {
             ...result,
-            isEnv: false,
             argv: [...result.argv, key],
+            isEnv: false,
           },
     {
       env: [],

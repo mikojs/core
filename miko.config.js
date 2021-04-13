@@ -2,6 +2,9 @@ const path = require('path');
 
 const gitBranch = require('git-branch');
 
+const runLernaCommand = command =>
+  `${command} && lerna exec "${command}" --stream --concurrency 1`;
+
 module.exports = {
   babel: {
     description: 'Build source code with babel.',
@@ -48,6 +51,18 @@ module.exports = {
       },
     },
   },
+  flow: {
+    description: 'Run flow in monorepo',
+    action: () => {
+      const isCI = process.env.CI === 'true';
+
+      return runLernaCommand(
+        [isCI ? 'flow stop' : '', 'flow --quiet', isCI ? 'flow stop' : '']
+          .filter(Boolean)
+          .join(' && '),
+      );
+    },
+  },
   'flow-typed': {
     description: 'Run flow-typed',
     commands: {
@@ -58,9 +73,10 @@ module.exports = {
             require.resolve('flow-bin'),
             '../package.json',
           ));
-          const command = `flow-typed install --verbose --flowVersion=${version}`;
 
-          return `${command} && lerna exec "${command}" --stream`;
+          return runLernaCommand(
+            `flow-typed install --verbose --flowVersion=${version}`,
+          );
         },
       },
     },

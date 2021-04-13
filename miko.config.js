@@ -12,7 +12,7 @@ module.exports = {
       'babel src -d lib --delete-dir-on-start --verbose --root-mode upward',
   },
   dev: {
-    description: 'Run development mode',
+    description: 'Run development mode.',
     action: () => {
       const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'main';
 
@@ -20,11 +20,11 @@ module.exports = {
     },
   },
   build: {
-    description: 'Run build mode',
+    description: 'Run build mode.',
     action: 'lerna exec "miko babel" --parallel --stream',
   },
   prod: {
-    description: 'Run production mode',
+    description: 'Run production mode.',
     action: 'NODE_ENV=production && miko build',
   },
   jest: {
@@ -52,7 +52,7 @@ module.exports = {
     },
   },
   flow: {
-    description: 'Run flow in monorepo',
+    description: 'Run flow in monorepo.',
     action: () => {
       const isCI = process.env.CI === 'true';
 
@@ -64,10 +64,10 @@ module.exports = {
     },
   },
   'flow-typed': {
-    description: 'Run flow-typed',
+    description: 'Run flow-typed.',
     commands: {
       install: {
-        description: 'Run flow-typed install in monorepo',
+        description: 'Run flow-typed install in monorepo.',
         action: () => {
           const { version } = require(path.resolve(
             require.resolve('flow-bin'),

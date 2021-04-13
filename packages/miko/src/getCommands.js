@@ -1,22 +1,14 @@
 import stringArgv from 'string-argv';
 
-const commandsToString = commands =>
-  commands
-    .map(command =>
-      command
-        .map(key => {
-          if (!/ /.test(key) || /^['"]/.test(key)) return key;
+import commandsToString from './commandsToString';
+import spliceEnv from './spliceEnv';
 
-          return key.match(/['"]/)?.[0] === '"' ? `'${key}'` : `"${key}"`;
-        })
-        .join(' '),
-    )
-    .join(' && ');
+const getCommands = async (originalArgv, parseArgv) => {
+  const { env, argv } = spliceEnv(originalArgv);
 
-const getCommands = async (argv, parseArgv) =>
-  argv[0] !== 'miko'
-    ? argv
-    : (await parseArgv(['node', ...argv])).reduce(
+  return argv[0] !== 'miko'
+    ? [originalArgv]
+    : [...env, ...(await parseArgv(['node', ...argv]))].reduce(
         async (promiseResult, key, index, keys) => {
           const result = await promiseResult;
           const [command] = result.slice(-1);
@@ -40,8 +32,8 @@ const getCommands = async (argv, parseArgv) =>
 
           return [
             ...result.slice(0, -1),
-            ...(command[0] !== 'miko' ||
-            (key !== '&&' && keys.length - 1 !== index)
+            ...((key !== '&&' && keys.length - 1 !== index) ||
+            spliceEnv(command).argv[0] !== 'miko'
               ? [command]
               : await getCommands(command, parseArgv)),
             ...(key === '&&' ? [[]] : []),
@@ -49,5 +41,6 @@ const getCommands = async (argv, parseArgv) =>
         },
         Promise.resolve([[]]),
       );
+};
 
 export default getCommands;

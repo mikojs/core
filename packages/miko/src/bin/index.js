@@ -5,6 +5,7 @@ import { cosmiconfigSync } from 'cosmiconfig';
 
 import getParseArgv from '../getParseArgv';
 import getCommands from '../getCommands';
+import spliceEnv from '../spliceEnv';
 
 (async () => {
   const commands = await getCommands(
@@ -15,11 +16,29 @@ import getCommands from '../getCommands';
   );
 
   try {
+    const globalEnv = {};
+
     await commands.reduce(async (result, command) => {
       await result;
-      await execa(command[0], command.slice(1), {
-        stdio: 'inherit',
+
+      const { env, argv } = spliceEnv(command);
+      const localEnv = {};
+
+      env.forEach(key => {
+        const [envKey, envValue] = key.split(/=/);
+
+        if (argv.length === 0) globalEnv[envKey] = envValue;
+        else localEnv[envKey] = envValue;
       });
+
+      if (argv.length !== 0)
+        await execa(argv[0], argv.slice(1), {
+          stdio: 'inherit',
+          env: {
+            ...globalEnv,
+            ...localEnv,
+          },
+        });
     }, Promise.resolve());
   } catch (e) {
     process.exit(1);

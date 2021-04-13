@@ -1,11 +1,24 @@
-export default argv => {
-  const result = [...argv];
+export default originalArgv => {
+  const { env, argv } = originalArgv.reduce(
+    (result, key) => {
+      if (result.isEnv && /^[^ ]+=/.test(key))
+        return {
+          ...result,
+          env: [...result.env, key],
+        };
 
-  return {
-    env: result.splice(
-      0,
-      result.findIndex(key => !/^[^ ]+=/.test(key)),
-    ),
-    argv: result,
-  };
+      return {
+        ...result,
+        isEnv: false,
+        argv: [...result.argv, key],
+      };
+    },
+    {
+      env: [],
+      argv: [],
+      isEnv: true,
+    },
+  );
+
+  return { env, argv };
 };

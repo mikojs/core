@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Basic job
-        uses: ./base.yml
+        uses: ./.github/actions/base.yml
       - name: Flow check
         run: yarn miko flow
       - name: Check code style

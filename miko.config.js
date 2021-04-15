@@ -14,11 +14,9 @@ module.exports = {
   dev: {
     description: 'Run development mode.',
     action: () =>
-      runLernaCommand(
-        `lerna exec "miko babel -w" --parallel --stream --since ${
-          gitBranch.sync()?.replace(/Branch: /, '') || 'main'
-        }`,
-      ),
+      `lerna exec "miko babel -w" --parallel --stream --since ${
+        gitBranch.sync()?.replace(/Branch: /, '') || 'main'
+      }`,
   },
   build: {
     description: 'Run build mode.',

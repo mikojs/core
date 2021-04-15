@@ -21,7 +21,14 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Install packages
         run: yarn
-      - uses: ./.github/actions/base
+      - name: Run basic script
+        run: yarn build:base
+      - name: Link bin files
+        run: yarn miko lerna link bin
+      - name: Link flow files
+        run: yarn miko lerna link flow
+      - name: Install flow-typed
+        run: yarn miko flow-typed install
       - name: Flow check
         run: yarn miko flow
       - name: Check code style

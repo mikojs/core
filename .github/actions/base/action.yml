@@ -3,7 +3,6 @@ description: Run basic steps for each job
 runs:
   using: composite
   steps:
-    - uses: bahmutov/npm-install@v1
     - name: Run basic script
       run: yarn build:base
     - name: Link bin files

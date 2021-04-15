@@ -23,8 +23,6 @@ jobs:
         run: yarn
       - name: Run basic script
         run: yarn build:base
-      - name: Link bin files
-        run: yarn miko lerna link bin
       - name: Link flow files
         run: yarn miko lerna link flow
       - name: Install flow-typed
@@ -33,3 +31,5 @@ jobs:
         run: yarn miko flow
       - name: Check code style
         run: yarn miko lint
+      - name: Test code
+        run: yarn miko jest

@@ -5,7 +5,7 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "build:base": "yarn lerna exec \"babel src -d lib --delete-dir-on-start --verbose --root-mode upward\" --stream --include-dependencies $(for PACKAGE in $(yarn --silent build:base:scope); do printf \"%s \" \"--scope $PACKAGE\"; done) && yarn lerna exec \"node ./lib/bin/index.js link-bin\" --stream --scope @mikojs/lerna-run",
-    "build:base:scope": "echo \"@mikojs/miko @mikojs/lerna-run\"",
+    "build:base:scope": "echo \"@mikojs/miko @mikojs/lerna-run @mikojs/eslint-config-miko\"",
     "postinstall": "husky install"
   },
   "devDependencies": {

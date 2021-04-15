@@ -13,11 +13,12 @@ module.exports = {
   },
   dev: {
     description: 'Run development mode.',
-    action: () => {
-      const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'main';
-
-      return `lerna exec "miko babel -w" --parallel --stream --since ${branch}`;
-    },
+    action: () =>
+      runLernaCommand(
+        `lerna exec "miko babel -w" --parallel --stream --since ${
+          gitBranch.sync()?.replace(/Branch: /, '') || 'main'
+        }`,
+      ),
   },
   build: {
     description: 'Run build mode.',
@@ -53,15 +54,7 @@ module.exports = {
   },
   flow: {
     description: 'Run flow in monorepo.',
-    action: () => {
-      const isCI = process.env.CI === 'true';
-
-      return runLernaCommand(
-        [isCI ? 'flow stop' : '', 'flow --quiet', isCI ? 'flow stop' : '']
-          .filter(Boolean)
-          .join(' && '),
-      );
-    },
+    action: runLernaCommand('flow --quiet'),
   },
   lerna: {
     description: 'Run lerna.',
@@ -86,16 +79,15 @@ module.exports = {
     commands: {
       install: {
         description: 'Run flow-typed install in monorepo.',
-        action: () => {
-          const { version } = require(path.resolve(
-            require.resolve('flow-bin'),
-            '../package.json',
-          ));
-
-          return runLernaCommand(
-            `flow-typed install --verbose --flowVersion=${version}`,
-          );
-        },
+        action: () =>
+          runLernaCommand(
+            `flow-typed install --verbose --flowVersion=${
+              require(path.resolve(
+                require.resolve('flow-bin'),
+                '../package.json',
+              )).version
+            }`,
+          ),
       },
     },
   },

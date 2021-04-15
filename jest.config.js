@@ -1,7 +1,7 @@
 module.exports = {
   testPathIgnorePatterns: ['__tests__/__ignore__'],
   collectCoverage: true,
-  collectCoverageFrom: ['**/src/**/*.js'],
+  collectCoverageFrom: ['**/src/**/*.js', '!**/bin/*.js'],
   coveragePathIgnorePatterns: ['__tests__/__ignore__'],
   coverageDirectory: 'coverage',
   coverageReporters: ['html', 'text'],

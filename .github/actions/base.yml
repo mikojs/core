@@ -6,3 +6,9 @@ runs:
     - uses: bahmutov/npm-install@v1
     - name: Run basic script
       run: yarn build:base
+    - name: Link bin files
+      run: yarn miko lerna link bin
+    - name: Link flow files
+      run: yarn miko lerna link flow
+    - name: Install flow-typed
+      run: yarn miko flow-typed install

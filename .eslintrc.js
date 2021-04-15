@@ -11,5 +11,8 @@ module.exports = {
 
     // jest
     'coverage',
+
+    // flow
+    '**/flow-typed/npm',
   ],
 };

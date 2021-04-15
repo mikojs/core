@@ -15,13 +15,13 @@ test('commander', async () => {
             options: [
               {
                 flags: '-o <option>',
-                description: 'option',
+                description: 'description',
               },
             ],
             requiredOptions: [
               {
                 flags: '-ro <requiredOption>',
-                description: 'required option',
+                description: 'description',
               },
             ],
             action: (args, program) => resolve([args, program.opts()]),

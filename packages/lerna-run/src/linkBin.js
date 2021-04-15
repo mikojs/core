@@ -9,7 +9,7 @@ export default async remove => {
     getPackagesSync().reduce(
       (result, { bin, rootPath, location }) => [
         ...result,
-        ...Object.keys(bin).map(key =>
+        ...Object.keys(bin || {}).map(key =>
           symlinkSync(
             path.resolve(location, bin[key]),
             path.resolve(rootPath, './node_modules/.bin', key),

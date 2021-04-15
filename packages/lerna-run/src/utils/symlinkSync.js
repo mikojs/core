@@ -1,18 +1,16 @@
 import fs from 'fs';
 import path from 'path';
+import { promisify } from 'util';
 
 import mkdirp from 'mkdirp';
 import rimraf from 'rimraf';
 
+const rimrafSync = promisify(rimraf);
+
 export default async (source, target, remove) => {
   if (remove) {
     if (fs.existsSync(target) && fs.lstatSync(target).isSymbolicLink())
-      await new Promise((resolve, reject) => {
-        rimraf(target, err => {
-          if (err) reject(err);
-          else resolve();
-        });
-      });
+      await rimrafSync(target);
 
     return;
   }

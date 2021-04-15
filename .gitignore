@@ -16,5 +16,5 @@ lib
 coverage
 
 # flow
-flow-typed/npm
-.flowconfig
+**/flow-typed/npm
+**/.flowconfig

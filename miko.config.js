@@ -89,4 +89,8 @@ module.exports = {
       },
     },
   },
+  clean: {
+    description: 'Clean ignored files.',
+    action: 'git clean -dxf',
+  },
 };

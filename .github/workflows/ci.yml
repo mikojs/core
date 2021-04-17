@@ -31,3 +31,7 @@ jobs:
         run: yarn miko lint
       - name: Test code
         run: yarn miko jest
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-coverage
+          path: coverage

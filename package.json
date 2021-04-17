@@ -4,9 +4,12 @@
   "license": "MIT",
   "workspaces": ["packages/*"],
   "scripts": {
-    "build:base": "yarn lerna exec \"babel src -d lib --delete-dir-on-start --verbose --root-mode upward\" --stream --include-dependencies $(for PACKAGE in $(yarn --silent build:base:scope); do printf \"%s \" \"--scope $PACKAGE\"; done) && yarn lerna exec \"node ./lib/bin/index.js link-bin\" --stream --scope @mikojs/lerna-run",
+    "build": "yarn build:base && miko build",
+    "build:base": "yarn lerna exec \"babel src -d lib --delete-dir-on-start --verbose --root-mode upward\" --stream --include-dependencies $(for PACKAGE in $(yarn --silent build:base:scope); do printf \"%s \" \"--scope $PACKAGE\"; done) $(echo $LERNA_OPTIONS) && yarn lerna exec \"node ./lib/bin/index.js link-bin\" --stream --scope @mikojs/lerna-run",
     "build:base:scope": "echo \"@mikojs/miko @mikojs/lerna-run @mikojs/eslint-config-miko\"",
-    "postinstall": "husky install && yarn build:base"
+    "dev": "LERNA_OPTIONS=\"--since $(git branch --show-current)\" yarn build:base && miko dev",
+    "postinstall": "husky install && yarn build:base",
+    "prod": "yarn build:base && miko prod"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.14",

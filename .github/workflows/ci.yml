@@ -21,8 +21,6 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Install packages
         run: yarn
-      - name: Run basic script
-        run: yarn build:base
       - name: Link flow files
         run: yarn miko lerna link flow
       - name: Install flow-typed
@@ -33,3 +31,7 @@ jobs:
         run: yarn miko lint
       - name: Test code
         run: yarn miko jest
+      - uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage

@@ -89,4 +89,29 @@ module.exports = {
       },
     },
   },
+  husky: {
+    description: 'Run husky.',
+    commands: {
+      'pre-commit': {
+        description: 'Run commands in git pre-commit hook.',
+        action: () => {
+          const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'main';
+
+          return `miko build --since ${branch} && miko flow --since ${branch} && lint-staged`;
+        },
+        'post-merge': {
+          description: 'Run commands in git post-merge hook.',
+          action: 'miko build',
+        },
+        'post-checkout': {
+          description: 'Run commands in git post-checkout hook.',
+          action: 'miko build --since main',
+        },
+      },
+    },
+  },
+  clean: {
+    description: 'Clean ignored files.',
+    action: 'git clean -dxf',
+  },
 };

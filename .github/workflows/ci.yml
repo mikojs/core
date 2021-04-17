@@ -33,5 +33,5 @@ jobs:
         run: yarn miko jest
       - uses: actions/upload-artifact@v2
         with:
-          name: test-coverage
+          name: coverage
           path: coverage

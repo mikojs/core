@@ -8,7 +8,6 @@ import { version } from '../../package.json';
 
 import linkBin from '../linkBin';
 import linkFlow from '../linkFlow';
-import release from '../release';
 
 commander({
   name: 'lerna-run',
@@ -34,11 +33,6 @@ commander({
         },
       ],
       action: program => linkFlow(Boolean(program.opts().remove)),
-    },
-    release: {
-      description: 'Release a new version.',
-      arguments: '<nextVersion>',
-      action: release,
     },
   },
 }).parse();

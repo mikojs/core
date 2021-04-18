@@ -1,9 +1,12 @@
 const path = require('path');
 
-const gitBranch = require('git-branch');
+const execa = require('execa');
 
 const runLernaCommand = command =>
   `${command} && lerna exec "${command}" --stream --concurrency 1`;
+
+const getBranch = async () =>
+  (await execa('git', ['branch', '--show-current'])).stdout;
 
 module.exports = {
   babel: {
@@ -13,10 +16,8 @@ module.exports = {
   },
   dev: {
     description: 'Run development mode.',
-    action: () =>
-      `lerna exec "miko babel -w" --parallel --stream --since ${
-        gitBranch.sync()?.replace(/Branch: /, '') || 'main'
-      }`,
+    action: async () =>
+      `lerna exec "miko babel -w" --parallel --stream --since ${await getBranch()}`,
   },
   build: {
     description: 'Run build mode.',
@@ -94,8 +95,8 @@ module.exports = {
     commands: {
       'pre-commit': {
         description: 'Run commands in git pre-commit hook.',
-        action: () => {
-          const branch = gitBranch.sync()?.replace(/Branch: /, '') || 'main';
+        action: async () => {
+          const branch = await getBranch();
 
           return `miko build --since ${branch} && miko flow --since ${branch} && lint-staged`;
         },

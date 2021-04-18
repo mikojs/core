@@ -113,10 +113,7 @@ module.exports = {
   },
   release: {
     description: 'Release a new version.',
-    action: async () =>
-      `lerna version && lerna-changelog --nextVersion "${(
-        await execa('git', ['describe', '--tags', '--abbrev=0'])
-      ).stdout.replace(/^v/, '')}"`,
+    action: 'lerna-run release',
   },
   clean: {
     description: 'Clean ignored files.',

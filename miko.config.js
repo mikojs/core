@@ -111,10 +111,6 @@ module.exports = {
       },
     },
   },
-  release: {
-    description: 'Release a new version.',
-    action: 'lerna-run release',
-  },
   clean: {
     description: 'Clean ignored files.',
     action: 'git clean -dxf',

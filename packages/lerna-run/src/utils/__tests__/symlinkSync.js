@@ -12,7 +12,7 @@ jest.mock('fs');
 
 describe('symlink sync', () => {
   beforeEach(() => {
-    fs.symlinkSync.mockRestore();
+    fs.symlinkSync.mockClear();
     rimraf.mockClear();
   });
 

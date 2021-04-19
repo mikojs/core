@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-. "$(dirname "$0")/build.sh"
+sh $(dirname "$0")/build.sh
 yarn miko husky post-merge

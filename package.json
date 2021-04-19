@@ -5,7 +5,7 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "build": "yarn build:base && miko build",
-    "build:base": "yarn lerna exec \"babel src -d lib --delete-dir-on-start --verbose --root-mode upward\" --stream --include-dependencies $(for PACKAGE in $(yarn --silent build:base:scope); do printf \"%s \" \"--scope $PACKAGE\"; done) $(echo $LERNA_OPTIONS) && yarn lerna exec \"node ./lib/bin/index.js link-bin\" --stream --scope @mikojs/lerna-run",
+    "build:base": "yarn lerna exec \"babel src -d lib --delete-dir-on-start --verbose --root-mode upward\" --stream --include-dependencies $(for PACKAGE in $(yarn --silent build:base:scope); do printf \"%s \" \"--scope $PACKAGE\"; done) $(echo $LERNA_OPTIONS)",
     "build:base:scope": "echo \"@mikojs/miko @mikojs/lerna-run @mikojs/eslint-config-miko\"",
     "dev": "LERNA_OPTIONS=\"--since $(git branch --show-current)\" yarn build:base && miko dev",
     "postinstall": "husky install && yarn build:base",
@@ -15,6 +15,8 @@
     "@babel/cli": "^7.13.14",
     "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",
+    "@mikojs/lerna-run": "workspace:*",
+    "@mikojs/miko": "workspace:*",
     "babel-plugin-add-module-exports": "^1.0.4",
     "core-js": "^3.10.0",
     "eslint": "^7.23.0",

@@ -2290,6 +2290,8 @@ __metadata:
     "@babel/cli": ^7.13.14
     "@babel/core": ^7.13.14
     "@babel/preset-env": ^7.13.12
+    "@mikojs/lerna-run": "workspace:*"
+    "@mikojs/miko": "workspace:*"
     babel-plugin-add-module-exports: ^1.0.4
     core-js: ^3.10.0
     eslint: ^7.23.0
@@ -2309,6 +2311,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikojs/eslint-config-miko@workspace:packages/eslint-config-miko"
   dependencies:
+    "@babel/core": ^7.13.14
     "@babel/eslint-parser": ^7.13.14
     eslint: ^7.23.0
     eslint-config-fbjs: ^3.1.1
@@ -2321,7 +2324,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/lerna-run@workspace:packages/lerna-run":
+"@mikojs/lerna-run@workspace:*, @mikojs/lerna-run@workspace:packages/lerna-run":
   version: 0.0.0-use.local
   resolution: "@mikojs/lerna-run@workspace:packages/lerna-run"
   bin:
@@ -2329,7 +2332,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/miko@workspace:packages/miko":
+"@mikojs/miko@workspace:*, @mikojs/miko@workspace:packages/miko":
   version: 0.0.0-use.local
   resolution: "@mikojs/miko@workspace:packages/miko"
   dependencies:

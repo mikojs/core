@@ -4,7 +4,7 @@
 if [ "$(git branch --show-current)" = main ]; then
   sh $(dirname "$0")/build.sh
 else
-  sh $(dirname "$0")/build.sh "--since main"
+  sh $(dirname "$0")/build.sh --since main
 fi
 
 yarn miko husky post-checkout

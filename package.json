@@ -5,7 +5,7 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "build": "sh ./.husky/build.sh && miko build",
-    "dev": "sh ./.husky/build.sh \"--since $(git branch --show-current)\" && miko dev",
+    "dev": "sh ./.husky/build.sh --since $(git branch --show-current) && miko dev",
     "postinstall": "husky install && sh ./.husky/build.sh",
     "prod": "sh ./.husky/build.sh && miko prod"
   },

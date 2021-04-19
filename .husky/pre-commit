@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-sh $(dirname "$0")/build.sh "--since $(git branch --show-current)"
+sh $(dirname "$0")/build.sh --since $(git branch --show-current)
 yarn miko husky pre-commit

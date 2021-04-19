@@ -7,4 +7,4 @@ yarn lerna exec \
   --scope @mikojs/eslint-config-miko \
   --stream \
   --include-dependencies \
-  $1
+  $@

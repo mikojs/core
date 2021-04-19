@@ -61,10 +61,6 @@ module.exports = {
       link: {
         description: 'Link something in monorepo.',
         commands: {
-          bin: {
-            description: 'Link bin files in monorepo.',
-            action: 'lerna-run link-bin',
-          },
           flow: {
             description: 'Link flow files in monorepo.',
             action: 'lerna-run link-flow',

@@ -2,9 +2,9 @@
 . "$(dirname "$0")/_/husky.sh"
 
 if [ "$(git branch --show-current)" = main ]; then
-  . "$(dirname "$0")/build.sh"
+  sh $(dirname "$0")/build.sh
 else
-  . "$(dirname "$0")/build.sh" "--since main"
+  sh $(dirname "$0")/build.sh --since main
 fi
 
 yarn miko husky post-checkout

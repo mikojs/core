@@ -4,17 +4,17 @@
   "license": "MIT",
   "workspaces": ["packages/*"],
   "scripts": {
-    "build": "yarn build:base && miko build",
-    "build:base": "yarn lerna exec \"babel src -d lib --delete-dir-on-start --verbose --root-mode upward\" --stream --include-dependencies $(for PACKAGE in $(yarn --silent build:base:scope); do printf \"%s \" \"--scope $PACKAGE\"; done) $(echo $LERNA_OPTIONS) && yarn lerna exec \"node ./lib/bin/index.js link-bin\" --stream --scope @mikojs/lerna-run",
-    "build:base:scope": "echo \"@mikojs/miko @mikojs/lerna-run @mikojs/eslint-config-miko\"",
-    "dev": "LERNA_OPTIONS=\"--since $(git branch --show-current)\" yarn build:base && miko dev",
-    "postinstall": "husky install && yarn build:base",
-    "prod": "yarn build:base && miko prod"
+    "build": "sh ./.husky/build.sh && miko build",
+    "dev": "sh ./.husky/build.sh \"--since $(git branch --show-current)\" && miko dev",
+    "postinstall": "husky install && sh ./.husky/build.sh",
+    "prod": "sh ./.husky/build.sh && miko prod"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.14",
     "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",
+    "@mikojs/lerna-run": "workspace:*",
+    "@mikojs/miko": "workspace:*",
     "babel-plugin-add-module-exports": "^1.0.4",
     "core-js": "^3.10.0",
     "eslint": "^7.23.0",
@@ -29,8 +29,8 @@
     "prettier-package-json": "^2.1.3"
   },
   "engines": {
-    "node": ">= 10.2.1",
-    "npm": ">= 6.1.0",
-    "yarn": ">= 1.7.0"
+    "node": ">= 14.x",
+    "npm": ">= 6.x",
+    "yarn": ">= 2.x"
   }
 }

@@ -107,7 +107,11 @@ module.exports = {
       },
       'post-checkout': {
         description: 'Run commands in git post-checkout hook.',
-        action: 'miko build --since main',
+        action: async () => {
+          const branch = await getBranch();
+
+          return branch === 'main' ? 'miko build' : 'miko build --since main';
+        },
       },
     },
   },

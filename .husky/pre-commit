@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-LERNA_OPTIONS="--since $(git branch --show-current)" yarn build:base
+. "$(dirname "$0")/build.sh" "--since $(git branch --show-current)"
 yarn miko husky pre-commit

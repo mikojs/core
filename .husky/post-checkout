@@ -2,9 +2,9 @@
 . "$(dirname "$0")/_/husky.sh"
 
 if [ "$(git branch --show-current)" = main ]; then
-  yarn build:base
+  . "$(dirname "$0")/build.sh"
 else
-  LERNA_OPTIONS="--since main" yarn build:base
+  . "$(dirname "$0")/build.sh" "--since main"
 fi
 
 yarn miko husky post-checkout

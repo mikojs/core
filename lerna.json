@@ -21,6 +21,6 @@
   "npmClient": "yarn",
   "npmClientArgs": ["--no-lockfile"],
   "ignoreChanges": ["**/__tests__/**", "**/*.md"],
-  "packages": ["packages/*"],
+  "packages": ["packages/*", "plugins/*"],
   "useWorkspaces": true
 }

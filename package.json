@@ -2,7 +2,7 @@
   "private": true,
   "name": "@mikojs/core",
   "license": "MIT",
-  "workspaces": ["packages/*"],
+  "workspaces": ["packages/*", "plugins/*"],
   "scripts": {
     "build": "sh ./.husky/build.sh && miko build",
     "dev": "sh ./.husky/build.sh --since $(git branch --show-current) && miko dev",

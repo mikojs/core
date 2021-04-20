@@ -2342,6 +2342,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@mikojs/plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json"
+  languageName: unknown
+  linkType: soft
+
 "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents":
   version: 2.1.8-no-fsevents
   resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents"

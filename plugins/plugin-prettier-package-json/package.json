@@ -1,0 +1,14 @@
+{
+  "name": "@mikojs/plugin-prettier-package-json",
+  "description": "Prettier package.json after running yarn install.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/plugin-prettier-package-json",
+  "repository": "https://github.com/mikojs/core/tree/main/packages/plugin-prettier-package-json",
+  "version": "2.0.0-beta",
+  "main": "./lib/index.js",
+  "keywords": ["mikojs", "prettier package.json", "yarn plugin"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

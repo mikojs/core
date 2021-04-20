@@ -7,8 +7,15 @@
   "repository": "https://github.com/mikojs/core/tree/main/packages/commander",
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
+  "scripts": {
+    "build": "babel src -d lib --delete-dir-on-start --verbose --root-mode upward"
+  },
   "dependencies": {
     "commander": "^6.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14"
   },
   "keywords": ["commander", "mikojs"],
   "publishConfig": {

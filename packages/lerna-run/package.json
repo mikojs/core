@@ -7,6 +7,13 @@
   "repository": "https://github.com/mikojs/core/tree/main/packages/lerna-run",
   "version": "2.0.0-beta",
   "bin": "./lib/bin/index.js",
+  "scripts": {
+    "build": "babel src -d lib --delete-dir-on-start --verbose --root-mode upward"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14"
+  },
   "keywords": ["lerna", "mikojs"],
   "publishConfig": {
     "access": "public"

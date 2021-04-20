@@ -2279,6 +2279,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikojs/commander@workspace:packages/commander"
   dependencies:
+    "@babel/cli": ^7.13.14
+    "@babel/core": ^7.13.14
     commander: ^6.2.1
   languageName: unknown
   linkType: soft
@@ -2311,6 +2313,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikojs/eslint-config-miko@workspace:packages/eslint-config-miko"
   dependencies:
+    "@babel/cli": ^7.13.14
     "@babel/core": ^7.13.14
     "@babel/eslint-parser": ^7.13.14
     eslint: ^7.23.0
@@ -2327,6 +2330,9 @@ __metadata:
 "@mikojs/lerna-run@workspace:*, @mikojs/lerna-run@workspace:packages/lerna-run":
   version: 0.0.0-use.local
   resolution: "@mikojs/lerna-run@workspace:packages/lerna-run"
+  dependencies:
+    "@babel/cli": ^7.13.14
+    "@babel/core": ^7.13.14
   bin:
     lerna-run: ./lib/bin/index.js
   languageName: unknown
@@ -2336,6 +2342,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikojs/miko@workspace:packages/miko"
   dependencies:
+    "@babel/cli": ^7.13.14
+    "@babel/core": ^7.13.14
     "@mikojs/commander": ^2.0.0-beta
   bin:
     miko: ./lib/bin/index.js
@@ -2345,6 +2353,9 @@ __metadata:
 "@mikojs/plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json":
   version: 0.0.0-use.local
   resolution: "@mikojs/plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json"
+  dependencies:
+    "@babel/cli": ^7.13.14
+    "@babel/core": ^7.13.14
   languageName: unknown
   linkType: soft
 

@@ -9,11 +9,11 @@ export default {
   name,
   factory: () => ({
     hooks: {
-      afterAllInstalled: async project => {
+      afterAllInstalled: async ({ workspaces }) => {
         const options = await prettier.resolveConfig();
 
-        project.workspaces.forEach(workspace => {
-          const pkgPath = path.resolve(workspace.cwd, './package.json');
+        workspaces.forEach(({ cwd }) => {
+          const pkgPath = path.resolve(cwd, './package.json');
 
           fs.writeFileSync(
             pkgPath,

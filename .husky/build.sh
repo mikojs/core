@@ -5,6 +5,7 @@ yarn lerna exec \
   --scope @mikojs/miko \
   --scope @mikojs/lerna-run \
   --scope @mikojs/eslint-config-miko \
+  --scope @mikojs/plugin-* \
   --stream \
   --include-dependencies \
   $@

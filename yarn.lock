@@ -2348,9 +2348,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/plugin-workspaces-link-flowconfig@workspace:plugins/plugin-workspaces-link-flowconfig":
+"@mikojs/plugin-workspaces-flow-typed@workspace:plugins/plugin-workspaces-flow-typed":
   version: 0.0.0-use.local
-  resolution: "@mikojs/plugin-workspaces-link-flowconfig@workspace:plugins/plugin-workspaces-link-flowconfig"
+  resolution: "@mikojs/plugin-workspaces-flow-typed@workspace:plugins/plugin-workspaces-flow-typed"
   languageName: unknown
   linkType: soft
 

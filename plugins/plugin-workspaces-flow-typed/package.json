@@ -1,0 +1,14 @@
+{
+  "name": "@mikojs/plugin-workspaces-flow-typed",
+  "description": "Run flow-typed with workspaces.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/plugin-workspaces-flow-typed",
+  "repository": "https://github.com/mikojs/core/tree/main/packages/plugin-workspaces-flow-typed",
+  "version": "2.0.0-beta",
+  "main": "./lib/index.js",
+  "keywords": ["flow-typed", "mikojs", "workspaces", "yarn plugin"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

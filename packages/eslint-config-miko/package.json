@@ -7,9 +7,6 @@
   "repository": "https://github.com/mikojs/core/tree/main/packages/eslint-config-miko",
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
-  "scripts": {
-    "build": "babel src -d lib --delete-dir-on-start --verbose --root-mode upward"
-  },
   "dependencies": {
     "@babel/core": "^7.13.14",
     "@babel/eslint-parser": "^7.13.14",
@@ -22,7 +19,6 @@
     "eslint-plugin-react": "^7.23.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.13.14",
     "eslint": "^7.23.0"
   },
   "keywords": ["eslint config", "mikojs"],

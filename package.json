@@ -6,7 +6,7 @@
   "scripts": {
     "build": "sh ./.husky/build.sh && miko build",
     "dev": "sh ./.husky/build.sh --since $(git branch --show-current) && miko dev",
-    "postinstall": "husky install && sh ./.husky/build.sh",
+    "postinstall": "prettier --write --parser json $(git diff --name-only '*package.json') && husky install && sh ./.husky/build.sh",
     "prod": "sh ./.husky/build.sh && miko prod"
   },
   "devDependencies": {

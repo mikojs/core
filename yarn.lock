@@ -2342,15 +2342,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json":
+"@mikojs/plugin-flow-typed-link@workspace:plugins/plugin-flow-typed-link":
   version: 0.0.0-use.local
-  resolution: "@mikojs/plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json"
+  resolution: "@mikojs/plugin-flow-typed-link@workspace:plugins/plugin-flow-typed-link"
   languageName: unknown
   linkType: soft
 
-"@mikojs/plugin-workspaces-flow-typed@workspace:plugins/plugin-workspaces-flow-typed":
+"@mikojs/plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json":
   version: 0.0.0-use.local
-  resolution: "@mikojs/plugin-workspaces-flow-typed@workspace:plugins/plugin-workspaces-flow-typed"
+  resolution: "@mikojs/plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json"
   languageName: unknown
   linkType: soft
 

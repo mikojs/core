@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/plugin-flow-typed-link",
-  "repository": "https://github.com/mikojs/core/tree/main/packages/plugin-flow-typed-link",
+  "repository": "https://github.com/mikojs/core/tree/main/plugins/plugin-flow-typed-link",
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
   "keywords": ["flow-typed link", "mikojs", "yarn plugin"],

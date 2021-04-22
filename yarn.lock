@@ -2289,6 +2289,7 @@ __metadata:
   dependencies:
     "@babel/cli": ^7.13.14
     "@babel/core": ^7.13.14
+    "@babel/plugin-proposal-class-properties": ^7.13.0
     "@babel/preset-env": ^7.13.12
     "@mikojs/lerna-run": "workspace:*"
     "@mikojs/miko": "workspace:*"

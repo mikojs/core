@@ -8,7 +8,7 @@ module.exports = {
       },
     ],
   ],
-  plugins: ['add-module-exports'],
+  plugins: ['add-module-exports', '@babel/proposal-class-properties'],
   ignore:
     process.env.NODE_ENV === 'test'
       ? []

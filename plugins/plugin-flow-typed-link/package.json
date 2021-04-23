@@ -7,6 +7,10 @@
   "repository": "https://github.com/mikojs/core/tree/main/plugins/plugin-flow-typed-link",
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
+  "dependencies": {
+    "@yarnpkg/cli": "^3.0.0-rc.2",
+    "@yarnpkg/core": "^3.0.0-rc.2"
+  },
   "keywords": ["flow-typed link", "mikojs", "yarn plugin"],
   "publishConfig": {
     "access": "public"

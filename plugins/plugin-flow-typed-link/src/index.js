@@ -1,5 +1,8 @@
+/* eslint new-cap: ['error', { capIsNewExceptionPattern: 'Command' }] */
+
 import { BaseCommand } from '@yarnpkg/cli';
 import { Configuration, Project } from '@yarnpkg/core';
+import { Command } from 'clipanion';
 
 import { name, description } from '../package.json';
 
@@ -10,15 +13,14 @@ export default {
   factory: () => ({
     commands: [
       class Link extends BaseCommand {
-        static paths = [['flow-typed', 'link']];
-
-        static usage = {
+        static usage = Command.Usage({
           description,
           details: `
           `,
           examples: [],
-        };
+        });
 
+        @Command.Path('flow-typed', 'link')
         execute = async () => {
           const configuration = await Configuration.find(
             this.context.cwd,

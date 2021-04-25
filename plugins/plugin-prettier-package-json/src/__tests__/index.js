@@ -1,9 +1,8 @@
-import fs from 'fs';
 import path from 'path';
 
-import pluginPrettierPackageJson from '..';
+import { execute } from '@yarnpkg/shell';
 
-jest.mock('fs');
+import pluginPrettierPackageJson from '..';
 
 test('plugin prettier package json', async () => {
   await pluginPrettierPackageJson.factory().hooks.afterAllInstalled({
@@ -14,6 +13,5 @@ test('plugin prettier package json', async () => {
     ],
   });
 
-  expect(fs.readFileSync).toHaveBeenCalledTimes(1);
-  expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
+  expect(execute).toHaveBeenCalledTimes(1);
 });

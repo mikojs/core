@@ -1,7 +1,6 @@
-import fs from 'fs';
 import path from 'path';
 
-import prettier from 'prettier';
+import { execute } from '@yarnpkg/shell';
 
 import { name } from '../package.json';
 
@@ -10,19 +9,15 @@ export default {
   factory: () => ({
     hooks: {
       afterAllInstalled: async ({ workspaces }) => {
-        const options = await prettier.resolveConfig();
-
-        workspaces.forEach(({ cwd }) => {
-          const pkgPath = path.resolve(cwd, './package.json');
-
-          fs.writeFileSync(
-            pkgPath,
-            prettier.format(fs.readFileSync(pkgPath, 'utf-8'), {
-              ...options,
-              parser: 'json',
-            }),
-          );
-        });
+        await execute('yarn', [
+          'prettier',
+          '--loglevel',
+          'silent',
+          '--write',
+          '--parser',
+          'json',
+          ...workspaces.map(({ cwd }) => path.resolve(cwd, './package.json')),
+        ]);
       },
     },
   }),

@@ -7,6 +7,9 @@
   "repository": "https://github.com/mikojs/core/tree/main/plugins/plugin-prettier-package-json",
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
+  "dependencies": {
+    "@yarnpkg/shell": "^2.4.1"
+  },
   "keywords": ["mikojs", "prettier package.json", "yarn plugin"],
   "publishConfig": {
     "access": "public"

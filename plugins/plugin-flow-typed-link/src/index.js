@@ -1,4 +1,4 @@
-/* eslint new-cap: ['error', { capIsNewExceptionPattern: 'Command' }] */
+import path from 'path';
 
 import { BaseCommand } from '@yarnpkg/cli';
 import { Configuration, Project } from '@yarnpkg/core';
@@ -8,6 +8,7 @@ import { name, description } from '../package.json';
 
 import symlinkSync from './symlinkSync';
 
+/* eslint new-cap: ['error', { capIsNewExceptionPattern: 'Command' }] */
 export default {
   name,
   factory: () => ({
@@ -22,16 +23,36 @@ export default {
 
         @Command.Path('flow-typed', 'link')
         execute = async () => {
-          const configuration = await Configuration.find(
-            this.context.cwd,
-            this.context.plugins,
-          );
-          const { project, workspace } = await Project.find(
-            configuration,
-            this.context.cwd,
-          );
+          const { cwd, plugins } = this.context;
+          const configuration = await Configuration.find(cwd, plugins);
+          const {
+            project: { workspaces },
+            workspace: {
+              manifest: { dependencies, devDependencies },
+            },
+          } = await Project.find(configuration, cwd);
+          const { projectCwd } = configuration;
 
-          symlinkSync(project, workspace);
+          if (projectCwd === cwd) return;
+
+          await symlinkSync(
+            path.resolve(projectCwd, './.flowconfig'),
+            path.resolve(cwd, './.flowconfig'),
+          );
+          await Promise.all(
+            [...dependencies.values(), ...devDependencies.values()].map(
+              ({ identHash, scope, name }) => {
+                const pkgName = !scope ? name : `@${scope}/${name}`;
+
+                return symlinkSync(
+                  workspaces.find(
+                    ({ locator }) => locator.identHash === identHash,
+                  )?.cwd || path.resolve(projectCwd, './node_modules', pkgName),
+                  path.resolve(cwd, './node_modules', pkgName),
+                );
+              },
+            ),
+          );
         };
       },
     ],

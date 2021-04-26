@@ -9,7 +9,10 @@ module.exports = filePath => {
   ].join('/');
 
   try {
-    return require(name);
+    return {
+      name,
+      factory: () => require(name),
+    };
   } catch (e) {
     if (
       !new RegExp(

@@ -3,8 +3,8 @@
   "description": "Prettier package.json after running yarn install.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://mikojs.github.io/core/plugin-prettier-package-json",
-  "repository": "https://github.com/mikojs/core/tree/main/plugins/plugin-prettier-package-json",
+  "homepage": "https://mikojs.github.io/core/yarn-plugin-prettier-package-json",
+  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/prettier-package-json",
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
   "dependencies": {

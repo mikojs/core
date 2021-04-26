@@ -5,7 +5,7 @@ const { warn } = console;
 module.exports = filePath => {
   const name = [
     '@mikojs',
-    path.relative(__dirname, filePath).replace(/\.js/, ''),
+    `yarn-${path.relative(__dirname, filePath).replace(/\.js/, '')}`,
   ].join('/');
 
   try {

@@ -2462,9 +2462,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json":
+"@mikojs/yarn-plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json":
   version: 0.0.0-use.local
-  resolution: "@mikojs/plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json"
+  resolution: "@mikojs/yarn-plugin-prettier-package-json@workspace:plugins/plugin-prettier-package-json"
   dependencies:
     "@yarnpkg/core": ^2.4.0
     "@yarnpkg/shell": ^2.4.1

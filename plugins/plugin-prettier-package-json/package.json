@@ -1,5 +1,5 @@
 {
-  "name": "@mikojs/plugin-prettier-package-json",
+  "name": "@mikojs/yarn-plugin-prettier-package-json",
   "description": "Prettier package.json after running yarn install.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",

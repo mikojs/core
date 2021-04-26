@@ -1,14 +1,17 @@
 {
-  "name": "@mikojs/plugin-prettier-package-json",
+  "name": "@mikojs/yarn-plugin-prettier-package-json",
   "description": "Prettier package.json after running yarn install.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://mikojs.github.io/core/plugin-prettier-package-json",
-  "repository": "https://github.com/mikojs/core/tree/main/plugins/plugin-prettier-package-json",
+  "homepage": "https://mikojs.github.io/core/yarn-plugin-prettier-package-json",
+  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/prettier-package-json",
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
   "dependencies": {
     "@yarnpkg/shell": "^2.4.1"
+  },
+  "devDependencies": {
+    "@yarnpkg/core": "^2.4.0"
   },
   "keywords": ["mikojs", "prettier package.json", "yarn plugin"],
   "publishConfig": {

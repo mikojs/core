@@ -22,6 +22,13 @@ module.exports = {
   build: {
     description: 'Run build mode.',
     action: 'lerna exec "miko babel" --parallel --stream',
+    commands: {
+      'yarn-plugins': {
+        description: 'Build yarn plugins.',
+        action:
+          'lerna exec "builder build plugin" --stream --scope @mikojs/yarn-plugin-*',
+      },
+    },
   },
   prod: {
     description: 'Run production mode.',

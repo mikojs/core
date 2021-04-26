@@ -3,10 +3,9 @@ const path = require('path');
 const { warn } = console;
 
 module.exports = filePath => {
-  const name = [
-    '@mikojs',
-    `yarn-${path.relative(__dirname, filePath).replace(/\.js/, '')}`,
-  ].join('/');
+  const name = `@mikojs/yarn-${path
+    .relative(__dirname, filePath)
+    .replace(/\.js/, '')}`;
 
   try {
     const plugin = require(name);

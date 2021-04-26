@@ -1,6 +1,6 @@
 const path = require('path');
 
-const { warn } = console;
+const { error } = console;
 
 module.exports = filePath => {
   const filename = path.relative(__dirname, filePath).replace(/\.js/, '');
@@ -9,10 +9,13 @@ module.exports = filePath => {
     const plugin = require(`@mikojs/yarn-${filename}`);
 
     return {
-      name,
+      name: `@yarnpkg/${filename}`,
       factory: () => plugin,
     };
   } catch (e) {
+    if (!new RegExp(`@mikojs/yarn-${filename}/lib/index.js`).test(e.message))
+      error(e);
+
     return require(path.resolve(
       './yarn-plugins',
       filename.replace(/plugin-/, ''),

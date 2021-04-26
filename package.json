@@ -2,11 +2,11 @@
   "private": true,
   "name": "@mikojs/core",
   "license": "MIT",
-  "workspaces": ["packages/*", "plugins/*"],
+  "workspaces": ["packages/*", "yarn-plugins/*"],
   "scripts": {
     "build": "sh ./.husky/build.sh && miko build",
     "dev": "sh ./.husky/build.sh --since $(git branch --show-current) && miko dev",
-    "postinstall": "prettier --write --parser json $(git diff --name-only '*package.json') && husky install && sh ./.husky/build.sh",
+    "postinstall": "husky install && sh ./.husky/build.sh",
     "prod": "sh ./.husky/build.sh && miko prod"
   },
   "devDependencies": {
@@ -17,6 +17,7 @@
     "@babel/preset-env": "^7.13.12",
     "@mikojs/lerna-run": "workspace:*",
     "@mikojs/miko": "workspace:*",
+    "@yarnpkg/builder": "^2.1.3",
     "babel-plugin-add-module-exports": "^1.0.4",
     "core-js": "^3.10.0",
     "eslint": "^7.23.0",

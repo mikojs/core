@@ -9,9 +9,11 @@ module.exports = filePath => {
   ].join('/');
 
   try {
+    const plugin = require(name);
+
     return {
       name,
-      factory: () => require(name),
+      factory: () => plugin,
     };
   } catch (e) {
     if (

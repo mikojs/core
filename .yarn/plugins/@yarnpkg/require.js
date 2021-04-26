@@ -20,6 +20,8 @@ module.exports = filePath => {
     if (!new RegExp(`${names.miko}/lib/index.js`).test(e.message)) error(e);
 
     return require(path.resolve(
+      __dirname,
+      '../../..',
       './yarn-plugins',
       filename.replace(/plugin-/, ''),
       './bundles',

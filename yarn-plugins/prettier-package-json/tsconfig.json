@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "include": ["src/**/*"],
+  "exclude": []
+}

@@ -3,33 +3,21 @@ const path = require('path');
 const { warn } = console;
 
 module.exports = filePath => {
-  const name = `@mikojs/yarn-${path
-    .relative(__dirname, filePath)
-    .replace(/\.js/, '')}`;
+  const filename = path.relative(__dirname, filePath).replace(/\.js/, '');
 
   try {
-    const plugin = require(name);
+    const plugin = require(`@mikojs/yarn-${filename}`);
 
     return {
       name,
       factory: () => plugin,
     };
   } catch (e) {
-    if (
-      !new RegExp(
-        `Cannot find module '${path.resolve(
-          __dirname,
-          '../../../node_modules',
-          name,
-          './lib/index.js',
-        )}'`,
-      ).test(e.message)
-    )
-      warn(e.message);
-
-    return {
-      name,
-      factory: () => ({}),
-    };
+    return require(path.resolve(
+      './yarn-plugins',
+      filename.replace(/plugin-/, ''),
+      './bundles/@yarnpkg',
+      filename,
+    ));
   }
 };

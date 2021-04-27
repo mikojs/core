@@ -203,7 +203,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-create-class-features-plugin@npm:^7.13.0":
+"@babel/helper-create-class-features-plugin@npm:^7.13.0, @babel/helper-create-class-features-plugin@npm:^7.13.11":
   version: 7.13.11
   resolution: "@babel/helper-create-class-features-plugin@npm:7.13.11"
   dependencies:
@@ -502,6 +502,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-proposal-decorators@npm:^7.13.15":
+  version: 7.13.15
+  resolution: "@babel/plugin-proposal-decorators@npm:7.13.15"
+  dependencies:
+    "@babel/helper-create-class-features-plugin": ^7.13.11
+    "@babel/helper-plugin-utils": ^7.13.0
+    "@babel/plugin-syntax-decorators": ^7.12.13
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: c259d7cd3b3e1079a0359e9e0040b9340d17611c00d336eae6614dcd6f5481956051edfda4e4d71820692f8b6fda58e201229fcc6b77070bc85b68469c5e88ee
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-proposal-dynamic-import@npm:^7.13.8":
   version: 7.13.8
   resolution: "@babel/plugin-proposal-dynamic-import@npm:7.13.8"
@@ -668,6 +681,17 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 3023dec8acd42e0b691d9cdf21bc6931fe3e3d53c2231bdfe3eca3afeab168723f7315991550a163748bc49dbcd3c95632b77ec56f5e1d89bc5029cfeb7f0f7b
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-syntax-decorators@npm:^7.12.13":
+  version: 7.12.13
+  resolution: "@babel/plugin-syntax-decorators@npm:7.12.13"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.12.13
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 6a07456fe84979ff1417cb14db464827c361d685472ece866eed188ef4c4a4d926cf66d904e1d9c194081e10daa68656d19a18bf8759ac608bfd71be242f5de0
   languageName: node
   linkType: hard
 
@@ -2408,6 +2432,8 @@ __metadata:
   dependencies:
     "@babel/cli": ^7.13.14
     "@babel/core": ^7.13.14
+    "@babel/plugin-proposal-class-properties": ^7.13.0
+    "@babel/plugin-proposal-decorators": ^7.13.15
     "@babel/preset-env": ^7.13.12
     "@mikojs/lerna-run": "workspace:*"
     "@mikojs/miko": "workspace:*"
@@ -2424,6 +2450,7 @@ __metadata:
     lint-staged: ^10.5.4
     prettier: ^2.2.1
     prettier-package-json: ^2.1.3
+    typescript: ^4.2.4
   languageName: unknown
   linkType: soft
 
@@ -2459,6 +2486,17 @@ __metadata:
     "@mikojs/commander": ^2.0.0-beta
   bin:
     miko: ./lib/bin/index.js
+  languageName: unknown
+  linkType: soft
+
+"@mikojs/yarn-plugin-flow-typed-link@workspace:yarn-plugins/flow-typed-link":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/yarn-plugin-flow-typed-link@workspace:yarn-plugins/flow-typed-link"
+  dependencies:
+    "@yarnpkg/cli": ^2.4.1
+    "@yarnpkg/core": ^2.4.0
+    "@yarnpkg/plugin-pnp": ^2.4.0
+    clipanion: ^2.6.2
   languageName: unknown
   linkType: soft
 
@@ -3290,7 +3328,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/cli@npm:^2.4.0":
+"@yarnpkg/cli@npm:^2.4.0, @yarnpkg/cli@npm:^2.4.1":
   version: 2.4.1
   resolution: "@yarnpkg/cli@npm:2.4.1"
   dependencies:
@@ -13125,7 +13163,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-typescript@^4.0.2:
+"typescript@^4.0.2, typescript@^4.2.4":
   version: 4.2.4
   resolution: "typescript@npm:4.2.4"
   bin:
@@ -13135,7 +13173,7 @@ typescript@^4.0.2:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.0.2#builtin<compat/typescript>":
+"typescript@patch:typescript@^4.0.2#builtin<compat/typescript>, typescript@patch:typescript@^4.2.4#builtin<compat/typescript>":
   version: 4.2.4
   resolution: "typescript@patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"
   bin:

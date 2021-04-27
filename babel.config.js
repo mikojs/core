@@ -8,7 +8,16 @@ module.exports = {
       },
     ],
   ],
-  plugins: ['add-module-exports'],
+  plugins: [
+    [
+      '@babel/proposal-decorators',
+      {
+        legacy: true,
+      },
+    ],
+    '@babel/proposal-class-properties',
+    'add-module-exports',
+  ],
   ignore:
     process.env.NODE_ENV === 'test'
       ? []

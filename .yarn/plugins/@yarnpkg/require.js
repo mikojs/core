@@ -1,23 +1,41 @@
 const path = require('path');
 
-const { warn } = console;
+const { error } = console;
 
 module.exports = filePath => {
   const filename = path.relative(__dirname, filePath).replace(/\.js/, '');
+  const names = {
+    miko: `@mikojs/yarn-${filename}`,
+    yarn: `@yarnpkg/${filename}`,
+  };
 
   try {
-    const plugin = require(`@mikojs/yarn-${filename}`);
+    const plugin = require(names.miko);
 
     return {
-      name,
+      name: names.yarn,
       factory: () => plugin,
     };
   } catch (e) {
-    return require(path.resolve(
+    if (
+      !new RegExp(names.miko) &&
+      !new RegExp(`${names.miko}/lib/index.js`).test(e.message)
+    )
+      error(e);
+
+    const workspacePath = path.resolve(
+      __dirname,
+      '../../..',
       './yarn-plugins',
       filename.replace(/plugin-/, ''),
-      './bundles/@yarnpkg',
-      filename,
-    ));
+    );
+
+    if (process.env.NODE_ENV === 'test')
+      return {
+        name: names.yarn,
+        factory: () => require(path.resolve(workspacePath, './src')),
+      };
+
+    return require(path.resolve(workspacePath, './bundles', names.yarn));
   }
 };

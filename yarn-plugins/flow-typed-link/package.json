@@ -8,11 +8,8 @@
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
   "dependencies": {
-    "@yarnpkg/cli": "^2.4.1",
-    "@yarnpkg/core": "^2.4.0"
-  },
-  "devDependencies": {
-    "@yarnpkg/plugin-pnp": "^2.4.0"
+    "@mikojs/yarn-plugin-utils": "^2.0.0-beta",
+    "@yarnpkg/cli": "^2.4.1"
   },
   "keywords": ["flow-typed link", "mikojs", "yarn plugin"],
   "publishConfig": {

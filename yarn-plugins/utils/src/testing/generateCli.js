@@ -7,9 +7,10 @@ import pluginConfiguration from './pluginConfiguration';
 class TestingCli extends Cli {
   run = (args, options) =>
     super.run(args, {
+      plugins: pluginConfiguration,
+      cwd: process.cwd(),
       ...Cli.defaultContext,
       ...options,
-      plugins: pluginConfiguration,
     });
 }
 

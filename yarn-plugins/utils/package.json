@@ -11,7 +11,8 @@
     "@yarnpkg/core": "^2.4.0"
   },
   "devDependencies": {
-    "@yarnpkg/plugin-pnp": "^2.4.0"
+    "@yarnpkg/plugin-pnp": "^2.4.0",
+    "clipanion": "^2.6.2"
   },
   "keywords": ["mikojs", "utils", "yarn plugin"],
   "publishConfig": {

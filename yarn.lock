@@ -2493,10 +2493,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-flow-typed-link@workspace:yarn-plugins/flow-typed-link"
   dependencies:
+    "@mikojs/yarn-plugin-utils": ^2.0.0-beta
     "@yarnpkg/cli": ^2.4.1
-    "@yarnpkg/core": ^2.4.0
-    "@yarnpkg/plugin-pnp": ^2.4.0
-    clipanion: ^2.6.2
   languageName: unknown
   linkType: soft
 

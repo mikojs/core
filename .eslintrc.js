@@ -4,7 +4,10 @@ module.exports = {
   extends: '@mikojs/miko',
   overrides: [
     {
-      files: ['yarn-plugins/**/src/index.js'],
+      files: [
+        'yarn-plugins/**/src/index.js',
+        'yarn-plugins/**/src/commands/*.js',
+      ],
       rules: {
         'new-cap': ['error', { capIsNewExceptionPattern: 'Command' }],
       },

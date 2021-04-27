@@ -18,7 +18,7 @@ module.exports = filePath => {
     };
   } catch (e) {
     if (
-      !new RegExp(names.miko) &&
+      !new RegExp(names.miko).test(e.message) &&
       !new RegExp(`${names.miko}/lib/index.js`).test(e.message)
     )
       error(e);

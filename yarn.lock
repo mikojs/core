@@ -2504,12 +2504,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-prettier-package-json@workspace:yarn-plugins/prettier-package-json"
   dependencies:
-    "@yarnpkg/core": ^2.4.0
+    "@mikojs/yarn-plugin-utils": ^2.0.0-beta
     "@yarnpkg/shell": ^2.4.1
   languageName: unknown
   linkType: soft
 
-"@mikojs/yarn-plugin-utils@workspace:yarn-plugins/utils":
+"@mikojs/yarn-plugin-utils@^2.0.0-beta, @mikojs/yarn-plugin-utils@workspace:yarn-plugins/utils":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-utils@workspace:yarn-plugins/utils"
   dependencies:

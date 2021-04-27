@@ -17,7 +17,11 @@ module.exports = filePath => {
       factory: () => plugin,
     };
   } catch (e) {
-    if (!new RegExp(`${names.miko}/lib/index.js`).test(e.message)) error(e);
+    if (
+      !new RegExp(names.miko) &&
+      !new RegExp(`${names.miko}/lib/index.js`).test(e.message)
+    )
+      error(e);
 
     return require(path.resolve(
       __dirname,

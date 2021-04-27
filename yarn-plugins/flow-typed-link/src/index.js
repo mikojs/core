@@ -4,8 +4,6 @@ import { BaseCommand } from '@yarnpkg/cli';
 import { Configuration, Project } from '@yarnpkg/core';
 import { Command } from 'clipanion';
 
-import { description } from '../package.json';
-
 import symlinkSync from './symlinkSync';
 
 /* eslint new-cap: ['error', { capIsNewExceptionPattern: 'Command' }] */
@@ -13,10 +11,19 @@ export default {
   commands: [
     class Link extends BaseCommand {
       static usage = Command.Usage({
-        description,
+        category: 'Flow-typed-related commands',
+        description: 'link .flowconfig and packages from root workspace',
         details: `
+          This command would try to find .flowconfig from root workspace and packages which are in workspaces. If this command find those files, this command would link those files to current workspace.
+
+          If this command is used in root workspace, it would not link any anything.
         `,
-        examples: [],
+        examples: [
+          [
+            'Link .flowconfig and packages from root workspace',
+            'yarn flow-typed link',
+          ],
+        ],
       });
 
       @Command.Path('flow-typed', 'link')

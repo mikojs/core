@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/yarn-plugin-flow-typed-link",
-  "description": "Link .flowconfig in each package.",
+  "description": "Link .flowconfig and pacakges from root workspace.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/yarn-plugin-flow-typed-link",

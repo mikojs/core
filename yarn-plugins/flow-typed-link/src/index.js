@@ -6,7 +6,6 @@ import findInfo from '@mikojs/yarn-plugin-utils/lib/findInfo';
 
 import symlinkSync from './symlinkSync';
 
-/* eslint new-cap: ['error', { capIsNewExceptionPattern: 'Command' }] */
 export default {
   commands: [
     class Link extends Command {

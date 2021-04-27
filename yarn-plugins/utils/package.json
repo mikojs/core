@@ -7,6 +7,12 @@
   "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/utils",
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
+  "dependencies": {
+    "@yarnpkg/core": "^2.4.0"
+  },
+  "devDependencies": {
+    "@yarnpkg/plugin-pnp": "^2.4.0"
+  },
   "keywords": ["mikojs", "utils", "yarn plugin"],
   "publishConfig": {
     "access": "public"

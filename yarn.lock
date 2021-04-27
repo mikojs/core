@@ -2512,6 +2512,9 @@ __metadata:
 "@mikojs/yarn-plugin-utils@workspace:yarn-plugins/utils":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-utils@workspace:yarn-plugins/utils"
+  dependencies:
+    "@yarnpkg/core": ^2.4.0
+    "@yarnpkg/plugin-pnp": ^2.4.0
   languageName: unknown
   linkType: soft
 

@@ -1,15 +1,14 @@
 import path from 'path';
 
-import { BaseCommand } from '@yarnpkg/cli';
+import { BaseCommand as Command } from '@yarnpkg/cli';
 import { Configuration, Project } from '@yarnpkg/core';
-import { Command } from 'clipanion';
 
 import symlinkSync from './symlinkSync';
 
 /* eslint new-cap: ['error', { capIsNewExceptionPattern: 'Command' }] */
 export default {
   commands: [
-    class Link extends BaseCommand {
+    class Link extends Command {
       static usage = Command.Usage({
         category: 'Flow-typed-related commands',
         description: 'link .flowconfig and packages from root workspace',

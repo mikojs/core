@@ -23,13 +23,19 @@ module.exports = filePath => {
     )
       error(e);
 
-    return require(path.resolve(
+    const workspacePath = path.resolve(
       __dirname,
       '../../..',
       './yarn-plugins',
       filename.replace(/plugin-/, ''),
-      './bundles',
-      names.yarn,
-    ));
+    );
+
+    if (process.env.NODE_ENV === 'test')
+      return {
+        name: names.yarn,
+        factory: () => require(path.resolve(workspacePath, './src')),
+      };
+
+    return require(path.resolve(workspacePath, './bundles', names.yarn));
   }
 };

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import chalk from 'chalk';
 import { BaseCommand as Command } from '@yarnpkg/cli';
 
 import findBuilder from '../utils/findBuilder';
@@ -8,9 +9,9 @@ import findBuilder from '../utils/findBuilder';
 export default class Build extends Command {
   static usage = Command.Usage({
     category: 'Plugin-related commands',
-    description: 'build yarn plugins without tsconfig.json',
-    details: `
-      Tsconfig.json is required for @yarnpkg/builder, but it is not needed for plugins which does not use typescript. This command would generate a tsconfig.json before building plugin. Tsconfig.json would be removed after building finished.
+    description: chalk`build yarn plugins without {cyan \`tsconfig.json\`}`,
+    details: chalk`
+      {cyan \`tsconfig.json\`} is required for {cyan \`@yarnpkg/builder\`}, but it is not needed for plugins which do not use {cyan \`typescript\`}. This command would generate a {cyan \`tsconfig.json\`} before building plugin. {cyan \`tsconfig.json\`} would be removed after building finished.
     `,
     examples: [['Build yarn plugin', 'yarn plugin build']],
   });

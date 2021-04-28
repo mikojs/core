@@ -70,7 +70,7 @@ module.exports = {
         commands: {
           flow: {
             description: 'Link flow files in monorepo.',
-            action: 'lerna-run link-flow',
+            action: 'lerna exec "yarn flow-typed link" --stream',
           },
         },
       },

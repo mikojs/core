@@ -2493,6 +2493,7 @@ __metadata:
   dependencies:
     "@mikojs/yarn-plugin-utils": ^2.0.0-beta
     "@yarnpkg/cli": ^2.4.1
+    mkdirp: ^1.0.4
   languageName: unknown
   linkType: soft
 

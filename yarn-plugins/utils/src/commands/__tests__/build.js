@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-import { commands } from '..';
-import { generateCli } from '../testing';
+import { commands } from '../..';
+import { generateCli } from '../../testing';
 
 jest.mock('fs');
 

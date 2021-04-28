@@ -1,4 +1,4 @@
-import { generateCli } from '@mikojs/yarn-plugin-utils/lib/testing';
+import { generateCli } from '@mikojs/yarn-plugin-utils/src/testing';
 
 import { commands } from '..';
 import symlinkSync from '../symlinkSync';

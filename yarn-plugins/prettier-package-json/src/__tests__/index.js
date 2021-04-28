@@ -1,6 +1,6 @@
 import { execute } from '@yarnpkg/shell';
 
-import { runHook } from '@mikojs/yarn-plugin-utils/lib/testing';
+import { runHook } from '@mikojs/yarn-plugin-utils/src/testing';
 
 import { hooks } from '..';
 

@@ -21,5 +21,5 @@ module.exports = {
   ignore:
     process.env.NODE_ENV === 'test'
       ? []
-      : ['**/__tests__/**', '**/__mocks__/**'],
+      : ['**/testing/**', '**/__tests__/**', '**/__mocks__/**'],
 };

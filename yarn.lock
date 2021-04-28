@@ -2487,9 +2487,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/yarn-plugin-flow-typed-link@workspace:yarn-plugins/flow-typed-link":
+"@mikojs/yarn-plugin-flow-typed@workspace:yarn-plugins/flow-typed":
   version: 0.0.0-use.local
-  resolution: "@mikojs/yarn-plugin-flow-typed-link@workspace:yarn-plugins/flow-typed-link"
+  resolution: "@mikojs/yarn-plugin-flow-typed@workspace:yarn-plugins/flow-typed"
   dependencies:
     "@mikojs/yarn-plugin-utils": ^2.0.0-beta
     "@yarnpkg/cli": ^2.4.1

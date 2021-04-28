@@ -21,6 +21,8 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Install packages
         run: yarn
+      - name: Build workspaces
+        run: yarn build
       - name: Link flow files
         run: yarn miko lerna link flow
       - name: Install flow-typed

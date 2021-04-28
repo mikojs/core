@@ -1,14 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 
-import { commands } from '..';
-import { generateCli } from '../testing';
+import Build from '../Build';
+import { generateCli } from '../../testing';
 
 jest.mock('fs');
 
 test('plugin build', async () => {
   const builderFilePath = path.resolve('./node_modules/.bin/builder');
-  const cli = generateCli(commands, [
+  const cli = generateCli(Build, [
     ['node', builderFilePath, 'build', 'plugin'],
   ]);
 

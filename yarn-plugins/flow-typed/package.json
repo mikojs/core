@@ -1,10 +1,10 @@
 {
-  "name": "@mikojs/yarn-plugin-flow-typed-link",
+  "name": "@mikojs/yarn-plugin-flow-typed",
   "description": "Link .flowconfig and packages from root workspace.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://mikojs.github.io/core/yarn-plugin-flow-typed-link",
-  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/flow-typed-link",
+  "homepage": "https://mikojs.github.io/core/yarn-plugin-flow-typed",
+  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/flow-typed",
   "version": "2.0.0-beta",
   "main": "./lib/index.js",
   "dependencies": {
@@ -12,7 +12,7 @@
     "@yarnpkg/cli": "^2.4.1",
     "mkdirp": "^1.0.4"
   },
-  "keywords": ["flow-typed link", "mikojs", "yarn plugin"],
+  "keywords": ["flow-typed", "mikojs", "yarn plugin"],
   "publishConfig": {
     "access": "public"
   }

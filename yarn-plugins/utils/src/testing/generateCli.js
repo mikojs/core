@@ -2,8 +2,6 @@ import { Cli, Command } from 'clipanion';
 
 import pluginConfiguration from './pluginConfiguration';
 
-// FIXME
-// eslint-disable-next-line require-jsdoc
 class TestingCli extends Cli {
   run = (args, options) =>
     super.run(args, {

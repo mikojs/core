@@ -1,12 +1,12 @@
 import { generateCli } from '@mikojs/yarn-plugin-utils/src/testing';
 
-import { commands } from '..';
-import symlinkSync from '../symlinkSync';
+import { commands } from '../..';
+import symlinkSync from '../../utils/symlinkSync';
 
 const cli = generateCli(commands);
 const args = ['flow-typed', 'link'];
 
-jest.mock('../symlinkSync', () => jest.fn());
+jest.mock('../../symlinkSync', () => jest.fn());
 
 describe('flow-typed link', () => {
   beforeEach(() => {

@@ -1,4 +1,4 @@
-import { Cli } from 'clipanion';
+import { Cli, Command } from 'clipanion';
 
 import pluginConfiguration from './pluginConfiguration';
 
@@ -14,11 +14,19 @@ class TestingCli extends Cli {
     });
 }
 
-export default commands => {
+export default (commands, mockCommands = []) => {
   const cli = new TestingCli();
 
   commands.forEach(command => {
     cli.register(command);
+  });
+  mockCommands.forEach(mockCommand => {
+    cli.register(
+      class MockCommand extends Command {
+        @Command.Path(...mockCommand)
+        execute = jest.fn();
+      },
+    );
   });
 
   return cli;

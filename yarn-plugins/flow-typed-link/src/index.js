@@ -1,15 +1,14 @@
 import path from 'path';
 
-import { BaseCommand } from '@yarnpkg/cli';
-import { Configuration, Project } from '@yarnpkg/core';
-import { Command } from 'clipanion';
+import { BaseCommand as Command } from '@yarnpkg/cli';
+
+import findInfo from '@mikojs/yarn-plugin-utils/lib/findInfo';
 
 import symlinkSync from './symlinkSync';
 
-/* eslint new-cap: ['error', { capIsNewExceptionPattern: 'Command' }] */
 export default {
   commands: [
-    class Link extends BaseCommand {
+    class Link extends Command {
       static usage = Command.Usage({
         category: 'Flow-typed-related commands',
         description: 'link .flowconfig and packages from root workspace',
@@ -29,14 +28,13 @@ export default {
       @Command.Path('flow-typed', 'link')
       execute = async () => {
         const { cwd, plugins } = this.context;
-        const configuration = await Configuration.find(cwd, plugins);
         const {
+          configuration: { projectCwd },
           project: { workspaces },
           workspace: {
             manifest: { dependencies, devDependencies },
           },
-        } = await Project.find(configuration, cwd);
-        const { projectCwd } = configuration;
+        } = await findInfo(cwd, plugins);
 
         if (projectCwd === cwd) return;
 

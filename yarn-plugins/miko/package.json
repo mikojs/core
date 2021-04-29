@@ -1,0 +1,20 @@
+{
+  "name": "@mikojs/yarn-plugin-miko",
+  "description": "Use config to add custom commands.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/yarn-plugin-miko",
+  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/miko",
+  "version": "2.0.0-beta",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@yarnpkg/shell": "^2.4.1"
+  },
+  "devDependencies": {
+    "@mikojs/yarn-plugin-utils": "^2.0.0-beta"
+  },
+  "keywords": ["miko", "mikojs", "yarn plugin"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

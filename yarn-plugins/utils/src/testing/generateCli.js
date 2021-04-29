@@ -5,9 +5,12 @@ import pluginConfiguration from './pluginConfiguration';
 class TestingCli extends Cli {
   run = (args, options) =>
     super.run(args, {
+      ...Cli.defaultContext,
       plugins: pluginConfiguration,
       cwd: process.cwd(),
-      ...Cli.defaultContext,
+      stdout: {
+        write: jest.fn(),
+      },
       ...options,
     });
 }

@@ -12,10 +12,16 @@ class TestingCli extends Cli {
     });
 }
 
-export default (command, mockCommands = []) => {
+export default (commandOrCommands, mockCommands = []) => {
   const cli = new TestingCli();
+  const commands =
+    commandOrCommands instanceof Array
+      ? commandOrCommands
+      : [commandOrCommands];
 
-  cli.register(command);
+  commands.forEach(command => {
+    cli.register(command);
+  });
   mockCommands.forEach(mockCommand => {
     cli.register(
       class MockCommand extends Command {

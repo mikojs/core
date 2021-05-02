@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/yarn-plugin-miko",
-  "description": "Use config to add custom commands.",
+  "description": "Use a config to add custom commands.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/yarn-plugin-miko",

@@ -8,7 +8,7 @@ describe('miko', () => {
     mockStdout.write.mockClear();
   });
 
-  test.each(testings)('%s', async (info, config, expected) => {
+  test.each(testings)('%s', async (info, config, args, expected) => {
     const { cosmiconfigSync } = require('cosmiconfig');
 
     cosmiconfigSync.mockReturnValue({
@@ -20,7 +20,7 @@ describe('miko', () => {
     const { commands } = require('..');
     const cli = generateCli(commands);
 
-    await cli.run(['miko-todo', 'miko']);
+    await cli.run(args);
 
     expect(mockStdout.write).toHaveBeenCalledTimes(1);
     expect(mockStdout.write).toHaveBeenCalledWith(

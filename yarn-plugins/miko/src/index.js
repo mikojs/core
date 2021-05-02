@@ -13,8 +13,11 @@ const getCommands = (config, prevKey) =>
           category: 'Miko-related commands',
         });
 
+        @Command.Proxy()
+        args = [];
+
         @Command.Path(...prevKey, key)
-        execute = () => this.cli.run(command);
+        execute = () => this.cli.run([...command, ...this.args]);
       },
       ...getCommands(commands, [...prevKey, key]),
     ];

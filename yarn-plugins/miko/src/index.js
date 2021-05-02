@@ -3,7 +3,7 @@ import { cosmiconfigSync } from 'cosmiconfig';
 
 const getCommands = (config, prevKey = []) =>
   Object.keys(config).reduce((result, key) => {
-    const { commands = {}, ...usage } = config[key];
+    const { command, commands = {}, ...usage } = config[key];
 
     return [
       ...result,
@@ -14,13 +14,7 @@ const getCommands = (config, prevKey = []) =>
         });
 
         @Command.Path(...prevKey, key)
-        execute = () => {
-          const { stdout } = this.context;
-
-          // TODO
-          stdout.write(JSON.stringify(config[key]));
-          stdout.write('\n');
-        };
+        execute = () => this.cli.run(command);
       },
       ...getCommands(commands, [...prevKey, key]),
     ];

@@ -17,11 +17,7 @@ module.exports = filePath => {
       factory: () => plugin,
     };
   } catch (e) {
-    if (
-      !new RegExp(names.miko).test(e.message) &&
-      !new RegExp(`${names.miko}/lib/index.js`).test(e.message)
-    )
-      error(e);
+    if (!new RegExp(names.miko).test(e.message)) error(e);
 
     const workspacePath = path.resolve(
       __dirname,

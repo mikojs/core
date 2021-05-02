@@ -2,20 +2,31 @@ import { Cli, Command } from 'clipanion';
 
 import pluginConfiguration from './pluginConfiguration';
 
+export const mockStdout = {
+  write: jest.fn(),
+};
+
 class TestingCli extends Cli {
   run = (args, options) =>
     super.run(args, {
+      ...Cli.defaultContext,
       plugins: pluginConfiguration,
       cwd: process.cwd(),
-      ...Cli.defaultContext,
+      stdout: mockStdout,
       ...options,
     });
 }
 
-export default (command, mockCommands = []) => {
+export default (commandOrCommands, mockCommands = []) => {
   const cli = new TestingCli();
+  const commands =
+    commandOrCommands instanceof Array
+      ? commandOrCommands
+      : [commandOrCommands];
 
-  cli.register(command);
+  commands.forEach(command => {
+    cli.register(command);
+  });
   mockCommands.forEach(mockCommand => {
     cli.register(
       class MockCommand extends Command {

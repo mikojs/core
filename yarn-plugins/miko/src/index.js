@@ -1,7 +1,7 @@
 import { BaseCommand as Command } from '@yarnpkg/cli';
 import { cosmiconfigSync } from 'cosmiconfig';
 
-const getCommands = (config, prevKey = []) =>
+const getCommands = (config, prevKey) =>
   Object.keys(config).reduce((result, key) => {
     const { command, commands = {}, ...usage } = config[key];
 

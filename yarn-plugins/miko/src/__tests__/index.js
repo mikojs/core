@@ -1,10 +1,29 @@
-import { generateCli } from '@mikojs/yarn-plugin-utils/src/testing';
+import { generateCli, mockStdout } from '@mikojs/yarn-plugin-utils/src/testing';
 
-import { commands } from '..';
+const args = ['miko-todo', 'arg'];
 
-const cli = generateCli(commands);
-const args = ['miko-todo', 'babel'];
+describe('miko', () => {
+  beforeEach(() => {
+    jest.resetModules();
+  });
 
-test('miko', async () => {
-  await cli.run(args);
+  test('does not have any config', async () => {
+    const { cosmiconfigSync } = require('cosmiconfig');
+
+    cosmiconfigSync.mockReturnValue({
+      search: jest.fn().mockReturnValue({
+        config: null,
+      }),
+    });
+
+    const { commands } = require('..');
+    const cli = generateCli(commands);
+
+    await cli.run(args);
+
+    expect(mockStdout.write).toHaveBeenCalledTimes(1);
+    expect(mockStdout.write).toHaveBeenCalledWith(
+      expect.stringMatching('Command not found'),
+    );
+  });
 });

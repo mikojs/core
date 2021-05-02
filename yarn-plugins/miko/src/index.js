@@ -8,8 +8,10 @@ const getCommands = (config, prevKey = []) =>
     return [
       ...result,
       class CustomCommand extends Command {
-        // TODO
-        static usage = Command.Usage(usage);
+        static usage = Command.Usage({
+          ...usage,
+          category: 'Miko-related commands',
+        });
 
         @Command.Path(...prevKey, key)
         execute = () => {

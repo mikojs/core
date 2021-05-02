@@ -4,13 +4,15 @@ const config = {
   },
 };
 
+const args = ['miko-todo', 'miko'];
+
 export default [
-  ['does not have any config', null, ['miko-todo', 'miko'], 'miko-todo miko'],
-  ['run a custom command', config, ['miko-todo', 'miko'], 'test-miko'],
+  ['does not have any config', null, args, 'miko-todo miko'],
+  ['run a custom command', config, args, 'test-miko'],
   [
-    'run a custom command with other atgs',
+    'run a custom command with other args',
     config,
-    ['miko-todo', 'miko', 'a'],
+    [...args, 'a'],
     'test-miko a',
   ],
 ];

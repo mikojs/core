@@ -8,7 +8,20 @@ const runLernaCommand = command =>
 const getBranch = async () =>
   (await execa('git', ['branch', '--show-current'])).stdout;
 
-module.exports = {
+const migration = config =>
+  Object.keys(config).reduce(
+    (result, key) => ({
+      ...result,
+      [key]: {
+        ...config[key],
+        command: config[key].action,
+        commands: migration(config[key].commands || {}),
+      },
+    }),
+    {},
+  );
+
+module.exports = migration({
   babel: {
     description: 'Build source code with babel.',
     action:
@@ -122,4 +135,4 @@ module.exports = {
     description: 'Clean ignored files.',
     action: 'git clean -dxf',
   },
-};
+});

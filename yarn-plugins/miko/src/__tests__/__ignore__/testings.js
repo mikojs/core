@@ -1,6 +1,6 @@
 const config = {
   miko: {
-    command: ['test-miko'],
+    command: 'test-miko',
   },
 };
 
@@ -21,7 +21,7 @@ export default [
     'support to run multiple commands',
     {
       miko: {
-        command: ['test-miko', '&&', 'test-miko'],
+        command: 'test-miko && test-miko',
       },
     },
     args,

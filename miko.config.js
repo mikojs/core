@@ -63,11 +63,11 @@ module.exports = migration({
     commands: {
       prettier: {
         description: 'Disable `prettier/prettier` rule for running prettier.',
-        action: 'miko lint --quiet --rule "prettier/prettier: off"',
+        action: 'miko-todo lint --quiet --rule "prettier/prettier: off"',
       },
       watch: {
         description: 'Run eslint in watch mode.',
-        action: 'miko lint --rule "prettier/prettier: off" -w',
+        action: 'miko-todo lint --rule "prettier/prettier: off" -w',
       },
     },
   },

@@ -24,15 +24,15 @@ jobs:
       - name: Build workspaces
         run: yarn build
       - name: Link flow files
-        run: yarn miko lerna link flow
+        run: yarn miko-todo lerna link flow
       - name: Install flow-typed
         run: yarn miko flow-typed install
       - name: Flow check
         run: yarn miko flow
       - name: Check code style
-        run: yarn miko lint
+        run: yarn miko-todo lint
       - name: Test code
-        run: yarn miko jest
+        run: yarn miko-todo jest
       - uses: actions/upload-artifact@v2
         with:
           name: coverage

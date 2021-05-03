@@ -19,12 +19,34 @@ const getCommands = (config, prevKey) =>
 
         @Command.Path(...prevKey, key)
         execute = async () =>
-          this.cli.run([
+          [
             ...stringArgv(
               typeof command === 'string' ? command : await command(),
             ),
             ...this.args,
-          ]);
+            '&&',
+          ].reduce(
+            async (promiseResult, value) => {
+              const result = await promiseResult;
+              const { run } = this.cli;
+
+              if (result.skip) return result;
+
+              return value === '&&'
+                ? {
+                    skip: (await run(result.command)) !== 0,
+                    command: [],
+                  }
+                : {
+                    ...result,
+                    command: [...result.command, value],
+                  };
+            },
+            Promise.resolve({
+              command: [],
+              skip: false,
+            }),
+          );
       },
       ...getCommands(commands, [...prevKey, key]),
     ];

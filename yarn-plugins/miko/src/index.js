@@ -18,35 +18,39 @@ const getCommands = (config, prevKey) =>
         args = [];
 
         @Command.Path(...prevKey, key)
-        execute = async () =>
-          [
-            ...stringArgv(
-              typeof command === 'string' ? command : await command(),
-            ),
+        execute = async () => {
+          const { run } = this.cli;
+          const commandArgv = stringArgv(
+            typeof command === 'string' ? command : await command(),
+          );
+          const { exitCode: finalExitCode } = await [
+            ...commandArgv,
             ...this.args,
             '&&',
           ].reduce(
-            async (promiseResult, value) => {
-              const result = await promiseResult;
-              const { run } = this.cli;
+            async (promiseResult, str) => {
+              const { argv, exitCode } = await promiseResult;
 
-              if (result.skip) return result;
+              if (exitCode !== 0) return { argv, exitCode };
 
-              return value === '&&'
+              return str === '&&'
                 ? {
-                    skip: (await run(result.command)) !== 0,
-                    command: [],
+                    argv: [],
+                    exitCode: await run(argv),
                   }
                 : {
-                    ...result,
-                    command: [...result.command, value],
+                    argv: [...argv, str],
+                    exitCode,
                   };
             },
             Promise.resolve({
-              command: [],
-              skip: false,
+              argv: [],
+              exitCode: 0,
             }),
           );
+
+          return finalExitCode;
+        };
       },
       ...getCommands(commands, [...prevKey, key]),
     ];

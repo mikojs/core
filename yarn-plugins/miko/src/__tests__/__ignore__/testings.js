@@ -27,4 +27,14 @@ export default [
     args,
     expected,
   ],
+  [
+    'support function command',
+    {
+      miko: {
+        command: () => 'test-miko',
+      },
+    },
+    args,
+    expected,
+  ],
 ];

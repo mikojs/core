@@ -21,20 +21,18 @@ const migration = config =>
     {},
   );
 
+const babel =
+  'babel src -d lib --delete-dir-on-start --verbose --root-mode upward';
+
 module.exports = migration({
-  babel: {
-    description: 'Build source code with babel.',
-    action:
-      'babel src -d lib --delete-dir-on-start --verbose --root-mode upward',
-  },
   dev: {
     description: 'Run development mode.',
     action: async () =>
-      `lerna exec "miko babel -w" --parallel --stream --since ${await getBranch()}`,
+      `lerna exec "${babel} -w" --parallel --stream --since ${await getBranch()}`,
   },
   build: {
     description: 'Run build mode.',
-    action: 'lerna exec "miko babel" --parallel --stream',
+    action: `lerna exec "${babel}" --parallel --stream`,
     commands: {
       'yarn-plugins': {
         description: 'Build yarn plugins.',
@@ -45,7 +43,7 @@ module.exports = migration({
   },
   prod: {
     description: 'Run production mode.',
-    action: 'NODE_ENV=production && miko build',
+    action: 'NODE_ENV=production && miko-todo build',
   },
   jest: {
     description: 'Test the code with jest.',
@@ -114,19 +112,21 @@ module.exports = migration({
         action: async () => {
           const branch = await getBranch();
 
-          return `miko build --since ${branch} && miko flow --since ${branch} && lint-staged`;
+          return `miko-todo build --since ${branch} && miko-todo flow --since ${branch} && lint-staged`;
         },
       },
       'post-merge': {
         description: 'Run commands in git post-merge hook.',
-        action: 'miko build',
+        action: 'miko-todo build',
       },
       'post-checkout': {
         description: 'Run commands in git post-checkout hook.',
         action: async () => {
           const branch = await getBranch();
 
-          return branch === 'main' ? 'miko build' : 'miko build --since main';
+          return branch === 'main'
+            ? 'miko-todo build'
+            : 'miko-todo build --since main';
         },
       },
     },

@@ -7,4 +7,4 @@ else
   sh $(dirname "$0")/build.sh --since main
 fi
 
-yarn miko husky post-checkout
+yarn miko-todo husky post-checkout

@@ -2,4 +2,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 sh $(dirname "$0")/build.sh
-yarn miko husky post-merge
+yarn miko-todo husky post-merge

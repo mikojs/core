@@ -26,9 +26,9 @@ jobs:
       - name: Link flow files
         run: yarn miko-todo lerna link flow
       - name: Install flow-typed
-        run: yarn miko flow-typed install
+        run: yarn miko-todo flow-typed install
       - name: Flow check
-        run: yarn miko flow
+        run: yarn miko-todo flow
       - name: Check code style
         run: yarn miko-todo lint
       - name: Test code

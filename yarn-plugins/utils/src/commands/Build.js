@@ -19,6 +19,7 @@ export default class Build extends Command {
   @Command.Path('plugin', 'build')
   execute = async () => {
     const { cwd } = this.context;
+    const { run } = this.cli;
     const tsconfigFilePath = path.resolve(cwd, './tsconfig.json');
 
     fs.writeFileSync(
@@ -34,7 +35,7 @@ export default class Build extends Command {
         2,
       ),
     );
-    await this.cli.run(['node', findBuilder(), 'build', 'plugin']);
+    await run(['node', findBuilder(), 'build', 'plugin']);
     fs.unlinkSync(tsconfigFilePath);
   };
 }

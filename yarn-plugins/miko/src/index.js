@@ -1,3 +1,4 @@
+import { execUtils } from '@yarnpkg/core';
 import { BaseCommand as Command } from '@yarnpkg/cli';
 import stringArgv from 'string-argv';
 import { cosmiconfigSync } from 'cosmiconfig';
@@ -20,6 +21,7 @@ const getCommands = (config, prevKey) =>
         @Command.Path(...prevKey, key)
         execute = async () => {
           const { run } = this.cli;
+          const { cwd, stdin, stdout, stderr } = this.context;
           const commandArgv = stringArgv(
             typeof command === 'string' ? command : await command(),
           );
@@ -33,15 +35,27 @@ const getCommands = (config, prevKey) =>
 
               if (exitCode !== 0) return { argv, exitCode };
 
-              return str === '&&'
-                ? {
-                    argv: [],
-                    exitCode: await run(argv),
-                  }
-                : {
-                    argv: [...argv, str],
-                    exitCode,
-                  };
+              if (str !== '&&')
+                return {
+                  argv: [...argv, str],
+                  exitCode,
+                };
+
+              return {
+                argv: [],
+                exitCode:
+                  (await run(argv)) === 0
+                    ? 0
+                    : await execUtils
+                        .pipevp(argv[0], argv.slice(1), {
+                          cwd,
+                          stdin,
+                          stdout,
+                          stderr,
+                        })
+                        .then(({ code }) => code)
+                        .catch(({ code }) => code),
+              };
             },
             Promise.resolve({
               argv: [],

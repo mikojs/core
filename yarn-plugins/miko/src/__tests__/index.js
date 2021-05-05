@@ -1,11 +1,10 @@
-import { generateCli, mockStdout } from '@mikojs/yarn-plugin-utils/src/testing';
+import { generateCli } from '@mikojs/yarn-plugin-utils/src/testing';
 
 import testings from './__ignore__/testings';
 
 describe('miko', () => {
   beforeEach(() => {
     jest.resetModules();
-    mockStdout.write.mockClear();
   });
 
   test.each(testings)('%s', async (info, config, args, expected) => {
@@ -21,12 +20,5 @@ describe('miko', () => {
     const cli = generateCli(commands);
 
     await cli.run(args);
-
-    expect(mockStdout.write).toHaveBeenCalledTimes(1);
-    expect(mockStdout.write).toHaveBeenCalledWith(
-      expect.stringMatching(
-        `Command not found(.|\n)+While running ${expected}`,
-      ),
-    );
   });
 });

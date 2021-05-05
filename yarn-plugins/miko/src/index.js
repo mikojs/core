@@ -5,6 +5,7 @@ import { cosmiconfigSync } from 'cosmiconfig';
 import runCommand from './utils/runCommand';
 import addInterceptor from './utils/addInterceptor';
 import exec from './utils/exec';
+import runAll from './utils/runAll';
 
 const getCommands = (config, prevKey) =>
   Object.keys(config).reduce((result, key) => {
@@ -36,10 +37,7 @@ const getCommands = (config, prevKey) =>
               ...this.args,
               '&&',
             ],
-            async argv =>
-              (await run(argv)) === 0
-                ? 0
-                : await exec(argv, { cwd, stdin, stdout, stderr }),
+            argv => runAll(argv, { cwd, stdin, stdout, stderr }, run, exec),
           );
 
           return exitCode;

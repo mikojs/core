@@ -2,10 +2,10 @@ import { BaseCommand as Command } from '@yarnpkg/cli';
 import stringArgv from 'string-argv';
 import { cosmiconfigSync } from 'cosmiconfig';
 
-import runCommand from './utils/runCommand';
+import runArgv from './utils/runArgv';
 import addInterceptor from './utils/addInterceptor';
 import exec from './utils/exec';
-import runAll from './utils/runAll';
+import execRace from './utils/execRace';
 
 const getCommands = (config, prevKey) =>
   Object.keys(config).reduce((result, key) => {
@@ -29,7 +29,7 @@ const getCommands = (config, prevKey) =>
 
           addInterceptor(stdout);
 
-          const { exitCode } = await runCommand(
+          const { exitCode } = await runArgv(
             [
               ...stringArgv(
                 typeof command === 'string' ? command : await command(),
@@ -37,7 +37,7 @@ const getCommands = (config, prevKey) =>
               ...this.args,
               '&&',
             ],
-            argv => runAll(argv, { cwd, stdin, stdout, stderr }, run, exec),
+            argv => execRace(argv, { cwd, stdin, stdout, stderr }, run, exec),
           );
 
           return exitCode;

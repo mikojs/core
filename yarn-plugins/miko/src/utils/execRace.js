@@ -1,4 +1,4 @@
-const runAll = async (argv, options, callback, ...callbacks) => {
+const execRace = async (argv, options, callback, ...callbacks) => {
   const exitCode = await callback(argv, options);
   const { stdout } = options;
 
@@ -14,8 +14,8 @@ const runAll = async (argv, options, callback, ...callbacks) => {
     default:
       return callbacks.length == 0
         ? exitCode
-        : runAll(argv, options, ...callbacks);
+        : execRace(argv, options, ...callbacks);
   }
 };
 
-export default runAll;
+export default execRace;

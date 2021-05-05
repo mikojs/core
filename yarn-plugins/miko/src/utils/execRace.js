@@ -12,9 +12,9 @@ const execRace = async (argv, options, callback, ...callbacks) => {
       return 130;
 
     default:
-      return callbacks.length == 0
-        ? exitCode
-        : execRace(argv, options, ...callbacks);
+      return stdout.write?.interceptor.errorMessage && callbacks.length !== 0
+        ? execRace(argv, options, ...callbacks)
+        : exitCode;
   }
 };
 

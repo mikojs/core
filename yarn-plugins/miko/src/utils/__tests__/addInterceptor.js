@@ -4,17 +4,21 @@ const write = jest.fn();
 const stdout = { write };
 
 describe('add interceptor', () => {
-  beforeAll(() => {
-    addInterceptor(stdout);
-    addInterceptor(stdout);
-  });
-
   beforeEach(() => {
+    addInterceptor(stdout);
     write.mockClear();
   });
 
   test('has interceptor', () => {
+    addInterceptor(stdout);
+
     expect(stdout.write.interceptor).not.toBeUndefined();
+  });
+
+  test('remove interceptor after stopping interceptor', () => {
+    stdout.write.interceptor.end();
+
+    expect(stdout.write.interceptor).toBeUndefined();
   });
 
   test('not show `Usage Error`', () => {

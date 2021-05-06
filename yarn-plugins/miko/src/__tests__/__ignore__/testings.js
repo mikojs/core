@@ -17,4 +17,24 @@ export default [
     [...args, 'a'],
     [[...expected, '-a']],
   ],
+  [
+    'support to run multiple commands',
+    {
+      miko: {
+        command: 'test-miko && test-miko',
+      },
+    },
+    args,
+    [expected, expected],
+  ],
+  [
+    'support function command',
+    {
+      miko: {
+        command: () => 'test-miko',
+      },
+    },
+    args,
+    [expected],
+  ],
 ];

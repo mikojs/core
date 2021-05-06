@@ -4,8 +4,8 @@ import { execute } from '@yarnpkg/shell';
 
 export default {
   hooks: {
-    afterAllInstalled: async ({ workspaces }) => {
-      await execute('yarn', [
+    afterAllInstalled: ({ workspaces }) =>
+      execute('yarn', [
         'prettier',
         '--loglevel',
         'silent',
@@ -13,7 +13,6 @@ export default {
         '--parser',
         'json',
         ...workspaces.map(({ cwd }) => path.resolve(cwd, './package.json')),
-      ]);
-    },
+      ]),
   },
 };

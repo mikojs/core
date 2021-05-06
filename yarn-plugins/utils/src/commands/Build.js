@@ -4,8 +4,6 @@ import path from 'path';
 import chalk from 'chalk';
 import { BaseCommand as Command } from '@yarnpkg/cli';
 
-import findBuilder from '../utils/findBuilder';
-
 export default class Build extends Command {
   static usage = Command.Usage({
     category: 'Plugin-related commands',
@@ -35,7 +33,7 @@ export default class Build extends Command {
         2,
       ),
     );
-    await run(['node', findBuilder(), 'build', 'plugin']);
+    await run(['run', 'builder', 'build', 'plugin']);
     fs.unlinkSync(tsconfigFilePath);
   };
 }

@@ -8,7 +8,7 @@ describe('miko', () => {
     mockStdout.write.mockClear();
   });
 
-  test.each(testings)('%s', async (info, config, args, expected) => {
+  test.each(testings)('%s', async (info, config, args) => {
     const { cosmiconfigSync } = require('cosmiconfig');
 
     cosmiconfigSync.mockReturnValue({
@@ -20,13 +20,6 @@ describe('miko', () => {
     const { commands } = require('..');
     const cli = generateCli(commands);
 
-    await cli.run(args);
-
-    expect(mockStdout.write).toHaveBeenCalledTimes(1);
-    expect(mockStdout.write).toHaveBeenCalledWith(
-      expect.stringMatching(
-        `Command not found(.|\n)+While running ${expected}`,
-      ),
-    );
+    expect(await cli.run(args)).toBe(1);
   });
 });

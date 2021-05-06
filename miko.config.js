@@ -26,7 +26,7 @@ module.exports = {
       'yarn-plugins': {
         description: 'Build yarn plugins.',
         action:
-          'lerna exec "builder build plugin" --stream --scope @mikojs/yarn-plugin-*',
+          'lerna exec "yarn plugin build" --stream --scope @mikojs/yarn-plugin-*',
       },
     },
   },

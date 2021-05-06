@@ -20,6 +20,5 @@ export default class FlowTyped extends Command {
   args = [];
 
   @Command.Path('flow-typed')
-  execute = () =>
-    this.cli.run(['node', require.resolve('flow-typed'), ...this.args]);
+  execute = () => this.cli.run(['run', 'flow-typed', ...this.args]);
 }

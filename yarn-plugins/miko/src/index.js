@@ -1,4 +1,5 @@
 import { BaseCommand as Command } from '@yarnpkg/cli';
+import stringArgv from 'string-argv';
 import { cosmiconfigSync } from 'cosmiconfig';
 
 const getCommands = (config, prevKey) =>
@@ -17,7 +18,13 @@ const getCommands = (config, prevKey) =>
         args = [];
 
         @Command.Path(...prevKey, key)
-        execute = () => this.cli.run([...command, ...this.args]);
+        execute = async () =>
+          this.cli.run([
+            ...stringArgv(
+              typeof command === 'string' ? command : await command(),
+            ),
+            ...this.args,
+          ]);
       },
       ...getCommands(commands, [...prevKey, key]),
     ];

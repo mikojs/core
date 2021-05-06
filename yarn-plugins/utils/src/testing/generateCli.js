@@ -2,17 +2,15 @@ import { Cli, Command } from 'clipanion';
 
 import pluginConfiguration from './pluginConfiguration';
 
-export const mockStdout = {
-  write: jest.fn(),
-};
-
 class TestingCli extends Cli {
   run = (args, options) =>
     super.run(args, {
       ...Cli.defaultContext,
       plugins: pluginConfiguration,
       cwd: process.cwd(),
-      stdout: mockStdout,
+      stdout: {
+        write: jest.fn(),
+      },
       ...options,
     });
 }

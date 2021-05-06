@@ -20,7 +20,7 @@
   "lerna": "3.22.1",
   "npmClient": "yarn",
   "npmClientArgs": ["--no-lockfile"],
-  "ignoreChanges": ["**/__tests__/**", "**/*.md"],
+  "ignoreChanges": ["**/__tests__/**", "**/*.md", "**/bundles/**"],
   "packages": ["packages/*", "yarn-plugins/*"],
   "useWorkspaces": true
 }

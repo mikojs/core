@@ -2,23 +2,3 @@
 *.swp
 *.log
 .DS_Store
-
-# yarn
-.yarn/build-state.yml
-.yarn/install-state.gz
-
-# node
-node_modules
-
-# babel
-lib
-
-# lint
-.eslintcache
-
-# jest
-coverage
-
-# flow
-**/flow-typed/npm
-**/.flowconfig

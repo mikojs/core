@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.0-beta.0 (2021-03-31)
+
+Rewrite project.
+
 ## 2.0.0-beta (2021-03-31)
 
 Rewrite project.

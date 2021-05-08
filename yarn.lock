@@ -9,3 +9,9 @@ __metadata:
   resolution: "@mikojs/core@workspace:."
   languageName: unknown
   linkType: soft
+
+"@mikojs/yarn-plugin-build@workspace:yarn-plugins/build":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/yarn-plugin-build@workspace:yarn-plugins/build"
+  languageName: unknown
+  linkType: soft

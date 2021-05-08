@@ -7,7 +7,6 @@
 .yarn/*
 !.yarn/releases
 !.yarn/plugins
-.pnp.*
 
 # node
 node_modules

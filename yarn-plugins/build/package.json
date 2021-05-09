@@ -16,7 +16,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@yarnpkg/cli": "^3.0.0-rc.2",
+    "@yarnpkg/cli": "^2.4.1",
     "chalk": "^4.1.1"
   }
 }

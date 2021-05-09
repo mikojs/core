@@ -16,20 +16,15 @@ module.exports = filename => {
     };
   } catch (e) {
     const { error } = console;
-    const workspacePath = path.resolve(
-      __dirname,
-      '../../../yarn-plugins',
-      name.replace(/plugin-/, ''),
-    );
 
     if (!new RegExp(names.miko).test(e.message)) error(e);
 
-    if (process.env.NODE_ENV === 'test')
-      return {
-        name: names.yarn,
-        factory: () => require(path.resolve(workspacePath, './src')),
-      };
-
-    return require(path.resolve(workspacePath, './bundles', names.yarn));
+    return require(path.resolve(
+      __dirname,
+      '../../../yarn-plugins',
+      name.replace(/plugin-/, ''),
+      './bundles',
+      names.yarn,
+    ));
   }
 };

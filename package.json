@@ -6,9 +6,7 @@
   "scripts": {
     "build": "yarn workspaces foreach --no-private exec yarn run --top-level babel src -d lib --delete-dir-on-start --verbose --root-mode upward"
   },
-  "workspaces": [
-    "yarn-plugins/*"
-  ],
+  "workspaces": ["yarn-plugins/*"],
   "engines": {
     "node": ">= 14.x",
     "npm": ">= 6.x",
@@ -21,6 +19,7 @@
     "@babel/plugin-proposal-decorators": "^7.13.15",
     "@babel/preset-env": "^7.14.1",
     "babel-plugin-add-module-exports": "^1.0.4",
-    "core-js": "^3.12.1"
+    "core-js": "^3.12.1",
+    "prettier": "^2.2.1"
   }
 }

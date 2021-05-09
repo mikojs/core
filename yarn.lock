@@ -1275,6 +1275,7 @@ __metadata:
     "@babel/preset-env": ^7.14.1
     babel-plugin-add-module-exports: ^1.0.4
     core-js: ^3.12.1
+    prettier: ^2.2.1
   languageName: unknown
   linkType: soft
 
@@ -4268,6 +4269,15 @@ fsevents@~2.3.1:
   version: 0.1.1
   resolution: "posix-character-classes@npm:0.1.1"
   checksum: 984f83c2d4dec5abb9a6ac2b4a184132a58c4af9ce25704bfda2be6e8139335673c45d959ef6ffea3756dc88d3a0cb27c745a84d875ae5142b76e661a37a5f0e
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "prettier@npm:2.2.1"
+  bin:
+    prettier: bin-prettier.js
+  checksum: 92c6c9f4b87eba1f28466edee57dd18c80d00b858edda77d46d1950d20e6e302b68ee255fc91133ba931e63c4577b5ae30da194d9626a8f3c0177778b91bf056
   languageName: node
   linkType: hard
 

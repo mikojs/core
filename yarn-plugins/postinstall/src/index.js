@@ -5,7 +5,7 @@ import { execUtils } from '@yarnpkg/core';
 export default {
   hooks: {
     afterAllInstalled: async ({ cwd, workspaces }) => {
-      await execUtils.execvp('yarn', [
+      await execUtils.pipevp('yarn', [
         'prettier',
         '--loglevel',
         'silent',
@@ -13,7 +13,7 @@ export default {
         '--parser',
         'json',
         ...workspaces.map(({ cwd }) => path.resolve(cwd, './package.json')),
-      ], { cwd });
+      ], { cwd, stdout: process.stdout, stderr: process.stderr });
     },
   },
 };

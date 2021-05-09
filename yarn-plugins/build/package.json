@@ -14,5 +14,9 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@yarnpkg/cli": "^3.0.0-rc.2",
+    "chalk": "^4.1.1"
   }
 }

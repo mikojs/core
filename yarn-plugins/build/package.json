@@ -9,7 +9,7 @@
   "main": "./lib/index.js",
   "keywords": [
     "mikojs",
-    "prettier package.json",
+    "build plugin",
     "yarn plugin"
   ],
   "publishConfig": {

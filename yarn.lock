@@ -1274,6 +1274,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": ^7.13.15
     "@babel/preset-env": ^7.14.1
     babel-plugin-add-module-exports: ^1.0.4
+    core-js: ^3.12.1
   languageName: unknown
   linkType: soft
 
@@ -2560,6 +2561,13 @@ __metadata:
     browserslist: ^4.16.6
     semver: 7.0.0
   checksum: c1c510bf5d60d5b8e6bf6272a6ecf8b573f90f43f550df4974f16b888eb8fac4f8e63bc525e07b4cd73b718e43e4354dfed7dcc8ae237ce62594c2e4ac6abbee
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.12.1":
+  version: 3.12.1
+  resolution: "core-js@npm:3.12.1"
+  checksum: 8b1d05579e7ddeafcd390001cc893540275fa3e658a00ae57f88954411a25bdfe583debb1929c6a50e40631cc07f2092490ea2284b35ffb922b23d7677060f28
   languageName: node
   linkType: hard
 

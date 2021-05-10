@@ -1,0 +1,14 @@
+{
+  "name": "@mikojs/yarn-plugin-workspaces",
+  "description": "Add more options to @yarnpkg/plugin-workspace-tools.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/yarn-plugin-workspaces",
+  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/workspaces",
+  "version": "2.0.0-beta.0",
+  "main": "./lib/index.js",
+  "keywords": ["mikojs", "workspaces", "yarn plugin"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

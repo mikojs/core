@@ -50,6 +50,7 @@ export default class Base extends Command {
     await run([
       'workspaces',
       'foreach',
+      '-i',
       '--exclude',
       structUtils.stringifyIdent(locator),
       ...(!this.gitRange ? [] : await findWorkspaces(workspaces, {

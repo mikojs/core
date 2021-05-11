@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { BaseCommand as Command } from '@yarnpkg/cli';
-import { Configuration, Project, structUtils } from '@yarnpkg/core';
+import { Configuration, Project, StreamReport, structUtils } from '@yarnpkg/core';
 
 import findWorkspaces from '../utils/findWorkspaces';
 
@@ -41,11 +41,24 @@ export default class Base extends Command {
   addOption = (condition, ...args) => condition ? args : [];
 
   buildExecute = executeCommandName => async () => {
-    const { cwd, plugins } = this.context;
+    const { cwd, plugins, stdout } = this.context;
     const { run } = this.cli;
     const configuration = await Configuration.find(cwd, plugins);
     const { projectCwd } = configuration;
     const { project: { workspaces }, locator } = await Project.find(configuration, projectCwd);
+    const filteredWorkspaces = !this.gitRange ? [] : await findWorkspaces(workspaces, {
+      cwd: projectCwd,
+      gitRange: this.gitRange,
+    });
+
+    if (this.gitRange && filteredWorkspaces.length === 0) {
+      await StreamReport.start({
+        configuration,
+        stdout,
+      }, report => report.exitCode());
+
+      return 0;
+    }
 
     await run([
       'workspaces',
@@ -53,10 +66,7 @@ export default class Base extends Command {
       '-i',
       '--exclude',
       structUtils.stringifyIdent(locator),
-      ...(!this.gitRange ? [] : await findWorkspaces(workspaces, {
-        cwd: projectCwd,
-        gitRange: this.gitRange,
-      })),
+      ...filteredWorkspaces,
       ...this.addFilter(this.include, '--include'),
       ...this.addFilter(this.exclude, '--exclude'),
       ...this.addOption(!this.noPrefix, '-v'),

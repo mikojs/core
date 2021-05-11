@@ -2,6 +2,8 @@ import chalk from 'chalk';
 import { BaseCommand as Command } from '@yarnpkg/cli';
 import { Configuration, Project, structUtils } from '@yarnpkg/core';
 
+import findWorkspaces from '../utils/findWorkspaces';
+
 export default class Exec extends Command {
   static usage = Command.Usage({
     category: 'Workspace-related commands',
@@ -30,19 +32,26 @@ export default class Exec extends Command {
   @Command.String('-j,--jobs')
   jobs
 
+  @Command.String('--git-range')
+  gitRange
+
   @Command.Path('workspaces', 'exec')
   execute = async () => {
     const { cwd, plugins } = this.context;
     const { run } = this.cli;
     const configuration = await Configuration.find(cwd, plugins);
     const { projectCwd } = configuration;
-    const { locator } = await Project.find(configuration, projectCwd);
+    const { project: { workspaces }, locator } = await Project.find(configuration, projectCwd);
 
     await run([
       'workspaces',
       'foreach',
       '--exclude',
       structUtils.stringifyIdent(locator),
+      ...(!this.gitRange ? [] : await findWorkspaces(workspaces, {
+        cwd: projectCwd,
+        gitRange: this.gitRange,
+      })),
       ...this.addOption(this.verbose, '-v'),
       ...this.addOption(this.parallel, '-p'),
       ...this.addOption(this.interlaced, '-i'),

@@ -1,5 +1,12 @@
-import ForEach from './commands/ForEach';
+import pluginWorkspaceTools from '@yarnpkg/plugin-workspace-tools';
+
+import Exec from './commands/Exec';
+
+const { commands } = pluginWorkspaceTools;
 
 export default {
-  commands: [ForEach],
+  commands: [
+    ...commands,
+    Exec,
+  ],
 };

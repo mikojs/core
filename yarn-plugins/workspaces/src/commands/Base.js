@@ -11,9 +11,6 @@ export default class Base extends Command {
   @Command.Proxy()
   args = [];
 
-  @Command.Boolean('-v,--verbose', { description: chalk`This is a proxy option for {cyan @yarnpkg/plugin-workspace-tools}` })
-  verbose = false;
-
   @Command.Boolean('-p,--parallel', { description: chalk`This is a proxy option for {cyan @yarnpkg/plugin-workspace-tools}` })
   parallel = false
 
@@ -28,6 +25,9 @@ export default class Base extends Command {
 
   @Command.Array('--exclude', { description: chalk`This is a proxy option for {cyan @yarnpkg/plugin-workspace-tools}` })
   exclude = [];
+
+  @Command.Boolean('--no-prefix', { description: 'Disable workspace name prefixing' })
+  noPrefix = false;
 
   @Command.String('--git-range', { description: chalk`Use to find workspaces with running {cyan git diff}` })
   gitRange
@@ -58,7 +58,7 @@ export default class Base extends Command {
       })),
       ...this.addFilter(this.include, '--include'),
       ...this.addFilter(this.exclude, '--exclude'),
-      ...this.addOption(this.verbose, '-v'),
+      ...this.addOption(!this.noPrefix, '-v'),
       ...this.addOption(this.parallel, '-p'),
       ...this.addOption(this.interlaced, '-i'),
       ...this.addOption(this.jobs, '-j', this.jobs),

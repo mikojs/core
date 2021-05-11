@@ -32,6 +32,12 @@ export default class Exec extends Command {
   @Command.String('-j,--jobs')
   jobs
 
+  @Command.Array('--include')
+  include = [];
+
+  @Command.Array('--exclude')
+  exclude = [];
+
   @Command.String('--git-range')
   gitRange
 
@@ -52,6 +58,8 @@ export default class Exec extends Command {
         cwd: projectCwd,
         gitRange: this.gitRange,
       })),
+      ...this.addFilter(this.include, '--include'),
+      ...this.addFilter(this.exclude, '--exclude'),
       ...this.addOption(this.verbose, '-v'),
       ...this.addOption(this.parallel, '-p'),
       ...this.addOption(this.interlaced, '-i'),
@@ -65,4 +73,10 @@ export default class Exec extends Command {
   }
 
   addOption = (condition, ...args) => condition ? args : [];
+
+  addFilter = (options, name) => options.reduce((result, option) => [
+    ...result,
+    name,
+    option,
+  ], []);
 }

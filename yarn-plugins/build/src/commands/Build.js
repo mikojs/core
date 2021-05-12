@@ -33,7 +33,7 @@ export default class Build extends Command {
         2,
       ),
     );
-    await run(['run', 'builder', 'build', 'plugin']);
+    await run(['run', '--top-level', 'builder', 'build', 'plugin']);
     fs.unlinkSync(filePath);
   };
 }

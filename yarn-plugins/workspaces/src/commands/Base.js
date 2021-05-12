@@ -11,25 +11,25 @@ export default class Base extends Command {
   @Command.Proxy()
   args = [];
 
-  @Command.Boolean('-p,--parallel', { description: chalk`This is a proxy option for {cyan @yarnpkg/plugin-workspace-tools}` })
+  @Command.Boolean('-p,--parallel', { description: chalk`This is a proxy option for {cyan \`@yarnpkg/plugin-workspace-tools\`}` })
   parallel = false
 
-  @Command.Boolean('-i,--interlaced', { description: chalk`This is a proxy option for {cyan @yarnpkg/plugin-workspace-tools}` })
+  @Command.Boolean('-i,--interlaced', { description: chalk`This is a proxy option for {cyan \`@yarnpkg/plugin-workspace-tools\`}` })
   interlaced = false;
 
-  @Command.String('-j,--jobs', { description: chalk`This is a proxy option for {cyan @yarnpkg/plugin-workspace-tools}` })
+  @Command.String('-j,--jobs', { description: chalk`This is a proxy option for {cyan \`@yarnpkg/plugin-workspace-tools\`}` })
   jobs
 
-  @Command.Array('--include', { description: chalk`This is a proxy option for {cyan @yarnpkg/plugin-workspace-tools}` })
+  @Command.Array('--include', { description: chalk`This is a proxy option for {cyan \`@yarnpkg/plugin-workspace-tools\`}` })
   include = [];
 
-  @Command.Array('--exclude', { description: chalk`This is a proxy option for {cyan @yarnpkg/plugin-workspace-tools}` })
+  @Command.Array('--exclude', { description: chalk`This is a proxy option for {cyan \`@yarnpkg/plugin-workspace-tools\`}` })
   exclude = [];
 
   @Command.Boolean('--no-prefix', { description: 'Disable workspace name prefixing' })
   noPrefix = false;
 
-  @Command.String('--git-range', { description: chalk`Use to find workspaces with running {cyan git diff}` })
+  @Command.String('--git-range', { description: chalk`Use to find workspaces with running {cyan \`git diff\`}` })
   gitRange
 
   addFilter = (options, name) => options.reduce((result, option) => [

@@ -14,6 +14,9 @@ export default class Build extends Command {
     examples: [['Build yarn plugin', 'yarn plugin build']],
   });
 
+  @Command.Boolean('--top-level', { description: chalk`Use this option to find {cyan \`@yarnpkg/builder\`} in the root workspace` })
+  topLevel = false
+
   @Command.Path('plugin', 'build')
   execute = async () => {
     const { cwd } = this.context;
@@ -33,7 +36,7 @@ export default class Build extends Command {
         2,
       ),
     );
-    await run(['run', 'builder', 'build', 'plugin']);
+    await run(['run', ...(!this.topLevel ? [] : ['--top-level']), 'builder', 'build', 'plugin']);
     fs.unlinkSync(filePath);
   };
 }

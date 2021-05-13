@@ -3,6 +3,8 @@ import { BaseCommand as Command } from '@yarnpkg/cli';
 import { Configuration, Project, StreamReport, structUtils } from '@yarnpkg/core';
 
 import findWorkspaces from '../utils/findWorkspaces';
+import addFilter from '../utils/addFilter';
+import addOption from '../utils/addOption';
 
 export default class Base extends Command {
   @Command.String()
@@ -32,14 +34,6 @@ export default class Base extends Command {
   @Command.String('--git-range', { description: chalk`Use to find workspaces with running {cyan \`git diff\`}` })
   gitRange
 
-  addFilter = (options, name) => options.reduce((result, option) => [
-    ...result,
-    name,
-    option,
-  ], []);
-
-  addOption = (condition, ...args) => condition ? args : [];
-
   buildExecute = executeCommandName => async () => {
     const { cwd, plugins, stdout } = this.context;
     const { run } = this.cli;
@@ -67,12 +61,12 @@ export default class Base extends Command {
       '--exclude',
       structUtils.stringifyIdent(locator),
       ...filteredWorkspaces,
-      ...this.addFilter(this.include, '--include'),
-      ...this.addFilter(this.exclude, '--exclude'),
-      ...this.addOption(!this.noPrefix, '-v'),
-      ...this.addOption(this.parallel, '-p'),
-      ...this.addOption(this.interlaced, '-i'),
-      ...this.addOption(this.jobs, '-j', this.jobs),
+      ...addFilter(this.include, '--include'),
+      ...addFilter(this.exclude, '--exclude'),
+      ...addOption(!this.noPrefix, '-v'),
+      ...addOption(this.parallel, '-p'),
+      ...addOption(this.interlaced, '-i'),
+      ...addOption(this.jobs, '-j', this.jobs),
       executeCommandName,
       this.commandName,
       ...this.args

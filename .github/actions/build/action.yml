@@ -1,0 +1,7 @@
+name: Build workspaces
+description: Build all workspaces
+runs:
+  using: "composite"
+  steps:
+    - run: yarn prod
+      shell: bash

@@ -8,5 +8,5 @@ export default (str, examples) => ({
 
     On the other hand, this command also add some helpful options to find the specific workspaces.
   `,
-  examples: [['Run script', 'yarn workspaces run build']],
+  examples,
 });

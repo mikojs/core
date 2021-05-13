@@ -9,6 +9,8 @@ export default class Exec extends Base {
     description: chalk`execute command with {cyan \`@yarnpkg/plugin-workspace-tools\`}`,
     details: chalk`
       Because {cyan \`@yarnpkg/plugin-workspace-tools\`} would execute command in the all workspaces included the root workspace, the root workspace is not needed for the most case. Using this command would avoid to executing command in the root workspace.
+
+      On the other hand, this command also add some helpful options to find the specific workspaces.
     `,
     examples: [['Show the all workspaces path', 'yarn workspaces exec pwd']],
   });

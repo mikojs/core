@@ -6,7 +6,7 @@ import buildUsage from '../utils/buildUsage';
 
 export default class Exec extends Base {
   static usage = Command.Usage(buildUsage('execute command', [
-    'Show the all workspaces path', 'yarn workspaces exec pwd'
+    ['Show the all workspaces path', 'yarn workspaces exec pwd'],
   ]));
 
   @Command.Path('workspaces', 'exec')

@@ -1,1 +1,1 @@
-export default {};
+export default require('@yarnpkg/plugin-config');

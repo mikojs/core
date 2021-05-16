@@ -1,4 +1,1 @@
-module.exports = {
-  name: '@yarnpkg/plugin-config',
-  factory: () => ({}),
-};
+module.exports = require('./require')(__filename);

@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/yarn-plugin-config",
-  "description": "This default config is used for @mikojs/yarn-plugin-miko.",
+  "description": "A default config is used for @mikojs/yarn-plugin-miko.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/yarn-plugin-config",

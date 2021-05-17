@@ -10,5 +10,8 @@
   "keywords": ["mikojs", "miko", "yarn plugin"],
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "string-argv": "^0.3.1"
   }
 }

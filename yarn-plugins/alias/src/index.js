@@ -12,7 +12,7 @@ const getCommands = (config, prevKey = []) =>
       class CustomCommand extends Command {
         static usage = Command.Usage({
           ...usage,
-          category: 'Miko-related commands',
+          category: 'Alias-related commands',
         });
 
         @Command.Proxy()

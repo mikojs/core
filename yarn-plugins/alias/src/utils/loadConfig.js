@@ -1,7 +1,6 @@
 export default () =>
   [
     () => require('@yarnpkg/plugin-config'),
-    () => require('@mikojs/yarn-plugin-config'),
     () => ({}),
   ].reduce((result, getConfig) => {
     try {

@@ -1281,12 +1281,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@mikojs/yarn-plugin-alias@workspace:yarn-plugins/alias":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/yarn-plugin-alias@workspace:yarn-plugins/alias"
+  dependencies:
+    string-argv: ^0.3.1
+  languageName: unknown
+  linkType: soft
+
 "@mikojs/yarn-plugin-build@workspace:yarn-plugins/build":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-build@workspace:yarn-plugins/build"
   dependencies:
     "@yarnpkg/cli": ^2.4.1
     chalk: ^4.1.1
+  languageName: unknown
+  linkType: soft
+
+"@mikojs/yarn-plugin-config@workspace:yarn-plugins/config":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/yarn-plugin-config@workspace:yarn-plugins/config"
   languageName: unknown
   linkType: soft
 
@@ -5826,6 +5840,13 @@ resolve@^1.14.2:
   version: 2.0.0
   resolution: "strict-uri-encode@npm:2.0.0"
   checksum: 775012e88b9d8dff939d514bf376d615a15e8228a5dd587a94ac3c71fce41aa3635cd808aa796e2c1cd33f3f2fe2fbf89b74ee18a504a1905efa1854311e04bb
+  languageName: node
+  linkType: hard
+
+"string-argv@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "string-argv@npm:0.3.1"
+  checksum: 002a6902698eff6bd463ddd2b03864bf9be08a1359879243d94d3906ebbe984ff355d73224064be7504d20262eadb06897b3d40b5d7cefccacc69c9dc45c8d0e
   languageName: node
   linkType: hard
 

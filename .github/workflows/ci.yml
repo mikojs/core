@@ -21,4 +21,3 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
       - name: Install packages
         run: yarn
-      - uses: ./.github/actions/build

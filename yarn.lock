@@ -1281,6 +1281,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@mikojs/yarn-plugin-alias@workspace:yarn-plugins/alias":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/yarn-plugin-alias@workspace:yarn-plugins/alias"
+  dependencies:
+    string-argv: ^0.3.1
+  languageName: unknown
+  linkType: soft
+
 "@mikojs/yarn-plugin-build@workspace:yarn-plugins/build":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-build@workspace:yarn-plugins/build"
@@ -1293,14 +1301,6 @@ __metadata:
 "@mikojs/yarn-plugin-config@workspace:yarn-plugins/config":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-config@workspace:yarn-plugins/config"
-  languageName: unknown
-  linkType: soft
-
-"@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko":
-  version: 0.0.0-use.local
-  resolution: "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko"
-  dependencies:
-    string-argv: ^0.3.1
   languageName: unknown
   linkType: soft
 

@@ -1264,6 +1264,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mikojs/commands@workspace:packages/commands":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/commands@workspace:packages/commands"
+  languageName: unknown
+  linkType: soft
+
 "@mikojs/core@workspace:.":
   version: 0.0.0-use.local
   resolution: "@mikojs/core@workspace:."
@@ -1295,12 +1301,6 @@ __metadata:
   dependencies:
     "@yarnpkg/cli": ^2.4.1
     chalk: ^4.1.1
-  languageName: unknown
-  linkType: soft
-
-"@mikojs/yarn-plugin-config@workspace:yarn-plugins/config":
-  version: 0.0.0-use.local
-  resolution: "@mikojs/yarn-plugin-config@workspace:yarn-plugins/config"
   languageName: unknown
   linkType: soft
 

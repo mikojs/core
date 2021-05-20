@@ -1,10 +1,10 @@
 {
-  "name": "@mikojs/yarn-plugin-config",
+  "name": "@mikojs/config",
   "description": "A default config is used for @mikojs/yarn-plugin-alias.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://mikojs.github.io/core/yarn-plugin-config",
-  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/config",
+  "homepage": "https://mikojs.github.io/core/config",
+  "repository": "https://github.com/mikojs/core/tree/main/packages/config",
   "version": "2.0.0-beta.0",
   "main": "./lib/index.js",
   "keywords": ["mikojs", "config", "yarn plugin"],

@@ -1,4 +1,10 @@
 module.exports = {
   name: '@yarnpkg/plugin-commands',
-  factory: () => ({}),
+  factory: () => {
+    try {
+      return require('@mikojs/commands');
+    } catch (e) {
+      return {};
+    }
+  },
 };

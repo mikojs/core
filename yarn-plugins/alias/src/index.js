@@ -1,7 +1,7 @@
 import { BaseCommand as Command } from '@yarnpkg/cli';
 import stringArgv from 'string-argv';
 
-import loadConfig from './utils/loadConfig';
+import loadPlugin from './utils/loadPlugin';
 
 const getCommands = (config, prevKey = []) =>
   Object.keys(config).reduce((result, key) => {
@@ -32,5 +32,5 @@ const getCommands = (config, prevKey = []) =>
   }, []);
 
 export default {
-  commands: getCommands(loadConfig()),
+  commands: getCommands(loadPlugin()),
 };

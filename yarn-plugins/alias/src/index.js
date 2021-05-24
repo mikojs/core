@@ -1,7 +1,9 @@
+import { execUtils } from '@yarnpkg/core';
 import { BaseCommand as Command } from '@yarnpkg/cli';
 import stringArgv from 'string-argv';
 
 import loadPlugin from './utils/loadPlugin';
+import commandsReducer from './utils/commandsReducer';
 
 const getCommands = (config, prevKey = []) =>
   Object.keys(config).reduce((result, key) => {
@@ -19,13 +21,26 @@ const getCommands = (config, prevKey = []) =>
         args = [];
 
         @Command.Path(...prevKey, key)
-        execute = async () =>
-          this.cli.run([
+        execute = async () => {
+          const { cwd, stdin, stdout, stderr } = this.context;
+          const { run } = this.cli;
+          const exitCode = await commandsReducer([
             ...stringArgv(
               typeof command === 'string' ? command : await command(),
             ),
             ...this.args,
-          ]);
+            '&&',
+          ], ([command, ...argv]) =>
+            command === 'yarn'
+              ? run(argv)
+              : execUtils.pipevp(command, argv, {
+                cwd,
+                stdin, stdout, stderr,
+              }).then(({ code }) => code),
+          );
+
+          return exitCode;
+        };
       },
       ...getCommands(commands, [...prevKey, key]),
     ];

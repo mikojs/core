@@ -8,7 +8,7 @@
     "prod": "NODE_ENV=production yarn build",
     "dev": "yarn workspaces exec --git-range $(git branch --show-current) -p yarn run --top-level babel src -d lib --delete-dir-on-start --verbose --root-mode upward -w",
     "build:plugins": "yarn workspaces exec -p yarn plugin build",
-    "postinstall": "yarn workspace @mikojs/babel-preset-base run --top-level babel src -d lib --delete-dir-on-start --verbose"
+    "postinstall": "yarn workspace @mikojs/babel-preset-base run --top-level babel src -d lib --delete-dir-on-start --verbose --presets @babel/env"
   },
   "workspaces": ["packages/*", "yarn-plugins/*"],
   "engines": {

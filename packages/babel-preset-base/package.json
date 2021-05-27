@@ -1,0 +1,14 @@
+{
+  "name": "@mikojs/babel-preset-base",
+  "description": "The basic babel config is used to run babel.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/babel-preset-base",
+  "repository": "https://github.com/mikojs/core/tree/main/packages/babel-preset-base",
+  "version": "2.0.0-beta.0",
+  "main": "./lib/index.js",
+  "keywords": ["mikojs", "babel preset", "base"],
+  "publishConfig": {
+    "access": "public"
+  }
+}

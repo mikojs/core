@@ -9,7 +9,9 @@ export default () =>
     () => ({}),
   ].reduce((result, getPlugin) => {
     try {
-      return result || getPlugin();
+      const plugin = getPlugin();
+
+      return result || plugin.default || plugin;
     } catch (e) {
       return result;
     }

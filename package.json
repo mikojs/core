@@ -4,11 +4,12 @@
   "version": "2.0.0-beta.0",
   "license": "MIT",
   "scripts": {
-    "build": "yarn workspaces exec -p yarn run --top-level babel src -d lib --verbose --root-mode upward",
-    "prod": "NODE_ENV=production yarn build",
-    "dev": "yarn workspaces exec --git-range $(git branch --show-current) -p yarn run --top-level babel src -d lib --verbose --root-mode upward -w",
     "build:plugins": "yarn workspaces exec -p yarn plugin build",
-    "postinstall": "yarn workspace @mikojs/babel-preset-base run --top-level babel src -d lib --verbose --presets @babel/env"
+    "babel:command": "echo \"run --top-level babel src -d lib --verbose\"",
+    "dev": "yarn workspaces exec --git-range $(git branch --show-current) -p yarn $(yarn babel:command) --root-mode upward -w",
+    "build": "yarn workspaces exec -p yarn $(yarn babel:command) --root-mode upward",
+    "prod": "NODE_ENV=production yarn build",
+    "postinstall": "yarn workspace @mikojs/babel-preset-base $(yarn babel:command) --presets @babel/env"
   },
   "workspaces": ["packages/*", "yarn-plugins/*"],
   "engines": {

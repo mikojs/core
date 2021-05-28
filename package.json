@@ -4,10 +4,13 @@
   "version": "2.0.0-beta.0",
   "license": "MIT",
   "scripts": {
-    "build": "yarn workspaces exec -p yarn run --top-level babel src -d lib --delete-dir-on-start --verbose --root-mode upward",
+    "build:plugins": "yarn workspaces exec -p yarn plugin build",
+    "variables:babel": "echo \"yarn run --top-level babel src -d lib --verbose\"",
+    "variables:basic:scope": "echo \"--include @mikojs/babel-preset-base --include @mikojs/commands\"",
+    "dev": "yarn workspaces exec --git-range $(git branch --show-current) -p $(yarn variables:babel) --root-mode upward -w",
+    "build": "yarn workspaces exec -p $(yarn variables:babel) --root-mode upward",
     "prod": "NODE_ENV=production yarn build",
-    "dev": "yarn workspaces exec --git-range $(git branch --show-current) -p yarn run --top-level babel src -d lib --delete-dir-on-start --verbose --root-mode upward -w",
-    "build:plugins": "yarn workspaces exec -p yarn plugin build"
+    "postinstall": "yarn workspaces exec $(yarn variables:basic:scope) -p $(yarn variables:babel) --presets @babel/env"
   },
   "workspaces": ["packages/*", "yarn-plugins/*"],
   "engines": {
@@ -20,10 +23,9 @@
     "@babel/core": "^7.14.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-decorators": "^7.13.15",
-    "@babel/preset-env": "^7.14.1",
+    "@mikojs/babel-preset-base": "workspace:^2.0.0-beta.0",
     "@yarnpkg/builder": "^2.1.3",
     "babel-plugin-add-module-exports": "^1.0.4",
-    "core-js": "^3.12.1",
     "prettier": "^2.2.1",
     "typescript": "^4.2.4"
   }

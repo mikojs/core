@@ -7,7 +7,7 @@
   "repository": "https://github.com/mikojs/core/tree/main/packages/commands",
   "version": "2.0.0-beta.0",
   "main": "./lib/index.js",
-  "keywords": ["mikojs", "commands", "yarn plugin"],
+  "keywords": ["mikojs", "commands"],
   "publishConfig": {
     "access": "public"
   }

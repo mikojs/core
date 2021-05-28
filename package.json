@@ -5,11 +5,12 @@
   "license": "MIT",
   "scripts": {
     "build:plugins": "yarn workspaces exec -p yarn plugin build",
-    "babel:command": "echo \"run --top-level babel src -d lib --verbose\"",
-    "dev": "yarn workspaces exec --git-range $(git branch --show-current) -p yarn $(yarn babel:command) --root-mode upward -w",
-    "build": "yarn workspaces exec -p yarn $(yarn babel:command) --root-mode upward",
+    "variables:babel": "echo \"yarn run --top-level babel src -d lib --verbose\"",
+    "variables:basic:scope": "echo \"--include @mikojs/babel-preset-base --include @mikojs/commands\"",
+    "dev": "yarn workspaces exec --git-range $(git branch --show-current) -p $(yarn variables:babel) --root-mode upward -w",
+    "build": "yarn workspaces exec -p $(yarn variables:babel) --root-mode upward",
     "prod": "NODE_ENV=production yarn build",
-    "postinstall": "yarn workspace @mikojs/babel-preset-base $(yarn babel:command) --presets @babel/env"
+    "postinstall": "yarn workspaces exec $(yarn variables:basic:scope) -p $(yarn variables:babel) --presets @babel/env"
   },
   "workspaces": ["packages/*", "yarn-plugins/*"],
   "engines": {

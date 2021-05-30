@@ -1,5 +1,1 @@
-module.exports = {
-  singleQuote: true,
-  arrowParens: 'avoid',
-  trailingComma: 'all',
-};
+module.exports = require('@mikojs/prettier-miko');

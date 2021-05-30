@@ -1,1 +1,1 @@
-module.exports = require('@mikojs/prettier-miko');
+module.exports = require('@mikojs/prettier-config');

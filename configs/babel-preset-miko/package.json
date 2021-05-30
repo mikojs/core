@@ -4,10 +4,10 @@
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/babel-preset-miko",
-  "repository": "https://github.com/mikojs/core/tree/main/packages/babel-preset-miko",
+  "repository": "https://github.com/mikojs/core/tree/main/configs/babel-preset-miko",
   "version": "2.0.0-beta.0",
   "main": "./lib/index.js",
-  "keywords": ["mikojs", "babel preset", "base"],
+  "keywords": ["mikojs", "babel", "config"],
   "publishConfig": {
     "access": "public"
   },

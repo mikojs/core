@@ -1,6 +1,6 @@
 module.exports = {
   presets: [
-    '@mikojs/base',
+    '@mikojs/miko',
   ],
   plugins: [
     [

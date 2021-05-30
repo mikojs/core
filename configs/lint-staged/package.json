@@ -1,0 +1,17 @@
+{
+  "name": "@mikojs/lint-staged-config",
+  "description": "This ia a basic lint-staged config.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/lint-staged-config",
+  "repository": "https://github.com/mikojs/core/tree/main/configs/lint-staged-config",
+  "version": "2.0.0-beta.0",
+  "main": "./lib/index.js",
+  "keywords": ["mikojs", "lint-staged", "config"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "lint-staged": ">=11"
+  }
+}

@@ -13,7 +13,6 @@
     "postinstall": "yarn workspaces exec $(yarn variables:basic:scope) -p $(yarn variables:babel) --presets @babel/env"
   },
   "workspaces": [
-    "packages/*",
     "yarn-plugins/*",
     "configs/*"
   ],

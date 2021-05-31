@@ -17,7 +17,9 @@
   },
   "dependencies": {
     "@yarnpkg/cli": "^2.4.1",
-    "@yarnpkg/core": "^2.4.0",
-    "@yarnpkg/plugin-workspace-tools": "^2.2.0"
+    "@yarnpkg/core": "^2.4.0"
+  },
+  "peerDependencies": {
+    "@yarnpkg/plugin-workspace-tools": ">=2"
   }
 }

@@ -7,7 +7,11 @@
   "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/build",
   "version": "2.0.0-beta.0",
   "main": "./lib/index.js",
-  "keywords": ["mikojs", "build plugin", "yarn plugin"],
+  "keywords": [
+    "mikojs",
+    "build plugin",
+    "yarn plugin"
+  ],
   "publishConfig": {
     "access": "public"
   },

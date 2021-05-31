@@ -12,7 +12,11 @@
     "prod": "NODE_ENV=production yarn build",
     "postinstall": "yarn workspaces exec $(yarn variables:basic:scope) -p $(yarn variables:babel) --presets @babel/env"
   },
-  "workspaces": ["packages/*", "yarn-plugins/*", "configs/*"],
+  "workspaces": [
+    "packages/*",
+    "yarn-plugins/*",
+    "configs/*"
+  ],
   "engines": {
     "node": ">= 14.x",
     "npm": ">= 6.x",

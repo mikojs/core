@@ -16,9 +16,6 @@ export default class Base extends Command {
   @Command.Boolean('-p,--parallel', { description: chalk`This is a proxy option for {cyan \`@yarnpkg/plugin-workspace-tools\`}` })
   parallel = false
 
-  @Command.Boolean('-i,--interlaced', { description: chalk`This is a proxy option for {cyan \`@yarnpkg/plugin-workspace-tools\`}` })
-  interlaced = false;
-
   @Command.String('-j,--jobs', { description: chalk`This is a proxy option for {cyan \`@yarnpkg/plugin-workspace-tools\`}` })
   jobs
 
@@ -65,7 +62,6 @@ export default class Base extends Command {
       ...addFilter(this.exclude, '--exclude'),
       ...addOption(!this.noPrefix, '-v'),
       ...addOption(this.parallel, '-p'),
-      ...addOption(this.interlaced, '-i'),
       ...addOption(this.jobs, '-j', this.jobs),
       executeCommandName,
       this.commandName,

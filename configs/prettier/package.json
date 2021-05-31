@@ -1,0 +1,17 @@
+{
+  "name": "@mikojs/prettier-config",
+  "description": "This is a basic prettier config.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/prettier",
+  "repository": "https://github.com/mikojs/core/tree/main/configs/prettier",
+  "version": "2.0.0-beta.0",
+  "main": "./lib/index.js",
+  "keywords": ["mikojs", "prettier", "config"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "prettier": ">=2"
+  }
+}

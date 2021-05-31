@@ -1408,6 +1408,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@mikojs/prettier-config@workspace:configs/prettier":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/prettier-config@workspace:configs/prettier"
+  peerDependencies:
+    prettier: ">=2"
+  languageName: unknown
+  linkType: soft
+
 "@mikojs/yarn-plugin-alias@workspace:yarn-plugins/alias":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-alias@workspace:yarn-plugins/alias"

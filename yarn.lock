@@ -1420,6 +1420,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko"
+  languageName: unknown
+  linkType: soft
+
 "@mikojs/yarn-plugin-workspaces@workspace:yarn-plugins/workspaces":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-workspaces@workspace:yarn-plugins/workspaces"

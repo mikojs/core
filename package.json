@@ -6,7 +6,7 @@
   "scripts": {
     "build:plugins": "yarn workspaces exec --include \"@mikojs/yarn-plugin-*\" -p yarn plugin build",
     "variables:babel": "echo \"yarn run --top-level babel src -d lib --verbose\"",
-    "variables:basic:scope": "echo \"--include @mikojs/babel-preset-miko --include @mikojs/commands\"",
+    "variables:basic:scope": "echo \"--include @mikojs/babel-preset-miko\"",
     "dev": "yarn workspaces exec --git-range $(git branch --show-current) -p $(yarn variables:babel) --root-mode upward -w",
     "build": "yarn workspaces exec -p $(yarn variables:babel) --root-mode upward",
     "prod": "NODE_ENV=production yarn build",

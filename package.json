@@ -4,7 +4,6 @@
   "version": "2.0.0-beta.0",
   "license": "MIT",
   "scripts": {
-    "build:plugins": "yarn workspaces exec --include \"@mikojs/yarn-plugin-*\" -p yarn plugin build",
     "variables:babel": "echo \"yarn run --top-level babel src -d lib --verbose\"",
     "variables:basic:scope": "echo \"--include @mikojs/babel-preset-miko\"",
     "dev": "yarn workspaces exec --git-range $(git branch --show-current) -p $(yarn variables:babel) --root-mode upward -w",
@@ -13,7 +12,6 @@
     "postinstall": "yarn workspaces exec $(yarn variables:basic:scope) -p $(yarn variables:babel) --presets @babel/env"
   },
   "workspaces": [
-    "yarn-plugins/*",
     "configs/*"
   ],
   "engines": {

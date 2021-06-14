@@ -1411,26 +1411,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/yarn-plugin-build@workspace:yarn-plugins/build":
-  version: 0.0.0-use.local
-  resolution: "@mikojs/yarn-plugin-build@workspace:yarn-plugins/build"
-  dependencies:
-    "@yarnpkg/cli": ^2.4.1
-    chalk: ^4.1.1
-  languageName: unknown
-  linkType: soft
-
-"@mikojs/yarn-plugin-workspaces@workspace:yarn-plugins/workspaces":
-  version: 0.0.0-use.local
-  resolution: "@mikojs/yarn-plugin-workspaces@workspace:yarn-plugins/workspaces"
-  dependencies:
-    "@yarnpkg/cli": ^2.4.1
-    "@yarnpkg/core": ^2.4.0
-  peerDependencies:
-    "@yarnpkg/plugin-workspace-tools": ">=2"
-  languageName: unknown
-  linkType: soft
-
 "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents":
   version: 2.1.8-no-fsevents
   resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents"
@@ -1817,7 +1797,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/cli@npm:^2.4.0, @yarnpkg/cli@npm:^2.4.1":
+"@yarnpkg/cli@npm:^2.4.0":
   version: 2.4.1
   resolution: "@yarnpkg/cli@npm:2.4.1"
   dependencies:
@@ -2795,7 +2775,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.1.0, chalk@npm:^4.1.1":
+"chalk@npm:^4.1.0":
   version: 4.1.1
   resolution: "chalk@npm:4.1.1"
   dependencies:

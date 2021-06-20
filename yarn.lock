@@ -1373,6 +1373,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko"
+  languageName: unknown
+  linkType: soft
+
 "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents":
   version: 2.1.8-no-fsevents
   resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents"

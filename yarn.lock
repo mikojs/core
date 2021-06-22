@@ -1606,6 +1606,7 @@ __metadata:
   resolution: "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko"
   dependencies:
     "@yarnpkg/cli": ^2.4.1
+    "@yarnpkg/core": ^2.4.0
   languageName: unknown
   linkType: soft
 

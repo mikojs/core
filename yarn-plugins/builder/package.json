@@ -1,0 +1,17 @@
+{
+  "name": "@mikojs/yarn-plugin-builder",
+  "description": "This plugin could help programmers to manage repositories.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/yarn-plugin-builder",
+  "repository": "https://github.com/mikojs/core/tree/main/packages/yarn-plugin-builder",
+  "version": "2.0.0-beta.0",
+  "main": "./lib/index.js",
+  "keywords": [
+    "mikojs",
+    "yarn plugin"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

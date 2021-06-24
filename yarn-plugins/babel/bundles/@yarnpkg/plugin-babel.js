@@ -1,6 +1,6 @@
 /* eslint-disable */
 module.exports = {
-name: "@yarnpkg/plugin-builder",
+name: "@yarnpkg/plugin-babel",
 factory: function (require) {
   return {};
 }

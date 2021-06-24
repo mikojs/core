@@ -1,0 +1,18 @@
+{
+  "name": "@mikojs/yarn-plugin-babel",
+  "description": "Use babel with @mikojs/yarn-plugin-miko.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/yarn-plugin-babel",
+  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/babel",
+  "version": "2.0.0-beta.0",
+  "main": "./lib/index.js",
+  "keywords": [
+    "mikojs",
+    "yarn plugin",
+    "babel"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

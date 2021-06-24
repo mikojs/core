@@ -1604,6 +1604,9 @@ __metadata:
 "@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel"
+  dependencies:
+    "@babel/cli": ^7.13.16
+    "@babel/core": ^7.14.0
   languageName: unknown
   linkType: soft
 

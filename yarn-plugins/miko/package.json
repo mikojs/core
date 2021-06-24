@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/yarn-plugin-miko",
-  "repository": "https://github.com/mikojs/core/tree/main/packages/yarn-plugin-miko",
+  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/miko",
   "version": "2.0.0-beta.0",
   "main": "./lib/index.js",
   "keywords": [

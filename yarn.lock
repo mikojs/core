@@ -1601,9 +1601,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/yarn-plugin-builder@workspace:yarn-plugins/builder":
+"@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel":
   version: 0.0.0-use.local
-  resolution: "@mikojs/yarn-plugin-builder@workspace:yarn-plugins/builder"
+  resolution: "@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel"
   languageName: unknown
   linkType: soft
 

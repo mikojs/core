@@ -21,6 +21,7 @@ export default class Dev extends Command {
     await configuration.triggerHook(
       ({ dev }) => dev,
       {
+        cwd: projectCwd,
         changedFiles,
         changedWorkspaces: workspaces.filter(
           ({ relativeCwd }) => changedFiles.some(changedFile => changedFile.startsWith(relativeCwd)),

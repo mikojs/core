@@ -11,6 +11,10 @@
     "mikojs",
     "yarn plugin"
   ],
+  "dependencies": {
+    "@yarnpkg/cli": "^2.4.1",
+    "@yarnpkg/core": "^2.4.0"
+  },
   "publishConfig": {
     "access": "public"
   }

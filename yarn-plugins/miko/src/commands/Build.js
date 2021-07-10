@@ -13,7 +13,7 @@ export default class Build extends Command {
     await configuration.triggerHook(
       ({ build }) => build,
       workspaces.filter(workspace =>
-        structUtils.stringifyIdent(workspace.locator) === structUtils.stringifyIdent(locator)
+        structUtils.stringifyIdent(workspace.locator) !== structUtils.stringifyIdent(locator)
       ),
     );
   };

@@ -12,9 +12,12 @@ export default class Build extends Command {
 
     await configuration.triggerHook(
       ({ build }) => build,
-      workspaces.filter(workspace =>
-        structUtils.stringifyIdent(workspace.locator) !== structUtils.stringifyIdent(locator)
-      ),
+      {
+        cli: this.cli,
+        workspaces: workspaces.filter(workspace =>
+          structUtils.stringifyIdent(workspace.locator) !== structUtils.stringifyIdent(locator)
+        ),
+      },
     );
   };
 }

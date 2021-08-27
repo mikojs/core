@@ -16,7 +16,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "prettier": ">=2"
+    "prettier": "^2.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",

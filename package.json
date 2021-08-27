@@ -13,7 +13,7 @@
     "yarn": ">= 2.x"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.0",
+    "@babel/core": "^7.14.3",
     "@mikojs/babel-preset-miko": "workspace:^2.0.0-beta.0",
     "@mikojs/prettier-config": "workspace:^2.0.0-beta.0",
     "prettier": "^2.2.1"

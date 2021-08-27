@@ -1344,6 +1344,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikojs/babel-preset-miko@workspace:configs/babel-preset-miko"
   dependencies:
+    "@babel/cli": ^7.13.16
     "@babel/core": ^7.14.3
     "@babel/helper-plugin-utils": ^7.13.0
     "@babel/preset-env": ^7.14.2
@@ -1357,7 +1358,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikojs/core@workspace:."
   dependencies:
-    "@babel/cli": ^7.13.16
     "@babel/core": ^7.14.0
     "@mikojs/babel-preset-miko": "workspace:^2.0.0-beta.0"
     "@mikojs/prettier-config": "workspace:^2.0.0-beta.0"
@@ -1368,6 +1368,9 @@ __metadata:
 "@mikojs/prettier-config@workspace:^2.0.0-beta.0, @mikojs/prettier-config@workspace:configs/prettier":
   version: 0.0.0-use.local
   resolution: "@mikojs/prettier-config@workspace:configs/prettier"
+  dependencies:
+    "@babel/cli": ^7.13.16
+    "@babel/core": ^7.14.3
   peerDependencies:
     prettier: ">=2"
   languageName: unknown
@@ -1376,12 +1379,18 @@ __metadata:
 "@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel"
+  dependencies:
+    "@babel/cli": ^7.13.16
+    "@babel/core": ^7.14.3
   languageName: unknown
   linkType: soft
 
 "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko"
+  dependencies:
+    "@babel/cli": ^7.13.16
+    "@babel/core": ^7.14.3
   languageName: unknown
   linkType: soft
 

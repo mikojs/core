@@ -48,29 +48,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.14.0, @babel/core@npm:^7.14.0":
-  version: 7.14.0
-  resolution: "@babel/core@npm:7.14.0"
-  dependencies:
-    "@babel/code-frame": ^7.12.13
-    "@babel/generator": ^7.14.0
-    "@babel/helper-compilation-targets": ^7.13.16
-    "@babel/helper-module-transforms": ^7.14.0
-    "@babel/helpers": ^7.14.0
-    "@babel/parser": ^7.14.0
-    "@babel/template": ^7.12.13
-    "@babel/traverse": ^7.14.0
-    "@babel/types": ^7.14.0
-    convert-source-map: ^1.7.0
-    debug: ^4.1.0
-    gensync: ^1.0.0-beta.2
-    json5: ^2.1.2
-    semver: ^6.3.0
-    source-map: ^0.5.0
-  checksum: eccd8c6acf33a2782b9213bffc0e766857c9b690649512c3a525a02bb212301c6fdf314d6e7f7404479dc9631beb58a8f5e673ea9f3c1964853a3c65b045a382
-  languageName: node
-  linkType: hard
-
 "@babel/core@npm:7.14.3, @babel/core@npm:^7.14.3":
   version: 7.14.3
   resolution: "@babel/core@npm:7.14.3"
@@ -1344,12 +1321,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikojs/babel-preset-miko@workspace:configs/babel-preset-miko"
   dependencies:
+    "@babel/cli": ^7.13.16
     "@babel/core": ^7.14.3
     "@babel/helper-plugin-utils": ^7.13.0
     "@babel/preset-env": ^7.14.2
     core-js: ^3.13.0
   peerDependencies:
-    "@babel/core": ">=7"
+    "@babel/core": ^7.14.3
   languageName: unknown
   linkType: soft
 
@@ -1357,8 +1335,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mikojs/core@workspace:."
   dependencies:
-    "@babel/cli": ^7.13.16
-    "@babel/core": ^7.14.0
+    "@babel/core": ^7.14.3
     "@mikojs/babel-preset-miko": "workspace:^2.0.0-beta.0"
     "@mikojs/prettier-config": "workspace:^2.0.0-beta.0"
     prettier: ^2.2.1
@@ -1368,20 +1345,29 @@ __metadata:
 "@mikojs/prettier-config@workspace:^2.0.0-beta.0, @mikojs/prettier-config@workspace:configs/prettier":
   version: 0.0.0-use.local
   resolution: "@mikojs/prettier-config@workspace:configs/prettier"
+  dependencies:
+    "@babel/cli": ^7.13.16
+    "@babel/core": ^7.14.3
   peerDependencies:
-    prettier: ">=2"
+    prettier: ^2.2.1
   languageName: unknown
   linkType: soft
 
 "@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel"
+  dependencies:
+    "@babel/cli": ^7.13.16
+    "@babel/core": ^7.14.3
   languageName: unknown
   linkType: soft
 
 "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko"
+  dependencies:
+    "@babel/cli": ^7.13.16
+    "@babel/core": ^7.14.3
   languageName: unknown
   linkType: soft
 

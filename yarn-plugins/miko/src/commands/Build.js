@@ -1,5 +1,5 @@
 import { BaseCommand as Command } from '@yarnpkg/cli';
-import { Configuration, Project, structUtils } from '@yarnpkg/core';
+import { Configuration, Project } from '@yarnpkg/core';
 
 export default class Build extends Command {
   @Command.Path('build')
@@ -12,12 +12,7 @@ export default class Build extends Command {
 
     await configuration.triggerHook(
       ({ build }) => build,
-      {
-        cli: this.cli,
-        workspaces: workspaces.filter(workspace =>
-          structUtils.stringifyIdent(workspace.locator) !== structUtils.stringifyIdent(locator)
-        ),
-      },
+      { cli: this.cli, workspaces },
     );
   };
 }

@@ -1,6 +1,15 @@
-import { structUtils } from '@yarnpkg/core';
+import { structUtils, SettingsType } from '@yarnpkg/core';
+import stringArgv from 'string-argv';
 
-export default async ({ cli, workspaces }) => {
+export const configuration = {
+  description: 'Build command for babel',
+  type: SettingsType.STRING,
+  default: 'src -d lib --verbose --root-mode upward',
+};
+
+export default async ({ cli, workspaces, configuration }) => {
+  const argv = stringArgv(configuration.get('babel').get('build'));
+
   await Promise.all(
     workspaces
       .reduce((result, { manifest, cwd, ...workspace }) => {
@@ -12,15 +21,7 @@ export default async ({ cli, workspaces }) => {
 
         return !shouldRunBabel ? result : [
           ...result,
-          cli.run([
-            'babel',
-            'src',
-            '-d',
-            'lib',
-            '--verbose',
-            '--root-mode',
-            'upward',
-          ], { cwd }),
+          cli.run(['babel', ...argv], { cwd }),
         ];
       }, [])
   );

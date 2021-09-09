@@ -11,7 +11,7 @@ export default class Build extends Command {
 
     await configuration.triggerHook(
       ({ build }) => build,
-      { cli: this.cli, workspaces },
+      { cli: this.cli, configuration, workspaces },
     );
   };
 }

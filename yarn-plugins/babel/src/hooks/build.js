@@ -1,10 +1,8 @@
 import { structUtils, SettingsType } from '@yarnpkg/core';
 import stringArgv from 'string-argv';
 
-export default async ({ cli, workspaces, configs }) => {
-  const argv = stringArgv(configs?.build?.babel || 'src -d lib --verbose --root-mode upward');
-
-  await Promise.all(
+export default ({ cli, workspaces, loadConfig }) =>
+  Promise.all(
     workspaces
       .reduce((result, { manifest, cwd }) => {
         let shouldRunBabel = false;
@@ -15,8 +13,13 @@ export default async ({ cli, workspaces, configs }) => {
 
         return !shouldRunBabel ? result : [
           ...result,
-          cli.run(['babel', ...argv], { cwd }),
+          cli.run([
+            'babel',
+            ...stringArgv(
+              loadConfig(cwd)?.babel ||
+              'src -d lib --verbose --root-mode upward'
+            )
+          ], { cwd }),
         ];
       }, [])
   );
-};

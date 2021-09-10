@@ -46,7 +46,7 @@ export default class Build extends Command {
         loadConfig: cwd => ({
           ...this.loadConfig(projectCwd),
           ...this.loadConfig(cwd),
-        }),
+        }).build,
       },
     );
   };

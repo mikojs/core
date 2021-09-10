@@ -12,7 +12,7 @@ export default async ({ cli, workspaces, configuration }) => {
 
   await Promise.all(
     workspaces
-      .reduce((result, { manifest, cwd, ...workspace }) => {
+      .reduce((result, { manifest, cwd }) => {
         let shouldRunBabel = false;
 
         manifest.devDependencies.forEach(locator => {

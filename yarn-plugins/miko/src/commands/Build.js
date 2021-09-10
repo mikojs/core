@@ -3,40 +3,32 @@ import { Configuration, Project, miscUtils, structUtils } from '@yarnpkg/core';
 import { NodeFS, npath, ppath } from '@yarnpkg/fslib';
 
 export default class Build extends Command {
+  configsCache = {};
+
   loadConfig = cwd => {
-    const baseFs = new NodeFS();
+    if (!this.configsCache[cwd]) {
+      const baseFs = new NodeFS();
 
-    return [
-      './.mikorc.js',
-      './miko.config.js',
-      './miko.json',
-    ].reduce(
-      (result, configName) => {
-        const configPath = ppath.resolve(
-          cwd,
-          npath.toPortablePath(configName),
-        );
+      this.configsCache[cwd] = [
+        './.mikorc.js',
+        './miko.config.js',
+        './miko.json',
+      ].reduce(
+        (result, configName) => {
+          const configPath = ppath.resolve(
+            cwd,
+            npath.toPortablePath(configName),
+          );
 
-        return result || !baseFs.existsSync(configPath)
-          ? result
-          : miscUtils.dynamicRequire(configPath);
-      },
-      null,
-    );
-  };
+          return result || !baseFs.existsSync(configPath)
+            ? result
+            : miscUtils.dynamicRequire(configPath);
+        },
+        null,
+      );
+    }
 
-  loadConfigs = (projectCwd, workspaces) => {
-    const projectConfig = this.loadConfig(projectCwd) || {};
-
-    return workspaces.reduce(
-      (result, { locator, cwd }) => ({
-        ...result,
-        [structUtils.stringifyIdent(locator)]: cwd === projectCwd
-            ? projectConfig
-            : { ...projectConfig, ...this.loadConfig(cwd) },
-      }),
-      {},
-    );
+    return this.configsCache[cwd];
   };
 
   @Command.Path('build')
@@ -48,7 +40,14 @@ export default class Build extends Command {
 
     await configuration.triggerHook(
       ({ build }) => build,
-      { cli: this.cli, configuration, workspaces, configs: this.loadConfigs(projectCwd, workspaces) },
+      {
+        cli: this.cli,
+        workspaces,
+        loadConfig: cwd => ({
+          ...this.loadConfig(projectCwd),
+          ...this.loadConfig(cwd),
+        }),
+      },
     );
   };
 }

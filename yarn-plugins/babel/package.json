@@ -18,5 +18,8 @@
   "devDependencies": {
     "@babel/cli": "^7.13.16",
     "@babel/core": "^7.14.3"
+  },
+  "dependencies": {
+    "string-argv": "^0.3.1"
   }
 }

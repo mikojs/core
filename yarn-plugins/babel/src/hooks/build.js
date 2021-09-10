@@ -1,14 +1,8 @@
 import { structUtils, SettingsType } from '@yarnpkg/core';
 import stringArgv from 'string-argv';
 
-export const configuration = {
-  description: 'Build command for babel',
-  type: SettingsType.STRING,
-  default: 'src -d lib --verbose --root-mode upward',
-};
-
-export default async ({ cli, workspaces, configuration }) => {
-  const argv = stringArgv(configuration.get('babel').get('build'));
+export default async ({ cli, workspaces, configs }) => {
+  const argv = stringArgv(configs?.build?.babel || 'src -d lib --verbose --root-mode upward');
 
   await Promise.all(
     workspaces

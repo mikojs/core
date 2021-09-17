@@ -31,7 +31,7 @@ export default class Base extends Command {
     return this.configsCache[cwd];
   };
 
-  run = async () => {
+  triggerHook = async () => {
     const name = this.path.join('.');
     const { cwd, plugins } = this.context;
     const configuration = await Configuration.find(cwd, plugins);

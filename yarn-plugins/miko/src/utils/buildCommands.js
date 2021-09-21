@@ -5,9 +5,10 @@ export default configs =>
     .reduce((result, key) => [
       ...result,
       class MikoCommand extends Command {
-        @Command.Path(...key.split(/\./))
+        static paths = [key.split(/\./g)];
+
         execute = () => {
           // TODO console.log(configs[key]);
         }
       }
-    ], {});
+    ], []);

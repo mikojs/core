@@ -1,5 +1,8 @@
-import Build from './commands/Build';
+import loadConfigs from './utils/loadConfigs';
+import buildCommands from './utils/buildCommands';
 
 export default {
-  commands: [Build],
+  commands: process.cwd()
+    |> loadConfigs(%)
+    |> buildCommands(%)
 };

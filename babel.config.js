@@ -10,13 +10,6 @@ module.exports = {
       },
     ],
     '@babel/proposal-class-properties',
-    [
-      '@babel/proposal-pipeline-operator',
-      {
-        proposal: 'hack',
-        topicToken: '%',
-      },
-    ],
     'add-module-exports',
   ],
 };

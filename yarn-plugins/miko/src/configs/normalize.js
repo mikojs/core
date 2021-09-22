@@ -1,1 +1,1 @@
-export default configs => configs;
+export default configs => [];

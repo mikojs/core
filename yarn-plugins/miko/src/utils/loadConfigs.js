@@ -6,7 +6,7 @@ const baseFs = new NodeFS();
 const loadConfigs = cwd =>
   cwd === '/'
     ? {}
-    : ['./.mikorc.js', './miko.config.js', './miko.json'].reduce(
+    : ['./.mikorc.js', './miko.config.js'].reduce(
         (result, configName) => {
           const configPath = ppath.resolve(
             cwd,

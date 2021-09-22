@@ -1,13 +1,13 @@
 import { BaseCommand as Command } from '@yarnpkg/cli';
 
-import configs from './configs';
+import scripts from './scripts';
 
 export default {
-  commands: configs.map(([key]) => class MikoCommand extends Command {
+  commands: scripts.map(([key, commands]) => class MikoCommand extends Command {
     static paths = [key.split(/\./g)];
 
     execute = () => {
-      // TODO console.log(config);
+      console.log(commands);
     };
   })
 };

@@ -13,7 +13,8 @@
   ],
   "dependencies": {
     "@yarnpkg/cli": "^2.4.1",
-    "@yarnpkg/core": "^2.4.0"
+    "@yarnpkg/core": "^2.4.0",
+    "fbjs": "^3.0.0"
   },
   "publishConfig": {
     "access": "public"

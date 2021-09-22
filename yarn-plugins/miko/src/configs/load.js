@@ -3,21 +3,21 @@ import { NodeFS, npath, ppath } from '@yarnpkg/fslib';
 
 const baseFs = new NodeFS();
 
-const loadConfigs = cwd =>
+const load = cwd =>
   cwd === '/'
     ? {}
     : ['./.mikorc.js', './miko.config.js'].reduce(
-        (result, configName) => {
-          const configPath = ppath.resolve(
+        (result, name) => {
+          const filePath = ppath.resolve(
             cwd,
-            npath.toPortablePath(configName),
+            npath.toPortablePath(name),
           );
 
-          return result || !baseFs.existsSync(configPath)
+          return result || !baseFs.existsSync(filePath)
             ? result
-            : miscUtils.dynamicRequire(configPath);
+            : miscUtils.dynamicRequire(filePath);
         },
         null,
-      ) || loadConfigs(ppath.resolve(cwd, '..'));
+      ) || load(ppath.resolve(cwd, '..'));
 
-export default loadConfigs;
+export default load;

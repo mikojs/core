@@ -1656,6 +1656,7 @@ __metadata:
     "@babel/core": ^7.15.5
     "@yarnpkg/cli": ^2.4.1
     "@yarnpkg/core": ^2.4.0
+    "@yarnpkg/fslib": ^2.4.0
   languageName: unknown
   linkType: soft
 

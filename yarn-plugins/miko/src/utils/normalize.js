@@ -1,5 +1,1 @@
-export default scripts =>
-  Object.keys(scripts).reduce(
-    (result, key) => [...result, [key, scripts[key]]],
-    [],
-  );
+export default scripts => Object.entries(scripts);

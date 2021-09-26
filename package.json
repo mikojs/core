@@ -15,7 +15,6 @@
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
-    "@babel/plugin-proposal-decorators": "^7.15.4",
     "@mikojs/babel-preset-miko": "workspace:^2.0.0-beta.0",
     "@mikojs/prettier-config": "workspace:^2.0.0-beta.0",
     "babel-plugin-add-module-exports": "^1.0.4",

@@ -1,7 +1,17 @@
+import { BaseCommand as Command } from '@yarnpkg/cli';
+
 import loadConfigs from './utils/loadConfigs';
-import buildCommands from './utils/buildCommands';
 import normalize from './utils/normalize';
 
 export default {
-  commands: buildCommands(normalize(loadConfigs(process.cwd()))),
+  commands: normalize(loadConfigs(process.cwd())).map(
+    ([command]) =>
+      class MikoCommand extends Command {
+        static paths = [command];
+
+        execute = () => {
+          // TODO console.log(script);
+        };
+      },
+  ),
 };

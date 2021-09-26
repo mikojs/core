@@ -1,6 +1,7 @@
 import loadConfigs from './utils/loadConfigs';
 import buildCommands from './utils/buildCommands';
+import normalize from './utils/normalize';
 
 export default {
-  commands: buildCommands(loadConfigs(process.cwd())),
+  commands: buildCommands(normalize(loadConfigs(process.cwd()))),
 };

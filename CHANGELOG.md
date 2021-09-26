@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.0-beta.1 (2021-09-26)
+
+Add @mikojs/yarn-plugin-miko.
+
 ## 2.0.0-beta.0 (2021-03-31)
 
 Rewrite project.

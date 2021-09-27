@@ -11,11 +11,12 @@ export default {
 
         static usage = Command.Usage({
           category: 'Miko-related commands',
-          description: `run \`${scripts}\``,
+          // TODO: add output function
+          description: `run \`${scripts[0].script}\``,
         });
 
         execute = () => {
-          // TODO console.log(script);
+          // TODO console.log(scripts);
         };
       },
   ),

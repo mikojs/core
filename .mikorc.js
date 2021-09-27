@@ -1,3 +1,5 @@
 module.exports = {
-  'babel-base': 'babel src -d lib --verbose --root-mode upward',
+  babel: {
+    base: 'babel src -d lib --verbose --root-mode upward',
+  },
 };

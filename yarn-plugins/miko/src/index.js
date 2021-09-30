@@ -1,4 +1,5 @@
 import { BaseCommand as Command } from '@yarnpkg/cli';
+import { Configuration, Project } from '@yarnpkg/core';
 
 import load from './utils/load';
 import normalize from './utils/normalize';
@@ -14,8 +15,15 @@ export default {
           description: scripts.toString(),
         });
 
-        execute = () => {
-          // TODO console.log(scripts);
+        execute = async () => {
+          const { cwd, plugins } = this.context;
+          const configuration = await Configuration.find(cwd, plugins);
+          const { projectCwd } = configuration;
+          const {
+            project: { workspaces },
+          } = await Project.find(configuration, projectCwd);
+
+          await scripts.execute({ cli: this.cli, workspaces });
         };
       },
   ),

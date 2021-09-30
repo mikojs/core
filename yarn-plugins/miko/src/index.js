@@ -11,8 +11,7 @@ export default {
 
         static usage = Command.Usage({
           category: 'Miko-related commands',
-          // TODO: add output function
-          description: `run \`${scripts[0].script}\``,
+          description: scripts.toString(),
         });
 
         execute = () => {

@@ -1,6 +1,6 @@
 /* eslint-disable */
 module.exports = {
-name: "@yarnpkg/plugin-scripts",
+name: "@yarnpkg/plugin-miko",
 factory: function (require) {
   return {};
 }

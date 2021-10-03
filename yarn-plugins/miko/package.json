@@ -1,0 +1,25 @@
+{
+  "name": "@mikojs/yarn-plugin-miko",
+  "description": "This plugin could help programmers to manage repositories.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/yarn-plugin-miko",
+  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/miko",
+  "version": "2.0.0-beta.0",
+  "main": "./lib/index.js",
+  "keywords": [
+    "mikojs",
+    "yarn plugin"
+  ],
+  "dependencies": {
+    "@yarnpkg/cli": "^2.4.1",
+    "@yarnpkg/core": "^2.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.5"
+  }
+}

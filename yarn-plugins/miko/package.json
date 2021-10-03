@@ -1,16 +1,15 @@
 {
-  "name": "@mikojs/yarn-plugin-scripts",
-  "description": "This plugin could add more feature for scripts.",
+  "name": "@mikojs/yarn-plugin-miko",
+  "description": "This plugin could help programmers to manage repositories.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
-  "homepage": "https://mikojs.github.io/core/yarn-plugin-scripts",
-  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/scripts",
+  "homepage": "https://mikojs.github.io/core/yarn-plugin-miko",
+  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/miko",
   "version": "2.0.0-beta.0",
   "main": "./lib/index.js",
   "keywords": [
     "mikojs",
-    "yarn plugin",
-    "scripts"
+    "yarn plugin"
   ],
   "publishConfig": {
     "access": "public"

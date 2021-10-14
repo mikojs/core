@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/yarn-plugin-babel",
-  "description": "Run babel with @mikojs/yarn-plugin-miko lifecycle.",
+  "description": "Run babel with @mikojs/yarn-plugin-miko life cycle.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/yarn-plugin-babel",

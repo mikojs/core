@@ -1,6 +1,6 @@
 {
   "name": "@mikojs/yarn-plugin-miko",
-  "description": "This plugin could help programmers to manage repositories.",
+  "description": "Add custom scripts for development life cycle.",
   "license": "MIT",
   "author": "HsuTing <hsuting0106@gmail.com>",
   "homepage": "https://mikojs.github.io/core/yarn-plugin-miko",
@@ -9,7 +9,8 @@
   "main": "./lib/index.js",
   "keywords": [
     "mikojs",
-    "yarn plugin"
+    "yarn plugin",
+    "scripts"
   ],
   "publishConfig": {
     "access": "public"

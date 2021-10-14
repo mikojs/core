@@ -1630,6 +1630,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel":
+  version: 0.0.0-use.local
+  resolution: "@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel"
+  dependencies:
+    "@babel/cli": ^7.15.7
+    "@babel/core": ^7.15.5
+  languageName: unknown
+  linkType: soft
+
 "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko"

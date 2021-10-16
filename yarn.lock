@@ -1645,6 +1645,7 @@ __metadata:
   dependencies:
     "@babel/cli": ^7.15.7
     "@babel/core": ^7.15.5
+    "@yarnpkg/core": ^3.0.0
   languageName: unknown
   linkType: soft
 

@@ -8,8 +8,5 @@
 !.yarn/releases
 !.yarn/plugins
 
-# node
-node_modules
-
 # babel
 lib

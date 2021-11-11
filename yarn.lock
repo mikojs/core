@@ -1634,6 +1634,7 @@ __metadata:
   dependencies:
     "@babel/cli": ^7.15.7
     "@babel/core": ^7.15.5
+    core-js: ^3.13.0
   peerDependencies:
     prettier: ^2.2.1
   languageName: unknown

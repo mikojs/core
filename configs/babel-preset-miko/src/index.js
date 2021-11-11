@@ -6,7 +6,7 @@ export default declare(({ assertVersion }) => {
   return {
     presets: [
       [
-        '@babel/env',
+        require.resolve('@babel/preset-env'),
         {
           useBuiltIns: 'usage',
           corejs: 3,

@@ -2595,6 +2595,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/cli", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.7"],
             ["@babel/core", "npm:7.15.5"],
             ["@types/prettier", null],
+            ["core-js", "npm:3.13.0"],
             ["prettier", "npm:2.2.1"]
           ],
           "packagePeers": [
@@ -2608,7 +2609,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@mikojs/prettier-config", "workspace:configs/prettier"],
             ["@babel/cli", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.7"],
-            ["@babel/core", "npm:7.15.5"]
+            ["@babel/core", "npm:7.15.5"],
+            ["core-js", "npm:3.13.0"]
           ],
           "linkType": "SOFT",
         }]

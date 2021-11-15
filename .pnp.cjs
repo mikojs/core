@@ -2638,7 +2638,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.15.7"],
             ["@babel/core", "npm:7.15.5"],
             ["@yarnpkg/core", "npm:3.0.0"],
-            ["clipanion", "virtual:b644898db9d00f9f37d5eb44e36f20e9479b44afd1de161232b42c49fdda6d24ee83083e27e52420bf3b4985c46a47d2bef42581f5a599abf04e801793aa0916#npm:3.1.0"]
+            ["clipanion", "virtual:b644898db9d00f9f37d5eb44e36f20e9479b44afd1de161232b42c49fdda6d24ee83083e27e52420bf3b4985c46a47d2bef42581f5a599abf04e801793aa0916#npm:3.1.0"],
+            ["core-js", "npm:3.13.0"],
+            ["regenerator-runtime", "npm:0.13.9"]
           ],
           "linkType": "SOFT",
         }]
@@ -5006,6 +5008,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/regenerator-runtime-npm-0.13.8-0450f887d6-5f89699ab5.zip/node_modules/regenerator-runtime/",
           "packageDependencies": [
             ["regenerator-runtime", "npm:0.13.8"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:0.13.9", {
+          "packageLocation": "./.yarn/cache/regenerator-runtime-npm-0.13.9-6d02340eec-65ed455fe5.zip/node_modules/regenerator-runtime/",
+          "packageDependencies": [
+            ["regenerator-runtime", "npm:0.13.9"]
           ],
           "linkType": "HARD",
         }]

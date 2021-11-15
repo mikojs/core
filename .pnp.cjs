@@ -59,6 +59,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/plugin-proposal-class-properties", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#npm:7.14.5"],
             ["@mikojs/babel-preset-miko", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/babel-preset-miko"],
             ["@mikojs/prettier-config", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/prettier"],
+            ["@mikojs/yarn-plugin-babel", "workspace:yarn-plugins/babel"],
+            ["@mikojs/yarn-plugin-miko", "workspace:yarn-plugins/miko"],
             ["babel-plugin-add-module-exports", "npm:1.0.4"],
             ["prettier", "npm:2.2.1"]
           ],
@@ -83,10 +85,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.7", {
-          "packageLocation": "./.yarn/__virtual__/@babel-cli-virtual-3729663ce8/0/cache/@babel-cli-npm-7.15.7-145f3e6ed2-128c8251c1.zip/node_modules/@babel/cli/",
+        ["virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.15.7", {
+          "packageLocation": "./.yarn/__virtual__/@babel-cli-virtual-e960f6fe41/0/cache/@babel-cli-npm-7.15.7-145f3e6ed2-128c8251c1.zip/node_modules/@babel/cli/",
           "packageDependencies": [
-            ["@babel/cli", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.7"],
+            ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.15.7"],
             ["@babel/core", "npm:7.15.5"],
             ["@nicolo-ribaudo/chokidar-2", "npm:2.1.8-no-fsevents.3"],
             ["@types/babel__core", null],
@@ -2546,7 +2548,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/@mikojs-babel-preset-miko-virtual-b4d15535a3/1/configs/babel-preset-miko/",
           "packageDependencies": [
             ["@mikojs/babel-preset-miko", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/babel-preset-miko"],
-            ["@babel/cli", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.7"],
+            ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.15.7"],
             ["@babel/core", "npm:7.15.5"],
             ["@babel/helper-plugin-utils", "npm:7.14.5"],
             ["@babel/preset-env", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.6"],
@@ -2563,7 +2565,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./configs/babel-preset-miko/",
           "packageDependencies": [
             ["@mikojs/babel-preset-miko", "workspace:configs/babel-preset-miko"],
-            ["@babel/cli", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.7"],
+            ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.15.7"],
             ["@babel/core", "npm:7.15.5"],
             ["@babel/helper-plugin-utils", "npm:7.14.5"],
             ["@babel/preset-env", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.6"],
@@ -2581,6 +2583,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/plugin-proposal-class-properties", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#npm:7.14.5"],
             ["@mikojs/babel-preset-miko", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/babel-preset-miko"],
             ["@mikojs/prettier-config", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/prettier"],
+            ["@mikojs/yarn-plugin-babel", "workspace:yarn-plugins/babel"],
+            ["@mikojs/yarn-plugin-miko", "workspace:yarn-plugins/miko"],
             ["babel-plugin-add-module-exports", "npm:1.0.4"],
             ["prettier", "npm:2.2.1"]
           ],
@@ -2592,7 +2596,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/@mikojs-prettier-config-virtual-188ae6d29f/1/configs/prettier/",
           "packageDependencies": [
             ["@mikojs/prettier-config", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/prettier"],
-            ["@babel/cli", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.7"],
+            ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.15.7"],
             ["@babel/core", "npm:7.15.5"],
             ["@types/prettier", null],
             ["core-js", "npm:3.13.0"],
@@ -2608,7 +2612,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./configs/prettier/",
           "packageDependencies": [
             ["@mikojs/prettier-config", "workspace:configs/prettier"],
-            ["@babel/cli", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.7"],
+            ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.15.7"],
             ["@babel/core", "npm:7.15.5"],
             ["core-js", "npm:3.13.0"]
           ],
@@ -2620,7 +2624,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./yarn-plugins/babel/",
           "packageDependencies": [
             ["@mikojs/yarn-plugin-babel", "workspace:yarn-plugins/babel"],
-            ["@babel/cli", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.7"],
+            ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.15.7"],
             ["@babel/core", "npm:7.15.5"]
           ],
           "linkType": "SOFT",
@@ -2631,7 +2635,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./yarn-plugins/miko/",
           "packageDependencies": [
             ["@mikojs/yarn-plugin-miko", "workspace:yarn-plugins/miko"],
-            ["@babel/cli", "virtual:b4d15535a39d334fb202c697da0442cd11a8e360f13496a2cde7834ab7967fff3501a6d823f2a9f4a2df3ebe1ad2e543197a2f2a8868a8af5c9837247903f128#npm:7.15.7"],
+            ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.15.7"],
             ["@babel/core", "npm:7.15.5"],
             ["@yarnpkg/core", "npm:3.0.0"],
             ["clipanion", "virtual:b644898db9d00f9f37d5eb44e36f20e9479b44afd1de161232b42c49fdda6d24ee83083e27e52420bf3b4985c46a47d2bef42581f5a599abf04e801793aa0916#npm:3.1.0"]

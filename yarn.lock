@@ -1623,6 +1623,8 @@ __metadata:
     "@babel/plugin-proposal-class-properties": ^7.14.5
     "@mikojs/babel-preset-miko": "workspace:^2.0.0-beta.0"
     "@mikojs/prettier-config": "workspace:^2.0.0-beta.0"
+    "@mikojs/yarn-plugin-babel": "workspace:^2.0.0-beta.0"
+    "@mikojs/yarn-plugin-miko": "workspace:^2.0.0-beta.0"
     babel-plugin-add-module-exports: ^1.0.4
     prettier: ^2.2.1
   languageName: unknown
@@ -1640,7 +1642,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel":
+"@mikojs/yarn-plugin-babel@workspace:^2.0.0-beta.0, @mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel"
   dependencies:
@@ -1649,7 +1651,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko":
+"@mikojs/yarn-plugin-miko@workspace:^2.0.0-beta.0, @mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko"
   dependencies:

@@ -16,7 +16,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@yarnpkg/core": "^3.0.0"
+    "@yarnpkg/core": "^3.0.0",
+    "core-js": "^3.13.0",
+    "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",

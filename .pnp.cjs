@@ -2625,7 +2625,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@mikojs/yarn-plugin-babel", "workspace:yarn-plugins/babel"],
             ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.15.7"],
-            ["@babel/core", "npm:7.15.5"]
+            ["@babel/core", "npm:7.15.5"],
+            ["@yarnpkg/core", "npm:3.0.0"],
+            ["core-js", "npm:3.13.0"],
+            ["regenerator-runtime", "npm:0.13.9"]
           ],
           "linkType": "SOFT",
         }]

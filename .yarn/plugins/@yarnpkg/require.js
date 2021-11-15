@@ -18,13 +18,15 @@ module.exports = filename => {
     };
   } catch (e) {
     const { error } = console;
+    const sourcePath = path.resolve(
+      __dirname, '../../../yarn-plugins',
+      name.replace(/plugin-/, ''),
+    );
 
-    if (!new RegExp(names.miko).test(e.message)) error(e);
+    if (!new RegExp(`Source path: ${sourcePath}/\n`).test(e.message)) error(e);
 
     return require(path.resolve(
-      __dirname,
-      '../../../yarn-plugins',
-      name.replace(/plugin-/, ''),
+      sourcePath,
       './bundles',
       names.yarn,
     ));

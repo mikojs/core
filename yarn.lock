@@ -1623,6 +1623,8 @@ __metadata:
     "@babel/plugin-proposal-class-properties": ^7.14.5
     "@mikojs/babel-preset-miko": "workspace:^2.0.0-beta.0"
     "@mikojs/prettier-config": "workspace:^2.0.0-beta.0"
+    "@mikojs/yarn-plugin-babel": "workspace:^2.0.0-beta.0"
+    "@mikojs/yarn-plugin-miko": "workspace:^2.0.0-beta.0"
     babel-plugin-add-module-exports: ^1.0.4
     prettier: ^2.2.1
   languageName: unknown
@@ -1634,12 +1636,13 @@ __metadata:
   dependencies:
     "@babel/cli": ^7.15.7
     "@babel/core": ^7.15.5
+    core-js: ^3.13.0
   peerDependencies:
     prettier: ^2.2.1
   languageName: unknown
   linkType: soft
 
-"@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel":
+"@mikojs/yarn-plugin-babel@workspace:^2.0.0-beta.0, @mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-babel@workspace:yarn-plugins/babel"
   dependencies:
@@ -1649,7 +1652,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko":
+"@mikojs/yarn-plugin-miko@workspace:^2.0.0-beta.0, @mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko":
   version: 0.0.0-use.local
   resolution: "@mikojs/yarn-plugin-miko@workspace:yarn-plugins/miko"
   dependencies:
@@ -1657,6 +1660,8 @@ __metadata:
     "@babel/core": ^7.15.5
     "@yarnpkg/core": ^3.0.0
     clipanion: ^3.1.0
+    core-js: ^3.13.0
+    regenerator-runtime: ^0.13.9
   languageName: unknown
   linkType: soft
 
@@ -3704,6 +3709,13 @@ fsevents@~2.3.1:
   version: 0.13.8
   resolution: "regenerator-runtime@npm:0.13.8"
   checksum: 5f89699ab578301e3f47fe323d2a9e19ed4b7302481b37ce96843602be3a5cb1e5b66a07c1500e69d4710c1dd6fa3b3f3e56d188ef56df4c17a744d853ac36ed
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.13.9":
+  version: 0.13.9
+  resolution: "regenerator-runtime@npm:0.13.9"
+  checksum: 65ed455fe5afd799e2897baf691ca21c2772e1a969d19bb0c4695757c2d96249eb74ee3553ea34a91062b2a676beedf630b4c1551cc6299afb937be1426ec55e
   languageName: node
   linkType: hard
 

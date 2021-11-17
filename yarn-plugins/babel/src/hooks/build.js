@@ -19,6 +19,7 @@ export default async ({ cli, workspaces }) => {
       '--include',
       babelWorkspaces.join(','),
       'exec',
+      // FIXME: rewrite after workspace-tools >= 3.1.1
       'run',
       'babel',
       'src',

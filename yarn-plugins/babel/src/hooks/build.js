@@ -1,6 +1,6 @@
-import { structUtils } from '@yarnpkg/core';
+import { structUtils, scriptUtils } from '@yarnpkg/core';
 
-const buildArgv = (argv = []) => [
+const buildArgv = argv => [
   'workspaces',
   'foreach',
   '-pAv',
@@ -18,27 +18,41 @@ const buildArgv = (argv = []) => [
 ];
 
 export default async ({ cli, workspaces }) => {
-  const {
-    names,
-    babelNames,
-  } = workspaces.reduce((result, { locator }) => {
-    const name = structUtils.stringifyIdent(locator);
-    const isBabelWorkspace =
-      /^(@(?!babel\/)[^/]+\/)([^/]*babel-(preset|plugin)(?:-|\/|$)|[^/]+\/)/.test(
-        name,
-      ) || /^babel-(preset|plugin)/.test(name);
+  const { babelWorkspaces, noBabelWorkspaces } = await workspaces.reduce(
+    async (resultPromise, workspace) => {
+      const result = await resultPromise;
+      const { locator } = workspace;
+      const name = structUtils.stringifyIdent(locator);
+      const binaries = await scriptUtils.getWorkspaceAccessibleBinaries(
+        workspace,
+      );
 
-    return {
-      names: [...result.names, name],
-      babelNames: !isBabelWorkspace ? result.babelNames : [...result.babelNames, name],
-    };
-  }, {
-    names: [],
-    babelNames: [],
-  });
+      if (!binaries.has('babel'))
+        return {
+          ...result,
+          noBabelWorkspaces: [...result.noBabelWorkspaces, name],
+        };
 
-  if (babelNames.length !== 0)
-    await cli.run(buildArgv(['--include', babelNames.join(',')]));
+      const isBabelWorkspace =
+        /^(@(?!babel\/)[^/]+\/)([^/]*babel-(preset|plugin)(?:-|\/|$)|[^/]+\/)/.test(
+          name,
+        ) || /^babel-(preset|plugin)/.test(name);
 
-  await cli.run(buildArgv());
+      return {
+        ...result,
+        babelWorkspaces: !isBabelWorkspace
+          ? result.babelWorkspaces
+          : [...result.babelWorkspaces, name],
+      };
+    },
+    Promise.resolve({
+      babelWorkspaces: [],
+      noBabelWorkspaces: [],
+    }),
+  );
+
+  if (babelWorkspaces.length !== 0)
+    await cli.run(buildArgv(['--include', babelWorkspaces.join(',')]));
+
+  await cli.run(buildArgv(['--exclude', noBabelWorkspaces.join(',')]));
 };

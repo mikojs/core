@@ -9,12 +9,13 @@ export default class Base extends Command {
     const { cwd, plugins } = this.context;
     const configuration = await Configuration.find(cwd, plugins);
     const { projectCwd } = configuration;
-    const {
-      project: { workspaces },
-    } = await Project.find(configuration, projectCwd);
+    const { project } = await Project.find(configuration, projectCwd);
+    const { workspaces } = project;
 
+    await project.restoreInstallState();
     await configuration.triggerHook(hooks => hooks[name], {
       cli: this.cli,
+      project,
       workspaces,
     });
   };

@@ -18,7 +18,7 @@ const buildArgv = argv => [
 ];
 
 export default async ({ cli, workspaces }) => {
-  const { babelWorkspaces, noBabelWorkspaces } = await workspaces.reduce(
+  const { babelWorkspaces, notUseBabelWorkspaces } = await workspaces.reduce(
     async (resultPromise, workspace) => {
       const result = await resultPromise;
       const { locator } = workspace;
@@ -30,7 +30,7 @@ export default async ({ cli, workspaces }) => {
       if (!binaries.has('babel'))
         return {
           ...result,
-          noBabelWorkspaces: [...result.noBabelWorkspaces, name],
+          notUseBabelWorkspaces: [...result.notUseBabelWorkspaces, name],
         };
 
       const isBabelWorkspace =
@@ -47,12 +47,12 @@ export default async ({ cli, workspaces }) => {
     },
     Promise.resolve({
       babelWorkspaces: [],
-      noBabelWorkspaces: [],
+      notUseBabelWorkspaces: [],
     }),
   );
 
   if (babelWorkspaces.length !== 0)
     await cli.run(buildArgv(['--include', babelWorkspaces.join(',')]));
 
-  await cli.run(buildArgv(['--exclude', noBabelWorkspaces.join(',')]));
+  await cli.run(buildArgv(['--exclude', notUseBabelWorkspaces.join(',')]));
 };

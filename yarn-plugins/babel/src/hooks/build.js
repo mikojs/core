@@ -51,8 +51,11 @@ export default async ({ cli, workspaces }) => {
     }),
   );
 
-  if (babelWorkspaces.length !== 0)
+  if (babelWorkspaces.length !== 0) {
+    process.env.BABEL_ENV = 'pre';
     await cli.run(buildArgv(['--include', babelWorkspaces.join(',')]));
+  }
 
+  delete process.env.BABEL_ENV;
   await cli.run(buildArgv(['--exclude', notUseBabelWorkspaces.join(',')]));
 };

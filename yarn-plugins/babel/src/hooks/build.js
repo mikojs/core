@@ -21,8 +21,6 @@ export default async ({ cli, workspaces }) => {
   const { babelWorkspaces, notUseBabelWorkspaces } = await workspaces.reduce(
     async (resultPromise, workspace) => {
       const result = await resultPromise;
-      const { locator } = workspace;
-      const name = structUtils.stringifyIdent(locator);
       const binaries = await scriptUtils.getWorkspaceAccessibleBinaries(
         workspace,
       );
@@ -30,9 +28,11 @@ export default async ({ cli, workspaces }) => {
       if (!binaries.has('babel'))
         return {
           ...result,
-          notUseBabelWorkspaces: [...result.notUseBabelWorkspaces, name],
+          notUseBabelWorkspaces: [...result.notUseBabelWorkspaces, workspace],
         };
 
+      const { locator } = workspace;
+      const name = structUtils.stringifyIdent(locator);
       const isBabelWorkspace =
         /^(@(?!babel\/)[^/]+\/)([^/]*babel-(preset|plugin)(?:-|\/|$)|[^/]+\/)/.test(
           name,
@@ -42,7 +42,7 @@ export default async ({ cli, workspaces }) => {
         ...result,
         babelWorkspaces: !isBabelWorkspace
           ? result.babelWorkspaces
-          : [...result.babelWorkspaces, name],
+          : [...result.babelWorkspaces, workspace],
       };
     },
     Promise.resolve({
@@ -52,7 +52,21 @@ export default async ({ cli, workspaces }) => {
   );
 
   if (babelWorkspaces.length !== 0)
-    await cli.run(buildArgv(['--include', babelWorkspaces.join(',')]));
+    await cli.run(
+      buildArgv([
+        '--include',
+        babelWorkspaces
+          .map(({ locator }) => structUtils.stringifyIdent(locator))
+          .join(','),
+      ]),
+    );
 
-  await cli.run(buildArgv(['--exclude', notUseBabelWorkspaces.join(',')]));
+  await cli.run(
+    buildArgv([
+      '--exclude',
+      notUseBabelWorkspaces
+        .map(({ locator }) => structUtils.stringifyIdent(locator))
+        .join(','),
+    ]),
+  );
 };

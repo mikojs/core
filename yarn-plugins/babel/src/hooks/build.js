@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+
 import { structUtils, scriptUtils } from '@yarnpkg/core';
 
 const buildArgv = argv => [
@@ -53,6 +56,12 @@ export default async ({ cli, workspaces }) => {
 
   if (babelWorkspaces.length !== 0) {
     process.env.BABEL_ENV = 'pre';
+    babelWorkspaces.forEach(({ cwd, manifest: { main } }) => {
+      fs.writeFileSync(
+        path.resolve(cwd, main),
+        'module.exports = function fakeBabel() { return {}; }',
+      );
+    });
     await cli.run(
       buildArgv([
         '--include',

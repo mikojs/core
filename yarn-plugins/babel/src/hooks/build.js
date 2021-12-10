@@ -3,37 +3,23 @@ import path from 'path';
 
 import { structUtils, scriptUtils } from '@yarnpkg/core';
 
-const buildArgv = argv => [
-  'workspaces',
-  'foreach',
-  '-pAv',
-  ...argv,
-  // FIXME: use `workspaces foreach run` after workspace-tools >= 3.1.1
-  'exec',
-  'run',
-  'babel',
-  'src',
-  '-d',
-  'lib',
-  '--verbose',
-  '--root-mode',
-  'upward',
-];
+const runBabelInWorkspaces = (cli, workspaces) =>
+  Promise.all(
+    workspaces.map(({ cwd }) =>
+      cli.run(
+        ['babel', 'src', '-d', 'lib', '--verbose', '--root-mode', 'upward'],
+        { cwd },
+      ),
+    ),
+  );
 
 export default async ({ cli, workspaces }) => {
-  const { babelWorkspaces, notUseBabelWorkspaces } = await workspaces.reduce(
+  const { babelWorkspaces, useBabelWorkspaces } = await workspaces.reduce(
     async (resultPromise, workspace) => {
       const result = await resultPromise;
       const binaries = await scriptUtils.getWorkspaceAccessibleBinaries(
         workspace,
       );
-
-      if (!binaries.has('babel'))
-        return {
-          ...result,
-          notUseBabelWorkspaces: [...result.notUseBabelWorkspaces, workspace],
-        };
-
       const { locator } = workspace;
       const name = structUtils.stringifyIdent(locator);
       const isBabelWorkspace =
@@ -42,15 +28,17 @@ export default async ({ cli, workspaces }) => {
         ) || /^babel-(preset|plugin)/.test(name);
 
       return {
-        ...result,
         babelWorkspaces: !isBabelWorkspace
           ? result.babelWorkspaces
           : [...result.babelWorkspaces, workspace],
+        useBabelWorkspaces: !binaries.has('babel')
+          ? result.useBabelWorkspaces
+          : [...result.useBabelWorkspaces, workspace],
       };
     },
     Promise.resolve({
       babelWorkspaces: [],
-      notUseBabelWorkspaces: [],
+      useBabelWorkspaces: [],
     }),
   );
 
@@ -62,23 +50,9 @@ export default async ({ cli, workspaces }) => {
         'module.exports = function fakeBabel() { return {}; }',
       );
     });
-    await cli.run(
-      buildArgv([
-        '--include',
-        babelWorkspaces
-          .map(({ locator }) => structUtils.stringifyIdent(locator))
-          .join(','),
-      ]),
-    );
+    await runBabelInWorkspaces(cli, babelWorkspaces);
   }
 
   delete process.env.BABEL_ENV;
-  await cli.run(
-    buildArgv([
-      '--exclude',
-      notUseBabelWorkspaces
-        .map(({ locator }) => structUtils.stringifyIdent(locator))
-        .join(','),
-    ]),
-  );
+  await runBabelInWorkspaces(cli, useBabelWorkspaces);
 };

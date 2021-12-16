@@ -8,7 +8,7 @@ const runBabelInWorkspaces = (cli, workspaces) =>
   Promise.all(
     workspaces.map(({ cwd }) =>
       cli.run(
-        ['babel', 'src', '-d', 'lib', '--verbose', '--root-mode', 'upward'],
+        ['babel', 'src', '-d', 'lib', '--root-mode', 'upward', '--quiet'],
         { cwd },
       ),
     ),

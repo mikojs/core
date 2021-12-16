@@ -2267,17 +2267,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001219":
-  version: 1.0.30001223
-  resolution: "caniuse-lite@npm:1.0.30001223"
-  checksum: 9fd38da346eae4b34a2cae11e40e1ea097245eb1d64c88ed80e69e488633e2c2d69f3b3c37ca4069f42e3271af623053808f7b44d1b27cab34296079ea009aa4
-  languageName: node
-  linkType: hard
-
-"caniuse-lite@npm:^1.0.30001254":
-  version: 1.0.30001259
-  resolution: "caniuse-lite@npm:1.0.30001259"
-  checksum: 4b0423693616a62d3a9beaa35ab5a414a9e4398df7361915ca2b6f24142f1f55909e014d5f0c14c034c0fd5084524116ab46bcdfae5c3b8620f11f2822a1c4ba
+"caniuse-lite@npm:^1.0.30001219, caniuse-lite@npm:^1.0.30001254":
+  version: 1.0.30001286
+  resolution: "caniuse-lite@npm:1.0.30001286"
+  checksum: 04de4742552d4aeb713677b40693d9ac1fbd259573e0ff739565278bcecb6f398f3227546a4e930f4d5cf95b61458f4a53c9c1f90f5b0c4f6063b32e4c54b89e
   languageName: node
   linkType: hard
 

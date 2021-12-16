@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { structUtils, scriptUtils } from '@yarnpkg/core';
+import Listr from 'listr';
 
 const runBabelInWorkspaces = (cli, workspaces) =>
   Promise.all(
@@ -13,7 +14,7 @@ const runBabelInWorkspaces = (cli, workspaces) =>
     ),
   );
 
-export default async ({ cli, workspaces }) => {
+export default async ({ cli, workspaces, tasks }) => {
   const { babelWorkspaces, useBabelWorkspaces } = await workspaces.reduce(
     async (resultPromise, workspace) => {
       const result = await resultPromise;
@@ -42,17 +43,32 @@ export default async ({ cli, workspaces }) => {
     }),
   );
 
-  if (babelWorkspaces.length !== 0) {
-    process.env.BABEL_ENV = 'pre';
-    babelWorkspaces.forEach(({ cwd, manifest: { main } }) => {
-      fs.writeFileSync(
-        path.resolve(cwd, main),
-        'module.exports = function fakeBabel() { return {}; }',
-      );
-    });
-    await runBabelInWorkspaces(cli, babelWorkspaces);
-  }
-
-  delete process.env.BABEL_ENV;
-  await runBabelInWorkspaces(cli, useBabelWorkspaces);
+  tasks.push({
+    title: 'babel',
+    task: () =>
+      new Listr([
+        {
+          title: 'Preparing babel workspaces',
+          enabled: () => babelWorkspaces.length !== 0,
+          task: async () => {
+            process.env.BABEL_ENV = 'pre';
+            babelWorkspaces.forEach(({ cwd, manifest: { main } }) => {
+              fs.writeFileSync(
+                path.resolve(cwd, main),
+                'module.exports = function fakeBabel() { return {}; }',
+              );
+            });
+            await runBabelInWorkspaces(cli, babelWorkspaces);
+          },
+        },
+        {
+          title: 'Building workspaces with babel',
+          enabled: () => useBabelWorkspaces.length !== 0,
+          task: async () => {
+            delete process.env.BABEL_ENV;
+            await runBabelInWorkspaces(cli, useBabelWorkspaces);
+          },
+        },
+      ]),
+  });
 };

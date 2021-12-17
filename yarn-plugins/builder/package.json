@@ -12,9 +12,7 @@
     "yarn plugin",
     "builder"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "dependencies": {
     "core-js": "^3.13.0",
     "regenerator-runtime": "^0.13.9"

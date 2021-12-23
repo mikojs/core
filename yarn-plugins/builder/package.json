@@ -14,8 +14,10 @@
   ],
   "private": true,
   "dependencies": {
+    "@yarnpkg/builder": "^3.1.0",
     "core-js": "^3.13.0",
-    "regenerator-runtime": "^0.13.9"
+    "regenerator-runtime": "^0.13.9",
+    "typescript": "^4.5.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",

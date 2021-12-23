@@ -19,6 +19,7 @@
     "@mikojs/babel-preset-miko": "workspace:^2.0.0-beta.0",
     "@mikojs/prettier-config": "workspace:^2.0.0-beta.0",
     "@mikojs/yarn-plugin-babel": "workspace:^2.0.0-beta.0",
+    "@mikojs/yarn-plugin-builder": "workspace:^2.0.0-beta.0",
     "@mikojs/yarn-plugin-miko": "workspace:^2.0.0-beta.0",
     "babel-plugin-add-module-exports": "^1.0.4",
     "prettier": "^2.2.1"

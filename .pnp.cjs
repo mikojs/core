@@ -2887,6 +2887,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["core-js", "npm:3.13.0"],
             ["listr", "npm:0.14.3"],
             ["regenerator-runtime", "npm:0.13.9"],
+            ["rxjs-compat", "npm:6.6.7"],
             ["typescript", "patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=32657b"]
           ],
           "linkType": "SOFT",
@@ -7766,6 +7767,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["rxjs", "npm:6.6.7"],
             ["tslib", "npm:1.14.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["rxjs-compat", [
+        ["npm:6.6.7", {
+          "packageLocation": "./.yarn/cache/rxjs-compat-npm-6.6.7-637635fe45-a47339680d.zip/node_modules/rxjs-compat/",
+          "packageDependencies": [
+            ["rxjs-compat", "npm:6.6.7"]
           ],
           "linkType": "HARD",
         }]

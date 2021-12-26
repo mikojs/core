@@ -1908,7 +1908,6 @@ __metadata:
     core-js: ^3.13.0
     listr: ^0.14.3
     regenerator-runtime: ^0.13.9
-    rxjs-compat: ^6.6.7
     typescript: ^4.5.4
   languageName: unknown
   linkType: soft
@@ -5890,13 +5889,6 @@ resolve@^1.14.2:
   dependencies:
     queue-microtask: ^1.2.2
   checksum: cb4f97ad25a75ebc11a8ef4e33bb962f8af8516bb2001082ceabd8902e15b98f4b84b4f8a9b222e5d57fc3bd1379c483886ed4619367a7680dad65316993021d
-  languageName: node
-  linkType: hard
-
-"rxjs-compat@npm:^6.6.7":
-  version: 6.6.7
-  resolution: "rxjs-compat@npm:6.6.7"
-  checksum: a47339680d8da5ad8d00693ff75653deff99206ca9a12fc21c48d5dc88b972d0aed2dbcdf34b8f7ae52fe8817931f70a0e25a053ea75eb24802f2daf6c8a47b7
   languageName: node
   linkType: hard
 

@@ -13,7 +13,7 @@
     "config"
   ],
   "dependencies": {
-    "core-js": "^3.13.0"
+    "core-js": "^3.20.1"
   },
   "publishConfig": {
     "access": "public"
@@ -22,7 +22,7 @@
     "prettier": "^2.2.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.7",
-    "@babel/core": "^7.15.5"
+    "@babel/cli": "^7.16.7",
+    "@babel/core": "^7.16.7"
   }
 }

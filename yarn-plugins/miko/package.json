@@ -16,15 +16,15 @@
     "access": "public"
   },
   "dependencies": {
-    "@yarnpkg/core": "^3.0.0",
-    "clipanion": "^3.1.0",
-    "core-js": "^3.13.0",
+    "@yarnpkg/core": "^3.2.0-rc.9",
+    "clipanion": "^3.2.0-rc.4",
+    "core-js": "^3.20.1",
     "listr": "^0.14.3",
     "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.7",
-    "@babel/core": "^7.15.5",
+    "@babel/cli": "^7.16.7",
+    "@babel/core": "^7.16.7",
     "@yarnpkg/builder": "^3.1.0",
     "typescript": "^4.5.4"
   }

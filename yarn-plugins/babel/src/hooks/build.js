@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { structUtils, scriptUtils } from '@yarnpkg/core';
-import Listr from 'listr';
+import { Listr } from 'listr2';
 
 const runBabelInWorkspaces = (cli, workspaces) =>
   Promise.all(

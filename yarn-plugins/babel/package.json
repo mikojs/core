@@ -18,7 +18,7 @@
   "dependencies": {
     "@yarnpkg/core": "^3.2.0-rc.9",
     "core-js": "^3.20.1",
-    "listr": "^0.14.3",
+    "listr2": "^3.14.0",
     "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {

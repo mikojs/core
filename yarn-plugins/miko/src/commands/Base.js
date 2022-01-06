@@ -1,6 +1,6 @@
 import { Command } from 'clipanion';
 import { Configuration, Project } from '@yarnpkg/core';
-import Listr from 'listr';
+import { Listr } from 'listr2';
 
 export default class Base extends Command {
   execute = async () => {
@@ -21,7 +21,6 @@ export default class Base extends Command {
       workspaces,
       tasks,
     });
-
-    new Listr(tasks).run();
+    await new Listr(tasks).run();
   };
 }

@@ -1,3 +1,5 @@
+import Miko from './commands/Miko';
+
 export default {
-  commands: [],
+  commands: [Miko],
 };

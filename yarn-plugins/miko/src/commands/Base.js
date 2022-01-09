@@ -4,9 +4,7 @@ import { Listr } from 'listr2';
 
 export default class Base extends Command {
   execute = async () => {
-    const name = this.constructor.name.replace(/^.{1}/, str =>
-      str.toLowerCase(),
-    );
+    const name = this.path.join('.');
     const { cwd, plugins } = this.context;
     const configuration = await Configuration.find(cwd, plugins);
     const { projectCwd } = configuration;

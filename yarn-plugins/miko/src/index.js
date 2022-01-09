@@ -1,6 +1,5 @@
-import Dev from './commands/Dev';
-import Build from './commands/Build';
+import Miko from './commands/Miko';
 
 export default {
-  commands: [Dev, Build],
+  commands: [Miko],
 };

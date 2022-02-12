@@ -17,7 +17,6 @@ export default class Miko extends Command {
     await project.restoreInstallState();
     await configuration.triggerHook(hooks => hooks[name], {
       cli: this.cli,
-      project,
       workspaces,
       tasks,
     });

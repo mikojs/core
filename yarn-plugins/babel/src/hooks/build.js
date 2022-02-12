@@ -59,15 +59,13 @@ export default async ({ cli, workspaces, tasks }) => {
               );
             });
             await runBabelInWorkspaces(cli, babelWorkspaces);
+            delete process.env.BABEL_ENV;
           },
         },
         {
           title: 'Building workspaces with babel',
           enabled: () => useBabelWorkspaces.length !== 0,
-          task: async () => {
-            delete process.env.BABEL_ENV;
-            await runBabelInWorkspaces(cli, useBabelWorkspaces);
-          },
+          task: () => runBabelInWorkspaces(cli, useBabelWorkspaces),
         },
       ]),
   });

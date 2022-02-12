@@ -2683,6 +2683,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.17.0"],
             ["@babel/core", "npm:7.17.2"],
             ["@yarnpkg/core", "npm:3.2.0-rc.14"],
+            ["@yarnpkg/fslib", "npm:2.6.1-rc.10"],
             ["core-js", "npm:3.21.0"],
             ["regenerator-runtime", "npm:0.13.9"]
           ],
@@ -2920,6 +2921,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
+        ["npm:2.6.1-rc.10", {
+          "packageLocation": "./.yarn/cache/@yarnpkg-fslib-npm-2.6.1-rc.10-e020003351-ce4b46343d.zip/node_modules/@yarnpkg/fslib/",
+          "packageDependencies": [
+            ["@yarnpkg/fslib", "npm:2.6.1-rc.10"],
+            ["@yarnpkg/libzip", "npm:2.2.3-rc.10"],
+            ["tslib", "npm:1.14.1"]
+          ],
+          "linkType": "HARD",
+        }],
         ["npm:2.6.1-rc.9", {
           "packageLocation": "./.yarn/cache/@yarnpkg-fslib-npm-2.6.1-rc.9-ba17e4b8ac-14b6accda4.zip/node_modules/@yarnpkg/fslib/",
           "packageDependencies": [
@@ -2946,6 +2956,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@yarnpkg-libzip-npm-2.2.2-3fa1ab5536-7c09b13fde.zip/node_modules/@yarnpkg/libzip/",
           "packageDependencies": [
             ["@yarnpkg/libzip", "npm:2.2.2"],
+            ["@types/emscripten", "npm:1.39.5"],
+            ["tslib", "npm:1.14.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.2.3-rc.10", {
+          "packageLocation": "./.yarn/cache/@yarnpkg-libzip-npm-2.2.3-rc.10-0119ffa833-bda9457f59.zip/node_modules/@yarnpkg/libzip/",
+          "packageDependencies": [
+            ["@yarnpkg/libzip", "npm:2.2.3-rc.10"],
             ["@types/emscripten", "npm:1.39.5"],
             ["tslib", "npm:1.14.1"]
           ],

@@ -1,7 +1,5 @@
-import fs from 'fs';
-import path from 'path';
-
 import { structUtils, scriptUtils } from '@yarnpkg/core';
+import { xfs, ppath } from '@yarnpkg/fslib';
 
 const runBabelInWorkspaces = (cli, workspaces) =>
   Promise.all(
@@ -47,16 +45,30 @@ export default async ({ cli, workspaces, tasks }) => {
     task: (ctx, task) =>
       task.newListr([
         {
-          title: 'Preparing babel workspaces',
+          title: 'Preparing babel presets/plugins in workspaces',
+          enabled: () => babelWorkspaces.length !== 0,
+          task: () =>
+            Promise.all(
+              babelWorkspaces.map(async ({ cwd, manifest: { main } }) => {
+                const mainFilePath = ppath.join(cwd, main);
+                const mainDirPath = ppath.dirname(mainFilePath);
+
+                if (!xfs.existsSync(mainDirPath))
+                  await xfs.mkdirPromise(mainDirPath, { recursive: true });
+
+                if (!xfs.existsSync(mainFilePath))
+                  xfs.writeFileSync(
+                    mainFilePath,
+                    'module.exports = function fakeBabel() { return {}; }',
+                  );
+              }),
+            ),
+        },
+        {
+          title: 'Building babel presets/plugins in workspaces',
           enabled: () => babelWorkspaces.length !== 0,
           task: async () => {
             process.env.BABEL_ENV = 'pre';
-            babelWorkspaces.forEach(({ cwd, manifest: { main } }) => {
-              fs.writeFileSync(
-                path.resolve(cwd, main),
-                'module.exports = function fakeBabel() { return {}; }',
-              );
-            });
             await runBabelInWorkspaces(cli, babelWorkspaces);
             delete process.env.BABEL_ENV;
           },

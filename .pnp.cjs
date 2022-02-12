@@ -2684,7 +2684,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/core", "npm:7.17.2"],
             ["@yarnpkg/core", "npm:3.2.0-rc.14"],
             ["core-js", "npm:3.21.0"],
-            ["listr2", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:4.0.3"],
             ["regenerator-runtime", "npm:0.13.9"]
           ],
           "linkType": "SOFT",
@@ -2700,7 +2699,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@yarnpkg/core", "npm:3.2.0-rc.14"],
             ["clipanion", "virtual:2aab6397063cd435b84ca5e82165a519e68cf72dd36f5bd0e92bf907864f8011b4b44cb7f6a70384db2f9521aa97bf24ec764ede314978c05e01ff5feb01916b#npm:3.2.0-rc.8"],
             ["core-js", "npm:3.21.0"],
-            ["listr2", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:4.0.3"],
+            ["listr2", "virtual:2aab6397063cd435b84ca5e82165a519e68cf72dd36f5bd0e92bf907864f8011b4b44cb7f6a70384db2f9521aa97bf24ec764ede314978c05e01ff5feb01916b#npm:4.0.3"],
             ["regenerator-runtime", "npm:0.13.9"]
           ],
           "linkType": "SOFT",
@@ -4488,10 +4487,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:4.0.3", {
-          "packageLocation": "./.yarn/__virtual__/listr2-virtual-a3cb7d96e3/0/cache/listr2-npm-4.0.3-5fe3eb5269-97f5174fdb.zip/node_modules/listr2/",
+        ["virtual:2aab6397063cd435b84ca5e82165a519e68cf72dd36f5bd0e92bf907864f8011b4b44cb7f6a70384db2f9521aa97bf24ec764ede314978c05e01ff5feb01916b#npm:4.0.3", {
+          "packageLocation": "./.yarn/__virtual__/listr2-virtual-cf8bd135c6/0/cache/listr2-npm-4.0.3-5fe3eb5269-97f5174fdb.zip/node_modules/listr2/",
           "packageDependencies": [
-            ["listr2", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:4.0.3"],
+            ["listr2", "virtual:2aab6397063cd435b84ca5e82165a519e68cf72dd36f5bd0e92bf907864f8011b4b44cb7f6a70384db2f9521aa97bf24ec764ede314978c05e01ff5feb01916b#npm:4.0.3"],
             ["@types/enquirer", null],
             ["cli-truncate", "npm:2.1.0"],
             ["colorette", "npm:2.0.16"],

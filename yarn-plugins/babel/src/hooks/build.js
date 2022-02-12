@@ -47,16 +47,22 @@ export default async ({ cli, workspaces, tasks }) => {
     task: (ctx, task) =>
       task.newListr([
         {
-          title: 'Preparing babel workspaces',
+          title: 'Preparing babel presets/plugins in workspaces',
           enabled: () => babelWorkspaces.length !== 0,
-          task: async () => {
-            process.env.BABEL_ENV = 'pre';
+          task: () => {
             babelWorkspaces.forEach(({ cwd, manifest: { main } }) => {
               fs.writeFileSync(
                 path.resolve(cwd, main),
                 'module.exports = function fakeBabel() { return {}; }',
               );
             });
+          },
+        },
+        {
+          title: 'Building babel presets/plugins in workspaces',
+          enabled: () => babelWorkspaces.length !== 0,
+          task: async () => {
+            process.env.BABEL_ENV = 'pre';
             await runBabelInWorkspaces(cli, babelWorkspaces);
             delete process.env.BABEL_ENV;
           },

@@ -1662,6 +1662,7 @@ __metadata:
     "@babel/cli": ^7.17.0
     "@babel/core": ^7.17.2
     "@yarnpkg/core": ^3.2.0-rc.14
+    "@yarnpkg/fslib": ^2.6.1-rc.10
     core-js: ^3.21.0
     regenerator-runtime: ^0.13.9
   languageName: unknown
@@ -1870,6 +1871,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@yarnpkg/fslib@npm:^2.6.1-rc.10":
+  version: 2.6.1-rc.10
+  resolution: "@yarnpkg/fslib@npm:2.6.1-rc.10"
+  dependencies:
+    "@yarnpkg/libzip": ^2.2.3-rc.10
+    tslib: ^1.13.0
+  checksum: ce4b46343dcf380d180d08c42a04faaab73c31524be75ac976df53f718163863d92753329b12e81378d93e0bbbbb3230862e374fa39143dbbbcd8c455348f421
+  languageName: node
+  linkType: hard
+
 "@yarnpkg/fslib@npm:^2.6.1-rc.9":
   version: 2.6.1-rc.9
   resolution: "@yarnpkg/fslib@npm:2.6.1-rc.9"
@@ -1897,6 +1908,16 @@ __metadata:
     "@types/emscripten": ^1.38.0
     tslib: ^1.13.0
   checksum: 7c09b13fdea1aa35959f3d8a17341ea3abc7b9708b731cff126c361582148a97555cda865bf0aaaefafae22bfeb95df218bd20ad1565ced68cc95402e554659f
+  languageName: node
+  linkType: hard
+
+"@yarnpkg/libzip@npm:^2.2.3-rc.10":
+  version: 2.2.3-rc.10
+  resolution: "@yarnpkg/libzip@npm:2.2.3-rc.10"
+  dependencies:
+    "@types/emscripten": ^1.38.0
+    tslib: ^1.13.0
+  checksum: bda9457f59063d9e3fb58b88405c13b8f20ce4d3b2c8a5a04ee52aafec45bf5e75ff8860a130c8bbe642dec8cf018dc8628d84e8dc97778340ee3315c546790d
   languageName: node
   linkType: hard
 

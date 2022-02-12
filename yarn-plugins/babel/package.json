@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@yarnpkg/core": "^3.2.0-rc.14",
+    "@yarnpkg/fslib": "^2.6.1-rc.10",
     "core-js": "^3.21.0",
     "regenerator-runtime": "^0.13.9"
   },

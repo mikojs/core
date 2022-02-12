@@ -51,6 +51,10 @@ export default async ({ cli, workspaces, tasks }) => {
             Promise.all(
               babelWorkspaces.map(async ({ cwd, manifest: { main } }) => {
                 const mainFilePath = ppath.join(cwd, main);
+                const mainDirPath = ppath.dirname(mainFilePath);
+
+                if (!xfs.existsSync(mainDirPath))
+                  await xfs.mkdirPromise(mainDirPath, {recursive: true});
 
                 if (!xfs.existsSync(mainFilePath))
                   xfs.writeFileSync(

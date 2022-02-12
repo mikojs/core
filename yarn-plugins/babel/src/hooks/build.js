@@ -54,7 +54,7 @@ export default async ({ cli, workspaces, tasks }) => {
                 const mainDirPath = ppath.dirname(mainFilePath);
 
                 if (!xfs.existsSync(mainDirPath))
-                  await xfs.mkdirPromise(mainDirPath, {recursive: true});
+                  await xfs.mkdirPromise(mainDirPath, { recursive: true });
 
                 if (!xfs.existsSync(mainFilePath))
                   xfs.writeFileSync(

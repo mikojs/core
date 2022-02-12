@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 
 import { structUtils, scriptUtils } from '@yarnpkg/core';
-import { Listr } from 'listr2';
 
 const runBabelInWorkspaces = (cli, workspaces) =>
   Promise.all(
@@ -45,8 +44,8 @@ export default async ({ cli, workspaces, tasks }) => {
 
   tasks.push({
     title: 'Run babel plugin',
-    task: () =>
-      new Listr([
+    task: (ctx, task) =>
+      task.newListr([
         {
           title: 'Preparing babel workspaces',
           enabled: () => babelWorkspaces.length !== 0,

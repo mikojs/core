@@ -57,7 +57,7 @@ export default async ({ cli, workspaces, tasks }) => {
                   await xfs.mkdirPromise(mainDirPath, { recursive: true });
 
                 if (!xfs.existsSync(mainFilePath))
-                  xfs.writeFileSync(
+                  await xfs.writeFilePromise(
                     mainFilePath,
                     'module.exports = function fakeBabel() { return {}; }',
                   );

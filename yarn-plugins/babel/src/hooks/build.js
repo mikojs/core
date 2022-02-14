@@ -11,7 +11,7 @@ const BABEL_COMMANDS = [
   '--quiet',
 ];
 
-export default tasks => {
+export default tasks =>
   tasks.add({
     title: 'Run babel plugin',
     task: (_, task) =>
@@ -80,4 +80,3 @@ export default tasks => {
         },
       ]),
   });
-};

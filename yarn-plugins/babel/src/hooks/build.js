@@ -17,28 +17,34 @@ export default tasks => {
     task: (_, task) =>
       task.newListr([
         {
-          title: 'Preparing babel presets/plugins in workspaces',
-          enabled: async ctx => {
+          title: 'Preparing babel plugin',
+          task: async ctx => {
             const { workspaces } = ctx;
-            const babelWorkspaces = await workspaces.reduce(
-              async (resultPromise, workspace) => {
-                const result = await resultPromise;
-                const { locator } = workspace;
-                const name = structUtils.stringifyIdent(locator);
-                const isBabelWorkspace =
-                  /^(@(?!babel\/)[^/]+\/)([^/]*babel-(preset|plugin)(?:-|\/|$)|[^/]+\/)/.test(
-                    name,
-                  ) || /^babel-(preset|plugin)/.test(name);
 
-                return !isBabelWorkspace ? result : [...result, workspace];
-              },
-              Promise.resolve([]),
-            );
+            ctx.babelWorkspaces = [];
+            ctx.useBabelWorkspaces = [];
 
-            ctx.babelWorkspaces = babelWorkspaces;
+            await workspaces.reduce(async (resultPromise, workspace) => {
+              const result = await resultPromise;
+              const binaries = await scriptUtils.getWorkspaceAccessibleBinaries(
+                workspace,
+              );
+              const { locator } = workspace;
+              const name = structUtils.stringifyIdent(locator);
+              const isBabelWorkspace =
+                /^(@(?!babel\/)[^/]+\/)([^/]*babel-(preset|plugin)(?:-|\/|$)|[^/]+\/)/.test(
+                  name,
+                ) || /^babel-(preset|plugin)/.test(name);
 
-            return babelWorkspaces.length !== 0;
+              if (isBabelWorkspace) ctx.babelWorkspaces.push(workspace);
+
+              if (binaries.has('babel')) ctx.useBabelWorkspaces.push(workspace);
+            }, Promise.resolve());
           },
+        },
+        {
+          title: 'Preparing babel presets/plugins in workspaces',
+          enabled: ({ babelWorkspaces }) => babelWorkspaces?.length !== 0,
           task: ({ babelWorkspaces }) =>
             Promise.all(
               babelWorkspaces.map(async ({ cwd, manifest: { main } }) => {
@@ -67,23 +73,7 @@ export default tasks => {
         },
         {
           title: 'Building workspaces with babel',
-          enabled: async ctx => {
-            const { workspaces } = ctx;
-            const useBabelWorkspaces = await workspaces.reduce(
-              async (resultPromise, workspace) => {
-                const result = await resultPromise;
-                const binaries =
-                  await scriptUtils.getWorkspaceAccessibleBinaries(workspace);
-
-                return !binaries.has('babel') ? result : [...result, workspace];
-              },
-              Promise.resolve([]),
-            );
-
-            ctx.useBabelWorkspaces = useBabelWorkspaces;
-
-            return useBabelWorkspaces.length !== 0;
-          },
+          enabled: ({ useBabelWorkspaces }) => useBabelWorkspaces?.length !== 0,
           task: ({ useBabelWorkspaces, runWithWorkspaces }) =>
             runWithWorkspaces(BABEL_COMMANDS, useBabelWorkspaces),
         },

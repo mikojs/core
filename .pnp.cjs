@@ -35,6 +35,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:yarn-plugins/babel"
       },
       {
+        "name": "@mikojs/yarn-plugin-builder",
+        "reference": "workspace:yarn-plugins/builder"
+      },
+      {
         "name": "@mikojs/yarn-plugin-miko",
         "reference": "workspace:yarn-plugins/miko"
       }
@@ -46,6 +50,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@mikojs/core", ["workspace:."]],
       ["@mikojs/prettier-config", ["virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/prettier", "workspace:configs/prettier"]],
       ["@mikojs/yarn-plugin-babel", ["workspace:yarn-plugins/babel"]],
+      ["@mikojs/yarn-plugin-builder", ["workspace:yarn-plugins/builder"]],
       ["@mikojs/yarn-plugin-miko", ["workspace:yarn-plugins/miko"]]
     ],
     "fallbackPool": [
@@ -2695,6 +2700,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@yarnpkg/fslib", "npm:2.6.1-rc.10"],
             ["core-js", "npm:3.21.0"],
             ["regenerator-runtime", "npm:0.13.9"],
+            ["typescript", "patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@mikojs/yarn-plugin-builder", [
+        ["workspace:yarn-plugins/builder", {
+          "packageLocation": "./yarn-plugins/builder/",
+          "packageDependencies": [
+            ["@mikojs/yarn-plugin-builder", "workspace:yarn-plugins/builder"],
+            ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.17.0"],
+            ["@babel/core", "npm:7.17.2"],
+            ["@yarnpkg/builder", "npm:3.2.0-rc.2"],
+            ["core-js", "npm:3.21.0"],
             ["typescript", "patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"]
           ],
           "linkType": "SOFT",

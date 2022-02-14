@@ -11,7 +11,7 @@ const BABEL_COMMANDS = [
   '--verbose',
 ];
 
-const prepareBabelPlugin = {
+const preparePlugin = {
   title: 'Preparing babel plugin',
   task: async ctx => {
     const { workspaces } = ctx;

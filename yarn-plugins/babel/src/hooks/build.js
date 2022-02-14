@@ -66,17 +66,21 @@ export default tasks =>
         {
           title: 'Building babel presets/plugins in workspaces',
           enabled: ({ babelWorkspaces }) => babelWorkspaces?.length !== 0,
-          task: async ({ babelWorkspaces, runWithWorkspaces }) => {
+          task: async ({ babelWorkspaces, runWithWorkspaces }, subTask) => {
             process.env.BABEL_ENV = 'pre';
-            await runWithWorkspaces(babelWorkspaces, BABEL_COMMANDS);
+            await runWithWorkspaces(babelWorkspaces, BABEL_COMMANDS, {
+              stdout: subTask.stdout(),
+            });
             delete process.env.BABEL_ENV;
           },
         },
         {
           title: 'Building workspaces with babel',
           enabled: ({ useBabelWorkspaces }) => useBabelWorkspaces?.length !== 0,
-          task: ({ useBabelWorkspaces, runWithWorkspaces }) =>
-            runWithWorkspaces(useBabelWorkspaces, BABEL_COMMANDS),
+          task: ({ useBabelWorkspaces, runWithWorkspaces }, subTask) =>
+            runWithWorkspaces(useBabelWorkspaces, BABEL_COMMANDS, {
+              stdout: subTask.stdout(),
+            }),
         },
       ]),
   });

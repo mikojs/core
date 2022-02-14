@@ -15,11 +15,9 @@ export default class Miko extends Command {
     const tasks = new Listr();
 
     await project.restoreInstallState();
-    await configuration.triggerHook(hooks => hooks[name], {
-      workspaces,
-      tasks,
-    });
+    await configuration.triggerHook(hooks => hooks[name], tasks);
     await tasks.run({
+      workspaces,
       runWithWorkspaces: (commands, workspaces) =>
         Promise.all(
           workspaces.map(({ cwd }) => this.cli.run(commands, { cwd })),

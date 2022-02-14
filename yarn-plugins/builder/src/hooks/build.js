@@ -28,10 +28,11 @@ export default tasks =>
           title: 'Building yarn plugins in workspaces',
           enabled: ({ useBuilderWorkspaces }) =>
             useBuilderWorkspaces?.length !== 0,
-          task: ({ useBuilderWorkspaces, runWithWorkspaces }) =>
+          task: ({ useBuilderWorkspaces, runWithWorkspaces }, subTask) =>
             runWithWorkspaces(
-              ['builder', 'build', 'plugin'],
               useBuilderWorkspaces,
+              ['builder', 'build', 'plugin'],
+              { stdout: subTask.stdout() },
             ),
         },
       ]),

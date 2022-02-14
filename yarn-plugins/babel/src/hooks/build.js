@@ -68,7 +68,7 @@ export default tasks =>
           enabled: ({ babelWorkspaces }) => babelWorkspaces?.length !== 0,
           task: async ({ babelWorkspaces, runWithWorkspaces }) => {
             process.env.BABEL_ENV = 'pre';
-            await runWithWorkspaces(BABEL_COMMANDS, babelWorkspaces);
+            await runWithWorkspaces(babelWorkspaces, BABEL_COMMANDS);
             delete process.env.BABEL_ENV;
           },
         },
@@ -76,7 +76,7 @@ export default tasks =>
           title: 'Building workspaces with babel',
           enabled: ({ useBabelWorkspaces }) => useBabelWorkspaces?.length !== 0,
           task: ({ useBabelWorkspaces, runWithWorkspaces }) =>
-            runWithWorkspaces(BABEL_COMMANDS, useBabelWorkspaces),
+            runWithWorkspaces(useBabelWorkspaces, BABEL_COMMANDS),
         },
       ]),
   });

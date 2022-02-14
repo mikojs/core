@@ -15,24 +15,6 @@ export default tasks => {
   tasks.add({
     title: 'Run babel plugin',
     task: async ({ workspaces }, task) => {
-      const { useBabelWorkspaces } = await workspaces.reduce(
-        async (resultPromise, workspace) => {
-          const result = await resultPromise;
-          const binaries = await scriptUtils.getWorkspaceAccessibleBinaries(
-            workspace,
-          );
-
-          return {
-            useBabelWorkspaces: !binaries.has('babel')
-              ? result.useBabelWorkspaces
-              : [...result.useBabelWorkspaces, workspace],
-          };
-        },
-        Promise.resolve({
-          useBabelWorkspaces: [],
-        }),
-      );
-
       return task.newListr([
         {
           title: 'Preparing babel presets/plugins in workspaces',
@@ -85,7 +67,23 @@ export default tasks => {
         },
         {
           title: 'Building workspaces with babel',
-          enabled: () => useBabelWorkspaces.length !== 0,
+          enabled: async (ctx) => {
+            const useBabelWorkspaces = await workspaces.reduce(
+              async (resultPromise, workspace) => {
+                const result = await resultPromise;
+                const binaries = await scriptUtils.getWorkspaceAccessibleBinaries(
+                  workspace,
+                );
+
+                return !binaries.has('babel') ? result : [...result, workspace];
+              },
+              Promise.resolve([]),
+            );
+
+            ctx.useBabelWorkspaces = useBabelWorkspaces;
+
+            return useBabelWorkspaces.length !== 0;
+          },
           task: ({ runWithWorkspaces }) =>
             runWithWorkspaces(BABEL_COMMANDS, useBabelWorkspaces),
         },

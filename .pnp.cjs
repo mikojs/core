@@ -2715,7 +2715,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/cli", "virtual:d52813448b6da4fcbe3502a286874855bcc0ccfd8895412c54de303ca008bc26fed3ae7929cf6d4badb945693957b1eb7359f43e3c43b164c8a9120b0f4aa031#npm:7.17.0"],
             ["@babel/core", "npm:7.17.2"],
             ["@yarnpkg/builder", "npm:3.2.0-rc.2"],
+            ["@yarnpkg/core", "npm:3.2.0-rc.14"],
             ["core-js", "npm:3.21.0"],
+            ["regenerator-runtime", "npm:0.13.9"],
             ["typescript", "patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"]
           ],
           "linkType": "SOFT",

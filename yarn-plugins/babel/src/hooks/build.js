@@ -24,8 +24,9 @@ export default tasks => {
             ctx.babelWorkspaces = [];
             ctx.useBabelWorkspaces = [];
 
-            await workspaces.reduce(async (resultPromise, workspace) => {
-              const result = await resultPromise;
+            await workspaces.reduce(async (result, workspace) => {
+              await result;
+
               const binaries = await scriptUtils.getWorkspaceAccessibleBinaries(
                 workspace,
               );

@@ -66,6 +66,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@mikojs/babel-preset-miko", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/babel-preset-miko"],
             ["@mikojs/prettier-config", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/prettier"],
             ["@mikojs/yarn-plugin-babel", "workspace:yarn-plugins/babel"],
+            ["@mikojs/yarn-plugin-builder", "workspace:yarn-plugins/builder"],
             ["@mikojs/yarn-plugin-miko", "workspace:yarn-plugins/miko"],
             ["babel-plugin-add-module-exports", "npm:1.0.4"],
             ["prettier", "npm:2.5.1"]
@@ -2653,6 +2654,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@mikojs/babel-preset-miko", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/babel-preset-miko"],
             ["@mikojs/prettier-config", "virtual:304a493fc2a50a432cd62f1f2d182800be885ebbb89ab55e1b33dbe870c110c7633320c500de3e61ee4ee6a999551d6d6870c95a198f6f57fcd32bfcfd6fe27e#workspace:configs/prettier"],
             ["@mikojs/yarn-plugin-babel", "workspace:yarn-plugins/babel"],
+            ["@mikojs/yarn-plugin-builder", "workspace:yarn-plugins/builder"],
             ["@mikojs/yarn-plugin-miko", "workspace:yarn-plugins/miko"],
             ["babel-plugin-add-module-exports", "npm:1.0.4"],
             ["prettier", "npm:2.5.1"]

@@ -16,10 +16,14 @@ export default class Miko extends Command {
 
     await project.restoreInstallState();
     await configuration.triggerHook(hooks => hooks[name], {
-      cli: this.cli,
       workspaces,
       tasks,
     });
-    await tasks.run();
+    await tasks.run({
+      runWithWorkspaces: (commands, workspaces) =>
+        Promise.all(
+          workspaces.map(({ cwd }) => this.cli.run(commands, { cwd })),
+        ),
+    });
   };
 }

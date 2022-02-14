@@ -1,17 +1,17 @@
 import { structUtils, scriptUtils } from '@yarnpkg/core';
 import { xfs, ppath } from '@yarnpkg/fslib';
 
-const runBabelInWorkspaces = (cli, workspaces) =>
-  Promise.all(
-    workspaces.map(({ cwd }) =>
-      cli.run(
-        ['babel', 'src', '-d', 'lib', '--root-mode', 'upward', '--quiet'],
-        { cwd },
-      ),
-    ),
-  );
+const BABEL_COMMANDS = [
+  'babel',
+  'src',
+  '-d',
+  'lib',
+  '--root-mode',
+  'upward',
+  '--quiet',
+];
 
-export default async ({ cli, workspaces, tasks }) => {
+export default async ({ workspaces, tasks }) => {
   const { babelWorkspaces, useBabelWorkspaces } = await workspaces.reduce(
     async (resultPromise, workspace) => {
       const result = await resultPromise;
@@ -67,16 +67,17 @@ export default async ({ cli, workspaces, tasks }) => {
         {
           title: 'Building babel presets/plugins in workspaces',
           enabled: () => babelWorkspaces.length !== 0,
-          task: async () => {
+          task: async ({ runWithWorkspaces }) => {
             process.env.BABEL_ENV = 'pre';
-            await runBabelInWorkspaces(cli, babelWorkspaces);
+            await runWithWorkspaces(BABEL_COMMANDS, babelWorkspaces);
             delete process.env.BABEL_ENV;
           },
         },
         {
           title: 'Building workspaces with babel',
           enabled: () => useBabelWorkspaces.length !== 0,
-          task: () => runBabelInWorkspaces(cli, useBabelWorkspaces),
+          task: ({ runWithWorkspaces }) =>
+            runWithWorkspaces(BABEL_COMMANDS, useBabelWorkspaces),
         },
       ]),
   });

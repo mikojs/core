@@ -1,0 +1,27 @@
+{
+  "name": "@mikojs/yarn-plugin-builder",
+  "description": "Run @yarnpk/builder with @mikojs/yarn-plugin-miko life cycle.",
+  "license": "MIT",
+  "author": "HsuTing <hsuting0106@gmail.com>",
+  "homepage": "https://mikojs.github.io/core/yarn-plugin-builder",
+  "repository": "https://github.com/mikojs/core/tree/main/yarn-plugins/builder",
+  "version": "2.0.0-beta.0",
+  "main": "./lib/index.js",
+  "keywords": [
+    "mikojs",
+    "yarn plugin",
+    "builder"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "core-js": "^3.21.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.0",
+    "@babel/core": "^7.17.2",
+    "@yarnpkg/builder": "^3.2.0-rc.2",
+    "typescript": "^4.5.5"
+  }
+}

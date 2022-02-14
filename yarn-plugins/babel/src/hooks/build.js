@@ -8,7 +8,7 @@ const BABEL_COMMANDS = [
   'lib',
   '--root-mode',
   'upward',
-  '--quiet',
+  '--verbose',
 ];
 
 export default tasks =>

@@ -12,7 +12,7 @@ export default class Miko extends Command {
     const { projectCwd } = configuration;
     const { project } = await Project.find(configuration, projectCwd);
     const { workspaces } = project;
-    const tasks = [];
+    const tasks = new Listr();
 
     await project.restoreInstallState();
     await configuration.triggerHook(hooks => hooks[name], {
@@ -20,6 +20,6 @@ export default class Miko extends Command {
       workspaces,
       tasks,
     });
-    await new Listr(tasks).run();
+    await tasks.run();
   };
 }

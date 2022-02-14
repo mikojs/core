@@ -40,7 +40,7 @@ export default async ({ cli, workspaces, tasks }) => {
     }),
   );
 
-  tasks.push({
+  tasks.add({
     title: 'Run babel plugin',
     task: (ctx, task) =>
       task.newListr([

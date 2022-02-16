@@ -70,6 +70,7 @@ const buildBabelWorkspaces = {
     });
     delete process.env.BABEL_ENV;
   },
+  options: { persistentOutput: true },
 };
 
 const buildWorkspaces = {
@@ -79,6 +80,7 @@ const buildWorkspaces = {
     runWithWorkspaces(useBabelWorkspaces, BABEL_COMMANDS, {
       stdout: task.stdout(),
     }),
+  options: { persistentOutput: true },
 };
 
 export default tasks =>

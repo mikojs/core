@@ -6,7 +6,7 @@ export default class Miko extends Command {
   static paths = [['dev'], ['build']];
 
   verbose = Option.Boolean('-v,--verbose', true, {
-    description: `Log everything.`,
+    description: 'Log everything.',
   });
 
   execute = async () => {

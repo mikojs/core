@@ -5,8 +5,28 @@ import { Listr } from 'listr2';
 export default class Miko extends Command {
   static paths = [['dev'], ['build']];
 
+  static usage = Command.Usage({
+    category: 'Miko-related commands',
+    description: 'some custom scripts for development life cycle',
+    details: `
+      At first, you should add some plugins for \`@mikojs/yarn-plugin-miko\`. For example, you could add plugin like \`{ hooks: { build: () => { ... } } }\`.
+
+      When you run the custom script, like \`yarn build\`, \`@mikojs/yarn-plugin-miko\` would trigger the \`build\` hooks in the plugins.
+
+      We add \`${Miko.paths
+        .map(path => path.join(':'))
+        .join(
+          '`, `',
+        )}\` stages for development life cycle. If you need, you could install \`@mikojs/yarn-plugin-miko\` and replace paths as you need.
+    `,
+    examples: Miko.paths.map(path => [
+      `Run \`${path.join(':')}\` stage in development life cycle`,
+      `$0 ${path.join(' ')}`,
+    ]),
+  });
+
   verbose = Option.Boolean('-v,--verbose', true, {
-    description: 'Log everything.',
+    description: 'Log everything',
   });
 
   execute = async () => {

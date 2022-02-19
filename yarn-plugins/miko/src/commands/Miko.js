@@ -9,7 +9,7 @@ export default class Miko extends Command {
     category: 'Miko-related commands',
     description: 'some custom scripts for development life cycle',
     details: `
-      At first, you should add some plugins for \`@mikojs/yarn-plugin-miko\`. For example, you could add plugin like \`{ hooks: { build: () => { ... } } }\`.
+      At first, you should add some plugins for \`@mikojs/yarn-plugin-miko\`. For example, you could add a plugin like \`{ hooks: { build: () => { ... } } }\`.
 
       When you run the custom script, like \`yarn build\`, \`@mikojs/yarn-plugin-miko\` would trigger the \`build\` hooks in the plugins.
 

@@ -33,5 +33,5 @@ export default tasks =>
   tasks.add({
     title: 'Run builder plugin',
     task: ({ normalizeTasks }, task) =>
-      task.newListr(normalizeTasks([preparePlugin, buildWorkspaces])),
+      task.newListr(normalizeTasks(preparePlugin, buildWorkspaces)),
   });

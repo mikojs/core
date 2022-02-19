@@ -30,7 +30,7 @@ export default class Miko extends Command {
             this.cli.run(commands, { ...options, cwd }),
           ),
         ),
-      normalizeTasks: tasks =>
+      normalizeTasks: (...tasks) =>
         tasks.map(task => ({
           ...task,
           options: { persistentOutput: Boolean(this.verbose) },

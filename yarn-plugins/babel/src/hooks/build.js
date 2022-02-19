@@ -84,11 +84,13 @@ const buildWorkspaces = {
 export default tasks =>
   tasks.add({
     title: 'Run babel plugin',
-    task: (_, task) =>
-      task.newListr([
-        preparePlugin,
-        prepareBabelWorkspaces,
-        buildBabelWorkspaces,
-        buildWorkspaces,
-      ]),
+    task: ({ normalizeTasks }, task) =>
+      task.newListr(
+        normalizeTasks(
+          preparePlugin,
+          prepareBabelWorkspaces,
+          buildBabelWorkspaces,
+          buildWorkspaces,
+        ),
+      ),
   });

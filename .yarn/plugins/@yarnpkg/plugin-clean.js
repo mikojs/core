@@ -1,22 +1,26 @@
-const fs = require('fs');
-
 module.exports = {
   name: '@yarnpkg/plugin-clean',
   factory: fn => {
     const { structUtils } = fn('@yarnpkg/core');
+    const { xfs, ppath } = fn('@yarnpkg/fslib');
 
     return {
       hooks: {
         build: tasks =>
           tasks.add({
-            title: 'Remove lib folder with @mikojs/yarn-plugin-*',
-            task: async ({ workspaces }) => {
-              const yarnPluginWorkspaces = workspaces.filter(({ locator }) =>
-                /yarn-plugin/.test(structUtils.stringifyIdent(locator)),
-              );
+            title: 'Remove lib folder in @mikojs/yarn-plugin-*',
+            task: ({ workspaces }) =>
+              Promise.all(
+                workspaces.map(async ({ locator, cwd }) => {
+                  if (!/yarn-plugin/.test(structUtils.stringifyIdent(locator)))
+                    return;
 
-              console.log(yarnPluginWorkspaces);
-            },
+                  await xfs.rmdirPromise(ppath.join(cwd, './lib'), {
+                    recursive: true,
+                    force: true,
+                  });
+                }),
+              ),
           }),
       },
     };

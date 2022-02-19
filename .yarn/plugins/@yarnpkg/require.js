@@ -19,16 +19,13 @@ module.exports = filename => {
   } catch (e) {
     const { error } = console;
     const sourcePath = path.resolve(
-      __dirname, '../../../yarn-plugins',
+      __dirname,
+      '../../../yarn-plugins',
       name.replace(/plugin-/, ''),
     );
 
     if (!new RegExp(`Source path: ${sourcePath}/\n`).test(e.message)) error(e);
 
-    return require(path.resolve(
-      sourcePath,
-      './bundles',
-      names.yarn,
-    ));
+    return require(path.resolve(sourcePath, './bundles', names.yarn));
   }
 };

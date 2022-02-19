@@ -30,7 +30,7 @@ export default class Miko extends Command {
   });
 
   execute = async () => {
-    const name = this.path.join('.');
+    const name = this.path.join(':');
     const { cwd, plugins } = this.context;
     const configuration = await Configuration.find(cwd, plugins);
     const { projectCwd } = configuration;

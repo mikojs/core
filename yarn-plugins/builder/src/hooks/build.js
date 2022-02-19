@@ -26,7 +26,6 @@ const buildWorkspaces = {
     runWithWorkspaces(useBuilderWorkspaces, ['builder', 'build', 'plugin'], {
       stdout: task.stdout(),
     }),
-  options: { persistentOutput: true },
 };
 
 export default tasks =>

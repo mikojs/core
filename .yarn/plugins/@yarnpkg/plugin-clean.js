@@ -11,25 +11,29 @@ module.exports = {
   factory: require => {
     const { structUtils } = require('@yarnpkg/core');
     const { xfs, ppath } = require('@yarnpkg/fslib');
-    const { addStages } = require('@yarnpkg/plugin-miko');
 
-    return addStages('clean', {
-      build: tasks =>
-        tasks.add({
-          title: 'Remove lib folder in @mikojs/yarn-plugin-*',
-          task: ({ workspaces }) =>
-            Promise.all(
-              workspaces.map(async ({ locator, cwd }) => {
-                if (!/yarn-plugin/.test(structUtils.stringifyIdent(locator)))
-                  return;
+    const build = tasks =>
+      tasks.add({
+        title: 'Remove lib folder in @mikojs/yarn-plugin-*',
+        task: ({ workspaces }) =>
+          Promise.all(
+            workspaces.map(async ({ locator, cwd }) => {
+              if (!/yarn-plugin/.test(structUtils.stringifyIdent(locator)))
+                return;
 
-                await xfs.rmdirPromise(ppath.join(cwd, './lib'), {
-                  recursive: true,
-                  force: true,
-                });
-              }),
-            ),
-        }),
-    });
+              await xfs.rmdirPromise(ppath.join(cwd, './lib'), {
+                recursive: true,
+                force: true,
+              });
+            }),
+          ),
+      });
+
+    return {
+      hooks: {
+        build,
+        'build:babel': build,
+      },
+    };
   },
 };

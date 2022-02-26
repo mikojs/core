@@ -12,7 +12,7 @@ const BABEL_COMMANDS = [
 ];
 
 const preparePlugin = {
-  title: 'Preparing babel plugin',
+  title: 'Prepare babel plugin',
   task: async ctx => {
     const { workspaces } = ctx;
 
@@ -40,10 +40,14 @@ const preparePlugin = {
 };
 
 const prepareBabelWorkspaces = {
-  title: 'Preparing babel presets/plugins in workspaces',
+  title: 'Prepare babel presets/plugins in workspaces',
   enabled: ({ babelWorkspaces }) => babelWorkspaces?.length !== 0,
-  task: ({ babelWorkspaces }) =>
-    Promise.all(
+  task: async ctx => {
+    const { babelWorkspaces } = ctx;
+
+    ctx.babelEnv = process.env.BABEL_ENV;
+    process.env.BABEL_ENV = 'pre';
+    await Promise.all(
       babelWorkspaces.map(async ({ cwd, manifest: { main } }) => {
         const mainFilePath = ppath.join(cwd, main);
         const mainDirPath = ppath.dirname(mainFilePath);
@@ -57,28 +61,29 @@ const prepareBabelWorkspaces = {
             'module.exports = function fakeBabel() { return {}; }',
           );
       }),
-    ),
+    );
+  },
 };
 
 const buildBabelWorkspaces = {
-  title: 'Building babel presets/plugins in workspaces',
+  title: 'Build babel presets/plugins in workspaces',
   enabled: ({ babelWorkspaces }) => babelWorkspaces?.length !== 0,
-  task: async ({ babelWorkspaces, runWithWorkspaces }, task) => {
-    process.env.BABEL_ENV = 'pre';
-    await runWithWorkspaces(babelWorkspaces, BABEL_COMMANDS, {
-      stdout: task.stdout(),
-    });
-    delete process.env.BABEL_ENV;
+  task: ({ babelWorkspaces, workspacesTasks }, task) =>
+    workspacesTasks(task, babelWorkspaces, BABEL_COMMANDS),
+};
+
+const resetBabelEnv = {
+  title: 'Reset BABEL_ENV',
+  task: ({ babelEnv }) => {
+    process.env.BABEL_ENV = babelEnv;
   },
 };
 
 const buildWorkspaces = {
-  title: 'Building workspaces with babel',
+  title: 'Build workspaces with babel',
   enabled: ({ useBabelWorkspaces }) => useBabelWorkspaces?.length !== 0,
-  task: ({ useBabelWorkspaces, runWithWorkspaces }, task) =>
-    runWithWorkspaces(useBabelWorkspaces, BABEL_COMMANDS, {
-      stdout: task.stdout(),
-    }),
+  task: ({ useBabelWorkspaces, workspacesTasks }, task) =>
+    workspacesTasks(task, useBabelWorkspaces, BABEL_COMMANDS),
 };
 
 export default tasks =>
@@ -90,6 +95,7 @@ export default tasks =>
         preparePlugin,
         prepareBabelWorkspaces,
         buildBabelWorkspaces,
+        resetBabelEnv,
         buildWorkspaces,
       ),
   });

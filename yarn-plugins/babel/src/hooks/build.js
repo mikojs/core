@@ -47,6 +47,7 @@ const prepareBabelWorkspaces = {
 
     ctx.babelEnv = process.env.BABEL_ENV;
     process.env.BABEL_ENV = 'pre';
+
     await Promise.all(
       babelWorkspaces.map(async ({ cwd, manifest: { main } }) => {
         const mainFilePath = ppath.join(cwd, main);
@@ -74,6 +75,7 @@ const buildBabelWorkspaces = {
 
 const resetBabelEnv = {
   title: 'Reset BABEL_ENV',
+  enabled: ({ babelWorkspaces }) => babelWorkspaces?.length !== 0,
   task: ({ babelEnv }) => {
     process.env.BABEL_ENV = babelEnv;
   },

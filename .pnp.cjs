@@ -2698,6 +2698,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@yarnpkg/builder", "npm:3.2.0-rc.2"],
             ["@yarnpkg/core", "npm:3.2.0-rc.14"],
             ["@yarnpkg/fslib", "npm:2.6.1-rc.10"],
+            ["@yarnpkg/plugin-miko", "link:../miko::locator=%40mikojs%2Fyarn-plugin-babel%40workspace%3Ayarn-plugins%2Fbabel"],
             ["core-js", "npm:3.21.0"],
             ["regenerator-runtime", "npm:0.13.9"],
             ["typescript", "patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"]
@@ -2714,6 +2715,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/core", "npm:7.17.2"],
             ["@yarnpkg/builder", "npm:3.2.0-rc.2"],
             ["@yarnpkg/core", "npm:3.2.0-rc.14"],
+            ["@yarnpkg/plugin-miko", "link:../miko::locator=%40mikojs%2Fyarn-plugin-builder%40workspace%3Ayarn-plugins%2Fbuilder"],
             ["core-js", "npm:3.21.0"],
             ["regenerator-runtime", "npm:0.13.9"],
             ["typescript", "patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"]
@@ -3451,6 +3453,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@yarnpkg/core"
           ],
           "linkType": "HARD",
+        }]
+      ]],
+      ["@yarnpkg/plugin-miko", [
+        ["link:../miko::locator=%40mikojs%2Fyarn-plugin-babel%40workspace%3Ayarn-plugins%2Fbabel", {
+          "packageLocation": "./yarn-plugins/miko/",
+          "packageDependencies": [
+            ["@yarnpkg/plugin-miko", "link:../miko::locator=%40mikojs%2Fyarn-plugin-babel%40workspace%3Ayarn-plugins%2Fbabel"]
+          ],
+          "linkType": "SOFT",
+          "discardFromLookup": true
+        }],
+        ["link:../miko::locator=%40mikojs%2Fyarn-plugin-builder%40workspace%3Ayarn-plugins%2Fbuilder", {
+          "packageLocation": "./yarn-plugins/miko/",
+          "packageDependencies": [
+            ["@yarnpkg/plugin-miko", "link:../miko::locator=%40mikojs%2Fyarn-plugin-builder%40workspace%3Ayarn-plugins%2Fbuilder"]
+          ],
+          "linkType": "SOFT",
+          "discardFromLookup": true
         }]
       ]],
       ["@yarnpkg/plugin-nm", [

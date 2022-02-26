@@ -3,8 +3,8 @@
  * https://github.com/arcanis/clipanion/blob/e32ee0143363414f0ef796fac11c954cac14ba48/sources/advanced/options/utils.ts#L7
  * https://github.com/arcanis/clipanion/blob/e32ee0143363414f0ef796fac11c954cac14ba48/sources/advanced/Cli.ts#L377
  *
- * Owing to Symbol, `isOptionSymbol` is different between `factory require` and `.yarn/cache`.
- * As a result, we need to remove lib folder in `@mikojs/yarn-plugin-*`, and let cli to run bundle files.
+ * Owing to Symbol, `isOptionSymbol` are different between `factory require` and `.yarn/cache`.
+ * As a result, we need to remove `lib` folder in `@mikojs/yarn-plugin-*`, and let `cli` run bundle files.
  */
 module.exports = {
   name: '@yarnpkg/plugin-clean',

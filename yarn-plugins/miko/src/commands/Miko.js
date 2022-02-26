@@ -25,12 +25,13 @@ export default class Miko extends Command {
     const listr = new Listr([], {
       rendererOptions: { collapse: !this.verbose },
     });
-    const normalizeTasks = (task, ...taskOptions) =>
+    const normalizeTasks = (task, taskOptions, option) =>
       task.newListr(
         taskOptions.map(taskOption => ({
           ...taskOption,
           options: { persistentOutput: Boolean(this.verbose) },
         })),
+        option,
       );
 
     await project.restoreInstallState();
@@ -47,7 +48,7 @@ export default class Miko extends Command {
       workspacesTasks: (task, selectedWorkspaces, commands) =>
         normalizeTasks(
           task,
-          ...selectedWorkspaces.map(({ locator, cwd }) => ({
+          selectedWorkspaces.map(({ locator, cwd }) => ({
             title: structUtils.stringifyIdent(locator),
             task: (_, subTask) =>
               this.cli.run(commands, {
@@ -55,6 +56,7 @@ export default class Miko extends Command {
                 stdout: subTask.stdout(),
               }),
           })),
+          { concurrent: true },
         ),
     });
   };

@@ -1,5 +1,5 @@
 import { Command, Option } from 'clipanion';
-import { Configuration, Project } from '@yarnpkg/core';
+import { Configuration, Project, structUtils } from '@yarnpkg/core';
 import { Listr } from 'listr2';
 
 import buildUsage from '../utils/buildUsage';
@@ -44,6 +44,18 @@ export default class Miko extends Command {
           ),
         ),
       normalizeTasks,
+      workspacesTasks: (task, selectedWorkspaces, commands) =>
+        normalizeTasks(
+          task,
+          ...selectedWorkspaces.map(({ locator, cwd }) => ({
+            title: structUtils.stringifyIdent(locator),
+            task: (_, subTask) =>
+              this.cli.run(commands, {
+                cwd,
+                stdout: subTask.stdout(),
+              }),
+          })),
+        ),
     });
   };
 }

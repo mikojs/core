@@ -1,5 +1,5 @@
 import { Command, Option } from 'clipanion';
-import { Configuration, Project } from '@yarnpkg/core';
+import { Configuration, Project, structUtils } from '@yarnpkg/core';
 import { Listr } from 'listr2';
 
 import buildUsage from '../utils/buildUsage';
@@ -38,13 +38,20 @@ export default class Miko extends Command {
     await configuration.triggerHook(hooks => hooks[name], listr);
     await listr.run({
       workspaces,
-      runWithWorkspaces: (workspaces, commands, options) =>
-        Promise.all(
-          workspaces.map(({ cwd }) =>
-            this.cli.run(commands, { ...options, cwd }),
-          ),
-        ),
       normalizeTasks,
+      workspacesTasks: (task, selectedWorkspaces, commands) =>
+        normalizeTasks(
+          task,
+          selectedWorkspaces.map(({ locator, cwd }) => ({
+            title: structUtils.stringifyIdent(locator),
+            task: (_, subTask) =>
+              this.cli.run(commands, {
+                cwd,
+                stdout: subTask.stdout(),
+              }),
+          })),
+          { concurrent: true },
+        ),
     });
   };
 }

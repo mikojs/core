@@ -1673,6 +1673,7 @@ __metadata:
     "@yarnpkg/builder": ^3.2.0-rc.2
     "@yarnpkg/core": ^3.2.0-rc.14
     "@yarnpkg/fslib": ^2.6.1-rc.10
+    "@yarnpkg/plugin-miko": "link:../miko"
     core-js: ^3.21.0
     regenerator-runtime: ^0.13.9
     typescript: ^4.5.5
@@ -1687,6 +1688,7 @@ __metadata:
     "@babel/core": ^7.17.2
     "@yarnpkg/builder": ^3.2.0-rc.2
     "@yarnpkg/core": ^3.2.0-rc.14
+    "@yarnpkg/plugin-miko": "link:../miko"
     core-js: ^3.21.0
     regenerator-runtime: ^0.13.9
     typescript: ^4.5.5
@@ -2241,6 +2243,18 @@ __metadata:
   checksum: d7a666d45f99607927a20997b39c719581db2021da13d20504f8e0c555072157afe0da7a4c767086d93b67e5cda272f2ea8866022aab75e2a4b28de5677e1c1e
   languageName: node
   linkType: hard
+
+"@yarnpkg/plugin-miko@link:../miko::locator=%40mikojs%2Fyarn-plugin-babel%40workspace%3Ayarn-plugins%2Fbabel":
+  version: 0.0.0-use.local
+  resolution: "@yarnpkg/plugin-miko@link:../miko::locator=%40mikojs%2Fyarn-plugin-babel%40workspace%3Ayarn-plugins%2Fbabel"
+  languageName: node
+  linkType: soft
+
+"@yarnpkg/plugin-miko@link:../miko::locator=%40mikojs%2Fyarn-plugin-builder%40workspace%3Ayarn-plugins%2Fbuilder":
+  version: 0.0.0-use.local
+  resolution: "@yarnpkg/plugin-miko@link:../miko::locator=%40mikojs%2Fyarn-plugin-builder%40workspace%3Ayarn-plugins%2Fbuilder"
+  languageName: node
+  linkType: soft
 
 "@yarnpkg/plugin-nm@npm:^3.1.1-rc.15":
   version: 3.1.1-rc.15

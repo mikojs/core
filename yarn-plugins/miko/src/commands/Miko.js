@@ -25,13 +25,13 @@ export default class Miko extends Command {
     const listr = new Listr([], {
       rendererOptions: { collapse: !this.verbose },
     });
-    const normalizeTasks = (task, taskOptions, option) =>
+    const normalizeTasks = (task, subTasks, taskOptions) =>
       task.newListr(
-        taskOptions.map(taskOption => ({
-          ...taskOption,
-          options: { persistentOutput: Boolean(this.verbose) },
+        subTasks.map(({ options, ...subTask }) => ({
+          ...subTask,
+          options: { ...options, persistentOutput: Boolean(this.verbose) },
         })),
-        option,
+        taskOptions,
       );
 
     await project.restoreInstallState();

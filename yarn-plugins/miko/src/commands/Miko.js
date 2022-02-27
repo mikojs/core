@@ -38,12 +38,6 @@ export default class Miko extends Command {
     await configuration.triggerHook(hooks => hooks[name], listr);
     await listr.run({
       workspaces,
-      runWithWorkspaces: (workspaces, commands, options) =>
-        Promise.all(
-          workspaces.map(({ cwd }) =>
-            this.cli.run(commands, { ...options, cwd }),
-          ),
-        ),
       normalizeTasks,
       workspacesTasks: (task, selectedWorkspaces, commands) =>
         normalizeTasks(

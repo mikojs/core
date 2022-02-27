@@ -32,5 +32,5 @@ export default tasks =>
   tasks.add({
     title: 'Run builder plugin',
     task: ({ normalizeTasks }, task) =>
-      normalizeTasks(task, preparePlugin, buildWorkspaces),
+      normalizeTasks(task, [preparePlugin, buildWorkspaces]),
   });

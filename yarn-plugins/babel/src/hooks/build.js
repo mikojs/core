@@ -85,11 +85,10 @@ export default tasks =>
   tasks.add({
     title: 'Run babel plugin',
     task: ({ normalizeTasks }, task) =>
-      normalizeTasks(
-        task,
+      normalizeTasks(task, [
         preparePlugin,
         prepareBabelWorkspaces,
         buildBabelWorkspaces,
         buildWorkspaces,
-      ),
+      ]),
   });

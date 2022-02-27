@@ -25,13 +25,6 @@ export default class Miko extends Command {
     const listr = new Listr([], {
       rendererOptions: { collapse: !this.verbose },
     });
-    const normalizeTasks = (task, ...taskOptions) =>
-      task.newListr(
-        taskOptions.map(taskOption => ({
-          ...taskOption,
-          options: { persistentOutput: Boolean(this.verbose) },
-        })),
-      );
 
     await project.restoreInstallState();
     await configuration.triggerHook(hooks => hooks[name], listr);
@@ -43,7 +36,11 @@ export default class Miko extends Command {
             this.cli.run(commands, { ...options, cwd }),
           ),
         ),
-      normalizeTasks,
+      normalizeTasks: (...tasks) =>
+        tasks.map(task => ({
+          ...task,
+          options: { persistentOutput: Boolean(this.verbose) },
+        })),
     });
   };
 }

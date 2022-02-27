@@ -1,7 +1,7 @@
 import { scriptUtils } from '@yarnpkg/core';
 
 const preparePlugin = {
-  title: 'Preparing builder plugin',
+  title: 'Prepare builder plugin',
   task: async ctx => {
     const { workspaces } = ctx;
 
@@ -20,12 +20,10 @@ const preparePlugin = {
 };
 
 const buildWorkspaces = {
-  title: 'Building yarn plugins in workspaces',
+  title: 'Build yarn plugins in workspaces',
   enabled: ({ useBuilderWorkspaces }) => useBuilderWorkspaces?.length !== 0,
-  task: ({ useBuilderWorkspaces, runWithWorkspaces }, task) =>
-    runWithWorkspaces(useBuilderWorkspaces, ['builder', 'build', 'plugin'], {
-      stdout: task.stdout(),
-    }),
+  task: ({ useBuilderWorkspaces, workspacesTasks }, task) =>
+    workspacesTasks(task, useBuilderWorkspaces, ['builder', 'build', 'plugin']),
 };
 
 export default tasks =>
